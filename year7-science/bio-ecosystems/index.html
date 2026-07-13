@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biodiversity &amp; Ecosystems | Year 7 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:  #1E7A4E;
+    --forest-light: #E3F5EC;
+    --navy:    #16305C;
+    --amber:   #F5A623;
+    --teal:    #18A999;
+    --ink:     #16223A;
+    --grey:    #5B6B82;
+    --line:    #DDE5F0;
+    --paper:   #FBFCFE;
+    --white:   #FFFFFF;
+    --shadow:  0 8px 32px rgba(22,48,92,0.12);
+    --font-display: 'Poppins', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(160deg, #0C2B1A 0%, #1E5E38 50%, #1E7A4E 100%);
+    min-height: 100vh;
+    padding: 5vh 5vw;
+    color: var(--white);
+  }
+  header { margin-bottom: 5vh; }
+  .unit-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    padding: 0.3em 1em;
+    font-family: var(--font-display);
+    font-size: clamp(0.8rem, 1.3vw, 1rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5vh;
+    color: rgba(255,255,255,0.9);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.2vh;
+  }
+  .sub {
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: rgba(255,255,255,0.8);
+    max-width: 55ch;
+    line-height: 1.5;
+    margin-bottom: 1vh;
+  }
+  .meta-row {
+    display: flex;
+    gap: 2vw;
+    flex-wrap: wrap;
+    font-size: clamp(0.82rem, 1.3vw, 1rem);
+    color: rgba(255,255,255,0.65);
+    margin-top: 1.5vh;
+  }
+  .acknowledgement {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 1.4vh 2vw;
+    margin: 3vh 0;
+    font-size: clamp(0.88rem, 1.4vw, 1.1rem);
+    color: rgba(255,255,255,0.88);
+    max-width: 80ch;
+    line-height: 1.6;
+  }
+  .deck-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.4vw;
+    margin-top: 4vh;
+  }
+  .deck-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    padding: 2.2vh 1.8vw;
+    text-decoration: none;
+    color: white;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vh;
+  }
+  .deck-card:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.45);
+  }
+  .dc-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    color: rgba(255,255,255,0.22);
+  }
+  .dc-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.9vw, 1.45rem);
+    line-height: 1.2;
+  }
+  .dc-desc {
+    font-size: clamp(0.85rem, 1.35vw, 1.05rem);
+    color: rgba(255,255,255,0.7);
+    line-height: 1.45;
+  }
+  .dc-quiz {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: 0.5vh;
+    font-size: clamp(0.75rem, 1.2vw, 0.92rem);
+    color: var(--amber);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  footer {
+    margin-top: 6vh;
+    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<a href="../" style="display:inline-block;margin-bottom:2.5vh;font-family:var(--font-display);font-weight:600;font-size:clamp(0.82rem,1.3vw,1rem);color:rgba(255,255,255,0.85);text-decoration:none;border:1px solid rgba(255,255,255,0.3);border-radius:100px;padding:0.4em 1.1em;">&#8592; Year 7 Science</a>
+
+<header>
+  <div class="unit-tag">Year 7 Science &middot; Victorian Curriculum 2.0</div>
+  <h1>Biodiversity &amp; Ecosystems</h1>
+  <p class="sub">Teacher slide decks for a 7-week unit on classification, biodiversity, Australian ecosystems, and conservation.</p>
+  <div class="meta-row">
+    <span>11 lessons</span>
+    <span>&middot;</span>
+    <span>Written assessment (60 marks)</span>
+    <span>&middot;</span>
+    <span>Spaced retrieval quizzes built in</span>
+    <span>&middot;</span>
+    <span>First Nations perspectives throughout</span>
+  </div>
+  <div class="acknowledgement">
+    <strong>Acknowledgement of Country</strong><br>
+    We acknowledge the Wurundjeri-Woiwurrung people of the Kulin Nation as the Traditional Custodians of the Country on which we learn. We pay our respects to Elders past, present, and emerging. This unit draws on Wurundjeri ecological knowledge as living, ongoing knowledge, not as a historical artefact.
+  </div>
+</header>
+
+<div class="deck-grid">
+  <a class="deck-card" href="quiz.html" style="background:rgba(245,166,35,0.18);border-color:rgba(245,166,35,0.45);grid-column:1/-1;flex-direction:row;align-items:center;gap:2vw;padding:2vh 2.5vw;">
+    <div style="font-size:clamp(2rem,5vw,3.5rem);line-height:1;">&#9889;</div>
+    <div>
+      <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.1rem,2vw,1.5rem);margin-bottom:0.4vh;">Retrieval Quiz</div>
+      <div style="font-size:clamp(0.85rem,1.4vw,1.05rem);color:rgba(255,255,255,0.75);">200 questions &middot; filter by topic &middot; instant feedback &middot; score tracker</div>
+    </div>
+    <div style="margin-left:auto;font-family:var(--font-display);font-weight:700;font-size:clamp(0.88rem,1.4vw,1.05rem);color:rgba(245,166,35,0.9);">Open &rarr;</div>
+  </a>
+
+  <a class="deck-card" href="booklet/Bio_Ecosystems_Unit_Booklet_Yr7_8.pdf" style="background:rgba(24,169,153,0.16);border-color:rgba(24,169,153,0.45);grid-column:1/-1;flex-direction:row;align-items:center;gap:2vw;padding:2vh 2.5vw;">
+    <div style="font-size:clamp(2rem,5vw,3.5rem);line-height:1;">&#128214;</div>
+    <div>
+      <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.1rem,2vw,1.5rem);margin-bottom:0.4vh;">Student Booklet (PDF)</div>
+      <div style="font-size:clamp(0.85rem,1.4vw,1.05rem);color:rgba(255,255,255,0.75);">Full Year 7/8 unit booklet &middot; print or project</div>
+    </div>
+    <div style="margin-left:auto;font-family:var(--font-display);font-weight:700;font-size:clamp(0.88rem,1.4vw,1.05rem);color:rgba(24,169,153,0.95);">Open &rarr;</div>
+  </a>
+
+  <a class="deck-card" href="deck1.html">
+    <div class="dc-num">01</div>
+    <div class="dc-title">Living or Non-living?</div>
+    <div class="dc-desc">Characteristics of life (MRS GREN), organisms vs non-living things, dead vs non-living. Victorian examples.</div>
+  </a>
+
+  <a class="deck-card" href="deck2.html">
+    <div class="dc-num">02</div>
+    <div class="dc-title">Classification — Levels</div>
+    <div class="dc-desc">Linnaean system (Kingdom to Species), using features to classify, Australian species examples.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lesson 1</div>
+  </a>
+
+  <a class="deck-card" href="deck3.html">
+    <div class="dc-num">03</div>
+    <div class="dc-title">Scientific Names &amp; The Six Kingdoms</div>
+    <div class="dc-desc">Binomial nomenclature, reading and writing scientific names, the six kingdoms with Victorian examples.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–2</div>
+  </a>
+
+  <a class="deck-card" href="deck4.html">
+    <div class="dc-num">04</div>
+    <div class="dc-title">Dichotomous Keys</div>
+    <div class="dc-desc">Identifying organisms using branching keys, constructing keys, Australian species identification.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–3</div>
+  </a>
+
+  <a class="deck-card" href="deck5.html">
+    <div class="dc-num">05</div>
+    <div class="dc-title">Australian Ecosystems &amp; Biodiversity</div>
+    <div class="dc-desc">Biotic and abiotic factors, Victorian ecosystems, biodiversity — genetic, species, and ecosystem levels.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–4</div>
+  </a>
+
+  <a class="deck-card" href="deck6.html">
+    <div class="dc-num">06</div>
+    <div class="dc-title">Food Webs &amp; Energy Flow</div>
+    <div class="dc-desc">Producers, consumers, decomposers, food chains and food webs using Victorian woodland species.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–5</div>
+  </a>
+
+  <a class="deck-card" href="deck7.html">
+    <div class="dc-num">07</div>
+    <div class="dc-title">Ecosystem Services</div>
+    <div class="dc-desc">Provisioning, regulating, cultural and supporting services. Native bee pollination, Caring for Country.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–6</div>
+  </a>
+
+  <a class="deck-card" href="deck8.html">
+    <div class="dc-num">08</div>
+    <div class="dc-title">Adaptations</div>
+    <div class="dc-desc">Structural, physiological and behavioural adaptations. Australian examples across ecosystems.</div>
+    <div class="dc-quiz">&#9889; Quiz: Lessons 1–7</div>
+  </a>
+
+  <a class="deck-card" href="deck9.html"

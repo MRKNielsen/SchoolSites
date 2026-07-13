@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrieval Quiz | Biodiversity &amp; Ecosystems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="questions.js"></script>
+<style>
+  :root {
+    --forest:       #1E7A4E;
+    --forest-light: #E3F5EC;
+    --forest-dark:  #0C2B1A;
+    --navy:         #16305C;
+    --amber:        #F5A623;
+    --amber-light:  #FFF3DC;
+    --teal:         #18A999;
+    --teal-light:   #E0F7F3;
+    --ink:          #16223A;
+    --grey:         #5B6B82;
+    --line:         #DDE5F0;
+    --paper:        #FBFCFE;
+    --white:        #FFFFFF;
+    --shadow:       0 8px 32px rgba(22,48,92,0.12);
+    --r:            14px;
+    --font-display: 'Poppins', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(160deg, var(--forest-dark) 0%, #1E5E38 50%, var(--forest) 100%);
+    min-height: 100vh;
+    padding: 5vh 5vw 8vh;
+    color: var(--white);
+  }
+
+  /* ── Header ── */
+  .page-header { margin-bottom: 4vh; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 0.4em;
+    text-decoration: none; color: rgba(255,255,255,0.7);
+    font-size: 0.92rem; margin-bottom: 2vh;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: white; }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6vh;
+  }
+  .sub {
+    font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ── Setup panel ── */
+  #setup {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 3vh 3vw;
+    max-width: 680px;
+    margin-top: 3vh;
+  }
+  .setup-row { margin-bottom: 2.5vh; }
+  .setup-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 1vh;
+    display: block;
+  }
+  .chip-group { display: flex; flex-wrap: wrap; gap: 0.6em; }
+  .chip {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 100px;
+    padding: 0.35em 1.1em;
+    font-family: var(--font-display);
+    font-size: clamp(0.82rem, 1.3vw, 1rem);
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .chip:hover { background: rgba(255,255,255,0.22); color: white; }
+  .chip.active {
+    background: var(--forest);
+    border-color: var(--forest);
+    color: white;
+  }
+  .start-btn {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    background: white; color: var(--forest);
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    border: none; border-radius: 100px;
+    padding: 0.7em 2em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow);
+    margin-top: 1vh;
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+
+  /* ── Quiz panel ── */
+  #quiz { display: none; max-width: 780px; }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.18);
+    border-radius: 100px;
+    height: 6px;
+    margin-bottom: 3vh;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 100px;
+    transition: width 0.4s ease;
+  }
+  .q-counter {
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.8vh;
+  }
+  .q-card {
+    background: var(--paper);
+    border-radius: var(--r);
+    padding: 3vh 3vw;
+    color: var(--ink);
+    box-shadow: 0 16px 56px rgba(0,0,0,0.25);
+  }
+  .q-deck-tag {
+    display: inline-block;
+    background: var(--forest-light);
+    color: var(--forest);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.25em 0.8em;
+    border-radius: 100px;
+    margin-bottom: 1.4vh;
+  }
+  .q-text {
+    font-size: clamp(1.05rem, 1.9vw, 1.45rem);
+    font-weight: 500;
+    line-height: 1.45;
+    margin-bottom: 2vh;
+    color: var(--navy);
+  }
+  .opts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8vh 1.2vw;
+  }
+  @media (max-width: 600px) { .opts { grid-template-columns: 1fr; } }
+  .opt-btn {
+    text-align: left;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    padding: 1vh 1.2vw;
+    font-family: var(--font-body);
+    font-size: clamp(0.92rem, 1.5vw, 1.15rem);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    line-height: 1.4;
+  }
+  .opt-btn:hover:not(:disabled) {
+    background: var(--forest-light);
+    border-color: var(--forest);
+    color: var(--navy);
+  }
+  .opt-btn.correct {
+    background: #D4EDDA; border-color: #28A745; color: #155724; font-weight: 600;
+  }
+  .opt-btn.wrong {
+    background: #F8D7DA; border-color: #DC3545; color: #721C24;
+  }
+  .opt-btn:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 1.6vh;
+    font-size: clamp(0.92rem, 1.5vw, 1.15rem);
+    font-weight: 600;
+    min-height: 1.4em;
+    color: var(--navy);
+  }
+  .feedback .correct-label { color: #155724; }
+  .feedback .wrong-label   { color: #DC3545; }
+
+  .next-btn {
+    display: none;
+    margin-top: 2vh;
+    background: var(--forest);
+    color: white;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+    border: none; border-radius: 100px;
+    padding: 0.65em 2em;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .next-btn:hover { transform: translateY(-2px); background: #165f3c; }
+
+  /* ── Results panel ── */
+  #results {
+    display: none;
+    max-width: 680px;
+    text-align: center;
+  }
+  .score-ring {
+    width: clamp(120px, 20vw, 180px);
+    height: clamp(120px, 20vw, 180px);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 6px solid rgba(255,255,255,0.3);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 3vh auto;
+  }
+  .score-num {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+  }
+  .score-denom {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: rgba(255,255,255,0.7);
+  }
+  .result-msg {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 700;
+    margin-bottom: 1vh;
+  }
+  .result-sub {
+    font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 3vh;
+  }
+  .result-btns { display: flex; gap: 1em; justify-content: center; flex-wrap: wrap; }
+  .result-btns button {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(0.92rem, 1.5vw, 1.1rem);
+    border: none; border-radius: 100px;
+    padding: 0.65em 1.8em;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .result-btns button:hover { transform: translateY(-2px); }
+  .btn-primary { background: white; color: var(--forest); }
+  .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1.5px solid rgba(255,255,255,0.3) !important; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a class="back-link" href="index.html">&#8592; Back to unit overview</a>
+  <h1>&#9889; Retrieval Quiz</h1>
+  <p class="sub">Biodiversity &amp; Ecosystems &mdash; 200 questions across all 11 lessons</p>
+</div>
+
+<!-- Setup -->
+<div id="setup">
+  <div class="setup-row">
+    <span class="setup-label">Topic</span>
+    <div class="chip-group" id="topic-chips">
+      <div class="chip active" data-decks="all">All topics</div>
+      <div class="chip" data-decks="1">1 · Living or Non-living?</div>
+      <div class="chip" data-decks="2">2 · Classification</div>
+      <div class="chip" data-decks="3">3 · Scientific Names &amp; Kingdoms</div>
+      <div class="chip" data-decks="4">4 · Dichotomous Keys</div>
+      <div class="chip" data-decks="5">5 · Ecosystems &amp; Biodiversity</div>
+      <div class="chip" data-decks="6">6 · Food Webs</div>
+      <div class="chip" data-decks="7">7 · Ecosystem Services</div>
+      <div class="chip" data-decks="8">8 · Adaptations</div>
+      <div class="chip" data-decks="9">9 · Introduced Species</div>
+      <div class="chip" data-decks="10">10 · Human Impacts</div>
+      <div class="chip" data-decks="11">11 · Conservation &amp; Action</div>
+    </div>
+  </div>
+
+  <div class="setup-row">
+    <span class="setup-label">Number of questions</span>
+    <div class="chip-group" id="count-chips">
+      <div class="chip" data-count="5">5</div>
+      <div class="chip active" data-count="10">10</div>
+      <div class="chip" data-count="20">20</div>
+      <div class="chip" data-count="999">All</div>
+    </div>
+  </div>
+
+  <button class="start-btn" id="start-btn">&#9889; Start quiz</button>
+</div>
+
+<!-- Quiz -->
+<div id="quiz">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-counter" id="q-counter">Question 1 of 10</div>
+  <div class="q-card">
+    <div class="q-deck-tag" id="q-tag"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn">Next &#8594;</button>
+  </div>
+</div>
+
+<!-- Results -->
+<div id="results">
+  <div class="score-ring">
+    <div class="score-num" id="score-num">0</div>
+    <div class="score-denom" id="score-denom">out of 10</div>
+  </div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-sub" id="result-sub"></div>
+  <div class="result-btns">
+    <button class="btn-primary" id="retry-btn">&#8635; Try again</button>
+    <button class="btn-secondary" onclick="location.href='index.html'">&#8592; Unit overview</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const DECK_LABELS = {
+    1:'Living or Non-living?', 2:'Classification', 3:'Scientific Names & Kingdoms',
+    4:'Dichotomous Keys', 5:'Ecosystems & Biodiversity', 6:'Food Webs & Energy Flow',
+    7:'Ecosystem Services', 8:'Adaptations', 9:'Introduced Species',
+    10:'Human Impacts', 11:'Conservation & Action'
+  };
+
+  let selectedDecks = 'all';
+  let selectedCount = 10;
+  let questions = [];
+  let current = 0;
+  let correct = 0;
+  let answered = false;
+
+  // ── Chip selection ──
+  document.querySelectorAll('#topic-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#topic-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      selectedDecks = c.dataset.decks;
+    });
+  });
+  document.querySelectorAll('#count-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#count-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      selectedCount = parseInt(c.dataset.count);
+    });
+  });
+
+  // ── Start ──
+  document.getElementById('start-btn').addEventListener('click', startQuiz);
+  document.getElementById('retry-btn').addEventListener('click', () => {
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('setup').style.display = 'block';
+  });
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function startQuiz() {
+    const pool = window.BIO_QUESTIONS || [];
+    let filtered = selectedDecks === 'all'
+      ? pool
+      : pool.filter(q => q.deck === parseInt(selectedDecks));
+
+    if (filtered.length === 0) {
+      alert('No questions found for that selection.');
+      return;
+    }
+
+    questions = shuffle([...filtered]).slice(0, Math.min(selectedCount, filtered.length));
+    current = 0;
+    correct = 0;
+
+    document.getElementById('setup').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('quiz').style.display = 'block';
+    showQuestion();
+  }
+
+  function showQuestion() {
+    answered = false;
+    const q = questions[current];
+    const total = questions.length;
+
+    document.getElementById('q-counter').textContent = `Question ${current + 1} of ${total}`;
+    document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+    document.getElementById('q-tag').textContent = `Lesson ${q.deck} · ${DECK_LABELS[q.deck]}`;
+    document.getElementById('q-text').textContent = q.q;
+    document.getElementById('feedback').innerHTML = '';
+    document.getElementById('next-btn').style.display = 'none';
+
+    const optsEl = document.getElementById('opts');
+    optsEl.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = `${letters[i]}. ${opt}`;
+      btn.addEventListener('click', () => selectAnswer(i, q.ans));
+      optsEl.appendChild(btn);
+    });
+  }
+
+  function selectAnswer(chosen, correct_idx) {
+    if (answered) return;
+    answered = true;
+
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    btns[correct_idx].classList.add('correct');
+
+    const fb = document.getElementById('feedback');
+    if (chosen === correct_idx) {
+      correct++;
+      btns[chosen].classList.add('correct');
+      fb.innerHTML = '<span class="correct-label">&#10003; Correct!</span>';
+    } else {
+      btns[chosen].classList.add('wrong');
+      fb.innerHTML = `<span class="wrong-label">&#10007; Incorrect</span> — correct answer: <strong>${['A','B','C','D'][correct_idx]}</strong>`;
+    }
+
+    document.getElementById('next-btn').style.display = 'inline-block';
+  }
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    current++;
+    if (current < questions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  });
+
+  function showResults() {
+    document.getElementById('quiz').style.display = 'none';
+    const res = document.getElementById('results');
+    res.style.display = 'block';
+
+    const total = questions.length;
+    const pct = Math.round((correct / total) * 100);
+    document.getElementById('score-num').textContent = correct;
+    document.getElementById('score-denom').textContent = `out of ${total}`;
+
+    let msg, sub;
+    if (pct === 100) {
+      msg = '🌿 Perfect score!';
+      sub = 'Outstanding work — you nailed every question.';
+    } else if (pct >= 80) {
+      msg = 'Great work!';
+      sub = `${pct}% — solid understanding. Review any you missed.`;
+    } else if (pct >= 60) {
+      msg = 'Good effort';
+      sub = `${pct}% — revisit the topics where you slipped.`;
+    } else {
+      msg = 'Keep practising';
+      sub = `${pct}% — go back over the lesson slides and try again.`;
+    }
+    document.getElementById('result-msg').textContent = msg;
+    document.getElementById('result-sub').textContent = sub;
+
+    document.getElementById('progress-fill').style.width = '100%';
+  }
+})();
+</script>
+</body>
+</html>
