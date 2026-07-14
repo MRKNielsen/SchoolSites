@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9C — Multi-stage Experiments | Year 11 Mathematical Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F8FA; --card:#FFFFFF; --ink:#16263D; --muted:#5C6B80;
+  --grid:#DDE8F1; --grid-major:#C3D4E4; --line:#D4DEE8;
+  --blue:#2456A6; --red:#C23B32; --amber:#9A6410;
+  --ido:#33508f; --wedo:#a8610f; --youdo:#1e7d56;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Source Sans 3',system-ui,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;font-size:16.5px;line-height:1.5}
+.deck{position:relative;height:100vh;height:100dvh}
+.slide{position:absolute;inset:0;padding:42px 56px 70px;display:none;flex-direction:column;overflow-y:auto}
+.slide.active{display:flex;animation:slideIn .32s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.slide.active{animation:none}.draw path{animation:none !important;stroke-dashoffset:0 !important}}
+.progress{position:fixed;top:0;left:0;height:4px;background:var(--red);z-index:20;transition:width .25s}
+.lessontag{position:fixed;top:12px;left:18px;z-index:15;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:5px 13px}
+.keyhint{position:fixed;left:18px;bottom:14px;font-size:14px;color:var(--muted);z-index:15}
+.chrome{position:fixed;right:18px;bottom:12px;display:flex;align-items:center;gap:10px;z-index:15}
+.counter{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);min-width:54px;text-align:center}
+.navbtn{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;transition:background .15s}
+.navbtn:hover{background:var(--grid)}
+button:focus-visible, input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.eyebrow b{color:var(--red)}
+h1{font-family:'Bitter',Georgia,serif;font-weight:800;font-size:clamp(32px,4.8vw,52px);line-height:1.08;margin-bottom:16px}
+h2{font-family:'Bitter',Georgia,serif;font-weight:700;font-size:clamp(22px,3vw,32px);margin-bottom:6px}
+h3{font-family:'Bitter',Georgia,serif}
+.lede{color:var(--muted);max-width:66ch;margin-bottom:16px}
+.cols{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start;flex:1;min-height:0}
+.cols.even{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.slide{padding:26px 20px 76px}.cols{grid-template-columns:1fr;gap:18px}}
+.m{font-style:italic;font-family:Georgia,'Times New Roman',serif}
+.mu{font-family:Georgia,'Times New Roman',serif}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;font-family:Georgia,serif;font-style:normal;line-height:1.05}
+.fr .nu{padding:0 .25em;border-bottom:1.5px solid currentColor}
+.fr .de{padding:0 .25em}
+.work{display:grid;grid-template-columns:auto 1fr;column-gap:6px;row-gap:2px;margin:5px 0 3px;font-family:Georgia,serif}
+.work .wl{text-align:right;white-space:nowrap} .work .wr{white-space:nowrap}
+.graph-card{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 12px 6px;box-shadow:0 2px 10px rgba(22,38,61,.05)}
+.graph-card svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;padding:8px 4px 2px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.pen{width:22px;height:0;border-top:3px solid;border-radius:2px;display:inline-block}
+.pen.blue{border-color:var(--blue)} .pen.red{border-color:var(--red)}
+.pen.amber{border-color:var(--amber);border-top-style:dashed} .pen.grey{border-color:#9aa4b8;border-top-style:dashed}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1.5px solid #fff;background:var(--ink)}
+.dot.red{background:var(--red)} .dot.blue{background:var(--blue)} .dot.grey{background:#9aa4b8}
+.note{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:13px}
+.note h3{font-size:17px;margin-bottom:8px}
+.note ul{padding-left:20px} .note li{margin-bottom:6px}
+.note.flag{border-left:5px solid var(--amber)} .note.flag h3{color:var(--amber)}
+.note.tip{border-left:5px solid var(--ido)} .note.tip h3{color:var(--ido)}
+.defbox{background:#eef3fb;border:2px solid var(--ido);border-left:8px solid var(--ido);border-radius:12px;padding:15px 20px;margin:2px 0 14px;max-width:1000px}
+.defbox .dlab{font-size:14px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ido);display:block;margin-bottom:6px}
+.defbox p{font-size:17px;margin:0;color:var(--ink)}
+.defbox.slim{padding:10px 18px;margin-bottom:12px}
+.defbox.slim p{font-size:15.5px}
+.bigeq{font-family:Georgia,serif;font-size:21px;text-align:center;margin:6px 0 2px}
+table.facts{border-collapse:collapse;width:100%;font-size:15.5px}
+table.facts td{padding:5px 8px;border-bottom:1px solid var(--line)}
+table.facts td:first-child{font-weight:600;width:55%}
+table.facts.deriv td:first-child{width:42%}
+.ctrl{margin-top:0;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 18px}
+.ctrl label{display:flex;justify-content:space-between;font-weight:600;font-size:15px;margin-bottom:5px}
+.ctrl label output{color:var(--red);font-variant-numeric:tabular-nums;font-family:Georgia,serif}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
+.param-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+.pcard{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--muted);border-radius:10px;padding:14px 16px}
+.pcard .sym{font-family:'Bitter',serif;font-weight:800;font-size:18px;line-height:1.1;margin-bottom:6px}
+.pcard p{font-size:15px;color:var(--muted)} .pcard p b{color:var(--ink)}
+.pcard .eg{display:flex;align-items:center;gap:8px;margin-top:10px;background:#eff4fb;border-radius:8px;padding:6px 10px}
+.pcard .eg .lab{font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);flex:none}
+.pcard .eg .ex{font-family:Georgia,serif;font-size:16px;color:var(--ink);font-weight:700}
+.pcard.c-amber .eg .lab{color:var(--amber)} .pcard.c-green .eg .lab{color:var(--youdo)} .pcard.c-red .eg .lab{color:var(--red)}
+.pcard.c-red{border-top-color:var(--red)} .pcard.c-red .sym{color:var(--red)}
+.pcard.c-blue{border-top-color:var(--blue)} .pcard.c-blue .sym{color:var(--blue)}
+.pcard.c-amber{border-top-color:var(--amber)} .pcard.c-amber .sym{color:var(--amber)}
+.pcard.c-green{border-top-color:var(--youdo)} .pcard.c-green .sym{color:var(--youdo)}
+.phase-tag{display:inline-block;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 10px;vertical-align:middle;margin-right:8px}
+.phase-tag.ido{background:var(--ido)} .phase-tag.wedo{background:var(--wedo)} .phase-tag.youdo{background:var(--youdo)} .phase-tag.cas{background:#7c3aed}
+.mbanner{border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 12px;border:1.5px solid}
+.mbanner.cas{background:#f3effd;border-color:#7c3aed;color:#4a2f9e} .mbanner.cas b{color:#4a2f9e}
+.reveal-btn{border:1.5px solid var(--ink);background:var(--card);padding:8px 16px;border-radius:999px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.reveal-btn:hover{background:var(--grid)}
+.steps{list-style:none;padding:0;margin:12px 0 0}
+.steps li{margin-bottom:10px;opacity:0;transform:translateY(4px);transition:all .3s;padding-left:0}
+.steps li.shown{opacity:1;transform:none}
+.steps li .stepno{display:inline-block;background:var(--ido);color:#fff;border-radius:4px;font-size:14px;font-weight:700;padding:1px 7px;margin-right:8px;vertical-align:middle}
+.steps li.ans .stepno{background:var(--red)}
+.rd{margin:6px 0 2px 6px} .rd>div{position:relative;padding-left:19px;margin-bottom:4px} .rd>div::before{content:"\2022";position:absolute;left:3px;top:-1px;color:var(--red);font-weight:700}
+.qcard{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.qcard .q{font-weight:600;margin-bottom:9px}
+.qcard .a{display:none;border-top:1px dashed var(--line);margin-top:9px;padding-top:9px;color:var(--muted)}
+.qcard .a.shown{display:block} .qcard .a b{color:var(--red)}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* part-by-part worked example */
+.parts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.ptab{font-size:14.5px;font-weight:700;border:1.5px solid var(--line);border-radius:999px;padding:5px 15px;cursor:pointer;background:var(--card);color:var(--muted);font-family:inherit}
+.ptab.active{border-color:var(--ido);color:var(--ido);background:#eef3fb}
+.ptab.done{color:var(--youdo);border-color:var(--youdo)}
+.ptab.done::after{content:" \2713"}
+.partpanel{display:none}
+.partpanel.shown{display:block;animation:slideIn .25s ease}
+.partpanel .q{font-weight:600;font-size:17px;margin-bottom:6px}
+.title-slide{justify-content:center;align-items:flex-start}
+.subtitle{font-size:19px;color:var(--muted);margin-bottom:6px}
+.title-eq{font-size:clamp(20px,3vw,30px);margin:8px 0 18px;font-family:Georgia,serif}
+.title-wave{max-width:720px;width:100%}
+.draw path.wave{stroke-dasharray:1;stroke-dashoffset:1;animation:drawin 2.2s ease forwards .3s}
+@keyframes drawin{to{stroke-dashoffset:0}}
+.head-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.pill{font-size:14px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 13px}
+.start-hint{margin-top:18px;color:var(--muted);font-size:14.5px}
+.key{display:inline-block;border:1.5px solid var(--line);border-bottom-width:2.5px;border-radius:5px;padding:1px 7px;font-size:14px;background:var(--card)}
+.teacher{margin-top:14px;border:1.5px dashed var(--line);border-radius:10px;background:#fbfdff}
+.teacher>summary{cursor:pointer;padding:11px 16px;font-weight:700;color:var(--ido);font-size:15px;list-style:none}
+.teacher>summary::-webkit-details-marker{display:none}
+.teacher>summary::before{content:"\25B8 ";color:var(--muted)}
+.teacher[open]>summary::before{content:"\25BE "}
+.teacher .inner-d{padding:2px 18px 14px} .teacher ul{margin-left:20px} .teacher li{margin-bottom:5px;font-size:14.5px;color:var(--ink)}
+.exit-slide{justify-content:center;align-items:center;text-align:center}
+.exit-wrap{max-width:820px}
+.exit-wrap ol{display:inline-block;text-align:left;margin:14px 0;padding-left:22px}
+.exit-wrap ol li{margin-bottom:9px;font-size:18px}
+.exit-wrap .note-key{font-size:14px;color:var(--muted);margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+.qrefrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.qchip{background:var(--card,#fff);border:1.5px solid var(--line,#e3ddd2);border-radius:8px;padding:4px 10px;line-height:1.5;display:inline-block}
+.qparts{list-style:none;margin:2px 0 12px;padding:0;font-size:16.5px;font-weight:600;color:var(--ink)}
+.qparts li{position:relative;padding-left:30px;margin:0 0 4px;line-height:1.4}
+.qparts li>b:first-child{position:absolute;left:4px;color:var(--ido)}
+.eqrow{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin:8px 0 18px}
+.eqbox{font-family:Georgia,serif;font-size:clamp(17px,2.1vw,24px);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 18px;display:flex;align-items:center}
+@media print{
+  body{overflow:visible}
+  .slide{display:flex !important;position:relative;inset:auto;height:auto;page-break-after:always;animation:none;overflow:visible}
+  .progress,.chrome,.keyhint,.lessontag{display:none}
+  .qcard .a{display:block !important}
+  .steps li{opacity:1 !important;transform:none !important}
+  .partpanel{display:block !important}
+  .glayer{opacity:1 !important}
+  .teacher{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="lessontag">9C &middot; Multi-stage Experiments</div>
+<div class="keyhint">&larr; &rarr; arrow keys &middot; space to advance</div>
+<div class="chrome">
+  <button class="navbtn" id="prevBtn" aria-label="Previous slide">&larr;</button>
+  <span class="counter" id="counter">1 / 14</span>
+  <button class="navbtn" id="nextBtn" aria-label="Next slide">&rarr;</button>
+  <button class="navbtn" id="resetBtn" aria-label="Reset all working" title="Reset all working (R)">&#8635;</button>
+  <button class="navbtn" id="fsBtn" aria-label="Toggle fullscreen" title="Fullscreen (F)">&#10530;</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide">
+  <div class="eyebrow">Year 11 Mathematical Methods &middot; Ch 9 &middot; <b>Probability</b></div>
+  <h1>9C &middot; Multi-stage experiments</h1>
+  <div class="subtitle">Two coins, three coins, two dice &mdash; list <b>every</b> outcome systematically, then count</div>
+  <div class="eqrow">
+    <div class="eqbox"><span class="mu">tree diagram &rarr; list &epsilon;</span></div>
+    <div class="eqbox"><span class="mu">two dice &rarr; 6 &times; 6 table, 36 outcomes</span></div>
+  </div>
+  <div class="graph-card title-wave"><svg id="g-title" viewBox="0 0 720 250"></svg></div>
+  <div class="head-meta">
+    <span class="pill">&#127794; tree diagrams</span>
+    <span class="pill">&#128202; tables of ordered pairs</span>
+    <span class="pill">&#9888;&#65039; sums are <b>not</b> equally likely</span>
+    <span class="pill">&#128218; Ex 9C</span>
+  </div>
+  <p class="start-hint">Press <span class="key">&rarr;</span> or <span class="key">space</span> to begin</p>
+</section>
+
+<!-- 2 GOALS -->
+<section class="slide">
+  <div class="eyebrow">Today &middot; Where we're headed</div>
+  <h2>Learning intentions</h2>
+  <div class="cols even">
+    <div class="note">
+      <h3>Learning intention</h3>
+      <ul>
+        <li>List the sample space of a multi-stage experiment with a <b>tree diagram</b> or a <b>table</b>.</li>
+        <li>Calculate probabilities by counting outcomes in the full sample space.</li>
+        <li>Know when each tool fits: table for two stages, tree for two <b>or more</b>.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>Success criteria &mdash; I can&hellip;</h3>
+      <ul>
+        <li>draw the tree for two or three coins and read events off it.</li>
+        <li>use the 36-cell table for two dice &mdash; and explain why <span class="mu">Pr(sum = 7) &ne; Pr(sum = 12)</span>.</li>
+        <li>keep the <b>order</b> of outcomes: HT and TH are different outcomes.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="teacher">
+    <summary>Teacher notes &mdash; 55-minute pacing</summary>
+    <div class="inner-d">
+      <ul>
+        <li><b>Warm-up (5 min):</b> 9A retrieval &mdash; counting probabilities.</li>
+        <li><b>Trees (10 min):</b> two coins; Example 1. Emphasise HT &ne; TH.</li>
+        <li><b>Two dice (12 min):</b> the table; Example 2, then the sum explorer &mdash; vote first: "is a sum of 9 as likely as a sum of 5?"</li>
+        <li><b>Three stages (10 min):</b> Example 3 (three coins); Example 4 (coin + die).</li>
+        <li><b>You Do + hinge + Exercise 9C (rest).</b></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- 3 WARM UP -->
+<section class="slide">
+  <div class="eyebrow">Warm-up &middot; Do now</div>
+  <h2>Retrieval &mdash; counting probabilities (9A)</h2>
+  <p class="lede">Multi-stage work is 9A counting on a bigger sample space.</p>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">W1. A die is rolled. Find <span class="mu">Pr(number &gt; 4)</span>.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a">{5, 6}: <span class="mu">Pr = <span class="fr"><span class="nu">2</span><span class="de">6</span></span> = <span class="fr"><span class="nu">1</span><span class="de">3</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">W2. Simplify <span class="mu"><span class="fr"><span class="nu">6</span><span class="de">36</span></span></span> and <span class="mu"><span class="fr"><span class="nu">4</span><span class="de">8</span></span></span>.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu"><span class="fr"><span class="nu">1</span><span class="de">6</span></span></span> and <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">2</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">W3. List all the ways to write a 2-letter "word" using only H and T.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a">HH, HT, TH, TT &mdash; four of them. Order matters!</div></div>
+    <div class="qcard"><div class="q">W4. <span class="mu">Pr(<span class="m">A</span>) = <span class="fr"><span class="nu">7</span><span class="de">8</span></span></span>. What is <span class="mu">Pr(<span class="m">A</span>&prime;)</span>?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">1 &minus; <span class="fr"><span class="nu">7</span><span class="de">8</span></span> = <span class="fr"><span class="nu">1</span><span class="de">8</span></span></span>.</div></div>
+  </div>
+</section>
+
+<!-- 4 CONCEPT: tree for two coins + EXAMPLE 1 -->
+<section class="slide">
+  <div class="eyebrow">01 &middot; Tree diagrams</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 1</h2>
+  <div class="cols">
+    <div class="graph-card">
+      <div style="font-size:16px;color:var(--ink);margin:2px 4px 8px;line-height:1.3">A fair coin is tossed twice. Find the probability that:&ensp;<b>a</b> one head is observed&ensp;<b>b</b> at least one head is observed&ensp;<b>c</b> both tosses give the same result.</div>
+      <svg id="g-tree2" viewBox="0 0 720 300"></svg>
+    </div>
+    <div>
+      <div class="defbox slim"><span class="dlab">Tree diagram</span><p>One <b>stage per column</b>; read along the branches to list every outcome. Here <span class="mu">&epsilon; = {HH, HT, TH, TT}</span> &mdash; four equally likely outcomes.</p></div>
+      <button class="reveal-btn" data-steps="e1-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e1-steps">
+        <li><span class="stepno">a</span>&lsquo;One head&rsquo; = {HT, TH}: <span class="mu">Pr = <span class="fr"><span class="nu">2</span><span class="de">4</span></span> = <span class="fr"><span class="nu">1</span><span class="de">2</span></span></span>.</li>
+        <li><span class="stepno">b</span>&lsquo;At least one head&rsquo; = {HH, HT, TH}: <span class="mu">Pr = <span class="fr"><span class="nu">3</span><span class="de">4</span></span></span>.</li>
+        <li class="ans"><span class="stepno">c</span>&lsquo;Same result&rsquo; = {HH, TT}: <span class="mu">Pr = <span class="fr"><span class="nu">2</span><span class="de">4</span></span> = <span class="fr"><span class="nu">1</span><span class="de">2</span></span></span>.</li>
+      </ul>
+      <div class="note flag" style="margin-top:12px"><h3>HT and TH are different</h3><p>&lsquo;One head&rsquo; happens <b>two ways</b>. Merging HT and TH is the most common listing error.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 TWO DICE TABLE + EXAMPLE 2 -->
+<section class="slide">
+  <div class="eyebrow">02 &middot; Tables for two-stage experiments</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 2</h2>
+  <div class="cols">
+    <div class="graph-card">
+      <div style="font-size:16px;color:var(--ink);margin:2px 4px 8px;line-height:1.3">Two fair dice are rolled. Find the probability that:&ensp;<b>a</b> a double is rolled&ensp;<b>b</b> the sum is greater than 10.</div>
+      <svg id="g-grid1" viewBox="0 0 720 330"></svg>
+    </div>
+    <div>
+      <div class="defbox slim"><span class="dlab">Table of ordered pairs</span><p>Two dice &rarr; a <span class="mu">6 &times; 6</span> table: <b>36 equally likely</b> outcomes <span class="mu">(die 1, die 2)</span>.</p></div>
+      <button class="reveal-btn" data-steps="e2-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e2-steps">
+        <li><span class="stepno">a</span>Doubles lie on the diagonal: {(1,1), (2,2), &hellip;, (6,6)} &mdash; 6 outcomes. <span class="mu">Pr = <span class="fr"><span class="nu">6</span><span class="de">36</span></span> = <span class="fr"><span class="nu">1</span><span class="de">6</span></span></span>.</li>
+        <li><span class="stepno">b</span>Sum &gt; 10: {(5,6), (6,5), (6,6)} &mdash; 3 outcomes. <span class="mu">Pr = <span class="fr"><span class="nu">3</span><span class="de">36</span></span> = <span class="fr"><span class="nu">1</span><span class="de">12</span></span></span>.</li>
+        <li class="ans"><span class="stepno">&#10003;</span>Both answers come from <b>counting cells</b> &mdash; the table guarantees nothing is missed or double-counted.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6 EXPLORE: sums -->
+<section class="slide">
+  <div class="eyebrow">03 &middot; Explore</div>
+  <h2>&#128270; Which sums are likely? Slide and see</h2>
+  <p class="lede"><b>Predict first:</b> two dice are rolled. Is a sum of 9 as likely as a sum of 5? Is 7 special?</p>
+  <div class="cols">
+    <div class="graph-card">
+      <svg id="g-grid2" viewBox="0 0 720 340"></svg>
+    </div>
+    <div>
+      <div class="ctrl">
+        <label>target sum <output id="sum-out">7</output></label>
+        <input type="range" id="sum-k" min="2" max="12" step="1" value="7" aria-label="target sum">
+        <table class="facts" style="margin-top:12px">
+          <tr><td>outcomes with this sum</td><td id="sum-count" style="font-weight:700">&mdash;</td></tr>
+          <tr><td>probability</td><td id="sum-pr" style="color:var(--red);font-weight:700">&mdash;</td></tr>
+        </table>
+        <p style="font-size:14.5px;color:var(--muted);margin-top:10px">The 36 <b>cells</b> are equally likely &mdash; the 11 possible <b>sums</b> are not. Each diagonal has a different number of cells.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 THREE COINS + EXAMPLE 3 -->
+<section class="slide">
+  <div class="eyebrow">04 &middot; Three stages</div>
+  <h2><span class="phase-tag wedo">We Do</span> Example 3</h2>
+  <div class="cols">
+    <div class="graph-card">
+      <div style="font-size:16px;color:var(--ink);margin:2px 4px 8px;line-height:1.3">A fair coin is tossed three times. Find the probability that:&ensp;<b>a</b> exactly one head is observed&ensp;<b>b</b> at least one head is observed&ensp;<b>c</b> the second toss is a head.</div>
+      <svg id="g-tree3" viewBox="0 0 720 330"></svg>
+    </div>
+    <div>
+      <button class="reveal-btn" data-steps="e3-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e3-steps">
+        <li><span class="stepno">1</span>The tree gives <span class="mu">2 &times; 2 &times; 2 = 8</span> equally likely outcomes.</li>
+        <li><span class="stepno">a</span>&lsquo;Exactly one head&rsquo; = {HTT, THT, TTH}: <span class="mu">Pr = <span class="fr"><span class="nu">3</span><span class="de">8</span></span></span>.</li>
+        <li><span class="stepno">b</span>Complement shortcut: &lsquo;no heads&rsquo; = {TTT}, so <span class="mu">Pr = 1 &minus; <span class="fr"><span class="nu">1</span><span class="de">8</span></span> = <span class="fr"><span class="nu">7</span><span class="de">8</span></span></span>.</li>
+        <li class="ans"><span class="stepno">c</span>&lsquo;Second toss a head&rsquo; = {HHH, HHT, THH, THT}: <span class="mu">Pr = <span class="fr"><span class="nu">4</span><span class="de">8</span></span> = <span class="fr"><span class="nu">1</span><span class="de">2</span></span></span>.</li>
+      </ul>
+      <div class="note tip" style="margin-top:12px"><h3>"At least one" &rarr; complement</h3><p>Count the one outcome you <i>don't</i> want instead of the seven you do.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 EXAMPLE 4: mixed stages -->
+<section class="slide">
+  <div class="eyebrow">05 &middot; Mixed experiments</div>
+  <h2><span class="phase-tag wedo">We Do</span> Example 4</h2>
+  <div class="cols even">
+    <div>
+      <p style="margin-bottom:8px">An experiment consists of tossing a coin and then rolling a die.</p>
+      <ol class="qparts">
+        <li><b>a</b> Use a tree diagram to list the sample space.</li>
+        <li><b>b</b> Find the probability of a tail together with a number greater than 4.</li>
+      </ol>
+      <button class="reveal-btn" data-steps="e4-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e4-steps">
+        <li><span class="stepno">1</span>Stage 1 has 2 branches (H, T); each splits into 6 (1&ndash;6): <span class="mu">2 &times; 6 = 12</span> equally likely outcomes: H1, H2, &hellip;, T6.</li>
+        <li><span class="stepno">2</span>&lsquo;Tail and number &gt; 4&rsquo; = {T5, T6} &mdash; 2 outcomes.</li>
+        <li class="ans"><span class="stepno">3</span><span class="mu">Pr = <span class="fr"><span class="nu">2</span><span class="de">12</span></span> = <span class="fr"><span class="nu">1</span><span class="de">6</span></span></span>.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="note tip"><h3>Multiply the branch counts</h3><p>Stages with <span class="m">m</span> and <span class="m">n</span> outcomes give <span class="mu"><span class="m">m</span> &times; <span class="m">n</span></span> outcomes altogether &mdash; a preview of the multiplication principle in Chapter 10.</p></div>
+      <div class="note flag"><h3>Keep stages in order</h3><p>H3 means "head, then 3". Writing outcomes in a fixed stage order is what keeps the list complete.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 YOU DO -->
+<section class="slide">
+  <div class="eyebrow">06 &middot; Your turn</div>
+  <h2><span class="phase-tag youdo">You Do</span> Example 5</h2>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">a. Two dice are rolled. Find <span class="mu">Pr(sum is even)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">18 of the 36 cells have an even sum: <span class="mu">Pr = <span class="fr"><span class="nu">18</span><span class="de">36</span></span> = <span class="fr"><span class="nu">1</span><span class="de">2</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">b. Two dice are rolled. Find <span class="mu">Pr(sum &le; 4)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">{(1,1), (1,2), (2,1), (1,3), (3,1), (2,2)} &mdash; 6 cells: <span class="mu">Pr = <span class="fr"><span class="nu">6</span><span class="de">36</span></span> = <span class="fr"><span class="nu">1</span><span class="de">6</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">c. Three coins are tossed. Find <span class="mu">Pr(exactly two tails)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">{TTH, THT, HTT}: <span class="mu">Pr = <span class="fr"><span class="nu">3</span><span class="de">8</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">d. A caf&eacute; offers 2 entr&eacute;es, 3 mains and 3 desserts. How many different three-course meals are possible? If all are equally likely, find <span class="mu">Pr(a particular meal)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu">2 &times; 3 &times; 3 = 18</span> meals; each has probability <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">18</span></span></span>.</div></div>
+  </div>
+</section>
+
+<!-- 10 CAS -->
+<section class="slide">
+  <div class="eyebrow">07 &middot; Using the TI-Nspire CX II CAS</div>
+  <h2><span class="phase-tag cas">CAS skills</span> Simulating two dice</h2>
+  <div class="mbanner cas">Check the table's prediction: simulate many rolls of two dice and compare relative frequency with <span class="mu"><span class="m">n</span>/36</span>.</div>
+  <div class="cols even">
+    <div class="note tip"><h3>Steps</h3>
+      <ul>
+        <li><span class="mu">randInt(1, 6, 100) + randInt(1, 6, 100) &rarr; sums</span> &mdash; 100 two-dice sums at once.</li>
+        <li>Count: <span class="mu">countIf(sums, 7)</span> and <span class="mu">countIf(sums, 12)</span>.</li>
+        <li>Compare with theory: <span class="mu">Pr(7) = <span class="fr"><span class="nu">6</span><span class="de">36</span></span> &asymp; 0.17</span>, <span class="mu">Pr(12) = <span class="fr"><span class="nu">1</span><span class="de">36</span></span> &asymp; 0.03</span>.</li>
+      </ul>
+    </div>
+    <div class="note flag"><h3>What you should see</h3><p>Roughly six times as many 7s as 12s &mdash; the diagonal count made visible. If a student's simulation gives 7 and 12 about equally often, something's wrong with the code, not the dice.</p></div>
+  </div>
+</section>
+
+<!-- 11 SUMMARY -->
+<section class="slide">
+  <div class="eyebrow">08 &middot; Summary 9C</div>
+  <h2>Multi-stage experiments &mdash; what to remember</h2>
+  <div class="cols even">
+    <div class="note"><h3>The tools</h3>
+      <ul>
+        <li><b>Tree diagram</b> &mdash; any number of stages; read along branches, keep stage order.</li>
+        <li><b>Table</b> &mdash; perfect for exactly two stages (e.g. the 36-cell dice grid).</li>
+        <li>Branch counts multiply: <span class="mu">2 &times; 6 = 12</span>, <span class="mu">2 &times; 2 &times; 2 = 8</span>.</li>
+      </ul>
+    </div>
+    <div class="note tip"><h3>The routine</h3>
+      <div class="rd">
+        <div>List the <b>whole</b> sample space first.</div>
+        <div>Circle the outcomes in the event; probability = count &divide; total.</div>
+        <div>"At least one" &rarr; use the complement.</div>
+      </div>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>The #1 trap</h3><p>Treating <b>summaries</b> of outcomes as equally likely. The 36 dice <i>pairs</i> are equally likely; the 11 <i>sums</i> are not. Always drop back to the level where outcomes really are equally likely.</p></div>
+</section>
+
+<!-- 12 HINGE -->
+<section class="slide">
+  <div class="eyebrow">Check &middot; <b>Mini-whiteboards</b></div>
+  <h2><span class="phase-tag wedo">Check</span> Hinge question &mdash; everyone shows an answer</h2>
+  <div style="background:#f7eedd;border:1.5px solid #9A6410;border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 14px;color:#6f4a0c">On your whiteboard write <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>. On the count of three, <b>hold it up</b> &mdash; everyone answers at once.</div>
+  <div class="qcard">
+    <div class="q" style="font-size:18px">A fair coin is tossed five times. Which sequence is <b>most likely</b>?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px">
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>A</b>&nbsp; H T H T H</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>B</b>&nbsp; H H H H H</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>C</b>&nbsp; T T H H T</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>D</b>&nbsp; they are all equally likely</div>
+    </div>
+    <button class="reveal-btn" data-ans>Show answer</button>
+    <div class="a"><b>Answer: D.</b> Each sequence is one path through the 32-outcome tree: probability <span class="mu">1/32</span> each. <b>A</b> and <b>C</b> "look more random", and <b>B</b> "looks impossible" &mdash; but looking random isn't being more likely. (Five heads <i>as a total</i> is rarer than three heads only because more sequences give three.)</div>
+  </div>
+</section>
+
+<!-- 13 INDEPENDENT -->
+<section class="slide">
+  <div class="eyebrow">09 &middot; Independent practice</div>
+  <h2><span class="phase-tag youdo">You Do</span> Exercise 9C</h2>
+  <div class="cols even">
+    <div class="note"><h3>Set work</h3>
+      <p style="font-size:18px;margin-bottom:8px"><b>Exercise 9C</b> &mdash; Q1&ndash;5, 8&ndash;10</p>
+      <p style="color:var(--muted)"><b>Required (minimum):</b> Q3, 4, 7, 9, 10. Draw the tree or table <b>first</b>, every time &mdash; the diagram is the working.</p>
+    </div>
+    <div class="note"><h3>What each builds</h3>
+      <ul>
+        <li><b>Q1, 2</b> two coins (Example 1).</li>
+        <li><b>Q3, 4</b> two dice with the table (Example 2 + explorer).</li>
+        <li><b>Q5, 6</b> three coins (Example 3).</li>
+        <li><b>Q7, 8</b> coin + die and bigger trees (Example 4).</li>
+        <li><b>Q9, 10</b> menus and drawing with replacement &mdash; multiply branch counts (Example 5d).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>Quick reference</h3><div class="qrefrow"><span class="qchip">tree: one stage per column</span> <span class="qchip">two dice: 36 cells</span> <span class="qchip">branch counts multiply</span> <span class="qchip">"at least one" &rarr; complement</span></div></div>
+</section>
+
+<!-- 14 EXIT -->
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <h2>&#127903; Exit ticket (optional)</h2>
+    <p class="lede" style="margin:6px auto 0">Last 5 minutes, or next lesson's warm-up.</p>
+    <ol>
+      <li>List the sample space for tossing a coin three times. How many outcomes?</li>
+      <li>Two dice are rolled. Find <span class="mu">Pr(sum = 11)</span>.</li>
+      <li>Two dice are rolled. Which is more likely: sum = 6 or sum = 3?</li>
+      <li>A spinner (3 colours) is spun and a coin is tossed. How many outcomes are in the sample space?</li>
+    </ol>
+    <p class="note-key">Key: 1) 8 outcomes, HHH &hellip; TTT &nbsp; 2) {(5,6), (6,5)}: <span class="mu">2/36 = 1/18</span> &nbsp; 3) sum = 6 (5 cells vs 2 cells) &nbsp; 4) <span class="mu">3 &times; 2 = 6</span>. &nbsp; Next: 9D &mdash; combining events.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+const PI=Math.PI, NS='http://www.w3.org/2000/svg';
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function fmt(v){const r=Math.round(v*100)/100;let s=String(r);if(s==='-0')s='0';return s.replace('-','−');}
+let uid=0;
+class Graph{
+  constructor(svgId,opts={}){
+    this.svg=document.getElementById(svgId);
+    const vb=this.svg.getAttribute('viewBox').split(' ').map(Number);
+    this.W=vb[2];this.H=vb[3];
+    this.xMin=opts.xMin??-3;this.xMax=opts.xMax??3;
+    this.yMin=opts.yMin??-3;this.yMax=opts.yMax??3;
+    this.padL=34;this.padR=14;this.padT=12;this.padB=26;
+    this.xTicks=opts.xTicks||null;
+    this.id='clip'+(++uid);
+    const defs=el('defs',{},this.svg);
+    const clip=el('clipPath',{id:this.id},defs);
+    el('rect',{x:this.padL,y:this.padT,width:this.W-this.padL-this.padR,height:this.H-this.padT-this.padB},clip);
+    this.gGrid=el('g',{},this.svg);
+    this.gCurves=el('g',{'clip-path':'url(#'+this.id+')'},this.svg);
+    this.gMarks=el('g',{},this.svg);
+    this.drawGrid(opts);
+  }
+  X(x){return this.padL+(x-this.xMin)/(this.xMax-this.xMin)*(this.W-this.padL-this.padR);}
+  Y(y){return this.H-this.padB-(y-this.yMin)/(this.yMax-this.yMin)*(this.H-this.padT-this.padB);}
+  drawGrid(opts={}){
+    const css=getComputedStyle(document.documentElement);
+    const cGrid=css.getPropertyValue('--grid').trim(), cMajor=css.getPropertyValue('--grid-major').trim();
+    const cInk=css.getPropertyValue('--ink').trim(), cMuted=css.getPropertyValue('--muted').trim();
+    if(this.xTicks){
+      this.xTicks.forEach(([x,lab])=>{
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:(lab?cMajor:cGrid),'stroke-width':1},this.gGrid);
+        if(lab) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=lab;
+      });
+    } else {
+      const xStep=opts.xStep||1;
+      for(let x=Math.ceil(this.xMin/xStep)*xStep;x<=this.xMax+1e-9;x+=xStep){
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:cGrid,'stroke-width':1},this.gGrid);
+        if(Math.abs(x)>1e-9&&!opts.noXLabels) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(x*100)/100).replace('-','−');
+      }
+    }
+    const yStep=opts.yStep|| (this.yMax-this.yMin>14?4:(this.yMax-this.yMin>7?2:1));
+    for(let y=Math.ceil(this.yMin/yStep)*yStep;y<=this.yMax+1e-9;y+=yStep){
+      el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:cGrid,'stroke-width':1},this.gGrid);
+      if(Math.abs(y)>1e-9&&!opts.noYLabels) el('text',{x:this.padL-7,y:this.Y(y)+4,'text-anchor':'end','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(y*100)/100).replace('-','−');
+    }
+    if(this.yMin<=0&&this.yMax>=0) el('line',{x1:this.padL,y1:this.Y(0),x2:this.W-this.padR,y2:this.Y(0),stroke:cInk,'stroke-width':1.6},this.gGrid);
+    if(this.xMin<=0&&this.xMax>=0) el('line',{x1:this.X(0),y1:this.padT,x2:this.X(0),y2:this.H-this.padB,stroke:cInk,'stroke-width':1.6},this.gGrid);
+  }
+  pathFor(fn){const N=480;let d='';for(let i=0;i<=N;i++){const x=this.xMin+(this.xMax-this.xMin)*i/N;d+=(i?'L':'M')+this.X(x).toFixed(1)+','+this.Y(fn(x)).toFixed(1);}return d;}
+  curve(fn,attrs={}){return el('path',Object.assign({d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||3,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round','stroke-linejoin':'round'},attrs.extra||{}),this.gCurves);}
+  line(fn,attrs={}){return el('path',{d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||2.4,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round'},this.gCurves);}
+  hline(y,attrs={}){return el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:attrs.stroke||'#9A6410','stroke-width':attrs.width||1.6,'stroke-dasharray':attrs.dash||'6 5'},this.gCurves);}
+  point(x,y,color,r){return el('circle',{cx:this.X(x),cy:this.Y(y),r:r||5,fill:color,stroke:'#fff','stroke-width':1.6},this.gMarks);}
+  label(x,y,txt,color){const t=el('text',{x:this.X(x),y:this.Y(y),'font-size':13,fill:color||'#16263D','font-family':"'Source Sans 3',sans-serif",'font-weight':600},this.gMarks);t.textContent=txt;return t;}
+}
+const BLUE='#2456A6',RED='#C23B32',AMBER='#9A6410',GREY='#9aa4b8',INK='#16263D';
+const resetters=[];
+function resetAll(){resetters.forEach(r=>r());}
+
+const PURP='#7c3aed';
+
+/* small right-angle marker where two (perpendicular, on square axes) lines cross at (a,y0) */
+function rightAngle(g,a,y0,m,L){
+  if(!isFinite(m)||Math.abs(m)<0.06) return;
+  L=L||13;
+  var px=g.X(a), py=g.Y(y0);
+  var tx=g.X(a+1)-px, ty=g.Y(y0+m)-py; var tl=Math.hypot(tx,ty); tx/=tl; ty/=tl;
+  var nx=g.X(a+1)-px, ny=g.Y(y0-1/m)-py; var nl=Math.hypot(nx,ny); nx/=nl; ny/=nl;
+  var Ax=px+tx*L, Ay=py+ty*L, Bx=px+nx*L, By=py+ny*L, Cx=px+(tx+nx)*L, Cy=py+(ty+ny)*L;
+  el('path',{d:'M'+Ax.toFixed(1)+','+Ay.toFixed(1)+' L'+Cx.toFixed(1)+','+Cy.toFixed(1)+' L'+Bx.toFixed(1)+','+By.toFixed(1),fill:'none',stroke:INK,'stroke-width':1.6},g.gMarks);
+}
+
+
+/* ===== 9C deck-specific graphics ===== */
+const MUT='#5C6B80';
+function treeNode(svg,x,y,txt,color){
+  const t=el('text',{x:x,y:y+5,'text-anchor':'middle','font-size':17,'font-weight':700,fill:color||INK,'font-family':"Georgia,serif"},svg);
+  t.textContent=txt; return t;
+}
+function branch(svg,x0,y0,x1,y1){
+  el('line',{x1:x0,y1:y0,x2:x1,y2:y1,stroke:'#C3D4E4','stroke-width':2},svg);
+}
+/* draw a 2-stage H/T tree with outcomes column */
+function coinTree2(svg,ox){
+  ox=ox||0;
+  const x0=70+ox,x1=210+ox,x2=350+ox,xo=440+ox;
+  branch(svg,x0+18,150,x1-18,75); branch(svg,x0+18,150,x1-18,225);
+  treeNode(svg,x1,75,'H',BLUE); treeNode(svg,x1,225,'T',RED);
+  branch(svg,x1+18,75,x2-18,40); branch(svg,x1+18,75,x2-18,110);
+  branch(svg,x1+18,225,x2-18,190); branch(svg,x1+18,225,x2-18,260);
+  treeNode(svg,x2,40,'H',BLUE); treeNode(svg,x2,110,'T',RED);
+  treeNode(svg,x2,190,'H',BLUE); treeNode(svg,x2,260,'T',RED);
+  const outs=[['HH',40],['HT',110],['TH',190],['TT',260]];
+  outs.forEach(o=>{ const t=el('text',{x:xo,y:o[1]+5,'font-size':17,fill:INK,'font-family':"Georgia,serif"},svg); t.textContent=o[0]; });
+  const h1=el('text',{x:x1,y:16,'text-anchor':'middle','font-size':13,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg); h1.textContent='Stage 1';
+  const h2=el('text',{x:x2,y:16,'text-anchor':'middle','font-size':13,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg); h2.textContent='Stage 2';
+  const h3=el('text',{x:xo+14,y:16,'text-anchor':'middle','font-size':13,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg); h3.textContent='Outcome';
+}
+
+/* title: two-coin tree + epsilon */
+(function(){
+  const svg=document.getElementById('g-title');
+  coinTree2(svg,0);
+  const t=el('text',{x:560,y:130,'font-size':21,fill:INK,'font-family':"Georgia,serif"},svg);
+  t.textContent='ε = {HH, HT, TH, TT}';
+  const t2=el('text',{x:560,y:170,'font-size':16,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg);
+  t2.textContent='4 equally likely outcomes';
+})();
+
+/* Example 1: two-coin tree */
+(function(){
+  const svg=document.getElementById('g-tree2');
+  coinTree2(svg,40);
+})();
+
+/* dice grid helper */
+function diceGrid(svg,ox,oy,cell,hiFn){
+  for(let r=0;r<6;r++)for(let c=0;c<6;c++){
+    const s1=r+1,s2=c+1;
+    const on=hiFn&&hiFn(s1,s2);
+    el('rect',{x:ox+c*cell,y:oy+r*cell,width:cell,height:cell,fill:on?'#f3d8b3':(((r+c)%2)?'#f4f7fb':'#ffffff'),stroke:on?AMBER:'#C3D4E4','stroke-width':on?2:1},svg);
+    const t=el('text',{x:ox+c*cell+cell/2,y:oy+r*cell+cell/2+5,'text-anchor':'middle','font-size':12.5,fill:on?'#6f4a0c':MUT,'font-family':"'Source Sans 3',sans-serif",'font-weight':on?700:400},svg);
+    t.textContent=s1+','+s2;
+  }
+  for(let i=0;i<6;i++){
+    const tr=el('text',{x:ox-14,y:oy+i*cell+cell/2+5,'text-anchor':'middle','font-size':13,'font-weight':700,fill:INK,'font-family':"'Source Sans 3',sans-serif"},svg); tr.textContent=i+1;
+    const tc=el('text',{x:ox+i*cell+cell/2,y:oy-8,'text-anchor':'middle','font-size':13,'font-weight':700,fill:INK,'font-family':"'Source Sans 3',sans-serif"},svg); tc.textContent=i+1;
+  }
+  const lab1=el('text',{x:ox-14,y:oy-8,'text-anchor':'end','font-size':12,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg); lab1.textContent='die 1 ↓  die 2 →';
+}
+
+/* Example 2 grid: highlight doubles + sum>10 */
+(function(){
+  const svg=document.getElementById('g-grid1');
+  diceGrid(svg,120,40,46,(a,b)=>a===b||a+b>10);
+  const t=el('text',{x:480,y:70,'font-size':15,fill:'#6f4a0c','font-family':"'Source Sans 3',sans-serif"},svg);
+  t.textContent='highlighted: doubles (diagonal)';
+  const t2=el('text',{x:480,y:92,'font-size':15,fill:'#6f4a0c','font-family':"'Source Sans 3',sans-serif"},svg);
+  t2.textContent='and sum > 10 (corner)';
+})();
+
+/* explorer grid: highlight sum = k */
+(function(){
+  const svg=document.getElementById('g-grid2');
+  const S=id=>document.getElementById(id);
+  function build(){
+    svg.innerHTML='';
+    const k=+S('sum-k').value;
+    diceGrid(svg,120,44,46,(a,b)=>a+b===k);
+    let n=0; for(let a=1;a<=6;a++)for(let b=1;b<=6;b++)if(a+b===k)n++;
+    const t=el('text',{x:470,y:120,'font-size':20,fill:INK,'font-family':"Georgia,serif"},svg);
+    t.textContent='Pr(sum = '+k+') = '+n+'/36';
+    S('sum-out').textContent=k;
+    S('sum-count').textContent=n;
+    S('sum-pr').textContent=n+'/36';
+  }
+  S('sum-k').addEventListener('input',build); build();
+})();
+
+/* Example 3: three-coin tree (compact) */
+(function(){
+  const svg=document.getElementById('g-tree3');
+  const x0=60,x1=170,x2=290,x3=410,xo=490;
+  const y=(i,n)=>165+(i-(n-1)/2)*(300/n);
+  // stage1
+  const y1=[85,245];
+  branch(svg,x0+16,165,x1-16,y1[0]); branch(svg,x0+16,165,x1-16,y1[1]);
+  treeNode(svg,x1,y1[0],'H',BLUE); treeNode(svg,x1,y1[1],'T',RED);
+  // stage2
+  const y2=[45,125,205,285];
+  for(let i=0;i<2;i++){ branch(svg,x1+16,y1[i],x2-16,y2[2*i]); branch(svg,x1+16,y1[i],x2-16,y2[2*i+1]); }
+  y2.forEach((yy,i)=>treeNode(svg,x2,yy,i%2?'T':'H',i%2?RED:BLUE));
+  // stage3
+  const y3=[26,66,106,146,186,226,266,306];
+  for(let i=0;i<4;i++){ branch(svg,x2+16,y2[i],x3-16,y3[2*i]); branch(svg,x2+16,y2[i],x3-16,y3[2*i+1]); }
+  y3.forEach((yy,i)=>treeNode(svg,x3,yy,i%2?'T':'H',i%2?RED:BLUE));
+  const outs=['HHH','HHT','HTH','HTT','THH','THT','TTH','TTT'];
+  outs.forEach((o,i)=>{ const t=el('text',{x:xo,y:y3[i]+5,'font-size':15.5,fill:INK,'font-family':"Georgia,serif"},svg); t.textContent=o; });
+  const hh=[['Stage 1',x1],['Stage 2',x2],['Stage 3',x3]];
+  hh.forEach(h=>{ const t=el('text',{x:h[1],y:12,'text-anchor':'middle','font-size':12.5,fill:MUT,'font-family':"'Source Sans 3',sans-serif"},svg); t.textContent=h[0]; });
+})();
+
+
+/* ===== vertical working (aligned equals) ===== */
+function renderWork(span){
+  const segs=[[]];
+  span.childNodes.forEach(node=>{
+    if(node.nodeType===3){ node.textContent.split('=').forEach((p,i)=>{ if(i>0) segs.push([]); segs[segs.length-1].push(document.createTextNode(p)); }); }
+    else { segs[segs.length-1].push(node); }
+  });
+  if(segs.length<2) return;
+  const grid=document.createElement('div'); grid.className='work';
+  const lhs=document.createElement('span'); lhs.className='wl'; segs[0].forEach(n=>lhs.appendChild(n)); grid.appendChild(lhs);
+  for(let i=1;i<segs.length;i++){
+    if(i>1){ const b=document.createElement('span'); b.className='wl'; grid.appendChild(b); }
+    const r=document.createElement('span'); r.className='wr'; r.appendChild(document.createTextNode('= ')); segs[i].forEach(n=>r.appendChild(n)); grid.appendChild(r);
+  }
+  span.replaceWith(grid);
+}
+document.querySelectorAll('span.work').forEach(renderWork);
+
+/* ===== reveals: steps (self-resetting) ===== */
+document.querySelectorAll('[data-steps]').forEach(btn=>{
+  const list=document.getElementById(btn.dataset.steps);
+  const items=[...list.querySelectorAll(':scope > li')];
+  const label=btn.textContent;
+  let shown=0;
+  function reset(){items.forEach(li=>li.classList.remove('shown'));shown=0;btn.textContent=label;}
+  btn.addEventListener('click',()=>{
+    if(shown<items.length){items[shown].classList.add('shown');shown++;if(shown===items.length)btn.textContent='Reset ↺';}
+    else{reset();}
+  });
+  resetters.push(reset);
+});
+/* ===== reveals: Q&A ===== */
+document.querySelectorAll('[data-ans]').forEach(btn=>{
+  const orig=btn.textContent;
+  const a=btn.nextElementSibling;
+  function reset(){a.classList.remove('shown');btn.textContent=orig;}
+  btn.addEventListener('click',()=>{
+    const open=a.classList.toggle('shown');
+    btn.textContent=open?orig.replace('Show','Hide'):orig;
+  });
+  resetters.push(reset);
+});
+document.getElementById('resetBtn').addEventListener('click',resetAll);
+
+/* ===== navigation ===== */
+const slides=[...document.querySelectorAll('.slide')];
+const counter=document.getElementById('counter'), progress=document.getElementById('progress');
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,j)=>s.classList.toggle('active',j===cur));
+  counter.textContent=(cur+1)+' / '+slides.length;
+  progress.style.width=((cur+1)/slides.length*100)+'%';
+  if(history.replaceState)history.replaceState(null,'','#slide-'+(cur+1));
+}
+document.getElementById('prevBtn').addEventListener('click',()=>go(cur-1));
+document.getElementById('nextBtn').addEventListener('click',()=>go(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
+  else if(e.key==='r'||e.key==='R'){resetAll();}
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60&&e.target.tagName!=='INPUT')go(cur+(dx<0?1:-1));tx=null;},{passive:true});
+const mm=location.hash.match(/slide-(\d+)/); go(mm?(+mm[1]-1):0);
+</script>
+<script>
+(function(){
+  var fsBtn=document.getElementById("fsBtn");
+  function inFull(){return document.fullscreenElement||document.webkitFullscreenElement;}
+  function toggle(){var el=document.documentElement;try{if(!inFull()){var p=(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);if(p&&p.catch)p.catch(function(){});}else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}catch(err){}}
+  if(fsBtn)fsBtn.addEventListener("click",toggle);
+  document.addEventListener("keydown",function(e){var t=e.target.tagName;if(t==="INPUT"||t==="TEXTAREA"||t==="SELECT")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggle();}});
+  function sync(){if(fsBtn)fsBtn.textContent=inFull()?"⤡":"⤢";}
+  document.addEventListener("fullscreenchange",sync);document.addEventListener("webkitfullscreenchange",sync);
+})();
+</script>
+</body>
+</html>

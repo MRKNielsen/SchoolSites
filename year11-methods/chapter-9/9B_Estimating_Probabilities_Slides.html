@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9B — Estimating Probabilities | Year 11 Mathematical Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F8FA; --card:#FFFFFF; --ink:#16263D; --muted:#5C6B80;
+  --grid:#DDE8F1; --grid-major:#C3D4E4; --line:#D4DEE8;
+  --blue:#2456A6; --red:#C23B32; --amber:#9A6410;
+  --ido:#33508f; --wedo:#a8610f; --youdo:#1e7d56;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Source Sans 3',system-ui,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;font-size:16.5px;line-height:1.5}
+.deck{position:relative;height:100vh;height:100dvh}
+.slide{position:absolute;inset:0;padding:42px 56px 70px;display:none;flex-direction:column;overflow-y:auto}
+.slide.active{display:flex;animation:slideIn .32s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.slide.active{animation:none}.draw path{animation:none !important;stroke-dashoffset:0 !important}}
+.progress{position:fixed;top:0;left:0;height:4px;background:var(--red);z-index:20;transition:width .25s}
+.lessontag{position:fixed;top:12px;left:18px;z-index:15;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:5px 13px}
+.keyhint{position:fixed;left:18px;bottom:14px;font-size:14px;color:var(--muted);z-index:15}
+.chrome{position:fixed;right:18px;bottom:12px;display:flex;align-items:center;gap:10px;z-index:15}
+.counter{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);min-width:54px;text-align:center}
+.navbtn{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;transition:background .15s}
+.navbtn:hover{background:var(--grid)}
+button:focus-visible, input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.eyebrow b{color:var(--red)}
+h1{font-family:'Bitter',Georgia,serif;font-weight:800;font-size:clamp(32px,4.8vw,52px);line-height:1.08;margin-bottom:16px}
+h2{font-family:'Bitter',Georgia,serif;font-weight:700;font-size:clamp(22px,3vw,32px);margin-bottom:6px}
+h3{font-family:'Bitter',Georgia,serif}
+.lede{color:var(--muted);max-width:66ch;margin-bottom:16px}
+.cols{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start;flex:1;min-height:0}
+.cols.even{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.slide{padding:26px 20px 76px}.cols{grid-template-columns:1fr;gap:18px}}
+.m{font-style:italic;font-family:Georgia,'Times New Roman',serif}
+.mu{font-family:Georgia,'Times New Roman',serif}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;font-family:Georgia,serif;font-style:normal;line-height:1.05}
+.fr .nu{padding:0 .25em;border-bottom:1.5px solid currentColor}
+.fr .de{padding:0 .25em}
+.work{display:grid;grid-template-columns:auto 1fr;column-gap:6px;row-gap:2px;margin:5px 0 3px;font-family:Georgia,serif}
+.work .wl{text-align:right;white-space:nowrap} .work .wr{white-space:nowrap}
+.graph-card{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 12px 6px;box-shadow:0 2px 10px rgba(22,38,61,.05)}
+.graph-card svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;padding:8px 4px 2px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.pen{width:22px;height:0;border-top:3px solid;border-radius:2px;display:inline-block}
+.pen.blue{border-color:var(--blue)} .pen.red{border-color:var(--red)}
+.pen.amber{border-color:var(--amber);border-top-style:dashed} .pen.grey{border-color:#9aa4b8;border-top-style:dashed}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1.5px solid #fff;background:var(--ink)}
+.dot.red{background:var(--red)} .dot.blue{background:var(--blue)} .dot.grey{background:#9aa4b8}
+.note{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:13px}
+.note h3{font-size:17px;margin-bottom:8px}
+.note ul{padding-left:20px} .note li{margin-bottom:6px}
+.note.flag{border-left:5px solid var(--amber)} .note.flag h3{color:var(--amber)}
+.note.tip{border-left:5px solid var(--ido)} .note.tip h3{color:var(--ido)}
+.defbox{background:#eef3fb;border:2px solid var(--ido);border-left:8px solid var(--ido);border-radius:12px;padding:15px 20px;margin:2px 0 14px;max-width:1000px}
+.defbox .dlab{font-size:14px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ido);display:block;margin-bottom:6px}
+.defbox p{font-size:17px;margin:0;color:var(--ink)}
+.defbox.slim{padding:10px 18px;margin-bottom:12px}
+.defbox.slim p{font-size:15.5px}
+.bigeq{font-family:Georgia,serif;font-size:21px;text-align:center;margin:6px 0 2px}
+table.facts{border-collapse:collapse;width:100%;font-size:15.5px}
+table.facts td{padding:5px 8px;border-bottom:1px solid var(--line)}
+table.facts td:first-child{font-weight:600;width:55%}
+table.facts.deriv td:first-child{width:42%}
+.ctrl{margin-top:0;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 18px}
+.ctrl label{display:flex;justify-content:space-between;font-weight:600;font-size:15px;margin-bottom:5px}
+.ctrl label output{color:var(--red);font-variant-numeric:tabular-nums;font-family:Georgia,serif}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
+.param-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+.pcard{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--muted);border-radius:10px;padding:14px 16px}
+.pcard .sym{font-family:'Bitter',serif;font-weight:800;font-size:18px;line-height:1.1;margin-bottom:6px}
+.pcard p{font-size:15px;color:var(--muted)} .pcard p b{color:var(--ink)}
+.pcard .eg{display:flex;align-items:center;gap:8px;margin-top:10px;background:#eff4fb;border-radius:8px;padding:6px 10px}
+.pcard .eg .lab{font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);flex:none}
+.pcard .eg .ex{font-family:Georgia,serif;font-size:16px;color:var(--ink);font-weight:700}
+.pcard.c-amber .eg .lab{color:var(--amber)} .pcard.c-green .eg .lab{color:var(--youdo)} .pcard.c-red .eg .lab{color:var(--red)}
+.pcard.c-red{border-top-color:var(--red)} .pcard.c-red .sym{color:var(--red)}
+.pcard.c-blue{border-top-color:var(--blue)} .pcard.c-blue .sym{color:var(--blue)}
+.pcard.c-amber{border-top-color:var(--amber)} .pcard.c-amber .sym{color:var(--amber)}
+.pcard.c-green{border-top-color:var(--youdo)} .pcard.c-green .sym{color:var(--youdo)}
+.phase-tag{display:inline-block;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 10px;vertical-align:middle;margin-right:8px}
+.phase-tag.ido{background:var(--ido)} .phase-tag.wedo{background:var(--wedo)} .phase-tag.youdo{background:var(--youdo)} .phase-tag.cas{background:#7c3aed}
+.mbanner{border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 12px;border:1.5px solid}
+.mbanner.cas{background:#f3effd;border-color:#7c3aed;color:#4a2f9e} .mbanner.cas b{color:#4a2f9e}
+.reveal-btn{border:1.5px solid var(--ink);background:var(--card);padding:8px 16px;border-radius:999px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.reveal-btn:hover{background:var(--grid)}
+.steps{list-style:none;padding:0;margin:12px 0 0}
+.steps li{margin-bottom:10px;opacity:0;transform:translateY(4px);transition:all .3s;padding-left:0}
+.steps li.shown{opacity:1;transform:none}
+.steps li .stepno{display:inline-block;background:var(--ido);color:#fff;border-radius:4px;font-size:14px;font-weight:700;padding:1px 7px;margin-right:8px;vertical-align:middle}
+.steps li.ans .stepno{background:var(--red)}
+.rd{margin:6px 0 2px 6px} .rd>div{position:relative;padding-left:19px;margin-bottom:4px} .rd>div::before{content:"\2022";position:absolute;left:3px;top:-1px;color:var(--red);font-weight:700}
+.qcard{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.qcard .q{font-weight:600;margin-bottom:9px}
+.qcard .a{display:none;border-top:1px dashed var(--line);margin-top:9px;padding-top:9px;color:var(--muted)}
+.qcard .a.shown{display:block} .qcard .a b{color:var(--red)}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* part-by-part worked example */
+.parts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.ptab{font-size:14.5px;font-weight:700;border:1.5px solid var(--line);border-radius:999px;padding:5px 15px;cursor:pointer;background:var(--card);color:var(--muted);font-family:inherit}
+.ptab.active{border-color:var(--ido);color:var(--ido);background:#eef3fb}
+.ptab.done{color:var(--youdo);border-color:var(--youdo)}
+.ptab.done::after{content:" \2713"}
+.partpanel{display:none}
+.partpanel.shown{display:block;animation:slideIn .25s ease}
+.partpanel .q{font-weight:600;font-size:17px;margin-bottom:6px}
+.title-slide{justify-content:center;align-items:flex-start}
+.subtitle{font-size:19px;color:var(--muted);margin-bottom:6px}
+.title-eq{font-size:clamp(20px,3vw,30px);margin:8px 0 18px;font-family:Georgia,serif}
+.title-wave{max-width:720px;width:100%}
+.draw path.wave{stroke-dasharray:1;stroke-dashoffset:1;animation:drawin 2.2s ease forwards .3s}
+@keyframes drawin{to{stroke-dashoffset:0}}
+.head-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.pill{font-size:14px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 13px}
+.start-hint{margin-top:18px;color:var(--muted);font-size:14.5px}
+.key{display:inline-block;border:1.5px solid var(--line);border-bottom-width:2.5px;border-radius:5px;padding:1px 7px;font-size:14px;background:var(--card)}
+.teacher{margin-top:14px;border:1.5px dashed var(--line);border-radius:10px;background:#fbfdff}
+.teacher>summary{cursor:pointer;padding:11px 16px;font-weight:700;color:var(--ido);font-size:15px;list-style:none}
+.teacher>summary::-webkit-details-marker{display:none}
+.teacher>summary::before{content:"\25B8 ";color:var(--muted)}
+.teacher[open]>summary::before{content:"\25BE "}
+.teacher .inner-d{padding:2px 18px 14px} .teacher ul{margin-left:20px} .teacher li{margin-bottom:5px;font-size:14.5px;color:var(--ink)}
+.exit-slide{justify-content:center;align-items:center;text-align:center}
+.exit-wrap{max-width:820px}
+.exit-wrap ol{display:inline-block;text-align:left;margin:14px 0;padding-left:22px}
+.exit-wrap ol li{margin-bottom:9px;font-size:18px}
+.exit-wrap .note-key{font-size:14px;color:var(--muted);margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+.qrefrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.qchip{background:var(--card,#fff);border:1.5px solid var(--line,#e3ddd2);border-radius:8px;padding:4px 10px;line-height:1.5;display:inline-block}
+.qparts{list-style:none;margin:2px 0 12px;padding:0;font-size:16.5px;font-weight:600;color:var(--ink)}
+.qparts li{position:relative;padding-left:30px;margin:0 0 4px;line-height:1.4}
+.qparts li>b:first-child{position:absolute;left:4px;color:var(--ido)}
+.eqrow{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin:8px 0 18px}
+.eqbox{font-family:Georgia,serif;font-size:clamp(17px,2.1vw,24px);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 18px;display:flex;align-items:center}
+@media print{
+  body{overflow:visible}
+  .slide{display:flex !important;position:relative;inset:auto;height:auto;page-break-after:always;animation:none;overflow:visible}
+  .progress,.chrome,.keyhint,.lessontag{display:none}
+  .qcard .a{display:block !important}
+  .steps li{opacity:1 !important;transform:none !important}
+  .partpanel{display:block !important}
+  .glayer{opacity:1 !important}
+  .teacher{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="lessontag">9B &middot; Estimating Probabilities</div>
+<div class="keyhint">&larr; &rarr; arrow keys &middot; space to advance</div>
+<div class="chrome">
+  <button class="navbtn" id="prevBtn" aria-label="Previous slide">&larr;</button>
+  <span class="counter" id="counter">1 / 14</span>
+  <button class="navbtn" id="nextBtn" aria-label="Next slide">&rarr;</button>
+  <button class="navbtn" id="resetBtn" aria-label="Reset all working" title="Reset all working (R)">&#8635;</button>
+  <button class="navbtn" id="fsBtn" aria-label="Toggle fullscreen" title="Fullscreen (F)">&#10530;</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide">
+  <div class="eyebrow">Year 11 Mathematical Methods &middot; Ch 9 &middot; <b>Probability</b></div>
+  <h1>9B &middot; Estimating probabilities</h1>
+  <div class="subtitle">When outcomes aren't equally likely, we <b>experiment</b> &mdash; and let the long run reveal the probability</div>
+  <div class="eqrow">
+    <div class="eqbox"><span class="mu">Pr(<span class="m">A</span>) &asymp; <span class="fr"><span class="nu">number of times <span class="m">A</span> occurs</span><span class="de">number of trials</span></span></span></div>
+    <div class="eqbox"><span class="mu">Pr(hit) = <span class="fr"><span class="nu">favourable area</span><span class="de">total area</span></span></span></div>
+  </div>
+  <div class="graph-card title-wave draw"><svg id="g-title" viewBox="0 0 720 240"></svg></div>
+  <div class="head-meta">
+    <span class="pill">&#128257; relative frequency</span>
+    <span class="pill">&#128200; more trials &rarr; better estimate</span>
+    <span class="pill">&#127919; probabilities from area</span>
+    <span class="pill">&#128218; Ex 9B</span>
+  </div>
+  <p class="start-hint">Press <span class="key">&rarr;</span> or <span class="key">space</span> to begin</p>
+</section>
+
+<!-- 2 GOALS -->
+<section class="slide">
+  <div class="eyebrow">Today &middot; Where we're headed</div>
+  <h2>Learning intentions</h2>
+  <div class="cols even">
+    <div class="note">
+      <h3>Learning intention</h3>
+      <ul>
+        <li>Estimate a probability from data using <b>relative frequency</b>.</li>
+        <li>Understand why estimates from <b>more trials</b> are better &mdash; and watch the estimate settle down.</li>
+        <li>Calculate probabilities from <b>areas</b>, when every point is equally likely to be hit.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>Success criteria &mdash; I can&hellip;</h3>
+      <ul>
+        <li>turn "33 point-up in 50 tosses" into an estimate of the probability.</li>
+        <li>choose (and justify) the better of two estimates by comparing the number of trials.</li>
+        <li>use <span class="mu">Pr = <span class="fr"><span class="nu">favourable area</span><span class="de">total area</span></span></span> for dartboard-style problems.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="teacher">
+    <summary>Teacher notes &mdash; 55-minute pacing</summary>
+    <div class="inner-d">
+      <ul>
+        <li><b>Warm-up (5 min):</b> fractions to decimals; circle and square areas.</li>
+        <li><b>Prediction first (2 min):</b> before the simulator &mdash; "50 tosses of a fair coin: will it be exactly 25 heads?" Vote.</li>
+        <li><b>Relative frequency (10 min):</b> Example 1 (drawing pin); Example 2 (which die?).</li>
+        <li><b>Simulator (8 min):</b> run it several times &mdash; short runs wobble, long runs settle.</li>
+        <li><b>Area (10 min):</b> Example 3 (dartboard); You Do set.</li>
+        <li><b>Hinge + Exercise 9B (rest).</b></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- 3 WARM UP -->
+<section class="slide">
+  <div class="eyebrow">Warm-up &middot; Do now</div>
+  <h2>Retrieval &mdash; fractions, decimals, areas</h2>
+  <p class="lede">Estimating probabilities means dividing counts &mdash; and dividing areas.</p>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">W1. Write <span class="mu"><span class="fr"><span class="nu">33</span><span class="de">50</span></span></span> as a decimal.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">0.66</span> &mdash; double top and bottom: <span class="mu">66/100</span>.</div></div>
+    <div class="qcard"><div class="q">W2. Which is larger: <span class="mu"><span class="fr"><span class="nu">78</span><span class="de">500</span></span></span> or <span class="mu"><span class="fr"><span class="nu">102</span><span class="de">700</span></span></span>?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">78/500 = 0.156</span> and <span class="mu">102/700 &asymp; 0.146</span> &mdash; the first.</div></div>
+    <div class="qcard"><div class="q">W3. Area of a circle of radius 4 cm?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu"><span class="m">A</span> = &pi;<span class="m">r</span><sup>2</sup> = 16&pi; &asymp; 50.3</span> cm<sup>2</sup>.</div></div>
+    <div class="qcard"><div class="q">W4. A square has side 12 cm; a smaller square inside has side 8 cm. What fraction of the big square is covered?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">64/144 = <span class="fr"><span class="nu">4</span><span class="de">9</span></span></span>.</div></div>
+  </div>
+</section>
+
+<!-- 4 CONCEPT -->
+<section class="slide">
+  <div class="eyebrow">01 &middot; When counting fails</div>
+  <h2>Relative frequency &mdash; probability from data</h2>
+  <div class="cols">
+    <div>
+      <div class="defbox"><span class="dlab">Relative frequency</span>
+        <p>Toss a drawing pin: is "point up" equally likely as "point down"? <b>No reason it should be.</b> So we experiment, and estimate:</p>
+        <div class="bigeq" style="font-size:18px"><span class="mu">Pr(<span class="m">A</span>) &asymp; <span class="fr"><span class="nu">number of times <span class="m">A</span> occurs</span><span class="de">number of trials</span></span></span>&ensp;<span style="font-size:14.5px;color:var(--muted)">(for a large number of trials)</span></div>
+      </div>
+      <div class="note tip"><h3>Three kinds of probability</h3>
+        <ul>
+          <li><b>Subjective</b> &mdash; a judgement call ("60% chance we win the Ashes"). Weakest.</li>
+          <li><b>From data</b> &mdash; relative frequency over many trials. This lesson.</li>
+          <li><b>From a model</b> &mdash; equally likely outcomes (9A), or areas (later today).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="graph-card">
+      <svg id="g-conv" viewBox="0 0 720 360"></svg>
+      <div class="legend"><span><span class="pen blue"></span>estimate after each batch of tosses</span><span><span class="pen amber"></span>long-run value</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 EXAMPLE 1 -->
+<section class="slide">
+  <div class="eyebrow">02 &middot; Worked example</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 1</h2>
+  <p class="lede" style="margin-bottom:8px">Katia tosses a drawing pin 50 times and observes 33 &lsquo;point up&rsquo;. Mikki tosses the <b>same pin</b> 100 times and observes 62 &lsquo;point up&rsquo;.</p>
+  <ol class="qparts">
+    <li><b>a</b> What is Katia's estimate of Pr(point up)?</li>
+    <li><b>b</b> What is Mikki's estimate?</li>
+    <li><b>c</b> Which is the preferred estimate, and why?</li>
+    <li><b>d</b> What is the best estimate using all the information available?</li>
+  </ol>
+  <button class="reveal-btn" data-steps="e1-steps">Reveal next step &rarr;</button>
+  <ul class="steps" id="e1-steps">
+    <li><span class="stepno">a</span><span class="mu">Pr(point up) &asymp; <span class="fr"><span class="nu">33</span><span class="de">50</span></span> = 0.66</span>.</li>
+    <li><span class="stepno">b</span><span class="mu">Pr(point up) &asymp; <span class="fr"><span class="nu">62</span><span class="de">100</span></span> = 0.62</span>.</li>
+    <li><span class="stepno">c</span>Mikki's &mdash; her estimate uses <b>more trials</b> (100 vs 50), so it should be closer to the true probability.</li>
+    <li class="ans"><span class="stepno">d</span><b>Combine the data</b> to maximise trials: 95 point-up in 150 tosses, so <span class="mu">Pr &asymp; <span class="fr"><span class="nu">95</span><span class="de">150</span></span> &asymp; 0.63</span>.</li>
+  </ul>
+</section>
+
+<!-- 6 EXAMPLE 2 -->
+<section class="slide">
+  <div class="eyebrow">03 &middot; Comparing estimates</div>
+  <h2><span class="phase-tag wedo">We Do</span> Example 2</h2>
+  <div class="cols even">
+    <div>
+      <p style="margin-bottom:8px">Two misshapen dice are tested. Die A is thrown <b>400</b> times and shows a six <b>70</b> times. Die B is thrown <b>600</b> times and shows a six <b>93</b> times.</p>
+      <ol class="qparts">
+        <li><b>a</b> Estimate Pr(six) for each die.</li>
+        <li><b>b</b> If you want to throw a six, which die should you choose?</li>
+      </ol>
+      <button class="reveal-btn" data-steps="e2-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e2-steps">
+        <li><span class="stepno">1</span>Die A: <span class="mu">Pr(six) &asymp; <span class="fr"><span class="nu">70</span><span class="de">400</span></span> = 0.175</span>.</li>
+        <li><span class="stepno">2</span>Die B: <span class="mu">Pr(six) &asymp; <span class="fr"><span class="nu">93</span><span class="de">600</span></span> = 0.155</span>.</li>
+        <li class="ans"><span class="stepno">3</span>Choose <b>die A</b> &mdash; its estimated probability of a six is higher. (Note both differ from the fair-die value <span class="mu">1/6 &asymp; 0.167</span>.)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="note flag"><h3>Compare rates, not counts</h3><p>Die B produced <b>more sixes</b> (93 vs 70) &mdash; but from far more throws. Raw counts mislead; always divide by the number of trials.</p></div>
+      <div class="note tip"><h3>Estimates vary</h3><p>Repeat the experiment and you'll get slightly different numbers. That variation is normal &mdash; it shrinks as trials grow, which is why we prefer more trials.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 EXPLORE: simulator -->
+<section class="slide">
+  <div class="eyebrow">04 &middot; Explore</div>
+  <h2>&#128270; Coin-toss simulator &mdash; watch the estimate settle</h2>
+  <p class="lede"><b>Predict first:</b> after 10 tosses of a fair coin, must the proportion of heads be close to 0.5? After 500?</p>
+  <div class="cols">
+    <div class="graph-card">
+      <svg id="g-sim" viewBox="0 0 720 360"></svg>
+      <div class="legend"><span><span class="pen blue"></span>running proportion of heads</span><span><span class="pen amber"></span><span class="mu">0.5</span></span></div>
+    </div>
+    <div>
+      <div class="ctrl">
+        <label>number of tosses <output id="sim-n-out">100</output></label>
+        <input type="range" id="sim-n" min="10" max="1000" step="10" value="100" aria-label="number of tosses">
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="reveal-btn" id="sim-run" type="button">Toss again &#127922;</button>
+        </div>
+        <table class="facts" style="margin-top:12px">
+          <tr><td>heads observed</td><td id="sim-h" style="font-weight:700">&mdash;</td></tr>
+          <tr><td>relative frequency</td><td id="sim-rf" style="color:var(--red);font-weight:700">&mdash;</td></tr>
+        </table>
+        <p style="font-size:14.5px;color:var(--muted);margin-top:10px">Early tosses swing wildly; the long run settles near 0.5 &mdash; but a new run takes a <b>different path</b>. That's the point.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 CONCEPT + EXAMPLE 3: area -->
+<section class="slide">
+  <div class="eyebrow">05 &middot; Probabilities from area</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 3</h2>
+  <div class="cols">
+    <div class="graph-card">
+      <div style="font-size:16px;color:var(--ink);margin:2px 4px 8px;line-height:1.3">A square dartboard of side 12 cm has a red square of side 8 cm inside it. A dart is equally likely to land anywhere on the board. Find the probability it lands in the red area.</div>
+      <svg id="g-dart" viewBox="0 0 720 300"></svg>
+    </div>
+    <div>
+      <div class="defbox slim"><span class="dlab">Probability from area</span>
+        <p>If every point is equally likely to be hit,</p>
+        <div class="bigeq" style="font-size:18px"><span class="mu">Pr(hit region) = <span class="fr"><span class="nu">area of region</span><span class="de">total area</span></span></span></div>
+      </div>
+      <button class="reveal-btn" data-steps="e3-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e3-steps">
+        <li><span class="stepno">1</span><b>Total area:</b> <span class="mu">12<sup>2</sup> = 144</span> cm<sup>2</sup>.</li>
+        <li><span class="stepno">2</span><b>Red area:</b> <span class="mu">8<sup>2</sup> = 64</span> cm<sup>2</sup>.</li>
+        <li class="ans"><span class="stepno">3</span><span class="mu">Pr(red) = <span class="fr"><span class="nu">64</span><span class="de">144</span></span> = <span class="fr"><span class="nu">4</span><span class="de">9</span></span></span>.</li>
+      </ul>
+      <div class="note tip" style="margin-top:12px"><h3>Same idea as counting</h3><p>It's still <span class="mu">favourable &divide; total</span> &mdash; areas replace counts when the outcomes form a continuous region.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 YOU DO -->
+<section class="slide">
+  <div class="eyebrow">06 &middot; Your turn</div>
+  <h2><span class="phase-tag youdo">You Do</span> Example 4</h2>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">a. A spinner lands on &lsquo;ten&rsquo; 24 times in 300 spins. Estimate <span class="mu">Pr(ten)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu">Pr(ten) &asymp; <span class="fr"><span class="nu">24</span><span class="de">300</span></span> = 0.08</span>.</div></div>
+    <div class="qcard"><div class="q">b. In a survey of 2000 people, 890 regularly use social media. Estimate the probability the next person surveyed does too.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu">Pr &asymp; <span class="fr"><span class="nu">890</span><span class="de">2000</span></span> = 0.445</span>.</div></div>
+    <div class="qcard"><div class="q">c. A square of side 1 m contains a quarter-circle of radius 1 m centred at one corner. Find the probability a random dart in the square lands inside the quarter-circle.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">Quarter-circle area <span class="mu">= <span class="fr"><span class="nu">&pi;(1)<sup>2</sup></span><span class="de">4</span></span></span>; square area 1. <span class="mu">Pr = <span class="fr"><span class="nu">&pi;</span><span class="de">4</span></span> &asymp; 0.785</span>.</div></div>
+    <div class="qcard"><div class="q">d. A circular board of radius 14 cm has an inner circle of radius 7 cm. Find the probability a random dart hits the <b>outer ring</b>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">Ring area <span class="mu">= &pi;(14<sup>2</sup> &minus; 7<sup>2</sup>) = 147&pi;</span>; total <span class="mu">196&pi;</span>. <span class="mu">Pr = <span class="fr"><span class="nu">147</span><span class="de">196</span></span> = <span class="fr"><span class="nu">3</span><span class="de">4</span></span></span>.</div></div>
+  </div>
+</section>
+
+<!-- 10 CAS -->
+<section class="slide">
+  <div class="eyebrow">07 &middot; Using the TI-Nspire CX II CAS</div>
+  <h2><span class="phase-tag cas">CAS skills</span> Simulating an experiment with randInt</h2>
+  <div class="mbanner cas">The calculator can run hundreds of trials in a second &mdash; a fast way to <b>estimate</b> a probability by simulation.</div>
+  <div class="cols even">
+    <div class="note tip"><h3>Steps</h3>
+      <ul>
+        <li>In a <b>Calculator</b> page: <span class="key">menu</span> &#9656; <b>Probability</b> &#9656; <b>Random</b> &#9656; <b>Integer</b>.</li>
+        <li><span class="mu">randInt(1, 6, 60)</span> simulates 60 die rolls. Store: <span class="mu">randInt(1, 6, 60) &rarr; rolls</span>.</li>
+        <li>Count sixes: <span class="mu">countIf(rolls, 6)</span>, then divide by 60 for the relative frequency.</li>
+      </ul>
+    </div>
+    <div class="note flag"><h3>Try it</h3><p>Run it three times. You'll get three <b>different</b> counts &mdash; each a legitimate estimate of <span class="mu">1/6 &asymp; 0.167</span>. Increase 60 to 600: the estimates cluster tighter. That's the law of large numbers on your screen.</p></div>
+  </div>
+</section>
+
+<!-- 11 SUMMARY -->
+<section class="slide">
+  <div class="eyebrow">08 &middot; Summary 9B</div>
+  <h2>Estimating probabilities &mdash; what to remember</h2>
+  <div class="cols even">
+    <div class="note"><h3>From data</h3>
+      <div class="bigeq" style="font-size:17px"><span class="mu">Pr(<span class="m">A</span>) &asymp; <span class="fr"><span class="nu">times <span class="m">A</span> occurred</span><span class="de">number of trials</span></span></span></div>
+      <ul>
+        <li>More trials &rarr; a more reliable estimate.</li>
+        <li>To combine experiments, add the counts <b>and</b> add the trials.</li>
+      </ul>
+    </div>
+    <div class="note tip"><h3>From area</h3>
+      <div class="rd">
+        <div><span class="mu">Pr = <span class="fr"><span class="nu">favourable area</span><span class="de">total area</span></span></span> when every point is equally likely.</div>
+        <div>All the 9A rules still hold: <span class="mu">Pr &ge; 0</span>, total is 1, complements work.</div>
+      </div>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>The #1 trap</h3><p>Believing a short run must "balance out" &mdash; after five heads in a row, tails is <b>not</b> "due". The coin has no memory; only the <b>long run</b> settles towards the true probability.</p></div>
+</section>
+
+<!-- 12 HINGE -->
+<section class="slide">
+  <div class="eyebrow">Check &middot; <b>Mini-whiteboards</b></div>
+  <h2><span class="phase-tag wedo">Check</span> Hinge question &mdash; everyone shows an answer</h2>
+  <div style="background:#f7eedd;border:1.5px solid #9A6410;border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 14px;color:#6f4a0c">On your whiteboard write <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>. On the count of three, <b>hold it up</b> &mdash; everyone answers at once.</div>
+  <div class="qcard">
+    <div class="q" style="font-size:18px">A fair coin has just landed heads <b>five times in a row</b>. The probability that the next toss is a head is:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px">
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>A</b>&nbsp; exactly <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">2</span></span></span></div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>B</b>&nbsp; less than <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">2</span></span></span> &mdash; tails is due</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>C</b>&nbsp; more than <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">2</span></span></span> &mdash; heads is on a streak</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>D</b>&nbsp; <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">32</span></span></span></div>
+    </div>
+    <button class="reveal-btn" data-ans>Show answer</button>
+    <div class="a"><b>Answer: A &mdash; exactly <span class="mu">1/2</span>.</b> Each toss of a fair coin is unaffected by the past. <b>B</b> is the gambler's fallacy ("due"); <b>C</b> is the streak fallacy; <b>D</b> is the probability of five heads <i>in advance</i> &mdash; not the probability of the next toss.</div>
+  </div>
+</section>
+
+<!-- 13 INDEPENDENT -->
+<section class="slide">
+  <div class="eyebrow">09 &middot; Independent practice</div>
+  <h2><span class="phase-tag youdo">You Do</span> Exercise 9B</h2>
+  <div class="cols even">
+    <div class="note"><h3>Set work</h3>
+      <p style="font-size:18px;margin-bottom:8px"><b>Exercise 9B</b> &mdash; Q1&ndash;7</p>
+      <p style="color:var(--muted)"><b>Required (minimum):</b> Q1 (a, d), 3, 7. Show the fraction <span class="mu">count/trials</span> (or <span class="mu">area/area</span>) before any decimal.</p>
+    </div>
+    <div class="note"><h3>What each builds</h3>
+      <ul>
+        <li><b>Q1</b> relative frequency from given data (Example 1).</li>
+        <li><b>Q3</b> comparing two dice &mdash; rates, not counts (Example 2).</li>
+        <li><b>Q4, 5</b> proportions from samples and surveys.</li>
+        <li><b>Q6&ndash;7</b> probabilities from area (Examples 3, 4).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>Quick reference</h3><div class="qrefrow"><span class="qchip"><span class="mu">Pr &asymp; count/trials</span></span> <span class="qchip">more trials = better</span> <span class="qchip">combine: add counts, add trials</span> <span class="qchip"><span class="mu">Pr = area/area</span></span></div></div>
+</section>
+
+<!-- 14 EXIT -->
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <h2>&#127903; Exit ticket (optional)</h2>
+    <p class="lede" style="margin:6px auto 0">Last 5 minutes, or next lesson's warm-up.</p>
+    <ol>
+      <li>A coin is tossed 100 times and shows 34 heads. Estimate <span class="mu">Pr(head)</span>. Is the coin likely to be fair?</li>
+      <li>Who has the better estimate of Pr(point up): 40 tosses or 400 tosses? Why?</li>
+      <li>A 12 cm square board has a 6 cm square target at its centre. Find <span class="mu">Pr(hit target)</span>.</li>
+      <li>True or false: after a run of tails, heads becomes more likely.</li>
+    </ol>
+    <p class="note-key">Key: 1) <span class="mu">0.34</span>; unlikely fair &mdash; a fair coin usually lands nearer 50 in 100 &nbsp; 2) 400 &mdash; more trials, less variation &nbsp; 3) <span class="mu">36/144 = 1/4</span> &nbsp; 4) False &mdash; no memory. &nbsp; Next: 9C &mdash; multi-stage experiments.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+const PI=Math.PI, NS='http://www.w3.org/2000/svg';
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function fmt(v){const r=Math.round(v*100)/100;let s=String(r);if(s==='-0')s='0';return s.replace('-','−');}
+let uid=0;
+class Graph{
+  constructor(svgId,opts={}){
+    this.svg=document.getElementById(svgId);
+    const vb=this.svg.getAttribute('viewBox').split(' ').map(Number);
+    this.W=vb[2];this.H=vb[3];
+    this.xMin=opts.xMin??-3;this.xMax=opts.xMax??3;
+    this.yMin=opts.yMin??-3;this.yMax=opts.yMax??3;
+    this.padL=34;this.padR=14;this.padT=12;this.padB=26;
+    this.xTicks=opts.xTicks||null;
+    this.id='clip'+(++uid);
+    const defs=el('defs',{},this.svg);
+    const clip=el('clipPath',{id:this.id},defs);
+    el('rect',{x:this.padL,y:this.padT,width:this.W-this.padL-this.padR,height:this.H-this.padT-this.padB},clip);
+    this.gGrid=el('g',{},this.svg);
+    this.gCurves=el('g',{'clip-path':'url(#'+this.id+')'},this.svg);
+    this.gMarks=el('g',{},this.svg);
+    this.drawGrid(opts);
+  }
+  X(x){return this.padL+(x-this.xMin)/(this.xMax-this.xMin)*(this.W-this.padL-this.padR);}
+  Y(y){return this.H-this.padB-(y-this.yMin)/(this.yMax-this.yMin)*(this.H-this.padT-this.padB);}
+  drawGrid(opts={}){
+    const css=getComputedStyle(document.documentElement);
+    const cGrid=css.getPropertyValue('--grid').trim(), cMajor=css.getPropertyValue('--grid-major').trim();
+    const cInk=css.getPropertyValue('--ink').trim(), cMuted=css.getPropertyValue('--muted').trim();
+    if(this.xTicks){
+      this.xTicks.forEach(([x,lab])=>{
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:(lab?cMajor:cGrid),'stroke-width':1},this.gGrid);
+        if(lab) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=lab;
+      });
+    } else {
+      const xStep=opts.xStep||1;
+      for(let x=Math.ceil(this.xMin/xStep)*xStep;x<=this.xMax+1e-9;x+=xStep){
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:cGrid,'stroke-width':1},this.gGrid);
+        if(Math.abs(x)>1e-9&&!opts.noXLabels) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(x*100)/100).replace('-','−');
+      }
+    }
+    const yStep=opts.yStep|| (this.yMax-this.yMin>14?4:(this.yMax-this.yMin>7?2:1));
+    for(let y=Math.ceil(this.yMin/yStep)*yStep;y<=this.yMax+1e-9;y+=yStep){
+      el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:cGrid,'stroke-width':1},this.gGrid);
+      if(Math.abs(y)>1e-9&&!opts.noYLabels) el('text',{x:this.padL-7,y:this.Y(y)+4,'text-anchor':'end','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(y*100)/100).replace('-','−');
+    }
+    if(this.yMin<=0&&this.yMax>=0) el('line',{x1:this.padL,y1:this.Y(0),x2:this.W-this.padR,y2:this.Y(0),stroke:cInk,'stroke-width':1.6},this.gGrid);
+    if(this.xMin<=0&&this.xMax>=0) el('line',{x1:this.X(0),y1:this.padT,x2:this.X(0),y2:this.H-this.padB,stroke:cInk,'stroke-width':1.6},this.gGrid);
+  }
+  pathFor(fn){const N=480;let d='';for(let i=0;i<=N;i++){const x=this.xMin+(this.xMax-this.xMin)*i/N;d+=(i?'L':'M')+this.X(x).toFixed(1)+','+this.Y(fn(x)).toFixed(1);}return d;}
+  curve(fn,attrs={}){return el('path',Object.assign({d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||3,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round','stroke-linejoin':'round'},attrs.extra||{}),this.gCurves);}
+  line(fn,attrs={}){return el('path',{d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||2.4,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round'},this.gCurves);}
+  hline(y,attrs={}){return el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:attrs.stroke||'#9A6410','stroke-width':attrs.width||1.6,'stroke-dasharray':attrs.dash||'6 5'},this.gCurves);}
+  point(x,y,color,r){return el('circle',{cx:this.X(x),cy:this.Y(y),r:r||5,fill:color,stroke:'#fff','stroke-width':1.6},this.gMarks);}
+  label(x,y,txt,color){const t=el('text',{x:this.X(x),y:this.Y(y),'font-size':13,fill:color||'#16263D','font-family':"'Source Sans 3',sans-serif",'font-weight':600},this.gMarks);t.textContent=txt;return t;}
+}
+const BLUE='#2456A6',RED='#C23B32',AMBER='#9A6410',GREY='#9aa4b8',INK='#16263D';
+const resetters=[];
+function resetAll(){resetters.forEach(r=>r());}
+
+const PURP='#7c3aed';
+
+/* small right-angle marker where two (perpendicular, on square axes) lines cross at (a,y0) */
+function rightAngle(g,a,y0,m,L){
+  if(!isFinite(m)||Math.abs(m)<0.06) return;
+  L=L||13;
+  var px=g.X(a), py=g.Y(y0);
+  var tx=g.X(a+1)-px, ty=g.Y(y0+m)-py; var tl=Math.hypot(tx,ty); tx/=tl; ty/=tl;
+  var nx=g.X(a+1)-px, ny=g.Y(y0-1/m)-py; var nl=Math.hypot(nx,ny); nx/=nl; ny/=nl;
+  var Ax=px+tx*L, Ay=py+ty*L, Bx=px+nx*L, By=py+ny*L, Cx=px+(tx+nx)*L, Cy=py+(ty+ny)*L;
+  el('path',{d:'M'+Ax.toFixed(1)+','+Ay.toFixed(1)+' L'+Cx.toFixed(1)+','+Cy.toFixed(1)+' L'+Bx.toFixed(1)+','+By.toFixed(1),fill:'none',stroke:INK,'stroke-width':1.6},g.gMarks);
+}
+
+
+/* ===== 9B deck-specific graphics ===== */
+/* seeded RNG so print/teacher copy is stable per load but 'toss again' reshuffles */
+function mulberry(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+
+/* title: small convergence sketch, animated draw */
+(function(){
+  const g=new Graph('g-title',{xMin:0,xMax:150,yMin:0,yMax:1,xStep:30,yStep:0.5});
+  const rnd=mulberry(42);
+  let heads=0; const pts=[];
+  for(let i=1;i<=150;i++){ if(rnd()<0.62)heads++; pts.push([i,heads/i]); }
+  g.hline(0.62,{stroke:AMBER,width:1.8,dash:'6 5'});
+  let d='';
+  pts.forEach((p,i)=>{ d+=(i?'L':'M')+g.X(p[0]).toFixed(1)+','+g.Y(p[1]).toFixed(1); });
+  const path=el('path',{d:d,fill:'none',stroke:BLUE,'stroke-width':3,'stroke-linejoin':'round'},g.gCurves);
+  path.setAttribute('pathLength','1'); path.classList.add('wave');
+})();
+
+/* concept slide: drawing-pin style convergence, static */
+(function(){
+  const g=new Graph('g-conv',{xMin:0,xMax:150,yMin:0,yMax:1,xStep:30,yStep:0.2});
+  const rnd=mulberry(7);
+  let up=0; const pts=[];
+  for(let i=1;i<=150;i++){ if(rnd()<0.63)up++; if(i%5===0||i<10)pts.push([i,up/i]); }
+  g.hline(0.63,{stroke:AMBER,width:1.8,dash:'6 5'});
+  let d='';
+  pts.forEach((p,i)=>{ d+=(i?'L':'M')+g.X(p[0]).toFixed(1)+','+g.Y(p[1]).toFixed(1); });
+  el('path',{d:d,fill:'none',stroke:BLUE,'stroke-width':3,'stroke-linejoin':'round'},g.gCurves);
+  pts.forEach(p=>{ el('circle',{cx:g.X(p[0]),cy:g.Y(p[1]),r:3,fill:BLUE},g.gMarks); });
+  g.label(108,0.75,'settles near the true value',AMBER);
+})();
+
+/* explorer: coin-toss simulator */
+(function(){
+  const svg=document.getElementById('g-sim');
+  const S=id=>document.getElementById(id);
+  let seed=Math.floor(Math.random()*1e9);
+  function build(){
+    svg.innerHTML='';
+    const N=+S('sim-n').value;
+    const g=new Graph('g-sim',{xMin:0,xMax:N,yMin:0,yMax:1,xStep:Math.max(1,Math.round(N/5)),yStep:0.2});
+    const rnd=mulberry(seed);
+    let heads=0, d='';
+    const step=Math.max(1,Math.floor(N/480));
+    for(let i=1;i<=N;i++){
+      if(rnd()<0.5)heads++;
+      if(i%step===0||i===1||i===N){ d+=(d?'L':'M')+g.X(i).toFixed(1)+','+g.Y(heads/i).toFixed(1); }
+    }
+    g.hline(0.5,{stroke:AMBER,width:1.8,dash:'6 5'});
+    el('path',{d:d,fill:'none',stroke:BLUE,'stroke-width':2.6,'stroke-linejoin':'round'},g.gCurves);
+    S('sim-n-out').textContent=N;
+    S('sim-h').textContent=heads+' / '+N;
+    S('sim-rf').textContent=(heads/N).toFixed(3);
+  }
+  S('sim-n').addEventListener('input',build);
+  S('sim-run').addEventListener('click',()=>{seed=Math.floor(Math.random()*1e9);build();});
+  resetters.push(build);
+  build();
+})();
+
+/* dartboard: 12cm square with 8cm red square (concentric) */
+(function(){
+  const svg=document.getElementById('g-dart');
+  const s=240, cx=250, cy=150;
+  el('rect',{x:cx-s/2,y:cy-s/2,width:s,height:s,fill:'#ffffff',stroke:INK,'stroke-width':2},svg);
+  const r=s*8/12;
+  el('rect',{x:cx-r/2,y:cy-r/2,width:r,height:r,fill:'#f6d9d6',stroke:RED,'stroke-width':2},svg);
+  const t1=el('text',{x:cx,y:cy+6,'text-anchor':'middle','font-size':19,fill:RED,'font-family':"Georgia,serif",'font-weight':700},svg);
+  t1.textContent='8 cm';
+  const t2=el('text',{x:cx,y:cy-s/2-10,'text-anchor':'middle','font-size':16,fill:INK,'font-family':"'Source Sans 3',sans-serif"},svg);
+  t2.textContent='12 cm';
+  const t3=el('text',{x:520,y:120,'font-size':20,fill:INK,'font-family':"Georgia,serif"},svg);
+  t3.textContent='Pr(red) = 64/144';
+  const t4=el('text',{x:520,y:160,'font-size':20,fill:RED,'font-family':"Georgia,serif"},svg);
+  t4.textContent='= 4/9';
+})();
+
+
+/* ===== vertical working (aligned equals) ===== */
+function renderWork(span){
+  const segs=[[]];
+  span.childNodes.forEach(node=>{
+    if(node.nodeType===3){ node.textContent.split('=').forEach((p,i)=>{ if(i>0) segs.push([]); segs[segs.length-1].push(document.createTextNode(p)); }); }
+    else { segs[segs.length-1].push(node); }
+  });
+  if(segs.length<2) return;
+  const grid=document.createElement('div'); grid.className='work';
+  const lhs=document.createElement('span'); lhs.className='wl'; segs[0].forEach(n=>lhs.appendChild(n)); grid.appendChild(lhs);
+  for(let i=1;i<segs.length;i++){
+    if(i>1){ const b=document.createElement('span'); b.className='wl'; grid.appendChild(b); }
+    const r=document.createElement('span'); r.className='wr'; r.appendChild(document.createTextNode('= ')); segs[i].forEach(n=>r.appendChild(n)); grid.appendChild(r);
+  }
+  span.replaceWith(grid);
+}
+document.querySelectorAll('span.work').forEach(renderWork);
+
+/* ===== reveals: steps (self-resetting) ===== */
+document.querySelectorAll('[data-steps]').forEach(btn=>{
+  const list=document.getElementById(btn.dataset.steps);
+  const items=[...list.querySelectorAll(':scope > li')];
+  const label=btn.textContent;
+  let shown=0;
+  function reset(){items.forEach(li=>li.classList.remove('shown'));shown=0;btn.textContent=label;}
+  btn.addEventListener('click',()=>{
+    if(shown<items.length){items[shown].classList.add('shown');shown++;if(shown===items.length)btn.textContent='Reset ↺';}
+    else{reset();}
+  });
+  resetters.push(reset);
+});
+/* ===== reveals: Q&A ===== */
+document.querySelectorAll('[data-ans]').forEach(btn=>{
+  const orig=btn.textContent;
+  const a=btn.nextElementSibling;
+  function reset(){a.classList.remove('shown');btn.textContent=orig;}
+  btn.addEventListener('click',()=>{
+    const open=a.classList.toggle('shown');
+    btn.textContent=open?orig.replace('Show','Hide'):orig;
+  });
+  resetters.push(reset);
+});
+document.getElementById('resetBtn').addEventListener('click',resetAll);
+
+/* ===== navigation ===== */
+const slides=[...document.querySelectorAll('.slide')];
+const counter=document.getElementById('counter'), progress=document.getElementById('progress');
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,j)=>s.classList.toggle('active',j===cur));
+  counter.textContent=(cur+1)+' / '+slides.length;
+  progress.style.width=((cur+1)/slides.length*100)+'%';
+  if(history.replaceState)history.replaceState(null,'','#slide-'+(cur+1));
+}
+document.getElementById('prevBtn').addEventListener('click',()=>go(cur-1));
+document.getElementById('nextBtn').addEventListener('click',()=>go(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
+  else if(e.key==='r'||e.key==='R'){resetAll();}
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60&&e.target.tagName!=='INPUT')go(cur+(dx<0?1:-1));tx=null;},{passive:true});
+const mm=location.hash.match(/slide-(\d+)/); go(mm?(+mm[1]-1):0);
+</script>
+<script>
+(function(){
+  var fsBtn=document.getElementById("fsBtn");
+  function inFull(){return document.fullscreenElement||document.webkitFullscreenElement;}
+  function toggle(){var el=document.documentElement;try{if(!inFull()){var p=(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);if(p&&p.catch)p.catch(function(){});}else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}catch(err){}}
+  if(fsBtn)fsBtn.addEventListener("click",toggle);
+  document.addEventListener("keydown",function(e){var t=e.target.tagName;if(t==="INPUT"||t==="TEXTAREA"||t==="SELECT")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggle();}});
+  function sync(){if(fsBtn)fsBtn.textContent=inFull()?"⤡":"⤢";}
+  document.addEventListener("fullscreenchange",sync);document.addEventListener("webkitfullscreenchange",sync);
+})();
+</script>
+</body>
+</html>
