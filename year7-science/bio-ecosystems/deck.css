@@ -396,6 +396,69 @@ h2.slide-sub {
   font-size: 0.85em;
 }
 
+/* ---- Choose-the-level option cards (options with definitions) ---- */
+.choose-list { display: flex; flex-direction: column; gap: 1vh; }
+/* Each level is a .we-step so it reveals in order, but we keep it always
+   visible and let only the correct option highlight on reveal. */
+.clevel.we-step {
+  display: block;
+  opacity: 1;
+  transform: none;
+  padding: 1vh 0;
+  border-top: 1px dashed var(--line);
+}
+.clevel.we-step:first-child { border-top: none; padding-top: 0; }
+.clevel.we-step::before { content: none; }
+.clevel-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+  color: var(--accent);
+  margin-bottom: 0.7vh;
+}
+.clevel-tag .clue {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--grey);
+  font-size: 0.82em;
+}
+.copts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7vw;
+}
+.copt {
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 0.7vw 0.9vw;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.copt .ct {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1.3vw, 1.02rem);
+  color: var(--ink);
+}
+.copt .cd {
+  display: block;
+  font-size: clamp(0.7rem, 1.05vw, 0.9rem);
+  color: var(--grey);
+  line-height: 1.3;
+  margin-top: 0.2em;
+}
+.we-step.revealed .copt.correct {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--teal) 22%, transparent);
+}
+.we-step.revealed .copt.correct .ct::after {
+  content: " \2713";
+  color: var(--teal);
+}
+
 /* ---- Discussion / check prompt ---- */
 .discuss {
   background: var(--violet-light);
