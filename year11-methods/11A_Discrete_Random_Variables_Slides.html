@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11A — Discrete Random Variables | Year 11 Mathematical Methods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F8FA; --card:#FFFFFF; --ink:#16263D; --muted:#5C6B80;
+  --grid:#DDE8F1; --grid-major:#C3D4E4; --line:#D4DEE8;
+  --blue:#2456A6; --red:#C23B32; --amber:#9A6410;
+  --ido:#33508f; --wedo:#a8610f; --youdo:#1e7d56;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Source Sans 3',system-ui,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);overflow:hidden;font-size:16.5px;line-height:1.5}
+.deck{position:relative;height:100vh;height:100dvh}
+.slide{position:absolute;inset:0;padding:42px 56px 70px;display:none;flex-direction:column;overflow-y:auto}
+.slide.active{display:flex;animation:slideIn .32s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.slide.active{animation:none}.draw path{animation:none !important;stroke-dashoffset:0 !important}}
+.progress{position:fixed;top:0;left:0;height:4px;background:var(--red);z-index:20;transition:width .25s}
+.lessontag{position:fixed;top:12px;left:18px;z-index:15;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:5px 13px}
+.keyhint{position:fixed;left:18px;bottom:14px;font-size:14px;color:var(--muted);z-index:15}
+.chrome{position:fixed;right:18px;bottom:12px;display:flex;align-items:center;gap:10px;z-index:15}
+.counter{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);min-width:54px;text-align:center}
+.navbtn{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;transition:background .15s}
+.navbtn:hover{background:var(--grid)}
+button:focus-visible, input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.eyebrow b{color:var(--red)}
+h1{font-family:'Bitter',Georgia,serif;font-weight:800;font-size:clamp(32px,4.8vw,52px);line-height:1.08;margin-bottom:16px}
+h2{font-family:'Bitter',Georgia,serif;font-weight:700;font-size:clamp(22px,3vw,32px);margin-bottom:6px}
+h3{font-family:'Bitter',Georgia,serif}
+.lede{color:var(--muted);max-width:66ch;margin-bottom:16px}
+.cols{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start;flex:1;min-height:0}
+.cols.even{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.slide{padding:26px 20px 76px}.cols{grid-template-columns:1fr;gap:18px}}
+.m{font-style:italic;font-family:Georgia,'Times New Roman',serif}
+.mu{font-family:Georgia,'Times New Roman',serif}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;font-family:Georgia,serif;font-style:normal;line-height:1.05}
+.fr .nu{padding:0 .25em;border-bottom:1.5px solid currentColor}
+.fr .de{padding:0 .25em}
+.work{display:grid;grid-template-columns:auto 1fr;column-gap:6px;row-gap:2px;margin:5px 0 3px;font-family:Georgia,serif}
+.work .wl{text-align:right;white-space:nowrap} .work .wr{white-space:nowrap}
+.graph-card{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 12px 6px;box-shadow:0 2px 10px rgba(22,38,61,.05)}
+.graph-card svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;padding:8px 4px 2px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.pen{width:22px;height:0;border-top:3px solid;border-radius:2px;display:inline-block}
+.pen.blue{border-color:var(--blue)} .pen.red{border-color:var(--red)}
+.pen.amber{border-color:var(--amber);border-top-style:dashed} .pen.grey{border-color:#9aa4b8;border-top-style:dashed}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1.5px solid #fff;background:var(--ink)}
+.dot.red{background:var(--red)} .dot.blue{background:var(--blue)} .dot.grey{background:#9aa4b8}
+.note{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:13px}
+.note h3{font-size:17px;margin-bottom:8px}
+.note ul{padding-left:20px} .note li{margin-bottom:6px}
+.note.flag{border-left:5px solid var(--amber)} .note.flag h3{color:var(--amber)}
+.note.tip{border-left:5px solid var(--ido)} .note.tip h3{color:var(--ido)}
+.defbox{background:#eef3fb;border:2px solid var(--ido);border-left:8px solid var(--ido);border-radius:12px;padding:15px 20px;margin:2px 0 14px;max-width:1000px}
+.defbox .dlab{font-size:14px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--ido);display:block;margin-bottom:6px}
+.defbox p{font-size:17px;margin:0;color:var(--ink)}
+.defbox.slim{padding:10px 18px;margin-bottom:12px}
+.defbox.slim p{font-size:15.5px}
+.bigeq{font-family:Georgia,serif;font-size:21px;text-align:center;margin:6px 0 2px}
+table.facts{border-collapse:collapse;width:100%;font-size:15.5px}
+table.facts td{padding:5px 8px;border-bottom:1px solid var(--line)}
+table.facts td:first-child{font-weight:600;width:55%}
+table.facts.deriv td:first-child{width:42%}
+.ctrl{margin-top:0;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 18px}
+.ctrl label{display:flex;justify-content:space-between;font-weight:600;font-size:15px;margin-bottom:5px}
+.ctrl label output{color:var(--red);font-variant-numeric:tabular-nums;font-family:Georgia,serif}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
+.param-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+.pcard{background:var(--card);border:1.5px solid var(--line);border-top:5px solid var(--muted);border-radius:10px;padding:14px 16px}
+.pcard .sym{font-family:'Bitter',serif;font-weight:800;font-size:18px;line-height:1.1;margin-bottom:6px}
+.pcard p{font-size:15px;color:var(--muted)} .pcard p b{color:var(--ink)}
+.pcard .eg{display:flex;align-items:center;gap:8px;margin-top:10px;background:#eff4fb;border-radius:8px;padding:6px 10px}
+.pcard .eg .lab{font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);flex:none}
+.pcard .eg .ex{font-family:Georgia,serif;font-size:16px;color:var(--ink);font-weight:700}
+.pcard.c-amber .eg .lab{color:var(--amber)} .pcard.c-green .eg .lab{color:var(--youdo)} .pcard.c-red .eg .lab{color:var(--red)}
+.pcard.c-red{border-top-color:var(--red)} .pcard.c-red .sym{color:var(--red)}
+.pcard.c-blue{border-top-color:var(--blue)} .pcard.c-blue .sym{color:var(--blue)}
+.pcard.c-amber{border-top-color:var(--amber)} .pcard.c-amber .sym{color:var(--amber)}
+.pcard.c-green{border-top-color:var(--youdo)} .pcard.c-green .sym{color:var(--youdo)}
+.phase-tag{display:inline-block;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;border-radius:5px;padding:3px 10px;vertical-align:middle;margin-right:8px}
+.phase-tag.ido{background:var(--ido)} .phase-tag.wedo{background:var(--wedo)} .phase-tag.youdo{background:var(--youdo)} .phase-tag.cas{background:#7c3aed}
+.mbanner{border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 12px;border:1.5px solid}
+.mbanner.cas{background:#f3effd;border-color:#7c3aed;color:#4a2f9e} .mbanner.cas b{color:#4a2f9e}
+.reveal-btn{border:1.5px solid var(--ink);background:var(--card);padding:8px 16px;border-radius:999px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+.reveal-btn:hover{background:var(--grid)}
+.steps{list-style:none;padding:0;margin:12px 0 0}
+.steps li{margin-bottom:10px;opacity:0;transform:translateY(4px);transition:all .3s;padding-left:0}
+.steps li.shown{opacity:1;transform:none}
+.steps li .stepno{display:inline-block;background:var(--ido);color:#fff;border-radius:4px;font-size:14px;font-weight:700;padding:1px 7px;margin-right:8px;vertical-align:middle}
+.steps li.ans .stepno{background:var(--red)}
+.rd{margin:6px 0 2px 6px} .rd>div{position:relative;padding-left:19px;margin-bottom:4px} .rd>div::before{content:"\2022";position:absolute;left:3px;top:-1px;color:var(--red);font-weight:700}
+.qcard{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.qcard .q{font-weight:600;margin-bottom:9px}
+.qcard .a{display:none;border-top:1px dashed var(--line);margin-top:9px;padding-top:9px;color:var(--muted)}
+.qcard .a.shown{display:block} .qcard .a b{color:var(--red)}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* part-by-part worked example */
+.parts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.ptab{font-size:14.5px;font-weight:700;border:1.5px solid var(--line);border-radius:999px;padding:5px 15px;cursor:pointer;background:var(--card);color:var(--muted);font-family:inherit}
+.ptab.active{border-color:var(--ido);color:var(--ido);background:#eef3fb}
+.ptab.done{color:var(--youdo);border-color:var(--youdo)}
+.ptab.done::after{content:" \2713"}
+.partpanel{display:none}
+.partpanel.shown{display:block;animation:slideIn .25s ease}
+.partpanel .q{font-weight:600;font-size:17px;margin-bottom:6px}
+.title-slide{justify-content:center;align-items:flex-start}
+.subtitle{font-size:19px;color:var(--muted);margin-bottom:6px}
+.title-eq{font-size:clamp(20px,3vw,30px);margin:8px 0 18px;font-family:Georgia,serif}
+.title-wave{max-width:720px;width:100%}
+.draw path.wave{stroke-dasharray:1;stroke-dashoffset:1;animation:drawin 2.2s ease forwards .3s}
+@keyframes drawin{to{stroke-dashoffset:0}}
+.head-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.pill{font-size:14px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 13px}
+.start-hint{margin-top:18px;color:var(--muted);font-size:14.5px}
+.key{display:inline-block;border:1.5px solid var(--line);border-bottom-width:2.5px;border-radius:5px;padding:1px 7px;font-size:14px;background:var(--card)}
+.teacher{margin-top:14px;border:1.5px dashed var(--line);border-radius:10px;background:#fbfdff}
+.teacher>summary{cursor:pointer;padding:11px 16px;font-weight:700;color:var(--ido);font-size:15px;list-style:none}
+.teacher>summary::-webkit-details-marker{display:none}
+.teacher>summary::before{content:"\25B8 ";color:var(--muted)}
+.teacher[open]>summary::before{content:"\25BE "}
+.teacher .inner-d{padding:2px 18px 14px} .teacher ul{margin-left:20px} .teacher li{margin-bottom:5px;font-size:14.5px;color:var(--ink)}
+.exit-slide{justify-content:center;align-items:center;text-align:center}
+.exit-wrap{max-width:820px}
+.exit-wrap ol{display:inline-block;text-align:left;margin:14px 0;padding-left:22px}
+.exit-wrap ol li{margin-bottom:9px;font-size:18px}
+.exit-wrap .note-key{font-size:14px;color:var(--muted);margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+.qrefrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.qchip{background:var(--card,#fff);border:1.5px solid var(--line,#e3ddd2);border-radius:8px;padding:4px 10px;line-height:1.5;display:inline-block}
+.qparts{list-style:none;margin:2px 0 12px;padding:0;font-size:16.5px;font-weight:600;color:var(--ink)}
+.qparts li{position:relative;padding-left:30px;margin:0 0 4px;line-height:1.4}
+.qparts li>b:first-child{position:absolute;left:4px;color:var(--ido)}
+.eqrow{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch;margin:8px 0 18px}
+.eqbox{font-family:Georgia,serif;font-size:clamp(17px,2.1vw,24px);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:8px 18px;display:flex;align-items:center}
+@media print{
+  body{overflow:visible}
+  .slide{display:flex !important;position:relative;inset:auto;height:auto;page-break-after:always;animation:none;overflow:visible}
+  .progress,.chrome,.keyhint,.lessontag{display:none}
+  .qcard .a{display:block !important}
+  .steps li{opacity:1 !important;transform:none !important}
+  .partpanel{display:block !important}
+  .glayer{opacity:1 !important}
+  .teacher{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="lessontag">11A &middot; Discrete Random Variables</div>
+<div class="keyhint">&larr; &rarr; arrow keys &middot; space to advance</div>
+<div class="chrome">
+  <button class="navbtn" id="prevBtn" aria-label="Previous slide">&larr;</button>
+  <span class="counter" id="counter">1 / 14</span>
+  <button class="navbtn" id="nextBtn" aria-label="Next slide">&rarr;</button>
+  <button class="navbtn" id="resetBtn" aria-label="Reset all working" title="Reset all working (R)">&#8635;</button>
+  <button class="navbtn" id="fsBtn" aria-label="Toggle fullscreen" title="Fullscreen (F)">&#10530;</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide title-slide">
+  <div class="eyebrow">Year 11 Mathematical Methods &middot; Ch 11 &middot; <b>Discrete Probability Distributions</b></div>
+  <h1>11A &middot; Discrete random variables</h1>
+  <div class="subtitle">Give every outcome a <b>number</b> &mdash; then list the numbers with their probabilities</div>
+  <div class="eqrow">
+    <div class="eqbox"><span class="mu"><span class="m">p</span>(<span class="m">x</span>) = Pr(<span class="m">X</span> = <span class="m">x</span>)</span></div>
+    <div class="eqbox"><span class="mu">0 &le; <span class="m">p</span>(<span class="m">x</span>) &le; 1</span></div>
+    <div class="eqbox"><span class="mu">&Sigma; <span class="m">p</span>(<span class="m">x</span>) = 1</span></div>
+  </div>
+  <div class="graph-card title-wave"><svg id="g-title" viewBox="0 0 720 240"></svg></div>
+  <div class="head-meta">
+    <span class="pill">&#127922; X = number of heads</span>
+    <span class="pill">&#128202; distribution = table, rule or graph</span>
+    <span class="pill">&#128218; Ex 11A</span>
+  </div>
+  <p class="start-hint">Press <span class="key">&rarr;</span> or <span class="key">space</span> to begin</p>
+</section>
+
+<!-- 2 GOALS -->
+<section class="slide">
+  <div class="eyebrow">Today &middot; Where we're headed</div>
+  <h2>Learning intentions</h2>
+  <div class="cols even">
+    <div class="note">
+      <h3>Learning intention</h3>
+      <ul>
+        <li>Define a <b>discrete random variable</b> and its <b>probability distribution</b>.</li>
+        <li>Translate probability language (<i>at least, more than, no more than</i>) into symbols.</li>
+        <li>Calculate probabilities &mdash; including <b>conditional</b> ones &mdash; from a distribution table.</li>
+      </ul>
+    </div>
+    <div class="note">
+      <h3>Success criteria &mdash; I can&hellip;</h3>
+      <ul>
+        <li>check whether a table is a valid distribution (two conditions).</li>
+        <li>find an unknown <span class="m">k</span> so a table becomes a distribution.</li>
+        <li>build a distribution from an experiment (coins, dice) and read any probability off it.</li>
+      </ul>
+    </div>
+  </div>
+  <details class="teacher">
+    <summary>Teacher notes &mdash; 55-minute pacing</summary>
+    <div class="inner-d">
+      <ul>
+        <li><b>Warm-up (5 min):</b> three-coin sample space, sum-to-1, decimals.</li>
+        <li><b>Random variables (8 min):</b> outcomes &rarr; numbers; the three-coin distribution built live.</li>
+        <li><b>Language (6 min):</b> the inequality table &mdash; drill "at least" vs "more than" hard; this is where marks die.</li>
+        <li><b>Reading tables (12 min):</b> Examples 1&ndash;3 (read, validate, find k).</li>
+        <li><b>Conditional (6 min):</b> Example 4 &mdash; 9F formula recycled.</li>
+        <li><b>Explorer + You Do + hinge + Exercise 11A (rest).</b></li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- 3 WARM UP -->
+<section class="slide">
+  <div class="eyebrow">Warm-up &middot; Do now</div>
+  <h2>Retrieval &mdash; coins, sums, conditionals</h2>
+  <p class="lede">Today's new object is built entirely from Chapter 9 skills.</p>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">W1. List the sample space for three coin tosses. How many outcomes?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a">HHH, HHT, HTH, THH, HTT, THT, TTH, TTT &mdash; 8 outcomes.</div></div>
+    <div class="qcard"><div class="q">W2. How many of those 8 outcomes have exactly two heads?</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a">3 &mdash; HHT, HTH, THH. (That's <span class="mu"><sup>3</sup>C<sub>2</sub></span> from 10C!)</div></div>
+    <div class="qcard"><div class="q">W3. <span class="mu">0.2 + 0.3 + 0.1 + <span class="m">k</span> = 1</span>. Find <span class="m">k</span>.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu"><span class="m">k</span> = 0.4</span>.</div></div>
+    <div class="qcard"><div class="q">W4. <span class="mu">Pr(<span class="m">A</span> &cap; <span class="m">B</span>) = 0.36</span>, <span class="mu">Pr(<span class="m">B</span>) = 0.6</span>. Find <span class="mu">Pr(<span class="m">A</span> | <span class="m">B</span>)</span>.</div>
+      <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">0.36/0.6 = 0.6</span>.</div></div>
+  </div>
+</section>
+
+<!-- 3B PREDICT HOOK -->
+<section class="slide">
+  <div class="eyebrow">Predict first &middot; <b>Vote &mdash; are the values equally likely?</b></div>
+  <h2>Toss a coin 3 times and count the heads. Is <b>1 head</b> as likely as <b>3 heads</b>?</h2>
+  <div style="background:#f3effd;border:1.5px solid #7c3aed;border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 14px;color:#4a2f9e">On your whiteboard write <b>A</b>, <b>B</b> or <b>C</b> &mdash; predict before we count the outcomes.</div>
+  <div class="qcard">
+    <div class="q" style="font-size:18px">Let <span class="mu"><span class="m">X</span></span> = the number of heads in three tosses, so <span class="mu"><span class="m">X</span></span> can be 0, 1, 2 or 3. Is <span class="mu">Pr(<span class="m">X</span> = 1)</span> equal to <span class="mu">Pr(<span class="m">X</span> = 3)</span>?</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:10px;margin:12px 0 4px">
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>A</b>&nbsp; Yes &mdash; four possible values, all equally likely.</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>B</b>&nbsp; No &mdash; <b>1 head</b> is more likely.</div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>C</b>&nbsp; No &mdash; <b>3 heads</b> is more likely.</div>
+    </div>
+    <button class="reveal-btn" data-ans>Reveal &amp; count</button>
+    <div class="a"><b>Answer: B.</b> From your warm-up, the 8 outcomes give <span class="mu">Pr(<span class="m">X</span> = 1) = 3/8</span> (HTT, THT, TTH) but <span class="mu">Pr(<span class="m">X</span> = 3) = 1/8</span> (only HHH). The <b>outcomes</b> are equally likely &mdash; the <b>values of <span class="m">X</span></b> are not. Assuming every value is equally likely (<b>A</b>) is the misconception today's distribution table clears up.</div>
+  </div>
+  <div class="note tip"><h3>That's today's big idea</h3><p>A random variable turns outcomes into numbers &mdash; and to know how likely each number is, you must <b>collect the probabilities</b> into a distribution. That's exactly what we build next.</p></div>
+</section>
+
+<!-- 4 CONCEPT -->
+<section class="slide">
+  <div class="eyebrow">01 &middot; From outcomes to numbers</div>
+  <h2>A random variable assigns a number to every outcome</h2>
+  <div class="cols">
+    <div class="graph-card">
+      <svg id="g-build" viewBox="0 0 720 330"></svg>
+    </div>
+    <div>
+      <div class="defbox slim"><span class="dlab">Random variable</span>
+        <p>A <b>random variable</b> <span class="m">X</span> assigns a number to each outcome in &epsilon;. It is <b>discrete</b> if it takes countable values (0, 1, 2, &hellip;) &mdash; usually from <i>counting</i>. (Heights and times are <b>continuous</b> &mdash; next year's story.)</p>
+      </div>
+      <div class="defbox slim"><span class="dlab">Probability distribution</span>
+        <p>The function <span class="mu"><span class="m">p</span>(<span class="m">x</span>) = Pr(<span class="m">X</span> = <span class="m">x</span>)</span> &mdash; every value of <span class="m">X</span> with its probability, as a rule, table or graph. Two conditions: <span class="mu">0 &le; <span class="m">p</span>(<span class="m">x</span>) &le; 1</span> and <span class="mu">&Sigma; <span class="m">p</span>(<span class="m">x</span>) = 1</span>.</p>
+      </div>
+      <div class="note tip"><h3>Read the diagram</h3><p>Eight equally likely outcomes get sorted by their <span class="m">X</span>-value. Collecting probabilities by value gives the table: <span class="mu">Pr(<span class="m">X</span> = 2) = 3/8</span> because <b>three outcomes</b> map to 2.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 LANGUAGE -->
+<section class="slide">
+  <div class="eyebrow">02 &middot; The language of probability statements</div>
+  <h2>"At least", "more than", "no more than" &mdash; get these exact</h2>
+  <div class="cols even">
+    <div class="note"><h3>Translation table (X takes 0, 1, 2, 3, 4, 5)</h3>
+      <table class="facts">
+        <tr><td>"<span class="m">X</span> is <b>more than</b> 2"</td><td><span class="mu"><span class="m">X</span> &gt; 2</span>: {3, 4, 5}</td></tr>
+        <tr><td>"<span class="m">X</span> is <b>at least</b> 2"</td><td><span class="mu"><span class="m">X</span> &ge; 2</span>: {2, 3, 4, 5}</td></tr>
+        <tr><td>"<span class="m">X</span> is <b>less than</b> 2"</td><td><span class="mu"><span class="m">X</span> &lt; 2</span>: {0, 1}</td></tr>
+        <tr><td>"<span class="m">X</span> is <b>no more than</b> 2"</td><td><span class="mu"><span class="m">X</span> &le; 2</span>: {0, 1, 2}</td></tr>
+        <tr><td>"between 2 and 5 (exclusive)"</td><td><span class="mu">2 &lt; <span class="m">X</span> &lt; 5</span>: {3, 4}</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="qcard"><div class="q">Quick check: X takes 0&ndash;5. List the values for <span class="mu">Pr(2 &le; <span class="m">X</span> &lt; 5)</span> and for "X is 2 or more".</div>
+        <button class="reveal-btn" data-ans>Show answer</button><div class="a"><span class="mu">2 &le; <span class="m">X</span> &lt; 5</span>: {2, 3, 4}. "2 or more" = <span class="mu"><span class="m">X</span> &ge; 2</span>: {2, 3, 4, 5}.</div></div>
+      <div class="note flag" style="margin-top:10px"><h3>The boundary is everything</h3><p>"At least 2" <b>includes</b> 2; "more than 2" <b>excludes</b> it. One word, one mark. Circle the boundary value and decide: in or out?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 EXAMPLE 1: read table -->
+<section class="slide">
+  <div class="eyebrow">03 &middot; Reading a distribution</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 1</h2>
+  <p class="lede" style="margin-bottom:6px">Consider the probability distribution:</p>
+  <div class="graph-card" style="max-width:640px;margin-bottom:10px"><svg id="g-tabread" viewBox="0 0 720 120"></svg></div>
+  <div class="cols even">
+    <div>
+      <ol class="qparts">
+        <li><b>a</b> Find <span class="mu">Pr(<span class="m">X</span> = 3)</span></li>
+        <li><b>b</b> Find <span class="mu">Pr(<span class="m">X</span> &lt; 3)</span></li>
+        <li><b>c</b> Find <span class="mu">Pr(<span class="m">X</span> &ge; 4)</span></li>
+        <li><b>d</b> Find <span class="mu">Pr(<span class="m">X</span> &ne; 5)</span></li>
+      </ol>
+    </div>
+    <div>
+      <button class="reveal-btn" data-steps="e1-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e1-steps">
+        <li><span class="stepno">a</span>Straight from the table: <span class="mu">Pr(<span class="m">X</span> = 3) = <b>0.1</b></span>.</li>
+        <li><span class="stepno">b</span><span class="mu"><span class="m">X</span> &lt; 3</span> means 1 or 2: <span class="mu">0.2 + 0.3 = <b>0.5</b></span>.</li>
+        <li><span class="stepno">c</span><span class="mu"><span class="m">X</span> &ge; 4</span> means 4, 5 or 6: <span class="mu">0.2 + 0.15 + 0.05 = <b>0.4</b></span>.</li>
+        <li class="ans"><span class="stepno">d</span>Complement: <span class="mu">1 &minus; Pr(<span class="m">X</span> = 5) = 1 &minus; 0.15 = <b>0.85</b></span>.</li>
+      </ul>
+      <div class="note tip" style="margin-top:10px"><h3>Method</h3><p>Underline the values in play, add their probabilities. "Not" &rarr; complement.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 EXAMPLE 2: valid? EXAMPLE 3: find k -->
+<section class="slide">
+  <div class="eyebrow">04 &middot; Valid distributions and unknowns</div>
+  <h2><span class="phase-tag wedo">We Do</span> Examples 2 and 3</h2>
+  <div class="cols even">
+    <div>
+      <p style="margin:2px 0 6px"><b>Example 2</b>&ensp;<span class="m">X</span> takes values 1, 2, 3, 4. Which of these are probability distributions?</p>
+      <ol class="qparts">
+        <li><b>a</b> <span class="mu">0.05, 0.35, 0.55, 0.15</span></li>
+        <li><b>b</b> <span class="mu">13%, 69%, 1%, 17%</span></li>
+        <li><b>c</b> <span class="mu">0.66, 0.32, &minus;0.19, 0.2</span></li>
+      </ol>
+      <button class="reveal-btn" data-steps="e2-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e2-steps">
+        <li><span class="stepno">a</span>Sum <span class="mu">= 1.1 &ne; 1</span> &rarr; <b>not</b> a distribution.</li>
+        <li><span class="stepno">b</span>Sum <span class="mu">= 100%</span>, each in [0, 1] &rarr; <b>yes</b> &mdash; percentages are fine.</li>
+        <li class="ans"><span class="stepno">c</span><span class="mu">&minus;0.19 &lt; 0</span> &rarr; <b>no</b>. A single negative entry kills it, whatever the sum.</li>
+      </ul>
+    </div>
+    <div>
+      <p style="margin:2px 0 6px"><b>Example 3</b>&ensp;For what value of <span class="m">k</span> is this a probability distribution?</p>
+      <div class="graph-card" style="margin-bottom:8px"><svg id="g-tabk" viewBox="0 0 720 110"></svg></div>
+      <button class="reveal-btn" data-steps="e3-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e3-steps">
+        <li><span class="stepno">1</span>Sum to 1: <span class="mu"><span class="m">k</span> + 2<span class="m">k</span> + 3<span class="m">k</span> + 4<span class="m">k</span> + 5<span class="m">k</span> = 1</span>.</li>
+        <li><span class="stepno">2</span><span class="mu">15<span class="m">k</span> = 1</span>, so <span class="mu"><span class="m">k</span> = <span class="fr"><span class="nu">1</span><span class="de">15</span></span></span>.</li>
+        <li class="ans"><span class="stepno">3</span>Check the other condition too: each entry is between 0 and 1. &#10003; (Then, e.g., <span class="mu">Pr(2 &le; <span class="m">X</span> &le; 4) = <span class="fr"><span class="nu">9</span><span class="de">15</span></span> = <span class="fr"><span class="nu">3</span><span class="de">5</span></span></span>.)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 8 EXAMPLE 4: conditional -->
+<section class="slide">
+  <div class="eyebrow">05 &middot; Conditional probability from a table</div>
+  <h2><span class="phase-tag ido">I Do</span> Example 4</h2>
+  <div class="cols even">
+    <div>
+      <p style="margin-bottom:6px">For the distribution below, find <span class="mu">Pr(<span class="m">X</span> &ge; 5 | <span class="m">X</span> &ge; 3)</span>.</p>
+      <div class="graph-card" style="margin-bottom:8px"><svg id="g-tabcond" viewBox="0 0 720 110"></svg></div>
+      <button class="reveal-btn" data-steps="e4-steps">Reveal next step &rarr;</button>
+      <ul class="steps" id="e4-steps">
+        <li><span class="stepno">1</span>9F formula: <span class="mu">Pr(<span class="m">X</span> &ge; 5 | <span class="m">X</span> &ge; 3) = <span class="fr"><span class="nu">Pr(<span class="m">X</span> &ge; 5)</span><span class="de">Pr(<span class="m">X</span> &ge; 3)</span></span></span> &mdash; since <span class="mu"><span class="m">X</span> &ge; 5</span> already implies <span class="mu"><span class="m">X</span> &ge; 3</span>.</li>
+        <li><span class="stepno">2</span>Numerator: <span class="mu">0.13 + 0.23 = 0.36</span>. Denominator: <span class="mu">0.07 + 0.17 + 0.13 + 0.23 = 0.6</span>.</li>
+        <li class="ans"><span class="stepno">3</span><span class="mu"><span class="fr"><span class="nu">0.36</span><span class="de">0.6</span></span> = <span class="fr"><span class="nu">3</span><span class="de">5</span></span></span>.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="note tip"><h3>Same "given" logic as 9F</h3><p>"Given <span class="mu"><span class="m">X</span> &ge; 3</span>" restricts the world to the values 3, 4, 5, 6 &mdash; their total probability is the denominator. Nothing new: the table just replaces the Venn diagram.</p></div>
+      <div class="note flag"><h3>Overlap check</h3><p>The numerator is Pr(<b>both</b> conditions). Here "&ge; 5 and &ge; 3" collapses to "&ge; 5" &mdash; but for something like <span class="mu">Pr(<span class="m">X</span> &lt; 3 | <span class="m">X</span> &lt; 4)</span> you must intersect first: numerator <span class="mu">Pr(<span class="m">X</span> &lt; 3)</span>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 EXPLORE -->
+<section class="slide">
+  <div class="eyebrow">06 &middot; Explore</div>
+  <h2>&#128270; The number-of-heads distribution, as the coins pile up</h2>
+  <p class="lede">Let <span class="m">X</span> = number of heads in <span class="m">n</span> tosses. Slide <span class="m">n</span> &mdash; the probabilities are <span class="mu"><sup><span class="m">n</span></sup>C<sub><span class="m">x</span></sub>/2<sup><span class="m">n</span></sup></span> (10C is doing the counting!).</p>
+  <div class="cols">
+    <div class="graph-card">
+      <svg id="g-dist" viewBox="0 0 720 340"></svg>
+    </div>
+    <div>
+      <div class="ctrl">
+        <label>number of tosses <span class="m">n</span> <output id="dx-n-out">3</output></label>
+        <input type="range" id="dx-n" min="1" max="8" step="1" value="3" aria-label="number of tosses">
+        <table class="facts" style="margin-top:12px">
+          <tr><td>most likely value of <span class="m">X</span></td><td id="dx-mode" style="font-weight:700">&mdash;</td></tr>
+          <tr><td>sum of all probabilities</td><td style="color:var(--red);font-weight:700">1</td></tr>
+        </table>
+        <p style="font-size:14.5px;color:var(--muted);margin-top:10px">Every bar height is a <span class="mu"><span class="m">p</span>(<span class="m">x</span>)</span>; the heights always total 1. Next lesson this becomes the <b>binomial distribution</b>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 YOU DO -->
+<section class="slide">
+  <div class="eyebrow">07 &middot; Your turn</div>
+  <h2><span class="phase-tag youdo">You Do</span> Example 5</h2>
+  <p class="lede" style="margin-bottom:8px">Parts a, b use: <span class="m">X</span> takes 0&ndash;5 with probabilities 0.3, 0.2, 0.2, 0.1, 0.05, 0.15.</p>
+  <div class="qgrid">
+    <div class="qcard"><div class="q">a. Find <span class="mu">Pr(<span class="m">X</span> &lt; 2)</span> and <span class="mu">Pr(<span class="m">X</span> &ge; 3)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu">0.3 + 0.2 = <b>0.5</b></span>; <span class="mu">0.1 + 0.05 + 0.15 = <b>0.3</b></span>.</div></div>
+    <div class="qcard"><div class="q">b. Find <span class="mu">Pr(<span class="m">X</span> &le; 1 | <span class="m">X</span> &le; 2)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu"><span class="fr"><span class="nu">Pr(<span class="m">X</span> &le; 1)</span><span class="de">Pr(<span class="m">X</span> &le; 2)</span></span> = <span class="fr"><span class="nu">0.5</span><span class="de">0.7</span></span> = <span class="fr"><span class="nu">5</span><span class="de">7</span></span></span>.</div></div>
+    <div class="qcard"><div class="q">c. <span class="m">X</span> takes 1&ndash;4 with probabilities <span class="mu"><span class="m">c</span>, 2<span class="m">c</span>, 3<span class="m">c</span>, 4<span class="m">c</span></span>. Find <span class="m">c</span>, then <span class="mu">Pr(<span class="m">X</span> &ge; 3)</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a"><span class="mu">10<span class="m">c</span> = 1</span>, <span class="mu"><span class="m">c</span> = 0.1</span>; <span class="mu">Pr(<span class="m">X</span> &ge; 3) = 0.3 + 0.4 = <b>0.7</b></span>.</div></div>
+    <div class="qcard"><div class="q">d. Two coins are tossed; <span class="m">X</span> = number of tails. Write the probability distribution of <span class="m">X</span>.</div>
+      <button class="reveal-btn" data-ans>Show solution</button><div class="a">Values 0, 1, 2 with probabilities <span class="mu"><span class="fr"><span class="nu">1</span><span class="de">4</span></span>, <span class="fr"><span class="nu">1</span><span class="de">2</span></span>, <span class="fr"><span class="nu">1</span><span class="de">4</span></span></span> (from HH, HT/TH, TT).</div></div>
+  </div>
+</section>
+
+<!-- 11 SUMMARY -->
+<section class="slide">
+  <div class="eyebrow">08 &middot; Summary 11A</div>
+  <h2>Discrete random variables &mdash; what to remember</h2>
+  <div class="cols even">
+    <div class="note"><h3>The objects</h3>
+      <ul>
+        <li>Random variable <span class="m">X</span>: a <b>number</b> for each outcome; discrete = countable values.</li>
+        <li>Distribution: <span class="mu"><span class="m">p</span>(<span class="m">x</span>) = Pr(<span class="m">X</span> = <span class="m">x</span>)</span> as a table, rule or graph.</li>
+        <li>Valid &hArr; every <span class="mu"><span class="m">p</span>(<span class="m">x</span>) &isin; [0, 1]</span> <b>and</b> <span class="mu">&Sigma; <span class="m">p</span>(<span class="m">x</span>) = 1</span>.</li>
+      </ul>
+    </div>
+    <div class="note tip"><h3>The routine</h3>
+      <div class="rd">
+        <div>Translate the words to an inequality; circle the boundary: in or out?</div>
+        <div>Underline the values in play; add their probabilities.</div>
+        <div>Unknown <span class="m">k</span>: sum to 1. Conditional: 9F formula, table-restricted.</div>
+      </div>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>The #1 trap</h3><p><b>"At least" vs "more than".</b> <span class="mu">Pr(<span class="m">X</span> &ge; 4)</span> includes 4; <span class="mu">Pr(<span class="m">X</span> &gt; 4)</span> doesn't. Most lost marks in this topic are that one boundary value.</p></div>
+</section>
+
+<!-- 12 HINGE -->
+<section class="slide">
+  <div class="eyebrow">Check &middot; <b>Mini-whiteboards</b></div>
+  <h2><span class="phase-tag wedo">Check</span> Hinge question &mdash; everyone shows an answer</h2>
+  <div style="background:#f7eedd;border:1.5px solid #9A6410;border-radius:10px;padding:11px 16px;font-size:15.5px;margin:2px 0 14px;color:#6f4a0c">On your whiteboard write <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>. On the count of three, <b>hold it up</b> &mdash; everyone answers at once.</div>
+  <div class="qcard">
+    <div class="q" style="font-size:18px"><span class="m">X</span> takes values 1&ndash;5 with probabilities 0.1, 0.2, 0.3, 0.25, 0.15. What is <span class="mu">Pr(<span class="m">X</span> &gt; 3)</span>?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px">
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>A</b>&nbsp; <span class="mu">0.4</span></div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>B</b>&nbsp; <span class="mu">0.7</span></div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>C</b>&nbsp; <span class="mu">0.3</span></div>
+      <div style="border:1.5px solid var(--line);border-radius:9px;padding:9px 13px"><b>D</b>&nbsp; <span class="mu">0.6</span></div>
+    </div>
+    <button class="reveal-btn" data-ans>Show answer</button>
+    <div class="a"><b>Answer: A &mdash; 0.4.</b> <span class="mu"><span class="m">X</span> &gt; 3</span> means 4 or 5: <span class="mu">0.25 + 0.15</span>. <b>B</b> included the boundary (that's <span class="mu"><span class="m">X</span> &ge; 3</span>); <b>C</b> read <span class="mu">Pr(<span class="m">X</span> = 3)</span>; <b>D</b> is the complement <span class="mu">Pr(<span class="m">X</span> &le; 3)</span>.</div>
+  </div>
+</section>
+
+<!-- 13 INDEPENDENT -->
+<section class="slide">
+  <div class="eyebrow">09 &middot; Independent practice</div>
+  <h2><span class="phase-tag youdo">You Do</span> Exercise 11A</h2>
+  <div class="cols even">
+    <div class="note"><h3>Set work</h3>
+      <p style="font-size:18px;margin-bottom:8px"><b>Exercise 11A</b> &mdash; Q1 (a, c, e), 2&ndash;5, 8&ndash;10</p>
+      <p style="color:var(--muted)"><b>Required (minimum):</b> Q1c, 3 (a, e, i), 4, 9. Write the value set (e.g. {3, 4}) before adding probabilities.</p>
+    </div>
+    <div class="note"><h3>What each builds</h3>
+      <ul>
+        <li><b>Q1</b> valid or not &mdash; two conditions (Example 2).</li>
+        <li><b>Q2, 3</b> language &rarr; symbols &rarr; value sets (language slide).</li>
+        <li><b>Q4</b> reading a table (Example 1).</li>
+        <li><b>Q5</b> unknown <span class="m">k</span> (Example 3).</li>
+        <li><b>Q8</b> conditional from a table (Example 4).</li>
+        <li><b>Q9, 10</b> build distributions from coins and dice (concept slide + Example 5d).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note flag" style="max-width:1000px"><h3>Quick reference</h3><div class="qrefrow"><span class="qchip">at least &rarr; &ge;</span> <span class="qchip">more than &rarr; &gt;</span> <span class="qchip">no more than &rarr; &le;</span> <span class="qchip">valid: [0, 1] and sum 1</span> <span class="qchip">conditional: 9F formula</span></div></div>
+</section>
+
+<!-- 14 EXIT -->
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <h2>&#127903; Exit ticket (optional)</h2>
+    <p class="lede" style="margin:6px auto 0">Last 5 minutes, or next lesson's warm-up.</p>
+    <ol>
+      <li><span class="m">X</span> takes 0&ndash;3. Can <span class="mu"><span class="m">p</span>(<span class="m">x</span>)</span> = 0.5, 0.3, 0.3, &minus;0.1 be a distribution?</li>
+      <li><span class="m">X</span> takes 1&ndash;4 with <span class="mu"><span class="m">p</span>(<span class="m">x</span>) = <span class="m">k</span>, <span class="m">k</span>, 2<span class="m">k</span>, <span class="m">k</span></span>. Find <span class="m">k</span>.</li>
+      <li>For values 0&ndash;5, list the set for "X is no more than 1".</li>
+      <li>One coin is tossed twice; <span class="m">Y</span> = number of heads. Find <span class="mu">Pr(<span class="m">Y</span> &ge; 1)</span>.</li>
+    </ol>
+    <p class="note-key">Key: 1) No &mdash; negative entry (and sum 1 doesn't save it) &nbsp; 2) <span class="mu">5<span class="m">k</span> = 1</span>, <span class="mu"><span class="m">k</span> = 0.2</span> &nbsp; 3) {0, 1} &nbsp; 4) <span class="mu">3/4</span>. &nbsp; Next: 11C &mdash; the binomial distribution.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+const PI=Math.PI, NS='http://www.w3.org/2000/svg';
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function fmt(v){const r=Math.round(v*100)/100;let s=String(r);if(s==='-0')s='0';return s.replace('-','−');}
+let uid=0;
+class Graph{
+  constructor(svgId,opts={}){
+    this.svg=document.getElementById(svgId);
+    const vb=this.svg.getAttribute('viewBox').split(' ').map(Number);
+    this.W=vb[2];this.H=vb[3];
+    this.xMin=opts.xMin??-3;this.xMax=opts.xMax??3;
+    this.yMin=opts.yMin??-3;this.yMax=opts.yMax??3;
+    this.padL=34;this.padR=14;this.padT=12;this.padB=26;
+    this.xTicks=opts.xTicks||null;
+    this.id='clip'+(++uid);
+    const defs=el('defs',{},this.svg);
+    const clip=el('clipPath',{id:this.id},defs);
+    el('rect',{x:this.padL,y:this.padT,width:this.W-this.padL-this.padR,height:this.H-this.padT-this.padB},clip);
+    this.gGrid=el('g',{},this.svg);
+    this.gCurves=el('g',{'clip-path':'url(#'+this.id+')'},this.svg);
+    this.gMarks=el('g',{},this.svg);
+    this.drawGrid(opts);
+  }
+  X(x){return this.padL+(x-this.xMin)/(this.xMax-this.xMin)*(this.W-this.padL-this.padR);}
+  Y(y){return this.H-this.padB-(y-this.yMin)/(this.yMax-this.yMin)*(this.H-this.padT-this.padB);}
+  drawGrid(opts={}){
+    const css=getComputedStyle(document.documentElement);
+    const cGrid=css.getPropertyValue('--grid').trim(), cMajor=css.getPropertyValue('--grid-major').trim();
+    const cInk=css.getPropertyValue('--ink').trim(), cMuted=css.getPropertyValue('--muted').trim();
+    if(this.xTicks){
+      this.xTicks.forEach(([x,lab])=>{
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:(lab?cMajor:cGrid),'stroke-width':1},this.gGrid);
+        if(lab) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=lab;
+      });
+    } else {
+      const xStep=opts.xStep||1;
+      for(let x=Math.ceil(this.xMin/xStep)*xStep;x<=this.xMax+1e-9;x+=xStep){
+        el('line',{x1:this.X(x),y1:this.padT,x2:this.X(x),y2:this.H-this.padB,stroke:cGrid,'stroke-width':1},this.gGrid);
+        if(Math.abs(x)>1e-9&&!opts.noXLabels) el('text',{x:this.X(x),y:this.H-this.padB+16,'text-anchor':'middle','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(x*100)/100).replace('-','−');
+      }
+    }
+    const yStep=opts.yStep|| (this.yMax-this.yMin>14?4:(this.yMax-this.yMin>7?2:1));
+    for(let y=Math.ceil(this.yMin/yStep)*yStep;y<=this.yMax+1e-9;y+=yStep){
+      el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:cGrid,'stroke-width':1},this.gGrid);
+      if(Math.abs(y)>1e-9&&!opts.noYLabels) el('text',{x:this.padL-7,y:this.Y(y)+4,'text-anchor':'end','font-size':12.5,fill:cMuted,'font-family':"'Source Sans 3',sans-serif"},this.gGrid).textContent=String(Math.round(y*100)/100).replace('-','−');
+    }
+    if(this.yMin<=0&&this.yMax>=0) el('line',{x1:this.padL,y1:this.Y(0),x2:this.W-this.padR,y2:this.Y(0),stroke:cInk,'stroke-width':1.6},this.gGrid);
+    if(this.xMin<=0&&this.xMax>=0) el('line',{x1:this.X(0),y1:this.padT,x2:this.X(0),y2:this.H-this.padB,stroke:cInk,'stroke-width':1.6},this.gGrid);
+  }
+  pathFor(fn){const N=480;let d='';for(let i=0;i<=N;i++){const x=this.xMin+(this.xMax-this.xMin)*i/N;d+=(i?'L':'M')+this.X(x).toFixed(1)+','+this.Y(fn(x)).toFixed(1);}return d;}
+  curve(fn,attrs={}){return el('path',Object.assign({d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||3,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round','stroke-linejoin':'round'},attrs.extra||{}),this.gCurves);}
+  line(fn,attrs={}){return el('path',{d:this.pathFor(fn),fill:'none',stroke:attrs.stroke||'#000','stroke-width':attrs.width||2.4,'stroke-dasharray':attrs.dash||'none','stroke-linecap':'round'},this.gCurves);}
+  hline(y,attrs={}){return el('line',{x1:this.padL,y1:this.Y(y),x2:this.W-this.padR,y2:this.Y(y),stroke:attrs.stroke||'#9A6410','stroke-width':attrs.width||1.6,'stroke-dasharray':attrs.dash||'6 5'},this.gCurves);}
+  point(x,y,color,r){return el('circle',{cx:this.X(x),cy:this.Y(y),r:r||5,fill:color,stroke:'#fff','stroke-width':1.6},this.gMarks);}
+  label(x,y,txt,color){const t=el('text',{x:this.X(x),y:this.Y(y),'font-size':13,fill:color||'#16263D','font-family':"'Source Sans 3',sans-serif",'font-weight':600},this.gMarks);t.textContent=txt;return t;}
+}
+const BLUE='#2456A6',RED='#C23B32',AMBER='#9A6410',GREY='#9aa4b8',INK='#16263D';
+const resetters=[];
+function resetAll(){resetters.forEach(r=>r());}
+
+const PURP='#7c3aed';
+
+/* small right-angle marker where two (perpendicular, on square axes) lines cross at (a,y0) */
+function rightAngle(g,a,y0,m,L){
+  if(!isFinite(m)||Math.abs(m)<0.06) return;
+  L=L||13;
+  var px=g.X(a), py=g.Y(y0);
+  var tx=g.X(a+1)-px, ty=g.Y(y0+m)-py; var tl=Math.hypot(tx,ty); tx/=tl; ty/=tl;
+  var nx=g.X(a+1)-px, ny=g.Y(y0-1/m)-py; var nl=Math.hypot(nx,ny); nx/=nl; ny/=nl;
+  var Ax=px+tx*L, Ay=py+ty*L, Bx=px+nx*L, By=py+ny*L, Cx=px+(tx+nx)*L, Cy=py+(ty+ny)*L;
+  el('path',{d:'M'+Ax.toFixed(1)+','+Ay.toFixed(1)+' L'+Cx.toFixed(1)+','+Cy.toFixed(1)+' L'+Bx.toFixed(1)+','+By.toFixed(1),fill:'none',stroke:INK,'stroke-width':1.6},g.gMarks);
+}
+
+
+/* ===== 11A deck-specific graphics ===== */
+const MUT='#5C6B80';
+function nCr(n,r){ if(r<0||r>n)return 0; r=Math.min(r,n-r); let v=1; for(let i=0;i<r;i++){v=v*(n-i)/(i+1);} return Math.round(v); }
+function txtX(svg,x,y,s,size,color,bold,anchor,serif){
+  const t=el('text',{x:x,y:y,'font-size':size||15,'text-anchor':anchor||'start',
+    fill:color||INK,'font-weight':bold?700:400,'font-family':serif?"Georgia,serif":"'Source Sans 3',sans-serif"},svg);
+  t.textContent=s; return t;
+}
+/* distribution table renderer: one header row (x values), one row of probs */
+function distTable(svg,ox,oy,cw,ch,xs,ps,hi){
+  txtX(svg,ox+cw/2,oy+ch/2+5,'x',16,INK,true,'middle',true);
+  txtX(svg,ox+cw/2,oy+ch+ch/2+5,'Pr(X = x)',14.5,INK,true,'middle',true);
+  for(let i=0;i<xs.length;i++){
+    const on=hi&&hi.includes(i);
+    el('rect',{x:ox+cw+i*cw,y:oy,width:cw,height:ch,fill:'#eef3fb',stroke:'#C3D4E4','stroke-width':1.5},svg);
+    el('rect',{x:ox+cw+i*cw,y:oy+ch,width:cw,height:ch,fill:on?'#f3d8b3':'#fff',stroke:on?AMBER:'#C3D4E4','stroke-width':on?2:1.5},svg);
+    txtX(svg,ox+cw+i*cw+cw/2,oy+ch/2+5,String(xs[i]),16,INK,true,'middle',true);
+    txtX(svg,ox+cw+i*cw+cw/2,oy+ch+ch/2+5,String(ps[i]),15.5,on?'#6f4a0c':INK,on,'middle',true);
+  }
+  el('rect',{x:ox,y:oy,width:cw*(xs.length+1),height:ch*2,fill:'none',stroke:INK,'stroke-width':1.8},svg);
+}
+
+/* title: mini bar graph of 3-coin distribution */
+(function(){
+  const svg=document.getElementById('g-title');
+  const probs=[1,3,3,1];
+  const bw=64, ox=140, base=190, scale=340;
+  probs.forEach((c,i)=>{
+    const h=c/8*scale;
+    el('rect',{x:ox+i*(bw+34),y:base-h,width:bw,height:h,fill:i%2?'#2456A6':'#5b83c9',rx:4},svg);
+    txtX(svg,ox+i*(bw+34)+bw/2,base-h-8,c+'/8',14.5,INK,true,'middle',true);
+    txtX(svg,ox+i*(bw+34)+bw/2,base+22,String(i),15,MUT,true,'middle',true);
+  });
+  txtX(svg,ox+2*(bw+34)-14,base+46,'x = number of heads in 3 tosses',14.5,MUT,false,'middle');
+  txtX(svg,560,110,'the heights',15,MUT,false,'start');
+  txtX(svg,560,132,'add to 1',15,'#9A6410',true,'start');
+})();
+
+/* concept: outcomes -> X values -> distribution */
+(function(){
+  const svg=document.getElementById('g-build');
+  const outs=['HHH','HHT','HTH','THH','HTT','THT','TTH','TTT'];
+  const xv=[3,2,2,2,1,1,1,0];
+  outs.forEach((o,i)=>{
+    const y=36+i*36;
+    el('rect',{x:60,y:y-20,width:84,height:28,fill:'#fff',stroke:'#C3D4E4','stroke-width':1.5,rx:6},svg);
+    txtX(svg,102,y,o,15.5,INK,false,'middle',true);
+    txtX(svg,168,y,'1/8',13.5,MUT,false,'middle',true);
+    // arrow to its X bucket
+    const buckets={0:308,1:236,2:130,3:58};
+    el('line',{x1:196,y1:y-6,x2:300,y2:buckets[xv[i]],stroke:'#DDE8F1','stroke-width':1.6},svg);
+  });
+  const groups=[[3,'X = 3','1/8',58],[2,'X = 2','3/8',130],[1,'X = 1','3/8',236],[0,'X = 0','1/8',308]];
+  groups.forEach(g=>{
+    el('rect',{x:300,y:g[3]-20,width:112,height:40,fill:'#eef3fb',stroke:BLUE,'stroke-width':1.8,rx:8},svg);
+    txtX(svg,356,g[3]-1,g[1],16,BLUE,true,'middle',true);
+    txtX(svg,356,g[3]+15,'Pr = '+g[2],13.5,MUT,false,'middle',true);
+  });
+  distTable(svg,450,110,58,40,['0','1','2','3'],['1/8','3/8','3/8','1/8'],null);
+  txtX(svg,480,90,'the distribution:',14,MUT,false,'start');
+})();
+
+/* Example 1 table */
+(function(){
+  distTable(document.getElementById('g-tabread'),90,18,78,40,['1','2','3','4','5','6'],['0.2','0.3','0.1','0.2','0.15','0.05'],null);
+})();
+
+/* Example 3 table: k */
+(function(){
+  distTable(document.getElementById('g-tabk'),120,14,80,40,['1','2','3','4','5'],['k','2k','3k','4k','5k'],null);
+})();
+
+/* Example 4 table (conditional) */
+(function(){
+  distTable(document.getElementById('g-tabcond'),90,14,80,40,['1','2','3','4','5','6'],['0.2','0.2','0.07','0.17','0.13','0.23'],[2,3,4,5]);
+})();
+
+/* explorer: heads distribution for n tosses */
+(function(){
+  const svg=document.getElementById('g-dist');
+  const S=id=>document.getElementById(id);
+  function build(){
+    svg.innerHTML='';
+    const n=+S('dx-n').value;
+    const tot=Math.pow(2,n);
+    const probs=[]; let pm=0, mode=0;
+    for(let x=0;x<=n;x++){ const p=nCr(n,x)/tot; probs.push(p); if(p>pm){pm=p;mode=x;} }
+    const base=292, ox=80, avail=560, bw=Math.min(70,avail/(n+1)-12), scale=250/pm;
+    probs.forEach((p,x)=>{
+      const cx=ox+(x+0.5)*(avail/(n+1));
+      const h=p*scale;
+      el('rect',{x:cx-bw/2,y:base-h,width:bw,height:h,fill:x===mode?'#C23B32':'#2456A6',rx:4},svg);
+      txtX(svg,cx,base-h-8,nCr(n,x)+'/'+tot,Math.max(12.5,15-n*0.3),INK,x===mode,'middle',true);
+      txtX(svg,cx,base+20,String(x),14.5,MUT,true,'middle',true);
+    });
+    txtX(svg,360,330,'x = number of heads in '+n+' tosses',14.5,MUT,false,'middle');
+    S('dx-n-out').textContent=n;
+    const modes=probs.filter(p=>Math.abs(p-pm)<1e-12).length;
+    S('dx-mode').textContent=modes>1?(mode+' and '+(mode+1)+' (tied)'):String(mode);
+  }
+  S('dx-n').addEventListener('input',build); build();
+})();
+
+
+/* ===== vertical working (aligned equals) ===== */
+function renderWork(span){
+  const segs=[[]];
+  span.childNodes.forEach(node=>{
+    if(node.nodeType===3){ node.textContent.split('=').forEach((p,i)=>{ if(i>0) segs.push([]); segs[segs.length-1].push(document.createTextNode(p)); }); }
+    else { segs[segs.length-1].push(node); }
+  });
+  if(segs.length<2) return;
+  const grid=document.createElement('div'); grid.className='work';
+  const lhs=document.createElement('span'); lhs.className='wl'; segs[0].forEach(n=>lhs.appendChild(n)); grid.appendChild(lhs);
+  for(let i=1;i<segs.length;i++){
+    if(i>1){ const b=document.createElement('span'); b.className='wl'; grid.appendChild(b); }
+    const r=document.createElement('span'); r.className='wr'; r.appendChild(document.createTextNode('= ')); segs[i].forEach(n=>r.appendChild(n)); grid.appendChild(r);
+  }
+  span.replaceWith(grid);
+}
+document.querySelectorAll('span.work').forEach(renderWork);
+
+/* ===== reveals: steps (self-resetting) ===== */
+document.querySelectorAll('[data-steps]').forEach(btn=>{
+  const list=document.getElementById(btn.dataset.steps);
+  const items=[...list.querySelectorAll(':scope > li')];
+  const label=btn.textContent;
+  let shown=0;
+  function reset(){items.forEach(li=>li.classList.remove('shown'));shown=0;btn.textContent=label;}
+  btn.addEventListener('click',()=>{
+    if(shown<items.length){items[shown].classList.add('shown');shown++;if(shown===items.length)btn.textContent='Reset ↺';}
+    else{reset();}
+  });
+  resetters.push(reset);
+});
+/* ===== reveals: Q&A ===== */
+document.querySelectorAll('[data-ans]').forEach(btn=>{
+  const orig=btn.textContent;
+  const a=btn.nextElementSibling;
+  function reset(){a.classList.remove('shown');btn.textContent=orig;}
+  btn.addEventListener('click',()=>{
+    const open=a.classList.toggle('shown');
+    btn.textContent=open?orig.replace('Show','Hide'):orig;
+  });
+  resetters.push(reset);
+});
+document.getElementById('resetBtn').addEventListener('click',resetAll);
+
+/* ===== navigation ===== */
+const slides=[...document.querySelectorAll('.slide')];
+const counter=document.getElementById('counter'), progress=document.getElementById('progress');
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,j)=>s.classList.toggle('active',j===cur));
+  counter.textContent=(cur+1)+' / '+slides.length;
+  progress.style.width=((cur+1)/slides.length*100)+'%';
+  if(history.replaceState)history.replaceState(null,'','#slide-'+(cur+1));
+}
+document.getElementById('prevBtn').addEventListener('click',()=>go(cur-1));
+document.getElementById('nextBtn').addEventListener('click',()=>go(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+  else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
+  else if(e.key==='r'||e.key==='R'){resetAll();}
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60&&e.target.tagName!=='INPUT')go(cur+(dx<0?1:-1));tx=null;},{passive:true});
+const mm=location.hash.match(/slide-(\d+)/); go(mm?(+mm[1]-1):0);
+</script>
+<script>
+(function(){
+  var fsBtn=document.getElementById("fsBtn");
+  function inFull(){return document.fullscreenElement||document.webkitFullscreenElement;}
+  function toggle(){var el=document.documentElement;try{if(!inFull()){var p=(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);if(p&&p.catch)p.catch(function(){});}else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}catch(err){}}
+  if(fsBtn)fsBtn.addEventListener("click",toggle);
+  document.addEventListener("keydown",function(e){var t=e.target.tagName;if(t==="INPUT"||t==="TEXTAREA"||t==="SELECT")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggle();}});
+  function sync(){if(fsBtn)fsBtn.textContent=inFull()?"⤡":"⤢";}
+  document.addEventListener("fullscreenchange",sync);document.addEventListener("webkitfullscreenchange",sync);
+})();
+</script>
+</body>
+</html>
