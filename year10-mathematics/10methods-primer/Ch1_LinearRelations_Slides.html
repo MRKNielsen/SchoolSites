@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 — Linear Relations | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#0e7490; --main2:#0a5468;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main2);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#e7f3f6;border:2px solid var(--main);border-radius:10px;padding:12px 20px;display:inline-block;
+           font-size:1.35rem;margin:8px 8px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main2);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .pill{display:inline-block;background:#e7f3f6;border:1px solid var(--main);color:var(--main2);border-radius:20px;padding:2px 12px;font-size:.9rem;font-weight:600;margin:2px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+
+/* graph plotter with optional shaded region */
+function graf(o){
+  const W=o.w||310,H=o.h||250,[x0,x1]=o.xr,[y0,y1]=o.yr;
+  const X=x=>10+(x-x0)/(x1-x0)*(W-20), Y=y=>H-12-(y-y0)/(y1-y0)*(H-24);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">`;
+  if(o.shade){ // {f, dir:'above'|'below'}
+    let pts='';
+    for(let i=0;i<=60;i++){const x=x0+(x1-x0)*i/60;let y=o.shade.f(x);y=Math.max(y0,Math.min(y1,y));
+      pts+=X(x).toFixed(1)+','+Y(y).toFixed(1)+' ';}
+    const edge=o.shade.dir==='above'?Y(y1):Y(y0);
+    pts+=X(x1).toFixed(1)+','+edge.toFixed(1)+' '+X(x0).toFixed(1)+','+edge.toFixed(1);
+    s+=`<polygon points="${pts}" fill="#0e7490" opacity="0.16"/>`;
+  }
+  if(y0<=0&&y1>=0)s+=`<line x1="6" y1="${Y(0).toFixed(1)}" x2="${W-6}" y2="${Y(0).toFixed(1)}" stroke="#888" stroke-width="1.5"/>
+   <text x="${W-16}" y="${(Y(0)+14).toFixed(1)}" font-size="12" fill="#666">x</text>`;
+  if(x0<=0&&x1>=0)s+=`<line x1="${X(0).toFixed(1)}" y1="6" x2="${X(0).toFixed(1)}" y2="${H-6}" stroke="#888" stroke-width="1.5"/>
+   <text x="${(X(0)+6).toFixed(1)}" y="16" font-size="12" fill="#666">y</text>`;
+  for(const c of o.curves||[]){
+    let d='',pen=false;
+    for(let i=0;i<=120;i++){
+      const x=x0+(x1-x0)*i/120, y=c.f(x);
+      if(!isFinite(y)||y<y0-(y1-y0)*0.05||y>y1+(y1-y0)*0.05){pen=false;continue;}
+      d+=(pen?' L ':' M ')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true;}
+    s+=`<path d="${d}" fill="none" stroke="${c.col||'#c0392b'}" stroke-width="2.6"${c.dash?' stroke-dasharray="7 5"':''}/>`;
+    if(c.lab)s+=`<text x="${X(c.lx).toFixed(1)}" y="${(Y(c.f(c.lx))-8).toFixed(1)}" font-size="13" fill="${c.col||'#c0392b'}" font-weight="bold">${c.lab}</text>`;}
+  for(const g of o.segs||[]){ // dashed construction segments [[x1,y1,x2,y2]]
+    s+=`<line x1="${X(g[0]).toFixed(1)}" y1="${Y(g[1]).toFixed(1)}" x2="${X(g[2]).toFixed(1)}" y2="${Y(g[3]).toFixed(1)}" stroke="#2266aa" stroke-width="1.8" stroke-dasharray="5 4"/>`;}
+  for(const m of o.marks||[]){
+    s+=`<circle cx="${X(m[0]).toFixed(1)}" cy="${Y(m[1]).toFixed(1)}" r="4" fill="#1F4E79"/>`;
+    if(m[2])s+=`<text x="${(X(m[0])+(m[3]??7)).toFixed(1)}" y="${(Y(m[1])+(m[4]??-8)).toFixed(1)}" font-size="12.5" fill="#1F4E79" font-weight="bold">${m[2]}</text>`;}
+  return s+'</svg>';
+}
+/* number line for inequalities: {min,max,pt,closed:true/false,dir:'left'|'right',lab} */
+function nline(o){
+  const W=430,H=76,X=v=>25+(v-o.min)/(o.max-o.min)*(W-50);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">
+  <line x1="8" y1="44" x2="${W-8}" y2="44" stroke="#556" stroke-width="2"/>
+  <polygon points="${W-8},44 ${W-16},40 ${W-16},48" fill="#556"/>
+  <polygon points="8,44 16,40 16,48" fill="#556"/>`;
+  for(let v=Math.ceil(o.min);v<=Math.floor(o.max);v++){
+    s+=`<line x1="${X(v)}" y1="39" x2="${X(v)}" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="${X(v)-(v<0?9:4)}" y="68" font-size="13" fill="#556">${v}</text>`;}
+  const px=X(o.pt), end=o.dir==='left'?X(o.min)+4:X(o.max)-4;
+  s+=`<line x1="${px}" y1="24" x2="${end}" y2="24" stroke="#c0392b" stroke-width="3.5"/>
+  <polygon points="${end},24 ${end+(o.dir==='left'?8:-8)},20 ${end+(o.dir==='left'?8:-8)},28" fill="#c0392b"/>
+  <circle cx="${px}" cy="24" r="6" fill="${o.closed?'#c0392b':'#fff'}" stroke="#c0392b" stroke-width="2.5"/>
+  ${o.lab?`<text x="${px-14}" y="12" font-size="14" fill="#c0392b" font-weight="bold">${o.lab}</text>`:''}</svg>`;
+  return s;
+}
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* ===== L1 welcome + 1A ===== */
+{code:'1A · Term 1 Week 1 · Lesson 1 (Thu 29 Jan)',nm:'Welcome + Review of algebra',menu:['1A','Welcome + Review of algebra','pronumeral, term, like terms, coefficient'],
+ slides:[
+ title('LESSON 1 — WELCOME + SECTION 1A','Welcome to 10 Methods · Review of algebra',['set up my maths glossary and class routines','collect like terms and simplify expressions','expand a single bracket']),
+ {h:'How every lesson works',b:`<div class="key"><span class="kt">Our routine (every single lesson)</span>
+  🗣 <b>New words first</b> → 💡 <b>Key idea</b> → ✏ <b>Worked example</b> → 🙋 <b>Your turn</b> → 📘 <b>Textbook exercise</b></div>
+  <div class="key frag"><span class="kt">Your two tools</span>1️⃣ A <b>glossary</b> at the back of your book: word · meaning · your home language. 2️⃣ <b>Sentence frames</b> — ready-made sentences for asking and explaining.</div>
+  <div class="frame frag">Practice one now: “Can you explain <b>___</b> again, please?” — works in every lesson, for anything.</div>`},
+ {h:'🗣 New words first',b:vocab([
+  ['pronumeral / variable','pro-NYOO-me-ral','a letter standing for a number, like x'],
+  ['term','term','one piece of an expression: 3x, −2y, 7'],
+  ['like terms','lyk terms','terms with exactly the same letters: 3x and −5x'],
+  ['coefficient','ko-e-FISH-ent','the number in front: the 3 in 3x'],
+  ['expand','ex-PAND','multiply out the brackets'],
+  ['simplify','SIM-pli-fy','write with as few terms as possible']])},
+ {h:'Key idea — collect like terms, expand brackets',b:`<div class="key"><span class="kt">Like terms</span>Only like terms can be added: 3x + 5x = 8x ✔ &nbsp; but 3x + 5y stays 3x + 5y.</div>
+  <div class="key frag"><span class="kt">Expanding</span><span class="formula">a(b + c) = ab + ac</span> — the outside number multiplies <b>everything</b> inside.</div>`},
+ {h:'Worked example 1',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) 3x + 2y − x + 5y &nbsp; b) 3(2x − 4) + 2x</div>`+steps([
+  `<b>a) Group like terms:</b> (3x − x) + (2y + 5y)`,
+  `<b>Simplify:</b> 2x + 7y`,
+  `<b>b) Expand first:</b> 6x − 12 + 2x <span class="say">(3 × 2x and 3 × −4)</span>`,
+  `<b>Collect:</b> 8x − 12`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) 5a − 2b + a + 7b &nbsp; b) 2(3x + 1) − 4x</div>
+  <div class="hint frag">Hint: b) expand to 6x + 2 first.</div>
+  <div class="ans frag">✔ a) 6a + 5b &nbsp; b) 2x + 2</div>`},
+ {h:'',b:exset('1A',['Fluency: like terms and expanding questions','Start your glossary with today’s six words','Frame: “___ and ___ are like terms because ___.”'])}
+]},
+/* ===== L2 1B ===== */
+{code:'1B · Term 1 Week 1 · Lesson 2 (Fri 30 Jan)',nm:'Solving linear equations',menu:['1B','Solving linear equations','equation, solve, inverse operation'],
+ slides:[
+ title('LESSON 2 — SECTION 1B','Solving linear equations',['explain what “solve” means','undo operations in reverse order','solve equations with x on both sides']),
+ {h:'🗣 New words first',b:vocab([
+  ['equation','ee-KWAY-zhun','two expressions with an equals sign: 2x + 5 = 17'],
+  ['solve','solv','find the value of x that makes it TRUE'],
+  ['inverse operation','IN-verse','the undo: + ↔ −, × ↔ ÷'],
+  ['both sides','—','whatever you do to one side, do to the other'],
+  ['check / verify','chek','substitute your answer back in — does it work?']])},
+ {h:'Key idea — keep the balance',b:`<div class="key"><span class="kt">Key idea</span>An equation is a balance ⚖. Do the <b>same inverse operation to both sides</b>, one step per line, until x is alone.</div>
+  <div class="key frag"><span class="kt">x on both sides?</span>First move the smaller x-term across, then solve as normal.</div>`},
+ {h:'Worked example 2',b:`<div class="q"><span class="tag">Worked example</span>Solve: a) 2x + 5 = 17 &nbsp; b) 5x − 4 = 3x + 10</div>`+steps([
+  `<b>a) − 5 both sides:</b> 2x = 12`,
+  `<b>÷ 2 both sides:</b> x = 6. <b>Check:</b> 2(6) + 5 = 17 ✔`,
+  `<b>b) − 3x both sides:</b> 2x − 4 = 10`,
+  `<b>+ 4, then ÷ 2:</b> 2x = 14 → x = 7. <b>Check:</b> 31 = 31 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve: a) 4x − 3 = 13 &nbsp; b) 7x + 2 = 4x + 17</div>
+  <div class="hint frag">Hint: b) subtract 4x first.</div>
+  <div class="ans frag">✔ a) x = 4 &nbsp; b) 3x = 15 → x = 5</div>`},
+ {h:'',b:exset('1B (start)',['One inverse operation per line — show every step','Check every third answer by substituting back','Frame: “I subtract ___ from both sides because ___.”'])}
+]},
+/* ===== L3 1B+ ===== */
+{code:'1B · Term 1 Week 2 · Lesson 3',nm:'Equations with brackets',menu:['1B+','Equations with brackets','expand, then solve'],
+ slides:[
+ title('LESSON 3 — SECTION 1B (CONTINUED)','Equations with brackets',['expand brackets before solving','solve equations with brackets on both sides','find and fix sign errors']),
+ {h:'Key idea — expand, then solve',b:`<div class="key"><span class="kt">Routine</span>1️⃣ Expand all brackets → 2️⃣ collect like terms on each side → 3️⃣ solve as normal.</div>
+  <div class="key frag"><span class="kt">Careful</span>A minus in front of a bracket changes EVERY sign inside: −2(x − 3) = −2x <b>+ 6</b>.</div>`},
+ {h:'Worked example 3',b:`<div class="q"><span class="tag">Worked example</span>Solve 3(x − 2) = 2(x + 4) + 1</div>`+steps([
+  `<b>Expand both sides:</b> 3x − 6 = 2x + 8 + 1`,
+  `<b>Collect:</b> 3x − 6 = 2x + 9`,
+  `<b>− 2x both sides:</b> x − 6 = 9`,
+  `<b>+ 6:</b> x = 15. <b>Check:</b> 3(13) = 2(19) + 1 → 39 = 39 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve 4(2x + 1) = 3x + 19</div>
+  <div class="hint frag">Hint: expand to 8x + 4 first.</div>
+  <div class="ans frag">✔ 8x + 4 = 3x + 19 → 5x = 15 → x = 3</div>`},
+ {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>A student wrote: −3(x − 2) = −3x − 6</div>
+  <div class="ans frag">✔ The −3 must multiply the −2 as well: −3 × −2 = <b>+6</b>, so −3(x − 2) = −3x + 6.</div>
+  <div class="frame frag">“The minus outside changes <b>every sign</b> inside the bracket.”</div>`},
+ {h:'',b:exset('1B (finish)',['Bracket equations, including brackets on both sides','Circle every minus sign BEFORE you expand','Challenge: equations with three brackets'])}
+]},
+/* ===== L4 1C ===== */
+{code:'1C · Term 1 Week 2 · Lesson 4',nm:'Linear inequalities',menu:['1C','Linear inequalities','inequality, reverse the sign, number line'],
+ slides:[
+ title('LESSON 4 — SECTION 1C','Linear inequalities',['read and write the four inequality symbols','solve inequalities like equations — with ONE special rule','graph solutions on a number line']),
+ {h:'🗣 New words first',b:vocab([
+  ['inequality','in-ee-KWOL-i-tee','a statement with &lt;, &gt;, ≤ or ≥ instead of ='],
+  ['less than <','less than','strictly smaller — open circle ○ on the number line'],
+  ['at least ≥ / at most ≤','—','includes the number itself — closed circle ●'],
+  ['reverse the sign','re-VERSE','flip &lt; to &gt; when multiplying or dividing by a NEGATIVE']])},
+ {h:'Key idea — one special rule',b:`<div class="key"><span class="kt">Solve like an equation…</span>same inverse operations, both sides — the inequality sign stays put…</div>
+  <div class="key frag"><span class="kt">…except</span><b>multiplying or dividing by a negative flips the sign.</b> Test it: 2 &lt; 4, but ×(−1) gives −2 &gt; −4. The flip keeps it true!</div>`},
+ {h:'Worked example 4',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Solve 3 − 2x ≥ 9 and show the solution on a number line.</div></div>
+  <div class="center">${nline({min:-6,max:2,pt:-3,closed:true,dir:'left',lab:'x ≤ −3'})}</div></div>`+steps([
+  `<b>− 3 both sides:</b> −2x ≥ 6`,
+  `<b>÷ (−2) — FLIP the sign:</b> x ≤ −3`,
+  `<b>Number line:</b> closed circle at −3 (it is included), arrow to the left.`,
+  `<b>Check with x = −4:</b> 3 − 2(−4) = 11 ≥ 9 ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Solve 2x + 1 &lt; 7 and graph it on a number line.</div></div>
+  <div class="center">${nline({min:-2,max:6,pt:3,closed:false,dir:'left',lab:'x < 3'})}</div></div>
+  <div class="hint frag">Hint: no negatives here — the sign does not flip. Open or closed circle?</div>
+  <div class="ans frag">✔ 2x &lt; 6 → x &lt; 3 — <b>open</b> circle at 3 (3 is NOT included), arrow left.</div>`},
+ {h:'',b:exset('1C',['Solve and graph — every answer gets a number line','Highlight each ×(−) or ÷(−) step: that is where the flip happens','Frame: “I flip the sign because I divided by a ___ number.”'])}
+]},
+/* ===== L5 1D ===== */
+{code:'1D · Term 1 Week 2 · Lesson 5',nm:'Equations with algebraic fractions',menu:['1D','Equations with fractions','denominator, common multiple'],
+ slides:[
+ title('LESSON 5 — SECTION 1D','Equations with algebraic fractions',['clear fractions by multiplying by a common multiple','solve equations with two fractions','keep working lines tidy and checkable']),
+ {h:'🗣 New words first',b:vocab([
+  ['denominator','de-NOM-in-ay-tor','the bottom of a fraction'],
+  ['common multiple','KOM-on MUL-ti-pul','a number all denominators divide into: for 2 and 3, use 6'],
+  ['clear the fractions','—','multiply every term so no fractions remain']])},
+ {h:'Key idea — multiply everything',b:`<div class="key"><span class="kt">Routine</span>1️⃣ Find the common multiple of the denominators → 2️⃣ multiply <b>every term</b> by it → 3️⃣ solve the fraction-free equation.</div>
+  <div class="key frag"><span class="kt">Careful</span>The whole top comes with brackets: 6 × ${fr('x + 3','2')} = 3(x + 3), not 3x + 3.</div>`},
+ {h:'Worked example 5',b:`<div class="q"><span class="tag">Worked example</span>Solve ${fr('x + 3','2')} + ${fr('x − 1','3')} = 4</div>`+steps([
+  `<b>Common multiple of 2 and 3:</b> 6 — multiply every term by 6.`,
+  `<b>Clear:</b> 3(x + 3) + 2(x − 1) = 24`,
+  `<b>Expand and collect:</b> 3x + 9 + 2x − 2 = 24 → 5x + 7 = 24`,
+  `<b>Solve:</b> 5x = 17 → x = ${fr('17','5')} = 3.4 <span class="say">(fractions are fine as answers!)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve ${fr('2x − 1','5')} = ${fr('x + 2','3')}</div>
+  <div class="hint frag">Hint: multiply both sides by 15 — or cross-multiply.</div>
+  <div class="ans frag">✔ 3(2x − 1) = 5(x + 2) → 6x − 3 = 5x + 10 → x = 13</div>`},
+ {h:'',b:exset('1D (start)',['Fraction equations — brackets around every numerator','Write the common multiple in the margin first','Check one answer by substituting back'])}
+]},
+/* ===== L6 1D+ ===== */
+{code:'1D · Term 1 Week 2 · Lesson 6',nm:'More complex equations — consolidation',menu:['1D+','Harder fraction equations','subtraction of fractions, check'],
+ slides:[
+ title('LESSON 6 — SECTION 1D (CONSOLIDATION)','More complex equations',['solve equations with subtracted fractions','avoid the minus-bracket trap','check solutions systematically']),
+ {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Solve ${fr('3x + 2','4')} − ${fr('x − 1','2')} = 1</div>`+steps([
+  `<b>Multiply every term by 4:</b> (3x + 2) − 2(x − 1) = 4`,
+  `<b>Expand — watch the minus:</b> 3x + 2 − 2x + 2 = 4 <span class="say">(−2 × −1 = +2!)</span>`,
+  `<b>Collect:</b> x + 4 = 4`,
+  `<b>Solve:</b> x = 0. <b>Check:</b> ${fr('2','4')} − ${fr('−1','2')} = ${fr('1','2')} + ${fr('1','2')} = 1 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve ${fr('x + 5','3')} − ${fr('x','6')} = 2</div>
+  <div class="hint frag">Hint: multiply every term by 6: 2(x + 5) − x = 12.</div>
+  <div class="ans frag">✔ 2x + 10 − x = 12 → x = 2</div>`},
+ {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>Solving ${fr('x + 1','2')} − ${fr('x − 3','4')} = 1, a student wrote: 2(x + 1) − (x − 3) = 4, then 2x + 2 − x − 3 = 4.</div>
+  <div class="ans frag">✔ The setup line is right; the expansion is wrong. −(x − 3) = −x <b>+ 3</b>. Correct: x + 5 = 4 → x = −1.</div>`},
+ {h:'',b:exset('1D (finish)',['Mixed set: brackets, both sides, fractions together','Every minus bracket: write the sign change explicitly','Exit ticket: solve one equation and CHECK it in writing'])}
+]},
+/* ===== L7 1E ===== */
+{code:'1E · Term 1 Week 3 · Lesson 7',nm:'Graphing straight lines',menu:['1E','Graphing straight lines','gradient, y-intercept, x-intercept'],
+ slides:[
+ title('LESSON 7 — SECTION 1E','Graphing straight lines',['find x- and y-intercepts from a rule','sketch a line using its two intercepts','read gradient and y-intercept from y = mx + c']),
+ {h:'🗣 New words first',b:vocab([
+  ['gradient m','GRAY-dee-ent','the slope: rise ÷ run — how steep the line is'],
+  ['y-intercept c','—','where the line crosses the y-axis (x = 0)'],
+  ['x-intercept','—','where the line crosses the x-axis (y = 0)'],
+  ['rise / run','ryz / run','up-or-down change ÷ across change']])},
+ {h:'Key idea — two points make a line',b:`<div class="key"><span class="kt">Intercept method</span>Put x = 0 → y-intercept. Put y = 0 → x-intercept. Join the two points — done.</div>
+  <div class="key frag"><span class="kt">Gradient form</span><span class="formula">y = mx + c</span> m = gradient, c = y-intercept. Read them straight off the rule.</div>`},
+ {h:'Worked example 7',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = 2x − 4 using the intercepts.</div></div>
+  <div class="center">${graf({xr:[-2.5,5],yr:[-6,5],curves:[{f:x=>2*x-4,lab:'y = 2x − 4',lx:3.4}],marks:[[0,-4,'(0, −4)',8,4],[2,0,'(2, 0)',8,-6]]})}</div></div>`+steps([
+  `<b>y-intercept:</b> x = 0 → y = −4 → (0, −4)`,
+  `<b>x-intercept:</b> y = 0 → 2x = 4 → x = 2 → (2, 0)`,
+  `<b>Plot both points, join with a ruler,</b> label the line and both intercepts.`,
+  `<b>Check the slope:</b> m = 2 — uphill, steepish ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = −x + 3 using the intercepts.</div></div>
+  <div class="center">${graf({xr:[-2,5.5],yr:[-2.5,5],curves:[{f:x=>3-x,col:'#2266aa'}],marks:[[0,3,'(0, 3)',8,-2],[3,0,'(3, 0)',8,14]]})}</div></div>
+  <div class="hint frag">Hint: both intercepts are 3 — but on different axes!</div>
+  <div class="ans frag">✔ (0, 3) and (3, 0); gradient −1, downhill.</div>`},
+ {h:'',b:exset('1E',['Sketch by intercepts; label both points on every sketch','Then read m and c from rules without sketching','Frame: “The gradient is ___, so the line goes ___hill.”'])}
+]},
+/* ===== L8 1E/F ===== */
+{code:'1E/1F · Term 1 Week 3 · Lesson 8',nm:'Gradient and equation from a graph',menu:['1E/1F','Equation from a graph','rise over run, y = mx + c'],
+ slides:[
+ title('LESSON 8 — SECTIONS 1E/1F','Finding the equation from a graph',['measure gradient as rise over run','read c from the graph','write the rule y = mx + c']),
+ {h:'Key idea — two readings, one rule',b:`<div class="key"><span class="kt">From any straight-line graph</span>1️⃣ Read <b>c</b> where it crosses the y-axis → 2️⃣ pick two nice grid points and count <b>rise ÷ run</b> → 3️⃣ write y = mx + c.</div>
+  <div class="key frag"><span class="kt">Signs</span>Downhill line → negative rise → negative m.</div>`},
+ {h:'Worked example 8',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of this line.</div></div>
+  <div class="center">${graf({xr:[-2.5,3],yr:[-2,9],curves:[{f:x=>3*x+2}],segs:[[0,2,1,2],[1,2,1,5]],marks:[[0,2,'(0, 2)',-50,-2],[1,5,'(1, 5)',8,-2]]})}</div></div>`+steps([
+  `<b>y-intercept:</b> the line crosses at (0, 2) → c = 2`,
+  `<b>Rise over run:</b> from (0, 2) to (1, 5): rise 3, run 1 → m = 3`,
+  `<b>Rule:</b> y = 3x + 2`,
+  `<b>Check with the second point:</b> 3(1) + 2 = 5 ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of this line.</div></div>
+  <div class="center">${graf({xr:[-2,4],yr:[-4,4],curves:[{f:x=>-2*x+1,col:'#2266aa'}],marks:[[0,1,'(0, 1)',8,-2],[2,-3,'(2, −3)',8,4]]})}</div></div>
+  <div class="hint frag">Hint: from (0, 1) to (2, −3): rise −4, run 2.</div>
+  <div class="ans frag">✔ m = −2, c = 1 → <b>y = −2x + 1</b></div>`},
+ {h:'',b:exset('1E (finish) + 1F (start)',['Equations from graphs — show the rise/run triangle on the graph','Then rules from a gradient + y-intercept given in words','Frame: “The rise is ___ and the run is ___, so m = ___.”'])}
+]},
+/* ===== L9 1F ===== */
+{code:'1F · Term 1 Week 3 · Lesson 9',nm:'Finding the equation of a line from two points',menu:['1F','Equation from two points','gradient formula, substitute a point'],
+ slides:[
+ title('LESSON 9 — SECTION 1F','Equation of a line from two points',['use the gradient formula','find c by substituting a point','write the full rule and check with the other point']),
+ {h:'Key idea — gradient formula, then one point',b:`<div class="center"><span class="formula">m = ${fr('y₂ − y₁','x₂ − x₁')}</span></div>
+  <div class="key frag"><span class="kt">Routine</span>1️⃣ m from the two points → 2️⃣ y = mx + c with ONE point substituted → find c → 3️⃣ check with the OTHER point.</div>`},
+ {h:'Worked example 9',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of the line through (1, 3) and (3, 11).</div></div>
+  <div class="center">${graf({xr:[-1.5,4.5],yr:[-4,13],curves:[{f:x=>4*x-1}],marks:[[1,3,'(1, 3)',-50,4],[3,11,'(3, 11)',8,0]]})}</div></div>`+steps([
+  `<b>Gradient:</b> m = ${fr('11 − 3','3 − 1')} = ${fr('8','2')} = 4`,
+  `<b>Substitute (1, 3):</b> 3 = 4(1) + c → c = −1`,
+  `<b>Rule:</b> y = 4x − 1`,
+  `<b>Check with (3, 11):</b> 4(3) − 1 = 11 ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of the line through (2, 5) and (4, 1).</div></div>
+  <div class="center">${graf({xr:[-0.5,6],yr:[-1.5,11],curves:[{f:x=>-2*x+9,col:'#2266aa'}],marks:[[2,5,'(2, 5)',-52,0],[4,1,'(4, 1)',8,0]]})}</div></div>
+  <div class="hint frag">Hint: m = (1 − 5) ÷ (4 − 2) = −2.</div>
+  <div class="ans frag">✔ 5 = −2(2) + c → c = 9 → <b>y = −2x + 9</b>. Check: −2(4) + 9 = 1 ✔</div>`},
+ {h:'',b:exset('1F (finish)',['Two-point questions — always check with the unused point','Keep the subtraction order the SAME on top and bottom','Word problems: “passes through” means the point fits the rule'])}
+]},
+/* ===== L10 1G ===== */
+{code:'1G · Term 1 Week 3 · Lesson 10',nm:'Length and midpoint of a line segment',menu:['1G','Length and midpoint','segment, distance, midpoint, average'],
+ slides:[
+ title('LESSON 10 — SECTION 1G','Length and midpoint of a line segment',['find the length of a segment with Pythagoras','find the midpoint by averaging','draw the right-angled triangle that makes it work']),
+ {h:'🗣 New words first',b:vocab([
+  ['line segment','SEG-ment','a piece of a line between two endpoints'],
+  ['length / distance','—','how long the segment is — Pythagoras!'],
+  ['midpoint','MID-poynt','the point exactly halfway — average the coordinates'],
+  ['average','AV-rij','add them, divide by 2']])},
+ {h:'Key idea — a hidden right triangle',b:`<div class="center">
+  <span class="formula">d = √((x₂−x₁)² + (y₂−y₁)²)</span>
+  <span class="formula">M = ${'('}${fr('x₁+x₂','2')}, ${fr('y₁+y₂','2')}${')'}</span></div>
+  <div class="key frag"><span class="kt">Why</span>The horizontal and vertical changes make a right-angled triangle — the segment is its hypotenuse.</div>`},
+ {h:'Worked example 10',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>For A(1, 2) and B(7, 10), find the length AB and the midpoint M.</div></div>
+  <div class="center">${graf({xr:[-1,9],yr:[-1,12],curves:[{f:x=>(4*x+2)/3}],segs:[[1,2,7,2],[7,2,7,10]],marks:[[1,2,'A(1, 2)',-8,18],[7,10,'B(7, 10)',8,0],[4,6,'M(4, 6)',10,4]]})}</div></div>`+steps([
+  `<b>Changes:</b> across 7 − 1 = 6, up 10 − 2 = 8 <span class="say">(the dashed triangle)</span>`,
+  `<b>Length:</b> AB = √(6² + 8²) = √100 = <b>10 units</b>`,
+  `<b>Midpoint:</b> M = (${fr('1+7','2')}, ${fr('2+10','2')}) = <b>(4, 6)</b>`,
+  `<b>Sense check:</b> M sits on the segment, halfway ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>For P(−2, 3) and Q(4, −5), find the length PQ and the midpoint.</div></div>
+  <div class="center">${graf({xr:[-4,6.5],yr:[-7,5.5],curves:[{f:x=>3-4/3*(x+2),col:'#2266aa'}],segs:[[-2,3,4,3],[4,3,4,-5]],marks:[[-2,3,'P(−2, 3)',-16,-10],[4,-5,'Q(4, −5)',8,6],[1,-1,'M?',10,-2]]})}</div></div>
+  <div class="hint frag">Hint: across = 4 − (−2) = 6; down = −5 − 3 = −8. Squaring removes the minus.</div>
+  <div class="ans frag">✔ PQ = √(36 + 64) = <b>10 units</b>; midpoint (1, −1)</div>`},
+ {h:'',b:exset('1G',['Length and midpoint — sketch the dashed triangle each time','Negative coordinates: brackets around every substitution','Extension: given the midpoint, find the missing endpoint'])}
+]},
+/* ===== L11 1H ===== */
+{code:'1H · Term 1 Week 4 · Lesson 11',nm:'Parallel and perpendicular lines',menu:['1H','Parallel & perpendicular','same gradient, negative reciprocal'],
+ slides:[
+ title('LESSON 11 — SECTION 1H','Parallel and perpendicular lines',['recognise parallel lines by gradient','use m₁ × m₂ = −1 for perpendicular lines','find equations of parallel/perpendicular lines through a point']),
+ {h:'🗣 New words first',b:vocab([
+  ['parallel','PA-ra-lel','never meet — SAME gradient: m₁ = m₂'],
+  ['perpendicular','per-pen-DIK-yoo-lar','meet at 90° — gradients multiply to −1'],
+  ['negative reciprocal','re-SIP-ro-kal','flip the fraction and change the sign: 2 → −½']])},
+ {h:'Key idea — the two gradient rules',b:`<div class="cols"><div>${graf({xr:[-1,5],yr:[-1,8],curves:[{f:x=>x+1,lab:'m = 1',lx:3.6},{f:x=>x+3,col:'#2266aa',lab:'m = 1',lx:2.2}]})}<p class="note">parallel: same m</p></div>
+  <div>${graf({xr:[-1,6],yr:[-1,7],curves:[{f:x=>2*x-1,lab:'m = 2',lx:2.9},{f:x=>-0.5*x+4,col:'#1e8449',lab:'m = −½',lx:4.2}],marks:[[2,3,'90°',10,-2]]})}<p class="note">perpendicular: m₁ × m₂ = −1</p></div></div>
+  <div class="key frag"><span class="kt">Quick pairs</span>2 ↔ −½ · ${fr('3','4')} ↔ −${fr('4','3')} · −5 ↔ ${fr('1','5')} — flip and flip the sign.</div>`},
+ {h:'Worked example 11',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of the line perpendicular to y = 2x + 1 passing through (4, 3).</div></div>
+  <div class="center">${graf({xr:[-1,7.5],yr:[-1,8.5],curves:[{f:x=>2*x+1,lab:'y = 2x + 1',lx:2.6},{f:x=>-0.5*x+5,col:'#1e8449',lab:'m = −½',lx:5.6}],marks:[[4,3,'(4, 3)',8,14]]})}</div></div>`+steps([
+  `<b>Perpendicular gradient:</b> m = −½ <span class="say">(2 × −½ = −1 ✔)</span>`,
+  `<b>Start the rule:</b> y = −½x + c`,
+  `<b>Substitute (4, 3):</b> 3 = −½(4) + c → 3 = −2 + c → c = 5`,
+  `<b>Answer:</b> y = −½x + 5`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of the line parallel to y = −3x + 2 through (1, 4).</div></div>
+  <div class="center">${graf({xr:[-2,4],yr:[-4,9.5],curves:[{f:x=>-3*x+2,lab:'y = −3x + 2',lx:-1.4},{f:x=>-3*x+7,col:'#2266aa',dash:1}],marks:[[1,4,'(1, 4)',8,0]]})}</div></div>
+  <div class="hint frag">Hint: parallel keeps m = −3.</div>
+  <div class="ans frag">✔ 4 = −3(1) + c → c = 7 → <b>y = −3x + 7</b></div>`},
+ {h:'',b:exset('1H',['Parallel first, then perpendicular questions','Write the gradient rule you used at the top of each answer','Frame: “Perpendicular to m = ___ is m = ___ because they multiply to −1.”'])}
+]},
+/* ===== L12 1I ===== */
+{code:'1I · Term 1 Week 4 · Lesson 12',nm:'Simultaneous equations — substitution',menu:['1I','Substitution','simultaneous, substitute, intersection'],
+ slides:[
+ title('LESSON 12 — SECTION 1I','Simultaneous equations using substitution',['explain what solving simultaneously means','substitute one rule into the other','check the solution in BOTH equations']),
+ {h:'🗣 New words first',b:vocab([
+  ['simultaneous','sy-mul-TAY-nee-us','both true at the same time'],
+  ['substitute','SUB-sti-tyoot','replace y with what it equals'],
+  ['point of intersection','—','where the two lines cross — that (x, y) IS the solution']])},
+ {h:'Key idea — the crossing point',b:`<div class="cols"><div>${graf({xr:[-1,5],yr:[-1,9],curves:[{f:x=>x+2,lab:'y = x + 2',lx:3.3},{f:x=>10-3*x,col:'#2266aa',lab:'3x + y = 10',lx:0.6}],marks:[[2,4,'(2, 4)',10,-2]]})}</div><div>
+  <div class="key"><span class="kt">Key idea</span>Two lines, one crossing point. Solving simultaneously finds that point with algebra.</div>
+  <div class="key frag"><span class="kt">When to substitute</span>Perfect when one equation already says “y = …” (or “x = …”).</div></div></div>`},
+ {h:'Worked example 12',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Solve y = x + 2 and 3x + y = 10 simultaneously.</div></div>
+  <div class="center">${graf({xr:[-1,5],yr:[-1,9],curves:[{f:x=>x+2,lab:'y = x + 2',lx:3.3},{f:x=>10-3*x,col:'#2266aa',lab:'3x + y = 10',lx:0.6}],marks:[[2,4,'(2, 4)',10,-2]]})}</div></div>`+steps([
+  `<b>Substitute</b> y = x + 2 into the second: 3x + (x + 2) = 10`,
+  `<b>Solve:</b> 4x + 2 = 10 → x = 2`,
+  `<b>Back-substitute:</b> y = 2 + 2 = 4 → solution <b>(2, 4)</b>`,
+  `<b>Check in BOTH:</b> 4 = 2 + 2 ✔ and 6 + 4 = 10 ✔`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Solve y = 2x − 1 and x + y = 5.</div></div>
+  <div class="center">${graf({xr:[-1,5.5],yr:[-2.5,7.5],curves:[{f:x=>2*x-1,col:'#c0392b',lab:'y = 2x − 1',lx:3.4},{f:x=>5-x,col:'#2266aa',lab:'x + y = 5',lx:0.4}],marks:[[2,3,'?',10,-2]]})}</div></div>
+  <div class="hint frag">Hint: x + (2x − 1) = 5.</div>
+  <div class="ans frag">✔ 3x = 6 → x = 2, y = 3 → <b>(2, 3)</b>. Check both: 3 = 4 − 1 ✔, 2 + 3 = 5 ✔</div>`},
+ {h:'',b:exset('1I (start)',['Substitution questions where one rule is ready-made','Always finish with the check in BOTH equations','Frame: “I replace y with ___ because the first rule tells me they are equal.”'])}
+]},
+/* ===== L13 1I+ ===== */
+{code:'1I · Term 1 Week 4 · Lesson 13',nm:'Substitution — consolidation',menu:['1I+','Substitution practice','rearrange first'],
+ slides:[
+ title('LESSON 13 — SECTION 1I (CONSOLIDATION)','Substitution with a rearrangement',['rearrange one equation before substituting','keep bracket discipline when substituting','decide which variable is easier to isolate']),
+ {h:'Worked example 13',b:`<div class="q"><span class="tag">Worked example</span>Solve x = 2y − 3 and 2x + 3y = 8.</div>`+steps([
+  `<b>x is ready-made</b> — substitute into the second: 2(2y − 3) + 3y = 8`,
+  `<b>Expand:</b> 4y − 6 + 3y = 8`,
+  `<b>Solve:</b> 7y = 14 → y = 2`,
+  `<b>Back-substitute:</b> x = 2(2) − 3 = 1 → <b>(1, 2)</b>. Check: 2(1) + 3(2) = 8 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve y = 3x + 1 and 2x + 2y = 18.</div>
+  <div class="hint frag">Hint: 2x + 2(3x + 1) = 18 — brackets around the whole substitution!</div>
+  <div class="ans frag">✔ 8x + 2 = 18 → x = 2, y = 7 → <b>(2, 7)</b></div>`},
+ {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>Substituting y = x − 4 into 3x − 2y = 14, a student wrote: 3x − 2x − 4 = 14.</div>
+  <div class="ans frag">✔ Missing brackets! 3x − 2<b>(x − 4)</b> = 3x − 2x <b>+ 8</b>. Correct: x + 8 = 14 → x = 6, y = 2.</div>
+  <div class="frame frag">“When I substitute, the whole expression goes in <b>brackets</b>.”</div>`},
+ {h:'',b:exset('1I (finish)',['Harder substitution — including rearrange-first questions','Brackets around EVERY substitution','Challenge: two equations, neither solved for x or y — you choose'])}
+]},
+/* ===== L14 1J ===== */
+{code:'1J · Term 1 Week 4 · Lesson 14',nm:'Simultaneous equations — elimination',menu:['1J','Elimination','eliminate, add or subtract equations'],
+ slides:[
+ title('LESSON 14 — SECTION 1J','Simultaneous equations using elimination',['line up equations and eliminate a variable','decide: add or subtract?','solve and check in both equations']),
+ {h:'🗣 New words first',b:vocab([
+  ['eliminate','ee-LIM-in-ayt','make one variable disappear'],
+  ['matching coefficients','—','same size number on x (or y) in both equations'],
+  ['SSS / DDA','—','memory help: Same Signs Subtract · Different signs? Add']])},
+ {h:'Key idea — make a variable vanish',b:`<div class="key"><span class="kt">Key idea</span>Line the equations up. If one variable has <b>matching coefficients</b>: same signs → <b>subtract</b>; opposite signs → <b>add</b>. That variable vanishes.</div>
+  <div class="key frag"><span class="kt">When elimination?</span>When neither equation is solved for x or y — no rearranging needed.</div>`},
+ {h:'Worked example 14',b:`<div class="q"><span class="tag">Worked example</span>Solve 2x + 3y = 12 and 2x − y = 4.</div>`+steps([
+  `<b>Matching 2x, same sign → subtract:</b> (2x + 3y) − (2x − y) = 12 − 4`,
+  `<b>Careful with signs:</b> 3y − (−y) = 4y → 4y = 8 → y = 2`,
+  `<b>Back-substitute:</b> 2x − 2 = 4 → x = 3 → <b>(3, 2)</b>`,
+  `<b>Check both:</b> 6 + 6 = 12 ✔ and 6 − 2 = 4 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve x + 2y = 7 and 3x − 2y = 5.</div>
+  <div class="hint frag">Hint: the 2y terms have opposite signs → ADD the equations.</div>
+  <div class="ans frag">✔ 4x = 12 → x = 3, y = 2 → <b>(3, 2)</b></div>`},
+ {h:'',b:exset('1J (start)',['Elimination with matching coefficients — decide add/subtract first','Write “+” or “−” next to the equations before you combine','Frame: “The ___ terms match with ___ signs, so I ___.”'])}
+]},
+/* ===== L15 1J+ ===== */
+{code:'1J · Term 1 Week 5 · Lesson 15',nm:'Elimination — multiply first',menu:['1J+','Elimination: multiply first','scale an equation'],
+ slides:[
+ title('LESSON 15 — SECTION 1J (CONTINUED)','Elimination — multiply first',['multiply an equation to create matching coefficients','choose the cheaper variable to match','solve any linear pair with elimination']),
+ {h:'Key idea — make the match yourself',b:`<div class="key"><span class="kt">No match? Make one.</span>Multiply one (or both) equations by a number so a variable matches — then add or subtract as usual.</div>
+  <div class="key frag"><span class="kt">Choose wisely</span>Match whichever variable needs the smallest multiplication. Multiply EVERY term, including the right side!</div>`},
+ {h:'Worked example 15',b:`<div class="q"><span class="tag">Worked example</span>Solve 3x + 2y = 16 and 2x − y = 6.</div>`+steps([
+  `<b>Match y:</b> multiply the second equation by 2 → 4x − 2y = 12`,
+  `<b>Opposite signs on y → add:</b> (3x + 2y) + (4x − 2y) = 16 + 12`,
+  `<b>Solve:</b> 7x = 28 → x = 4`,
+  `<b>Back-substitute:</b> 2(4) − y = 6 → y = 2 → <b>(4, 2)</b>. Check: 12 + 4 = 16 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve 2x + 5y = 16 and 3x + 2y = 13.</div>
+  <div class="hint frag">Hint: ×3 the first and ×2 the second → 6x in both → subtract.</div>
+  <div class="ans frag">✔ 6x + 15y = 48; 6x + 4y = 26 → 11y = 22 → y = 2, x = 3 → <b>(3, 2)</b></div>`},
+ {h:'',b:exset('1J (finish)',['Multiply-first elimination; label each equation ①, ② and show “① × 3”','Multiply every term — right side included','Mixed set: choose substitution OR elimination and say why'])}
+]},
+/* ===== L16 1K ===== */
+{code:'1K · Term 1 Week 5 · Lesson 16',nm:'Applications of simultaneous equations',menu:['1K','Applications','define variables, translate, answer in words'],
+ slides:[
+ title('LESSON 16 — SECTION 1K','Applications of simultaneous equations',['define two variables with units','translate sentences into two equations','solve and answer in words']),
+ {h:'Key idea — words to equations',b:`<div class="key"><span class="kt">Routine</span>1️⃣ <b>Define:</b> “let a = adult ticket price ($), c = child ticket price ($)” → 2️⃣ <b>Translate</b> each sentence into an equation → 3️⃣ <b>Solve</b> (substitution or elimination) → 4️⃣ <b>Answer in words with units.</b></div>
+  <div class="frame frag">“Let ___ = ___ (units). Let ___ = ___ (units).” — write this line FIRST, always.</div>`},
+ {h:'Worked example 16',b:`<div class="q"><span class="tag">Worked example</span>2 adult and 3 child tickets cost $47. 1 adult and 2 child tickets cost $26. Find each price.</div>`+steps([
+  `<b>Define:</b> let a = adult price ($), c = child price ($).`,
+  `<b>Translate:</b> 2a + 3c = 47 &nbsp;①&nbsp; and a + 2c = 26 &nbsp;②`,
+  `<b>From ②:</b> a = 26 − 2c → substitute into ①: 2(26 − 2c) + 3c = 47`,
+  `<b>Solve:</b> 52 − c = 47 → c = 5, a = 16.`,
+  `<b>Answer in words:</b> “An adult ticket costs <b>$16</b> and a child ticket costs <b>$5</b>.” Check: 32 + 15 = 47 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>3 pens and 2 pencils cost $9.20. 1 pen and 4 pencils cost $6.40. Find the price of each.</div>
+  <div class="hint frag">Hint: from the second, p = 6.40 − 4q.</div>
+  <div class="ans frag">✔ 3(6.4 − 4q) + 2q = 9.2 → 19.2 − 10q = 9.2 → q = $1, p = $2.40. “A pen costs $2.40 and a pencil costs $1.”</div>`},
+ {h:'',b:exset('1K',['Word problems — the “define” line earns a mark on its own','Answers in full sentences with units','Number puzzles: “the sum of two numbers is…” works the same way'])}
+]},
+/* ===== L17 1L ===== */
+{code:'1L · Term 1 Week 5 · Lesson 17',nm:'Regions on the Cartesian plane',menu:['1L','Regions (half planes)','half plane, boundary, test point'],
+ slides:[
+ title('LESSON 17 — SECTION 1L','Regions on the Cartesian plane',['sketch the boundary line (solid or dashed?)','use a test point to choose the side','shade and label the region']),
+ {h:'🗣 New words first',b:vocab([
+  ['region / half plane','REE-jun','all the points on one side of a line'],
+  ['boundary line','BOWN-da-ree','the edge: solid for ≤ ≥, dashed for < >'],
+  ['test point','—','an easy point (usually (0, 0)) to check which side is true'],
+  ['shade','shayd','colour the side where the inequality is true']])},
+ {h:'Worked example 17',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch the region y &gt; x − 2.</div></div>
+  <div class="center">${graf({xr:[-2.5,5.5],yr:[-4.5,4.5],shade:{f:x=>x-2,dir:'above'},curves:[{f:x=>x-2,dash:1,lab:'y = x − 2',lx:3.7}],marks:[[0,0,'test (0, 0) ✓',10,-4]]})}</div></div>`+steps([
+  `<b>Boundary:</b> y = x − 2 — strict inequality (&gt;) → <b>dashed</b> line.`,
+  `<b>Test (0, 0):</b> is 0 &gt; 0 − 2? Yes → (0, 0)'s side is the region.`,
+  `<b>Shade</b> the side containing (0, 0) (above the line) and label the region.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch the region y ≤ −x + 3.</div></div>
+  <div class="center">${graf({xr:[-2,5.5],yr:[-3,5.5],shade:{f:x=>3-x,dir:'below'},curves:[{f:x=>3-x,col:'#2266aa'}],marks:[[0,0,'test (0, 0)',10,-4]]})}</div></div>
+  <div class="hint frag">Hint: ≤ means the boundary is solid and included. Test (0, 0): 0 ≤ 3 true.</div>
+  <div class="ans frag">✔ Solid line through (0, 3) and (3, 0); shade the side with (0, 0) — below the line.</div>`},
+ {h:'',b:exset('1L',['Regions — the checklist: solid/dashed? test point shown? shaded + labelled?','Boundary sketching uses the 1E intercept method','Extension: two inequalities at once (overlapping regions)'])}
+]},
+/* ===== L18 revision ===== */
+{code:'Term 1 Week 5 · Lesson 18',nm:'Unit 1 review and progress check',menu:['★','Unit 1 review + progress quiz','CAT 1 (Units 1 & 2) is in Week 8'],cls:'rev',
+ slides:[
+ title('LESSON 18 — REVIEW','Unit 1 review and progress check',['check every checklist item for Chapter 1','complete the progress quiz','start my fix-it list — CAT 1 (Units 1 & 2) is in Week 8']),
+ {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>1A: collect like terms and expand</td><td></td><td></td><td></td></tr>
+  <tr><td>1B: solve equations, brackets, x both sides</td><td></td><td></td><td></td></tr>
+  <tr><td>1C: solve inequalities and graph on a number line</td><td></td><td></td><td></td></tr>
+  <tr><td>1D: solve equations with algebraic fractions</td><td></td><td></td><td></td></tr>
+  <tr><td>1E/1F: sketch lines; find equations from graphs and points</td><td></td><td></td><td></td></tr>
+  <tr><td>1G: length and midpoint of a segment</td><td></td><td></td><td></td></tr>
+  <tr><td>1H: parallel and perpendicular gradients</td><td></td><td></td><td></td></tr>
+  <tr><td>1I/1J: simultaneous equations both ways</td><td></td><td></td><td></td></tr>
+  <tr><td>1K: applications — define, translate, solve, answer</td><td></td><td></td><td></td></tr>
+  <tr><td>1L: sketch and shade regions</td><td></td><td></td><td></td></tr></table>
+  <p class="note">😟 rows → fix-it list. CAT 1 covers Units 1 AND 2 — keep this list alive through the Indices unit.</p>`},
+ {h:'Vocabulary quick quiz',b:`<div class="q"><span class="tag">Match the word to the meaning (with a partner)</span></div>
+  <div class="cols"><div class="key">1. gradient<br>2. simultaneous<br>3. inequality<br>4. midpoint<br>5. perpendicular<br>6. eliminate</div>
+  <div class="key">A. both true at the same time<br>B. make a variable disappear<br>C. rise over run<br>D. meet at 90°<br>E. statement with &lt; &gt; ≤ ≥<br>F. halfway point — average the coordinates</div></div>
+  <div class="ans frag">✔ 1-C, 2-A, 3-E, 4-F, 5-D, 6-B</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Unit 1 wrap</h3><ul>
+  <li>Progress quiz 1A–1L under quiet conditions, then swap and mark</li>
+  <li>Chapter 1 review: fluency set from your 😟 rows first</li>
+  <li>Glossary check: you should own ~30 words from this unit</li>
+  <li>Next week: Unit 2 — Indices and Surds (Ch 3A–3E, 4A–4D). CAT 1 in Week 8 covers BOTH units.</li></ul></div>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 1 · Week 1 (starts Thu 29 Jan) — Welcome and algebra review',[0,1]],
+             ['Term 1 · Week 2 — Equations and inequalities',[2,3,4,5]],
+             ['Term 1 · Week 3 — Straight-line graphs',[6,7,8,9]],
+             ['Term 1 · Week 4 — Parallel lines and simultaneous equations',[10,11,12,13]],
+             ['Term 1 · Week 5 — Elimination, applications, regions, review',[14,15,16,17]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Chapter 1 — Linear Relations</h1>
+  <p class="sub">10 Methods · Unit 1 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 1 Weeks 1–5 · CAT 1 (Units 1 &amp; 2) in Week 8<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

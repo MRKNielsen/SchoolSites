@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measurement &amp; Geometry — Ch 4, 2 | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#6d4c41; --main2:#4e342e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main2);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#f0e9e6;border:2px solid var(--main);border-radius:10px;padding:10px 18px;display:inline-block;
+           font-size:1.25rem;margin:6px 6px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main2);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+
+/* ---------- solid & shape diagrams ---------- */
+const D={
+composite:`<svg viewBox="0 0 380 220" width="340"><rect x="40" y="60" width="220" height="110" fill="#f0e9e6" stroke="#6d4c41" stroke-width="3"/>
+<path d="M 260 60 A 55 55 0 0 1 260 170" fill="#f0e9e6" stroke="#6d4c41" stroke-width="3"/>
+<line x1="260" y1="60" x2="260" y2="170" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="130" y="50" font-size="16" fill="#1F4E79" font-weight="bold">8 m</text>
+<text x="8" y="120" font-size="16" fill="#1F4E79" font-weight="bold">5 m</text>
+<text x="290" y="120" font-size="13" fill="#2266aa">semicircle</text></svg>`,
+box:`<svg viewBox="0 0 380 250" width="330"><polygon points="60,210 260,210 260,110 60,110" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="60,110 130,55 330,55 260,110" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="260,210 330,155 330,55 260,110" fill="#dccec7" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="60" y1="210" x2="330" y2="155" stroke="#2266aa" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="60" y1="210" x2="330" y2="55" stroke="#c0392b" stroke-width="3"/>
+<text x="140" y="230" fill="#1F4E79" font-size="15" font-weight="bold">4 m</text>
+<text x="300" y="200" fill="#1F4E79" font-size="15" font-weight="bold">3 m</text>
+<text x="336" y="110" fill="#1F4E79" font-size="15" font-weight="bold">2.5 m</text>
+<text x="150" y="118" fill="#c0392b" font-size="13" font-weight="bold" transform="rotate(-27 150 118)">d = ?</text></svg>`,
+cyl:`<svg viewBox="0 0 300 250" width="250"><ellipse cx="150" cy="55" rx="80" ry="24" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="70" y1="55" x2="70" y2="195" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="230" y1="55" x2="230" y2="195" stroke="#6d4c41" stroke-width="2.5"/>
+<path d="M 70 195 A 80 24 0 0 0 230 195" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="150" y1="55" x2="230" y2="55" stroke="#c0392b" stroke-width="2.5"/>
+<text x="180" y="46" font-size="15" fill="#c0392b" font-weight="bold">r = 3 cm</text>
+<text x="238" y="130" font-size="15" fill="#2266aa" font-weight="bold">h = 7 cm</text></svg>`,
+cone:`<svg viewBox="0 0 300 260" width="250"><polygon points="150,30 70,205 230,205" fill="#f0e9e6" stroke="none"/>
+<line x1="150" y1="30" x2="70" y2="205" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="150" y1="30" x2="230" y2="205" stroke="#6d4c41" stroke-width="2.5"/>
+<ellipse cx="150" cy="205" rx="80" ry="22" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="150" y1="205" x2="230" y2="205" stroke="#c0392b" stroke-width="2.5"/>
+<text x="176" y="198" font-size="15" fill="#c0392b" font-weight="bold">r = 3 m</text>
+<text x="204" y="110" font-size="15" fill="#1e8449" font-weight="bold">s = 5 m</text>
+<line x1="150" y1="30" x2="150" y2="205" stroke="#2266aa" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="110" y="120" font-size="15" fill="#2266aa" font-weight="bold">h</text></svg>`,
+pyr:`<svg viewBox="0 0 320 250" width="270"><polygon points="160,30 60,200 220,215" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="160,30 220,215 280,175" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="60" y1="200" x2="280" y2="175" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="120" y="226" font-size="15" fill="#1F4E79" font-weight="bold">6 cm</text>
+<text x="252" y="208" font-size="15" fill="#1F4E79" font-weight="bold">6 cm</text>
+<line x1="160" y1="30" x2="140" y2="207" stroke="#1e8449" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="98" y="110" font-size="15" fill="#1e8449" font-weight="bold">slant 5 cm</text></svg>`,
+sph:`<svg viewBox="0 0 280 240" width="230"><circle cx="140" cy="120" r="90" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<ellipse cx="140" cy="120" rx="90" ry="26" fill="none" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<line x1="140" y1="120" x2="230" y2="120" stroke="#c0392b" stroke-width="2.5"/>
+<text x="168" y="110" font-size="15" fill="#c0392b" font-weight="bold">r = 6 cm</text></svg>`,
+simtri:`<svg viewBox="0 0 420 230" width="380"><polygon points="30,200 180,200 180,110" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="220,200 415,200 415,83" fill="#e6dbd6" stroke="#2266aa" stroke-width="2.5"/>
+<path d="M 62 200 A 32 32 0 0 0 57 181" fill="none" stroke="#b7791f" stroke-width="2.2" transform="rotate(180 62 190)"/>
+<text x="52" y="192" font-size="14" fill="#b7791f" font-weight="bold">θ</text>
+<text x="248" y="192" font-size="14" fill="#b7791f" font-weight="bold">θ</text>
+<text x="90" y="220" font-size="15" fill="#1F4E79" font-weight="bold">8</text>
+<text x="188" y="160" font-size="15" fill="#1F4E79" font-weight="bold">5</text>
+<text x="305" y="220" font-size="15" fill="#1F4E79" font-weight="bold">12</text>
+<text x="421" y="150" font-size="15" fill="#c0392b" font-weight="bold" writing-mode="tb">x</text></svg>`,
+congtri:`<svg viewBox="0 0 430 200" width="390"><polygon points="30,170 170,170 120,40" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="250,170 390,170 340,40" fill="#e6dbd6" stroke="#2266aa" stroke-width="2.5"/>
+<line x1="93" y1="168" x2="107" y2="172" stroke="#c0392b" stroke-width="2.5"/><line x1="313" y1="168" x2="327" y2="172" stroke="#c0392b" stroke-width="2.5"/>
+<line x1="68,110" y1="0" x2="0" y2="0" stroke="none"/>
+<line x1="70" y1="108" x2="82" y2="100" stroke="#c0392b" stroke-width="2.5"/><line x1="75" y1="115" x2="87" y2="107" stroke="#c0392b" stroke-width="2.5"/>
+<line x1="290" y1="108" x2="302" y2="100" stroke="#c0392b" stroke-width="2.5"/><line x1="295" y1="115" x2="307" y2="107" stroke="#c0392b" stroke-width="2.5"/>
+<path d="M 58 170 A 28 28 0 0 0 53 154" fill="none" stroke="#b7791f" stroke-width="2.2"/>
+<path d="M 278 170 A 28 28 0 0 0 273 154" fill="none" stroke="#b7791f" stroke-width="2.2"/>
+<text x="90" y="30" font-size="13" fill="#556">△ABC</text><text x="310" y="30" font-size="13" fill="#556">△DEF</text></svg>`,
+circ:`<svg viewBox="0 0 320 260" width="270"><circle cx="160" cy="130" r="105" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<circle cx="160" cy="130" r="4" fill="#1c2733"/>
+<line x1="160" y1="130" x2="80" y2="60" stroke="#2266aa" stroke-width="2.2"/>
+<line x1="160" y1="130" x2="245" y2="65" stroke="#2266aa" stroke-width="2.2"/>
+<line x1="80" y1="60" x2="160" y2="232" stroke="#c0392b" stroke-width="2.2"/>
+<line x1="245" y1="65" x2="160" y2="232" stroke="#c0392b" stroke-width="2.2"/>
+<path d="M 138 105 A 34 34 0 0 1 185 103" fill="none" stroke="#2266aa" stroke-width="2.2"/>
+<text x="146" y="92" font-size="15" fill="#2266aa" font-weight="bold">100°</text>
+<path d="M 146 208 A 26 26 0 0 1 180 206" fill="none" stroke="#c0392b" stroke-width="2.2"/>
+<text x="150" y="196" font-size="15" fill="#c0392b" font-weight="bold">θ</text>
+<text x="152" y="252" font-size="13" fill="#556">P (on the circle)</text>
+<text x="168" y="140" font-size="13" fill="#556">O</text></svg>`
+};
+
+/* parametric solids: labels as arguments */
+const bx=(a,b,c,diag)=>`<svg viewBox="0 0 380 250" width="300"><polygon points="60,210 260,210 260,110 60,110" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="60,110 130,55 330,55 260,110" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="260,210 330,155 330,55 260,110" fill="#dccec7" stroke="#6d4c41" stroke-width="2.5"/>
+${diag?`<line x1="60" y1="210" x2="330" y2="155" stroke="#2266aa" stroke-width="2" stroke-dasharray="6 4"/>
+<line x1="60" y1="210" x2="330" y2="55" stroke="#c0392b" stroke-width="3"/>
+<text x="150" y="118" fill="#c0392b" font-size="13" font-weight="bold" transform="rotate(-27 150 118)">d = ?</text>`:''}
+<text x="140" y="230" fill="#1F4E79" font-size="15" font-weight="bold">${a}</text>
+<text x="300" y="200" fill="#1F4E79" font-size="15" font-weight="bold">${b}</text>
+<text x="336" y="110" fill="#1F4E79" font-size="15" font-weight="bold">${c}</text></svg>`;
+const cyl2=(rl,hl)=>`<svg viewBox="0 0 300 250" width="230"><ellipse cx="150" cy="55" rx="80" ry="24" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="70" y1="55" x2="70" y2="195" stroke="#6d4c41" stroke-width="2.5"/><line x1="230" y1="55" x2="230" y2="195" stroke="#6d4c41" stroke-width="2.5"/>
+<path d="M 70 195 A 80 24 0 0 0 230 195" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="150" y1="55" x2="230" y2="55" stroke="#c0392b" stroke-width="2.5"/>
+<text x="168" y="46" font-size="14" fill="#c0392b" font-weight="bold">${rl}</text>
+<text x="238" y="130" font-size="14" fill="#2266aa" font-weight="bold">${hl}</text></svg>`;
+const cone2=(rl,sl,hl)=>`<svg viewBox="0 0 300 260" width="230"><polygon points="150,30 70,205 230,205" fill="#f0e9e6" stroke="none"/>
+<line x1="150" y1="30" x2="70" y2="205" stroke="#6d4c41" stroke-width="2.5"/><line x1="150" y1="30" x2="230" y2="205" stroke="#6d4c41" stroke-width="2.5"/>
+<ellipse cx="150" cy="205" rx="80" ry="22" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="150" y1="205" x2="230" y2="205" stroke="#c0392b" stroke-width="2.5"/>
+<text x="164" y="196" font-size="14" fill="#c0392b" font-weight="bold">${rl}</text>
+${sl?`<text x="198" y="110" font-size="14" fill="#1e8449" font-weight="bold">${sl}</text>`:''}
+${hl?`<line x1="150" y1="30" x2="150" y2="205" stroke="#2266aa" stroke-width="1.8" stroke-dasharray="5 4"/><text x="78" y="118" font-size="14" fill="#2266aa" font-weight="bold">${hl}</text>`:''}</svg>`;
+const pyr2=(bl,sl)=>`<svg viewBox="0 0 320 250" width="250"><polygon points="160,30 60,200 220,215" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="160,30 220,215 280,175" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="60" y1="200" x2="280" y2="175" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="112" y="228" font-size="14" fill="#1F4E79" font-weight="bold">${bl}</text>
+<line x1="160" y1="30" x2="140" y2="207" stroke="#1e8449" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="88" y="112" font-size="14" fill="#1e8449" font-weight="bold">${sl}</text></svg>`;
+const sph2=rl=>`<svg viewBox="0 0 280 240" width="210"><circle cx="140" cy="120" r="90" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<ellipse cx="140" cy="120" rx="90" ry="26" fill="none" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<line x1="140" y1="120" x2="230" y2="120" stroke="#c0392b" stroke-width="2.5"/>
+<text x="160" y="110" font-size="14" fill="#c0392b" font-weight="bold">${rl}</text></svg>`;
+const rects2=(l1,w1,lab1,l2,w2,lab2)=>`<svg viewBox="0 0 420 200" width="360">
+<rect x="20" y="70" width="110" height="74" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<rect x="190" y="40" width="196" height="132" fill="#e6dbd6" stroke="#2266aa" stroke-width="2.5"/>
+<text x="48" y="64" font-size="14" fill="#1F4E79" font-weight="bold">${l1}</text>
+<text x="2" y="112" font-size="14" fill="#1F4E79" font-weight="bold">${w1}</text>
+<text x="60" y="162" font-size="13" fill="#556">${lab1}</text>
+<text x="262" y="32" font-size="14" fill="#1F4E79" font-weight="bold">${l2}</text>
+<text x="392" y="112" font-size="14" fill="#1F4E79" font-weight="bold">${w2}</text>
+<text x="250" y="190" font-size="13" fill="#556">${lab2}</text></svg>`;
+const qsq=`<svg viewBox="0 0 260 240" width="220"><rect x="40" y="30" width="180" height="180" fill="#f0e9e6" stroke="#6d4c41" stroke-width="3"/>
+<path d="M 220 30 A 180 180 0 0 0 40 210" fill="#fff" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4" transform="rotate(180 130 120)"/>
+<path d="M 40 30 L 220 30 A 180 180 0 0 0 40 210 L 40 30" fill="#fff" stroke="#c0392b" stroke-width="2.5"/>
+<text x="110" y="22" font-size="15" fill="#1F4E79" font-weight="bold">6 cm</text>
+<text x="8" y="125" font-size="15" fill="#1F4E79" font-weight="bold">6 cm</text>
+<text x="150" y="180" font-size="13" fill="#6d4c41" font-weight="bold">remaining</text>
+<text x="60" y="70" font-size="13" fill="#c0392b">removed</text></svg>`;
+const sq10=`<svg viewBox="0 0 240 220" width="200"><rect x="40" y="30" width="160" height="160" fill="#f0e9e6" stroke="#6d4c41" stroke-width="3"/>
+<text x="70" y="215" font-size="15" fill="#1F4E79" font-weight="bold">10 cm (nearest cm)</text>
+<text x="90" y="118" font-size="15" fill="#6d4c41" font-weight="bold">Area?</text></svg>`;
+const seg36=`<svg viewBox="0 0 400 90" width="340"><line x1="30" y1="45" x2="370" y2="45" stroke="#6d4c41" stroke-width="4"/>
+<line x1="30" y1="32" x2="30" y2="58" stroke="#6d4c41" stroke-width="3"/><line x1="370" y1="32" x2="370" y2="58" stroke="#6d4c41" stroke-width="3"/>
+<text x="120" y="80" font-size="15" fill="#1F4E79" font-weight="bold">36 mm (nearest mm)</text></svg>`;
+const triprism=`<svg viewBox="0 0 360 230" width="290"><polygon points="60,190 180,190 120,90" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<polygon points="180,190 300,160 240,60 120,90" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="60" y1="190" x2="180" y2="160" stroke="#6d4c41" stroke-width="1.6" stroke-dasharray="5 4"/>
+<line x1="120" y1="90" x2="120" y2="190" stroke="#2266aa" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="100" y="212" font-size="14" fill="#1F4E79" font-weight="bold">6 cm</text>
+<text x="126" y="145" font-size="14" fill="#2266aa" font-weight="bold">4 cm</text>
+<text x="240" y="196" font-size="14" fill="#1e8449" font-weight="bold">length 9 cm</text></svg>`;
+const hemi=`<svg viewBox="0 0 280 180" width="220"><path d="M 50 120 A 90 90 0 0 1 230 120" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<ellipse cx="140" cy="120" rx="90" ry="24" fill="#e6dbd6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="140" y1="120" x2="230" y2="120" stroke="#c0392b" stroke-width="2.5"/>
+<text x="162" y="112" font-size="14" fill="#c0392b" font-weight="bold">r = 3 cm</text>
+<text x="86" y="170" font-size="13" fill="#556">solid hemisphere (flat top face too!)</text></svg>`;
+const shadow=`<svg viewBox="0 0 430 230" width="370"><line x1="20" y1="200" x2="420" y2="200" stroke="#7a5c3e" stroke-width="2"/>
+<line x1="80" y1="200" x2="80" y2="160" stroke="#1F4E79" stroke-width="4"/><text x="70" y="152" font-size="16">🧍</text>
+<line x1="80" y1="160" x2="22" y2="200" stroke="#888" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="30" y="222" font-size="13" fill="#2266aa" font-weight="bold">2.4 m</text>
+<text x="88" y="185" font-size="13" fill="#1F4E79" font-weight="bold">1.6 m</text>
+<line x1="330" y1="200" x2="330" y2="60" stroke="#1e8449" stroke-width="5"/><text x="316" y="52" font-size="18">🌳</text>
+<line x1="330" y1="60" x2="180" y2="200" stroke="#888" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="230" y="222" font-size="13" fill="#2266aa" font-weight="bold">15 m</text>
+<text x="338" y="135" font-size="13" fill="#1e8449" font-weight="bold">h = ?</text></svg>`;
+const semic=`<svg viewBox="0 0 320 200" width="260"><path d="M 40 160 A 120 120 0 0 1 280 160" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="40" y1="160" x2="280" y2="160" stroke="#6d4c41" stroke-width="2.5"/>
+<line x1="40" y1="160" x2="110" y2="60" stroke="#c0392b" stroke-width="2.2"/>
+<line x1="110" y1="60" x2="280" y2="160" stroke="#c0392b" stroke-width="2.2"/>
+<text x="26" y="180" font-size="15" font-weight="bold" fill="#1c2733">A</text>
+<text x="284" y="180" font-size="15" font-weight="bold" fill="#1c2733">B</text>
+<text x="104" y="48" font-size="15" font-weight="bold" fill="#1c2733">C</text>
+<text x="72" y="150" font-size="14" fill="#b7791f" font-weight="bold">35°</text>
+<text x="118" y="170" font-size="12" fill="#556">AB is a diameter</text></svg>`;
+const rhspair=`<svg viewBox="0 0 430 190" width="370"><polygon points="30,160 170,160 170,50" fill="#f0e9e6" stroke="#6d4c41" stroke-width="2.5"/>
+<rect x="154" y="144" width="16" height="16" fill="none" stroke="#6d4c41" stroke-width="2"/>
+<polygon points="250,160 390,160 390,50" fill="#e6dbd6" stroke="#2266aa" stroke-width="2.5"/>
+<rect x="374" y="144" width="16" height="16" fill="none" stroke="#2266aa" stroke-width="2"/>
+<line x1="92" y1="98" x2="104" y2="106" stroke="#c0392b" stroke-width="2.5"/><line x1="312" y1="98" x2="324" y2="106" stroke="#c0392b" stroke-width="2.5"/>
+<line x1="163" y1="100" x2="177" y2="100" stroke="#1e8449" stroke-width="2.5"/><line x1="383" y1="100" x2="397" y2="100" stroke="#1e8449" stroke-width="2.5"/>
+<text x="60" y="80" font-size="13" fill="#c0392b" font-weight="bold">equal hypotenuses</text>
+<text x="252" y="40" font-size="13" fill="#1e8449" font-weight="bold">equal sides</text></svg>`;
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+const wall=(t,items)=>`<div class="key"><span class="kt">${t}</span><div class="center">${items.map(i=>`<span class="formula">${i}</span>`).join('')}</div></div>`;
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* L1 4E/4G */
+{code:'4E/4G · Term 2 Week 4 · Lesson 1',nm:'Review of length and area',menu:['4E/4G','Length & area review','perimeter, circumference, composite'],
+ slides:[
+ title('LESSON 1 — SECTIONS 4E/4G','Review of length and area',['use the perimeter and area formulas fluently','break a composite shape into simple parts','round only at the end']),
+ {h:'Formula wall — say each one aloud',b:wall('Length',['C = 2πr = πd','perimeter = add ALL edges'])+
+  wall('Area',[`rectangle lw`,`triangle ${fr('1','2')}bh`,`circle πr²`,`trapezium ${fr('1','2')}(a + b)h`])+
+  `<div class="key frag"><span class="kt">Composite shapes</span>Cut into simple pieces → add (or subtract) the parts. Semicircle = half a circle — divide by 2!</div>`},
+ {h:'Worked example 1',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A pool is a rectangle 8 m × 5 m with a semicircle on one end (diameter 5 m). Find the perimeter and area, to 1 d.p.</div></div>
+  <div class="center">${D.composite}</div></div>`+steps([
+  `<b>Perimeter:</b> 8 + 5 + 8 + half circumference = 21 + ${fr('π × 5','2')} ≈ 21 + 7.85 = <b>28.9 m</b> <span class="say">(the flat 5 m side of the semicircle is INSIDE — not counted)</span>`,
+  `<b>Area of rectangle:</b> 8 × 5 = 40 m²`,
+  `<b>Area of semicircle:</b> ½ × π × 2.5² ≈ 9.82 m²`,
+  `<b>Total area:</b> ≈ <b>49.8 m²</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A square of side 6 cm has a quarter-circle (radius 6 cm) removed from one corner. Find the remaining area, to 1 d.p.</div></div>
+  <div class="center">${qsq}</div></div>
+  <div class="hint frag">Hint: 36 − ¼ × π × 36.</div>
+  <div class="ans frag">✔ 36 − 28.27 ≈ <b>7.7 cm²</b></div>`},
+ {h:'',b:exset('4E + 4G',['Formula fluency first, then composite shapes','Draw and label EVERY shape — cut lines in pencil','Units: perimeter in m, area in m² — check every answer'])}
+]},
+/* L2 4F */
+{code:'4F · Term 2 Week 4 · Lesson 2',nm:'Pythagoras including 3D problems',menu:['4F','Pythagoras in 3D','hypotenuse, two triangles'],
+ slides:[
+ title('LESSON 2 — SECTION 4F','Pythagoras including three-dimensional problems',['apply c² = a² + b² fluently','find diagonals inside 3D objects with two steps','give exact and rounded answers']),
+ {h:'Key idea — two triangles for 3D',b:`<div class="cols"><div>${D.box}</div><div>
+  <div class="key"><span class="kt">Pythagoras</span><span class="formula">c² = a² + b²</span> (right-angled triangles only)</div>
+  <div class="key frag"><span class="kt">3D strategy</span>1️⃣ base diagonal (triangle on the floor) → 2️⃣ space diagonal (triangle standing up, using the base diagonal).</div></div></div>`},
+ {h:'Worked example 2',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A room is 4 m × 3 m × 2.5 m. Find the length of the diagonal from a bottom corner to the opposite top corner, to 2 d.p.</div></div>
+  <div class="center">${bx('4 m','3 m','2.5 m',1)}</div></div>`+steps([
+  `<b>Base diagonal:</b> √(4² + 3²) = √25 = 5 m`,
+  `<b>Space diagonal:</b> √(5² + 2.5²) = √31.25`,
+  `<b>Answer:</b> ≈ <b>5.59 m</b> <span class="say">(exact form √31.25 = ${fr('5√5','2')} — surd skills from Unit 2!)</span>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A shipping box is 6 m × 2 m × 3 m. Will a 7 m pole fit inside along the space diagonal?</div></div>
+  <div class="center">${bx('6 m','2 m','3 m',1)}</div></div>
+  <div class="hint frag">Hint: base diagonal √40, then √(40 + 9).</div>
+  <div class="ans frag">✔ Diagonal = √49 = <b>7 m exactly</b> — it just fits (in theory!). Answer in words.</div>`},
+ {h:'',b:exset('4F',['2D fluency, then two-step 3D problems','Label “Triangle 1” and “Triangle 2” in your working','Exact answers: simplify the surd where possible'])}
+]},
+/* L3 4H */
+{code:'4H · Term 2 Week 4 · Lesson 3',nm:'Measurement errors and accuracy',menu:['4H','Errors & accuracy','limits of accuracy, ± half a unit'],
+ slides:[
+ title('LESSON 3 — SECTION 4H','Measurement errors and accuracy',['state the limits of accuracy of a measurement','explain why every measurement is an interval','find smallest and largest possible perimeter/area']),
+ {h:'🗣 New words first',b:vocab([
+  ['limits of accuracy','—','the smallest and largest true value a measurement could be'],
+  ['to the nearest cm','—','the real value is within half a cm either side'],
+  ['lower / upper bound','bownd','the bottom / top of the interval']])},
+ {h:'Key idea — ± half the unit',b:`<div class="key"><span class="kt">Key idea</span>“12 cm to the nearest cm” means the true length is anywhere in <b>11.5 cm ≤ L &lt; 12.5 cm</b>. Every measurement is really an interval!</div>
+  <div class="key frag"><span class="kt">Consequence</span>Calculations inherit the error: smallest area uses lower bounds, largest area uses upper bounds.</div>`},
+ {h:'Worked example 3',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A square has sides measured as 10 cm to the nearest cm. Find the limits of accuracy for its area.</div></div>
+  <div class="center">${sq10}</div></div>`+steps([
+  `<b>Side limits:</b> 9.5 ≤ s &lt; 10.5`,
+  `<b>Smallest area:</b> 9.5² = 90.25 cm²`,
+  `<b>Largest area:</b> 10.5² = 110.25 cm²`,
+  `<b>In words:</b> “The area is between <b>90.25 and 110.25 cm²</b> — a 20 cm² spread from a 1 cm ruler!”`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A length is recorded as 36 mm to the nearest mm. State the limits of accuracy.</div></div>
+  <div class="center">${seg36}</div></div>
+  <div class="hint frag">Hint: half of 1 mm each way.</div>
+  <div class="ans frag">✔ 35.5 mm ≤ L &lt; 36.5 mm</div>`},
+ {h:'',b:exset('4H',['Limits of accuracy, then perimeter/area bounds','Write the interval with ≤ on the left, < on the right','Discussion: why do builders measure twice?'])}
+]},
+/* L4 4I */
+{code:'4I · Term 2 Week 5 · Lesson 4',nm:'Surface area — prisms and cylinders',menu:['4I','SA: prisms & cylinders','net, curved surface'],
+ slides:[
+ title('LESSON 4 — SECTION 4I','Surface area of prisms and cylinders',['think in nets: every face counted once','use the cylinder surface area formula','set working out face by face']),
+ {h:'Key idea — unfold the solid',b:`<div class="cols"><div>${D.cyl}</div><div>
+  <div class="key"><span class="kt">Prisms</span>SA = sum of ALL faces. List them: top, bottom, front, back, two sides — tick each one.</div>
+  <div class="key frag"><span class="kt">Cylinder</span><span class="formula">SA = 2πr² + 2πrh</span><br>two circles + the unrolled rectangle (label: 2πr wide, h tall).</div></div></div>`},
+ {h:'Worked example 4',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the surface area of a cylinder with radius 3 cm and height 7 cm (exact, then 1 d.p.).</div></div>
+  <div class="center">${cyl2('r = 3 cm','h = 7 cm')}</div></div>`+steps([
+  `<b>Two circles:</b> 2π(3²) = 18π`,
+  `<b>Curved surface:</b> 2π(3)(7) = 42π`,
+  `<b>Total:</b> 60π cm² (exact) ≈ <b>188.5 cm²</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the surface area of a rectangular prism 4 cm × 3 cm × 5 cm.</div></div>
+  <div class="center">${bx('4 cm','3 cm','5 cm',0)}</div></div>
+  <div class="hint frag">Hint: three different faces, each appearing twice: 2(lw + lh + wh).</div>
+  <div class="ans frag">✔ 2(12 + 20 + 15) = <b>94 cm²</b></div>`},
+ {h:'',b:exset('4I',['Prisms face-by-face, then cylinders','Exact (π form) AND rounded answers when asked','Open-top questions: read carefully — one circle missing!'])}
+]},
+/* L5 4J */
+{code:'4J (10A) · Term 2 Week 5 · Lesson 5',nm:'Surface area — pyramids and cones',menu:['4J','SA: pyramids & cones (10A)','slant height s'],
+ slides:[
+ title('LESSON 5 — SECTION 4J (10A)','Surface area of pyramids and cones',['use slant height (not vertical height!) for surfaces','find SA of square pyramids and cones','find the slant height with Pythagoras when needed']),
+ {h:'Key idea — slant for surface',b:`<div class="cols"><div>${D.cone}</div><div>
+  <div class="key"><span class="kt">Cone</span><span class="formula">SA = πr² + πrs</span> — s is the <b>slant</b> height (along the surface).</div>
+  <div class="key frag"><span class="kt">Square pyramid</span>base + 4 triangles: <span class="formula">SA = b² + 4 × ${fr('1','2')}bs</span></div>
+  <div class="key frag"><span class="kt">Only given h?</span>Pythagoras: s² = r² + h² (cone). Slant ALWAYS ≥ height.</div></div></div>`},
+ {h:'Worked example 5',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>a) Cone: r = 3 m, s = 5 m — find SA (exact + 1 d.p.). b) Square pyramid: base 6 cm, slant 5 cm — find SA.</div></div>
+  <div class="center">${cone2('r = 3 m','s = 5 m','')}${pyr2('6 cm','slant 5 cm')}</div></div>`+steps([
+  `<b>a)</b> SA = π(3²) + π(3)(5) = 9π + 15π = 24π ≈ <b>75.4 m²</b>`,
+  `<b>b) Base:</b> 6² = 36`,
+  `<b>Four triangles:</b> 4 × ½ × 6 × 5 = 60`,
+  `<b>Total:</b> <b>96 cm²</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A cone has r = 6 cm and vertical height h = 8 cm. Find s, then the total SA (exact).</div></div>
+  <div class="center">${cone2('r = 6 cm','s = ?','h = 8 cm')}</div></div>
+  <div class="hint frag">Hint: s = √(36 + 64).</div>
+  <div class="ans frag">✔ s = 10 → SA = 36π + 60π = <b>96π cm²</b></div>`},
+ {h:'',b:exset('4J',['Given s first, then find-s-first questions','Underline in colour: h = vertical, s = slant','Exact π answers unless told to round'])}
+]},
+/* L6 4K */
+{code:'4K · Term 2 Week 5 · Lesson 6',nm:'Volume — prisms and cylinders',menu:['4K','Volume: prisms & cylinders','cross-section × length'],
+ slides:[
+ title('LESSON 6 — SECTION 4K','Volume of prisms and cylinders',['use V = area of cross-section × length','find volumes of triangular prisms and cylinders','convert units: cm³, m³, L']),
+ {h:'Key idea — slice and stack',b:`<div class="key"><span class="kt">Prisms and cylinders</span><span class="formula">V = A × h</span> — area of the cross-section (the constant slice) × the length/height.</div>
+  <div class="key frag"><span class="kt">Cylinder</span>V = πr²h — the slice is a circle.</div>
+  <div class="key frag"><span class="kt">Units bonus</span>1 cm³ = 1 mL · 1000 cm³ = 1 L — volume questions love units.</div>`},
+ {h:'Worked example 6',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>a) Cylinder r = 4 cm, h = 10 cm — volume (exact + 1 d.p.). b) A triangular prism: triangle base 6 cm, height 4 cm; prism length 9 cm.</div></div>
+  <div class="center">${cyl2('r = 4 cm','h = 10 cm')}${triprism}</div></div>`+steps([
+  `<b>a)</b> V = π(4²)(10) = 160π ≈ <b>502.7 cm³</b>`,
+  `<b>b) Slice area:</b> ½ × 6 × 4 = 12 cm²`,
+  `<b>Volume:</b> 12 × 9 = <b>108 cm³</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A water tank is a cylinder r = 1.5 m, h = 2 m. Find its capacity in litres (1 m³ = 1000 L), nearest litre.</div></div>
+  <div class="center">${cyl2('r = 1.5 m','h = 2 m')}</div></div>
+  <div class="hint frag">Hint: V = π × 2.25 × 2 m³ first.</div>
+  <div class="ans frag">✔ V ≈ 14.137 m³ ≈ <b>14 137 L</b></div>`},
+ {h:'',b:exset('4K',['Identify the cross-section first — shade it on the diagram','Capacity conversions: cm³ ↔ mL ↔ L','Composite solids: add or subtract volumes'])}
+]},
+/* L7 4L */
+{code:'4L (10A) · Term 2 Week 5 · Lesson 7',nm:'Volume — pyramids and cones',menu:['4L','Volume: pyramids & cones (10A)','one third of the prism'],
+ slides:[
+ title('LESSON 7 — SECTION 4L (10A)','Volume of pyramids and cones',['use the one-third rule','find volumes of cones and square pyramids','use vertical height h (not slant!) for volume']),
+ {h:'Key idea — exactly one third',b:`<div class="cols"><div>${D.pyr}</div><div>
+  <div class="key"><span class="kt">The one-third rule</span><span class="formula">V = ${fr('1','3')} × base area × h</span><br>A pyramid fills exactly ⅓ of its box; a cone fills ⅓ of its cylinder.</div>
+  <div class="key frag"><span class="kt">h vs s — opposite of 4J!</span><b>Volume uses vertical height h.</b> Surface uses slant s. Read the diagram carefully.</div></div></div>`},
+ {h:'Worked example 7',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>a) Cone: r = 3 m, h = 4 m. b) Square pyramid: base 5 cm, h = 6 cm.</div></div>
+  <div class="center">${cone2('r = 3 m','','h = 4 m')}${pyr2('5 cm','h = 6 cm')}</div></div>`+steps([
+  `<b>a)</b> V = ⅓ × π(3²) × 4 = 12π ≈ <b>37.7 m³</b>`,
+  `<b>b) Base area:</b> 25 cm²`,
+  `<b>Volume:</b> ⅓ × 25 × 6 = <b>50 cm³</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A cone has r = 6 cm and slant s = 10 cm. Find h, then the volume (exact).</div></div>
+  <div class="center">${cone2('r = 6 cm','s = 10 cm','h = ?')}</div></div>
+  <div class="hint frag">Hint: h = √(100 − 36) — Pythagoras, then the one-third rule.</div>
+  <div class="ans frag">✔ h = 8 → V = ⅓ × 36π × 8 = <b>96π cm³</b></div>`},
+ {h:'',b:exset('4L',['Direct questions, then find-h-first questions','h for volume, s for surface — write it at the top of the page','Compare: cylinder vs cone with same r and h'])}
+]},
+/* L8 4M */
+{code:'4M (10A) · Term 2 Week 6 · Lesson 8',nm:'Surface area and volume of spheres',menu:['4M','Spheres (10A)','4πr², 4/3 πr³'],
+ slides:[
+ title('LESSON 8 — SECTION 4M (10A)','Surface area and volume of spheres',['use the two sphere formulas','handle hemispheres (half + the flat circle!)','solve backwards for r']),
+ {h:'Key idea — the sphere formulas',b:`<div class="cols"><div>${D.sph}</div><div>
+  <div class="key"><span class="kt">Memorise the pair</span><span class="formula">SA = 4πr²</span> <span class="formula">V = ${fr('4','3')}πr³</span></div>
+  <div class="key frag"><span class="kt">Hemisphere trap</span>half a sphere's surface is 2πr² — but a SOLID hemisphere also has the flat circular face: + πr².</div></div></div>`},
+ {h:'Worked example 8',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>For a sphere of radius 6 cm find (exact + 1 d.p.): a) the surface area b) the volume.</div></div>
+  <div class="center">${sph2('r = 6 cm')}</div></div>`+steps([
+  `<b>a)</b> SA = 4π(36) = 144π ≈ <b>452.4 cm²</b>`,
+  `<b>b)</b> V = ${fr('4','3')}π(216) = 288π ≈ <b>904.8 cm³</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the total surface area of a SOLID hemisphere with radius 3 cm (exact).</div></div>
+  <div class="center">${hemi}</div></div>
+  <div class="hint frag">Hint: curved half + flat circle: 2πr² + πr².</div>
+  <div class="ans frag">✔ 18π + 9π = <b>27π cm²</b></div>`},
+ {h:'',b:exset('4M',['Spheres, then hemispheres, then composite solids','Backwards questions: V given, find r (cube root!)','Exact form unless the question says round'])}
+]},
+/* L9 consolidation */
+{code:'Term 2 Week 6 · Lesson 9',nm:'Measurement consolidation',menu:['★','Measurement mixed problems','choose the formula, mind h vs s'],cls:'rev',
+ slides:[
+ title('LESSON 9 — CONSOLIDATION','Measurement mixed problems',['choose the right formula without prompting','handle composite solids','present full, unit-correct working']),
+ {h:'Formula summary — cover and recall',b:wall('Surface area',['prism: all faces','cylinder: 2πr² + 2πrh','cone: πr² + πrs','pyramid: base + triangles','sphere: 4πr²'])+
+  wall('Volume',['prism/cylinder: A × h','pyramid/cone: ⅓ A h','sphere: 4⁄3 πr³'])+
+  `<div class="frame frag">Test yourself: cover the wall, write all eight from memory, uncover, mark.</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🧭 Choose your path (pairs)</h3><ul>
+  <li><b>Path 1 — Build:</b> Progress quiz 4E–4K with teacher support</li>
+  <li><b>Path 2 — Strengthen:</b> Chapter 4 applications: tanks, silos, ice-cream cones</li>
+  <li><b>Path 3 — Challenge:</b> composite solids and backwards questions (4J–4M)</li></ul>
+  <p class="note">Every path: one full solution on the mini-whiteboard, with units, to share.</p></div>`},
+ {h:'Exit ticket',b:`<div class="q"><span class="tag">Before you leave</span>Complete the frames:</div>
+  <div class="frame">1. Volume uses <b>___</b> height; surface area of a cone uses <b>___</b> height.</div>
+  <div class="frame">2. Units for volume are <b>___</b>; for surface area <b>___</b>.</div>
+  <div class="frame">3. I still need practice with <b>___</b>.</div>`}
+]},
+/* L10 2A/2B */
+{code:'2A/2B · Term 2 Week 6 · Lesson 10',nm:'Geometry review and congruent triangles',menu:['2A/2B','Congruent triangles','SSS, SAS, AAS, RHS'],
+ slides:[
+ title('LESSON 10 — SECTIONS 2A/2B','Geometry review and congruent triangles',['recall angle facts (parallel lines, triangles)','name the four congruence tests','justify congruence with a test']),
+ {h:'🗣 New words first',b:vocab([
+  ['congruent ≅','KON-groo-ent','exactly the same shape AND size'],
+  ['corresponding','ko-res-POND-ing','matching — the same position in each triangle'],
+  ['included angle','—','the angle BETWEEN the two named sides'],
+  ['SSS · SAS · AAS · RHS','—','the four congruence tests']])},
+ {h:'Key idea — the four tests',b:`<div class="cols"><div>${D.congtri}</div><div>
+  <div class="key"><span class="kt">Congruence tests</span><b>SSS</b> three sides · <b>SAS</b> two sides + included angle · <b>AAS</b> two angles + a matching side · <b>RHS</b> right angle + hypotenuse + side.</div>
+  <div class="key frag"><span class="kt">Matching marks</span>the dashes and arcs on the diagram tell you which parts are equal — read them like labels.</div></div></div>`},
+ {h:'Worked example 10',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Triangles ABC and DEF have AB = DE, BC = EF and ∠B = ∠E. Are they congruent? Which test?</div></div>
+  <div class="center">${D.congtri}</div></div>`+steps([
+  `<b>List the pairs:</b> two sides equal, and the angle ∠B/∠E sits BETWEEN those sides.`,
+  `<b>Test:</b> SAS (side, included angle, side).`,
+  `<b>Conclusion sentence:</b> “△ABC ≅ △DEF (SAS)” — the test in brackets IS the justification.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Two right-angled triangles have equal hypotenuses and one other pair of equal sides. Congruent? Test?</div></div>
+  <div class="center">${rhspair}</div></div>
+  <div class="hint frag">Hint: right angle + hypotenuse + side…</div>
+  <div class="ans frag">✔ Yes — <b>RHS</b>. Write: “△… ≅ △… (RHS)”.</div>`},
+ {h:'',b:exset('2A + 2B',['Angle-fact warm-up, then congruence test identification','Every answer needs the test named in brackets','Order matters: △ABC ≅ △DEF matches A↔D, B↔E, C↔F'])}
+]},
+/* L11 2D */
+{code:'2D · Term 2 Week 6 · Lesson 11',nm:'Similar figures',menu:['2D','Similar figures','scale factor, enlargement'],
+ slides:[
+ title('LESSON 11 — SECTION 2D','Similar figures',['explain similar: same shape, different size','find and use a scale factor','know the area scale factor is k²']),
+ {h:'🗣 New words first',b:vocab([
+  ['similar ~','SIM-i-lar','same shape, same angles — but a different size'],
+  ['scale factor k','skayl FAK-tor','the multiplier from one figure to the other'],
+  ['enlargement / reduction','en-LARJ-ment','k > 1 grows the shape; k < 1 shrinks it']])},
+ {h:'Worked example 11',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Rectangle A is 4 cm × 6 cm. Rectangle B is 6 cm × 9 cm. a) Show they are similar and give k. b) Compare the areas.</div></div>
+  <div class="center">${rects2('6 cm','4 cm','A','9 cm','6 cm','B')}</div></div>`+steps([
+  `<b>Compare matching sides:</b> 6 ÷ 4 = 1.5 and 9 ÷ 6 = 1.5 — same ratio → similar, k = 1.5.`,
+  `<b>Areas:</b> A: 24 cm²; B: 54 cm²`,
+  `<b>Ratio of areas:</b> 54 ÷ 24 = 2.25 = 1.5² — <b>areas scale by k²!</b>`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A photo 10 cm × 15 cm is enlarged with k = 3. Find the new size and how many times bigger the area is.</div></div>
+  <div class="center">${rects2('15 cm','10 cm','photo','?','?','enlargement (k = 3)')}</div></div>
+  <div class="hint frag">Hint: areas scale by k² = 9.</div>
+  <div class="ans frag">✔ 30 cm × 45 cm; the area is <b>9 times</b> bigger.</div>`},
+ {h:'',b:exset('2D',['Test-for-similar, then use-the-scale-factor questions','k for lengths, k² for areas — write which one you used','Maps and models: scale factor in real life'])}
+]},
+/* L12 2E */
+{code:'2E · Term 2 Week 7 · Lesson 12',nm:'Similar triangles',menu:['2E','Similar triangles','AA test, missing lengths'],
+ slides:[
+ title('LESSON 12 — SECTION 2E','Proving and applying similar triangles',['prove triangles similar with the AA test','set up the ratio of matching sides','find missing lengths (river-width style problems)']),
+ {h:'Key idea — AA is enough',b:`<div class="cols"><div>${D.simtri}</div><div>
+  <div class="key"><span class="kt">AA test</span>Two pairs of equal angles → the triangles are similar. (The third pair is automatic — angle sum!)</div>
+  <div class="key frag"><span class="kt">Then ratios</span>${fr('big side','small side')} is the same for every matching pair. Set two ratios equal and solve.</div></div></div>`},
+ {h:'Worked example 12',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Two triangles are similar (AA, marked θ). The small one has base 8 and height 5; the large has base 12 and height x. Find x.</div></div>
+  <div class="center">${D.simtri}</div></div>`+steps([
+  `<b>Similarity statement:</b> the triangles are similar (AA).`,
+  `<b>Scale factor from bases:</b> k = 12 ÷ 8 = 1.5`,
+  `<b>Apply to the height:</b> x = 5 × 1.5 = <b>7.5</b>`,
+  `<b>Check:</b> ${fr('12','8')} = ${fr('7.5','5')} ✔ same ratio`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A 1.6 m student casts a 2.4 m shadow. A tree beside her casts a 15 m shadow. How tall is the tree?</div></div>
+  <div class="center">${shadow}</div></div>
+  <div class="hint frag">Hint: similar triangles (same sun angle): ${fr('h','1.6')} = ${fr('15','2.4')}.</div>
+  <div class="ans frag">✔ h = 1.6 × 15 ÷ 2.4 = <b>10 m</b>. Answer in words!</div>`},
+ {h:'',b:exset('2E',['Prove similar (AA) first, then find the length','Write the similarity statement BEFORE the ratio line','Real problems: shadows, ramps, river widths'])}
+]},
+/* L13 circle taster */
+{code:'2F/2G (10A) · Term 2 Week 7 · Lesson 13',nm:'Circle geometry taster',menu:['2F/2G','Circle geometry taster (10A)','centre angle = 2 × circumference angle'],
+ slides:[
+ title('LESSON 13 — SECTIONS 2F/2G (10A TASTER)','Circle geometry — two star theorems',['name the parts of a circle (chord, arc, subtend)','use: angle at the centre = 2 × angle at the circumference','use: angle in a semicircle = 90°']),
+ {h:'🗣 New words first',b:vocab([
+  ['chord','kord','a line joining two points on the circle'],
+  ['arc','ark','a piece of the circle edge'],
+  ['subtend','sub-TEND','the angle an arc “opens up” at a point'],
+  ['theorem','THEER-em','a proven geometric fact']])},
+ {h:'Key idea — the two star theorems',b:`<div class="cols"><div>${D.circ}</div><div>
+  <div class="key"><span class="kt">Theorem 1</span>Angle at the <b>centre</b> = 2 × angle at the <b>circumference</b> (same arc).</div>
+  <div class="key frag"><span class="kt">Theorem 2</span>The angle in a semicircle (on a diameter) is <b>90°</b> — a special case: centre angle 180° → circumference angle 90°.</div></div></div>`},
+ {h:'Worked example 13',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>In the diagram, the angle at the centre O is 100°. Find θ, the angle at point P on the circle (same arc).</div></div>
+  <div class="center">${D.circ}</div></div>`+steps([
+  `<b>Same arc</b> subtends both angles.`,
+  `<b>Theorem 1:</b> centre = 2 × circumference → 100° = 2θ`,
+  `<b>Answer:</b> θ = <b>50°</b>, with reason: “angle at the centre is twice the angle at the circumference.”`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>AB is a diameter and C is on the circle. ∠CAB = 35°. Find ∠ABC.</div></div>
+  <div class="center">${semic}</div></div>
+  <div class="hint frag">Hint: ∠ACB = 90° (semicircle), then angle sum.</div>
+  <div class="ans frag">✔ ∠ABC = 180 − 90 − 35 = <b>55°</b> — reasons: “angle in a semicircle” + “angle sum of a triangle”.</div>`},
+ {h:'',b:exset('2F + 2G (selected)',['Star-theorem questions with REASONS written for every step','The reason sentence earns the mark — memorise the wording','Extension: the other circle theorems (2H–2J) for the curious'])}
+]},
+/* L14 revision */
+{code:'Term 2 Week 7 · Lesson 14',nm:'Unit 4 review — into exam revision',menu:['★','Unit 4 review + exam pointers','Wk8 revision · CAT 3 exam Wk9 (GAT week)'],cls:'rev',
+ slides:[
+ title('LESSON 14 — REVIEW','Unit 4 review and exam runway',['check every checklist item for Unit 4','rebuild the formula wall from memory','set up my Semester 1 exam revision plan']),
+ {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>4E/4G: perimeter and area, composite shapes</td><td></td><td></td><td></td></tr>
+  <tr><td>4F: Pythagoras in 2D and 3D (two triangles)</td><td></td><td></td><td></td></tr>
+  <tr><td>4H: limits of accuracy</td><td></td><td></td><td></td></tr>
+  <tr><td>4I/4J: surface area — all five solids (s for slant!)</td><td></td><td></td><td></td></tr>
+  <tr><td>4K/4L/4M: volume — prisms, cones, spheres (h!)</td><td></td><td></td><td></td></tr>
+  <tr><td>2A/2B: congruence tests with justification</td><td></td><td></td><td></td></tr>
+  <tr><td>2D/2E: similarity, scale factors, missing lengths</td><td></td><td></td><td></td></tr>
+  <tr><td>2F/2G: the two star circle theorems (10A)</td><td></td><td></td><td></td></tr></table>
+  <p class="note">😟 rows → your Semester-exam fix-it list.</p>`},
+ {h:'The exam runway',b:`<table class="chk"><tr><th>Week</th><th>What happens</th></tr>
+  <tr><td>Week 8 (Kings Birthday Mon — 3 lessons)</td><td>whole-course revision: Units 1–4, practice exam under time</td></tr>
+  <tr><td>Week 9 (GAT Tuesday)</td><td><b>CAT 3 — Semester 1 Examination</b></td></tr>
+  <tr><td>Week 10</td><td>Semester 2 begins: Unit 5 Trigonometry</td></tr></table>
+  <div class="frame frag">Revision plan frame: “My three weakest topics are ___, ___ and ___ — one per night this week.”</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Unit 4 wrap + exam prep launch</h3><ul>
+  <li>Chapter 4 and Chapter 2 review sets — 😟 topics first</li>
+  <li>Formula wall from memory: all SA and volume formulas</li>
+  <li>Collect: glossary, fix-it lists from Units 1–4 — they are your revision syllabus</li>
+  <li>Semester Review 1 in the textbook = your practice exam material</li></ul>
+  <p class="note">Good luck — and remember, Semester 2's sites are already waiting: Trigonometry is next! 🧭</p></div>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 2 · Week 4 — Length, area, Pythagoras, accuracy (after CAT 2)',[0,1,2]],
+             ['Term 2 · Week 5 — Surface area and volume',[3,4,5,6]],
+             ['Term 2 · Week 6 — Spheres, consolidation, congruence, similarity',[7,8,9,10]],
+             ['Term 2 · Week 7 — Similar triangles, circles, review (Course Expo Wed)',[11,12,13]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Measurement &amp; Geometry — Chapters 4 and 2</h1>
+  <p class="sub">10 Methods · Unit 4 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 2 Weeks 4–7 · assessed in the Semester 1 exam (Week 9)<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

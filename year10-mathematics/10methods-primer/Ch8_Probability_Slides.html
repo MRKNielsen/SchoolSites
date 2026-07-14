@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 8 — Probability | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#7a3b8f; --main:#c05621; --main2:#8f3c12;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#faeee6;border:2px solid var(--main);border-radius:10px;padding:14px 22px;display:inline-block;
+           font-size:1.35rem;margin:10px 8px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+  table.tt{border-collapse:collapse;background:var(--card);font-size:1.1rem;margin:8px auto}
+  table.tt th{background:var(--main);color:#fff;padding:7px 14px}
+  table.tt td{border:1px solid #cdd7e1;padding:7px 14px;text-align:center}
+  table.tt td.hl{background:#faeee6;font-weight:700}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+
+/* Venn diagram: onlyA, both, onlyB, neither; labels; optional shade 'A'|'B'|'both'|'union'|'neither' */
+let vennN=0;
+function venn(oA,both,oB,none,la,lb,shade){
+  const id='v'+(vennN++);
+  const cA={x:118,y:105,r:72},cB={x:202,y:105,r:72};
+  let s=`<svg viewBox="0 0 320 215" width="310"><rect x="6" y="8" width="308" height="196" fill="#fff" stroke="#556" stroke-width="1.6" rx="6"/>`;
+  s+=`<defs><clipPath id="${id}"><circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}"/></clipPath></defs>`;
+  const shA=shade==='A'||shade==='union', shB=shade==='B'||shade==='union';
+  if(shA)s+=`<circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}" fill="#f5c9a8" opacity="0.7"/>`;
+  if(shB)s+=`<circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="#f5c9a8" opacity="0.7"/>`;
+  if(shade==='both')s+=`<circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="#f5c9a8" opacity="0.85" clip-path="url(#${id})"/>`;
+  if(shade==='neither')s=s.replace('fill="#fff"','fill="#f5c9a8"')+`<circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}" fill="#fff"/><circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="#fff"/>`;
+  s+=`<circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}" fill="none" stroke="#2266aa" stroke-width="2.6"/>
+  <circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="none" stroke="#c05621" stroke-width="2.6"/>
+  <text x="60" y="30" font-size="16" font-weight="bold" fill="#2266aa">${la}</text>
+  <text x="238" y="30" font-size="16" font-weight="bold" fill="#c05621">${lb}</text>
+  <text x="72" y="112" font-size="19" font-weight="bold" fill="#1c2733">${oA}</text>
+  <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">${both}</text>
+  <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">${oB}</text>
+  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">${none}</text></svg>`;
+  return s;
+}
+/* two-stage tree: b1=[ [lab,prob], [lab,prob] ], b2=[ [[lab,prob],[lab,prob]], [...] ], res=[outcome strings x4] */
+function tree(b1,b2,res){
+  const ys=[[62,148],[[30,94],[116,180]]];
+  let s=`<svg viewBox="0 0 560 215" width="540">`;
+  const line=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#556" stroke-width="2"/>`;
+  const node=(x,y,t,c)=>`<circle cx="${x}" cy="${y}" r="15" fill="${c}"/><text x="${x-5}" y="${y+5}" font-size="14" fill="#fff" font-weight="bold">${t}</text>`;
+  const plab=(x,y,t)=>`<text x="${x}" y="${y}" font-size="13.5" fill="#b7791f" font-weight="bold">${t}</text>`;
+  s+=line(45,105,150,ys[0][0])+line(45,105,150,ys[0][1]);
+  s+=`<circle cx="42" cy="105" r="5" fill="#1c2733"/>`;
+  s+=plab(72,68,b1[0][1])+plab(72,150,b1[1][1]);
+  for(let i=0;i<2;i++){
+    const y1=ys[0][i];
+    for(let j=0;j<2;j++){
+      const y2=ys[1][i][j];
+      s+=line(165,y1,290,y2)+plab(210,(y1+y2)/2-6,b2[i][j][1]);
+      s+=node(305,y2,b2[i][j][0],b2[i][j][0]==='R'?'#c0392b':'#2266aa');
+      s+=`<text x="335" y="${y2+5}" font-size="14.5" fill="#1c2733">${res[i*2+j]}</text>`;
+    }
+    s+=node(150,y1,b1[i][0],b1[i][0]==='R'?'#c0392b':'#2266aa');
+  }
+  return s+`</svg>`;
+}
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* ===== L1 8A/8B ===== */
+{code:'8A/8B · Term 4 Week 3 · Lesson 1',nm:'Review of probability and Venn diagrams',menu:['8A/8B','Probability review & Venn diagrams','sample space, event, union, intersection'],
+ slides:[
+ title('LESSON 1 — SECTIONS 8A/8B','Review of probability and Venn diagrams',['calculate probabilities as favourable ÷ total','use complement, union ∪ and intersection ∩','fill and read a Venn diagram']),
+ {h:'🗣 New words first',b:vocab([
+  ['sample space','SAM-pul spayss','the list of ALL possible outcomes'],
+  ['event','ee-VENT','a set of outcomes we care about, like “rolling an even number”'],
+  ['complement A′','KOM-ple-ment','everything NOT in A — Pr(A′) = 1 − Pr(A)'],
+  ['A ∩ B','A intersection B','in A AND in B — the overlap'],
+  ['A ∪ B','A union B','in A OR in B (or both)'],
+  ['Venn diagram','VEN','circles showing how two events overlap']])},
+ {h:'Key idea — probability and the Venn regions',b:`<div class="cols"><div>${venn('a only','both','b only','neither','A','B','both')}</div><div>
+  <div class="key"><span class="kt">Probability</span><span class="formula" style="font-size:1.15rem">Pr(event) = ${fr('favourable outcomes','total outcomes')}</span></div>
+  <div class="key frag"><span class="kt">The four regions</span>only A · <b>both (A ∩ B — shaded)</b> · only B · neither. The four numbers always add to the total.</div>
+  <div class="key frag"><span class="kt">Fill rule</span>Always put the <b>“both” number in first</b>, then subtract to find “only” regions.</div></div></div>`},
+ {h:'Worked example 1',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>In a class of 30 students, 18 play soccer (S), 14 play basketball (B) and 8 play both. Fill the Venn diagram and find Pr(neither).</div></div>
+  <div class="center">${venn('10','8','6','6','S','B')}</div></div>`+steps([
+  `<b>Both first:</b> S ∩ B = 8 goes in the overlap.`,
+  `<b>Only S:</b> 18 − 8 = 10. <b>Only B:</b> 14 − 8 = 6.`,
+  `<b>Neither:</b> 30 − (10 + 8 + 6) = 6.`,
+  `<b>Pr(neither):</b> ${fr('6','30')} = ${fr('1','5')}`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Using the same Venn diagram, find Pr(S ∪ B) — a student plays soccer OR basketball (or both).</div></div>
+  <div class="center">${venn('10','8','6','6','S','B','union')}</div></div>
+  <div class="hint frag">Hint: add the three regions inside the circles.</div>
+  <div class="ans frag">✔ Pr(S ∪ B) = ${fr('10 + 8 + 6','30')} = ${fr('24','30')} = ${fr('4','5')}</div>`},
+ {h:'',b:exset('8A + 8B (start)',['8A fluency: dice, cards, spinners — favourable ÷ total','8B: fill Venn diagrams — “both” number first, always','Say it: “A intersection B means A AND B.”'])}
+]},
+/* ===== L2 8B two-way ===== */
+{code:'8B · Term 4 Week 3 · Lesson 2',nm:'Set notation and two-way tables',menu:['8B+','Two-way tables','row, column, total'],
+ slides:[
+ title('LESSON 2 — SECTION 8B (CONTINUED)','Two-way tables',['convert between a Venn diagram and a two-way table','read probabilities from a two-way table','check totals across rows and columns']),
+ {h:'Key idea — same information, two displays',b:`<div class="cols"><div>${venn('10','8','6','6','S','B')}</div><div>
+  <table class="tt"><tr><th></th><th>B</th><th>B′</th><th>Total</th></tr>
+  <tr><th>S</th><td class="hl">8</td><td>10</td><td>18</td></tr>
+  <tr><th>S′</th><td>6</td><td>6</td><td>12</td></tr>
+  <tr><th>Total</th><td>14</td><td>16</td><td>30</td></tr></table>
+  <div class="key frag"><span class="kt">Key idea</span>The Venn's overlap (8) = the table's S-and-B cell. Every Venn region has exactly one home in the table.</div></div></div>
+  <div class="frame frag">“The cell where row S meets column B means S <b>and</b> B.”</div>`},
+ {h:'Worked example 2',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Using this two-way table, find: a) Pr(S ∩ B′) &nbsp; b) Pr(B)</div></div>
+  <div><table class="tt"><tr><th></th><th>B</th><th>B′</th><th>Total</th></tr>
+  <tr><th>S</th><td>8</td><td class="hl">10</td><td>18</td></tr>
+  <tr><th>S′</th><td>6</td><td>6</td><td>12</td></tr>
+  <tr><th>Total</th><td class="hl">14</td><td>16</td><td>30</td></tr></table></div></div>`+steps([
+  `<b>a)</b> Row S, column B′ → 10 students → Pr = ${fr('10','30')} = ${fr('1','3')}`,
+  `<b>b)</b> Column B total → 14 → Pr(B) = ${fr('14','30')} = ${fr('7','15')}`,
+  `<b>Check:</b> all four inner cells add to 30 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>A two-way table has: A ∩ C = 5, A total = 12, C total = 9, grand total = 25. Complete the table and find Pr(neither A nor C).</div>
+  <div class="hint frag">Hint: only A = 12 − 5 = 7; only C = 9 − 5 = 4.</div>
+  <div class="ans frag">✔ neither = 25 − (7 + 5 + 4) = 9 → Pr = ${fr('9','25')}</div>`},
+ {h:'',b:exset('8B (finish)',['Convert Venn ↔ table both directions','Always add the Total row and column — free error check','Frame: “Row ___ and column ___ meet at ___ and ___.”'])}
+]},
+/* ===== L3 8C ===== */
+{code:'8C · Term 4 Week 3 · Lesson 3',nm:'The addition rule',menu:['8C','The addition rule','union, mutually exclusive'],
+ slides:[
+ title('LESSON 3 — SECTION 8C','The addition rule',['use Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B)','explain why the overlap is subtracted','recognise mutually exclusive events']),
+ {h:'🗣 New words first',b:vocab([
+  ['addition rule','—','Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B)'],
+  ['mutually exclusive','MYOO-choo-a-lee ex-KLOO-siv','events that cannot both happen — no overlap, Pr(A ∩ B) = 0'],
+  ['double counting','—','the error the rule fixes: the overlap got counted twice']])},
+ {h:'Key idea — subtract the overlap',b:`<div class="cols"><div>${venn('0.3','0.2','0.2','0.3','A','B','both')}</div><div>
+  <div class="key"><span class="kt">The rule</span><span class="formula" style="font-size:1.15rem">Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B)</span></div>
+  <div class="key frag"><span class="kt">Why subtract?</span>Adding Pr(A) and Pr(B) counts the shaded overlap <b>twice</b> — subtract it once to fix the double count.</div>
+  <div class="key frag"><span class="kt">Mutually exclusive</span>No overlap → Pr(A ∪ B) = Pr(A) + Pr(B). Simple version!</div></div></div>`},
+ {h:'Worked example 3',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Pr(A) = 0.5, Pr(B) = 0.4 and Pr(A ∩ B) = 0.2. Find Pr(A ∪ B).</div></div>
+  <div class="center">${venn('0.3','0.2','0.2','0.3','A','B','union')}</div></div>`+steps([
+  `<b>Write the rule:</b> Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B)`,
+  `<b>Substitute:</b> = 0.5 + 0.4 − 0.2`,
+  `<b>Answer:</b> Pr(A ∪ B) = <b>0.7</b>`,
+  `<b>Check with the Venn:</b> 0.3 + 0.2 + 0.2 = 0.7 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Events C and D are mutually exclusive with Pr(C) = 0.3 and Pr(D) = 0.45. Find Pr(C ∪ D), and state Pr(C ∩ D).</div>
+  <div class="hint frag">Hint: mutually exclusive → the overlap is empty.</div>
+  <div class="ans frag">✔ Pr(C ∩ D) = 0 · Pr(C ∪ D) = 0.3 + 0.45 = <b>0.75</b></div>`},
+ {h:'',b:exset('8C',['Addition rule questions — write the rule line first','Spot “mutually exclusive” — it sets the overlap to 0','Rearranged versions: find Pr(A ∩ B) given the other three'])}
+]},
+/* ===== L4 8D ===== */
+{code:'8D · Term 4 Week 3 · Lesson 4',nm:'Conditional probability',menu:['8D','Conditional probability','given, reduced sample space'],
+ slides:[
+ title('LESSON 4 — SECTION 8D','Conditional probability',['understand “given that” questions','use Pr(A|B) = Pr(A ∩ B) ÷ Pr(B)','find conditional probabilities from Venn diagrams and tables']),
+ {h:'🗣 New words first',b:vocab([
+  ['given that','GIV-en','we already know this happened — “given that the student plays basketball…”'],
+  ['Pr(A | B)','probability of A given B','the chance of A when we know B happened'],
+  ['reduced sample space','re-DYOOSD','the new, smaller total — only the B outcomes count now']])},
+ {h:'Key idea — shrink the world to B',b:`<div class="cols"><div>${venn('10','8','6','6','S','B','B')}</div><div>
+  <div class="key"><span class="kt">The rule</span><span class="formula" style="font-size:1.15rem">Pr(A | B) = ${fr('Pr(A ∩ B)','Pr(B)')}</span></div>
+  <div class="key frag"><span class="kt">In words</span>“Given B” means: <b>B is the new total</b> (shaded). Count only inside B.</div></div></div>
+  <div class="frame frag">“Given that ___ happened, the total is now ___, and the favourable part is ___.”</div>`},
+ {h:'Worked example 4',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>From Lesson 1: 10 play only soccer, 8 both, 6 only basketball, 6 neither. Find Pr(plays soccer | plays basketball).</div></div>
+  <div class="center">${venn('10','8','6','6','S','B','B')}</div></div>`+steps([
+  `<b>Given basketball:</b> new total = everyone in B = 8 + 6 = 14.`,
+  `<b>Favourable inside B:</b> soccer AND basketball = 8.`,
+  `<b>Answer:</b> Pr(S | B) = ${fr('8','14')} = ${fr('4','7')}`,
+  `<b>Compare:</b> Pr(S) = 18/30 = 3/5 — knowing B changed the probability!`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Same data: find Pr(plays basketball | plays soccer).</div></div>
+  <div class="center">${venn('10','8','6','6','S','B','A')}</div></div>
+  <div class="hint frag">Hint: new total = everyone in S = 10 + 8 = 18.</div>
+  <div class="ans frag">✔ Pr(B | S) = ${fr('8','18')} = ${fr('4','9')} — different from Pr(S | B)! Order matters.</div>`},
+ {h:'',b:exset('8D',['Underline “given that” in every question — it names the new total','From tables: the given event picks the ROW or COLUMN','Pr(A|B) ≠ Pr(B|A): check which is asked'])}
+]},
+/* ===== L5 8E ===== */
+{code:'8E · Term 4 Week 4 · Lesson 5',nm:'Two-step experiments using arrays',menu:['8E','Arrays (tables of outcomes)','two-step, with/without replacement'],
+ slides:[
+ title('LESSON 5 — SECTION 8E','Two-step experiments using arrays',['list all outcomes of a two-step experiment in a grid','count favourable cells','handle “without replacement” by removing the diagonal']),
+ {h:'🗣 New words first',b:vocab([
+  ['two-step experiment','—','do something twice: roll two dice, pick two counters'],
+  ['array / grid','a-RAY','a table showing every combined outcome'],
+  ['with replacement','re-PLAYSS-ment','put the first one back — it can appear again'],
+  ['without replacement','—','keep the first one out — it cannot repeat']])},
+ {h:'Key idea — two dice, 36 outcomes',b:`<div class="cols"><div><table class="tt">
+  <tr><th>+</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+  <tr><th>1</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+  <tr><th>2</th><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td class="hl">8</td></tr>
+  <tr><th>3</th><td>4</td><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td></tr>
+  <tr><th>4</th><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td></tr>
+  <tr><th>5</th><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td></tr>
+  <tr><th>6</th><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr></table></div><div>
+  <div class="key"><span class="kt">Key idea</span>Rows = first step, columns = second step. Every cell is one equally likely outcome: 6 × 6 = 36.</div>
+  <div class="key frag"><span class="kt">Count cells</span>Sum = 8 is highlighted: <b>5 cells</b> → Pr(sum 8) = ${fr('5','36')}</div></div></div>`},
+ {h:'Worked example 5',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Two dice are rolled. Find Pr(the sum is 8).</div></div>
+  <div><table class="tt"><tr><th>+</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+  <tr><th>1</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+  <tr><th>2</th><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td class="hl">8</td></tr>
+  <tr><th>3</th><td>4</td><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td></tr>
+  <tr><th>4</th><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td></tr>
+  <tr><th>5</th><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td></tr>
+  <tr><th>6</th><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr></table></div></div>`+steps([
+  `<b>Draw the array</b> (6 × 6 sums).`,
+  `<b>Highlight sum = 8:</b> (2,6), (3,5), (4,4), (5,3), (6,2) — 5 cells.`,
+  `<b>Total cells:</b> 36.`,
+  `<b>Answer:</b> Pr(sum 8) = ${fr('5','36')}`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>From the same array, find Pr(sum ≥ 10).</div>
+  <div class="hint frag">Hint: count cells showing 10, 11 and 12.</div>
+  <div class="ans frag">✔ 3 + 2 + 1 = 6 cells → Pr = ${fr('6','36')} = ${fr('1','6')}</div>`},
+ {h:'',b:exset('8E',['Arrays for coins, dice, spinners and counters','Without replacement: cross out the impossible diagonal cells','Count carefully — tick each favourable cell as you go'])}
+]},
+/* ===== L6 8F ===== */
+{code:'8F · Term 4 Week 4 · Lesson 6',nm:'Using tree diagrams',menu:['8F','Tree diagrams','branch, multiply along, add between'],
+ slides:[
+ title('LESSON 6 — SECTION 8F','Using tree diagrams',['draw a tree for a two-step experiment','multiply along branches, add between paths','adjust probabilities for “without replacement”']),
+ {h:'🗣 New words first',b:vocab([
+  ['tree diagram','tree DY-a-gram','branches showing each step and its probability'],
+  ['branch','brahnch','one arm of the tree, labelled with a probability'],
+  ['path','pahth','a route from start to finish — one complete outcome'],
+  ['multiply along, add between','—','the tree rule: × along a path, + between paths']])},
+ {h:'Key idea — the tree rule',b:`<div class="center">${tree([['R','3/5'],['B','2/5']],[[['R','3/5'],['B','2/5']],[['R','3/5'],['B','2/5']]],['RR: 9/25','RB: 6/25','BR: 6/25','BB: 4/25'])}</div>
+  <div class="key frag"><span class="kt">Setup</span>A bag has 3 red and 2 blue counters. Two draws <b>with replacement</b> — the probabilities stay 3/5 and 2/5 on every branch.</div>
+  <div class="key frag"><span class="kt">The rule</span><b>Multiply along</b> a path: Pr(RR) = 3/5 × 3/5 = 9/25. <b>Add between</b> paths for “or”. All four paths sum to 1 ✔</div>`},
+ {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Using the tree (3 red, 2 blue, with replacement), find Pr(the two counters are different colours).</div>
+  <div class="center">${tree([['R','3/5'],['B','2/5']],[[['R','3/5'],['B','2/5']],[['R','3/5'],['B','2/5']]],['RR: 9/25','RB: 6/25','BR: 6/25','BB: 4/25'])}</div>`+steps([
+  `<b>Which paths?</b> RB and BR.`,
+  `<b>Multiply along each:</b> Pr(RB) = ${fr('3','5')} × ${fr('2','5')} = ${fr('6','25')}; &nbsp; Pr(BR) = ${fr('2','5')} × ${fr('3','5')} = ${fr('6','25')}`,
+  `<b>Add between:</b> ${fr('6','25')} + ${fr('6','25')} = ${fr('12','25')}`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Same bag (3 red, 2 blue), but now <b>without replacement</b>. Find Pr(both red).</div></div>
+  <div class="center">${tree([['R','3/5'],['B','2/5']],[[['R','2/4'],['B','2/4']],[['R','3/4'],['B','1/4']]],['RR: ?','RB','BR','BB'])}</div></div>
+  <div class="hint frag">Hint: after taking a red, only 2 red remain out of 4 counters.</div>
+  <div class="ans frag">✔ Pr(RR) = ${fr('3','5')} × ${fr('2','4')} = ${fr('6','20')} = ${fr('3','10')}</div>`},
+ {h:'',b:exset('8F',['Trees with and without replacement — write the second-stage fractions carefully','Check: all end-of-path probabilities must add to 1','Say it: “multiply along, add between.”'])}
+]},
+/* ===== L7 8G ===== */
+{code:'8G · Term 4 Week 4 · Lesson 7',nm:'Independent events',menu:['8G','Independent events','independent, test with multiplication'],
+ slides:[
+ title('LESSON 7 — SECTION 8G','Independent events',['say what independent means','test independence: does Pr(A ∩ B) = Pr(A) × Pr(B)?','connect independence to “with replacement”']),
+ {h:'🗣 New words first',b:vocab([
+  ['independent','in-de-PEN-dent','one event does not change the chance of the other'],
+  ['dependent','de-PEN-dent','the first event changes the second — like drawing without replacement'],
+  ['test','test','a check with numbers — not a guess']])},
+ {h:'Key idea — the multiplication test',b:`<div class="key"><span class="kt">Test for independence</span>
+  <span class="formula" style="font-size:1.15rem">A, B independent ⟺ Pr(A ∩ B) = Pr(A) × Pr(B)</span></div>
+  <div class="key frag"><span class="kt">Also true</span>If independent, Pr(A | B) = Pr(A) — knowing B tells you nothing about A.</div>
+  <div class="key frag"><span class="kt">Everyday link</span>With replacement → independent. Without replacement → dependent.</div>`},
+ {h:'Worked example 7',b:`<div class="q"><span class="tag">Worked example</span>Pr(A) = 0.5, Pr(B) = 0.4, Pr(A ∩ B) = 0.2. Are A and B independent?</div>`+steps([
+  `<b>Test:</b> Pr(A) × Pr(B) = 0.5 × 0.4 = 0.2`,
+  `<b>Compare:</b> Pr(A ∩ B) = 0.2 — the same!`,
+  `<b>Conclusion in words:</b> “Since Pr(A ∩ B) = Pr(A) × Pr(B), the events <b>are independent</b>.”`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Pr(C) = 0.6, Pr(D) = 0.3, Pr(C ∩ D) = 0.12. Independent?</div>
+  <div class="hint frag">Hint: 0.6 × 0.3 = ?</div>
+  <div class="ans frag">✔ 0.6 × 0.3 = 0.18 ≠ 0.12 → <b>not independent</b> (dependent). Write the comparison line — that IS the answer.</div>`},
+ {h:'',b:exset('8G',['Run the multiplication test and write the conclusion sentence','From tables: find the three probabilities first','Conclusion frame: “Since ___ = / ≠ ___, the events are ___.”'])}
+]},
+/* ===== L8 8H ===== */
+{code:'8H (10A) · Term 4 Week 4 · Lesson 8',nm:'Counting principles and factorial notation',menu:['8H','Counting & factorials (10A)','multiplication principle, n!'],
+ slides:[
+ title('LESSON 8 — SECTION 8H (10A)','Counting principles and factorial notation',['use the multiplication principle for choices in a row','evaluate factorials n!','count arrangements of distinct objects']),
+ {h:'🗣 New words first',b:vocab([
+  ['multiplication principle','—','choices multiply: 4 shirts × 3 pants = 12 outfits'],
+  ['factorial n!','n fak-TOR-ee-al','n! = n × (n−1) × … × 2 × 1'],
+  ['arrangement','a-RAYNJ-ment','an ordered line-up of objects'],
+  ['distinct','dis-TINKT','all different from each other']])},
+ {h:'Key idea — choices multiply',b:`<div class="key"><span class="kt">Multiplication principle</span>If step 1 has m choices and step 2 has n choices, together there are <b>m × n</b> outcomes.</div>
+  <div class="key frag"><span class="kt">Factorial</span><span class="formula" style="font-size:1.15rem">5! = 5 × 4 × 3 × 2 × 1 = 120</span> — the number of ways to arrange 5 different things in a row.</div>
+  <div class="frame frag">“For the first position I have ___ choices, then ___, then ___ …”</div>`},
+ {h:'Worked example 8',b:`<div class="q"><span class="tag">Worked example</span>a) A canteen offers 4 sandwiches, 3 drinks and 2 snacks. How many different lunches (one of each)? &nbsp; b) How many ways can 5 students line up?</div>`+steps([
+  `<b>a) Multiply the choices:</b> 4 × 3 × 2 = <b>24 lunches</b>`,
+  `<b>b) Line-up = arrangement:</b> 5 choices, then 4, 3, 2, 1.`,
+  `<b>Factorial:</b> 5! = <b>120 ways</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>a) Evaluate 6!. &nbsp; b) In how many ways can 3 people sit on 3 chairs?</div>
+  <div class="hint frag">Hint: 6! = 6 × 5!</div>
+  <div class="ans frag">✔ a) 6! = <b>720</b> &nbsp; b) 3! = <b>6 ways</b></div>`},
+ {h:'',b:exset('8H',['Multiplication principle problems: menus, number plates, PINs','Factorial practice — find the ! button on your calculator','Watch for restrictions: “the captain must go first” removes choices'])}
+]},
+/* ===== L9 8I ===== */
+{code:'8I (10A) · Term 4 Week 5 · Lesson 9',nm:'Arrangements',menu:['8I','Arrangements (10A)','order matters, nPr'],
+ slides:[
+ title('LESSON 9 — SECTION 8I (10A)','Arrangements',['count arrangements of r objects chosen from n','recognise when ORDER MATTERS','use the falling-product shortcut']),
+ {h:'Key idea — order matters',b:`<div class="key"><span class="kt">Arrangements</span>Choosing r from n where order matters: start at n and multiply <b>r falling numbers</b>.<br><br>
+  <span class="formula" style="font-size:1.15rem">arrangements = n × (n−1) × … &nbsp; (r factors) = ${fr('n!','(n−r)!')}</span></div>
+  <div class="key frag"><span class="kt">Spot it</span>Words like <b>1st/2nd/3rd, president/secretary, code, ranking</b> → order matters → arrangement.</div>`},
+ {h:'Worked example 9',b:`<div class="q"><span class="tag">Worked example</span>Eight runners race. In how many ways can gold, silver and bronze be awarded?</div>`+steps([
+  `<b>Order matters</b> (gold ≠ silver!) → arrangement.`,
+  `<b>Three falling factors from 8:</b> 8 × 7 × 6`,
+  `<b>Answer:</b> <b>336 ways</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>How many 4-letter codes can be made from 10 different letters, with no repeats?</div>
+  <div class="hint frag">Hint: 4 falling factors from 10.</div>
+  <div class="ans frag">✔ 10 × 9 × 8 × 7 = <b>5040 codes</b></div>`},
+ {h:'',b:exset('8I',['Arrangement problems: podiums, committees WITH roles, codes','Write the falling product before reaching for n!/(n−r)!','Ask first: does order matter here? Why?'])}
+]},
+/* ===== L10 8J ===== */
+{code:'8J (10A) · Term 4 Week 5 · Lesson 10',nm:'Selections',menu:['8J','Selections (10A)','order does not matter, nCr'],
+ slides:[
+ title('LESSON 10 — SECTION 8J (10A)','Selections',['count selections where order does NOT matter','use the nCr formula (and calculator button)','decide: arrangement or selection?']),
+ {h:'Key idea — divide out the repeats',b:`<div class="key"><span class="kt">Selections</span>Choosing r from n where order does NOT matter:<br><br>
+  <span class="formula" style="font-size:1.15rem">ⁿCᵣ = ${fr('n!','r!(n−r)!')}</span></div>
+  <div class="key frag"><span class="kt">Why divide by r!</span>Every group of r was counted r! times as arrangements — divide the repeats out.</div>
+  <div class="key frag"><span class="kt">Spot it</span>Words like <b>choose, select, committee (no roles), team, hand of cards</b> → selection.</div>`},
+ {h:'Worked example 10',b:`<div class="q"><span class="tag">Worked example</span>A committee of 3 is chosen from 7 students (no roles). How many committees are possible?</div>`+steps([
+  `<b>No roles → order does not matter</b> → selection.`,
+  `<b>Formula:</b> ⁷C₃ = ${fr('7 × 6 × 5','3 × 2 × 1')}`,
+  `<b>Calculate:</b> 210 ÷ 6 = <b>35 committees</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>a) How many ways to choose 2 toppings from 10? &nbsp; b) Arrangement or selection: “choose a captain and vice-captain from 12”?</div>
+  <div class="hint frag">Hint: toppings have no order; captain vs vice-captain DO have roles.</div>
+  <div class="ans frag">✔ a) ¹⁰C₂ = 45 &nbsp; b) arrangement (order matters): 12 × 11 = 132</div>`},
+ {h:'',b:exset('8J',['Mixed set: label each question A (arrangement) or S (selection) FIRST','Find the nCr button on your calculator','Frame: “Order ___ matter, so this is a ___.”'])}
+]},
+/* ===== L11 revision ===== */
+{code:'Term 4 Week 5 · Lesson 11',nm:'Revision — Chapter 8 review',menu:['★','Revision: Chapter 8 review','Melbourne Cup week — 3 lessons'],cls:'rev',
+ slides:[
+ title('LESSON 11 — REVISION','Chapter 8 review',['check every checklist item for Chapter 8','complete review questions at my level','carry my fix-it list into exam revision week']),
+ {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>8A/8B: probabilities, Venn diagrams, two-way tables</td><td></td><td></td><td></td></tr>
+  <tr><td>8C: the addition rule; mutually exclusive events</td><td></td><td></td><td></td></tr>
+  <tr><td>8D: conditional probability — “given that”</td><td></td><td></td><td></td></tr>
+  <tr><td>8E: arrays for two-step experiments</td><td></td><td></td><td></td></tr>
+  <tr><td>8F: tree diagrams, with/without replacement</td><td></td><td></td><td></td></tr>
+  <tr><td>8G: test for independence</td><td></td><td></td><td></td></tr>
+  <tr><td>8H–8J: counting, arrangements, selections (10A)</td><td></td><td></td><td></td></tr></table>
+  <p class="note">Melbourne Cup week — only 3 lessons. 😟 rows → fix-it list → exam revision week starts next Monday.</p>`},
+ {h:'Vocabulary quick quiz',b:`<div class="q"><span class="tag">Match the word to the meaning (with a partner)</span></div>
+  <div class="cols"><div class="key">1. mutually exclusive<br>2. A ∩ B<br>3. independent<br>4. without replacement<br>5. n!<br>6. selection</div>
+  <div class="key">A. both A and B<br>B. cannot both happen<br>C. order does not matter<br>D. first pick changes the second<br>E. Pr(A ∩ B) = Pr(A)Pr(B)<br>F. n × (n−1) × … × 1</div></div>
+  <div class="ans frag">✔ 1-B, 2-A, 3-E, 4-D, 5-F, 6-C</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Chapter 8 review</h3><ul>
+  <li>Chapter checklist with success criteria — tick honestly</li>
+  <li>Review questions: fluency, then a Venn + a tree + a table question</li>
+  <li>10A students: counting questions from 8H–8J</li>
+  <li>Chapter 8 is in the <b>CAT 3 semester exam</b> — file your fix-it list for revision week</li></ul>
+  <p class="note">Next week: semester exam revision — Units 5, 6, 7 and 8. 🏁</p></div>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 4 · Week 3 — Venn diagrams, tables and rules',[0,1,2,3]],
+             ['Term 4 · Week 4 — Two-step experiments and independence',[4,5,6,7]],
+             ['Term 4 · Week 5 — Counting (10A) and revision · Melbourne Cup Tuesday',[8,9,10]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Chapter 8 — Probability</h1>
+  <p class="sub">10 Methods · Unit 8 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 4 Weeks 3–5 · assessed in the semester exam (CAT 3, Week 7)<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

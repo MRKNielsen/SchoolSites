@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Revision &amp; Wrap-up | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#b7791f; --main2:#8a5a15;
+    --u5:#1F4E79; --u6:#7a3b8f; --u7:#1e8449; --u8:#c05621;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main2);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.u5{border-left-color:var(--u5)}.card.u6{border-left-color:var(--u6)}
+  .card.u7{border-left-color:var(--u7)}.card.u8{border-left-color:var(--u8)}
+  .card.test{border-left-color:var(--test)} .card.fun{border-left-color:var(--rev)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#faf3e6;border:2px solid var(--main);border-radius:10px;padding:10px 18px;display:inline-block;
+           font-size:1.2rem;margin:6px 6px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main2);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .marks{background:#faf3e6;border-left:6px solid var(--gold);border-radius:8px;padding:12px 18px;font-size:1.05rem;margin:8px 0}
+  .marks b{color:var(--main2)}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+  table.tt{border-collapse:collapse;background:var(--card);font-size:1.05rem;margin:8px auto}
+  table.tt th{background:var(--main2);color:#fff;padding:6px 12px}
+  table.tt td{border:1px solid #cdd7e1;padding:6px 12px;text-align:center}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+function graf(o){
+  const W=o.w||310,H=o.h||250,[x0,x1]=o.xr,[y0,y1]=o.yr;
+  const X=x=>10+(x-x0)/(x1-x0)*(W-20), Y=y=>H-12-(y-y0)/(y1-y0)*(H-24);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">`;
+  if(y0<=0&&y1>=0)s+=`<line x1="6" y1="${Y(0).toFixed(1)}" x2="${W-6}" y2="${Y(0).toFixed(1)}" stroke="#888" stroke-width="1.5"/>`;
+  if(x0<=0&&x1>=0)s+=`<line x1="${X(0).toFixed(1)}" y1="6" x2="${X(0).toFixed(1)}" y2="${H-6}" stroke="#888" stroke-width="1.5"/>`;
+  for(const v of o.vlines||[]){
+    s+=`<line x1="${X(v[0]).toFixed(1)}" y1="10" x2="${X(v[0]).toFixed(1)}" y2="${H-10}" stroke="#b7791f" stroke-width="1.8" stroke-dasharray="5 4"/>`;
+    if(v[1])s+=`<text x="${(X(v[0])+4).toFixed(1)}" y="${H-16}" font-size="12" fill="#b7791f" font-weight="bold">${v[1]}</text>`;}
+  for(const v of o.hlines||[]){
+    s+=`<line x1="6" y1="${Y(v[0]).toFixed(1)}" x2="${W-6}" y2="${Y(v[0]).toFixed(1)}" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/>`;
+    if(v[1])s+=`<text x="${W-95}" y="${(Y(v[0])-6).toFixed(1)}" font-size="12" fill="#c05621" font-weight="bold">${v[1]}</text>`;}
+  for(const c of o.curves){
+    let d='',pen=false;
+    for(let i=0;i<=120;i++){
+      const x=x0+(x1-x0)*i/120, y=c.f(x);
+      if(!isFinite(y)||y<y0-(y1-y0)*0.05||y>y1+(y1-y0)*0.05){pen=false;continue;}
+      d+=(pen?' L ':' M ')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true;}
+    s+=`<path d="${d}" fill="none" stroke="${c.col||'#c0392b'}" stroke-width="2.6"${c.dash?' stroke-dasharray="6 4"':''}/>`;
+    if(c.lab)s+=`<text x="${X(c.lx).toFixed(1)}" y="${(Y(c.f(c.lx))-8).toFixed(1)}" font-size="13" fill="${c.col||'#c0392b'}" font-weight="bold">${c.lab}</text>`;}
+  for(const m of o.marks||[]){
+    s+=`<circle cx="${X(m[0]).toFixed(1)}" cy="${Y(m[1]).toFixed(1)}" r="4" fill="#1F4E79"/>`;
+    if(m[2])s+=`<text x="${(X(m[0])+(m[3]??7)).toFixed(1)}" y="${(Y(m[1])+(m[4]??-8)).toFixed(1)}" font-size="12.5" fill="#1F4E79" font-weight="bold">${m[2]}</text>`;}
+  return s+'</svg>';
+}
+const G={
+rt(o){return `<svg viewBox="0 0 300 200" width="270"><polygon points="25,175 275,175 275,35" fill="#eef3fa" stroke="#1F4E79" stroke-width="3"/>
+<rect x="257" y="157" width="18" height="18" fill="none" stroke="#1F4E79" stroke-width="2"/>
+<path d="M 59 175 A 34 34 0 0 0 54.7 158.4" fill="none" stroke="#b7791f" stroke-width="2.5"/>
+<text x="70" y="165" fill="#b7791f" font-size="17" font-style="italic">${o.ang||'θ'}</text>
+${o.hyp?`<text x="120" y="90" fill="#1e8449" font-size="17" font-weight="bold" transform="rotate(-29 120 90)">${o.hyp}</text>`:''}
+${o.opp?`<text x="283" y="110" fill="#c0392b" font-size="17" font-weight="bold">${o.opp}</text>`:''}
+${o.adj?`<text x="130" y="195" fill="#2266aa" font-size="17" font-weight="bold">${o.adj}</text>`:''}</svg>`;},
+obl(o){return `<svg viewBox="0 0 340 210" width="300"><polygon points="30,185 310,185 225,30" fill="#eef3fa" stroke="#1F4E79" stroke-width="3"/>
+${o.A?`<text x="212" y="22" font-size="16" font-weight="bold" fill="#b7791f">${o.A}</text>`:''}
+${o.B?`<text x="6" y="200" font-size="16" font-weight="bold" fill="#b7791f">${o.B}</text>`:''}
+${o.C?`<text x="300" y="204" font-size="16" font-weight="bold" fill="#b7791f">${o.C}</text>`:''}
+${o.a?`<text x="150" y="204" font-size="16" fill="#1F4E79" font-weight="bold">${o.a}</text>`:''}
+${o.b?`<text x="278" y="105" font-size="16" fill="#1F4E79" font-weight="bold">${o.b}</text>`:''}
+${o.c?`<text x="86" y="100" font-size="16" fill="#1F4E79" font-weight="bold">${o.c}</text>`:''}</svg>`;}
+};
+let vennN=0;
+function venn(oA,both,oB,none,la,lb,shade){
+  const id='v'+(vennN++);
+  const cA={x:118,y:105,r:72},cB={x:202,y:105,r:72};
+  let s=`<svg viewBox="0 0 320 215" width="310"><rect x="6" y="8" width="308" height="196" fill="#fff" stroke="#556" stroke-width="1.6" rx="6"/>`;
+  s+=`<defs><clipPath id="${id}"><circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}"/></clipPath></defs>`;
+  const shA=shade==='A'||shade==='union', shB=shade==='B'||shade==='union';
+  if(shA)s+=`<circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}" fill="#f5c9a8" opacity="0.7"/>`;
+  if(shB)s+=`<circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="#f5c9a8" opacity="0.7"/>`;
+  if(shade==='both')s+=`<circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="#f5c9a8" opacity="0.85" clip-path="url(#${id})"/>`;
+  s+=`<circle cx="${cA.x}" cy="${cA.y}" r="${cA.r}" fill="none" stroke="#2266aa" stroke-width="2.6"/>
+  <circle cx="${cB.x}" cy="${cB.y}" r="${cB.r}" fill="none" stroke="#c05621" stroke-width="2.6"/>
+  <text x="60" y="30" font-size="16" font-weight="bold" fill="#2266aa">${la}</text>
+  <text x="238" y="30" font-size="16" font-weight="bold" fill="#c05621">${lb}</text>
+  <text x="72" y="112" font-size="19" font-weight="bold" fill="#1c2733">${oA}</text>
+  <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">${both}</text>
+  <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">${oB}</text>
+  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">${none}</text></svg>`;
+  return s;
+}
+function tree(b1,b2,res){
+  const ys=[[62,148],[[30,94],[116,180]]];
+  let s=`<svg viewBox="0 0 560 215" width="540">`;
+  const line=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#556" stroke-width="2"/>`;
+  const node=(x,y,t,c)=>`<circle cx="${x}" cy="${y}" r="15" fill="${c}"/><text x="${x-5}" y="${y+5}" font-size="14" fill="#fff" font-weight="bold">${t}</text>`;
+  const plab=(x,y,t)=>`<text x="${x}" y="${y}" font-size="13.5" fill="#b7791f" font-weight="bold">${t}</text>`;
+  s+=line(45,105,150,ys[0][0])+line(45,105,150,ys[0][1]);
+  s+=`<circle cx="42" cy="105" r="5" fill="#1c2733"/>`;
+  s+=plab(72,68,b1[0][1])+plab(72,150,b1[1][1]);
+  for(let i=0;i<2;i++){
+    const y1=ys[0][i];
+    for(let j=0;j<2;j++){
+      const y2=ys[1][i][j];
+      s+=line(165,y1,290,y2)+plab(210,(y1+y2)/2-6,b2[i][j][1]);
+      s+=node(305,y2,b2[i][j][0],['R','W','🚗'].includes(b2[i][j][0])?'#c0392b':'#2266aa');
+      s+=`<text x="335" y="${y2+5}" font-size="14.5" fill="#1c2733">${res[i*2+j]}</text>`;}
+    s+=node(150,y1,b1[i][0],['R','W','🚗'].includes(b1[i][0])?'#c0392b':'#2266aa');
+  }
+  return s+`</svg>`;
+}
+/* bearings walk diagram for the trig exam question */
+const walkSVG=`<svg viewBox="0 0 330 260" width="310">
+<line x1="60" y1="230" x2="60" y2="120" stroke="#888" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="52" y="112" font-size="14" font-weight="bold" fill="#556">N</text>
+<line x1="203" y1="148" x2="203" y2="60" stroke="#888" stroke-width="1.8" stroke-dasharray="5 4"/>
+<text x="195" y="52" font-size="14" font-weight="bold" fill="#556">N</text>
+<line x1="60" y1="230" x2="203" y2="148" stroke="#1F4E79" stroke-width="3"/>
+<line x1="203" y1="148" x2="258" y2="243" stroke="#1F4E79" stroke-width="3"/>
+<line x1="60" y1="230" x2="258" y2="243" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4"/>
+<path d="M 60 200 A 30 30 0 0 1 86 215" fill="none" stroke="#b7791f" stroke-width="2.2"/>
+<text x="72" y="196" font-size="13" fill="#b7791f" font-weight="bold">060°T</text>
+<path d="M 203 118 A 30 30 0 0 1 218 174" fill="none" stroke="#b7791f" stroke-width="2.2"/>
+<text x="222" y="120" font-size="13" fill="#b7791f" font-weight="bold">150°T</text>
+<rect x="197" y="153" width="14" height="14" fill="none" stroke="#1F4E79" stroke-width="2" transform="rotate(-30 203 148)"/>
+<text x="110" y="175" font-size="14.5" fill="#1F4E79" font-weight="bold" transform="rotate(-30 110 175)">300 m</text>
+<text x="238" y="192" font-size="14.5" fill="#1F4E79" font-weight="bold">200 m</text>
+<text x="150" y="252" font-size="14.5" fill="#c0392b" font-weight="bold">x = ?</text>
+<text x="40" y="242" font-size="15" font-weight="bold">A</text>
+<text x="200" y="140" font-size="15" font-weight="bold">B</text>
+<text x="264" y="250" font-size="15" font-weight="bold">C</text></svg>`;
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+const wall=(t,items)=>`<div class="key"><span class="kt">${t}</span><div class="center">${items.map(i=>`<span class="formula">${i}</span>`).join('')}</div></div>`;
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* ===== L1 U5 revision ===== */
+{code:'Exam revision · Term 4 Week 6 · Lesson 1',nm:'Unit 5 revision — Trigonometry',menu:['U5','Revision: Trigonometry','SOH CAH TOA, sine/cosine rule, bearings'],cls:'u5',
+ slides:[
+ title('REVISION DAY 1 — UNIT 5','Trigonometry (Chapter 6)',['rebuild my trig formula wall from memory','answer one full exam-style question with a diagram','update my fix-it list from the Semester Review']),
+ {h:'Formula wall — say each one aloud',b:wall('Right-angled triangles',
+  [`sin θ = ${fr('O','H')}`,`cos θ = ${fr('A','H')}`,`tan θ = ${fr('O','A')}`,`θ = sin⁻¹, cos⁻¹, tan⁻¹`])+
+  wall('Any triangle (10A)',[`${fr('a','sin A')} = ${fr('b','sin B')}`,`c² = a² + b² − 2ab cos C`,`Area = ${fr('1','2')}ab sin C`])+
+  `<div class="key frag"><span class="kt">Decision check</span>Right angle? → SOH CAH TOA. Opposite pair? → sine rule. SAS/SSS? → cosine rule. Bearings? → draw the north arrow FIRST.</div>`},
+ {h:'Exam-style worked example (5 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example — bearings</span>Mai walks 300 m from A on a bearing of 060°T to B, then 200 m on a bearing of 150°T to C.<br>a) Show the angle at B is 90°. &nbsp; b) Find the distance AC. &nbsp; c) Find the bearing of C from A (nearest degree).</div></div>
+  <div class="center">${walkSVG}</div></div>`+steps([
+  `<b>a)</b> Direction B→A is 060 + 180 = 240°T; direction B→C is 150°T. Angle at B = 240 − 150 = <b>90°</b> ✔ <span class="say">(1 mark: shown, not just stated)</span>`,
+  `<b>b) Pythagoras:</b> AC = √(300² + 200²) = √130000 ≈ <b>360.6 m</b> <span class="say">(1 mark rule, 1 mark answer + units)</span>`,
+  `<b>c) Angle at A:</b> tan α = ${fr('200','300')} → α ≈ 33.7°`,
+  `<b>Bearing:</b> 060 + 33.7 ≈ <b>094°T</b> <span class="say">(1 mark angle, 1 mark 3-digit bearing)</span>`])+
+  `<div class="marks frag"><b>Where the marks live:</b> diagram with north lines · the rule you chose · substitution · answer with units · 3-digit bearing.</div>`},
+ {h:'Your turn (3 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>From the top of a 40 m tower, the angle of depression to a car is 25°. How far is the car from the base of the tower, to one decimal place?</div></div>
+  <div class="center">${G.rt({ang:'25°',opp:'40 m',adj:'d = ?'})}</div></div>
+  <div class="hint frag">Hint: alternate angles put 25° at the car. tan 25° = 40 ÷ d.</div>
+  <div class="ans frag">✔ d = 40 ÷ tan 25° ≈ <b>85.8 m</b>. Marks: diagram (1), rule + substitution (1), answer + units (1).</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Semester Review 2 — Trigonometry section</h3><ul>
+  <li>Short-answer set first; 10A students add the sine/cosine rule questions</li>
+  <li>One practice-exam trig question under 8-minute timing</li>
+  <li>Fix-it list: add anything you could not start without help</li></ul>
+  <p class="note">Exam reminder: DEG mode · answer in words with units · 3-digit bearings.</p></div>`}
+]},
+/* ===== L2 U6 revision ===== */
+{code:'Exam revision · Term 4 Week 6 · Lesson 2',nm:'Unit 6 revision — Quadratic Functions',menu:['U6','Revision: Quadratic Functions','TP, intercepts, Δ, formula'],cls:'u6',
+ slides:[
+ title('REVISION DAY 2 — UNIT 6','Quadratic Functions (Chapter 7)',['rebuild my quadratics formula wall from memory','produce a fully labelled sketch under time pressure','update my fix-it list']),
+ {h:'Formula wall — say each one aloud',b:wall('Sketching',
+  [`y = a(x − h)² + k → TP (h, k)`,`null factor law`,`axis: x = ${fr('−b','2a')}`])+
+  wall('Formula & discriminant',[`Δ = b² − 4ac`,`x = ${fr('−b ± √Δ','2a')}`,`Δ&gt;0: two · Δ=0: one · Δ&lt;0: none`])+
+  `<div class="key frag"><span class="kt">Sketch = 4 labels minimum</span>x-intercepts · y-intercept · axis · turning point. Every label is usually a mark.</div>`},
+ {h:'Exam-style worked example (4 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = x² − 4x − 5, labelling all intercepts and the turning point.</div></div>
+  <div class="center">${graf({xr:[-2.8,7],yr:[-11,8],curves:[{f:x=>x*x-4*x-5}],vlines:[[2,'x = 2']],marks:[[2,-9,'TP (2, −9)',8,18],[-1,0,'(−1, 0)',-52,-8],[5,0,'(5, 0)'],[0,-5,'(0, −5)',8,4]]})}</div></div>`+steps([
+  `<b>Factorise:</b> y = (x − 5)(x + 1) → x-intercepts <b>5 and −1</b>`,
+  `<b>y-intercept:</b> x = 0 → <b>−5</b>`,
+  `<b>Axis:</b> midpoint of −1 and 5 → x = 2`,
+  `<b>TP:</b> y = 4 − 8 − 5 = −9 → <b>(2, −9)</b> minimum. Draw + label all four features.`])+
+  `<div class="marks frag"><b>Where the marks live:</b> one for each labelled feature. An unlabelled beautiful curve scores almost nothing!</div>`},
+ {h:'Your turn (4 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = −x² + 2x + 8 with all features labelled. Max or min?</div></div>
+  <div class="center">${graf({xr:[-3.6,5.8],yr:[-4,10.8],curves:[{f:x=>-x*x+2*x+8,col:'#2266aa'}],vlines:[[1,'']],marks:[[1,9,'TP?',8,-4],[-2,0,'',0,0],[4,0,'',0,0],[0,8,'(0, 8)',-52,-4]]})}</div></div>
+  <div class="hint frag">Hint: y = −(x² − 2x − 8) = −(x − 4)(x + 2).</div>
+  <div class="ans frag">✔ x-intercepts 4 and −2 · y-intercept 8 · axis x = 1 · TP (1, 9), a <b>maximum</b> (a &lt; 0).</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Semester Review 2 — Quadratics section</h3><ul>
+  <li>One sketch by each method: factorise, complete the square, formula</li>
+  <li>One application (max/min) question — answer in words with units</li>
+  <li>Timed challenge: full labelled sketch in 6 minutes</li></ul>
+  <p class="note">Exam reminder: “exact” = surds · sign of the bracket flips at the root.</p></div>`}
+]},
+/* ===== L3 U7 revision ===== */
+{code:'Exam revision · Term 4 Week 6 · Lesson 3',nm:'Unit 7 revision — Exponentials and Logarithms',menu:['U7','Revision: Exponentials & Logs','growth, compound interest, logs'],cls:'u7',
+ slides:[
+ title('REVISION DAY 3 — UNIT 7','Exponentials and Logarithms (Chapter 3F–3L)',['rebuild my exp/log formula wall from memory','solve a full money question end to end','update my fix-it list']),
+ {h:'Formula wall — say each one aloud',b:wall('Exponentials',
+  [`y = aˣ: through (0, 1), asymptote y = 0`,`A = A₀(1 ± ${fr('r','100')})ⁿ`,`A = P(1 + ${fr('r','100')})ⁿ`])+
+  wall('Logarithms',[`logₐ x = y ⟺ aʸ = x`,`log x + log y = log(xy)`,`aˣ = b → x = ${fr('log b','log a')}`])+
+  `<div class="key frag"><span class="kt">Translate percentages</span>+5% → ×1.05 · −12% → ×0.88 · “when does it double?” → set the bracket power equal to 2 and use logs.</div>`},
+ {h:'Exam-style worked example (5 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example — compound interest</span>$12 000 is invested at 5% p.a. compound interest.<br>a) Write the rule. &nbsp; b) Find the amount after 4 years (nearest cent). &nbsp; c) How long until the investment doubles? (1 d.p.)</div></div>
+  <div class="center">${graf({xr:[-1,21],yr:[9000,34000],curves:[{f:n=>12000*1.05**n,col:'#1e8449',lab:'A = 12000(1.05)ⁿ',lx:6}],hlines:[[24000,'A = 24000']],marks:[[0,12000,'12000',6,16],[14.2,24000,'n ≈ 14.2',-76,-8]]})}</div></div>`+steps([
+  `<b>a) Rule:</b> A = 12000(1.05)ⁿ <span class="say">(1 mark)</span>`,
+  `<b>b) Substitute n = 4:</b> A = 12000 × 1.05⁴ ≈ <b>$14 586.08</b> <span class="say">(1 mark working, 1 mark rounding)</span>`,
+  `<b>c) Double:</b> 12000(1.05)ⁿ = 24000 → (1.05)ⁿ = 2`,
+  `<b>Logs:</b> n = ${fr('log 2','log 1.05')} ≈ <b>14.2 years</b> <span class="say">(1 mark log step, 1 mark answer in words)</span>`])},
+ {h:'Your turn (3 marks)',b:`<div class="q"><span class="tag">Your turn</span>a) Evaluate log₂ 32 and log₁₀ 0.001. &nbsp; b) Solve 2ˣ = 100 to two decimal places.</div>
+  <div class="hint frag">Hint: 2⁵ = 32; 0.001 = 10⁻³; x = log 100 ÷ log 2.</div>
+  <div class="ans frag">✔ a) log₂ 32 = <b>5</b>; log₁₀ 0.001 = <b>−3</b> &nbsp; b) x = 2 ÷ 0.30103 ≈ <b>6.64</b> (check: 2⁶ = 64, 2⁷ = 128 ✔)</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Semester Review 2 — Exponentials &amp; logs section</h3><ul>
+  <li>Growth/decay and compound interest — rule first, always</li>
+  <li>Log evaluation set (no calculator), then log laws (10A)</li>
+  <li>One “how long until…” question using logs</li></ul>
+  <p class="note">Exam reminder: sanity-check log answers between neighbouring powers.</p></div>`}
+]},
+/* ===== L4 U8 revision + technique ===== */
+{code:'Exam revision · Term 4 Week 6 · Lesson 4',nm:'Unit 8 revision — Probability + exam technique',menu:['U8','Revision: Probability + exam technique','Venn, tree, conditional, command words'],cls:'u8',
+ slides:[
+ title('REVISION DAY 4 — UNIT 8','Probability (Chapter 8) + exam technique',['rebuild my probability formula wall from memory','answer a full Venn question with conditional probability','lock in my exam-day plan']),
+ {h:'Formula wall — say each one aloud',b:wall('Rules',
+  [`Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B)`,`Pr(A | B) = ${fr('Pr(A ∩ B)','Pr(B)')}`,`independent: Pr(A ∩ B) = Pr(A)Pr(B)`])+
+  wall('Tools',[`Venn: “both” number first`,`tree: × along, + between`,`ⁿCᵣ selections · falling product arrangements`])},
+ {h:'Exam-style worked example (5 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>In a class of 50, 28 students have a dog (D), 16 have a cat (C) and 8 have both.<br>a) Show this on a Venn diagram. &nbsp; b) Find Pr(neither). &nbsp; c) Find Pr(D | C). &nbsp; d) Are D and C independent?</div></div>
+  <div class="center">${venn('20','8','8','14','D','C')}</div></div>`+steps([
+  `<b>a) Both first:</b> 8 → only D = 20, only C = 8, neither = 50 − 36 = 14 <span class="say">(1 mark)</span>`,
+  `<b>b)</b> Pr(neither) = ${fr('14','50')} = ${fr('7','25')} <span class="say">(1 mark)</span>`,
+  `<b>c) Given C:</b> new total 16 → Pr(D | C) = ${fr('8','16')} = ${fr('1','2')} <span class="say">(1 mark)</span>`,
+  `<b>d) Test:</b> Pr(D) = 0.56 but Pr(D | C) = 0.5 — different → <b>not independent</b> <span class="say">(1 mark test, 1 mark conclusion sentence)</span>`])},
+ {h:'Your turn (3 marks)',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A bag has 4 red and 3 blue marbles. Two are drawn <b>without replacement</b>. Find Pr(different colours).</div></div>
+  <div class="center">${tree([['R','4/7'],['B','3/7']],[[['R','3/6'],['B','3/6']],[['R','4/6'],['B','2/6']]],['RR','RB ✓','BR ✓','BB'])}</div></div>
+  <div class="hint frag">Hint: paths RB and BR; multiply along, add between.</div>
+  <div class="ans frag">✔ ${fr('4','7')}×${fr('3','6')} + ${fr('3','7')}×${fr('4','6')} = ${fr('12','42')} + ${fr('12','42')} = ${fr('24','42')} = <b>${fr('4','7')}</b></div>`},
+ {h:'Exam technique — your day plan',b:`<table class="vocab"><tr><th>When</th><th>Do this</th></tr>
+  <tr><td class="t">Reading time</td><td>find the questions from your 😃 topics — start there</td></tr>
+  <tr><td class="t">Every question</td><td>underline the command word; circle numbers and units</td></tr>
+  <tr><td class="t">Time plan</td><td>1 mark ≈ 1 minute; circle hard ones and RETURN later</td></tr>
+  <tr><td class="t">Stuck?</td><td>draw the diagram, write the rule — method marks are real</td></tr>
+  <tr><td class="t">Last 5 minutes</td><td>check rounding, units, 3-digit bearings, sketch labels</td></tr></table>
+  <div class="frame frag">My exam sentence: “I have seen every one of these question types before.”</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Practice exam under timed conditions</h3><ul>
+  <li>Complete the practice exam sections for Units 7 and 8</li>
+  <li>Mark with the solutions; name every error type</li>
+  <li>Final fix-it list → tonight's revision is ONLY that list</li></ul>
+  <p class="note">Bilingual dictionary rules for the exam: confirm with your teacher TODAY.</p></div>`}
+]},
+/* ===== L5 exam 1 ===== */
+{code:'CAT 3 · Term 4 Week 7 · Lesson 1',nm:'CAT 3 — Semester Examination',menu:['📋','CAT 3 Semester Exam','Units 5–8'],cls:'test',
+ slides:[
+ title('CAT 3 — SEMESTER EXAM','Units 5, 6, 7 and 8',['show everything I have learned this semester','use my time plan: 1 mark ≈ 1 minute','attempt every question — method marks are real']),
+ {h:'Before you start',b:`<div class="key"><span class="kt">Checklist</span>🖩 Calculator in <b>DEG</b> mode · ✏ pencil for sketches · 📏 ruler · 📖 dictionary (if approved) · 💧 water.</div>
+  <div class="key frag"><span class="kt">The routine</span>Reading time → find your strong topics → answer those first → circle and return to hard ones → last 5 minutes = checking round.</div>
+  <div class="frame frag">Breathe. You have practised every question type in this exam. 💪</div>`}
+]},
+/* ===== L6 exam 2 ===== */
+{code:'CAT 3 · Term 4 Week 7 · Lesson 2',nm:'CAT 3 — Semester Examination (continued)',menu:['📋','CAT 3 continued / catch-up','finish + checking routine'],cls:'test',
+ slides:[
+ title('CAT 3 — SEMESTER EXAM (CONTINUED)','Completion and catch-up session',['complete any remaining sections','run the full checking routine before submitting']),
+ {h:'The checking round (last 10 minutes)',b:`<table class="chk"><tr><th>Check</th><th>Looking for…</th></tr>
+  <tr><td>Rounding</td><td>does the answer match “correct to …”? middle steps NOT rounded?</td></tr>
+  <tr><td>Units</td><td>m, m², $, degrees, °T on every answer</td></tr>
+  <tr><td>Sketches</td><td>4 labels: intercepts, axis, TP (or asymptote)</td></tr>
+  <tr><td>Bearings</td><td>three digits, measured from north</td></tr>
+  <tr><td>Blank questions</td><td>none! diagram + rule at minimum</td></tr></table>`}
+]},
+/* ===== L7 exam review ===== */
+{code:'Post-exam · Term 4 Week 7 · Lesson 3',nm:'Exam review and feedback',menu:['🛠','Exam review & feedback','corrections journal'],cls:'test',
+ slides:[
+ title('POST-EXAM — LESSON 3','Exam review and feedback',['read my feedback calmly and completely','redo my three highest-value lost questions','record patterns in my corrections journal']),
+ {h:'The corrections journal',b:`<div class="key"><span class="kt">For each lost mark, one row</span>Question → error type (🔢 calculation / 📖 reading / 🧭 method / ✍️ working) → the fix in one sentence.</div>
+  <div class="frame frag">“In question ___ I lost ___ marks because ___. The fix is ___.”</div>
+  <div class="key frag"><span class="kt">Look for the pattern</span>Three errors of the same type is not bad luck — it is your <b>number one focus</b> for Year 11.</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🛠 Review session</h3><ul>
+  <li>Redo your three highest-value lost questions with full working</li>
+  <li>Complete the corrections journal — bring it to the goal-setting lesson</li>
+  <li>Pair share: one thing you did WELL in the exam (say it aloud!)</li></ul></div>`}
+]},
+/* ===== L8 goals ===== */
+{code:'Post-exam · Term 4 Week 7 · Lesson 4',nm:'Goal-setting for Year 11',menu:['🎯','Goal-setting for Year 11','reflection, Methods preview'],cls:'test',
+ slides:[
+ title('POST-EXAM — LESSON 4','Goal-setting for Year 11 Methods',['name my strengths with evidence from the exam','set one skill goal and one habit goal for Year 11','see what Year 10 topics carry into Methods 1/2']),
+ {h:'What carries into Year 11 Methods',b:`<table class="chk"><tr><th>Year 10 topic</th><th>Becomes in Methods 1/2…</th></tr>
+  <tr><td>Quadratics &amp; parabolas (U6)</td><td>polynomial functions and transformations</td></tr>
+  <tr><td>Functions notation, graphs</td><td>domain, range, function families</td></tr>
+  <tr><td>Exponentials &amp; logs (U7)</td><td>exponential/log functions and applications</td></tr>
+  <tr><td>Trigonometry, unit circle (U5)</td><td>circular functions sin, cos, tan</td></tr>
+  <tr><td>Probability &amp; counting (U8)</td><td>probability and combinatorics</td></tr></table>
+  <div class="key frag"><span class="kt">Message</span>Nothing is wasted — Year 11 is these same ideas, deeper and with CAS.</div>`},
+ {h:'Set your two goals',b:`<div class="frame">Skill goal: “By the end of Term 1 next year I will be confident with <b>___</b>, because this semester it cost me marks in <b>___</b>.”</div>
+  <div class="frame">Habit goal: “Every week I will <b>___</b> (e.g. keep my glossary, do corrections the same day, ask one question per class).”</div>
+  <div class="exset frag"><h3>🎯 Exit ticket</h3><ul><li>Both goals written and photographed</li><li>Corrections journal filed for January revision</li></ul></div>`}
+]},
+/* ===== L9 numerical methods ===== */
+{code:'Enrichment · Term 4 Week 8 · Lesson 1',nm:'Ch 11 Activity 1 — Numerical methods for solving equations',menu:['🧮','Numerical methods (Ch 11)','bisection, spreadsheet'],cls:'fun',
+ slides:[
+ title('ENRICHMENT — CH 11 ACTIVITY 1','Solving equations with numerical methods',['solve an equation by trapping it in an interval','run the bisection method by hand and by spreadsheet','connect this to how computers really solve equations']),
+ {h:'Key idea — trap the answer',b:`<div class="cols"><div>${graf({xr:[-0.5,3.6],yr:[-6,6],curves:[{f:x=>x*x-5,lab:'y = x² − 5',lx:2.7}],vlines:[[2,'2'],[3,'3']],marks:[[2.236,0,'√5 ≈ 2.236',-30,16]]})}</div><div>
+  <div class="key"><span class="kt">Bisection method</span>Solve x² = 5. At x = 2: 4 (too small). At x = 3: 9 (too big). The answer is <b>trapped between 2 and 3</b>.</div>
+  <div class="key frag"><span class="kt">Halve the trap</span>Test the midpoint, keep the half that still traps the answer, repeat. Each step halves the possible error.</div></div></div>`},
+ {h:'Worked example — three bisection steps',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Use bisection to estimate √5 (solve x² − 5 = 0), starting with [2, 3].</div></div>
+  <div class="center">${graf({xr:[1.6,3.2],yr:[-2.5,5],curves:[{f:x=>x*x-5,lab:'y = x² − 5',lx:2.85}],vlines:[[2,'2'],[2.5,'2.5'],[3,'3']],marks:[[2.236,0,'root',6,16]]})}</div></div>`+steps([
+  `<b>Midpoint 2.5:</b> 2.5² = 6.25 &gt; 5 → keep [2, 2.5]`,
+  `<b>Midpoint 2.25:</b> 5.06 &gt; 5 → keep [2, 2.25]`,
+  `<b>Midpoint 2.125:</b> 4.52 &lt; 5 → keep [2.125, 2.25]`,
+  `<b>Estimate:</b> √5 ≈ 2.19 ± 0.06 — and the calculator says 2.236… we are closing in!`])},
+ {h:'Today’s work',b:`<div class="exset"><h3>💻 Spreadsheet build (pairs)</h3><ul>
+  <li>Ch 11 Activity 1: tables and bisection in a spreadsheet</li>
+  <li>Columns: low, high, midpoint, midpoint² − 5, keep-which-half</li>
+  <li>Challenge: how many steps for 4-decimal accuracy? (Count them!)</li>
+  <li>Extension: change the equation to x³ = 20</li></ul></div>`}
+]},
+/* ===== L10 simulations ===== */
+{code:'Enrichment · Term 4 Week 8 · Lesson 2',nm:'Ch 11 Activity 3 — Simulations: Walk the Plank and Monty Hall',menu:['🎲','Simulations (Ch 11)','Monty Hall, experimental probability'],cls:'fun',
+ slides:[
+ title('ENRICHMENT — CH 11 ACTIVITY 3','Simulations: Walk the Plank and Monty Hall',['estimate probability by running many trials','simulate with dice, coins and spreadsheets','settle the Monty Hall argument with data AND a tree']),
+ {h:'The Monty Hall problem',b:`<div class="key"><span class="kt">The game</span>Three doors: one car 🚗, two goats 🐐. You pick a door. The host (who knows) opens a DIFFERENT door showing a goat, then asks: <b>stick or switch?</b></div>
+  <div class="key frag"><span class="kt">The argument</span>Most people say 50–50. The tree says otherwise…</div>
+  <div class="center frag">${tree([['🚗','1/3'],['🐐','2/3']],[[['S','stick wins'],['W','switch loses']],[['S','stick loses'],['W','switch WINS']]],['Pr = 1/3','','','Pr = 2/3'])}</div>
+  <div class="ans frag">✔ Your first pick is the car only ${fr('1','3')} of the time — so <b>switching wins ${fr('2','3')}</b> of the time!</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🎲 Run the simulations (pairs)</h3><ul>
+  <li><b>Walk the plank:</b> coin-flip random walk — record how often you fall; pool the class data</li>
+  <li><b>Monty Hall:</b> 20 trials sticking, 20 trials switching (cups + a coin) — tally wins</li>
+  <li>Compare class results with the tree's ${fr('1','3')} vs ${fr('2','3')} — experimental vs theoretical!</li>
+  <li>Spreadsheet extension: 1000 simulated games with RANDBETWEEN</li></ul></div>`}
+]},
+/* ===== L11 CAS ===== */
+{code:'Enrichment · Term 4 Week 8 · Lesson 3',nm:'Year 11 Methods head-start — CAS familiarisation',menu:['🖩','CAS head-start','solve, factor, define, graph'],cls:'fun',
+ slides:[
+ title('ENRICHMENT — HEAD-START','CAS familiarisation for Methods 1/2',['do four core CAS skills: solve, factor, define, graph','check answers from this semester with CAS','know what CAS will and will not do for me']),
+ {h:'Four commands to leave with',b:`<table class="chk"><tr><th>Command</th><th>Try it on…</th><th>Expect</th></tr>
+  <tr><td><b>solve</b>(x² − 4x − 5 = 0, x)</td><td>our Unit 6 sketch</td><td>x = −1 or x = 5</td></tr>
+  <tr><td><b>factor</b>(x² − 4x − 5)</td><td>same quadratic</td><td>(x − 5)(x + 1)</td></tr>
+  <tr><td><b>define</b> f(x) = x² − 4x − 5</td><td>then f(2)</td><td>−9 — the TP y-value!</td></tr>
+  <tr><td><b>graph</b> f(x)</td><td>trace the TP and intercepts</td><td>matches our hand sketch</td></tr></table>
+  <div class="key frag"><span class="kt">The honest truth</span>CAS is fast but shows no working — in Methods you earn marks for <b>method</b>. CAS checks; your brain solves.</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🖩 CAS circuit (pairs, 4 stations)</h3><ul>
+  <li>Station 1: solve — five equations from this semester</li>
+  <li>Station 2: factor + expand round trip</li>
+  <li>Station 3: define f(x), evaluate, find f(x) = 0</li>
+  <li>Station 4: graph y = 2ˣ − 4 and find the intercepts on screen</li></ul>
+  <p class="note">Own a CAS already? Bring it. School sets available otherwise.</p></div>`}
+]},
+/* ===== L12 wrap ===== */
+{code:'Wrap-up · Term 4 Week 8 · Lesson 4',nm:'End of Year 10 — course wrap-up',menu:['🏁','Course wrap-up','celebrate + summer challenge'],cls:'fun',
+ slides:[
+ title('WRAP-UP — FINAL LESSON','End of Year 10 Mathematics',['see how far I have come this semester','file my glossary and corrections journal for January','finish with a challenge (and maybe some cake)']),
+ {h:'The semester in one slide',b:`<table class="chk"><tr><th>Unit</th><th>You can now…</th></tr>
+  <tr><td>U5 Trigonometry</td><td>solve any triangle — right-angled or not — and navigate with bearings</td></tr>
+  <tr><td>U6 Quadratic Functions</td><td>sketch any parabola four ways and model real situations</td></tr>
+  <tr><td>U7 Exponentials &amp; Logs</td><td>model growth and money, and undo any power with a log</td></tr>
+  <tr><td>U8 Probability</td><td>use Venn diagrams, trees and counting to measure chance</td></tr></table>
+  <div class="frame frag">Look at your glossary — count the words you own now that you did not own in July. That number is YOUR number. 🎉</div>`},
+ {h:'Summer challenge (optional!)',b:`<div class="exset"><h3>🌞 Holiday head-start menu — pick any</h3><ul>
+  <li>Teach one topic from this semester to someone at home — in any language</li>
+  <li>Desmos art: draw a picture using only parabolas and lines</li>
+  <li>Simulate 1000 Monty Hall games in a spreadsheet — does 2/3 hold?</li>
+  <li>Keep your glossary and corrections journal safe — Year 11 Methods will thank you</li></ul>
+  <p class="note">Thank you for a fantastic semester. See you in Year 11! 🏁</p></div>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 4 · Week 6 — Semester exam revision (Year 11 exams this week)',[0,1,2,3]],
+             ['Term 4 · Week 7 — CAT 3 Semester Exam and feedback',[4,5,6,7]],
+             ['Term 4 · Week 8 — Enrichment and wrap-up (last week of classes)',[8,9,10,11]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Exam Revision, CAT 3 &amp; Wrap-up</h1>
+  <p class="sub">10 Methods · Term 4 Weeks 6–8 · Semester Review 2 + practice exams + Chapter 11 enrichment<br>
+  <b>Revision routine:</b> formula wall from memory → exam-style worked example → your turn → timed practice → fix-it list.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

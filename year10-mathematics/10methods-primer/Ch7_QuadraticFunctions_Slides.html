@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 7 — Quadratic Functions | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --navy2:#163a5c; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --opp:#c0392b; --adj:#2266aa; --hyp:#1e8449; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --purp:#7a3b8f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--purp);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--purp);border-bottom:2px solid var(--purp);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--purp);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--purp);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--purp);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--purp);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--purp);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--purp);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--purp)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--purp);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--purp);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--purp);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#f4edf8;border:2px solid var(--purp);border-radius:10px;padding:14px 22px;display:inline-block;
+           font-size:1.4rem;margin:10px 8px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--purp);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--hyp);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--purp);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .pill{display:inline-block;background:#f4edf8;border:1px solid var(--purp);color:var(--purp);border-radius:20px;padding:2px 12px;font-size:.9rem;font-weight:600;margin:2px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--purp);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+
+/* ---------- graph generator: curves plotted exactly, marks on points ---------- */
+function graf(o){
+  const W=o.w||310,H=o.h||250,[x0,x1]=o.xr,[y0,y1]=o.yr;
+  const X=x=>10+(x-x0)/(x1-x0)*(W-20), Y=y=>H-12-(y-y0)/(y1-y0)*(H-24);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">`;
+  if(y0<=0&&y1>=0)s+=`<line x1="6" y1="${Y(0).toFixed(1)}" x2="${W-6}" y2="${Y(0).toFixed(1)}" stroke="#888" stroke-width="1.5"/>
+   <text x="${W-16}" y="${(Y(0)+14).toFixed(1)}" font-size="12" fill="#666">${o.xlab||'x'}</text>`;
+  if(x0<=0&&x1>=0)s+=`<line x1="${X(0).toFixed(1)}" y1="6" x2="${X(0).toFixed(1)}" y2="${H-6}" stroke="#888" stroke-width="1.5"/>
+   <text x="${(X(0)+6).toFixed(1)}" y="16" font-size="12" fill="#666">${o.ylab||'y'}</text>`;
+  for(const v of o.vlines||[]){
+    s+=`<line x1="${X(v[0]).toFixed(1)}" y1="10" x2="${X(v[0]).toFixed(1)}" y2="${H-10}" stroke="#b7791f" stroke-width="1.8" stroke-dasharray="5 4"/>`;
+    if(v[1])s+=`<text x="${(X(v[0])+4).toFixed(1)}" y="${H-16}" font-size="12" fill="#b7791f" font-weight="bold">${v[1]}</text>`;
+  }
+  for(const c of o.curves){
+    let d='',pen=false;
+    for(let i=0;i<=120;i++){
+      const x=x0+(x1-x0)*i/120, y=c.f(x);
+      if(!isFinite(y)||y<y0-(y1-y0)*0.05||y>y1+(y1-y0)*0.05){pen=false;continue;}
+      d+=(pen?' L ':' M ')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true;
+    }
+    s+=`<path d="${d}" fill="none" stroke="${c.col||'#c0392b'}" stroke-width="2.6"${c.dash?' stroke-dasharray="6 4"':''}/>`;
+    if(c.lab)s+=`<text x="${X(c.lx).toFixed(1)}" y="${Y(c.f(c.lx)).toFixed(1)-8}" font-size="13" fill="${c.col||'#c0392b'}" font-weight="bold">${c.lab}</text>`;
+  }
+  for(const m of o.marks||[]){
+    s+=`<circle cx="${X(m[0]).toFixed(1)}" cy="${Y(m[1]).toFixed(1)}" r="4" fill="#1F4E79"/>`;
+    if(m[2])s+=`<text x="${(X(m[0])+(m[3]??7)).toFixed(1)}" y="${(Y(m[1])+(m[4]??-8)).toFixed(1)}" font-size="12.5" fill="#1F4E79" font-weight="bold">${m[2]}</text>`;
+  }
+  return s+'</svg>';
+}
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* ===== L1 7A ===== */
+{code:'7A · Term 3 Week 5 · Lesson 2',nm:'Exploring parabolas',menu:['7A','Exploring parabolas','parabola, turning point, axis of symmetry, intercept'],
+ slides:[
+ title('LESSON 1 — SECTION 7A','Exploring parabolas',['name the key features of a parabola','read the turning point, axis of symmetry and intercepts from a graph','describe simple transformations of y = x²']),
+ {h:'🗣 New words first',b:vocab([
+  ['parabola','pa-RAB-o-la','the U-shaped graph of a quadratic'],
+  ['turning point (TP) / vertex','—','the highest or lowest point of the parabola'],
+  ['maximum / minimum','—','TP is a minimum if the graph opens up ∪, a maximum if it opens down ∩'],
+  ['axis of symmetry','AK-sis of SIM-e-tree','the vertical mirror line through the turning point'],
+  ['y-intercept','WY IN-ter-sept','where the graph crosses the y-axis (x = 0)'],
+  ['x-intercept','EKS IN-ter-sept','where the graph crosses the x-axis (y = 0)']])},
+ {h:'Key idea — the features of y = x²',b:`<div class="cols"><div>${graf({xr:[-3.4,3.4],yr:[-1.5,9],curves:[{f:x=>x*x,lab:'y = x²',lx:2.2}],vlines:[[0,'axis']],marks:[[0,0,'TP (0, 0)',8,16]]})}</div><div>
+  <div class="key"><span class="kt">Key idea</span>Every parabola has: a <b>turning point</b>, an <b>axis of symmetry</b> through it, a <b>y-intercept</b>, and 0, 1 or 2 <b>x-intercepts</b>.</div>
+  <div class="key frag"><span class="kt">Symmetry</span>The two halves are mirror images — points at equal distance from the axis have equal y-values.</div></div></div>`},
+ {h:'Key idea — three simple changes',b:`<div class="cols">
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-1,9],curves:[{f:x=>x*x,col:'#999',dash:1},{f:x=>2*x*x,lab:'y = 2x²',lx:1.6}]})}<p class="note">narrower (dilation)</p></div>
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-1,9],curves:[{f:x=>x*x,col:'#999',dash:1},{f:x=>x*x+2,lab:'y = x²+2',lx:1.6,col:'#1e8449'}]})}<p class="note">moved up (translation)</p></div>
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-9,2],curves:[{f:x=>-x*x,lab:'y = −x²',lx:1.4,col:'#2266aa'}]})}<p class="note">flipped ∩ (reflection)</p></div></div>
+  <div class="frame frag">Say it: “y = −x² opens <b>down</b>, so the turning point is a <b>maximum</b>.”</div>`},
+ {h:'Worked example 1',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>For y = x² − 4, state: the turning point, the axis of symmetry, the y-intercept and the x-intercepts.</div></div>
+  <div class="center">${graf({xr:[-3.4,3.4],yr:[-5,6],curves:[{f:x=>x*x-4,lab:'y = x²−4',lx:2.3}],vlines:[[0,'x = 0']],marks:[[0,-4,'TP (0, −4)',8,16],[-2,0,'(−2, 0)',-58,-8],[2,0,'(2, 0)']]})}</div></div>`+steps([
+  `<b>Turning point:</b> lowest point → (0, −4), a <b>minimum</b>.`,
+  `<b>Axis of symmetry:</b> the vertical line x = 0.`,
+  `<b>y-intercept:</b> at x = 0, y = −4.`,
+  `<b>x-intercepts:</b> solve x² − 4 = 0 → x = −2 and x = 2.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>For y = −x² + 9, state the turning point (max or min?), the axis of symmetry and all intercepts.</div></div>
+  <div class="center">${graf({xr:[-4.2,4.2],yr:[-3,10.5],curves:[{f:x=>9-x*x,col:'#2266aa'}],marks:[[0,9,'TP?',8,-4],[-3,0,'',0,0],[3,0,'',0,0]]})}</div></div>
+  <div class="hint frag">Hint: the graph opens down (a = −1). Solve 9 − x² = 0 for the x-intercepts.</div>
+  <div class="ans frag">✔ TP (0, 9), a <b>maximum</b> · axis x = 0 · y-intercept 9 · x-intercepts x = −3 and x = 3</div>`},
+ {h:'',b:exset('7A',['Reading features from graphs, then plotting from tables of values','Label every sketch: TP, axis, intercepts — this is how marks are earned','Sentence frame: “The turning point is a ___ because a is ___.”'])}
+]},
+/* ===== L2 7B ===== */
+{code:'7B · Term 3 Week 5 · Lesson 3',nm:'Sketching parabolas using transformations',menu:['7B','Sketching with transformations','translation, dilation, reflection, vertex form'],
+ slides:[
+ title('LESSON 2 — SECTION 7B','Sketching parabolas using transformations',['read the turning point from y = a(x − h)² + k','describe transformations in words','sketch a parabola from vertex form']),
+ {h:'🗣 New words first',b:vocab([
+  ['vertex form','—','y = a(x − h)² + k — the turning point is (h, k)'],
+  ['translation','trans-LAY-shun','a slide: left/right (h) or up/down (k)'],
+  ['dilation','dy-LAY-shun','a stretch: |a| > 1 narrower, |a| < 1 wider'],
+  ['reflection','re-FLEK-shun','a flip: a < 0 flips the parabola upside-down ∩']])},
+ {h:'Key idea — vertex form',b:`<div class="center"><span class="formula">y = a(x − h)² + k &nbsp;→&nbsp; turning point (h, k)</span></div>
+  <div class="key frag"><span class="kt">Careful — the sign of h</span>y = (x − 2)² + 1 → TP (2, 1). &nbsp; y = (x + 3)² − 4 means (x − (−3))² − 4 → TP (−3, −4).</div>
+  <div class="key frag"><span class="kt">Sketch routine</span>1️⃣ TP from (h, k) · 2️⃣ shape from a (∪ or ∩, wide or narrow) · 3️⃣ y-intercept: put x = 0 · 4️⃣ draw and label.</div>`},
+ {h:'Worked example 2',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = (x − 2)² + 1, labelling the turning point and y-intercept.</div></div>
+  <div class="center">${graf({xr:[-1.5,5.5],yr:[-1,10],curves:[{f:x=>(x-2)*(x-2)+1,lab:'y=(x−2)²+1',lx:3.8}],vlines:[[2,'x = 2']],marks:[[2,1,'TP (2, 1)',8,16],[0,5,'(0, 5)',-52,-6]]})}</div></div>`+steps([
+  `<b>Turning point:</b> h = 2, k = 1 → TP (2, 1), minimum (a = 1 > 0).`,
+  `<b>Shape:</b> a = 1 → same width as y = x², opens up ∪.`,
+  `<b>y-intercept:</b> x = 0 → y = (−2)² + 1 = 5.`,
+  `<b>Draw:</b> smooth ∪ through (0, 5) with TP (2, 1); label everything.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = −(x + 1)² + 4. Give the TP (max or min?), y-intercept and x-intercepts.</div></div>
+  <div class="center">${graf({xr:[-4.5,2.8],yr:[-4,5.5],curves:[{f:x=>4-(x+1)*(x+1),col:'#2266aa'}],vlines:[[-1,'']],marks:[[-1,4,'TP?',6,-4],[0,3,'(0, 3)',8,4],[-3,0,'',0,0],[1,0,'',0,0]]})}</div></div>
+  <div class="hint frag">Hint: TP (−1, 4), maximum. For x-intercepts solve (x + 1)² = 4.</div>
+  <div class="ans frag">✔ TP (−1, 4) <b>maximum</b> · y-intercept 3 · x-intercepts x = −3 and x = 1</div>`},
+ {h:'',b:exset('7B',['State the transformation in words, then the TP, then sketch','Mixed forms: y = ax², y = x² + k, y = (x − h)², y = a(x − h)² + k','Frame: “The graph of ___ is y = x² translated ___ and ___.”'])}
+]},
+/* ===== L3 7B tech ===== */
+{code:'7B · Term 3 Week 5 · Lesson 4',nm:'Transformations — consolidation with technology',menu:['7B+','Transformations with Desmos','predict, check, correct'],
+ slides:[
+ title('LESSON 3 — SECTION 7B (TECHNOLOGY)','Transformations — predict, then check',['predict a graph before technology draws it','use Desmos sliders for a, h, k','match equations to graphs quickly']),
+ {h:'Predict → check → correct',b:`<div class="key"><span class="kt">The routine (with Desmos)</span>
+  1️⃣ <b>Predict:</b> write your TP and shape for the equation — before typing it.<br>
+  2️⃣ <b>Check:</b> type it into Desmos. Was your prediction right?<br>
+  3️⃣ <b>Correct:</b> if not, say <i>which</i> part was wrong (h? k? the flip?).</div>
+  <div class="key frag"><span class="kt">Desmos setup</span>Type <span class="pill">y = a(x−h)² + k</span> and click “add sliders: all”. Move one slider at a time and watch.</div>`},
+ {h:'Matching game',b:`<div class="q"><span class="tag">With a partner — match each equation to a description</span>
+  1. y = (x − 3)² &nbsp;&nbsp; 2. y = x² − 3 &nbsp;&nbsp; 3. y = −3x² &nbsp;&nbsp; 4. y = (x + 3)² + 2</div>
+  <div class="cols"><div class="key">A. moved down 3<br>B. flipped and narrower<br>C. moved right 3<br>D. moved left 3 and up 2</div>
+  <div>${graf({w:280,h:220,xr:[-2,6],yr:[-1.5,8],curves:[{f:x=>(x-3)*(x-3),lab:'1',lx:4.6}],marks:[[3,0,'(3, 0)']]})}</div></div>
+  <div class="ans frag">✔ 1-C · 2-A · 3-B · 4-D</div>`},
+ {h:'Speed sketch challenge',b:`<div class="q"><span class="tag">Whiteboards — 60 seconds each</span>Sketch and label the TP only:</div>
+  <div class="key">a) y = (x − 1)² − 4 &nbsp;&nbsp; b) y = −(x − 2)² + 3 &nbsp;&nbsp; c) y = 2x² + 1 &nbsp;&nbsp; d) y = −(x + 4)²</div>
+  <div class="ans frag">✔ a) (1, −4) min · b) (2, 3) max · c) (0, 1) min · d) (−4, 0) max</div>`},
+ {h:'',b:exset('7B (finish)',['Finish Exercise 7B; use Desmos only to CHECK, never to answer first','Exit ticket: one equation whose graph has TP (−2, 5) and opens down','Answer: y = −(x + 2)² + 5 (any negative a earns full credit)'])}
+]},
+/* ===== L4 7C ===== */
+{code:'7C · Term 3 Week 6 · Lesson 5',nm:'Sketching parabolas using factorisation',menu:['7C','Sketching by factorisation','factorise, null factor law, roots'],
+ slides:[
+ title('LESSON 4 — SECTION 7C','Sketching parabolas using factorisation',['factorise a quadratic to find the x-intercepts','use symmetry to find the turning point','sketch with all features labelled']),
+ {h:'🗣 New words first',b:vocab([
+  ['factorise','FAK-to-rize','write as a product of brackets: x² − 2x − 8 = (x − 4)(x + 2)'],
+  ['null factor law','nul FAK-tor law','if two things multiply to 0, one of them must be 0'],
+  ['roots','roots','another word for the x-intercepts'],
+  ['midpoint','MID-poynt','halfway between — the axis of symmetry is midway between the roots']])},
+ {h:'Key idea — the factorised sketch routine',b:`<div class="key"><span class="kt">Four steps</span>
+  1️⃣ <b>y-intercept:</b> put x = 0.<br>
+  2️⃣ <b>x-intercepts:</b> factorise, then null factor law.<br>
+  3️⃣ <b>Axis of symmetry:</b> x = midpoint of the two x-intercepts.<br>
+  4️⃣ <b>Turning point:</b> substitute the axis x-value into the rule.</div>
+  <div class="frame frag">“The axis of symmetry is exactly <b>halfway between the roots</b>.”</div>`},
+ {h:'Worked example 3',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = x² − 2x − 8, labelling all features.</div></div>
+  <div class="center">${graf({xr:[-4,6.4],yr:[-10.5,7],curves:[{f:x=>x*x-2*x-8}],vlines:[[1,'x = 1']],marks:[[1,-9,'TP (1, −9)',8,18],[-2,0,'(−2, 0)',-56,-8],[4,0,'(4, 0)'],[0,-8,'(0, −8)',8,6]]})}</div></div>`+steps([
+  `<b>y-intercept:</b> x = 0 → y = −8.`,
+  `<b>Factorise:</b> y = (x − 4)(x + 2) → x-intercepts x = 4 and x = −2.`,
+  `<b>Axis:</b> midpoint of −2 and 4 → x = 1.`,
+  `<b>Turning point:</b> y = 1² − 2(1) − 8 = −9 → TP (1, −9), minimum.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = x² − 6x + 8 with all features labelled.</div></div>
+  <div class="center">${graf({xr:[-0.8,6.8],yr:[-2.5,9],curves:[{f:x=>x*x-6*x+8,col:'#2266aa'}],vlines:[[3,'']],marks:[[3,-1,'TP?',8,16],[2,0,'',0,0],[4,0,'',0,0],[0,8,'(0, 8)',8,2]]})}</div></div>
+  <div class="hint frag">Hint: factorise to (x − 2)(x − 4). Midpoint of 2 and 4 is 3.</div>
+  <div class="ans frag">✔ x-intercepts 2 and 4 · axis x = 3 · TP (3, −1) minimum · y-intercept 8</div>`},
+ {h:'',b:exset('7C',['Factorise → intercepts → axis → TP → sketch, every time in that order','Show the null factor law line in your working','Say it: “(x − 4)(x + 2) = 0, so x = 4 or x = −2.”'])}
+]},
+/* ===== L5 7C+ ===== */
+{code:'7C · Term 3 Week 6 · Lesson 6',nm:'Factorisation sketching — consolidation',menu:['7C+','Factorisation — harder cases','common factor, non-monic'],
+ slides:[
+ title('LESSON 5 — SECTION 7C (CONSOLIDATION)','Harder factorising cases',['sketch when there is a common factor','sketch non-monic quadratics','find and fix common sketching errors']),
+ {h:'Worked example 4 — common factor',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = 2x² − 8x.</div></div>
+  <div class="center">${graf({xr:[-1.5,5.5],yr:[-9.5,6],curves:[{f:x=>2*x*x-8*x}],vlines:[[2,'x = 2']],marks:[[2,-8,'TP (2, −8)',8,18],[0,0,'(0, 0)',-46,-8],[4,0,'(4, 0)']]})}</div></div>`+steps([
+  `<b>Factorise:</b> y = 2x(x − 4) — take out the common factor 2x.`,
+  `<b>x-intercepts:</b> 2x = 0 or x − 4 = 0 → x = 0 and x = 4. <span class="say">(the y-intercept is also 0 here!)</span>`,
+  `<b>Axis:</b> midpoint → x = 2.`,
+  `<b>TP:</b> y = 2(4) − 16 = −8 → (2, −8).`])},
+ {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error — talk with a partner</span>A student sketching y = (x − 3)(x + 1) wrote: “x-intercepts at x = −3 and x = 1.”</div>
+  <div class="ans frag">✔ Signs flipped! (x − 3) = 0 gives x = <b>+3</b>; (x + 1) = 0 gives x = <b>−1</b>. The bracket sign and the root sign are always opposite.</div>
+  <div class="frame frag">Check frame: “If the bracket is (x − 3), the intercept is x = <b>3</b>, because 3 − 3 = 0.”</div>`},
+ {h:'',b:exset('7C (finish)',['Finish 7C including common-factor and non-monic questions','Problem-solving: match 4 factorised rules to 4 sketches','Every sketch: 4 labels minimum (2 intercept types, axis, TP)'])}
+]},
+/* ===== L6 7D ===== */
+{code:'7D · Term 3 Week 6 · Lesson 7',nm:'Sketching by completing the square',menu:['7D','Completing the square','perfect square, complete the square'],
+ slides:[
+ title('LESSON 6 — SECTION 7D','Sketching by completing the square',['complete the square to reach vertex form','read the TP directly','sketch when the quadratic does not factorise nicely']),
+ {h:'🗣 New words first',b:vocab([
+  ['perfect square','PER-fekt skwair','an expression like (x + 2)² — a bracket squared'],
+  ['complete the square','—','rewrite x² + bx + c in the form (x + b/2)² + …'],
+  ['halve','hahv','divide by 2 — “halve the coefficient of x”'],
+  ['exact / surd form','—','leave answers with √ — do not round']])},
+ {h:'Key idea — the method',b:`<div class="center"><span class="formula">x² + bx = ${'( x + '}${fr('b','2')}${' )² − ('}${fr('b','2')}${')²'}</span></div>
+  <div class="key frag"><span class="kt">In words</span><b>Halve</b> the x-coefficient, write the bracket squared, then <b>subtract the square</b> of that half.</div>
+  <div class="key frag"><span class="kt">Why do it?</span>It turns any quadratic into vertex form → the TP appears instantly.</div>`},
+ {h:'Worked example 5',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Complete the square for y = x² + 4x + 1, state the TP, and sketch.</div></div>
+  <div class="center">${graf({xr:[-5.5,2],yr:[-4.5,6.5],curves:[{f:x=>x*x+4*x+1}],vlines:[[-2,'x = −2']],marks:[[-2,-3,'TP (−2, −3)',6,18],[0,1,'(0, 1)',8,-2]]})}</div></div>`+steps([
+  `<b>Halve 4 → 2:</b> y = (x + 2)² − 2² + 1`,
+  `<b>Simplify:</b> y = (x + 2)² − 3`,
+  `<b>TP:</b> (−2, −3), minimum. Axis x = −2.`,
+  `<b>y-intercept:</b> x = 0 → y = 1. Sketch and label.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Complete the square for y = x² − 6x + 7 and state the turning point.</div></div>
+  <div class="center">${graf({xr:[-0.6,6.6],yr:[-3.2,8],curves:[{f:x=>x*x-6*x+7,col:'#2266aa'}],vlines:[[3,'']],marks:[[3,-2,'TP?',8,16],[0,7,'(0, 7)',8,2]]})}</div></div>
+  <div class="hint frag">Hint: halve −6 → −3. y = (x − 3)² − 9 + 7.</div>
+  <div class="ans frag">✔ y = (x − 3)² − 2 → TP (3, −2), minimum</div>`},
+ {h:'',b:exset('7D',['Complete the square first, then sketch','Watch the sign: halving −6 gives −3, and (x − 3)², not (x + 3)²','Frame: “I halve b, square it, and subtract it.”'])}
+]},
+/* ===== L7 7D+ ===== */
+{code:'7D · Term 3 Week 6 · Lesson 8',nm:'Completing the square — x-intercepts in exact form',menu:['7D+','Exact x-intercepts (surds)','surd, exact form, ±'],
+ slides:[
+ title('LESSON 7 — SECTION 7D (CONSOLIDATION)','x-intercepts in exact (surd) form',['solve (x + h)² = c using ± square roots','give x-intercepts in exact surd form','sketch with exact labels']),
+ {h:'Key idea — solving from vertex form',b:`<div class="key"><span class="kt">Key idea</span>From y = (x + 2)² − 3, the x-intercepts solve (x + 2)² = 3, so:<br><br>
+  <span class="formula">x + 2 = ±√3 &nbsp;→&nbsp; x = −2 ± √3</span></div>
+  <div class="key frag"><span class="kt">Remember ±</span>A square has <b>two</b> square roots — forgetting the negative root loses one intercept. (Surds: Chapter 4!)</div>`},
+ {h:'Worked example 6',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the exact x-intercepts of y = (x + 2)² − 3.</div></div>
+  <div class="center">${graf({xr:[-5.5,2],yr:[-4,5.5],curves:[{f:x=>(x+2)*(x+2)-3}],marks:[[-2,-3,'TP (−2, −3)',4,18],[-3.732,0,'x = −2−√3',-30,-10],[-0.268,0,'x = −2+√3',-8,-10]]})}</div></div>`+steps([
+  `<b>Set y = 0:</b> (x + 2)² − 3 = 0`,
+  `<b>Isolate the square:</b> (x + 2)² = 3`,
+  `<b>± square root:</b> x + 2 = ±√3`,
+  `<b>Solve:</b> x = −2 + √3 ≈ −0.27 and x = −2 − √3 ≈ −3.73 — give the <b>exact</b> form in your answer.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the exact x-intercepts of y = (x − 1)² − 5.</div></div>
+  <div class="center">${graf({xr:[-2.8,5],yr:[-6,5.5],curves:[{f:x=>(x-1)*(x-1)-5,col:'#2266aa'}],marks:[[1,-5,'TP (1, −5)',6,18],[-1.236,0,'x = 1−√5',-40,-10],[3.236,0,'x = 1+√5',-14,-10]]})}</div></div>
+  <div class="hint frag">Hint: (x − 1)² = 5 → x − 1 = ±√5</div>
+  <div class="ans frag">✔ x = 1 + √5 and x = 1 − √5 (exact form — no rounding)</div>`},
+ {h:'',b:exset('7D (finish)',['Exact-form intercept questions; keep answers as surds','Simplify surds where possible: √12 = 2√3','Command word alert: “exact” means NO decimals'])}
+]},
+/* ===== L8 7E ===== */
+{code:'7E · Term 3 Week 7 · Lesson 9',nm:'Quadratic formula and the discriminant',menu:['7E','Formula & discriminant','discriminant Δ, quadratic formula'],
+ slides:[
+ title('LESSON 8 — SECTION 7E','Sketching using the quadratic formula and the discriminant',['use Δ = b² − 4ac to predict how many x-intercepts','use the quadratic formula for x-intercepts','find the TP from x = −b/(2a)']),
+ {h:'🗣 New words first',b:vocab([
+  ['quadratic formula','—','x = (−b ± √Δ) / 2a — works for ANY quadratic'],
+  ['discriminant Δ','dis-KRIM-in-ant, DEL-ta','Δ = b² − 4ac — the part under the square root'],
+  ['irrational','ir-RASH-on-al','a number that is not a fraction — most surds are irrational']])},
+ {h:'Key idea — Δ counts the x-intercepts',b:`<div class="cols">
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-3,6],curves:[{f:x=>x*x-2}],marks:[[-1.414,0,'',0,0],[1.414,0,'',0,0]]})}<p class="note">Δ &gt; 0 → <b>two</b> x-intercepts</p></div>
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-1.5,7.5],curves:[{f:x=>x*x,col:'#1e8449'}],marks:[[0,0,'',0,0]]})}<p class="note">Δ = 0 → <b>one</b> (just touches)</p></div>
+  <div class="center">${graf({w:250,h:200,xr:[-3,3],yr:[-1,8],curves:[{f:x=>x*x+2,col:'#2266aa'}]})}<p class="note">Δ &lt; 0 → <b>none</b></p></div></div>
+  <div class="key frag"><span class="kt">Formulas</span><span class="formula" style="font-size:1.2rem">Δ = b² − 4ac</span>
+  <span class="formula" style="font-size:1.2rem">x = ${fr('−b ± √Δ','2a')}</span>
+  <span class="formula" style="font-size:1.2rem">axis: x = ${fr('−b','2a')}</span></div>`},
+ {h:'Worked example 7',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = 2x² + 4x − 3 using the discriminant and quadratic formula. Round intercepts to 2 d.p.</div></div>
+  <div class="center">${graf({xr:[-4.2,2.4],yr:[-6,6],curves:[{f:x=>2*x*x+4*x-3}],vlines:[[-1,'x = −1']],marks:[[-1,-5,'TP (−1, −5)',6,18],[-2.58,0,'−2.58',-46,-8],[0.58,0,'0.58'],[0,-3,'(0, −3)',8,6]]})}</div></div>`+steps([
+  `<b>a = 2, b = 4, c = −3.</b> Δ = 4² − 4(2)(−3) = 16 + 24 = 40 &gt; 0 → two x-intercepts.`,
+  `<b>Formula:</b> x = ${fr('−4 ± √40','4')} → x ≈ 0.58 and x ≈ −2.58.`,
+  `<b>Axis:</b> x = −4 ÷ (2×2) = −1.`,
+  `<b>TP:</b> y = 2(1) − 4 − 3 = −5 → (−1, −5). y-intercept −3. Sketch and label.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Use Δ to decide how many x-intercepts y = x² + 2x + 5 has.</div></div>
+  <div class="center">${graf({xr:[-4.5,2.5],yr:[-1.5,12],curves:[{f:x=>x*x+2*x+5,col:'#2266aa'}],marks:[[-1,4,'TP (−1, 4)',6,-4]]})}</div></div>
+  <div class="hint frag">Hint: Δ = b² − 4ac with a = 1, b = 2, c = 5.</div>
+  <div class="ans frag">✔ Δ = 4 − 20 = −16 &lt; 0 → <b>no</b> x-intercepts — see the graph: the whole parabola sits above the x-axis.</div>`},
+ {h:'',b:exset('7E',['Δ first — say how many intercepts BEFORE using the formula','Formula questions: write a, b, c on the side before substituting','Careful with negatives: b = −4 → −b = 4'])}
+]},
+/* ===== L9 7E+ ===== */
+{code:'7E · Term 3 Week 7 · Lesson 10',nm:'Choosing the best sketching method',menu:['7E+','Which method? Mixed practice','choose, justify'],
+ slides:[
+ title('LESSON 9 — SECTION 7E (CONSOLIDATION)','Choosing the best sketching method',['choose factorising, completing the square, or the formula','justify my choice in words','sketch three quadratics three ways']),
+ {h:'Which method? Decision guide',b:`<table class="chk"><tr><th>What does the quadratic look like?</th><th>Best method</th></tr>
+  <tr><td>Factorises easily (nice whole numbers)</td><td>Factorise + null factor law (7C)</td></tr>
+  <tr><td>Already close to vertex form, or you need the TP</td><td>Complete the square (7D)</td></tr>
+  <tr><td>Ugly numbers, or you only need intercept COUNT</td><td>Discriminant + formula (7E)</td></tr></table>
+  <div class="frame frag">“I chose ___ because the quadratic ___.” — write this sentence for every question today.</div>`},
+ {h:'Trio challenge',b:`<div class="q"><span class="tag">In pairs — one quadratic, three methods</span>Sketch y = x² − 4x + 3 by (a) factorising, (b) completing the square, (c) the formula. Check you get the same graph!</div>
+  <div class="ans frag">✔ All three give: x-intercepts 1 and 3, axis x = 2, TP (2, −1), y-intercept 3.</div>
+  <div class="center frag">${graf({xr:[-0.6,4.8],yr:[-2.2,5],curves:[{f:x=>x*x-4*x+3}],vlines:[[2,'x = 2']],marks:[[2,-1,'TP (2, −1)',8,16],[1,0,'(1, 0)',-44,-8],[3,0,'(3, 0)'],[0,3,'(0, 3)',8,0]]})}</div>`},
+ {h:'',b:exset('7E (finish)',['Mixed sketching set — method is your choice, justification required','Timed pair: 10 minutes, 3 sketches, swap and mark','Add “which method” sentences to your glossary page'])}
+]},
+/* ===== L10 7F ===== */
+{code:'7F · Term 3 Week 7 · Lesson 11',nm:'Applications of parabolas',menu:['7F','Applications of parabolas','maximum height, launch, land, model'],
+ slides:[
+ title('LESSON 10 — SECTION 7F','Applications of parabolas',['translate a word problem into a quadratic model','find maximum height / greatest value from the TP','answer in words with units']),
+ {h:'🗣 New words first',b:vocab([
+  ['model','MOD-el','a rule (equation) that describes a real situation'],
+  ['launch / land','lawnch / land','when a ball leaves the ground (h = 0) and returns (h = 0)'],
+  ['maximum height','—','the h-value of the turning point'],
+  ['greatest / least value','—','command words: they mean “find the turning point”']])},
+ {h:'Worked example 8',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A ball is thrown so its height is h = −5t² + 20t (h metres, t seconds). Find when it lands and its maximum height.</div></div>
+  <div class="center">${graf({xr:[-0.5,4.7],yr:[-4,24],xlab:'t',ylab:'h',curves:[{f:t=>-5*t*t+20*t}],vlines:[[2,'t = 2']],marks:[[2,20,'max (2, 20)',6,-4],[0,0,'launch',-8,16],[4,0,'lands',4,16]]})}</div></div>`+steps([
+  `<b>Factorise:</b> h = −5t(t − 4) → h = 0 at t = 0 (launch) and t = 4 (lands).`,
+  `<b>Axis:</b> midpoint → t = 2.`,
+  `<b>Maximum height:</b> h = −5(4) + 40 = 20.`,
+  `<b>Answer in words:</b> “The ball lands after <b>4 seconds</b>; its maximum height is <b>20 m</b> at t = 2 s.”`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A bridge arch is modelled by y = −x² + 6x (y = height in m, x = metres along the base). How wide is the arch at the base, and how high is it?</div></div>
+  <div class="center">${graf({xr:[-0.8,7],yr:[-2,11],curves:[{f:x=>-x*x+6*x,col:'#2266aa'}],marks:[[3,9,'top?',6,-4],[0,0,'',0,0],[6,0,'',0,0]]})}</div></div>
+  <div class="hint frag">Hint: y = −x(x − 6). Roots give the base width; the TP gives the height.</div>
+  <div class="ans frag">✔ Base width <b>6 m</b> (from x = 0 to x = 6); maximum height <b>9 m</b> at x = 3. Answer in words with units!</div>`},
+ {h:'Word problem routine',b:`<div class="key"><span class="kt">Every application — 4 steps</span>
+  1️⃣ <b>Read</b> — circle numbers, underline the question.<br>2️⃣ <b>Identify</b> — what do the letters mean? (h = height, t = time)<br>
+  3️⃣ <b>Solve</b> — intercepts for start/end, TP for max/min.<br>4️⃣ <b>Answer in words</b>, with units.</div>
+  <div class="frame frag">“The maximum ___ is ___ , when ___ = ___ .”</div>`},
+ {h:'',b:exset('7F',['Application problems — a labelled sketch for every question','Answers in full sentences with units','Highlight the command words: greatest, least, maximum, when'])}
+]},
+/* ===== L11 7G ===== */
+{code:'7G (10A) · Term 3 Week 7 · Lesson 12',nm:'Intersection of lines and parabolas',menu:['7G','Lines and parabolas (10A)','intersect, tangent, simultaneous'],
+ slides:[
+ title('LESSON 11 — SECTION 7G (10A)','Intersection of lines and parabolas',['solve a line and a parabola simultaneously','use Δ to count intersection points','recognise a tangent line']),
+ {h:'🗣 New words first',b:vocab([
+  ['intersect','in-ter-SEKT','cross — where two graphs meet'],
+  ['point of intersection','—','the (x, y) where they meet — it satisfies BOTH rules'],
+  ['tangent','TAN-jent','a line touching the curve at exactly one point'],
+  ['simultaneously','sy-mul-TAY-nee-us-lee','both equations true at the same time (Chapter 1!)']])},
+ {h:'Key idea — substitute, then Δ',b:`<div class="key"><span class="kt">Method</span>Set the rules equal (substitute the line into the parabola) → rearrange to ax² + bx + c = 0 → solve.</div>
+  <div class="key frag"><span class="kt">Δ counts the crossings</span>Δ &gt; 0 → line cuts the parabola <b>twice</b> · Δ = 0 → <b>tangent</b> (one touch) · Δ &lt; 0 → line <b>misses</b>.</div>`},
+ {h:'Worked example 9',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find where y = x² intersects y = x + 2.</div></div>
+  <div class="center">${graf({xr:[-3.2,3.6],yr:[-2,8.5],curves:[{f:x=>x*x},{f:x=>x+2,col:'#2266aa',lab:'y = x+2',lx:2.2}],marks:[[2,4,'(2, 4)',8,-4],[-1,1,'(−1, 1)',-54,-4]]})}</div></div>`+steps([
+  `<b>Set equal:</b> x² = x + 2`,
+  `<b>Rearrange:</b> x² − x − 2 = 0`,
+  `<b>Factorise:</b> (x − 2)(x + 1) = 0 → x = 2 or x = −1`,
+  `<b>y-values from the line:</b> (2, 4) and (−1, 1). Two points of intersection.`])},
+ {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Show that y = 2x is a tangent to y = x² + 1, and find the point of contact.</div></div>
+  <div class="center">${graf({xr:[-2.4,3.2],yr:[-1.5,7.5],curves:[{f:x=>x*x+1},{f:x=>2*x,col:'#1e8449',lab:'y = 2x',lx:2.4}],marks:[[1,2,'touch?',8,-4]]})}</div></div>
+  <div class="hint frag">Hint: x² + 1 = 2x → x² − 2x + 1 = 0. What is Δ?</div>
+  <div class="ans frag">✔ Δ = 4 − 4 = 0 → exactly one solution: (x − 1)² = 0, x = 1 → tangent at <b>(1, 2)</b>.</div>`},
+ {h:'',b:exset('7G',['Intersection questions: substitute → rearrange → Δ → solve','State the number of intersections BEFORE solving','Tangent questions: show Δ = 0 clearly — that IS the proof'])}
+]},
+/* ===== L12 7H ===== */
+{code:'7H (10A) · Term 3 Week 8 · Lesson 13',nm:'Rates of change',menu:['7H','Rates of change (10A)','rate of change, gradient, chord'],
+ slides:[
+ title('LESSON 12 — SECTION 7H (10A)','Rates of change',['explain what a rate of change measures','calculate an average rate of change from a graph or rule','interpret positive, negative and zero rates']),
+ {h:'🗣 New words first',b:vocab([
+  ['rate of change','—','how fast y changes as x changes'],
+  ['average rate of change','—','the gradient of the straight line (chord) between two points'],
+  ['chord','kord','a straight line joining two points on a curve'],
+  ['per','per','for each — “metres per second” = metres for each second']])},
+ {h:'Key idea — gradient of the chord',b:`<div class="cols"><div>${graf({xr:[-0.6,3.8],yr:[-1,10],curves:[{f:x=>x*x},{f:x=>4*x-3,col:'#2266aa',dash:1}],marks:[[1,1,'(1, 1)',-48,4],[3,9,'(3, 9)',8,0]]})}</div><div>
+  <div class="key"><span class="kt">Key idea</span><span class="formula" style="font-size:1.2rem">average rate = ${fr('change in y','change in x')}</span></div>
+  <div class="key frag"><span class="kt">On a curve</span>the average rate between two points = the <b>gradient of the chord</b> (dashed line) joining them.</div></div></div>`},
+ {h:'Worked example 10',b:`<div class="q"><span class="tag">Worked example</span>For y = x², find the average rate of change from x = 1 to x = 3.</div>`+steps([
+  `<b>y-values:</b> at x = 1, y = 1; at x = 3, y = 9.`,
+  `<b>Change in y:</b> 9 − 1 = 8. <b>Change in x:</b> 3 − 1 = 2.`,
+  `<b>Average rate:</b> 8 ÷ 2 = <b>4</b> — y increases by 4 for each 1 that x increases (on average).`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>For y = x² − 2x, find the average rate of change from x = 0 to x = 2. What does your answer mean?</div>
+  <div class="hint frag">Hint: y(0) = 0 and y(2) = 0.</div>
+  <div class="ans frag">✔ (0 − 0) ÷ 2 = <b>0</b>. The curve went down then up — the overall (average) change is zero.</div>`},
+ {h:'',b:exset('7H',['Average rate questions from rules, tables and graphs','Include units in every rate: km/h, m/s, $/day','Frame: “Between x = ___ and x = ___, y changes by ___ per unit.”'])}
+]},
+/* ===== L13 7I ===== */
+{code:'7I (10A) · Term 3 Week 8 · Lesson 14',nm:'Average and instantaneous rates of change',menu:['7I','Instantaneous rates (10A)','instantaneous, tangent, approach'],
+ slides:[
+ title('LESSON 13 — SECTION 7I (10A)','Average and instantaneous rates of change',['explain the difference between average and instantaneous rate','estimate an instantaneous rate by shrinking the interval','connect the instantaneous rate to the tangent line']),
+ {h:'🗣 New words first',b:vocab([
+  ['instantaneous','in-stan-TAY-nee-us','at one exact moment — like the speedo in a car'],
+  ['approach','a-PROHCH','get closer and closer to a value'],
+  ['interval','IN-ter-val','the gap between two x-values'],
+  ['tangent line','TAN-jent','the line that touches the curve at one point — its gradient IS the instantaneous rate']])},
+ {h:'Key idea — shrink the interval',b:`<div class="cols"><div>${graf({xr:[-0.4,3],yr:[-1,7.5],curves:[{f:x=>x*x},{f:x=>3*x-2,col:'#2266aa',dash:1},{f:x=>2*x-1,col:'#1e8449'}],marks:[[1,1,'(1, 1)',-46,10]]})}</div><div>
+  <div class="key"><span class="kt">Key idea</span>Make the second point slide toward the first: the <span style="color:#2266aa"><b>chords</b></span> (dashed) tilt toward the <span style="color:#1e8449"><b>tangent</b></span> (solid green).</div>
+  <div class="key frag"><span class="kt">So…</span>instantaneous rate at a point = gradient of the tangent there = the value the average rates <b>approach</b>.</div></div></div>`},
+ {h:'Worked example 11',b:`<div class="q"><span class="tag">Worked example</span>Estimate the instantaneous rate of change of y = x² at x = 1.</div>`+steps([
+  `<b>Interval [1, 2]:</b> rate = (4 − 1) ÷ 1 = 3`,
+  `<b>Interval [1, 1.5]:</b> rate = (2.25 − 1) ÷ 0.5 = 2.5`,
+  `<b>Interval [1, 1.1]:</b> rate = (1.21 − 1) ÷ 0.1 = 2.1`,
+  `<b>The rates approach 2</b> → instantaneous rate at x = 1 is <b>2</b>.`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Using the same shrinking method, estimate the instantaneous rate of change of y = x² at x = 2. Try [2, 2.5] and [2, 2.1].</div>
+  <div class="hint frag">Hint: (6.25 − 4) ÷ 0.5 = ? and (4.41 − 4) ÷ 0.1 = ?</div>
+  <div class="ans frag">✔ 4.5, then 4.1 → the rates approach <b>4</b>. (Pattern: at x = a on y = x², the rate is 2a!)</div>`},
+ {h:'',b:exset('7I',['Average vs instantaneous — say WHICH one each question wants','Table questions: shrink the interval step by step','Extension: find the “rate ≈ 2a” pattern yourself for y = x²'])}
+]},
+/* ===== L14 7J ===== */
+{code:'7J · Term 3 Week 8 · Lesson 15',nm:'Direct variation and inverse variation',menu:['7J','Direct & inverse variation','proportional, k, hyperbola'],
+ slides:[
+ title('LESSON 14 — SECTION 7J','Direct variation and inverse variation',['recognise y ∝ x and y ∝ 1/x','find the constant of proportionality k','solve variation problems']),
+ {h:'🗣 New words first',b:vocab([
+  ['varies directly / y ∝ x','VAIR-eez','y = kx — double x and y doubles too'],
+  ['varies inversely / y ∝ 1/x','IN-verse-lee','y = k/x — double x and y halves'],
+  ['constant of proportionality k','—','the fixed number connecting x and y'],
+  ['hyperbola','hy-PER-bo-la','the curved graph of y = k/x']])},
+ {h:'Key idea — two shapes to know',b:`<div class="cols">
+  <div class="center">${graf({w:270,h:210,xr:[-0.4,5],yr:[-1,10],curves:[{f:x=>2*x,lab:'y = kx',lx:3.6}]})}<p class="note">direct: straight line through (0, 0)</p></div>
+  <div class="center">${graf({w:270,h:210,xr:[0.2,8],yr:[-0.5,10],curves:[{f:x=>8/x,col:'#2266aa',lab:'y = k/x',lx:4}]})}<p class="note">inverse: hyperbola (never touches the axes)</p></div></div>
+  <div class="key frag"><span class="kt">Routine</span>1️⃣ Write the rule (y = kx or y = k/x) · 2️⃣ substitute the given pair to find k · 3️⃣ use the rule to answer.</div>`},
+ {h:'Worked example 12',b:`<div class="q"><span class="tag">Worked example</span>y varies directly with x, and y = 12 when x = 3. Find y when x = 7.</div>`+steps([
+  `<b>Rule:</b> y = kx`,
+  `<b>Find k:</b> 12 = k × 3 → k = 4`,
+  `<b>New rule:</b> y = 4x`,
+  `<b>Answer:</b> y = 4 × 7 = <b>28</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>y varies inversely with x, and y = 5 when x = 4. Find y when x = 10.</div>
+  <div class="hint frag">Hint: y = k/x → 5 = k/4 → k = 20.</div>
+  <div class="ans frag">✔ k = 20, so y = 20/x → y = 20 ÷ 10 = <b>2</b></div>`},
+ {h:'',b:exset('7J',['Direct first, then inverse; find k before anything else','Real contexts: speed–time, workers–days, cost–quantity','Frame: “When x doubles, y ___, so this is ___ variation.”'])}
+]},
+/* ===== L15 consolidation ===== */
+{code:'Term 3 Week 8 · Lesson 16',nm:'Consolidation — mixed sketching and applications',menu:['★','Consolidation: mixed problems','choose the method and justify'],cls:'rev',
+ slides:[
+ title('LESSON 15 — CONSOLIDATION','Mixed sketching and applications',['choose the right method without prompting','produce fully labelled sketches at speed','explain my method to a partner']),
+ {h:'Which tool? Decision guide',b:`<table class="chk"><tr><th>The question gives…</th><th>Tool</th></tr>
+  <tr><td>Vertex form y = a(x − h)² + k</td><td>Read TP directly (7B)</td></tr>
+  <tr><td>A quadratic that factorises</td><td>Null factor law (7C)</td></tr>
+  <tr><td>“Find the TP” but it won't factorise</td><td>Complete the square (7D)</td></tr>
+  <tr><td>“How many x-intercepts?” / ugly numbers</td><td>Δ and the formula (7E)</td></tr>
+  <tr><td>A real situation (ball, arch, profit)</td><td>Model + TP/intercepts (7F)</td></tr>
+  <tr><td>A line AND a parabola</td><td>Substitute, then Δ (7G)</td></tr></table>
+  <div class="frame frag">“I know ___ and I want ___, so I will use ___.”</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🧭 Choose your path (work in pairs)</h3><ul>
+  <li><b>Path 1 — Build:</b> Progress quiz 7A–7E with teacher support</li>
+  <li><b>Path 2 — Strengthen:</b> Chapter 7 “Applications and problem-solving” tasks</li>
+  <li><b>Path 3 — Challenge:</b> Problem-solving and reasoning questions from 7G–7I</li></ul>
+  <p class="note">Every path: one full labelled sketch on the mini-whiteboard to share.</p></div>`},
+ {h:'Exit ticket',b:`<div class="q"><span class="tag">Before you leave</span>Complete the frames:</div>
+  <div class="frame">1. The sketching method I am best at is <b>___</b>.</div>
+  <div class="frame">2. The method I need more practice with is <b>___</b>.</div>
+  <div class="frame">3. One new word from this chapter is <b>___</b>, which means <b>___</b>.</div>`}
+]},
+/* ===== L16 modelling ===== */
+{code:'Term 3 Week 9 · Lesson 17',nm:'Applications and modelling with quadratic functions',menu:['★','Modelling task','model, assumption, interpret'],cls:'rev',
+ slides:[
+ title('LESSON 16 — MODELLING','Applications and modelling',['build a quadratic model from a real situation','use the model to answer questions','say what the model assumes (and where it breaks)']),
+ {h:'Modelling task — the netball shot',b:`<div class="cols"><div><div class="q"><span class="tag">Task (pairs)</span>A netball leaves a shooter's hands at height 2 m and follows h = −x² + 4x + 2 (h = height in m, x = horizontal distance in m).</div>
+  <div class="key">a) How high is the ball at its peak, and how far along?<br>b) The ring is 3.05 m high, 4 m away. Does the model say the shot passes the ring height there?<br>c) What does the model ignore? (air, spin, the ring itself…)</div></div>
+  <div class="center">${graf({xr:[-0.5,5],yr:[-1,7.5],xlab:'x',ylab:'h',curves:[{f:x=>-x*x+4*x+2}],marks:[[2,6,'peak (2, 6)',6,-4],[0,2,'(0, 2)',-8,18],[4,2,'x = 4',6,4]]})}</div></div>
+  <div class="ans frag">✔ a) peak 6 m at x = 2 · b) at x = 4, h = 2 m &lt; 3.05 m — the model says the ball is below ring height there · c) real shots have air resistance, spin, and the ball is not a point!</div>`},
+ {h:'Writing up a model',b:`<div class="key"><span class="kt">Structure (use these headings)</span><b>Define</b> the variables → <b>State</b> the rule → <b>Solve</b> with labelled sketch → <b>Interpret</b> in words → <b>Limitations</b> (one sentence).</div>
+  <div class="frame frag">“The model predicts ___, but in real life ___.”</div>`},
+ {h:'',b:exset('Chapter 7 modelling tasks',['Complete the write-up with the five headings','Extension: adjust the rule so the shot passes through (4, 3.05)','This style of reasoning appears in the CAT extended question'])}
+]},
+/* ===== L17 revision ===== */
+{code:'Term 3 Week 9 · Lesson 18',nm:'Revision — Chapter 7 review',menu:['★','Revision: Chapter 7 review','all chapter vocabulary'],cls:'rev',
+ slides:[
+ title('LESSON 17 — REVISION','Chapter 7 review',['check every checklist item for Chapter 7','complete review questions at my level','build my personal fix-it list for CAT 2']),
+ {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>7A: name and read parabola features</td><td></td><td></td><td></td></tr>
+  <tr><td>7B: sketch from vertex form y = a(x − h)² + k</td><td></td><td></td><td></td></tr>
+  <tr><td>7C: sketch by factorising (null factor law)</td><td></td><td></td><td></td></tr>
+  <tr><td>7D: complete the square; exact intercepts</td><td></td><td></td><td></td></tr>
+  <tr><td>7E: use Δ and the quadratic formula</td><td></td><td></td><td></td></tr>
+  <tr><td>7F: solve application problems (max/min)</td><td></td><td></td><td></td></tr>
+  <tr><td>7G: intersect lines and parabolas (10A)</td><td></td><td></td><td></td></tr>
+  <tr><td>7H/7I: average &amp; instantaneous rates (10A)</td><td></td><td></td><td></td></tr>
+  <tr><td>7J: direct and inverse variation</td><td></td><td></td><td></td></tr></table>
+  <p class="note">😟 rows → fix-it list → do those review questions first.</p>`},
+ {h:'Vocabulary quick quiz',b:`<div class="q"><span class="tag">Match the word to the meaning (with a partner)</span></div>
+  <div class="cols"><div class="key">1. turning point<br>2. discriminant<br>3. null factor law<br>4. tangent<br>5. axis of symmetry<br>6. vertex form</div>
+  <div class="key">A. b² − 4ac<br>B. line touching a curve at one point<br>C. the highest/lowest point<br>D. y = a(x − h)² + k<br>E. if a product is 0, one factor is 0<br>F. mirror line through the TP</div></div>
+  <div class="ans frag">✔ 1-C, 2-A, 3-E, 4-B, 5-F, 6-D</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>📘 Chapter 7 review</h3><ul>
+  <li>Chapter checklist with success criteria — tick honestly</li>
+  <li>Short-answer review questions: fluency set</li>
+  <li>10A students: include extended-response questions (7G–7I)</li>
+  <li>Add every 😟 topic to your fix-it list for the practice CAT</li></ul></div>`}
+]},
+/* ===== L18 practice CAT ===== */
+{code:'Term 3 Week 9 · Lesson 19',nm:'CAT revision — practice under timed conditions',menu:['★','Practice CAT (timed)','command words: sketch, label, hence, exact'],cls:'test',
+ slides:[
+ title('LESSON 18 — CAT REVISION','Practice CAT under timed conditions',['complete a practice CAT in test conditions','manage time (1 mark ≈ 1 minute)','decode command words before answering']),
+ {h:'Command words for this CAT',b:`<table class="vocab"><tr><th>Command word</th><th>It means…</th></tr>
+  <tr><td class="t">Sketch</td><td>draw the shape with TP, axis and intercepts labelled — not perfect scale</td></tr>
+  <tr><td class="t">Label</td><td>write the coordinates next to each feature</td></tr>
+  <tr><td class="t">Exact</td><td>surds and fractions — do NOT round</td></tr>
+  <tr><td class="t">Hence</td><td>use the answer you just found (e.g. “hence sketch…”)</td></tr>
+  <tr><td class="t">Show that</td><td>the answer is given — write ALL steps to reach it</td></tr>
+  <tr><td class="t">State</td><td>write the answer — no working needed</td></tr></table>`},
+ {h:'Test technique',b:`<div class="key"><span class="kt">Sketch marks</span>Most sketch questions give 1 mark per labelled feature. An unlabelled perfect curve scores less than a rough curve with 4 labels!</div>
+  <div class="key frag"><span class="kt">Never leave blank</span>Write a, b, c and Δ even if you can't finish — method marks are real.</div>
+  <div class="key frag"><span class="kt">Check</span>TP y-value: substitute back. Intercept signs: bracket sign is opposite.</div>`},
+ {h:'',b:`<div class="exset"><h3>⏱ Practice CAT (silent, timed)</h3><ul>
+  <li>Complete the practice paper (faculty Chapter Tests folder)</li>
+  <li>Test conditions — bilingual dictionary permitted (check with your teacher)</li>
+  <li>Finished early? Count the labels on every sketch: 4 minimum</li></ul></div>`}
+]},
+/* ===== L19 clinic ===== */
+{code:'Term 3 Week 9 · Lesson 20',nm:'CAT feedback clinic',menu:['★','Feedback clinic / target weak areas','error analysis, goal'],cls:'test',
+ slides:[
+ title('LESSON 19 — FEEDBACK CLINIC','Fix errors, target weak areas',['find and name my errors from the practice CAT','redo every wrong question','set one goal for CAT 2']),
+ {h:'Error analysis',b:`<div class="key"><span class="kt">Name your error type</span>
+  🔢 <b>Calculation</b> — sign slip, rounding too early<br>
+  📖 <b>Reading</b> — missed “exact”, “label”, or units<br>
+  🧭 <b>Method</b> — wrong sketching method for the question<br>
+  ✍️ <b>Working</b> — right idea, steps or labels missing</div>
+  <div class="frame frag">“My error in question ___ was a <b>___</b> error. Next time I will <b>___</b>.”</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>🛠 Clinic time</h3><ul>
+  <li>Redo every wrong question — full working and full labels</li>
+  <li>Pair up: explain one fixed question using the sentence frames</li>
+  <li>Targeted questions from your fix-it list sections</li>
+  <li>Write your one goal for CAT 2 on the exit ticket</li></ul>
+  <p class="note">CAT 2 — Unit 6 Quadratic Functions is next lesson (Week 10). You are ready. 💪</p></div>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 3 · Week 5 — Parabolas and transformations (after CAT 1)',[0,1,2]],
+             ['Term 3 · Week 6 — Sketching: factorising and completing the square',[3,4,5,6]],
+             ['Term 3 · Week 7 — Formula, discriminant, applications, intersections',[7,8,9,10]],
+             ['Term 3 · Week 8 — Rates of change, variation, consolidation',[11,12,13,14]],
+             ['Term 3 · Week 9 — Model, revise, prepare for CAT 2',[15,16,17,18]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--purp);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Chapter 7 — Quadratic Functions</h1>
+  <p class="sub">10 Methods · Unit 6 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 3 Weeks 5–9 · CAT 2 in Week 10<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

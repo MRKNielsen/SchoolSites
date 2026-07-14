@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indices &amp; Surds — Ch 3A–3E, 4A–4D | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#a61e4d; --main2:#7d1639;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main2);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#faeaef;border:2px solid var(--main);border-radius:10px;padding:12px 20px;display:inline-block;
+           font-size:1.3rem;margin:8px 8px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main2);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+  sup{font-size:.72em}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+
+/* powers-of-ten scale */
+const pow10=`<svg viewBox="0 0 560 110" width="540">
+<line x1="20" y1="55" x2="540" y2="55" stroke="#555" stroke-width="2"/>
+${[0,1,2,3,4,5].map(i=>`<line x1="${40+i*96}" y1="45" x2="${40+i*96}" y2="65" stroke="#555" stroke-width="2"/>
+<text x="${24+i*96}" y="86" font-size="13" fill="#1F4E79" font-weight="bold">${['0.001','0.1','1','10','1000','100000'][i]}</text>
+<text x="${28+i*96}" y="34" font-size="12" fill="#a61e4d">10${['⁻³','⁻¹','⁰','¹','³','⁵'][i]}</text>`).join('')}
+<text x="150" y="12" font-size="13" fill="#c05621" font-weight="bold">big numbers → positive powers · small numbers → negative powers</text></svg>`;
+/* unit right triangle with hypotenuse √2 */
+const rt2=`<svg viewBox="0 0 300 230" width="270"><polygon points="50,195 230,195 230,45" fill="#faeaef" stroke="#a61e4d" stroke-width="3"/>
+<rect x="212" y="177" width="18" height="18" fill="none" stroke="#a61e4d" stroke-width="2"/>
+<text x="132" y="216" font-size="17" fill="#1F4E79" font-weight="bold">1</text>
+<text x="240" y="126" font-size="17" fill="#1F4E79" font-weight="bold">1</text>
+<text x="106" y="106" font-size="18" fill="#a61e4d" font-weight="bold" transform="rotate(-40 106 106)">√2 = 1.41421356…</text></svg>`;
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* ===== L1 3A ===== */
+{code:'3A · Term 1 Week 6 · Lesson 1',nm:'Review of index laws',menu:['3A','Review of index laws','index, base, power'],
+ slides:[
+ title('LESSON 1 — SECTION 3A','Review of index laws',['name the base and the index','use the three main index laws','simplify expressions with several variables']),
+ {h:'🗣 New words first',b:vocab([
+  ['index / indices','IN-dex / IN-di-seez','the small raised number: the 5 in 3⁵ (plural: indices)'],
+  ['base','bayss','the big number being multiplied: the 3 in 3⁵'],
+  ['power','POW-er','another word for index; 3⁵ is “3 to the power 5”'],
+  ['simplify','SIM-pli-fy','write with each base appearing once']])},
+ {h:'Key idea — the index laws',b:`<div class="center">
+  <span class="formula">aᵐ × aⁿ = aᵐ⁺ⁿ</span>
+  <span class="formula">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</span>
+  <span class="formula">(aᵐ)ⁿ = aᵐⁿ</span></div>
+  <div class="center frag"><span class="formula">a⁰ = 1</span><span class="formula">(ab)ᵐ = aᵐbᵐ</span><span class="formula">(${fr('a','b')})ᵐ = ${fr('aᵐ','bᵐ')}</span></div>
+  <div class="key frag"><span class="kt">In words</span>multiply → <b>add</b> the indices · divide → <b>subtract</b> · power of a power → <b>multiply</b>. Same base only!</div>`},
+ {h:'Worked example 1',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) 3x²y × 4x³y² &nbsp; b) (2m³)⁴ ÷ 8m⁷</div>`+steps([
+  `<b>a) Numbers first:</b> 3 × 4 = 12; then add indices: x²⁺³ = x⁵, y¹⁺² = y³`,
+  `<b>Answer:</b> 12x⁵y³`,
+  `<b>b) Power of a power:</b> (2m³)⁴ = 2⁴m¹² = 16m¹²`,
+  `<b>Divide:</b> 16m¹² ÷ 8m⁷ = 2m⁵`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) 5a⁴b × 2ab³ &nbsp; b) (3k²)³ ÷ 9k⁴</div>
+  <div class="hint frag">Hint: b) (3k²)³ = 27k⁶.</div>
+  <div class="ans frag">✔ a) 10a⁵b⁴ &nbsp; b) 27k⁶ ÷ 9k⁴ = 3k²</div>`},
+ {h:'',b:exset('3A',['Fluency: one law at a time, then mixed','Write which law you used next to each answer','Careful: 2x⁰ = 2 × 1 = 2, but (2x)⁰ = 1'])}
+]},
+/* ===== L2 3B ===== */
+{code:'3B · Term 1 Week 6 · Lesson 2',nm:'Negative indices',menu:['3B','Negative indices','reciprocal, positive index form'],
+ slides:[
+ title('LESSON 2 — SECTION 3B','Negative indices',['explain what a negative index means','rewrite with positive indices','evaluate numbers with negative indices']),
+ {h:'🗣 New words first',b:vocab([
+  ['negative index','—','a⁻ⁿ means “1 over aⁿ” — NOT a negative number!'],
+  ['reciprocal','re-SIP-ro-kal','1 over the number: the reciprocal of 4 is ¼'],
+  ['positive index form','—','written with no negative indices']])},
+ {h:'Key idea — negative means reciprocal',b:`<div class="center">
+  <span class="formula">a⁻ⁿ = ${fr('1','aⁿ')}</span>
+  <span class="formula">${fr('1','a⁻ⁿ')} = aⁿ</span></div>
+  <div class="key frag"><span class="kt">Why?</span>Keep the divide-law pattern: a² ÷ a³ = a⁻¹, and also = ${fr('a×a','a×a×a')} = ${fr('1','a')}. So a⁻¹ = ${fr('1','a')} ✔</div>
+  <div class="key frag"><span class="kt">Careful</span>5⁻² = ${fr('1','25')} — positive! The minus moves the term downstairs; it does not make it negative.</div>`},
+ {h:'Worked example 2',b:`<div class="q"><span class="tag">Worked example</span>a) Write 4x⁻³ and ${fr('2','y⁻²')} with positive indices. &nbsp; b) Evaluate 5⁻².</div>`+steps([
+  `<b>a)</b> Only the x has the negative index: 4x⁻³ = ${fr('4','x³')} <span class="say">(the 4 stays upstairs!)</span>`,
+  `<b>Downstairs negative comes up:</b> ${fr('2','y⁻²')} = 2y²`,
+  `<b>b)</b> 5⁻² = ${fr('1','5²')} = ${fr('1','25')}`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>a) Evaluate 3⁻³. &nbsp; b) Write 7x⁻¹y² with positive indices.</div>
+  <div class="hint frag">Hint: only x has the negative index in b).</div>
+  <div class="ans frag">✔ a) ${fr('1','27')} &nbsp; b) ${fr('7y²','x')}</div>`},
+ {h:'',b:exset('3B',['Rewrite, then evaluate — two question types','Underline WHICH letter owns the negative index','Frame: “The negative index moves it to the ___ of the fraction.”'])}
+]},
+/* ===== L3 3C ===== */
+{code:'3C · Term 1 Week 6 · Lesson 3',nm:'Scientific notation',menu:['3C','Scientific notation','a × 10ⁿ, significant figures'],
+ slides:[
+ title('LESSON 3 — SECTION 3C','Scientific notation',['write big and small numbers as a × 10ⁿ','convert back to ordinary numbers','multiply and divide in scientific notation']),
+ {h:'🗣 New words first',b:vocab([
+  ['scientific notation','—','a × 10ⁿ where 1 ≤ a &lt; 10'],
+  ['significant figures (s.f.)','sig-NIF-i-kant','the meaningful digits: 3.84 has three'],
+  ['ordinary / basic numeral','OR-din-ree','the number written out in full']])},
+ {h:'Key idea — one digit before the point',b:`<div class="center">${pow10}</div>
+  <div class="key frag"><span class="kt">The form</span><span class="formula">a × 10ⁿ, &nbsp; 1 ≤ a &lt; 10</span> — exactly ONE non-zero digit before the decimal point.</div>
+  <div class="key frag"><span class="kt">Direction</span>384 000 → the point moves 5 left → 10⁵. &nbsp; 0.00062 → 4 right → 10⁻⁴.</div>`},
+ {h:'Worked example 3',b:`<div class="q"><span class="tag">Worked example</span>a) Write 384 000 and 0.00062 in scientific notation. &nbsp; b) Calculate (3 × 10⁸) × (2 × 10⁻³).</div>`+steps([
+  `<b>a)</b> 384 000 = 3.84 × 10⁵ <span class="say">(point moved 5 places left)</span>`,
+  `<b>Small number:</b> 0.00062 = 6.2 × 10⁻⁴ <span class="say">(4 places right → negative)</span>`,
+  `<b>b) Numbers together, powers together:</b> 3 × 2 = 6; 10⁸ × 10⁻³ = 10⁵`,
+  `<b>Answer:</b> 6 × 10⁵`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Write in scientific notation: a) 5 100 000 &nbsp; b) 0.0000403</div>
+  <div class="hint frag">Hint: b) point moves 5 places right.</div>
+  <div class="ans frag">✔ a) 5.1 × 10⁶ &nbsp; b) 4.03 × 10⁻⁵</div>`},
+ {h:'',b:exset('3C',['Both directions: to and from scientific notation','Calculator: find the ×10ˣ (EXP/EE) button','Real data: distances in space, sizes of atoms — units matter'])}
+]},
+/* ===== L4 3D ===== */
+{code:'3D (10A) · Term 1 Week 6 · Lesson 4',nm:'Fractional indices',menu:['3D','Fractional indices (10A)','root as a power'],
+ slides:[
+ title('LESSON 4 — SECTION 3D (10A)','Fractional indices',['read a fractional index as a root','evaluate numbers with fractional indices','swap between root form and index form']),
+ {h:'🗣 New words first',b:vocab([
+  ['fractional index','frak-SHUN-al','a power that is a fraction: 8^(1/3)'],
+  ['square root √ / cube root ∛','—','the number that squares (cubes) to give yours'],
+  ['ⁿ√a','the n-th root of a','the number that gives a when raised to the power n']])},
+ {h:'Key idea — a root is a power',b:`<div class="center">
+  <span class="formula">a^${fr('1','n')} = ⁿ√a</span>
+  <span class="formula">a^${fr('m','n')} = (ⁿ√a)ᵐ</span></div>
+  <div class="key frag"><span class="kt">Why?</span>The laws demand it: (a^½)² = a¹ = a — so a^½ squares to a. That is exactly what √a does!</div>
+  <div class="key frag"><span class="kt">Order tip</span>For 16^(3/4): root FIRST (⁴√16 = 2), then power (2³ = 8). Small numbers, easy work.</div>`},
+ {h:'Worked example 4',b:`<div class="q"><span class="tag">Worked example</span>Evaluate: a) 8^(1/3) &nbsp; b) 16^(3/4) &nbsp; c) Write √(x⁵) in index form.</div>`+steps([
+  `<b>a)</b> 8^(1/3) = ∛8 = <b>2</b> <span class="say">(2 × 2 × 2 = 8)</span>`,
+  `<b>b) Root first:</b> ⁴√16 = 2, then 2³ = <b>8</b>`,
+  `<b>c)</b> √(x⁵) = x^(5/2) <span class="say">(root index goes on the bottom)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Evaluate: a) 27^(2/3) &nbsp; b) 25^(−1/2)</div>
+  <div class="hint frag">Hint: b) negative index first: 1 over 25^(1/2).</div>
+  <div class="ans frag">✔ a) (∛27)² = 3² = <b>9</b> &nbsp; b) ${fr('1','√25')} = ${fr('1','5')}</div>`},
+ {h:'',b:exset('3D',['Evaluate without a calculator — root first, then power','Swap between forms both directions','Combine: negative AND fractional indices together'])}
+]},
+/* ===== L5 3E ===== */
+{code:'3E · Term 1 Week 7 · Lesson 5',nm:'Exponential equations',menu:['3E','Exponential equations','same base, match the powers'],
+ slides:[
+ title('LESSON 5 — SECTION 3E','Exponential equations',['write both sides with the same base','match the indices to solve','handle fractional answers confidently']),
+ {h:'Key idea — same base, match powers',b:`<div class="key"><span class="kt">Key idea</span>If aˣ = aʸ (same base), then x = y. So: rewrite both sides with the <b>same base</b>, then set the indices equal.</div>
+  <div class="key frag"><span class="kt">Base spotting</span>4, 8, 16, 32 are all powers of 2 · 9, 27, 81 are powers of 3 · 25, 125 are powers of 5.</div>
+  <div class="frame frag">“Both sides can be written with base ___, so I match the powers.”</div>`},
+ {h:'Worked example 5',b:`<div class="q"><span class="tag">Worked example</span>Solve: a) 2ˣ = 32 &nbsp; b) 9ˣ = 27</div>`+steps([
+  `<b>a) Same base:</b> 32 = 2⁵, so 2ˣ = 2⁵ → <b>x = 5</b>`,
+  `<b>b) Base 3 both sides:</b> 9ˣ = (3²)ˣ = 3²ˣ and 27 = 3³`,
+  `<b>Match powers:</b> 2x = 3`,
+  `<b>Solve:</b> x = ${fr('3','2')} <span class="say">(fractions are normal here!)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve: a) 4ˣ = 64 &nbsp; b) 8ˣ = 16</div>
+  <div class="hint frag">Hint: b) both are powers of 2: 2³ˣ = 2⁴.</div>
+  <div class="ans frag">✔ a) x = 3 &nbsp; b) 3x = 4 → x = ${fr('4','3')}</div>`},
+ {h:'',b:exset('3E',['Rewrite-the-base questions, then equations with negative indices','Show the “same base” line — it earns the method mark','Preview: in Semester 2 we solve 2ˣ = 20 (no nice base!) with logarithms'])}
+]},
+/* ===== L6 4A ===== */
+{code:'4A (10A) · Term 1 Week 7 · Lesson 6',nm:'Irrational numbers including surds',menu:['4A','Irrational numbers & surds (10A)','rational, irrational, surd'],
+ slides:[
+ title('LESSON 6 — SECTION 4A (10A)','Irrational numbers including surds',['sort numbers into rational and irrational','explain what a surd is','simplify surds using square factors']),
+ {h:'🗣 New words first',b:vocab([
+  ['rational','RASH-on-al','can be written as a fraction of whole numbers: ½, 0.75, 7'],
+  ['irrational','ir-RASH-on-al','cannot — the decimals never repeat or stop: π, √2'],
+  ['surd','serd','an irrational root, like √2 or √12 (but √9 = 3 is NOT a surd)'],
+  ['square factor','—','a factor that is a perfect square: 4, 9, 16, 25, …'],
+  ['exact','eg-ZAKT','the true value — keep the √, do not round']])},
+ {h:'Key idea — surds are real lengths',b:`<div class="cols"><div>${rt2}</div><div>
+  <div class="key"><span class="kt">√2 exists!</span>A right triangle with two sides of 1 has hypotenuse exactly √2 (Pythagoras). The decimal never ends — but the length is real and exact.</div>
+  <div class="key frag"><span class="kt">Simplifying surds</span><span class="formula" style="font-size:1.15rem">√(a × b) = √a × √b</span><br>Pull out the <b>biggest square factor</b>: √12 = √4 × √3 = 2√3.</div></div></div>`},
+ {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) √12 &nbsp; b) √50 &nbsp; c) √72</div>`+steps([
+  `<b>a) Biggest square factor of 12 is 4:</b> √12 = √4 × √3 = <b>2√3</b>`,
+  `<b>b) 50 = 25 × 2:</b> √50 = 5√2`,
+  `<b>c) 72 = 36 × 2:</b> √72 = <b>6√2</b> <span class="say">(36 beats 9 or 4 — go biggest!)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) √18 &nbsp; b) √75</div>
+  <div class="hint frag">Hint: 18 = 9 × 2; 75 = 25 × 3.</div>
+  <div class="ans frag">✔ a) 3√2 &nbsp; b) 5√3</div>`},
+ {h:'',b:exset('4A',['Sort rational/irrational first, then simplify surds','Memorise the squares: 4, 9, 16, 25, 36, 49, 64, 81, 100','Frame: “The biggest square factor of ___ is ___.”'])}
+]},
+/* ===== L7 4B ===== */
+{code:'4B (10A) · Term 1 Week 7 · Lesson 7',nm:'Adding and subtracting surds',menu:['4B','Adding & subtracting surds (10A)','like surds'],
+ slides:[
+ title('LESSON 7 — SECTION 4B (10A)','Adding and subtracting surds',['identify like surds','simplify before adding','add and subtract like surds only']),
+ {h:'Key idea — like surds, like like terms',b:`<div class="key"><span class="kt">Key idea</span>Only <b>like surds</b> add: 3√2 + 5√2 = 8√2 — exactly like 3x + 5x = 8x. But 3√2 + 5√3 stays as it is.</div>
+  <div class="key frag"><span class="kt">Hidden likes</span>√27 and √3 look different — but √27 = 3√3. <b>Simplify first</b>, then look again!</div>
+  <div class="key frag"><span class="kt">Warning</span>√9 + √16 = 3 + 4 = 7, but √25 = 5. So √a + √b ≠ √(a+b). Never add under the root!</div>`},
+ {h:'Worked example 7',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) 3√2 + 5√2 − √2 &nbsp; b) √27 + 2√3</div>`+steps([
+  `<b>a) All like surds (√2):</b> 3 + 5 − 1 = 7 → <b>7√2</b>`,
+  `<b>b) Simplify first:</b> √27 = √9 × √3 = 3√3`,
+  `<b>Now they match:</b> 3√3 + 2√3 = <b>5√3</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) 5√5 − 2√5 &nbsp; b) √8 + 3√2</div>
+  <div class="hint frag">Hint: b) √8 = 2√2.</div>
+  <div class="ans frag">✔ a) 3√5 &nbsp; b) 2√2 + 3√2 = <b>5√2</b></div>`},
+ {h:'',b:exset('4B',['Like surds first, then simplify-first questions','Circle the surd part — the numbers in front do the arithmetic','Frame: “___ and ___ are like surds because both have √___.”'])}
+]},
+/* ===== L8 4C ===== */
+{code:'4C (10A) · Term 1 Week 8 · Lesson 8',nm:'Multiplying and dividing surds',menu:['4C','Multiplying & dividing surds (10A)','multiply under the root'],
+ slides:[
+ title('LESSON 8 — SECTION 4C (10A)','Multiplying and dividing surds',['multiply and divide surds','expand brackets containing surds','always simplify the final answer']),
+ {h:'Key idea — roots multiply happily',b:`<div class="center">
+  <span class="formula">√a × √b = √(ab)</span>
+  <span class="formula">${fr('√a','√b')} = √${fr('a','b')}</span>
+  <span class="formula">√a × √a = a</span></div>
+  <div class="key frag"><span class="kt">Routine</span>Numbers × numbers, surds × surds — then <b>simplify</b> the result. (Unlike adding, multiplying is allowed under the root!)</div>`},
+ {h:'Worked example 8',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) 2√3 × 5√6 &nbsp; b) √2(3 + √2) &nbsp; c) 6√10 ÷ 2√5</div>`+steps([
+  `<b>a)</b> 2 × 5 = 10 and √3 × √6 = √18 → 10√18`,
+  `<b>Simplify:</b> √18 = 3√2 → 10 × 3√2 = <b>30√2</b>`,
+  `<b>b) Expand:</b> √2 × 3 + √2 × √2 = 3√2 + 2`,
+  `<b>c)</b> 6 ÷ 2 = 3 and √10 ÷ √5 = √2 → <b>3√2</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) 3√2 × 4√8 &nbsp; b) √3(2√3 − 1)</div>
+  <div class="hint frag">Hint: a) √2 × √8 = √16 = 4 — no surd survives!</div>
+  <div class="ans frag">✔ a) 12 × 4 = <b>48</b> &nbsp; b) 2 × 3 − √3 = <b>6 − √3</b></div>`},
+ {h:'',b:exset('4C',['Multiply, divide, then expand-the-bracket questions','ALWAYS check: can the answer simplify further?','Challenge: (2 + √3)(2 − √3) — what happens to the surd?'])}
+]},
+/* ===== L9 4D ===== */
+{code:'4D (10A) · Term 1 Week 8 · Lesson 9',nm:'Rationalising the denominator',menu:['4D','Rationalising (10A)','no surds downstairs'],
+ slides:[
+ title('LESSON 9 — SECTION 4D (10A)','Rationalising the denominator',['explain why we rationalise','multiply by √b over √b','write answers in simplest exact form']),
+ {h:'🗣 New words first',b:vocab([
+  ['rationalise','RASH-on-a-lyz','remove the surd from the denominator (the bottom)'],
+  ['equivalent fraction','ee-KWIV-a-lent','same value, different look — like ½ = 2⁄4'],
+  ['simplest form','—','no surds downstairs, fraction fully cancelled']])},
+ {h:'Key idea — multiply by 1, cleverly',b:`<div class="center"><span class="formula">${fr('a','√b')} × ${fr('√b','√b')} = ${fr('a√b','b')}</span></div>
+  <div class="key frag"><span class="kt">Why it works</span>${fr('√b','√b')} = 1, so the value never changes — but √b × √b = b kills the surd downstairs.</div>
+  <div class="key frag"><span class="kt">Convention</span>Exact answers are written with rational denominators — examiners expect it.</div>`},
+ {h:'Worked example 9',b:`<div class="q"><span class="tag">Worked example</span>Rationalise: a) ${fr('5','√3')} &nbsp; b) ${fr('3√2','√5')}</div>`+steps([
+  `<b>a) Multiply top and bottom by √3:</b> ${fr('5√3','√3 × √3')} = ${fr('5√3','3')}`,
+  `<b>b) Multiply by √5:</b> ${fr('3√2 × √5','5')}`,
+  `<b>Multiply the surds:</b> √2 × √5 = √10 → answer ${fr('3√10','5')}`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Rationalise: a) ${fr('4','√7')} &nbsp; b) ${fr('6','2√3')}</div>
+  <div class="hint frag">Hint: b) cancel 6 ÷ 2 = 3 first, then rationalise ${fr('3','√3')}.</div>
+  <div class="ans frag">✔ a) ${fr('4√7','7')} &nbsp; b) ${fr('3√3','3')} = <b>√3</b></div>`},
+ {h:'',b:exset('4D',['Rationalise, then simplify — every answer surd-free downstairs','Cancel BEFORE rationalising when you can','Mixed review: all four surd skills together (4A–4D)'])}
+]},
+/* ===== L10 revision ===== */
+{code:'Term 1 Week 8 · Lesson 10',nm:'Revision — Units 1 & 2 CAT preparation',menu:['★','Revision: Units 1 & 2 for CAT 1','both units, command words'],cls:'rev',
+ slides:[
+ title('LESSON 10 — CAT 1 REVISION','Units 1 and 2 review',['check the full checklist for BOTH units','practise mixed questions under time','finalise my fix-it list for CAT 1']),
+ {h:'Checklist self-assessment (both units)',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>U1: solve equations (brackets, fractions, both sides)</td><td></td><td></td><td></td></tr>
+  <tr><td>U1: inequalities with number lines</td><td></td><td></td><td></td></tr>
+  <tr><td>U1: straight lines — sketch, equation, parallel/perpendicular</td><td></td><td></td><td></td></tr>
+  <tr><td>U1: simultaneous equations + applications</td><td></td><td></td><td></td></tr>
+  <tr><td>U2: index laws, negative and fractional indices</td><td></td><td></td><td></td></tr>
+  <tr><td>U2: scientific notation both directions</td><td></td><td></td><td></td></tr>
+  <tr><td>U2: exponential equations (same base)</td><td></td><td></td><td></td></tr>
+  <tr><td>U2: simplify, ±, ×, ÷ surds; rationalise (10A)</td><td></td><td></td><td></td></tr></table>
+  <p class="note">😟 rows → tonight's revision list. CAT 1 covers BOTH units — split your time.</p>`},
+ {h:'Command words for CAT 1',b:`<table class="vocab"><tr><th>Command word</th><th>It means…</th></tr>
+  <tr><td class="t">Solve</td><td>find the value(s) — show each step</td></tr>
+  <tr><td class="t">Simplify</td><td>fewest terms; surds: biggest square factor out</td></tr>
+  <tr><td class="t">Evaluate</td><td>find the number — e.g. 27^(2/3) = 9</td></tr>
+  <tr><td class="t">Exact</td><td>keep √ and fractions — no decimals</td></tr>
+  <tr><td class="t">Sketch</td><td>line + labelled intercepts</td></tr>
+  <tr><td class="t">Hence</td><td>use your previous answer</td></tr></table>
+  <div class="frame frag">“1 mark ≈ 1 minute. Method marks are real — never leave a blank.”</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>⏱ Mixed practice (timed)</h3><ul>
+  <li>Practice CAT: half Unit 1, half Unit 2 questions</li>
+  <li>Swap and mark; name each error type</li>
+  <li>Fix-it questions from your 😟 rows to finish</li></ul>
+  <p class="note">Bilingual dictionary rules for the CAT: confirm with your teacher today.</p></div>`}
+]},
+/* ===== L11 CAT ===== */
+{code:'Term 1 Week 8 · Lesson 11',nm:'CAT 1 — Units 1 and 2',menu:['📋','CAT 1 — Units 1 & 2','linear relations + indices & surds'],cls:'test',
+ slides:[
+ title('CAT 1 — UNITS 1 AND 2','Linear Relations · Indices and Surds',['show what I know across both units','manage my time: 1 mark ≈ 1 minute','attempt every question']),
+ {h:'Before you start',b:`<div class="key"><span class="kt">Checklist</span>🖩 calculator · ✏ pencil + ruler for sketches · 📖 dictionary (if approved) · 💧 water.</div>
+  <div class="key frag"><span class="kt">Remember</span>Exact means keep the √ · sketches need labelled intercepts · inequality answers get a number line · check by substituting back.</div>
+  <div class="frame frag">You have practised every question type in this CAT. Breathe, start with your strongest topic. 💪</div>
+  <p class="note frag">Next week: Unit 3 — Quadratic Algebra (Chapter 5 and 10B–10D).</p>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 1 · Week 6 — Index laws to fractional indices',[0,1,2,3]],
+             ['Term 1 · Week 7 — Exponential equations and surds (Labour Day Monday: 3 lessons)',[4,5,6]],
+             ['Term 1 · Week 8 — Surd operations, revision and CAT 1',[7,8,9,10]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Indices &amp; Surds — Chapters 3A–3E and 4A–4D</h1>
+  <p class="sub">10 Methods · Unit 2 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 1 Weeks 6–8 · CAT 1 (Units 1 &amp; 2) in Week 8<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quadratic Algebra — Ch 5, 10B–10D | 10 Methods</title>
+<style>
+  :root{
+    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
+    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#3b5bdb; --main2:#2b3f9e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
+  #menu h1{color:var(--main2);font-size:2.1rem}
+  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
+  .wk{margin-bottom:20px}
+  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
+        padding:12px 14px;cursor:pointer;transition:.15s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
+  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
+  .card .vb{font-size:.8rem;color:#666;font-style:italic}
+  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
+  #stage{position:fixed;inset:0;display:none;flex-direction:column}
+  #bar{height:6px;background:#dfe6ee}
+  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
+  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
+  #head .l{font-weight:600;font-size:.95rem}
+  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
+               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
+  #slide{flex:1;overflow-y:auto;padding:34px 56px;max-width:1150px;margin:0 auto;width:100%}
+  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
+  #foot .keys{font-size:.8rem}
+  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
+  #foot button.ghost{background:#b9c6d4}
+  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
+  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
+  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
+  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
+  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
+  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
+  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
+  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
+  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
+  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
+  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
+  .formula{background:#e9edfb;border:2px solid var(--main);border-radius:10px;padding:12px 20px;display:inline-block;
+           font-size:1.3rem;margin:8px 8px 4px 0;font-family:Georgia,serif}
+  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
+  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
+  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
+  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
+  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
+  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
+  .frame b{color:var(--adj)}
+  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
+  .exset h3{color:var(--main2);margin-bottom:10px}
+  .exset li{margin:8px 0 8px 22px}
+  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
+  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .cols>div{flex:1;min-width:300px}
+  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
+  .fr .de{padding:0 6px}
+  .say{font-size:.85rem;color:#888;font-style:italic}
+  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
+  svg text{font-family:'Segoe UI',sans-serif}
+  .center{text-align:center}
+  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
+  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
+  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
+</style>
+</head>
+<body>
+
+<div id="menu"></div>
+
+<div id="stage">
+  <div id="bar"><div id="fill"></div></div>
+  <div id="head">
+    <span class="l" id="hlbl"></span>
+    <button onclick="goMenu()">☰ Menu (Esc)</button>
+  </div>
+  <div id="slide"></div>
+  <div id="foot">
+    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
+    <span id="pgs"></span>
+    <span>
+      <button class="ghost" onclick="nav(-1)">← Back</button>
+      <button onclick="nav(1)">Next →</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
+const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
+  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
+const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
+const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+/* labelled rectangle for area applications */
+const rect=(w,h,wl,hl,al)=>`<svg viewBox="0 0 320 200" width="290"><rect x="40" y="35" width="240" height="130" fill="#e9edfb" stroke="#3b5bdb" stroke-width="3"/>
+<text x="140" y="188" font-size="16" fill="#1F4E79" font-weight="bold">${wl}</text>
+<text x="8" y="105" font-size="16" fill="#1F4E79" font-weight="bold">${hl}</text>
+<text x="115" y="105" font-size="16" fill="#3b5bdb" font-weight="bold">${al}</text></svg>`;
+
+/* ---------- slide builders ---------- */
+const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
+  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+
+/* ---------- lesson data ---------- */
+const LESSONS=[
+/* L1 5A */
+{code:'5A · Term 1 Week 9 · Lesson 1',nm:'Expanding expressions',menu:['5A','Expanding expressions','binomial, FOIL, expand'],
+ slides:[
+ title('LESSON 1 — SECTION 5A','Expanding expressions',['expand a pair of brackets systematically','recognise perfect squares and difference of squares','collect like terms after expanding']),
+ {h:'🗣 New words first',b:vocab([
+  ['binomial','by-NOH-mee-al','an expression with two terms: (x + 3)'],
+  ['expand','ex-PAND','multiply out the brackets'],
+  ['perfect square','—','(a + b)² = a² + 2ab + b²'],
+  ['difference of two squares (DOPS)','—','(a + b)(a − b) = a² − b²']])},
+ {h:'Key idea — every term meets every term',b:`<div class="center">
+  <span class="formula">(a + b)(c + d) = ac + ad + bc + bd</span></div>
+  <div class="center frag"><span class="formula">(a + b)² = a² + 2ab + b²</span><span class="formula">(a + b)(a − b) = a² − b²</span></div>
+  <div class="key frag"><span class="kt">Check yourself</span>Two brackets of two terms → <b>four products</b> before collecting. Count them every time.</div>`},
+ {h:'Worked example 1',b:`<div class="q"><span class="tag">Worked example</span>Expand: a) (x + 3)(x + 4) &nbsp; b) (2x − 3)(x + 2)</div>`+steps([
+  `<b>a) Four products:</b> x² + 4x + 3x + 12`,
+  `<b>Collect:</b> x² + 7x + 12`,
+  `<b>b)</b> 2x² + 4x − 3x − 6`,
+  `<b>Collect:</b> 2x² + x − 6`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Expand: a) (x + 5)(x − 2) &nbsp; b) (3x − 1)(x + 4)</div>
+  <div class="hint frag">Hint: four products, then collect the two middle ones.</div>
+  <div class="ans frag">✔ a) x² + 3x − 10 &nbsp; b) 3x² + 11x − 4</div>`},
+ {h:'',b:exset('5A',['Binomial products, then perfect squares and DOPS','Write all four products before collecting — no shortcuts yet','Spot the patterns: (x + 5)² and (x + 5)(x − 5) behave differently!'])}
+]},
+/* L2 5B */
+{code:'5B · Term 1 Week 9 · Lesson 2',nm:'Factorising expressions',menu:['5B','Factorising: common factor & DOPS','HCF, difference of squares'],
+ slides:[
+ title('LESSON 2 — SECTION 5B','Factorising expressions',['take out the highest common factor','factorise a difference of two squares','combine both techniques']),
+ {h:'Key idea — expanding in reverse',b:`<div class="key"><span class="kt">Always first</span>Take out the <b>HCF</b>: 3x² − 12x = 3x(x − 4). Check by expanding back!</div>
+  <div class="key frag"><span class="kt">DOPS in reverse</span><span class="formula">a² − b² = (a + b)(a − b)</span> — two squares with a MINUS between.</div>
+  <div class="frame frag">“First I look for a common factor, then I look for two squares.”</div>`},
+ {h:'Worked example 2',b:`<div class="q"><span class="tag">Worked example</span>Factorise: a) 3x² − 12x &nbsp; b) x² − 25 &nbsp; c) 4x² − 36</div>`+steps([
+  `<b>a) HCF is 3x:</b> 3x(x − 4)`,
+  `<b>b) DOPS:</b> x² − 25 = (x + 5)(x − 5)`,
+  `<b>c) HCF first:</b> 4(x² − 9)`,
+  `<b>Then DOPS:</b> 4(x + 3)(x − 3) <span class="say">(two steps — many students stop too early!)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise: a) 5a² + 20a &nbsp; b) 9x² − 49 &nbsp; c) 2y² − 50</div>
+  <div class="hint frag">Hint: c) HCF 2 first, then DOPS.</div>
+  <div class="ans frag">✔ a) 5a(a + 4) &nbsp; b) (3x + 7)(3x − 7) &nbsp; c) 2(y + 5)(y − 5)</div>`},
+ {h:'',b:exset('5B',['HCF questions, DOPS questions, then combinations','Expand every third answer back to check','x² + 25 does NOT factorise — a SUM of squares stays put'])}
+]},
+/* L3 5C */
+{code:'5C · Term 1 Week 9 · Lesson 3',nm:'Multiplying and dividing algebraic fractions',menu:['5C','Algebraic fractions ×÷','factorise, then cancel'],
+ slides:[
+ title('LESSON 3 — SECTION 5C','Multiplying and dividing algebraic fractions',['cancel common FACTORS only','multiply and divide algebraic fractions','factorise before cancelling']),
+ {h:'Key idea — factorise, then cancel',b:`<div class="key"><span class="kt">The golden rule</span>Only <b>factors</b> cancel — never terms. ${fr('x + 3','3')} does NOT cancel; ${fr('3(x + 2)','3')} = x + 2 does.</div>
+  <div class="key frag"><span class="kt">Routine</span>1️⃣ Factorise every top and bottom → 2️⃣ cancel matching brackets → 3️⃣ multiply what is left. Dividing? Flip the second fraction first.</div>`},
+ {h:'Worked example 3',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) ${fr('x² − 9','x + 3')} &nbsp; b) ${fr('x − 1','4')} × ${fr('8','3(x − 1)')}</div>`+steps([
+  `<b>a) Factorise the top:</b> ${fr('(x + 3)(x − 3)','x + 3')}`,
+  `<b>Cancel the bracket:</b> x − 3`,
+  `<b>b) Cancel (x − 1) and 8 with 4:</b> ${fr('1','1')} × ${fr('2','3')}`,
+  `<b>Answer:</b> ${fr('2','3')}`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: ${fr('x² − 4','x + 2')} &nbsp; and &nbsp; ${fr('x + 1','5')} ÷ ${fr('x + 1','10')}</div>
+  <div class="hint frag">Hint: dividing → flip the second fraction and multiply.</div>
+  <div class="ans frag">✔ x − 2 &nbsp; and &nbsp; ${fr('x + 1','5')} × ${fr('10','x + 1')} = 2</div>`},
+ {h:'',b:exset('5C (start)',['Simplify, multiply, then divide questions','Factorise BEFORE you cancel — every time','Cross out cancelled brackets in pencil so the marker can see'])}
+]},
+/* L4 5C+ */
+{code:'5C · Term 1 Week 9 · Lesson 4',nm:'Algebraic fractions — consolidation',menu:['5C+','Fractions practice + error hunt','terms never cancel'],
+ slides:[
+ title('LESSON 4 — SECTION 5C (CONSOLIDATION)','Algebraic fractions practice',['handle DOPS and common factors inside fractions','catch illegal cancelling','work through multi-step simplifications']),
+ {h:'Worked example 4',b:`<div class="q"><span class="tag">Worked example</span>Simplify ${fr('2x + 6','x² − 9')}</div>`+steps([
+  `<b>Factorise top:</b> 2(x + 3)`,
+  `<b>Factorise bottom (DOPS):</b> (x + 3)(x − 3)`,
+  `<b>Cancel (x + 3):</b> ${fr('2','x − 3')}`])},
+ {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>A student wrote: ${fr('x² + 5','x²')} = 5? And another wrote ${fr('x + 6','x + 3')} = 2?</div>
+  <div class="ans frag">✔ Both cancelled <b>terms</b>, not factors. Neither fraction simplifies at all! Only whole brackets (factors) cancel.</div>
+  <div class="frame frag">“I can cancel ___ because it is a <b>factor</b> of the top AND the bottom.”</div>`},
+ {h:'',b:exset('5C (finish)',['Mixed simplifications with factorising first','One illegal-cancel example of your own: swap with a partner to catch it','Challenge: three fractions multiplied together'])}
+]},
+/* L5 5D */
+{code:'5D · Term 1 Week 10 · Lesson 5',nm:'Factorising monic quadratic trinomials',menu:['5D','Monic trinomials','two numbers: multiply to c, add to b'],
+ slides:[
+ title('LESSON 5 — SECTION 5D','Factorising monic quadratic trinomials',['find the two magic numbers','factorise x² + bx + c','handle negative b and c confidently']),
+ {h:'🗣 New words first',b:vocab([
+  ['trinomial','try-NOH-mee-al','three terms: x² + 7x + 12'],
+  ['monic','MON-ik','the x² has coefficient 1'],
+  ['product','PROD-ukt','the multiply answer'],
+  ['sum','sum','the add answer']])},
+ {h:'Key idea — multiply to c, add to b',b:`<div class="key"><span class="kt">The search</span>For x² + bx + c, find two numbers that <b>multiply to c</b> and <b>add to b</b>. Then (x + □)(x + □).</div>
+  <div class="key frag"><span class="kt">Sign detective</span>c positive → same signs (both b's sign). c negative → different signs (bigger number takes b's sign).</div>`},
+ {h:'Worked example 5',b:`<div class="q"><span class="tag">Worked example</span>Factorise: a) x² + 7x + 12 &nbsp; b) x² − 2x − 15</div>`+steps([
+  `<b>a) Multiply to 12, add to 7:</b> 3 and 4`,
+  `<b>Answer:</b> (x + 3)(x + 4) — expand to check ✔`,
+  `<b>b) Multiply to −15, add to −2:</b> different signs → −5 and 3`,
+  `<b>Answer:</b> (x − 5)(x + 3)`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise: a) x² + 5x + 6 &nbsp; b) x² − x − 12</div>
+  <div class="hint frag">Hint: b) multiply to −12, add to −1: think 3 and −4.</div>
+  <div class="ans frag">✔ a) (x + 2)(x + 3) &nbsp; b) (x − 4)(x + 3)</div>`},
+ {h:'',b:exset('5D (start)',['All four sign cases, in order of difficulty','List factor pairs of c in the margin until it is automatic','Expand to check — 10 seconds that saves marks'])}
+]},
+/* L6 5D+ */
+{code:'5D · Term 1 Week 10 · Lesson 6',nm:'Monic trinomials — consolidation',menu:['5D+','Trinomials with HCF first','two-step factorising'],
+ slides:[
+ title('LESSON 6 — SECTION 5D (CONSOLIDATION)','Trinomials with a common factor first',['take the HCF before the trinomial search','complete two-step factorisations','build speed and accuracy']),
+ {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Factorise 2x² + 10x + 12</div>`+steps([
+  `<b>HCF first:</b> 2(x² + 5x + 6)`,
+  `<b>Now monic:</b> multiply to 6, add to 5 → 2 and 3`,
+  `<b>Answer:</b> 2(x + 2)(x + 3) <span class="say">(keep the 2 out the front!)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise: a) 3x² − 3x − 36 &nbsp; b) x² − 8x + 16</div>
+  <div class="hint frag">Hint: a) HCF 3 first. b) multiply to 16, add to −8 — same number twice?</div>
+  <div class="ans frag">✔ a) 3(x − 4)(x + 3) &nbsp; b) (x − 4)² — a perfect square!</div>`},
+ {h:'',b:exset('5D (finish)',['HCF-first questions and perfect squares','Full factorising checklist: HCF? DOPS? trinomial?','Speed round: 8 trinomials in 8 minutes, swap and check'])}
+]},
+/* L7 5E */
+{code:'5E (10A) · Term 1 Week 10 · Lesson 7',nm:'Factorising non-monic trinomials',menu:['5E','Non-monic trinomials (10A)','grouping method, ac'],
+ slides:[
+ title('LESSON 7 — SECTION 5E (10A)','Factorising non-monic quadratic trinomials',['use the grouping (ac) method','split the middle term correctly','factorise ax² + bx + c with a ≠ 1']),
+ {h:'Key idea — the grouping method',b:`<div class="key"><span class="kt">For ax² + bx + c</span>1️⃣ Find two numbers that multiply to <b>a × c</b> and add to <b>b</b> → 2️⃣ split the middle term → 3️⃣ factorise in pairs (grouping).</div>
+  <div class="key frag"><span class="kt">Why a × c?</span>The a is tangled with the x² — multiplying a × c untangles the search.</div>`},
+ {h:'Worked example 7',b:`<div class="q"><span class="tag">Worked example</span>Factorise 2x² + 7x + 3</div>`+steps([
+  `<b>a × c = 6, add to 7:</b> the numbers are 6 and 1`,
+  `<b>Split the middle:</b> 2x² + 6x + x + 3`,
+  `<b>Group in pairs:</b> 2x(x + 3) + 1(x + 3)`,
+  `<b>Common bracket:</b> (x + 3)(2x + 1) — expand to check ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise 3x² + 8x + 4</div>
+  <div class="hint frag">Hint: a × c = 12, add to 8 → 6 and 2.</div>
+  <div class="ans frag">✔ 3x² + 6x + 2x + 4 = 3x(x + 2) + 2(x + 2) = <b>(x + 2)(3x + 2)</b></div>`},
+ {h:'',b:exset('5E (start)',['Grouping method, positive coefficients first','Both bracket pairs must match at step 3 — if not, re-split','Say it: “multiply to a-c, add to b.”'])}
+]},
+/* L8 5E+ */
+{code:'5E (10A) · Term 2 Week 1 · Lesson 8',nm:'Non-monic trinomials — consolidation',menu:['5E+','Non-monic with negatives','sign care in grouping'],
+ slides:[
+ title('LESSON 8 — SECTION 5E (CONSOLIDATION)','Non-monic trinomials with negatives',['handle negative middle and last terms','factorise a negative from the second pair','check every answer by expanding']),
+ {h:'Worked example 8',b:`<div class="q"><span class="tag">Worked example</span>Factorise 6x² − 7x − 3</div>`+steps([
+  `<b>a × c = −18, add to −7:</b> −9 and 2`,
+  `<b>Split:</b> 6x² − 9x + 2x − 3`,
+  `<b>Group:</b> 3x(2x − 3) + 1(2x − 3)`,
+  `<b>Answer:</b> (2x − 3)(3x + 1) ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise 4x² − 4x − 3</div>
+  <div class="hint frag">Hint: a × c = −12, add to −4 → −6 and 2.</div>
+  <div class="ans frag">✔ 4x² − 6x + 2x − 3 = 2x(2x − 3) + 1(2x − 3) = <b>(2x − 3)(2x + 1)</b></div>`},
+ {h:'',b:exset('5E (finish)',['Negative cases; watch the minus when grouping the second pair','Brackets not matching? Swap the split order and retry','Mixed: HCF, DOPS, monic, non-monic — choose the technique'])}
+]},
+/* L9 5F */
+{code:'5F · Term 2 Week 1 · Lesson 9',nm:'Factorising by completing the square',menu:['5F','Completing the square','halve b, add and subtract'],
+ slides:[
+ title('LESSON 9 — SECTION 5F','Factorising by completing the square',['complete the square on x² + bx + c','factorise using DOPS with surds','know when completing the square is needed']),
+ {h:'Key idea — build the perfect square',b:`<div class="center"><span class="formula">x² + bx = ${'(x + '}${fr('b','2')}${')² − ('}${fr('b','2')}${')²'}</span></div>
+  <div class="key frag"><span class="kt">Then DOPS</span>(x + 3)² − 7 = (x + 3 + √7)(x + 3 − √7) — the “squares” can be surds! (Unit 2 skills return.)</div>
+  <div class="key frag"><span class="kt">When?</span>When the magic numbers do not exist — e.g. x² + 6x + 2 has no whole-number pair.</div>`},
+ {h:'Worked example 9',b:`<div class="q"><span class="tag">Worked example</span>Factorise x² + 6x + 2 by completing the square.</div>`+steps([
+  `<b>Halve 6 → 3:</b> x² + 6x + 2 = (x + 3)² − 9 + 2`,
+  `<b>Simplify:</b> (x + 3)² − 7`,
+  `<b>DOPS with √7:</b> (x + 3 + √7)(x + 3 − √7)`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Factorise x² − 4x − 1 by completing the square.</div>
+  <div class="hint frag">Hint: (x − 2)² − 4 − 1.</div>
+  <div class="ans frag">✔ (x − 2)² − 5 = <b>(x − 2 + √5)(x − 2 − √5)</b></div>`},
+ {h:'',b:exset('5F',['Complete the square, then DOPS-factorise','Exact surd form — no decimals','Odd b? Fractions appear: halve 5 → 5⁄2. Stay calm, keep fractions'])}
+]},
+/* L10 5G */
+{code:'5G · Term 2 Week 1 · Lesson 10',nm:'Solving quadratic equations by factorising',menu:['5G','Solving by factorising','null factor law, standard form'],
+ slides:[
+ title('LESSON 10 — SECTION 5G','Solving quadratic equations by factorising',['rearrange to standard form = 0','apply the null factor law','solve monic and non-monic quadratic equations']),
+ {h:'Key idea — the null factor law',b:`<div class="key"><span class="kt">Null factor law</span>If A × B = 0, then A = 0 or B = 0. This ONLY works when one side is <b>zero</b> — rearrange first!</div>
+  <div class="key frag"><span class="kt">Routine</span>1️⃣ Everything to one side (= 0) → 2️⃣ factorise fully → 3️⃣ each factor = 0 → 4️⃣ solve each little equation.</div>`},
+ {h:'Worked example 10',b:`<div class="q"><span class="tag">Worked example</span>Solve: a) x² − 3x − 10 = 0 &nbsp; b) 2x² = 8x</div>`+steps([
+  `<b>a) Factorise:</b> (x − 5)(x + 2) = 0`,
+  `<b>Null factor law:</b> x = 5 or x = −2`,
+  `<b>b) Rearrange first:</b> 2x² − 8x = 0 <span class="say">(never divide by x — you lose a solution!)</span>`,
+  `<b>Factorise:</b> 2x(x − 4) = 0 → x = 0 or x = 4`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve x² + 2x − 24 = 0</div>
+  <div class="hint frag">Hint: multiply to −24, add to 2.</div>
+  <div class="ans frag">✔ (x + 6)(x − 4) = 0 → x = −6 or x = 4</div>`},
+ {h:'',b:exset('5G',['Standard form first, always — “= 0” before factorising','Two answers is normal for quadratics','Trap check: 2x² = 8x has TWO solutions, not one'])}
+]},
+/* L11 5H */
+{code:'5H · Term 2 Week 2 · Lesson 11',nm:'Applications of quadratic equations',menu:['5H','Applications','define, form, solve, reject, answer'],
+ slides:[
+ title('LESSON 11 — SECTION 5H','Applications of quadratic equations',['form a quadratic equation from a real situation','solve it and REJECT impossible answers','answer in words with units']),
+ {h:'Key idea — the five-step routine',b:`<div class="key"><span class="kt">Applications routine</span>1️⃣ <b>Define</b> the variable with units → 2️⃣ <b>Form</b> the equation → 3️⃣ <b>Solve</b> (factorise + NFL) → 4️⃣ <b>Reject</b> impossible solutions (negative lengths!) → 5️⃣ <b>Answer in words</b>.</div>
+  <div class="frame frag">“x = ___ is rejected because a length cannot be negative.”</div>`},
+ {h:'Worked example 11',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A rectangle is 5 m longer than it is wide. Its area is 84 m². Find its dimensions.</div></div>
+  <div class="center">${rect(240,130,'x + 5','x','Area = 84 m²')}</div></div>`+steps([
+  `<b>Define:</b> let x = width (m); length = x + 5.`,
+  `<b>Form:</b> x(x + 5) = 84 → x² + 5x − 84 = 0`,
+  `<b>Solve:</b> (x + 12)(x − 7) = 0 → x = −12 or x = 7`,
+  `<b>Reject:</b> x = −12 (width cannot be negative).`,
+  `<b>Answer:</b> “The rectangle is <b>7 m wide and 12 m long</b>.” Check: 7 × 12 = 84 ✔`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>The product of two consecutive whole numbers is 72. Find the numbers.</div>
+  <div class="hint frag">Hint: n(n + 1) = 72 → n² + n − 72 = 0.</div>
+  <div class="ans frag">✔ (n + 9)(n − 8) = 0 → n = 8 (reject −9 if the question wants positive numbers) → <b>8 and 9</b></div>`},
+ {h:'',b:exset('5H',['Area, number and “consecutive” problems — draw a diagram for every shape','The reject line earns a mark: write it','Answers in words with units, always'])}
+]},
+/* L12 5I */
+{code:'5I · Term 2 Week 2 · Lesson 12',nm:'Solving by completing the square',menu:['5I','Solving by completing the square','exact surd solutions'],
+ slides:[
+ title('LESSON 12 — SECTION 5I','Solving quadratic equations by completing the square',['solve when factorising fails','give exact surd answers with ±','decide: factorise or complete the square?']),
+ {h:'Key idea — isolate the square, ± root',b:`<div class="key"><span class="kt">Routine</span>1️⃣ Complete the square → 2️⃣ isolate: (x + h)² = k → 3️⃣ ± square root → 4️⃣ solve both.</div>
+  <div class="key frag"><span class="kt">Remember ±</span>(x + 2)² = 7 has TWO solutions: x + 2 = √7 and x + 2 = −√7.</div>`},
+ {h:'Worked example 12',b:`<div class="q"><span class="tag">Worked example</span>Solve x² + 4x − 3 = 0, giving exact answers.</div>`+steps([
+  `<b>Complete the square:</b> (x + 2)² − 4 − 3 = 0`,
+  `<b>Isolate:</b> (x + 2)² = 7`,
+  `<b>± root:</b> x + 2 = ±√7`,
+  `<b>Answer:</b> x = −2 + √7 or x = −2 − √7`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve x² − 6x + 2 = 0 exactly.</div>
+  <div class="hint frag">Hint: (x − 3)² = 7.</div>
+  <div class="ans frag">✔ x = 3 + √7 or x = 3 − √7</div>`},
+ {h:'',b:exset('5I',['Exact-answer solving; simplify surds where possible','Try factorising FIRST — complete the square when it fails','Write ± the moment you square root'])}
+]},
+/* L13 5J */
+{code:'5J · Term 2 Week 2 · Lesson 13',nm:'The quadratic formula',menu:['5J','The quadratic formula','a, b, c and the discriminant'],
+ slides:[
+ title('LESSON 13 — SECTION 5J','Solving using the quadratic formula',['identify a, b and c from standard form','substitute carefully into the formula','use Δ to predict the number of solutions']),
+ {h:'Key idea — the formula that always works',b:`<div class="center">
+  <span class="formula">x = ${fr('−b ± √(b² − 4ac)','2a')}</span></div>
+  <div class="key frag"><span class="kt">The discriminant</span>Δ = b² − 4ac: &nbsp; Δ &gt; 0 → two solutions · Δ = 0 → one · Δ &lt; 0 → none.</div>
+  <div class="key frag"><span class="kt">Substitution discipline</span>Write a = …, b = …, c = … first. Brackets around negatives: b = −3 → −b = 3, b² = 9.</div>`},
+ {h:'Worked example 13',b:`<div class="q"><span class="tag">Worked example</span>Solve 2x² + 3x − 4 = 0, exact and to 2 d.p.</div>`+steps([
+  `<b>a = 2, b = 3, c = −4.</b> Δ = 9 − 4(2)(−4) = 9 + 32 = 41 &gt; 0 → two solutions.`,
+  `<b>Formula:</b> x = ${fr('−3 ± √41','4')} (exact)`,
+  `<b>Decimals:</b> x ≈ 0.85 or x ≈ −2.35`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve x² − 5x + 2 = 0 exactly.</div>
+  <div class="hint frag">Hint: Δ = 25 − 8 = 17.</div>
+  <div class="ans frag">✔ x = ${fr('5 ± √17','2')}</div>`},
+ {h:'',b:exset('5J (start)',['Δ first, then the formula','a, b, c line before every substitution','Exact AND decimal answers when asked — read the command words'])}
+]},
+/* L14 5J+ */
+{code:'5J · Term 2 Week 2 · Lesson 14',nm:'Choosing your solving method',menu:['5J+','Which method? Mixed practice','factorise / complete / formula'],cls:'rev',
+ slides:[
+ title('LESSON 14 — SECTION 5J (CONSOLIDATION)','Choosing your solving method',['pick the fastest correct method for each equation','justify the choice in one sentence','solve one equation all three ways']),
+ {h:'Which method? Decision guide',b:`<table class="chk"><tr><th>The quadratic…</th><th>Best method</th></tr>
+  <tr><td>factorises with whole numbers</td><td>factorise + null factor law (5G)</td></tr>
+  <tr><td>monic, but no whole-number pair</td><td>complete the square (5I)</td></tr>
+  <tr><td>non-monic and ugly, or “2 d.p.” asked</td><td>quadratic formula (5J)</td></tr>
+  <tr><td>“how many solutions?” only</td><td>just Δ — no solving!</td></tr></table>
+  <div class="frame frag">“I chose ___ because the equation ___.”</div>`},
+ {h:'Trio challenge',b:`<div class="q"><span class="tag">Pairs — one equation, three methods</span>Solve x² − 2x − 8 = 0 by (a) factorising, (b) completing the square, (c) the formula. Same answers?</div>
+  <div class="ans frag">✔ All three give x = 4 and x = −2. (a) is fastest here — but (b) and (c) always work.</div>`},
+ {h:'',b:exset('5J (finish)',['Mixed solving set — method is your choice, one-line justification required','Time trial: 6 equations, 12 minutes','Add the decision guide to your glossary page'])}
+]},
+/* L15 10B */
+{code:'10B (10A) · Term 2 Week 3 · Lesson 15',nm:'Introducing polynomials',menu:['10B','Introducing polynomials (10A)','degree, coefficient, P(x)'],
+ slides:[
+ title('LESSON 15 — SECTION 10B (10A)','Introducing polynomials',['name the degree and coefficients of a polynomial','use function notation P(x)','evaluate P(k) by substitution']),
+ {h:'🗣 New words first',b:vocab([
+  ['polynomial','pol-ee-NOH-mee-al','a sum of whole-number powers of x: x³ − 2x² + 3x − 4'],
+  ['degree','de-GREE','the highest power: degree 3 above'],
+  ['leading coefficient','—','the number on the highest power'],
+  ['constant term','KON-stant','the term with no x'],
+  ['P(x)','P of x','the name of the polynomial; P(2) means “substitute x = 2”']])},
+ {h:'Worked example 15',b:`<div class="q"><span class="tag">Worked example</span>For P(x) = x³ − 2x² + 3x − 4: state the degree, leading coefficient and constant term, then find P(2).</div>`+steps([
+  `<b>Degree 3</b> (highest power) · leading coefficient 1 · constant −4`,
+  `<b>P(2):</b> 2³ − 2(2²) + 3(2) − 4`,
+  `<b>Calculate:</b> 8 − 8 + 6 − 4 = <b>2</b>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>For the same P(x), find P(−1).</div>
+  <div class="hint frag">Hint: brackets around −1 everywhere: (−1)³ = −1, (−1)² = 1.</div>
+  <div class="ans frag">✔ −1 − 2 − 3 − 4 = <b>−10</b></div>`},
+ {h:'',b:exset('10B',['Degree/coefficient identification, then evaluation','Brackets around every negative substitution','Is √x + 1 a polynomial? No — powers must be whole numbers'])}
+]},
+/* L16 10C */
+{code:'10C (10A) · Term 2 Week 3 · Lesson 16',nm:'Expanding and simplifying polynomials',menu:['10C','Expanding polynomials (10A)','every term meets every term'],
+ slides:[
+ title('LESSON 16 — SECTION 10C (10A)','Expanding and simplifying polynomials',['expand a trinomial × binomial','track six products without losing one','collect like terms by degree']),
+ {h:'Key idea — count your products',b:`<div class="key"><span class="kt">Same rule, more terms</span>(3 terms)(2 terms) → <b>6 products</b>. Write them all, then collect by degree: x³ terms, x² terms, x terms, constants.</div>
+  <div class="key frag"><span class="kt">Layout tip</span>Work left to right from the first bracket; tick each term as it is used.</div>`},
+ {h:'Worked example 16',b:`<div class="q"><span class="tag">Worked example</span>Expand (x² + 2x − 1)(x + 3)</div>`+steps([
+  `<b>x² row:</b> x³ + 3x²`,
+  `<b>2x row:</b> 2x² + 6x`,
+  `<b>−1 row:</b> −x − 3`,
+  `<b>Collect:</b> x³ + 5x² + 5x − 3 <span class="say">(six products ✔)</span>`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Expand (x² − x + 2)(x − 1)</div>
+  <div class="hint frag">Hint: six products, watch the minus rows.</div>
+  <div class="ans frag">✔ x³ − x² − x² + x + 2x − 2 = <b>x³ − 2x² + 3x − 2</b></div>`},
+ {h:'',b:exset('10C',['Trinomial × binomial, then bigger products','Count products before collecting: 3 × 2 = 6 every time','Challenge: (x + 1)³ — expand in two stages'])}
+]},
+/* L17 10D */
+{code:'10D (10A) · Term 2 Week 3 · Lesson 17',nm:'Division of polynomials',menu:['10D','Polynomial division (10A)','long division, quotient, remainder'],
+ slides:[
+ title('LESSON 17 — SECTION 10D (10A)','Division of polynomials',['set up polynomial long division','divide, multiply, subtract, bring down — repeat','write the answer as quotient and remainder']),
+ {h:'🗣 New words first',b:vocab([
+  ['quotient','KWOH-shent','the answer to the division'],
+  ['remainder','re-MAYN-der','what is left over at the end'],
+  ['divisor','di-VY-zor','the polynomial you divide BY, like (x − 1)'],
+  ['bring down','—','pull the next term into the working']])},
+ {h:'Worked example 17',b:`<div class="q"><span class="tag">Worked example</span>Divide x³ − 2x² − 5x + 6 by (x − 1).</div>`+steps([
+  `<b>x³ ÷ x = x²:</b> write x²; multiply back x²(x − 1) = x³ − x²; subtract → −x² − 5x`,
+  `<b>−x² ÷ x = −x:</b> multiply −x(x − 1) = −x² + x; subtract → −6x + 6`,
+  `<b>−6x ÷ x = −6:</b> multiply −6(x − 1) = −6x + 6; subtract → remainder 0`,
+  `<b>Answer:</b> quotient x² − x − 6, remainder 0 — so x³ − 2x² − 5x + 6 = (x − 1)(x² − x − 6) = (x − 1)(x − 3)(x + 2)!`])},
+ {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Divide x³ + 3x² − 4 by (x + 2). <span class="say">(Careful: write x³ + 3x² + 0x − 4 — hold the x place!)</span></div>
+  <div class="hint frag">Hint: first step x³ ÷ x = x².</div>
+  <div class="ans frag">✔ Quotient x² + x − 2, remainder 0 → (x + 2)(x² + x − 2) = (x + 2)(x + 2)(x − 1)</div>`},
+ {h:'',b:exset('10D',['Long division with zero remainders, then with remainders','Insert 0x place-holders for missing terms — every time','Divide-multiply-subtract-bring down: chant it!'])}
+]},
+/* L18 revision */
+{code:'Term 2 Week 3 · Lesson 18',nm:'Revision — Unit 3 CAT preparation',menu:['★','Revision: Unit 3 for CAT 2','all factorising + solving'],cls:'rev',
+ slides:[
+ title('LESSON 18 — CAT 2 REVISION','Unit 3 review',['check the full Unit 3 checklist','run the factorise-and-solve decision guides at speed','finalise my fix-it list for CAT 2']),
+ {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <tr><td>5A: expand binomial products, perfect squares, DOPS</td><td></td><td></td><td></td></tr>
+  <tr><td>5B: factorise — HCF and DOPS</td><td></td><td></td><td></td></tr>
+  <tr><td>5C: simplify, × and ÷ algebraic fractions</td><td></td><td></td><td></td></tr>
+  <tr><td>5D/5E: factorise monic and non-monic trinomials</td><td></td><td></td><td></td></tr>
+  <tr><td>5F: complete the square (surd factorising)</td><td></td><td></td><td></td></tr>
+  <tr><td>5G–5J: solve by factorising, completing, formula</td><td></td><td></td><td></td></tr>
+  <tr><td>5H: applications with the reject step</td><td></td><td></td><td></td></tr>
+  <tr><td>10B–10D: polynomials — evaluate, expand, divide (10A)</td><td></td><td></td><td></td></tr></table>
+  <p class="note">😟 rows → tonight's list. CAT 2 is next lesson.</p>`},
+ {h:'The master factorising flowchart',b:`<table class="chk"><tr><th>Ask in order…</th><th>If yes…</th></tr>
+  <tr><td>1. Common factor?</td><td>take out the HCF first</td></tr>
+  <tr><td>2. Two terms, minus, both squares?</td><td>DOPS</td></tr>
+  <tr><td>3. Three terms, a = 1?</td><td>magic numbers (5D)</td></tr>
+  <tr><td>4. Three terms, a ≠ 1?</td><td>grouping / ac method (5E)</td></tr>
+  <tr><td>5. Nothing works?</td><td>complete the square (5F)</td></tr></table>
+  <div class="frame frag">Solving? Standard form → factorise → null factor law → (or formula). Say the chain aloud.</div>`},
+ {h:'Today’s work',b:`<div class="exset"><h3>⏱ Mixed practice (timed)</h3><ul>
+  <li>Practice CAT questions across 5A–5J and 10B–10D</li>
+  <li>Swap and mark; name each error type</li>
+  <li>Fix-it questions from your 😟 rows to finish</li></ul>
+  <p class="note">Bilingual dictionary rules for the CAT: confirm with your teacher today.</p></div>`}
+]},
+/* L19 CAT */
+{code:'Term 2 Week 4 · Lesson 19',nm:'CAT 2 — Unit 3',menu:['📋','CAT 2 — Quadratic Algebra','expand, factorise, solve, apply'],cls:'test',
+ slides:[
+ title('CAT 2 — UNIT 3','Quadratic Algebra',['show my full factorising and solving toolkit','manage time: 1 mark ≈ 1 minute','attempt every question — method marks are real']),
+ {h:'Before you start',b:`<div class="key"><span class="kt">Checklist</span>🖩 calculator · ✏ pencil · 📖 dictionary (if approved) · 💧 water.</div>
+  <div class="key frag"><span class="kt">Remember</span>“= 0” before the null factor law · brackets around negative substitutions · exact means surds · reject impossible answers in applications.</div>
+  <div class="frame frag">You have factorised hundreds of these. Start strong. 💪</div>
+  <p class="note frag">After the CAT: Unit 4 — Measurement and Geometry begins this week.</p>`}
+]}
+];
+
+/* ---------- engine ---------- */
+let li=0,si=0;
+const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
+      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
+      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
+const WEEKS=[['Term 1 · Week 9 — Expanding, factorising, algebraic fractions (Careers Expo Mon · PTSC Wed)',[0,1,2,3]],
+             ['Term 1 · Week 10 — Trinomials (Good Friday: 3 lessons) · then autumn holidays',[4,5,6]],
+             ['Term 2 · Week 1 — Non-monic, completing the square, solving',[7,8,9,10]],
+             ['Term 2 · Week 2 — Applications, exact solving, the formula',[11,12,13,14]],
+             ['Term 2 · Weeks 3–4 — Polynomials (10A), revision and CAT 2',[15,16,17,18,19]]];
+function buildMenu(){
+  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
+  <h1>Quadratic Algebra — Chapter 5 and 10B–10D</h1>
+  <p class="sub">10 Methods · Unit 3 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 1 Wk 9 – Term 2 Wk 4 · CAT 2 in Term 2 Week 4<br>
+  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
+  for(const [wn,ids] of WEEKS){
+    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
+    for(const id of ids){const L=LESSONS[id];
+      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
+      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
+      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
+    h+=`</div></div>`;}
+  menuEl.innerHTML=h;
+}
+function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
+function goMenu(){stage.style.display='none';menuEl.style.display='block';}
+function render(){
+  const L=LESSONS[li],S=L.slides[si];
+  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
+  slideEl.scrollTop=0;
+  hlbl.textContent=`${L.code} — ${L.nm}`;
+  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
+  fill.style.width=((si+1)/L.slides.length*100)+'%';
+}
+function frags(){return [...slideEl.querySelectorAll('.frag')];}
+function nav(dir){
+  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
+    if(f){f.classList.add('on');return;}
+    if(si<LESSONS[li].slides.length-1){si++;render();}
+    else if(li<LESSONS.length-1){openLesson(li+1);}
+    else goMenu();
+  }else{const on=frags().filter(x=>x.classList.contains('on'));
+    if(on.length){on[on.length-1].classList.remove('on');return;}
+    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
+    else goMenu();
+  }
+}
+document.addEventListener('keydown',e=>{
+  if(stage.style.display!=='flex')return;
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Escape')goMenu();
+});
+buildMenu();
+</script>
+</body>
+</html>
