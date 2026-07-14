@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solution Set &mdash; Biodiversity &amp; Ecosystems | Year 7 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:  #1E7A4E;
+    --forest-dark: #0C4A2D;
+    --forest-light: #E3F5EC;
+    --navy:    #16305C;
+    --amber:   #F5A623;
+    --amber-bg:#FFF3DC;
+    --amber-ink:#7A4E00;
+    --teal:    #18A999;
+    --violet:  #7C5CE0;
+    --violet-bg:#EFE9FF;
+    --violet-ink:#4A2F91;
+    --coral:   #FF6B5E;
+    --coral-bg:#FFE9E6;
+    --coral-ink:#7A1C14;
+    --ink:     #16223A;
+    --grey:    #5B6B82;
+    --line:    #DDE5F0;
+    --paper:   #FBFCFE;
+    --white:   #FFFFFF;
+    --font-display: 'Poppins', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); line-height:1.6; }
+
+  /* ---- Header band ---- */
+  .hero {
+    background: linear-gradient(160deg, #0C2B1A 0%, #1E5E38 55%, #1E7A4E 100%);
+    color: var(--white);
+    padding: 4vh 6vw 5vh;
+  }
+  .back-btn {
+    display:inline-block; margin-bottom:2.4vh;
+    font-family:var(--font-display); font-weight:600; font-size:0.92rem;
+    color:rgba(255,255,255,0.9); text-decoration:none;
+    border:1px solid rgba(255,255,255,0.3); border-radius:100px; padding:0.4em 1.1em;
+    transition:background 0.2s ease;
+  }
+  .back-btn:hover { background:rgba(255,255,255,0.15); }
+  .unit-tag {
+    display:inline-block; background:rgba(245,166,35,0.22); border:1px solid rgba(245,166,35,0.5);
+    border-radius:100px; padding:0.3em 1em; font-family:var(--font-display); font-size:0.8rem;
+    font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1.5vh;
+    color:#FFE2B0;
+  }
+  .hero h1 { font-family:var(--font-display); font-size:clamp(1.9rem,4.5vw,3.2rem); font-weight:700; line-height:1.05; letter-spacing:-0.02em; }
+  .hero .sub { font-size:clamp(1rem,1.6vw,1.25rem); color:rgba(255,255,255,0.82); max-width:60ch; margin-top:1.2vh; }
+  .hero .meta-row { display:flex; gap:1.4vw; flex-wrap:wrap; font-size:0.9rem; color:rgba(255,255,255,0.7); margin-top:2vh; }
+  .teacher-note {
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.25); border-radius:12px;
+    padding:1.4vh 1.8vw; margin-top:2.4vh; font-size:0.95rem; color:rgba(255,255,255,0.9); max-width:80ch;
+  }
+
+  /* ---- Section nav ---- */
+  .toc {
+    position:sticky; top:0; z-index:20; background:rgba(251,252,254,0.95);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+    padding:1.2vh 6vw; display:flex; gap:0.5em; flex-wrap:wrap;
+  }
+  .toc a {
+    font-family:var(--font-display); font-weight:600; font-size:0.78rem; text-decoration:none;
+    color:var(--forest); background:var(--forest-light); border-radius:100px; padding:0.3em 0.8em;
+    border:1px solid transparent; transition:all 0.15s ease;
+  }
+  .toc a:hover { border-color:var(--forest); }
+  .toc a.review { color:var(--amber-ink); background:var(--amber-bg); }
+
+  /* ---- Content ---- */
+  main { max-width:1000px; margin:0 auto; padding:4vh 6vw 8vh; }
+  section.lesson { margin-bottom:5vh; scroll-margin-top:70px; }
+  .lesson-head { display:flex; align-items:baseline; gap:0.8em; border-bottom:3px solid var(--forest); padding-bottom:0.6vh; margin-bottom:2.4vh; }
+  .lesson-num { font-family:var(--font-display); font-weight:700; font-size:2.2rem; color:rgba(30,122,78,0.28); line-height:1; }
+  .lesson-title { font-family:var(--font-display); font-weight:700; font-size:clamp(1.3rem,2.6vw,1.8rem); color:var(--forest-dark); }
+
+  .qa { border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:1.8vh; background:var(--white); box-shadow:0 2px 10px rgba(22,48,92,0.05); }
+  .q { background:var(--forest-light); padding:1.2vh 1.4vw; font-weight:600; color:var(--forest-dark); display:flex; gap:0.6em; align-items:baseline; }
+  .q .qref { font-family:var(--font-display); font-weight:700; white-space:nowrap; }
+  .q .marks { margin-left:auto; font-family:var(--font-display); font-size:0.78rem; font-weight:600; background:var(--forest); color:#fff; border-radius:100px; padding:0.15em 0.7em; white-space:nowrap; }
+  .a { padding:1.4vh 1.6vw; }
+  .a p { margin-bottom:0.8em; }
+  .a p:last-child { margin-bottom:0; }
+  .a ul, .a ol { margin:0.4em 0 0.8em 1.4em; }
+  .a li { margin-bottom:0.35em; }
+  .a strong { color:var(--forest-dark); }
+  .sp { color:var(--grey); font-style:italic; }
+
+  table.ans { width:100%; border-collapse:collapse; margin:0.6em 0 0.9em; font-size:0.92rem; }
+  table.ans th, table.ans td { border:1px solid var(--line); padding:0.5em 0.7em; text-align:left; vertical-align:top; }
+  table.ans th { background:var(--forest-light); color:var(--forest-dark); font-family:var(--font-display); font-weight:600; }
+  table.ans tbody tr:nth-child(even) td { background:#F6FAF8; }
+
+  .tag { display:inline-block; font-size:0.72rem; font-family:var(--font-display); font-weight:600; border-radius:6px; padding:0.1em 0.55em; margin-right:0.3em; vertical-align:middle; }
+  .tag.y8 { background:var(--violet-bg); color:var(--violet-ink); }
+  .tag.entry { background:var(--amber-bg); color:var(--amber-ink); }
+  .tag.fn { background:#F3E9DD; color:#6B4423; }
+
+  .note { border-left:4px solid var(--amber); background:var(--amber-bg); padding:0.8em 1em; border-radius:0 8px 8px 0; font-size:0.9rem; margin:0.6em 0; color:#5c3d00; }
+  .note strong { color:var(--amber-ink); }
+  .calc { font-family:'Inter',monospace; background:#F6FAF8; border:1px solid var(--line); border-radius:8px; padding:0.7em 0.9em; margin:0.6em 0; font-size:0.9rem; }
+
+  /* MCQ grid */
+  .mcq-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:0.7em; margin:1em 0; }
+  .mcq { border:1px solid var(--line); border-radius:10px; padding:0.7em; text-align:center; background:var(--white); }
+  .mcq .num { font-family:var(--font-display); font-size:0.78rem; color:var(--grey); }
+  .mcq .let { font-family:var(--font-display); font-weight:700; font-size:1.5rem; color:var(--forest); line-height:1.1; }
+
+  footer { text-align:center; padding:4vh 6vw; color:var(--grey); font-size:0.85rem; border-top:1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <a class="back-btn" href="index.html">&#8592; Back to unit</a>
+  <div class="unit-tag">Teacher Answer Key &middot; Confidential</div>
+  <h1>Solution Set &mdash; Biodiversity &amp; Ecosystems</h1>
+  <p class="sub">Model answers and marking guidance for the full Year 7/8 unit booklet: every entry task, worked-example follow-up, core and extension question, and the 60-mark unit review.</p>
+  <div class="meta-row">
+    <span>11 sections</span><span>&middot;</span>
+    <span>Year 7 core + Year 8 extension</span><span>&middot;</span>
+    <span>Unit Review marking key (60 marks)</span><span>&middot;</span>
+    <span>Victorian Curriculum F&ndash;10 v2.0</span>
+  </div>
+  <div class="teacher-note">
+    <strong>How to use:</strong> Answers are model responses, not the only acceptable wording &mdash; award marks for any response that demonstrates the same understanding. <span class="tag entry">Entry task</span> <span class="tag y8">Yr 8</span> and <span class="tag fn">First Nations</span> labels mark question type. Open-ended and opinion questions show the marking criteria rather than a single "correct" answer.
+  </div>
+</div>
+
+<nav class="toc">
+  <a href="#s1">1 &middot; Living?</a>
+  <a href="#s2">2 &middot; Classification</a>
+  <a href="#s3">3 &middot; Names &amp; Kingdoms</a>
+  <a href="#s4">4 &middot; Keys</a>
+  <a href="#s5">5 &middot; Ecosystems</a>
+  <a href="#s6">6 &middot; Food Webs</a>
+  <a href="#s7">7 &middot; Services</a>
+  <a href="#s8">8 &middot; Adaptations</a>
+  <a href="#s9">9 &middot; Introduced</a>
+  <a href="#s10">10 &middot; Human Impacts</a>
+  <a href="#s11">11 &middot; Conservation</a>
+  <a href="#review" class="review">&#9733; Unit Review</a>
+</nav>
+
+<main>
+
+<!-- ============ SECTION 1 ============ -->
+<section class="lesson" id="s1">
+  <div class="lesson-head"><span class="lesson-num">01</span><span class="lesson-title">Living or Non-living?</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 1.1</span><span><span class="tag entry">Entry task</span>Sort each item as living, dead, or non-living</span><span class="marks">8 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Item</th><th>Column</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Candle flame</td><td>Non-living</td><td>Never alive; no cells; cannot reproduce or excrete</td></tr>
+          <tr><td>Dry leaf</td><td>Dead</td><td>Was part of a living plant; can no longer carry out life processes</td></tr>
+          <tr><td>Bacterium</td><td>Living</td><td>Single cell carrying out all seven MRS GREN processes</td></tr>
+          <tr><td>Wooden desk</td><td>Dead</td><td>Made from a once-living tree; no longer alive</td></tr>
+          <tr><td>Yeast in bread dough</td><td>Living</td><td>Fungus respiring (produces CO&#8322;), feeding on sugar, reproducing</td></tr>
+          <tr><td>River rock</td><td>Non-living</td><td>Never alive; mineral, no cells</td></tr>
+          <tr><td>Mushroom</td><td>Living</td><td>Fungus &mdash; grows, reproduces via spores, absorbs nutrients</td></tr>
+          <tr><td>Virus</td><td>Non-living</td><td>No cells; cannot carry out life processes without a host (see Q2)</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">1 mark per correct placement. Accept "virus" as a debated case if justified.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Explain a difficult-to-classify item using MRS GREN</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Answers vary &mdash; award for a reasoned justification. <strong>Model (virus):</strong> A virus <em>can</em> reproduce (R) &mdash; but only by hijacking a host cell &mdash; and it contains genetic material. However it shows no independent movement, respiration, growth, excretion, sensitivity or nutrition, and has no cells. Because it cannot carry out all seven processes on its own, it is best classified as <strong>non-living</strong>.</p>
+      <p class="sp">1 mark: criteria met &middot; 1 mark: criteria not met &middot; 1 mark: justified final classification.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Is a virus living or non-living? Explain using MRS GREN</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p><strong>Non-living.</strong> A virus can only reproduce inside a host cell and cannot independently move, grow, respire, excrete, sense, or obtain nutrition. It has no cells, so it fails most MRS GREN criteria and cannot function as an organism on its own.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span><span class="tag y8">Yr 8</span>Two structural differences that let plant cells photosynthesise</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>Chloroplasts</strong> &mdash; contain the green pigment chlorophyll and are the site of photosynthesis, capturing light energy to make glucose. Animal cells have none.</p>
+      <p><strong>Cell wall</strong> (rigid cellulose) &mdash; supports the plant and holds leaves upright and spread out so chloroplasts are positioned to capture sunlight. (Accept <strong>large permanent vacuole</strong>, which keeps cells turgid to hold leaves up to the light.)</p>
+      <p class="sp">1 mark per structure named + 1 mark for linking a structure to photosynthesis.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Evaluate: should viruses be a "seventh kingdom"?</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>For:</strong> viruses have genetic material (DNA/RNA), evolve and mutate, and interact with living organisms &mdash; features shared with life.</p>
+      <p><strong>Against:</strong> they have no cellular structure (violating cell theory), no metabolism, and cannot reproduce or do anything without hijacking a host cell.</p>
+      <p><strong>Evaluation:</strong> most scientists reject a seventh kingdom &mdash; kingdoms are cellular, and viruses are non-cellular. A defensible conclusion either way earns marks if supported with this evidence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section class="lesson" id="s2">
+  <div class="lesson-head"><span class="lesson-num">02</span><span class="lesson-title">Classification &mdash; Linnaean Levels</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 2.1</span><span><span class="tag entry">Entry task</span>Complete the table for the eastern grey kangaroo</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Level</th><th>Classification</th><th>What this tells us</th></tr></thead>
+        <tbody>
+          <tr><td>Kingdom</td><td>Animalia</td><td>It is an animal (multicellular, eats, moves)</td></tr>
+          <tr><td>Phylum</td><td>Chordata</td><td>Has a backbone (vertebrate)</td></tr>
+          <tr><td>Class</td><td>Mammalia</td><td>Feeds young on milk; has fur; warm-blooded</td></tr>
+          <tr><td>Order</td><td>Diprotodontia</td><td>Two fused lower front teeth; includes kangaroos, wombats, possums</td></tr>
+          <tr><td>Family</td><td>Macropodidae</td><td>"Big-footed" marsupials: kangaroos and wallabies</td></tr>
+          <tr><td>Genus</td><td><em>Macropus</em></td><td>Large kangaroos</td></tr>
+          <tr><td>Species</td><td><em>giganteus</em></td><td>The specific epithet unique to this species</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">4 marks for the four blank "what this tells us" cells (Phylum&ndash;Species).</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>At which level does the echidna first differ from the kangaroo?</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p>They share <strong>Kingdom Animalia, Phylum Chordata and Class Mammalia</strong> &mdash; both are backboned mammals. They first differ at <strong>Order</strong>: the kangaroo is <em>Diprotodontia</em>, the echidna is <em>Monotremata</em>.</p>
+      <p>Because they diverge at Order (a fairly broad level), they share a <strong>more distant common ancestor</strong> than two animals in the same family or genus would. They are related &mdash; both mammals &mdash; but not closely.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Why classify into a hierarchy rather than give each organism a unique name?</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p>A hierarchy <strong>groups related organisms together</strong>, showing evolutionary relationships and letting us <strong>predict shared characteristics</strong>. With millions of species, nested groups make information far easier to organise, search and communicate than millions of unrelated names.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span><span class="tag fn">First Nations</span>The three domains &mdash; classify human, <em>E. coli</em>, and a thermophile</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Domains are separated by <strong>cell type / basic cell structure and chemistry</strong> &mdash; principally whether cells have a membrane-bound nucleus, plus differences in cell wall and membrane chemistry.</p>
+      <ul>
+        <li>Human &rarr; <strong>Eukarya</strong> (cells have a nucleus)</li>
+        <li><em>E. coli</em> &rarr; <strong>Bacteria</strong> (prokaryote)</li>
+        <li>Hot-spring thermophile (<em>Sulfolobus</em>) &rarr; <strong>Archaea</strong> (prokaryote adapted to extreme conditions)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>A DNA reclassification example, and why DNA beats appearance</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>Example (accept any valid one):</strong> whales were shown by DNA to be close relatives of hippopotamuses rather than of fish; or fungi were moved out of the plant kingdom; or several bird groups were reshuffled after DNA sequencing.</p>
+      <p>DNA is more reliable than physical appearance because unrelated species can <strong>look alike through convergent evolution</strong> (similar environments produce similar body shapes), whereas DNA sequences directly record <strong>shared inheritance</strong> from a common ancestor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section class="lesson" id="s3">
+  <div class="lesson-head"><span class="lesson-num">03</span><span class="lesson-title">Scientific Names &amp; The Six Kingdoms</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 3.1</span><span><span class="tag entry">Entry task</span>Fix the scientific names</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Incorrect</th><th>Correct</th></tr></thead>
+        <tbody>
+          <tr><td>vombatus Ursinus</td><td><em>Vombatus ursinus</em></td></tr>
+          <tr><td>MacropusGiganteus</td><td><em>Macropus giganteus</em></td></tr>
+          <tr><td>ornithorhynchus anatinus</td><td><em>Ornithorhynchus anatinus</em></td></tr>
+          <tr><td>TACHYGLOSSUS aculeatus</td><td><em>Tachyglossus aculeatus</em></td></tr>
+        </tbody>
+      </table>
+      <p class="sp">Each: capital genus, lowercase species, italics (or underlined by hand), single space.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Classify each organism into a kingdom, with two reasons</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Organism</th><th>Kingdom</th><th>Two reasons</th></tr></thead>
+        <tbody>
+          <tr><td>Amoeba</td><td>Protista</td><td>Single-celled eukaryote; not a plant, animal or fungus</td></tr>
+          <tr><td>Common wombat</td><td>Animalia</td><td>Multicellular; heterotroph that eats other organisms and can move</td></tr>
+          <tr><td>Hot-spring microbe (no nucleus)</td><td>Archaea</td><td>Prokaryote (no membrane-bound nucleus); survives extreme conditions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Why must scientists worldwide use the same naming system?</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p>A single international system means every scientist refers to <strong>exactly the same species</strong>, regardless of language. <strong>Example:</strong> "magpie" means an unrelated bird in Australia versus Europe, so common names cause confusion &mdash; but <em>Cracticus tibicen</em> is unambiguous everywhere.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>Two features that make fungi more different from plants than they appear</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>1. Nutrition:</strong> fungi cannot photosynthesise &mdash; they are heterotrophs that digest organic matter externally and absorb the nutrients, whereas plants make their own food. <strong>2. Cell walls:</strong> fungal cell walls are made of <strong>chitin</strong>, not cellulose like plants. (Also: fungi store glycogen, plants store starch.)</p>
+      <p>These fundamental differences in how they feed and what they are built from justify placing fungi in a <strong>separate kingdom</strong>.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Diagram: one key difference between prokaryotic and eukaryotic cells</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>Key difference:</strong> the eukaryotic cell has a <strong>membrane-bound nucleus</strong> enclosing its DNA; the prokaryotic cell has <strong>no nucleus</strong> &mdash; its DNA floats free in the cytoplasm (a nucleoid).</p>
+      <p>A correct labelled sketch shows: prokaryote (cell wall, membrane, free DNA loop, no nucleus) vs eukaryote (membrane, nucleus containing DNA). This nucleus/no-nucleus split is the basis of the domain system because it reflects the deepest division in the history of life.</p>
+      <p class="sp">1 mark diagram &middot; 1 mark correct labels &middot; 1 mark explanation.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q5</span><span>Autotroph / heterotroph across the six kingdoms; how fungi feed</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a)</strong></p>
+      <table class="ans">
+        <thead><tr><th>Kingdom</th><th>Nutrition</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Animalia</td><td>Heterotroph</td><td>Eastern grey kangaroo</td></tr>
+          <tr><td>Plantae</td><td>Autotroph</td><td>Wattle (<em>Acacia</em>)</td></tr>
+          <tr><td>Fungi</td><td>Heterotroph</td><td>Mushroom</td></tr>
+          <tr><td>Protista</td><td>Both possible</td><td>Algae (auto) / amoeba (hetero)</td></tr>
+          <tr><td>Bacteria</td><td>Both possible</td><td>Cyanobacteria (auto) / <em>Salmonella</em> (hetero)</td></tr>
+          <tr><td>Archaea</td><td>Both possible</td><td>Chemoautotrophic methanogens</td></tr>
+        </tbody>
+      </table>
+      <p><strong>(b)</strong> Fungi feed by <strong>secreting digestive enzymes onto their food</strong>, breaking it down outside the body (external digestion), then <strong>absorbing</strong> the dissolved nutrients through their hyphae. This is why they don't need to move to obtain organic compounds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section class="lesson" id="s4">
+  <div class="lesson-head"><span class="lesson-num">04</span><span class="lesson-title">Dichotomous Keys</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 4.1</span><span><span class="tag entry">Entry task</span>Use the key to identify the spiders</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <ol>
+        <li>Small, uniformly black, red hourglass on belly &rarr; <strong>Redback spider</strong> (1a &rarr; 2a)</li>
+        <li>Large, hairy, brown, wider than a palm &rarr; <strong>Bird-eating spider (tarantula)</strong> (1b &rarr; 3a)</li>
+        <li>Black spider, no coloured markings anywhere &rarr; <strong>Black house spider</strong> (1a &rarr; 2b)</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Design a table-format key for four Victorian birds</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p>Model key (physical features only) &mdash; award marks for any working key that separates all four:</p>
+      <table class="ans">
+        <thead><tr><th>#</th><th>Characteristic</th><th>Go to / Identify</th></tr></thead>
+        <tbody>
+          <tr><td>1a</td><td>Very large (&gt;1&nbsp;m tall), cannot fly</td><td><strong>Emu</strong></td></tr>
+          <tr><td>1b</td><td>Smaller, can fly</td><td>Go to 2</td></tr>
+          <tr><td>2a</td><td>Large hooked beak and talons</td><td><strong>Wedge-tailed eagle</strong></td></tr>
+          <tr><td>2b</td><td>Straight or dagger-like beak, no talons</td><td>Go to 3</td></tr>
+          <tr><td>3a</td><td>Long heavy beak; large head (&gt;35&nbsp;cm body)</td><td><strong>Laughing kookaburra</strong></td></tr>
+          <tr><td>3b</td><td>Tiny (&lt;15&nbsp;cm); fine beak; long upright tail</td><td><strong>Superb fairy-wren</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="sp">Marks for: two clear options per step, physical features only, all four identifiable, logical order.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>One advantage and one disadvantage of the flowchart format</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p><strong>Advantage:</strong> the branching layout is visual and easy to follow &mdash; you can see the whole path at a glance. <strong>Disadvantage:</strong> it takes up much more space and becomes cluttered and hard to draw when there are many species.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>How within-species variation limits a key, and how to improve it</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p>If a key relies on a feature that varies within a species &mdash; e.g. juvenile vs adult colouring, or males vs females (sexual dimorphism, as in the superb fairy-wren where only breeding males are bright blue) &mdash; a user could be sent down the wrong branch and misidentify the organism.</p>
+      <p><strong>Improvement:</strong> base questions on <strong>stable structural features</strong> (beak shape, body size, number of legs) that don't change with age or sex, or add separate branches for each life stage/sex.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span>Compare a phylogenetic tree with a dichotomous key</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>A <strong>dichotomous key</strong> tells you <em>which species an unknown organism is</em>, using observable features &mdash; but says nothing about how species are related. A <strong>phylogenetic tree</strong> shows <em>evolutionary relationships and common ancestry</em> from DNA &mdash; but you can't use it to identify an unknown specimen in the field. Each answers a different question.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q5</span><span><span class="tag y8">Yr 8</span>Using DNA barcoding to identify an unknown beetle</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Extract DNA from the beetle, sequence a short standard region (e.g. the COI gene), and compare it against a reference database; the closest match identifies the species.</p>
+      <p><strong>Advantage:</strong> works from any life stage or a damaged fragment and is highly precise. <strong>Limitation:</strong> needs a lab, equipment and an existing reference database &mdash; if the species has never been barcoded, there is no match (a field key needs none of this).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<section class="lesson" id="s5">
+  <div class="lesson-head"><span class="lesson-num">05</span><span class="lesson-title">Australian Ecosystems &amp; Biodiversity</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 5.1</span><span><span class="tag entry">Entry task</span>Sort each item into biotic or abiotic</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Biotic (living / once-living)</th><th>Abiotic (non-living)</th></tr></thead>
+        <tbody>
+          <tr><td>Eastern grey kangaroo, leaf litter, soil bacteria, rotting log, mountain ash tree, fungi</td><td>Rainfall, rock, temperature, sunlight, wind, river</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">Leaf litter and rotting log are biotic because they come from living organisms. Award for correct justification of the tricky ones.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Why is a rotting log biotic even though it is not alive?</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p>Because it is <strong>made of organic material from a once-living organism</strong> (a tree). Biotic factors include living things <em>and</em> the dead organic matter and products that come from them, which still supply nutrients and habitat.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Complete the table for two Victorian ecosystem types</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p>Any two, correctly completed. Model:</p>
+      <table class="ans">
+        <thead><tr><th>Ecosystem</th><th>Key abiotic features</th><th>Plant</th><th>Animal</th></tr></thead>
+        <tbody>
+          <tr><td>Alpine</td><td>Cold, snow cover in winter, high altitude, short growing season</td><td>Snow gum</td><td>Mountain pygmy possum</td></tr>
+          <tr><td>Wet sclerophyll forest</td><td>High rainfall, deep fertile soil, tall dense canopy</td><td>Mountain ash</td><td>Leadbeater's possum</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>Why isn't a 50-species forest necessarily more biodiverse than a 30-species one?</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p>Species <em>richness</em> is only one part of biodiversity. You also need to know <strong>evenness</strong> (relative abundance) &mdash; a forest where one species dominates is less diverse than an even one &mdash; as well as <strong>genetic and ecosystem diversity</strong>.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Calculate the Simpson Diversity Index for two quadrats</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <div class="calc">
+        <strong>Quadrat A</strong> (N = 20; species 10, 5, 3, 2)<br>
+        &Sigma;(n/N)&sup2; = 0.5&sup2; + 0.25&sup2; + 0.15&sup2; + 0.1&sup2; = 0.25 + 0.0625 + 0.0225 + 0.01 = <strong>0.345</strong><br>
+        D = 1 &minus; 0.345 = <strong>0.655</strong><br><br>
+        <strong>Quadrat B</strong> (N = 20; species 18, 2)<br>
+        &Sigma;(n/N)&sup2; = 0.9&sup2; + 0.1&sup2; = 0.81 + 0.01 = <strong>0.82</strong><br>
+        D = 1 &minus; 0.82 = <strong>0.18</strong>
+      </div>
+      <p>A higher D means greater diversity. <strong>Quadrat A (0.66)</strong> is far more diverse than Quadrat B (0.18): A has more species and they are more evenly spread, while B is dominated by one species.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<section class="lesson" id="s6">
+  <div class="lesson-head"><span class="lesson-num">06</span><span class="lesson-title">Food Webs &amp; Energy Flow</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 6.1</span><span><span class="tag entry">Entry task</span>Classify each organism's role and draw a food chain</span><span class="marks">5 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Organism</th><th>Role</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Wallaby grass</td><td>Producer</td><td>Photosynthesises to make its own food</td></tr>
+          <tr><td>Eastern grey kangaroo</td><td>Primary consumer</td><td>Herbivore, eats grass</td></tr>
+          <tr><td>Brown falcon</td><td>Secondary consumer</td><td>Predator, eats primary consumers</td></tr>
+          <tr><td>Soil bacteria</td><td>Decomposer</td><td>Break down dead matter, recycle nutrients</td></tr>
+          <tr><td>Grasshopper</td><td>Primary consumer</td><td>Herbivore, eats plants</td></tr>
+          <tr><td>Wedge-tailed eagle</td><td>Apex consumer</td><td>Top predator, no natural predators</td></tr>
+          <tr><td>Eucalyptus tree</td><td>Producer</td><td>Photosynthesises</td></tr>
+          <tr><td>Common ringtail possum</td><td>Primary consumer</td><td>Herbivore, eats leaves</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Sample food chain:</strong> Wallaby grass &rarr; Grasshopper &rarr; Brown falcon &rarr; Wedge-tailed eagle. Arrows point in the direction of energy flow.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Interpret the woodland food web (Figure 6.1)</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a)</strong> If grasshoppers fell by 80%, the brown falcon population would likely <strong>decline</strong> because it loses a major food source &mdash; unless it can switch to alternative prey. Less food means lower survival and breeding success.</p>
+      <p><strong>(b)</strong> An <strong>apex predator</strong> sits at the top of the web with no natural predators. Losing it is more significant than losing a primary consumer because it controls the numbers of species below it &mdash; its removal triggers a <strong>trophic cascade</strong> that ripples through many levels.</p>
+      <p><strong>(c)</strong> An <strong>omnivore such as the lace monitor</strong> can be both: when it eats wattle seeds/plant matter it is a <em>primary</em> consumer, and when it eats grasshoppers or small animals it is a <em>secondary</em> consumer.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Why do scientists prefer food webs over food chains?</span><span class="marks">2 marks</span></div>
+    <div class="a">
+      <p>A food web shows the <strong>many interconnected feeding relationships</strong> in a real ecosystem, including alternative food sources. This makes it more realistic and lets scientists predict how a change to one species ripples out to others &mdash; a single chain shows only one pathway.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>The 10% rule &mdash; energy calculations</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <div class="calc">
+        Producers: 10,000 units<br>
+        (a) Primary consumer level = 10% &times; 10,000 = <strong>1,000 units</strong><br>
+        Secondary consumer level = 10% &times; 1,000 = 100 units<br>
+        (b) Tertiary consumer level = 10% &times; 100 = <strong>10 units</strong>
+      </div>
+      <p>About 90% of energy is lost at each transfer (as heat, movement and undigested waste), so only a tiny fraction reaches the top.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Define "keystone species" with an Australian example</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>A <strong>keystone species</strong> has an effect on its ecosystem far larger than its numbers would suggest; removing it causes the ecosystem to change dramatically.</p>
+      <p><strong>Example: the dingo.</strong> As a top predator it suppresses foxes and cats and controls kangaroo numbers. Remove dingoes and fox/cat numbers rise, small native mammals are hunted out and overgrazing increases &mdash; a <strong>trophic cascade</strong> that reshapes the whole community. (Accept digging mammals such as bilbies/bettongs as ecosystem engineers.)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 7 ============ -->
+<section class="lesson" id="s7">
+  <div class="lesson-head"><span class="lesson-num">07</span><span class="lesson-title">Ecosystem Services</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 7.1</span><span><span class="tag entry">Entry task</span>Sort each service into the correct category</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Category</th><th>Service (and reason)</th></tr></thead>
+        <tbody>
+          <tr><td>Provisioning</td><td>Birrarung providing fresh drinking water &mdash; a resource humans use directly</td></tr>
+          <tr><td>Regulating</td><td>Crop pollination by native bees; coastal mangroves absorbing wave energy; wetlands filtering agricultural runoff &mdash; all regulate natural processes</td></tr>
+          <tr><td>Cultural</td><td>Snowy Mountains attracting snow tourism &mdash; recreation/tourism value</td></tr>
+          <tr><td>Supporting</td><td>Soil bacteria breaking down dead leaves &mdash; nutrient cycling that underpins other services</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">Pollination and filtering can be argued as supporting too &mdash; award for best-fit choice with justification.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Ecosystem services the Birrarung provides, and the effect of pollution</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Category</th><th>Service the Birrarung provides</th><th>Effect of permanent pollution</th></tr></thead>
+        <tbody>
+          <tr><td>Provisioning</td><td>Fresh water and fish</td><td>Water undrinkable; fish unsafe to eat / lost</td></tr>
+          <tr><td>Regulating</td><td>Water purification and flood moderation by the riparian zone</td><td>Loss of natural filtering; worse floods and dirtier water downstream</td></tr>
+          <tr><td>Cultural</td><td>Deep cultural and spiritual significance to Wurundjeri people; recreation</td><td>Loss of cultural connection, recreation and tourism</td></tr>
+          <tr><td>Supporting</td><td>Habitat and nutrient cycling for aquatic life</td><td>Collapse of aquatic habitat; biodiversity decline</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Explain the link between biodiversity and ecosystem services</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Ecosystem services are produced by living organisms, so higher biodiversity generally means services are delivered more reliably. Diversity provides <strong>redundancy</strong> &mdash; if one species is lost, others can fill its role &mdash; making the ecosystem more <strong>resilient</strong>. As biodiversity declines, this backup is lost, roles go unfilled, and services (pollination, water purification, nutrient cycling) break down.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span><span class="tag y8">Yr 8</span>Evaluate assigning dollar values to ecosystem services</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>Advantages:</strong> (1) it makes nature's value visible in economic and political decisions so it isn't treated as free; (2) it allows the cost of destroying an ecosystem to be compared with the cost of protecting it.</p>
+      <p><strong>Limitation:</strong> many values &mdash; cultural, spiritual, and the intrinsic worth of species &mdash; cannot truly be captured in dollars, and pricing nature risks treating it as a commodity to be traded away.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>A Victorian ecosystem near a tipping point, and how to prevent the shift</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>Example (accept any valid one):</strong> mountain ash forests &mdash; repeated intense bushfires can shift them permanently to lower <em>Acacia</em> scrub because the ash cannot regenerate if burnt before it sets seed. (Or the Gippsland Lakes tipping into recurrent algal-bloom "dead zones".)</p>
+      <p><strong>Management:</strong> stop logging old-growth, reduce ignition risk and fuel loads, and protect unburnt refuges &mdash; keeping the system below the threshold where change becomes self-reinforcing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 8 ============ -->
+<section class="lesson" id="s8">
+  <div class="lesson-head"><span class="lesson-num">08</span><span class="lesson-title">Adaptations</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 8.1</span><span><span class="tag entry">Entry task</span>Classify each adaptation (S/B/P) and explain how it helps</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Adaptation</th><th>Type</th><th>How it helps</th></tr></thead>
+        <tbody>
+          <tr><td>Kangaroo: large hind legs</td><td>Structural</td><td>Powerful, energy-efficient hopping to cover ground and escape predators</td></tr>
+          <tr><td>Tawny frogmouth: bark-like feathers</td><td>Structural</td><td>Camouflage &mdash; blends with tree bark to avoid predators</td></tr>
+          <tr><td>Wombat: cube-shaped droppings</td><td>Physiological</td><td>The gut shapes them so they don't roll off rocks &mdash; used to scent-mark territory</td></tr>
+          <tr><td>Echidna: lowers body temperature in winter</td><td>Physiological</td><td>Torpor slows metabolism to conserve energy when food is scarce</td></tr>
+          <tr><td>Platypus: bill with electroreceptors</td><td>Structural</td><td>Detects prey's electrical signals underwater with eyes, ears and nose shut</td></tr>
+          <tr><td>Ringtail possum: nocturnal activity</td><td>Behavioural</td><td>Avoids daytime heat and predators and reduces water loss</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>One adaptation of each type for the platypus</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Type</th><th>Adaptation</th><th>How it aids survival</th></tr></thead>
+        <tbody>
+          <tr><td>Structural</td><td>Webbed feet and streamlined body</td><td>Efficient swimming to hunt and escape in water</td></tr>
+          <tr><td>Behavioural</td><td>Nocturnal/crepuscular foraging</td><td>Hunts when predators are inactive and water is calm</td></tr>
+          <tr><td>Physiological</td><td>Maintains a stable warm body temperature in cold water (and males produce venom)</td><td>Stays active while foraging in cold streams; venom defends/competes in breeding season</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">Accept bill electroreception (structural), dense waterproof fur, etc., if correctly classified.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Two mountain pygmy possum adaptations, useless in a Melbourne garden</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p><strong>1. Hibernation under snow</strong> &mdash; in the alps it survives freezing winters beneath an insulating snow layer; in a warm suburb there is no snow and no need to hibernate, so it would waste energy or fail to trigger correctly. <strong>2. Feeding on Bogong moths / fat storage</strong> &mdash; it relies on the seasonal moth migration to the alps; in a suburb those moths aren't reliably available, so this specialised feeding strategy fails. (Also thick fur would cause overheating.)</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>Explain natural selection using the ringtail possum colour scenario</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>Variation:</strong> possums vary &mdash; some darker, some paler. <strong>Heritability:</strong> colour is inherited and passed to offspring. <strong>Selection pressure:</strong> the new eagle predator spots pale possums more easily against dark granite, so they are eaten more often. <strong>Differential reproduction:</strong> darker (better-camouflaged) possums survive and breed more, passing on dark colouring. Over 50 generations the population becomes predominantly <strong>darker</strong>.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Marsupial mole vs European mole &mdash; convergent evolution</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Although only distantly related, both moles face the <strong>same selection pressures of a burrowing, underground life</strong>, so natural selection independently produced very similar features (cylindrical body, powerful digging limbs, reduced eyes). This is <strong>convergent evolution</strong> &mdash; it shows that similar environments shape unrelated species toward similar forms, and that looking alike does not prove close relationship.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 9 ============ -->
+<section class="lesson" id="s9">
+  <div class="lesson-head"><span class="lesson-num">09</span><span class="lesson-title">Introduced Species</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 9.1</span><span><span class="tag entry">Entry task</span>Sort native vs introduced (and note potential harm)</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Native to Victoria</th><th>Introduced (potentially harmful?)</th></tr></thead>
+        <tbody>
+          <tr><td>Eastern grey kangaroo, tawny frogmouth, platypus</td><td>European rabbit (harmful &mdash; overgrazing/competition); red fox (harmful &mdash; predation); European blackberry (harmful &mdash; habitat change); common starling (harmful &mdash; competes for nest hollows); European carp (harmful &mdash; degrades waterways)</td></tr>
+        </tbody>
+      </table>
+      <p class="sp">1 mark per correct sort + reason for the introduced species.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Trace the ecological effects of the red fox (impact chain)</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>Direct effect on native prey:</strong> foxes prey heavily on small-to-medium mammals (bandicoots, bettongs, potoroos) and ground-nesting birds that evolved no defences against a placental predator &mdash; causing steep declines and local extinctions.</p>
+      <p><strong>Effect on plant communities:</strong> many of those small mammals dig, disperse seeds and spread fungal spores; as they disappear, seed dispersal and soil turnover fall and vegetation structure changes.</p>
+      <p><strong>Effect on other animals:</strong> foxes compete with and suppress native predators such as quolls, and their presence reshapes the whole community (a mesopredator/prey effect rippling through the web).</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Why are native mammals so vulnerable to foxes, when rabbits survive?</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Native Australian mammals <strong>evolved without placental predators like the fox</strong>, so they lack anti-predator behaviours and many breed slowly &mdash; they cannot replace losses fast enough. European rabbits <strong>co-evolved alongside foxes</strong> in Europe, so they are naturally wary and breed extremely rapidly, letting their populations absorb heavy predation.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span><span class="tag y8">Yr 8</span>Evaluate the myxoma virus as biological control of rabbits</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>How it works:</strong> the myxoma virus causes myxomatosis, a fatal disease spread between rabbits by mosquitoes and fleas.</p>
+      <p><strong>Evidence of effectiveness:</strong> after release in the early 1950s it killed an estimated 99% of infected rabbits and crashed Australia's rabbit population.</p>
+      <p><strong>Risks:</strong> rabbits then <strong>evolved resistance</strong> and the virus became less lethal, so effectiveness fell; biological controls can also potentially harm non-target species or mutate, so they require careful host-specificity testing before release.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Why are island species so vulnerable to introduced predators?</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Island populations are usually <strong>small</strong> (little genetic diversity, so limited ability to adapt), and they <strong>evolved in isolation without such predators</strong>, so they have no defensive behaviours. If they are wiped out they <strong>cannot be re-colonised</strong> from elsewhere because they are cut off. <strong>Victorian example:</strong> little penguins on Phillip Island were devastated by foxes crossing to the colony until intensive fox control was introduced.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 10 ============ -->
+<section class="lesson" id="s10">
+  <div class="lesson-head"><span class="lesson-num">10</span><span class="lesson-title">Human Impacts on Ecosystems</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 10.1</span><span><span class="tag entry">Entry task</span>Identify the primary impact pathway for each scenario</span><span class="marks">5 marks</span></div>
+    <div class="a">
+      <table class="ans">
+        <thead><tr><th>Scenario</th><th>Primary pathway</th></tr></thead>
+        <tbody>
+          <tr><td>Housing estate built in remnant grassland</td><td>Habitat loss and fragmentation</td></tr>
+          <tr><td>Fertiliser runoff causes an algal bloom in the Yarra</td><td>Pollution</td></tr>
+          <tr><td>Snow cover in the Victorian alps has decreased since 1980</td><td>Climate change</td></tr>
+          <tr><td>Rabbits introduced in 1860s outcompete native marsupials</td><td>Introduced species</td></tr>
+          <tr><td>A freeway splits a forest into two isolated patches</td><td>Habitat loss / fragmentation</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>Why does fragmented Reserve B support fewer species than continuous Reserve A?</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Even though the total area is the same, four small 10&nbsp;ha blocks suffer far more <strong>edge effect</strong> (altered wind, light and moisture favouring weeds and predators), so less true interior habitat remains. Small patches <strong>cannot support viable populations</strong> of species that need large territories, and the farmland between blocks <strong>isolates populations</strong>, preventing movement and gene flow and leaving them more vulnerable to local extinction.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Trace the eutrophication chain in the Gippsland Lakes</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a) Nutrient input:</strong> nitrogen and phosphorus enter from fertiliser runoff and sewage. <strong>(b) Effect on algae:</strong> the extra nutrients trigger a rapid algal bloom. <strong>(c) Water clarity and plants:</strong> thick algae block light, so submerged aquatic plants can't photosynthesise and die. <strong>(d) Oxygen and animals:</strong> when the algae die, decomposing bacteria consume the dissolved oxygen, creating a low-oxygen "dead zone" where fish and other aquatic animals suffocate (fish kills).</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span>A Victorian species facing multiple threats &mdash; how they interact</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>Model &mdash; Leadbeater's possum:</strong> it needs hollows that form only in mountain ash over 150 years old. <strong>Threat 1 (logging)</strong> removes old hollow-bearing trees; <strong>Threat 2 (bushfire)</strong> &mdash; the 2009 fires burned ~45% of its habitat and hollows take 150+ years to reform; <strong>Threat 3 (climate change)</strong> increases fire frequency so regrowth is burnt before it is old enough to form hollows.</p>
+      <p><strong>Why the combination is worse:</strong> each threat alone is survivable, but together they trap the species &mdash; the forest is repeatedly reset before it can produce the old trees the possum depends on, accelerating decline toward extinction. (Accept any Victorian species with two well-explained interacting threats.)</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Three risks facing a small, isolated bandicoot population</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <ul>
+        <li><strong>Loss of genetic diversity:</strong> random genetic drift in a small population reduces variation, limiting the ability to adapt.</li>
+        <li><strong>Inbreeding depression:</strong> mating between close relatives exposes harmful recessive alleles, lowering health and fertility.</li>
+        <li><strong>Demographic stochasticity:</strong> chance events (a run of one-sex births, a bad season) can crash a tiny population.</li>
+        <li><strong>Allee effect:</strong> at very low density individuals struggle to find mates, so the population grows even more slowly &mdash; a downward spiral.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q5</span><span><span class="tag y8">Yr 8</span>Planetary boundaries: biodiversity as the most-exceeded boundary</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>It means humans have already pushed biodiversity loss <strong>well beyond the safe operating limit</strong> for a stable planet. Crossing it makes other boundaries harder to stay within because biodiversity underpins the processes that regulate them &mdash; forests and ocean life store carbon (climate) and healthy ecosystems cycle and purify water (freshwater). As biodiversity collapses, those regulating functions weaken, worsening climate change and freshwater stress in turn.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 11 ============ -->
+<section class="lesson" id="s11">
+  <div class="lesson-head"><span class="lesson-num">11</span><span class="lesson-title">Conservation &amp; Action</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Task 11.1</span><span><span class="tag entry">Entry task</span>Rank the conservation strategies and justify</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>No single correct ranking</strong> &mdash; award marks for a coherent, justified order. A strong response tends to rank <strong>in-situ protection</strong> (new national park; habitat corridors) highly because it protects whole ecosystems and natural processes, treats <strong>legislation banning key pesticides</strong> as powerful but dependent on enforcement, and places <strong>ex-situ measures</strong> (captive breeding, seed/gene banks) and <strong>education</strong> as valuable supports rather than complete solutions on their own.</p>
+      <p><strong>Justify top choice:</strong> the best answers argue that protecting habitat in place keeps species in their natural web of relationships, whereas ex-situ methods only preserve a species until its habitat is restored.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q1</span><span>The eastern barred bandicoot recovery program</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>(a)</strong> <strong>Both.</strong> Captive breeding at Zoos Victoria is <em>ex-situ</em> (away from the wild), while reintroduction into predator-free enclosures is <em>in-situ</em> (back into natural habitat).</p>
+      <p><strong>(b)</strong> The ultimate goal is a <strong>self-sustaining wild population</strong>. Before reintroduction can succeed, the original threats must be controlled (fox and cat control), there must be <strong>suitable protected habitat</strong>, and released animals need <strong>enough genetic diversity</strong> to remain healthy.</p>
+      <p><strong>(c)</strong> Reaching over 1,500 by 2022 shows the strategy <strong>worked</strong> &mdash; the species was downlisted from extinct-in-the-wild. <strong>Remaining concerns:</strong> the population still depends on fenced/predator-free sites and ongoing management, and it may carry reduced genetic diversity from its founder bottleneck.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q2</span><span>Design a realistic local conservation action (northern Melbourne)</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p>Award for a realistic, well-reasoned plan. <strong>Model:</strong></p>
+      <p><strong>(a) Action:</strong> plant an indigenous-vegetation corridor of local grasses, wattles and eucalypts along the school grounds or a nearby creek, and install nest boxes.</p>
+      <p><strong>(b) Benefit (linked to ecology):</strong> it creates habitat and food, and <strong>links isolated patches</strong> so native animals can move safely between them &mdash; restoring gene flow and supporting the local food web (Sections 5, 6 and 10).</p>
+      <p><strong>(c) Limitation:</strong> corridors need ongoing weed and watering maintenance, can also help weeds or predators spread, and take years to become effective habitat.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q3</span><span><span class="tag y8">Yr 8</span>Evaluate the EPBC Act 1999</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>What it does:</strong> it is Australia's main federal environmental law, protecting nationally threatened species and ecological communities and requiring assessment of developments likely to harm them.</p>
+      <p><strong>Evidence it is failing:</strong> biodiversity has kept declining and many listed species continue toward extinction; the 2020 independent (Samuel) review found it "not fit for purpose", citing weak enforcement and slow, under-resourced processes.</p>
+      <p><strong>One improvement:</strong> establish an <strong>independent regulator</strong> with legally binding national environmental standards (accept: more funding, faster listing, stronger penalties).</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Q4</span><span><span class="tag y8">Yr 8</span>Evaluate rewilding Tasmanian devils to mainland Victoria</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a) Proposed benefit:</strong> as a mesopredator/scavenger the devil could <strong>suppress foxes and feral cats</strong>, triggering a trophic cascade that helps small native mammals recover.</p>
+      <p><strong>(b) Community concerns:</strong> possible predation on livestock and pets, uncertainty about effects on native prey, and disease risk (to and from the devils).</p>
+      <p><strong>(c) Decision-making authority:</strong> it should be <strong>shared</strong> &mdash; ecologists and government for the science and regulation, and especially <strong>Traditional Owners and local communities</strong>, because they hold responsibility for Country and would live with the consequences. A defensible view earns marks if justified.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNIT REVIEW ============ -->
+<section class="lesson" id="review">
+  <div class="lesson-head"><span class="lesson-num">&#9733;</span><span class="lesson-title">Unit Review &mdash; Marking Key (60 marks)</span></div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">Section A</span><span>Multiple choice &mdash; answer key</span><span class="marks">20 marks</span></div>
+    <div class="a">
+      <div class="mcq-grid">
+        <div class="mcq"><div class="num">Q1</div><div class="let">C</div></div>
+        <div class="mcq"><div class="num">Q2</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q3</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q4</div><div class="let">C</div></div>
+        <div class="mcq"><div class="num">Q5</div><div class="let">A</div></div>
+        <div class="mcq"><div class="num">Q6</div><div class="let">C</div></div>
+        <div class="mcq"><div class="num">Q7</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q8</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q9</div><div class="let">C</div></div>
+        <div class="mcq"><div class="num">Q10</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q11</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q12</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q13</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q14</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q15</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q16</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q17</div><div class="let">B</div></div>
+        <div class="mcq"><div class="num">Q18</div><div class="let">C</div></div>
+        <div class="mcq"><div class="num">Q19</div><div class="let">A</div></div>
+        <div class="mcq"><div class="num">Q20</div><div class="let">C</div></div>
+      </div>
+      <p class="sp">1 mark each. Q1 classification reflects evolution; Q9 the 10% rule; Q13 genetic = within-species variation; Q20 an IPA is a whole conservation strategy, not a single-threat response.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q1</span><span>Two kangaroo species &mdash; classification</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a)</strong> They first share a classification at <strong>Genus</strong> (both <em>Macropus</em>). <em>(1)</em></p>
+      <p><strong>(b)</strong> Sharing a genus means they are <strong>closely related with a recent common ancestor</strong>, but are still <strong>distinct species</strong> that don't normally interbreed to produce fertile offspring. <em>(2)</em></p>
+      <p><strong>(c)</strong> <em>Macropus rufus</em> &mdash; capital genus, lowercase species, italic/underlined. <em>(1)</em></p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q2</span><span>Food web interpretation</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>(a)</strong> Producer: wallaby grass. Apex predator: wedge-tailed eagle. <em>(1)</em></p>
+      <p><strong>(b)</strong> If brown falcons were removed, <strong>grasshopper numbers would rise</strong> &mdash; a predator that ate them is gone, so more survive and breed. <em>(2)</em></p>
+      <p><strong>(c)</strong> Energy decreases up the web because about <strong>90% is lost at each level</strong> (heat, respiration, movement, undigested waste) &mdash; the 10% rule. <em>(1)</em></p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q3</span><span>European carp impact chain (&ge;3 steps)</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p><strong>Step 1:</strong> carp stir up river sediment as they feed, increasing turbidity (cloudiness) and releasing stored nutrients. <strong>Step 2:</strong> less light reaches the riverbed, so aquatic plants can't photosynthesise and die, removing food and shelter. <strong>Step 3:</strong> native fish and invertebrates lose habitat, and released nutrients fuel algal blooms whose decay lowers oxygen &mdash; causing fish kills. Native species decline.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q4</span><span>Structural vs behavioural adaptation, with examples</span><span class="marks">4 marks</span></div>
+    <div class="a">
+      <p>A <strong>structural adaptation</strong> is an inherited physical body feature; a <strong>behavioural adaptation</strong> is an inherited pattern of action. <strong>Structural example:</strong> the echidna's sharp spines protect it from predators. <strong>Behavioural example:</strong> the echidna entering torpor in winter (or a kangaroo resting in shade during the day) to conserve energy/water.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q5</span><span><span class="tag fn">First Nations</span>Three ways Caring for Country supports biodiversity</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <ul>
+        <li><strong>Cultural burning</strong> creates a mosaic of habitats at different regrowth stages, supporting complex, resilient food webs.</li>
+        <li><strong>Seasonal, sustainable harvesting</strong> (strict protocols against over-harvesting) keeps populations healthy.</li>
+        <li><strong>Protecting sacred sites and totemic species</strong> and active, ongoing land management maintain habitat and species over the long term.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">B&middot;Q6</span><span>Three categories of ecosystem service, with Victorian examples</span><span class="marks">3 marks</span></div>
+    <div class="a">
+      <p>Any three of: <strong>Provisioning</strong> &mdash; Melbourne's drinking water from mountain ash catchments; <strong>Regulating</strong> &mdash; mountain ash storing carbon / wetlands controlling floods; <strong>Cultural</strong> &mdash; Great Ocean Road tourism / the Birrarung's cultural significance; <strong>Supporting</strong> &mdash; decomposers recycling nutrients into Victorian soils.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">C&middot;Q7</span><span>Declining wetland ecosystem (extended response)</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>(a) Two ecosystem services (2):</strong> water purification/filtering (regulating) and flood control (regulating); accept habitat/biodiversity support, fish provisioning, or cultural value.</p>
+      <p><strong>(b) Food-web changes from carp (3):</strong> carp stir sediment &rarr; higher turbidity &rarr; aquatic plants die (loss of food and shelter); native fish and waterbirds decline; nutrient release &amp; algal blooms lower oxygen, causing fish kills. (Two specific effects required.)</p>
+      <p><strong>(c) One restoration strategy (1):</strong> remove/reduce carp (e.g. screening or targeted control) and replant native aquatic vegetation &mdash; restoring water clarity, habitat and the native food web.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">C&middot;Q8</span><span>Leadbeater's possum (extended response)</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>(a) Two threats, each explained (4):</strong> <em>logging of old-growth mountain ash</em> removes the hollow-bearing trees it nests in (hollows take 150+ years to form); <em>bushfire</em> (e.g. 2009) destroys large areas of habitat and kills old trees faster than they can be replaced. (Accept climate change increasing fire frequency.)</p>
+      <p><strong>(b) Effect on species diversity (2):</strong> losing the possum lowers species richness directly, and because it is part of the food web (eating invertebrates, prey for owls) and an indicator of old-growth health, its loss signals decline that also threatens other hollow-dependent species.</p>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qref">C&middot;Q9</span><span><span class="tag fn">First Nations</span>Integrating First Nations knowledge with Western science</span><span class="marks">6 marks</span></div>
+    <div class="a">
+      <p><strong>(a) One integrated example (2):</strong> cultural burning combined with modern fire management to sustain habitat mosaics and food-web complexity; or Indigenous Protected Areas, which research shows hold higher biodiversity than areas managed by agencies alone; or Wurundjeri Elders guiding ecological restoration projects.</p>
+      <p><strong>(b) One challenge (2):</strong> the two systems use different frameworks and evidence (oral, relational knowledge vs written data), and integration can become tokenistic without genuine authority-sharing and self-determination for First Nations peoples.</p>
+      <p><strong>(c) Overall judgement (2):</strong> award for a clear position supported by the unit's evidence &mdash; strong answers agree the statement is justified, citing the higher biodiversity of Country managed by First Nations peoples, while noting integration must be done respectfully and on equal terms.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Biodiversity &amp; Ecosystems &middot; Teacher Solution Set &middot; Year 7 Science &middot; Victorian Curriculum F&ndash;10 v2.0<br>
+  Generated to accompany <em>Bio_Ecosystems_Unit_Booklet_Yr7_8.pdf</em>. For staff use.
+</footer>
+
+</body>
+</html>
