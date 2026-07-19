@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T3W09 — Logic and Proof II</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<style>
+  :root {
+    --teal: #1F3A93; --teal-dark: #16296b;
+    --slate: #475569; --slate-dark: #334155;
+    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
+    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: var(--bg); overflow: hidden;
+    font-family: "Segoe UI", system-ui, sans-serif; }
+  #stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .slide { width: 1280px; height: 720px; background: var(--paper); color: var(--ink);
+    display: none; flex-direction: column; padding: 52px 68px 64px; position: absolute; border-radius: 6px; }
+  .slide.active { display: flex; }
+  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
+  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
+  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
+  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
+  .slide.title h1::after, .slide.section h1::after { background: #fff; }
+  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
+  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
+  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
+  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
+  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
+  ul, ol { margin-left: 30px; }
+  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
+  p { font-size: 25px; line-height: 1.5; }
+  .small li, .small p { font-size: 22px; }
+  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  .col.narrow { flex: .8; }
+  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
+  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
+  .box p, .box li { font-size: 23px; }
+  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
+  .key .lbl { color: var(--teal-dark); }
+  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
+  .try .lbl { color: var(--amber); }
+  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
+  .ex .lbl { color: var(--slate-dark); }
+  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
+  .defn .lbl { color: var(--maroon); }
+  mjx-container { font-size: 108% !important; }
+  table.t { border-collapse: collapse; margin-top: 8px; }
+  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
+  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
+  table.t td { border-bottom: 1px solid var(--line); }
+  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
+  table.t td.c, table.t th.c { text-align: center; }
+  .step { visibility: hidden; }
+  .step.shown { visibility: visible; }
+  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
+    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
+    font-family: inherit; letter-spacing: .04em; }
+  button.rvl:hover { background: var(--teal-dark); }
+  button.rvl.done { opacity: .25; cursor: default; }
+  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
+    border-radius: 0 0 6px 6px; }
+  .slide.title .footerbar, .slide.section .footerbar { display: none; }
+  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
+  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
+  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
+  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
+    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
+  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage">
+
+<!-- 1 · Title -->
+<section class="slide title">
+  <h1>Logic and Proof II</h1>
+  <p>Chapter 2 (C–D) · Week 9 — Proving inequalities and collapsing sums</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026</p>
+  <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
+</section>
+
+<!-- 2 · Week map -->
+<section class="slide">
+  <h1>This week: four lessons</h1>
+  <table class="t">
+    <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
+    <tr><td class="c"><b>1</b></td><td>2C</td><td>The difference method</td><td>prove inequalities via "difference \(\geq 0\)"; AM–GM</td></tr>
+    <tr><td class="c"><b>2</b></td><td>2C</td><td>Fractions and surds</td><td>use conjugates and denominator bounds</td></tr>
+    <tr><td class="c"><b>3</b></td><td>2D</td><td>Telescoping</td><td>collapse sums and products to boundary terms</td></tr>
+    <tr><td class="c"><b>4</b></td><td>Workshop</td><td>Proof writing</td><td>set out arguments that earn full marks</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Almost every inequality proof at this level is the same move: bring everything to one side and show the result is a square, a sum of squares, or otherwise visibly non-negative.</p>
+  </div>
+  <div class="footerbar"><span>T3W09 · Logic and Proof II</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 1 ═══ -->
+
+<section class="slide section" data-lesson="1">
+  <div class="kicker">Lesson 1 · 2C</div>
+  <h1>The difference method</h1>
+  <ul class="goals">
+    <li>To prove LHS \(\geq\) RHS: show LHS − RHS \(\geq 0\), usually via squares.</li>
+    <li>AM–GM falls out of \((a-b)^2 \geq 0\).</li>
+    <li>Track equality conditions.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>Worked example: the difference method</h1>
+  <div class="box ex"><span class="lbl">Example 1</span>
+    <p>Prove that \(a^2 + b^2 \geq 2ab\) for all real \(a, b\), and hence derive the AM–GM inequality \(\dfrac{x+y}{2} \geq \sqrt{xy}\) for \(x, y \geq 0\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Difference: \(a^2 + b^2 - 2ab = (a - b)^2 \geq 0\), with equality iff \(a = b\). ∎</li>
+    <li class="step">Now put \(a = \sqrt{x}\), \(b = \sqrt{y}\) (legal since \(x, y \geq 0\)): \(x + y \geq 2\sqrt{xy}\).</li>
+    <li class="step">Divide by 2: \(\dfrac{x+y}{2} \geq \sqrt{xy}\), equality iff \(x = y\). ∎</li>
+  </ul>
+  <div class="box key"><span class="lbl">Direction of writing</span>
+    <p>Scratch work may run backwards from the target; the <b>written proof</b> must run forwards from known facts. Assuming the conclusion scores poorly.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 1 · Difference method</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 1 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈6 min)</span>
+    <ul style="margin-top:6px;">
+      <li><b>(a)</b> Prove that \(a^2 + b^2 + c^2 \geq ab + bc + ca\) for all real \(a, b, c\). <em>Hint: multiply the difference by 2.</em></li>
+      <li><b>(b)</b> When does equality hold?</li>
+    </ul>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step"><b>(a)</b> \(2(a^2+b^2+c^2) - 2(ab+bc+ca) = (a-b)^2 + (b-c)^2 + (c-a)^2 \geq 0\). ∎</li>
+    <li class="step"><b>(b)</b> Equality iff every square vanishes: \(a = b = c\).</li>
+    <li class="step">Sum-of-squares is the workhorse: if the difference isn't one square, try to write it as several.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 2 ═══ -->
+
+<section class="slide section" data-lesson="2">
+  <div class="kicker">Lesson 2 · 2C</div>
+  <h1>Fractions and surds</h1>
+  <ul class="goals">
+    <li>\(x + \tfrac{1}{x} \geq 2\): the fraction version of the difference method.</li>
+    <li>Conjugates turn surd differences into single fractions you can bound.</li>
+    <li>Check that every hypothesis earns its keep.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>Worked example: \(x + \dfrac{1}{x} \geq 2\)</h1>
+  <div class="box ex"><span class="lbl">Example 2</span>
+    <p>Prove that \(x + \dfrac{1}{x} \geq 2\) for all \(x &gt; 0\), with equality only at \(x = 1\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Difference: \(x + \dfrac{1}{x} - 2 = \dfrac{x^2 - 2x + 1}{x} = \dfrac{(x-1)^2}{x}\).</li>
+    <li class="step">For \(x &gt; 0\): numerator \(\geq 0\), denominator \(&gt; 0\), so the difference is \(\geq 0\). ∎</li>
+    <li class="step">Equality iff \((x-1)^2 = 0\), i.e. \(x = 1\).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Hypotheses earn their keep</span>
+    <p>Where did \(x &gt; 0\) get used? The denominator's sign. If a given condition never appears in your proof, suspect the proof.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 2 · Fractions and surds</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Worked example: taming surds</h1>
+  <div class="box ex"><span class="lbl">Example 3</span>
+    <p>Prove that \(\sqrt{n+1} - \sqrt{n} &lt; \dfrac{1}{2\sqrt{n}}\) for all integers \(n \geq 1\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Rationalise: \(\sqrt{n+1} - \sqrt{n} = \dfrac{(\sqrt{n+1} - \sqrt{n})(\sqrt{n+1} + \sqrt{n})}{\sqrt{n+1} + \sqrt{n}} = \dfrac{1}{\sqrt{n+1} + \sqrt{n}}\).</li>
+    <li class="step">Since \(\sqrt{n+1} &gt; \sqrt{n}\), the denominator satisfies \(\sqrt{n+1} + \sqrt{n} &gt; 2\sqrt{n}\).</li>
+    <li class="step">Bigger denominator, smaller fraction: \(\dfrac{1}{\sqrt{n+1} + \sqrt{n}} &lt; \dfrac{1}{2\sqrt{n}}\). ∎</li>
+  </ul>
+  <div class="box key"><span class="lbl">Tool worth naming</span>
+    <p>Multiplying by the conjugate turns a difference of surds into a single fraction you can bound. This trick reappears in exam proofs constantly.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 2 · Fractions and surds</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 2 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
+    <p>Prove the companion bound: \(\sqrt{n+1} - \sqrt{n} &gt; \dfrac{1}{2\sqrt{n+1}}\) for all integers \(n \geq 1\).</p>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Same conjugate step: \(\sqrt{n+1} - \sqrt{n} = \dfrac{1}{\sqrt{n+1} + \sqrt{n}}\).</li>
+    <li class="step">This time bound the other way: \(\sqrt{n+1} + \sqrt{n} &lt; 2\sqrt{n+1}\), so the fraction exceeds \(\dfrac{1}{2\sqrt{n+1}}\). ∎</li>
+    <li class="step">Together the two bounds sandwich \(\sqrt{n+1}-\sqrt{n}\) — the pair is a favourite exam question.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 3 ═══ -->
+
+<section class="slide section" data-lesson="3">
+  <div class="kicker">Lesson 3 · 2D</div>
+  <h1>Telescoping series</h1>
+  <ul class="goals">
+    <li>Split the general term as \(f(k) - f(k+1)\); the interior cancels.</li>
+    <li>Products telescope too — match numerators with denominators.</li>
+    <li>Limits fall out of the surviving boundary terms.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>Worked example: a sum that collapses</h1>
+  <div class="box ex"><span class="lbl">Example 4</span>
+    <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \frac{1}{k(k+1)}\), and its limit as \(n \to \infty\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Partial fractions: \(\dfrac{1}{k(k+1)} = \dfrac{1}{k} - \dfrac{1}{k+1}\).</li>
+    <li class="step">Write out a few terms: \(\left(1 - \tfrac12\right) + \left(\tfrac12 - \tfrac13\right) + \cdots + \left(\tfrac1n - \tfrac{1}{n+1}\right)\) — the interior cancels in pairs.</li>
+    <li class="step">Survivors: \(1 - \dfrac{1}{n+1} = \dfrac{n}{n+1} \to 1\) as \(n \to \infty\).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Recognising a telescope</span>
+    <p>If the general term splits as \(f(k) - f(k+1)\) (or \(f(k+1) - f(k)\)), the sum collapses to boundary terms. Partial fractions is the usual splitter.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 3 · Telescoping</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Seeing it: the interior cancels</h1>
+  <svg viewBox="0 0 980 300" style="width:100%;max-width:940px;display:block;margin:20px auto 0;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><text x="90" y="120" font-size="26" fill="#1e293b" text-anchor="middle">(1 &#8722; &#189;)</text><text x="285" y="120" font-size="26" fill="#1e293b" text-anchor="middle">(&#189; &#8722; &#8531;)</text><text x="480" y="120" font-size="26" fill="#1e293b" text-anchor="middle">(&#8531; &#8722; &#188;)</text><text x="640" y="120" font-size="26" fill="#1e293b" text-anchor="middle">&#8943;</text><text x="790" y="120" font-size="26" fill="#1e293b" text-anchor="middle">(1/n &#8722; 1/(n+1))</text><text x="187" y="120" font-size="26" fill="#1e293b" text-anchor="middle">+</text><text x="382" y="120" font-size="26" fill="#1e293b" text-anchor="middle">+</text><text x="577" y="120" font-size="26" fill="#1e293b" text-anchor="middle">+</text><text x="717" y="120" font-size="26" fill="#1e293b" text-anchor="middle">+</text><path d="M128,135 C158,185 220,185 250,135" fill="none" stroke="#8E244D" stroke-width="2.5"/><text x="189" y="205" font-size="16" font-weight="700" fill="#8E244D" text-anchor="middle">&#8722;&#189; + &#189; = 0</text><path d="M322,135 C352,185 415,185 445,135" fill="none" stroke="#8E244D" stroke-width="2.5"/><text x="384" y="205" font-size="16" font-weight="700" fill="#8E244D" text-anchor="middle">&#8722;&#8531; + &#8531; = 0</text><path d="M518,135 C548,185 580,185 610,135" fill="none" stroke="#8E244D" stroke-width="2.5"/><text x="564" y="205" font-size="16" font-weight="700" fill="#8E244D" text-anchor="middle">&#8722;&#188; + &#188; = 0</text><rect x="52" y="86" width="42" height="46" rx="8" fill="none" stroke="#1F3A93" stroke-width="3"/><rect x="806" y="86" width="118" height="46" rx="8" fill="none" stroke="#1F3A93" stroke-width="3"/><text x="73" y="62" font-size="16" font-weight="700" fill="#1F3A93" text-anchor="middle">survives</text><text x="865" y="62" font-size="16" font-weight="700" fill="#1F3A93" text-anchor="middle">survives</text><text x="490" y="272" font-size="24" fill="#1F3A93" font-weight="700" text-anchor="middle">= 1 &#8722; 1/(n+1) = n/(n+1)</text></svg>
+  <p style="font-size:21px; margin-top:4px; text-align:center;">Every middle term appears once with \(+\) and once with \(-\). Only the first and last survive.</p>
+  <div class="footerbar"><span>Lesson 3 · Telescoping</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Products telescope too</h1>
+  <div class="box ex"><span class="lbl">Example 5</span>
+    <p>Evaluate \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k^2}\right)\), and its limit as \(n \to \infty\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Factor: \(1 - \dfrac{1}{k^2} = \dfrac{(k-1)(k+1)}{k^2}\), so each numerator meets a matching denominator along the product.</li>
+    <li class="step">Survivors: \(\dfrac{1}{2} \cdot \dfrac{n+1}{n} = \dfrac{n+1}{2n} \to \tfrac12\) as \(n \to \infty\).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Same principle</span>
+    <p>Sums cancel by subtraction; products cancel by division. Either way, only the boundary survives.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 3 · Telescoping</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 3 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈6 min)</span>
+    <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \frac{1}{k(k+2)}\). <em>Careful: two boundary terms survive at each end.</em></p>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">\(\dfrac{1}{k(k+2)} = \dfrac12\left(\dfrac{1}{k} - \dfrac{1}{k+2}\right)\) — the gap of 2 means cancellation skips a term.</li>
+    <li class="step">Survivors: \(\dfrac12\left(1 + \dfrac12 - \dfrac{1}{n+1} - \dfrac{1}{n+2}\right) = \dfrac34 - \dfrac{2n+3}{2(n+1)(n+2)}\).</li>
+    <li class="step">Limit: \(\dfrac34\). Check \(n=1\): formula gives \(\tfrac34 - \tfrac{5}{12} = \tfrac13\) = \(\tfrac{1}{1\cdot3}\). ✓</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 3 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 4 ═══ -->
+
+<section class="slide section" data-lesson="4">
+  <div class="kicker">Lesson 4 · Workshop</div>
+  <h1>Proof-writing workshop</h1>
+  <ul class="goals">
+    <li>The frame, the flow, the finish: setting out arguments for full marks.</li>
+    <li>Diagnose a flawed proof.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>Workshop: setting out a proof</h1>
+  <ul>
+    <li><b>Declare the frame:</b> "Let \(n \geq 1\) be an integer" / "Suppose, for contradiction, that…".</li>
+    <li><b>One claim per line,</b> each justified: algebra, a known inequality, or a previously proven line.</li>
+    <li><b>Direction forwards:</b> known → target. Never begin with the statement to be proved.</li>
+    <li><b>Close it:</b> state what was shown, note equality conditions if asked, and end with ∎ or "as required".</li>
+  </ul>
+  <div class="box key"><span class="lbl">Marker's-eye view</span>
+    <p>Assessors award marks for visible logical structure. Two correct proofs can score differently if one hides its reasoning — make every inference inspectable.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 4 · Workshop</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 4 — find the flaw</h1>
+  <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
+    <p>A student "proves" \(a^2 + b^2 \geq 2ab\) like this:</p>
+    <p style="margin-top:8px; font-style:italic;">"\(a^2 + b^2 \geq 2ab\). Subtract \(2ab\): \(a^2 - 2ab + b^2 \geq 0\). So \((a-b)^2 \geq 0\), which is true. Hence proved."</p>
+    <p style="margin-top:8px;">The algebra is right and the final line is true. What's wrong — and how should it be written?</p>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">The argument <b>assumes the conclusion</b> in line 1 and deduces something true — but true conclusions can follow from false premises, so nothing is proved.</li>
+    <li class="step">The steps here are reversible, so the fix is to run them <b>forwards</b>: start from \((a-b)^2 \geq 0\), expand, add \(2ab\). Same algebra, valid direction.</li>
+    <li class="step">Exam habit: scratch backwards, write forwards — and re-read your first line asking "is this known, or is it the target?"</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 4 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Week 9 summary</h1>
+  <ul>
+    <li>Inequalities: difference \(\geq 0\), squares are your witnesses; AM–GM from \((a-b)^2 \geq 0\).</li>
+    <li>Surd bounds: multiply by the conjugate, then bound the denominator.</li>
+    <li>Telescoping: split into \(f(k) - f(k+1)\), keep only the boundary.</li>
+    <li>Written proofs run forwards, one justified claim per line.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Before next week</span>
+    <p>Problem Set 5 (Logic &amp; Proof). Next week: the crown jewel of Chapter 2 — mathematical induction (2E).</p>
+  </div>
+  <div class="footerbar"><span>T3W09 · Logic and Proof II</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+</div>
+<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div id="counter"></div>
+<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let cur = 0;
+  function fit() {
+    const s = Math.min(innerWidth / 1300, innerHeight / 740);
+    slides.forEach(sl => sl.style.transform = 'scale(' + s + ')');
+  }
+  addEventListener('resize', fit); fit();
+  function syncBtns(sl) {
+    const left = sl.querySelector('.step:not(.shown)');
+    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
+  }
+  function revealNext(sl) {
+    const s = sl.querySelector('.step:not(.shown)');
+    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
+    return false;
+  }
+  function unrevealLast(sl) {
+    const shown = sl.querySelectorAll('.step.shown');
+    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
+    return false;
+  }
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+    location.hash = cur + 1;
+  }
+  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
+  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (['1','2','3','4'].includes(e.key)) {
+      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
+      if (target >= 0) show(target);
+    }
+    else if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  addEventListener('click', e => {
+    if (e.target.closest('button.rvl, a')) return;
+    if (e.clientX > innerWidth * 0.66) next();
+    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
+  });
+  document.querySelectorAll('button.rvl').forEach(b =>
+    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
+  show(parseInt(location.hash.slice(1)) - 1 || 0);
+</script>
+</body>
+</html>

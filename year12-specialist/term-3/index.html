@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VCE Specialist Mathematics 3&4 — Term 3 Course Hub</title>
+<style>
+  :root {
+    --navy: #1F3A93; --navy-dark: #16296b;
+    --teal: #00796B; --teal-dark: #00584e;
+    --slate: #475569; --slate-dark: #334155;
+    --maroon: #8E244D; --red: #d33; --amber: #b45309;
+    --bg: #f4f6f8; --card: #ffffff; --ink: #1e293b; --muted: #64748b;
+    --line: #e2e8f0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); padding-bottom: 4rem; }
+
+  header { background: linear-gradient(120deg, var(--navy-dark), var(--slate-dark)); color: #fff; padding: 2rem 2.5rem 1.6rem; }
+  header h1 { font-size: 1.6rem; font-weight: 700; }
+  header p { opacity: .85; margin-top: .3rem; font-size: .95rem; }
+  .head-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+
+  .timeline { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1.2rem 2.5rem 0; position: relative; top: 1.4rem; }
+  .mile {
+    background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--navy);
+    border-radius: 8px; padding: .55rem .9rem; flex: 1 1 150px; min-width: 150px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.07);
+  }
+  .mile b { display: block; font-size: .85rem; }
+  .mile span { font-size: .78rem; color: var(--muted); }
+  .mile.m-test { border-left-color: var(--red); }
+  .mile.m-teal { border-left-color: var(--teal); }
+  .mile.m-maroon { border-left-color: var(--maroon); }
+  .mile.m-amber { border-left-color: var(--amber); }
+  .mile.done { opacity: .55; }
+  .mile.next { outline: 2px solid var(--navy); }
+  #countdown { font-size: .78rem; color: var(--navy); font-weight: 600; }
+
+  main { max-width: 1180px; margin: 3.2rem auto 0; padding: 0 1.5rem; }
+  h2 { font-size: 1.15rem; margin: 1.8rem 0 .9rem; color: var(--slate-dark); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; }
+  .week {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1rem 1.1rem; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .week.current { border: 2px solid var(--navy); box-shadow: 0 2px 10px rgba(31,58,147,.25); }
+  .week.current .wk-head::after { content: "THIS WEEK"; background: var(--navy); color:#fff; font-size:.62rem; padding:.15rem .45rem; border-radius:4px; margin-left:.5rem; letter-spacing:.05em;}
+  .wk-head { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+  .wk-head h3 { font-size: 1rem; }
+  .wk-head .dates { font-size: .78rem; color: var(--muted); }
+  .aos { font-size: .65rem; font-weight: 700; letter-spacing: .06em; padding: .18rem .5rem; border-radius: 4px; color: #fff; }
+  .aosC { background: var(--navy); } .aosS { background: var(--maroon); } .aosP { background: var(--teal); } .aosR { background: var(--amber); }
+  ul.periods { list-style: none; margin: .6rem 0 .2rem; }
+  ul.periods li { font-size: .85rem; padding: .28rem 0 .28rem .9rem; position: relative; border-top: 1px dashed var(--line); }
+  ul.periods li::before { content: "▸"; position: absolute; left: 0; top: .28rem; font-size: .7rem; color: var(--muted); }
+  .milestone-chip {
+    display: inline-block; font-size: .7rem; font-weight: 700; color: #fff;
+    padding: .18rem .55rem; border-radius: 4px; margin: .45rem .3rem 0 0;
+  }
+  .c-navy { background: var(--navy); } .c-red { background: var(--red); }
+  .c-teal { background: var(--teal); } .c-maroon { background: var(--maroon); } .c-amber { background: var(--amber); }
+  .links { margin-top: .6rem; padding-top: .5rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: .35rem; }
+  .links a {
+    font-size: .74rem; text-decoration: none; padding: .22rem .55rem; border-radius: 5px;
+    border: 1px solid var(--line); color: var(--navy); background: #f8fafc;
+  }
+  .links a:hover { background: #e8ecf7; }
+  .legend { font-size: .75rem; color: var(--muted); margin: .4rem 0 0; }
+
+  .prog { font-size: .8rem; color: var(--muted); margin: .3rem 0 .8rem; }
+  footer { text-align: center; font-size: .72rem; color: var(--muted); margin-top: 3rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-row">
+    <div>
+      <h1>VCE Specialist Mathematics 3&amp;4 — Term 3</h1>
+      <p>Term 3, 2026 · Northcote High School · Kinematics → Vector Calculus → Statistics → Logic &amp; Proof</p>
+    </div>
+    <a href="../" style="color:#fff; font-size:.85rem; border:1px solid rgba(255,255,255,.4); padding:.45rem .9rem; border-radius:6px; text-decoration:none; background:rgba(255,255,255,.12);">← Year 12 Specialist</a>
+  </div>
+  <div class="timeline" id="timeline">
+    <div class="mile m-red m-test" data-date="2026-07-29"><b>SAC 2 — Differential Equations</b><span>Week 3 · date TBC (moved)</span></div>
+    <div class="mile m-teal" data-date="2026-08-26"><b>SAC 3 — Probability &amp; Statistics</b><span>Week 7 · date TBC</span></div>
+    <div class="mile m-maroon" data-date="2026-09-18"><b>Term 3 ends</b><span>Fri 18 Sep</span></div>
+    <div class="mile m-amber" data-date="2026-10-19"><b>Last Year 12 classes</b><span>Week of 19 Oct</span></div>
+    <div class="mile m-test" data-date="2026-10-26"><b>VCAA Exams begin</b><span>late Oct · <span id="countdown"></span></span></div>
+  </div>
+</header>
+
+<main>
+  <h2>Weekly calendar</h2>
+
+  <div class="grid" id="weeks">
+
+    <div class="week" data-start="2026-07-13">
+      <div class="wk-head"><h3>Week 1</h3><span class="dates">13–17 Jul</span><span class="aos aosC">CH 12</span></div>
+      <ul class="periods">
+        <li>12A Position, velocity and acceleration</li>
+        <li>12B Constant acceleration &amp; 12C velocity–time graphs</li>
+        <li>12D–E Acceleration as \(v\,dv/dx\); DEs for kinematics</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W01.html">Slides</a>
+        <a href="problemsets/SPM-PS01-Kinematics.pdf">Problem set 1</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-07-20">
+      <div class="wk-head"><h3>Week 2</h3><span class="dates">20–24 Jul</span><span class="aos aosC">CH 13</span></div>
+      <ul class="periods">
+        <li>13A Vector functions; sketching paths</li>
+        <li>13B–C Position vectors r(t); differentiating vector functions</li>
+        <li>13D Velocity, acceleration and speed along a curve</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W02.html">Slides</a>
+        <a href="problemsets/SPM-PS02-VectorCalculus.pdf">Problem set 2</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-07-27">
+      <div class="wk-head"><h3>Week 3</h3><span class="dates">27–31 Jul</span><span class="aos aosP">CH 15</span></div>
+      <ul class="periods">
+        <li>15A Linear functions of a random variable</li>
+        <li>15B Linear combinations of independent random variables</li>
+        <li>15C Linear combinations of normal random variables</li>
+      </ul>
+      <span class="milestone-chip c-red">SAC 2 THIS WEEK — DIFF EQUATIONS</span>
+      <div class="links">
+        <a href="slides/T3W03.html">Slides</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-08-03">
+      <div class="wk-head"><h3>Week 4</h3><span class="dates">3–7 Aug</span><span class="aos aosP">CH 15</span></div>
+      <ul class="periods">
+        <li>15D The sample mean of a normal random variable</li>
+        <li>15E Simulating the distribution of the sample mean</li>
+        <li>15F The distribution of X̄; the central limit theorem</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W04.html">Slides</a>
+        <a href="problemsets/SPM-PS03-RandomVariables.pdf">Problem set 3</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-08-10">
+      <div class="wk-head"><h3>Week 5</h3><span class="dates">10–14 Aug</span><span class="aos aosP">CH 16</span></div>
+      <ul class="periods">
+        <li>16A Confidence intervals for the population mean</li>
+        <li>16B Hypothesis testing for the mean; the p-value</li>
+        <li>Formulating H₀ and H₁ correctly</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W05.html">Slides</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-08-17">
+      <div class="wk-head"><h3>Week 6</h3><span class="dates">17–21 Aug</span><span class="aos aosP">CH 16</span></div>
+      <ul class="periods">
+        <li>16C One-tail and two-tail tests</li>
+        <li>16D Two-tail tests revisited; 16E Type I and II errors</li>
+        <li>SAC 3 revision launch — statistics pipeline</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W06.html">Slides</a>
+        <a href="problemsets/SPM-PS04-HypothesisTesting.pdf">Problem set 4</a>
+        <a href="revision/SAC3Revision.pdf">SAC 3 revision pack</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-08-24">
+      <div class="wk-head"><h3>Week 7</h3><span class="dates">24–28 Aug</span><span class="aos aosR">SAC WEEK</span></div>
+      <ul class="periods">
+        <li>Targeted revision: Ch 15 + 16 worked SAC-style questions</li>
+        <li>Practice SAC under timed conditions + review</li>
+        <li>SAC 3 — Probability and Statistics</li>
+      </ul>
+      <span class="milestone-chip c-teal">SAC 3 THIS WEEK — PROB &amp; STATS</span>
+      <div class="links">
+        <a href="slides/T3W07.html">Slides</a>
+        <a href="revision/SAC3Revision.pdf">SAC 3 revision pack</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-08-31">
+      <div class="wk-head"><h3>Week 8</h3><span class="dates">31 Aug–4 Sep</span><span class="aos aosS">CH 2</span></div>
+      <ul class="periods">
+        <li>2A Revision of proof techniques (direct, contrapositive, contradiction)</li>
+        <li>2B Quantifiers and counterexamples</li>
+        <li>SAC 3 feedback and reflection</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W08.html">Slides</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-09-07">
+      <div class="wk-head"><h3>Week 9</h3><span class="dates">7–11 Sep</span><span class="aos aosS">CH 2</span></div>
+      <ul class="periods">
+        <li>2C Proving inequalities</li>
+        <li>2D Telescoping series</li>
+        <li>Proof-writing workshop: setting out and rigour</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W09.html">Slides</a>
+        <a href="problemsets/SPM-PS05-LogicProof.pdf">Problem set 5</a>
+      </div>
+    </div>
+
+    <div class="week" data-start="2026-09-14">
+      <div class="wk-head"><h3>Week 10</h3><span class="dates">14–18 Sep</span><span class="aos aosS">CH 2</span></div>
+      <ul class="periods">
+        <li>2E Mathematical induction: sums and products</li>
+        <li>2E Induction: divisibility results</li>
+        <li>Term wrap-up + holiday revision plan (exam countdown)</li>
+      </ul>
+      <div class="links">
+        <a href="slides/T3W10.html">Slides</a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <footer>VCE Specialist Mathematics Units 3&amp;4 · Study Design 2023–2027 · Cambridge Specialist 3&amp;4 (2nd ed.) · SAC dates approximate — confirm with faculty calendar</footer>
+</main>
+
+<script>
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  const weeks = [...document.querySelectorAll('.week')];
+  weeks.forEach((w, i) => {
+    const start = new Date(w.dataset.start + 'T00:00:00');
+    const next = weeks[i+1] ? new Date(weeks[i+1].dataset.start + 'T00:00:00') : new Date('2026-09-21T00:00:00');
+    if (today >= start && today < next) w.classList.add('current');
+  });
+  const cur = document.querySelector('.week.current');
+  if (cur) setTimeout(() => cur.scrollIntoView({behavior:'smooth', block:'center'}), 300);
+
+  let nextMarked = false;
+  document.querySelectorAll('.mile').forEach(m => {
+    const d = new Date(m.dataset.date + 'T00:00:00');
+    if (d < today) m.classList.add('done');
+    else if (!nextMarked) { m.classList.add('next'); nextMarked = true; }
+  });
+  const exams = new Date('2026-10-26T00:00:00');
+  const days = Math.ceil((exams - today) / 86400000);
+  document.getElementById('countdown').textContent = days > 0 ? days + ' days away' : 'underway';
+
+</script>
+</body>
+</html>

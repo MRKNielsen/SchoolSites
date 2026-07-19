@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T3W05 — Confidence Intervals and Hypothesis Testing</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<style>
+  :root {
+    --teal: #1F3A93; --teal-dark: #16296b;
+    --slate: #475569; --slate-dark: #334155;
+    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
+    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: var(--bg); overflow: hidden;
+    font-family: "Segoe UI", system-ui, sans-serif; }
+  #stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .slide { width: 1280px; height: 720px; background: var(--paper); color: var(--ink);
+    display: none; flex-direction: column; padding: 52px 68px 64px; position: absolute; border-radius: 6px; }
+  .slide.active { display: flex; }
+  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
+  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
+  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
+  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
+  .slide.title h1::after, .slide.section h1::after { background: #fff; }
+  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
+  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
+  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
+  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
+  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
+  ul, ol { margin-left: 30px; }
+  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
+  p { font-size: 25px; line-height: 1.5; }
+  .small li, .small p { font-size: 22px; }
+  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  .col.narrow { flex: .8; }
+  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
+  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
+  .box p, .box li { font-size: 23px; }
+  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
+  .key .lbl { color: var(--teal-dark); }
+  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
+  .try .lbl { color: var(--amber); }
+  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
+  .ex .lbl { color: var(--slate-dark); }
+  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
+  .defn .lbl { color: var(--maroon); }
+  mjx-container { font-size: 108% !important; }
+  table.t { border-collapse: collapse; margin-top: 8px; }
+  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
+  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
+  table.t td { border-bottom: 1px solid var(--line); }
+  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
+  table.t td.c, table.t th.c { text-align: center; }
+  .step { visibility: hidden; }
+  .step.shown { visibility: visible; }
+  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
+    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
+    font-family: inherit; letter-spacing: .04em; }
+  button.rvl:hover { background: var(--teal-dark); }
+  button.rvl.done { opacity: .25; cursor: default; }
+  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
+    border-radius: 0 0 6px 6px; }
+  .slide.title .footerbar, .slide.section .footerbar { display: none; }
+  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
+  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
+  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
+  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
+    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
+  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="stage">
+
+<!-- 1 · Title -->
+<section class="slide title">
+  <h1>Confidence Intervals &amp; Hypothesis Testing</h1>
+  <p>Chapter 16 (A–B) · Week 5 — From one sample to a claim about the whole population</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026</p>
+  <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
+</section>
+
+<!-- 2 · Week map -->
+<section class="slide">
+  <h1>This week: four lessons</h1>
+  <table class="t">
+    <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
+    <tr><td class="c"><b>1</b></td><td>16A</td><td>Confidence intervals</td><td>construct and interpret a 95% CI for \(\mu\)</td></tr>
+    <tr><td class="c"><b>2</b></td><td>16A</td><td>Width and sample size</td><td>choose \(n\) to meet a target width</td></tr>
+    <tr><td class="c"><b>3</b></td><td>16B</td><td>Hypothesis tests: the logic</td><td>set up \(H_0\), \(H_1\) and read a \(p\)-value</td></tr>
+    <tr><td class="c"><b>4</b></td><td>16B</td><td>Full tests, written properly</td><td>run a complete test with a conclusion in context</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Estimation asks "what values of \(\mu\) are plausible?" (an interval). Testing asks "is this particular \(\mu_0\) still believable?" (a decision). Same distribution, two questions.</p>
+  </div>
+  <div class="footerbar"><span>T3W05 · Inference I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 1 ═══ -->
+
+<section class="slide section" data-lesson="1">
+  <div class="kicker">Lesson 1 · 16A</div>
+  <h1>Confidence intervals for the mean</h1>
+  <ul class="goals">
+    <li>Build \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\) from the distribution of \(\bar{X}\).</li>
+    <li>Say what "95% confident" means — and what it doesn't.</li>
+    <li>Other confidence levels: 90%, 99%.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>The 95% confidence interval</h1>
+  <p style="text-align:center; margin:6px 0 16px;">\[\left(\bar{x} - 1.96\,\frac{\sigma}{\sqrt{n}},\;\; \bar{x} + 1.96\,\frac{\sigma}{\sqrt{n}}\right)\]</p>
+  <ul>
+    <li>Where does 1.96 come from? \(P(-1.96 &lt; Z &lt; 1.96) = 0.95\) for the standard normal.</li>
+    <li>If \(\sigma\) is unknown and \(n\) is large, use the sample standard deviation \(s\) in its place.</li>
+    <li>Other levels: 90% ↔ 1.645, 99% ↔ 2.576 — wider confidence costs a wider interval.</li>
+  </ul>
+  <div class="box ex"><span class="lbl">Example 1</span>
+    <p>\(n = 36\) batteries last \(\bar{x} = 25\) hours on average; \(\sigma = 6\) hours. Find the 95% CI for \(\mu\).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:10px;">
+    <li class="step">\(\text{sd}(\bar{X}) = \dfrac{6}{\sqrt{36}} = 1\); interval \(= 25 \pm 1.96 \times 1 = (23.04,\; 26.96)\) hours.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 1 · Confidence intervals</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>What "95% confident" actually means</h1>
+  <ul>
+    <li>The interval is random; \(\mu\) is fixed. Before sampling, there is a 95% chance the interval we <b>will construct</b> captures \(\mu\).</li>
+    <li>Correct sentence: "If we repeated this sampling process many times, about 95% of the intervals produced would contain \(\mu\)."</li>
+    <li><b>Not</b> correct: "There is a 95% probability that \(\mu\) lies in \((23.04, 26.96)\)" — once computed, the interval either contains \(\mu\) or it doesn't.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Width levers</span>
+    <p>Width \(= 2z\dfrac{\sigma}{\sqrt{n}}\). To halve the width: quadruple \(n\), or accept lower confidence. Exam questions love "find \(n\) so the width is at most …".</p>
+  </div>
+  <div class="footerbar"><span>Lesson 1 · Confidence intervals</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Twenty samples, twenty intervals</h1>
+  <svg viewBox="0 0 980 420" style="width:100%;max-width:820px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="463.409090909091" y1="24" x2="463.409090909091" y2="374" stroke="#b45309" stroke-width="2.5" stroke-dasharray="7 5"/><text x="463.409090909091" y="18" font-size="18" font-weight="700" fill="#b45309" text-anchor="middle">&#956; = 25 (fixed, unknown)</text><line x1="301.8" y1="44.0" x2="662.6" y2="44.0" stroke="#1F3A93" stroke-width="2.5"/><circle cx="482.2" cy="44.0" r="4" fill="#1F3A93"/><line x1="362.4" y1="61.1" x2="723.2" y2="61.1" stroke="#1F3A93" stroke-width="2.5"/><circle cx="542.8" cy="61.1" r="4" fill="#1F3A93"/><line x1="266.1" y1="78.1" x2="626.9" y2="78.1" stroke="#1F3A93" stroke-width="2.5"/><circle cx="446.5" cy="78.1" r="4" fill="#1F3A93"/><line x1="225.7" y1="95.2" x2="586.5" y2="95.2" stroke="#1F3A93" stroke-width="2.5"/><circle cx="406.1" cy="95.2" r="4" fill="#1F3A93"/><line x1="201.5" y1="112.2" x2="562.4" y2="112.2" stroke="#1F3A93" stroke-width="2.5"/><circle cx="381.9" cy="112.2" r="4" fill="#1F3A93"/><line x1="426.8" y1="129.3" x2="787.6" y2="129.3" stroke="#1F3A93" stroke-width="2.5"/><circle cx="607.2" cy="129.3" r="4" fill="#1F3A93"/><line x1="476.3" y1="146.3" x2="837.1" y2="146.3" stroke="#c0392b" stroke-width="4"/><circle cx="656.7" cy="146.3" r="4" fill="#c0392b"/><text x="849.1" y="151.3" font-size="17" font-weight="700" fill="#c0392b">misses &#956;</text><line x1="315.5" y1="163.4" x2="676.3" y2="163.4" stroke="#1F3A93" stroke-width="2.5"/><circle cx="495.9" cy="163.4" r="4" fill="#1F3A93"/><line x1="329.8" y1="180.4" x2="690.6" y2="180.4" stroke="#1F3A93" stroke-width="2.5"/><circle cx="510.2" cy="180.4" r="4" fill="#1F3A93"/><line x1="286.8" y1="197.5" x2="647.6" y2="197.5" stroke="#1F3A93" stroke-width="2.5"/><circle cx="467.2" cy="197.5" r="4" fill="#1F3A93"/><line x1="218.1" y1="214.5" x2="578.9" y2="214.5" stroke="#1F3A93" stroke-width="2.5"/><circle cx="398.5" cy="214.5" r="4" fill="#1F3A93"/><line x1="320.9" y1="231.6" x2="681.7" y2="231.6" stroke="#1F3A93" stroke-width="2.5"/><circle cx="501.3" cy="231.6" r="4" fill="#1F3A93"/><line x1="136.2" y1="248.6" x2="497.0" y2="248.6" stroke="#1F3A93" stroke-width="2.5"/><circle cx="316.6" cy="248.6" r="4" fill="#1F3A93"/><line x1="289.2" y1="265.7" x2="650.0" y2="265.7" stroke="#1F3A93" stroke-width="2.5"/><circle cx="469.6" cy="265.7" r="4" fill="#1F3A93"/><line x1="321.6" y1="282.7" x2="682.4" y2="282.7" stroke="#1F3A93" stroke-width="2.5"/><circle cx="502.0" cy="282.7" r="4" fill="#1F3A93"/><line x1="240.6" y1="299.8" x2="601.4" y2="299.8" stroke="#1F3A93" stroke-width="2.5"/><circle cx="421.0" cy="299.8" r="4" fill="#1F3A93"/><line x1="325.8" y1="316.8" x2="686.6" y2="316.8" stroke="#1F3A93" stroke-width="2.5"/><circle cx="506.2" cy="316.8" r="4" fill="#1F3A93"/><line x1="303.4" y1="333.9" x2="664.2" y2="333.9" stroke="#1F3A93" stroke-width="2.5"/><circle cx="483.8" cy="333.9" r="4" fill="#1F3A93"/><line x1="368.2" y1="350.9" x2="729.1" y2="350.9" stroke="#1F3A93" stroke-width="2.5"/><circle cx="548.7" cy="350.9" r="4" fill="#1F3A93"/><line x1="210.9" y1="368.0" x2="571.7" y2="368.0" stroke="#1F3A93" stroke-width="2.5"/><circle cx="391.3" cy="368.0" r="4" fill="#1F3A93"/><text x="95.2" y="398" font-size="16" fill="#475569" text-anchor="middle">21</text><line x1="95.2" y1="376" x2="95.2" y2="382" stroke="#475569"/><text x="187.3" y="398" font-size="16" fill="#475569" text-anchor="middle">22</text><line x1="187.3" y1="376" x2="187.3" y2="382" stroke="#475569"/><text x="279.3" y="398" font-size="16" fill="#475569" text-anchor="middle">23</text><line x1="279.3" y1="376" x2="279.3" y2="382" stroke="#475569"/><text x="371.4" y="398" font-size="16" fill="#475569" text-anchor="middle">24</text><line x1="371.4" y1="376" x2="371.4" y2="382" stroke="#475569"/><text x="463.4" y="398" font-size="16" fill="#475569" text-anchor="middle">25</text><line x1="463.4" y1="376" x2="463.4" y2="382" stroke="#475569"/><text x="555.5" y="398" font-size="16" fill="#475569" text-anchor="middle">26</text><line x1="555.5" y1="376" x2="555.5" y2="382" stroke="#475569"/><text x="647.5" y="398" font-size="16" fill="#475569" text-anchor="middle">27</text><line x1="647.5" y1="376" x2="647.5" y2="382" stroke="#475569"/><text x="739.5" y="398" font-size="16" fill="#475569" text-anchor="middle">28</text><line x1="739.5" y1="376" x2="739.5" y2="382" stroke="#475569"/><text x="831.6" y="398" font-size="16" fill="#475569" text-anchor="middle">29</text><line x1="831.6" y1="376" x2="831.6" y2="382" stroke="#475569"/><line x1="40" y1="376" x2="850" y2="376" stroke="#475569" stroke-width="2"/></svg>
+  <p style="font-size:20px; margin-top:2px; text-align:center;">Each sample of \(n=36\) gives its own interval \(\bar{x} \pm 1.96\); in the long run about 1 in 20 miss.</p>
+  <div class="footerbar"><span>Lesson 1 · Confidence intervals</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 1 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
+    <p>A sample of \(n = 64\) test scores gives \(\bar{x} = 102\); the population sd is \(\sigma = 16\).</p>
+    <ul style="margin-top:8px;">
+      <li><b>(a)</b> Find the 95% confidence interval for \(\mu\).</li>
+      <li><b>(b)</b> Find the 90% interval. Which is wider, and why?</li>
+    </ul>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step"><b>(a)</b> \(\text{sd}(\bar{X}) = \dfrac{16}{8} = 2\); \(102 \pm 1.96(2) = (98.08,\; 105.92)\).</li>
+    <li class="step"><b>(b)</b> \(102 \pm 1.645(2) = (98.71,\; 105.29)\) — narrower: less confidence buys a tighter interval.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 2 ═══ -->
+
+<section class="slide section" data-lesson="2">
+  <div class="kicker">Lesson 2 · 16A</div>
+  <h1>Width and sample size</h1>
+  <ul class="goals">
+    <li>Width \(= 2z\sigma/\sqrt{n}\): solve for \(n\) given a target width.</li>
+    <li>Round the right way, and respect the square-root law.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>Worked example: choosing the sample size</h1>
+  <div class="box ex"><span class="lbl">Example 2</span>
+    <p>Battery lifetimes have \(\sigma = 6\) hours. How many batteries must we test so that a 95% confidence interval for \(\mu\) has width at most 2 hours?</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">Width \(= 2 \times 1.96\,\dfrac{6}{\sqrt{n}} \leq 2 \;\Longleftrightarrow\; \sqrt{n} \geq 1.96 \times 6 = 11.76\).</li>
+    <li class="step">\(n \geq 138.3\), and \(n\) is a whole number of batteries: \(n = 139\).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Round the right way</span>
+    <p>Always round <b>up</b> — 138 batteries gives an interval slightly too wide. And note the square-root law: halving the width quadruples the sample.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 2 · Width and sample size</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 2 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
+    <p>Delivery times have \(\sigma = 12\) minutes.</p>
+    <ul style="margin-top:8px;">
+      <li><b>(a)</b> How large a sample is needed for a <b>99%</b> CI of width at most 4 minutes?</li>
+      <li><b>(b)</b> How does the answer change at 95% confidence?</li>
+    </ul>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step"><b>(a)</b> \(2 \times 2.576 \times \dfrac{12}{\sqrt{n}} \leq 4 \Rightarrow \sqrt{n} \geq 15.456 \Rightarrow n \geq 238.9\): \(n = 239\).</li>
+    <li class="step"><b>(b)</b> \(\sqrt{n} \geq 1.96 \times 6 = 11.76 \Rightarrow n = 139\) — a hundred fewer: high confidence is expensive.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 3 ═══ -->
+
+<section class="slide section" data-lesson="3">
+  <div class="kicker">Lesson 3 · 16B</div>
+  <h1>The logic of a hypothesis test</h1>
+  <ul class="goals">
+    <li>\(H_0\) is the status quo; \(H_1\) is the suspicion — fixed before seeing data.</li>
+    <li>The \(p\)-value: how surprising is our sample, if \(H_0\) is true?</li>
+    <li>The decision rule, and why "do not reject" ≠ "accept".</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>The logic of a hypothesis test</h1>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li><b>Null hypothesis</b> \(H_0: \mu = \mu_0\) — the status quo, "nothing has changed".</li>
+        <li><b>Alternative</b> \(H_1\) — what we suspect: \(\mu &lt; \mu_0\), \(\mu &gt; \mu_0\) or \(\mu \neq \mu_0\).</li>
+        <li>Strategy: assume \(H_0\), then measure how surprising the data would be.</li>
+      </ul>
+    </div>
+    <div class="col narrow">
+      <div class="box defn"><span class="lbl">p-value</span>
+        <p>The probability, <b>assuming \(H_0\) is true</b>, of observing a sample mean at least as extreme as the one we got.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Decision rule</span>
+    <p>Small \(p\)-value (below the significance level, usually \(\alpha = 0.05\)) → the data are too surprising for \(H_0\) → <b>reject \(H_0\)</b>. Otherwise: <b>do not reject</b> \(H_0\) — which is not the same as proving it true.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 3 · Hypothesis testing</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Worked example: a full test</h1>
+  <div class="box ex"><span class="lbl">Example 3</span>
+    <p>Recovery takes 5 days on average with the current drug (\(\sigma = 1\) day). On a new drug, 25 patients average \(\bar{x} = 4.6\) days. Test at the 5% level whether recovery time has reduced (\(\sigma\) unchanged).</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">\(H_0: \mu = 5\); \(H_1: \mu &lt; 5\) (one-tail — we're asking about a reduction).</li>
+    <li class="step">Under \(H_0\): \(\bar{X} \sim N\!\left(5,\, \left(\tfrac{1}{5}\right)^2\right)\). Test statistic: \(z = \dfrac{4.6 - 5}{1/\sqrt{25}} = -2\).</li>
+    <li class="step">\(p = P(Z \leq -2) \approx 0.0228 &lt; 0.05\): reject \(H_0\) — evidence, at the 5% level, that the new drug reduces mean recovery time.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Write the conclusion in context</span>
+    <p>Always end with a sentence about drugs and days — not just "reject \(H_0\)".</p>
+  </div>
+  <div class="footerbar"><span>Lesson 3 · Hypothesis testing</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Seeing it: the \(p\)-value is a tail area</h1>
+  <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">4.2</text><line x1="178" y1="30" x2="178" y2="330" stroke="#e2e8f0"/><text x="178" y="352" font-size="16" fill="#475569" text-anchor="middle">4.4</text><line x1="285" y1="30" x2="285" y2="330" stroke="#e2e8f0"/><text x="285" y="352" font-size="16" fill="#475569" text-anchor="middle">4.6</text><line x1="392" y1="30" x2="392" y2="330" stroke="#e2e8f0"/><text x="392" y="352" font-size="16" fill="#475569" text-anchor="middle">4.8</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">5.0</text><line x1="608" y1="30" x2="608" y2="330" stroke="#e2e8f0"/><text x="608" y="352" font-size="16" fill="#475569" text-anchor="middle">5.2</text><line x1="715" y1="30" x2="715" y2="330" stroke="#e2e8f0"/><text x="715" y="352" font-size="16" fill="#475569" text-anchor="middle">5.4</text><line x1="822" y1="30" x2="822" y2="330" stroke="#e2e8f0"/><text x="822" y="352" font-size="16" fill="#475569" text-anchor="middle">5.6</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">5.8</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,330.0 L70.0,329.9 L72.1,329.9 L74.3,329.9 L76.4,329.9 L78.6,329.9 L80.7,329.9 L82.9,329.8 L85.0,329.8 L87.2,329.8 L89.3,329.8 L91.5,329.8 L93.6,329.8 L95.8,329.8 L97.9,329.7 L100.1,329.7 L102.2,329.7 L104.4,329.7 L106.5,329.7 L108.7,329.6 L110.8,329.6 L113.0,329.6 L115.1,329.5 L117.3,329.5 L119.4,329.5 L121.6,329.4 L123.7,329.4 L125.9,329.3 L128.0,329.3 L130.2,329.2 L132.3,329.2 L134.5,329.1 L136.6,329.1 L138.8,329.0 L140.9,328.9 L143.1,328.9 L145.2,328.8 L147.4,328.7 L149.5,328.6 L151.7,328.5 L153.8,328.4 L156.0,328.3 L158.1,328.2 L160.3,328.1 L162.4,328.0 L164.6,327.9 L166.7,327.7 L168.9,327.6 L171.0,327.4 L173.2,327.3 L175.3,327.1 L177.5,326.9 L179.6,326.7 L181.8,326.5 L183.9,326.3 L186.1,326.1 L188.2,325.8 L190.4,325.6 L192.5,325.3 L194.7,325.1 L196.8,324.8 L199.0,324.5 L201.1,324.1 L203.3,323.8 L205.4,323.5 L207.6,323.1 L209.7,322.7 L211.9,322.3 L214.0,321.9 L216.2,321.4 L218.3,321.0 L220.5,320.5 L222.6,320.0 L224.8,319.5 L226.9,318.9 L229.1,318.3 L231.2,317.7 L233.4,317.1 L235.5,316.5 L237.7,315.8 L239.8,315.1 L242.0,314.3 L244.1,313.6 L246.3,312.8 L248.4,311.9 L250.6,311.1 L252.7,310.2 L254.9,309.2 L257.0,308.3 L259.2,307.3 L261.3,306.2 L263.5,305.2 L265.6,304.1 L267.8,302.9 L269.9,301.7 L272.1,300.5 L274.2,299.2 L276.4,297.9 L278.5,296.5 L280.7,295.1 L282.8,293.7 L285.0,292.2 L285.0,330.0 Z" fill="#8E244D" fill-opacity="0.25" stroke="none"/><path d="M70.0,329.9 L74.3,329.9 L78.6,329.9 L82.9,329.8 L87.2,329.8 L91.5,329.8 L95.8,329.8 L100.1,329.7 L104.4,329.7 L108.7,329.6 L113.0,329.6 L117.3,329.5 L121.6,329.4 L125.9,329.3 L130.2,329.2 L134.5,329.1 L138.8,329.0 L143.1,328.9 L147.4,328.7 L151.7,328.5 L156.0,328.3 L160.3,328.1 L164.6,327.9 L168.9,327.6 L173.2,327.3 L177.5,326.9 L181.8,326.5 L186.1,326.1 L190.4,325.6 L194.7,325.1 L199.0,324.5 L203.3,323.8 L207.6,323.1 L211.9,322.3 L216.2,321.4 L220.5,320.5 L224.8,319.5 L229.1,318.3 L233.4,317.1 L237.7,315.8 L242.0,314.3 L246.3,312.8 L250.6,311.1 L254.9,309.2 L259.2,307.3 L263.5,305.2 L267.8,302.9 L272.1,300.5 L276.4,297.9 L280.7,295.1 L285.0,292.2 L289.3,289.1 L293.6,285.8 L297.9,282.3 L302.2,278.6 L306.5,274.7 L310.8,270.7 L315.1,266.4 L319.4,261.9 L323.7,257.2 L328.0,252.4 L332.3,247.3 L336.6,242.0 L340.9,236.6 L345.2,231.0 L349.5,225.2 L353.8,219.2 L358.1,213.1 L362.4,206.9 L366.7,200.5 L371.0,194.1 L375.3,187.5 L379.6,180.9 L383.9,174.1 L388.2,167.4 L392.5,160.6 L396.8,153.8 L401.1,147.1 L405.4,140.4 L409.7,133.8 L414.0,127.2 L418.3,120.8 L422.6,114.5 L426.9,108.4 L431.2,102.5 L435.5,96.7 L439.8,91.3 L444.1,86.1 L448.4,81.1 L452.7,76.5 L457.0,72.2 L461.3,68.3 L465.6,64.7 L469.9,61.5 L474.2,58.7 L478.5,56.3 L482.8,54.3 L487.1,52.7 L491.4,51.6 L495.7,51.0 L500.0,50.7 L504.3,51.0 L508.6,51.6 L512.9,52.7 L517.2,54.3 L521.5,56.3 L525.8,58.7 L530.1,61.5 L534.4,64.7 L538.7,68.3 L543.0,72.2 L547.3,76.5 L551.6,81.1 L555.9,86.1 L560.2,91.3 L564.5,96.7 L568.8,102.5 L573.1,108.4 L577.4,114.5 L581.7,120.8 L586.0,127.2 L590.3,133.8 L594.6,140.4 L598.9,147.1 L603.2,153.8 L607.5,160.6 L611.8,167.4 L616.1,174.1 L620.4,180.9 L624.7,187.5 L629.0,194.1 L633.3,200.5 L637.6,206.9 L641.9,213.1 L646.2,219.2 L650.5,225.2 L654.8,231.0 L659.1,236.6 L663.4,242.0 L667.7,247.3 L672.0,252.4 L676.3,257.2 L680.6,261.9 L684.9,266.4 L689.2,270.7 L693.5,274.7 L697.8,278.6 L702.1,282.3 L706.4,285.8 L710.7,289.1 L715.0,292.2 L719.3,295.1 L723.6,297.9 L727.9,300.5 L732.2,302.9 L736.5,305.2 L740.8,307.3 L745.1,309.2 L749.4,311.1 L753.7,312.8 L758.0,314.3 L762.3,315.8 L766.6,317.1 L770.9,318.3 L775.2,319.5 L779.5,320.5 L783.8,321.4 L788.1,322.3 L792.4,323.1 L796.7,323.8 L801.0,324.5 L805.3,325.1 L809.6,325.6 L813.9,326.1 L818.2,326.5 L822.5,326.9 L826.8,327.3 L831.1,327.6 L835.4,327.9 L839.7,328.1 L844.0,328.3 L848.3,328.5 L852.6,328.7 L856.9,328.9 L861.2,329.0 L865.5,329.1 L869.8,329.2 L874.1,329.3 L878.4,329.4 L882.7,329.5 L887.0,329.6 L891.3,329.6 L895.6,329.7 L899.9,329.7 L904.2,329.8 L908.5,329.8 L912.8,329.8 L917.1,329.8 L921.4,329.9 L925.7,329.9 L930.0,329.9" fill="none" stroke="#1F3A93" stroke-width="3.5"/><line x1="285" y1="40" x2="285" y2="330" stroke="#8E244D" stroke-width="2" stroke-dasharray="6 5"/><text x="285" y="30" font-size="17" font-weight="700" fill="#8E244D" text-anchor="middle">x&#772; = 4.6  (z = &#8722;2)</text><text x="199" y="300" font-size="18" font-weight="700" fill="#8E244D" text-anchor="middle">p &#8776; 0.0228</text><text x="650" y="90" font-size="19" font-weight="700" fill="#1F3A93">under H&#8320;: X&#772; ~ N(5, 0.2&#178;)</text></svg>
+  <p style="font-size:21px; margin-top:4px; text-align:center;">Under \(H_0\), \(\bar{X} \sim N(5,\, 0.2^2)\). Our \(\bar{x} = 4.6\) sits at \(z = -2\); the shaded tail (0.0228) is the \(p\)-value.</p>
+  <div class="footerbar"><span>Lesson 3 · Hypothesis testing</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<!-- ═══ LESSON 4 ═══ -->
+
+<section class="slide section" data-lesson="4">
+  <div class="kicker">Lesson 4 · 16B</div>
+  <h1>Full tests, written properly</h1>
+  <ul class="goals">
+    <li>Run complete tests start to finish, both directions of \(H_1\).</li>
+    <li>Practise the five-line setting-out that earns full marks.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h1>The five-line setting-out</h1>
+  <ol>
+    <li><b>Hypotheses:</b> \(H_0: \mu = \mu_0\); \(H_1\) with direction justified by the question's wording.</li>
+    <li><b>Distribution under \(H_0\):</b> \(\bar{X} \sim N(\mu_0,\, \sigma^2/n)\) — cite normal population or CLT.</li>
+    <li><b>Test statistic:</b> \(z = \dfrac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\) with the numbers shown.</li>
+    <li><b>p-value:</b> the correct tail probability, compared against \(\alpha\).</li>
+    <li><b>Conclusion in context:</b> reject / do not reject, then a sentence with units.</li>
+  </ol>
+  <div class="box key"><span class="lbl">Marker's-eye view</span>
+    <p>Each line carries marks independently. A correct \(p\)-value after wrong hypotheses still loses the setup marks — write line 1 before touching the CAS.</p>
+  </div>
+  <div class="footerbar"><span>Lesson 4 · Full tests</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Worked example: testing an increase</h1>
+  <div class="box ex"><span class="lbl">Example 4</span>
+    <p>A machine fills bags with \(\mu = 500\) g of flour, \(\sigma = 8\) g. After maintenance, a sample of 16 bags has \(\bar{x} = 504.5\) g. At the 5% level, is there evidence the machine now overfills?</p>
+  </div>
+  <button class="rvl">Reveal ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">\(H_0: \mu = 500\); \(H_1: \mu &gt; 500\) ("overfills" → one-tail, upper).</li>
+    <li class="step">\(z = \dfrac{504.5 - 500}{8/\sqrt{16}} = \dfrac{4.5}{2} = 2.25\).</li>
+    <li class="step">\(p = P(Z \geq 2.25) \approx 0.0122 &lt; 0.05\) → reject \(H_0\): evidence, at the 5% level, that the machine now overfills bags.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 4 · Full tests</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Checkpoint 4 — your turn</h1>
+  <div class="box try"><span class="lbl">Try it! (≈6 min)</span>
+    <p>Cereal boxes should contain \(\mu = 750\) g with \(\sigma = 10\) g. Consumer-watch suspects <b>underfilling</b>. A sample of 25 boxes gives \(\bar{x} = 745.2\) g. Test at the <b>1%</b> level, writing all five lines.</p>
+  </div>
+  <button class="rvl">Answers ▸</button>
+  <ul class="small" style="margin-top:12px;">
+    <li class="step">\(H_0: \mu = 750\); \(H_1: \mu &lt; 750\). Under \(H_0\): \(\bar{X} \sim N(750,\, 2^2)\).</li>
+    <li class="step">\(z = \dfrac{745.2 - 750}{10/5} = -2.4\); \(p = P(Z \leq -2.4) \approx 0.0082\).</li>
+    <li class="step">\(p &lt; 0.01\) → reject \(H_0\): evidence, at the 1% level, that boxes are being underfilled on average.</li>
+  </ul>
+  <div class="footerbar"><span>Lesson 4 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+<section class="slide">
+  <h1>Week 5 summary</h1>
+  <ul>
+    <li>95% CI: \(\bar{x} \pm 1.96\sigma/\sqrt{n}\); interpret via repeated sampling, and know the width levers.</li>
+    <li>Tests: state \(H_0\) and \(H_1\) before touching the data; compute \(z\); convert to a \(p\)-value.</li>
+    <li>\(p &lt; \alpha\) → reject \(H_0\); otherwise "do not reject" — never "accept".</li>
+    <li>Conclusions live in context: days, grams, hours — not just symbols.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Before next week</span>
+    <p>Next week: one-tail vs two-tail tests, and the two ways a test can go wrong (Type I and II errors). SAC 3 is in Week 7 — the revision pack drops next week.</p>
+  </div>
+  <div class="footerbar"><span>T3W05 · Inference I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+</section>
+
+</div>
+<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div id="counter"></div>
+<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let cur = 0;
+  function fit() {
+    const s = Math.min(innerWidth / 1300, innerHeight / 740);
+    slides.forEach(sl => sl.style.transform = 'scale(' + s + ')');
+  }
+  addEventListener('resize', fit); fit();
+  function syncBtns(sl) {
+    const left = sl.querySelector('.step:not(.shown)');
+    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
+  }
+  function revealNext(sl) {
+    const s = sl.querySelector('.step:not(.shown)');
+    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
+    return false;
+  }
+  function unrevealLast(sl) {
+    const shown = sl.querySelectorAll('.step.shown');
+    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
+    return false;
+  }
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
+    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+    location.hash = cur + 1;
+  }
+  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
+  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (['1','2','3','4'].includes(e.key)) {
+      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
+      if (target >= 0) show(target);
+    }
+    else if (e.key.toLowerCase() === 'f') {
+      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    }
+  });
+  addEventListener('click', e => {
+    if (e.target.closest('button.rvl, a')) return;
+    if (e.clientX > innerWidth * 0.66) next();
+    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
+  });
+  document.querySelectorAll('button.rvl').forEach(b =>
+    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
+  show(parseInt(location.hash.slice(1)) - 1 || 0);
+</script>
+</body>
+</html>
