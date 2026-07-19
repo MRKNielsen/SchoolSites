@@ -22,9 +22,9 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; background: var(--bg); overflow: hidden;
     font-family: "Segoe UI", system-ui, sans-serif; }
-  #stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-  .slide { width: 1280px; height: 720px; background: var(--paper); color: var(--ink);
-    display: none; flex-direction: column; padding: 52px 68px 64px; position: absolute; border-radius: 6px; }
+  #stage { position: absolute; inset: 0; display: flex; overflow-y: auto; padding: 5vh 5vw; }
+  .slide { width: 1280px; min-height: 720px; background: var(--paper); color: var(--ink);
+    display: none; flex-direction: column; padding: 52px 68px 64px; position: relative; margin: auto; flex-shrink: 0; border-radius: 6px; }
   .slide.active { display: flex; }
   .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
   .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
@@ -356,8 +356,8 @@
   const slides = [...document.querySelectorAll('.slide')];
   let cur = 0;
   function fit() {
-    const s = Math.min(innerWidth / 1300, innerHeight / 740);
-    slides.forEach(sl => sl.style.transform = 'scale(' + s + ')');
+    const s = Math.min(innerWidth * 0.9 / 1280, innerHeight * 0.9 / 720);
+    slides.forEach(sl => sl.style.zoom = s);
   }
   addEventListener('resize', fit); fit();
   function syncBtns(sl) {
