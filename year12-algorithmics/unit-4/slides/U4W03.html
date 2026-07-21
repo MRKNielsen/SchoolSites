@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W03 — Formal Algorithm Analysis III</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W03 · Formal Algorithm Analysis III</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Formal Algorithm Analysis III</h1>
+  <p>Unit 4 AOS1 · Week 3 — Recursion: call graphs, recurrences, Master Theorem</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W03 · Formal Algorithm Analysis III">
+  <h2>This week</h2>
+  <ul>
+    <li>Call graphs — seeing what recursion actually does.</li>
+    <li>Recurrence relations — writing the cost of recursion as an equation, and solving it by expansion.</li>
+    <li>The Master Theorem — the shortcut for divide-and-conquer recurrences.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Why this matters for your SAT</span>
+    <p>If your solution contains any recursive module, Memo 02 expects its cost derived via a call graph or recurrence — VCAA names all three tools (call graphs, recurrence relations, Master Theorem) for Criterion 5–7 work.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Call graphs</h1>
+</section>
+
+<section class="slide" data-topic="U4W03 · Call graphs">
+  <h2>A call graph shows who calls whom, how many times</h2>
+  <div class="cols">
+    <div>
+      <pre class="code" style="margin-top:0;"><span><b>Algorithm</b> Fact(n):</span><span>    <b>If</b> n ≤ 1 <b>Do</b></span><span>        <b>Return</b> 1</span><span>    <b>Return</b> n * Fact(n - 1)</span></pre>
+      <ul class="small">
+        <li>Each call does \(O(1)\) work, then makes <b>one</b> recursive call.</li>
+        <li>The call graph is a <em>chain</em> of depth \(n\): total \(\Theta(n)\).</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 200 260" style="width:62%; height:auto; margin:0 auto; display:block;">
+        <g font-size="15" text-anchor="middle">
+          <circle cx="100" cy="30" r="24" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="100" y="35">F(4)</text>
+          <line x1="100" y1="54" x2="100" y2="76" stroke="#475569" stroke-width="1.8" />
+          <circle cx="100" cy="100" r="24" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="100" y="105">F(3)</text>
+          <line x1="100" y1="124" x2="100" y2="146" stroke="#475569" stroke-width="1.8"/>
+          <circle cx="100" cy="170" r="24" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="100" y="175">F(2)</text>
+          <line x1="100" y1="194" x2="100" y2="216" stroke="#475569" stroke-width="1.8"/>
+          <circle cx="100" cy="238" r="20" fill="#fdf6ec" stroke="#b45309" stroke-width="2"/><text x="100" y="243">F(1)</text>
+        </g>
+      </svg>
+      <p class="small" style="text-align:center; color:var(--muted);">A chain: depth \(n\), one call per level.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W03 · Call graphs">
+  <h2>Branching recursion: the tree explodes</h2>
+  <div class="cols">
+    <div>
+      <pre class="code" style="margin-top:0;"><span><b>Algorithm</b> Fib(n):</span><span>    <b>If</b> n ≤ 1 <b>Do</b></span><span>        <b>Return</b> n</span><span>    <b>Return</b> Fib(n-1) + Fib(n-2)</span></pre>
+      <ul class="small">
+        <li><b>Two</b> calls per level → a binary tree of depth \(\approx n\).</li>
+        <li>Call count roughly doubles per level: \(\Theta(\phi^n)\) — <b>exponential</b> (\(\phi \approx 1.618\)).</li>
+        <li>Fib(30) ≈ 2.7 million calls. Fib(50): unusable.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 260 210" style="width:88%; height:auto; margin:0 auto; display:block;">
+        <g font-size="13" text-anchor="middle">
+          <line x1="130" y1="40" x2="70" y2="95" stroke="#475569" stroke-width="1.6"/>
+          <line x1="130" y1="40" x2="190" y2="95" stroke="#475569" stroke-width="1.6"/>
+          <line x1="70" y1="115" x2="40" y2="165" stroke="#475569" stroke-width="1.6"/>
+          <line x1="70" y1="115" x2="100" y2="165" stroke="#475569" stroke-width="1.6"/>
+          <line x1="190" y1="115" x2="160" y2="165" stroke="#475569" stroke-width="1.6"/>
+          <line x1="190" y1="115" x2="220" y2="165" stroke="#475569" stroke-width="1.6"/>
+          <circle cx="130" cy="30" r="20" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="130" y="35">F(5)</text>
+          <circle cx="70" cy="105" r="20" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="70" y="110">F(4)</text>
+          <circle cx="190" cy="105" r="20" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/><text x="190" y="110">F(3)</text>
+          <circle cx="40" cy="175" r="18" fill="#fbf1f3" stroke="#8b1f34" stroke-width="2"/><text x="40" y="180">F(3)</text>
+          <circle cx="100" cy="175" r="18" fill="#f4f6fa" stroke="#475569" stroke-width="2"/><text x="100" y="180">F(2)</text>
+          <circle cx="160" cy="175" r="18" fill="#f4f6fa" stroke="#475569" stroke-width="2"/><text x="160" y="180">F(2)</text>
+          <circle cx="220" cy="175" r="18" fill="#f4f6fa" stroke="#475569" stroke-width="2"/><text x="220" y="180">F(1)</text>
+        </g>
+      </svg>
+      <p class="small" style="text-align:center; color:var(--muted);">F(3) appears twice already — repeated work.</p>
+    </div>
+  </div>
+  <div class="box key" style="margin-top:6px;"><span class="lbl">Key idea</span>
+    <p>Cost of recursion = (number of calls in the tree) × (work per call). The <em>shape</em> of the call graph is the whole story.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W03 · Call graphs">
+  <h2>Halving recursion: the friendly shape</h2>
+  <div class="cols even">
+    <div>
+      <pre class="code" style="margin-top:0;"><span><b>Algorithm</b> BinSearchR(L, t, lo, hi):</span><span>    <b>If</b> lo &gt; hi <b>Do</b></span><span>        <b>Return</b> not_found</span><span>    mid ← (lo + hi) div 2</span><span>    <b>If</b> L[mid] = t <b>Do</b></span><span>        <b>Return</b> mid</span><span>    <b>If</b> L[mid] &lt; t <b>Do</b></span><span>        <b>Return</b> BinSearchR(L, t, mid+1, hi)</span><span>    <b>Else</b> <b>Do</b></span><span>        <b>Return</b> BinSearchR(L, t, lo, mid-1)</span></pre>
+    </div>
+    <div class="small">
+      <ul>
+        <li>One call per level, but the <em>problem size halves</em>: \(n \to n/2 \to n/4 \to \dots\)</li>
+        <li>Chain of depth \(\log_2 n\), \(O(1)\) work per call: \(\Theta(\log n)\).</li>
+        <li>Compare: same result as the iterative version from Week 1 — recursion doesn't change the complexity, the <em>shape</em> does.</li>
+      </ul>
+      <div class="box try" style="margin-top:10px;"><span class="lbl">Try it!</span>
+        <p>Sketch the call graph of Fact(6), Fib(5), and BinSearchR on a 16-element list. Three shapes: chain, tree, halving chain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Recurrence relations</h1>
+</section>
+
+<section class="slide" data-topic="U4W03 · Recurrence relations">
+  <h2>From code to equation</h2>
+  <ul>
+    <li>Let \(T(n)\) = the running time on input of size \(n\). Read the recurrence <b>straight off the code</b>:</li>
+  </ul>
+  <table class="tbl" style="margin:6px auto;">
+    <tr><th>Code shape</th><th>Recurrence</th><th>Example</th></tr>
+    <tr><td>one call on \(n-1\), \(O(1)\) work</td><td>\(T(n) = T(n-1) + c\)</td><td>Fact</td></tr>
+    <tr><td>one call on \(n/2\), \(O(1)\) work</td><td>\(T(n) = T(n/2) + c\)</td><td>BinSearchR</td></tr>
+    <tr><td>two calls on \(n/2\), \(O(n)\) merge</td><td>\(T(n) = 2T(n/2) + cn\)</td><td>MergeSort</td></tr>
+    <tr><td>two calls on \(n-1\), \(O(1)\) work</td><td>\(T(n) = 2T(n-1) + c\)</td><td>Towers of Hanoi</td></tr>
+  </table>
+  <ul style="margin-top:10px;">
+    <li>Plus a base case: \(T(1) = c\). The recurrence <em>is</em> the call graph, written algebraically.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W03 · Recurrence relations">
+  <h2>Solving by expansion (telescoping)</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Example: \(T(n) = T(n/2) + c\)</span>
+    <p>
+    \[ T(n) = T(n/2) + c = T(n/4) + 2c = T(n/8) + 3c = \dots = T(1) + kc \]
+    where \(n/2^k = 1\), i.e. \(k = \log_2 n\). So \(T(n) = c\log_2 n + c = \Theta(\log n)\).
+    </p>
+  </div>
+  <ul style="margin-top:14px;">
+    <li><b>Method:</b> substitute the recurrence into itself, spot the pattern after 2–3 steps, find when the base case is reached, sum the work.</li>
+    <li>Same technique gives \(T(n) = T(n-1) + c \Rightarrow \Theta(n)\), and \(T(n) = T(n-1) + cn \Rightarrow c(1 + 2 + \dots + n) = \Theta(n^2)\).</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Expand \(T(n) = 2T(n-1) + c\), \(T(1)=c\), three steps. What is the pattern, and what does it solve to?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W03 · Recurrence relations">
+  <h2>The big one: \(T(n) = 2T(n/2) + cn\)</h2>
+  <ul>
+    <li>Level 0: \(cn\) work. Level 1: two problems of size \(n/2\) → \(2 \cdot c\frac{n}{2} = cn\). Level 2: four of size \(n/4\) → \(cn\). <b>Every level costs \(cn\)</b>.</li>
+    <li>Depth: \(\log_2 n\) levels until size 1.</li>
+    <li>Total: \(cn \cdot \log_2 n + \Theta(n) = \Theta(n \log n)\) — MergeSort's bound, derived, not memorised.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The level-sum picture</span>
+    <p>Draw the call tree, write each level's total work beside it, count the levels, add. If every level costs the same, the answer is (level cost) × (depth).</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>The Master Theorem</h1>
+</section>
+
+<section class="slide" data-topic="U4W03 · The Master Theorem">
+  <h2>The Master Theorem</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">For recurrences of the form</span>
+    <p style="text-align:center;">\[ T(n) = a\,T\!\left(\frac{n}{b}\right) + f(n), \qquad a \geq 1,\; b > 1 \]</p>
+    <p>Compare \(f(n)\) with \(n^{\log_b a}\) (the “tree cost”):</p>
+  </div>
+  <table class="tbl" style="margin:12px auto;">
+    <tr><th>Case</th><th>Condition</th><th>Result</th></tr>
+    <tr><td class="c">1</td><td>\(f(n)\) grows <b>slower</b> than \(n^{\log_b a}\)</td><td>\(T(n) = \Theta(n^{\log_b a})\)</td></tr>
+    <tr><td class="c">2</td><td>\(f(n) = \Theta(n^{\log_b a})\)</td><td>\(T(n) = \Theta(n^{\log_b a} \log n)\)</td></tr>
+    <tr><td class="c">3</td><td>\(f(n)\) grows <b>faster</b> (and is “regular”)</td><td>\(T(n) = \Theta(f(n))\)</td></tr>
+  </table>
+  <p class="small" style="color:var(--muted);">Intuition: case 1 — the leaves dominate; case 2 — every level ties; case 3 — the root dominates.</p>
+</section>
+
+<section class="slide" data-topic="U4W03 · The Master Theorem">
+  <h2>Worked examples</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Recurrence</th><th>\(a, b, f(n)\)</th><th>\(n^{\log_b a}\)</th><th>Case</th><th>Result</th></tr>
+    <tr><td>\(T(n) = 2T(n/2) + n\)</td><td>\(2, 2, n\)</td><td>\(n^{\log_2 2} = n\)</td><td class="c">2</td><td>\(\Theta(n \log n)\)</td></tr>
+    <tr><td>\(T(n) = T(n/2) + 1\)</td><td>\(1, 2, 1\)</td><td>\(n^{\log_2 1} = 1\)</td><td class="c">2</td><td>\(\Theta(\log n)\)</td></tr>
+    <tr><td>\(T(n) = 4T(n/2) + n\)</td><td>\(4, 2, n\)</td><td>\(n^{\log_2 4} = n^2\)</td><td class="c">1</td><td>\(\Theta(n^2)\)</td></tr>
+    <tr><td>\(T(n) = 2T(n/2) + n^2\)</td><td>\(2, 2, n^2\)</td><td>\(n\)</td><td class="c">3</td><td>\(\Theta(n^2)\)</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Exam recipe</span>
+    <p>1) Read off \(a\), \(b\), \(f(n)\). &nbsp;2) Compute \(n^{\log_b a}\). &nbsp;3) Compare growth. &nbsp;4) Quote the case and the result — <em>name the case number</em> in your justification.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W03 · The Master Theorem">
+  <h2>When the Master Theorem does <em>not</em> apply</h2>
+  <ul>
+    <li>\(T(n) = T(n-1) + c\) — the subproblem shrinks by subtraction, not division (\(b \not> 1\)). Use expansion instead.</li>
+    <li>\(T(n) = 2T(n-1) + c\) — same problem: expansion gives \(\Theta(2^n)\).</li>
+    <li>Uneven splits like \(T(n) = T(n/3) + T(2n/3) + n\) — outside the standard form (level-sum picture still works).</li>
+  </ul>
+  <div class="box key"><span class="lbl">VCAA phrasing</span>
+    <p>The study design says Master Theorem “where / if appropriate” — recognising when it applies <em>is</em> part of the skill. State the form check before using it.</p>
+  </div>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Which tool for each? (a) \(T(n)=3T(n/3)+n\) &nbsp; (b) \(T(n)=T(n-2)+n\) &nbsp; (c) \(T(n)=8T(n/2)+n^2\)</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W03 · The Master Theorem">
+  <h2>The complete AOS1 toolkit (Memo 02 checklist)</h2>
+  <table class="tbl">
+    <tr><th>Tool</th><th>Use when…</th><th>From week</th></tr>
+    <tr><td>Loop counting + Big-O arithmetic</td><td>iterative code</td><td class="c">1</td></tr>
+    <tr><td>Best/average/worst + \(\Theta, \Omega\)</td><td>input-dependent behaviour</td><td class="c">1</td></tr>
+    <tr><td>Amortised edge-counting</td><td>graph algorithms</td><td class="c">2</td></tr>
+    <tr><td>Call graphs</td><td>any recursion — see the shape</td><td class="c">3</td></tr>
+    <tr><td>Recurrence + expansion</td><td>subtract-style or unusual recursion</td><td class="c">3</td></tr>
+    <tr><td>Master Theorem</td><td>divide-and-conquer form \(aT(n/b) + f(n)\)</td><td class="c">3</td></tr>
+  </table>
+  <ul style="margin-top:16px;">
+    <li>Next week: applying <em>all of this to your own SAT algorithm</em> — the Memo 02 workshop.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W03 · Formal Algorithm Analysis III">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w03.py</code>: call-tree visualiser + recurrence explorer — watch Fib explode, watch MergeSort stay tame.</li>
+    <li><b>Problem Set 2</b>: recurrences and Master Theorem — due start of Week 4.</li>
+    <li>Start thinking about which modules of your SAT solution are recursive — bring a list to next week's workshop.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Recursion cost = calls in the tree × work per call; write it as a recurrence, solve by expansion or Master Theorem.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 16</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

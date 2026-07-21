@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W05 — From Analysis to Intractability</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W05 · From Analysis to Intractability</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>From Analysis to Intractability</h1>
+  <p>Unit 4 · Week 5 — Finishing Memo 02, and the question AOS2 asks</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W05 · From Analysis to Intractability">
+  <h2>This week</h2>
+  <ul>
+    <li>Comparisons that score — C7 technique, with the crossover-point method.</li>
+    <li>Workshop 2 — consequences and comparison paragraphs, A03/A04.</li>
+    <li>AOS2 launch — tractability: which problems <em>can't</em> be solved fast, no matter how clever you are?</li>
+  </ul>
+  <div class="box key"><span class="lbl">Deadline</span>
+    <p>Submission 2 (Memo 02 + A03 + A04 + workbook) due <b>Tuesday 18 August</b>. Final checkpoint Monday.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Comparisons that score</h1>
+</section>
+
+<section class="slide" data-topic="U4W05 · Comparisons that score">
+  <h2>The crossover-point method</h2>
+  <ul>
+    <li>Two candidate solutions rarely have a universal winner — the comparison's job is to find <b>where the lead changes</b>.</li>
+    <li>Example: Dijkstra-per-query vs Floyd–Warshall precompute, for \(q\) routing queries on a static graph:</li>
+  </ul>
+  <div class="box example"><span class="lbl">Set the costs against each other</span>
+    <p>Per-query Dijkstra: \(q \cdot O((|V|+|E|)\log|V|)\). &nbsp; FW once, then \(O(1)\) lookups: \(O(|V|^3) + q \cdot O(1)\).</p>
+    <p style="margin-top:8px;">FW wins when \(q\) is large and the graph is small and static; Dijkstra wins when the graph is big, sparse, or changes often. <em>State the condition, then conclude for your context.</em></p>
+  </div>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>On your facility (your \(|V|, |E|\)): estimate the \(q\) at which precomputing all pairs pays off.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W05 · Comparisons that score">
+  <h2>Anatomy of a full-marks C7 response</h2>
+  <ol>
+    <li><b>Same task, stated:</b> "For the task of ⟨X⟩ on my facility graph…"</li>
+    <li><b>Both bounds, justified:</b> quote your C5 work for each candidate.</li>
+    <li><b>Conditions:</b> input shape (sparse/dense), query pattern, static vs dynamic.</li>
+    <li><b>Crossover:</b> where the lead changes, with arithmetic.</li>
+    <li><b>Conclusion for your context:</b> a decision, not a shrug.</li>
+  </ol>
+  <div class="box key"><span class="lbl">Common fail</span>
+    <p>Comparing different tasks ("Dijkstra finds one path but FW finds all") is <em>description</em>, not comparison. Fix the task first, then compare costs.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W05 · Workshop 2 · Submission 2">
+  <h2>Workshop 2: finishing Submission 2</h2>
+  <ul>
+    <li>Priority order: tally paragraph → C6 consequences (four sentences) → C7 comparison (crossover method) → A03 → A04.</li>
+    <li>A03 is a C7 exercise in disguise; A04 is a C6 exercise in disguise. Reuse your paragraph structures.</li>
+    <li>Checklist in the workbook — every box ticked before Monday's checkpoint.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Peer check (10 min)</span>
+    <p>Swap tally paragraphs. Can your partner reconstruct which module dominates and why, from your paragraph alone? If not, it needs another sentence.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  <p class="kicker">AOS2 begins</p>
+  <h1>Tractability</h1>
+</section>
+
+<section class="slide" data-topic="U4W05 · Tractability">
+  <h2>AOS1 asked "how fast is this algorithm?" — AOS2 asks more</h2>
+  <ul>
+    <li><b>New question:</b> how fast can <em>any</em> algorithm for this <em>problem</em> be?</li>
+    <li>A problem is <b>tractable</b> if some algorithm solves it in polynomial time — \(O(n^k)\) for some constant \(k\).</li>
+    <li>Sorting: tractable (\(n \log n\)). Shortest path: tractable. But some problems have resisted every attempt at a polynomial algorithm for 70+ years.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Complexity is now a property of the <em>problem</em>, not just one algorithm. A clever algorithm can't save you if the problem itself is intractable.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W05 · Tractability">
+  <h2>Decision vs optimisation problems</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Optimisation form</th><th>Decision form</th></tr>
+    <tr><td>TSP</td><td>Find the <em>shortest</em> tour</td><td>Is there a tour shorter than \(k\)?</td></tr>
+    <tr><td>Knapsack</td><td>Maximise the value packed</td><td>Can value \(\geq k\) be packed?</td></tr>
+    <tr><td>Facility routing</td><td>Find the best sensor placement</td><td>Do \(m\) sensors suffice?</td></tr>
+  </table>
+  <ul style="margin-top:18px;">
+    <li>The decision form answers <b>yes/no</b> — this is the form complexity theory classifies.</li>
+    <li>If you can solve the optimisation, you can answer the decision; solving the decision repeatedly (binary search on \(k\)) recovers the optimisation. They stand or fall together.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W05 · Tractability">
+  <h2>P and NP</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">Definitions</span>
+    <p><b>P</b> — decision problems solvable in polynomial time.</p>
+    <p><b>NP</b> — decision problems where a proposed "yes" answer can be <em>checked</em> in polynomial time.</p>
+  </div>
+  <ul style="margin-top:16px;">
+    <li>Every problem in P is in NP (if you can solve it fast, you can check it fast).</li>
+    <li>TSP-decision is in NP: <em>given</em> a tour, checking its length is easy — \(O(|V|)\). <em>Finding</em> it seems to require searching \((|V|-1)!\) tours.</li>
+    <li><b>The million-dollar question:</b> does P = NP? Nobody knows. Almost everyone bets no.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Sudoku: what's the decision problem, and why is it obviously in NP?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W05 · Tractability">
+  <h2>Why AOS2 matters for your SAT</h2>
+  <ul>
+    <li>Memo 03 (due 4 Sep) asks you to <b>improve</b> your solution. If your problem contains an intractable core (many do), "just find the exact optimum faster" is not on the menu.</li>
+    <li>The honest options: solve a <em>restricted version</em> exactly, or the <em>full version approximately</em> — with heuristics. That's the next three weeks.</li>
+    <li>The exam loves this arc: identify intractability → justify a heuristic → analyse the trade-off.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Tractable = polynomial; NP = checkable fast; when the problem is (likely) intractable, engineer the trade-off instead of chasing the optimum.</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W05 · From Analysis to Intractability">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w05.py</code>: crossover explorer + brute-force TSP timer — feel the factorial wall yourself.</li>
+    <li>Submission 2: workbook checklist complete by Monday's checkpoint, due Tuesday.</li>
+    <li>Next week: NP-completeness, reductions, and the first escape route — heuristics.</li>
+  </ul>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 12</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

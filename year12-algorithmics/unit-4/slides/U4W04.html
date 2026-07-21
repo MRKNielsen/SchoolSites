@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W04 — Formal Algorithm Analysis IV</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W04 · Formal Algorithm Analysis IV</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Formal Algorithm Analysis IV</h1>
+  <p>Unit 4 AOS1 · Week 4 — Divide &amp; conquer, consequences, and your own algorithm</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W04 · Formal Algorithm Analysis IV">
+  <h2>This week</h2>
+  <ul>
+    <li>Divide &amp; conquer analysis — Master Theorem fluency drills.</li>
+    <li>Criterion 6 — turning a bound into a <em>real-world consequence</em>.</li>
+    <li>Memo 02 workshop launch — the analysis toolkit meets <em>your</em> SAT solution.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Where you stand</span>
+    <p>Test 1 (C5) is done. Submission 2 — Memo 02 + Amendments A03/A04 — is due <b>Tuesday 18 August</b>. Two workshop periods are protected: this Friday and next Wednesday.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Divide &amp; conquer, drilled</h1>
+</section>
+
+<section class="slide" data-topic="U4W04 · Divide &amp; conquer, drilled">
+  <h2>The divide &amp; conquer template</h2>
+  <pre class="code"><span><b>Algorithm</b> Solve(P):                <i># problem of size n</i></span><span>    <b>If</b> P is small <b>Do</b></span><span>        <b>Return</b> direct answer      <i># base case</i></span><span>    split P into a subproblems of size n/b</span><span>    solve each subproblem recursively</span><span>    combine the answers            <i># f(n) work</i></span></pre>
+  <ul>
+    <li>Cost equation: \(T(n) = a\,T(n/b) + f(n)\) — read \(a\), \(b\), \(f\) straight off the code.</li>
+    <li>MergeSort: split in 2, halves, linear merge → \(T(n) = 2T(n/2) + cn = \Theta(n \log n)\) (case 2).</li>
+    <li>Binary search: 1 subproblem, half size, constant check → \(T(n) = T(n/2) + c = \Theta(\log n)\) (case 2).</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W04 · Divide &amp; conquer, drilled">
+  <h2>Fluency drill (whiteboards)</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Recurrence</th><th class="c">Your answer</th></tr>
+    <tr><td class="c">1</td><td>\(T(n) = 2T(n/2) + 1\)</td><td class="c">?</td></tr>
+    <tr><td class="c">2</td><td>\(T(n) = 3T(n/3) + n\)</td><td class="c">?</td></tr>
+    <tr><td class="c">3</td><td>\(T(n) = 4T(n/2) + n^3\)</td><td class="c">?</td></tr>
+    <tr><td class="c">4</td><td>\(T(n) = T(n/4) + 1\)</td><td class="c">?</td></tr>
+    <tr><td class="c">5</td><td>\(T(n) = 7T(n/2) + n^2\)</td><td class="c">?</td></tr>
+    <tr><td class="c">6</td><td>\(T(n) = T(n-1) + n\)</td><td class="c">? <em>(trap)</em></td></tr>
+  </table>
+  <p class="small" style="margin-top:14px; color:var(--muted);">90 seconds each. For each: form check → \(a, b, f\) → \(n^{\log_b a}\) → case → bound. Q6 fails the form check — expansion gives \(\Theta(n^2)\).</p>
+</section>
+
+<section class="slide" data-topic="U4W04 · Divide &amp; conquer, drilled">
+  <h2>Drill answers</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>\(n^{\log_b a}\)</th><th class="c">Case</th><th>Bound</th></tr>
+    <tr><td class="c">1</td><td>\(n^{\log_2 2} = n\) vs \(f = 1\)</td><td class="c">1</td><td>\(\Theta(n)\)</td></tr>
+    <tr><td class="c">2</td><td>\(n^{\log_3 3} = n\) vs \(f = n\)</td><td class="c">2</td><td>\(\Theta(n \log n)\)</td></tr>
+    <tr><td class="c">3</td><td>\(n^{\log_2 4} = n^2\) vs \(f = n^3\)</td><td class="c">3</td><td>\(\Theta(n^3)\)</td></tr>
+    <tr><td class="c">4</td><td>\(n^{\log_4 1} = 1\) vs \(f = 1\)</td><td class="c">2</td><td>\(\Theta(\log n)\)</td></tr>
+    <tr><td class="c">5</td><td>\(n^{\log_2 7} \approx n^{2.81}\) vs \(f = n^2\)</td><td class="c">1</td><td>\(\Theta(n^{2.81})\)</td></tr>
+    <tr><td class="c">6</td><td colspan="3">form fails (\(b \not> 1\)) — expansion: \(c(1+2+\dots+n) = \Theta(n^2)\)</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Note on Q5</span>
+    <p>That's Strassen's matrix multiplication — a real algorithm where the Master Theorem's case 1 beats the obvious \(\Theta(n^3)\) approach. Sub-cubic multiplication exists because someone analysed the recurrence.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Criterion 6: consequences</h1>
+</section>
+
+<section class="slide" data-topic="U4W04 · Criterion 6: consequences">
+  <h2>What Criterion 6 actually asks</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">C6 (from the SAT criteria)</span>
+    <p><em>Understanding of the consequences of an algorithm's time complexity on its real-world application.</em></p>
+  </div>
+  <ul style="margin-top:16px;">
+    <li>Not: “my algorithm is \(O(|V|^3)\), which is slow.” That's a restatement, not a consequence.</li>
+    <li>A consequence names: <b>the context's realistic input size</b>, <b>what the bound implies at that size</b> (and at growth), and <b>the decision that follows</b>.</li>
+    <li>The bound is maths; the consequence is an <em>argument about your problem</em>.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W04 · Criterion 6: consequences">
+  <h2>The consequences paragraph: a template</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Four sentences</span>
+    <ol class="small" style="margin-top:6px;">
+      <li><b>Bound:</b> “Module X is worst-case \(O(\dots)\) because …” <em>(C5 work, quoted)</em></li>
+      <li><b>Scale:</b> “In this problem's context, the input is realistically \(n \approx \dots\), and could grow to … if …”</li>
+      <li><b>Implication:</b> “At that size the algorithm performs roughly … operations, i.e. …; at 10× the size, … times more.”</li>
+      <li><b>Decision:</b> “Therefore the design is feasible/marginal/unusable for …, and the bottleneck to address in Unit 4 Outcome 2 is …”</li>
+    </ol>
+  </div>
+  <div class="box example"><span class="lbl">Worked example (facility routing)</span>
+    <p class="small">“RouteAll is \(\Theta(|V|^3)\) via Floyd–Warshall. A single facility wing has ≈ 40 rooms, so ≈ 64,000 steps — instant. But the multi-wing amendment (A01) grows \(|V|\) to ≈ 400, giving 64 million steps per re-plan; recomputing on every corridor closure would cause visible delay on modest hardware. The all-pairs approach is the bottleneck; a single-source method run on demand is the natural Unit 4 improvement.”</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W04 · Criterion 6: consequences">
+  <h2>Criterion 7: comparing solutions honestly</h2>
+  <ul>
+    <li>C7 = <em>comparison of the time complexities of algorithmic solutions to a real-world / applied problem.</em></li>
+    <li>Compare like with like: same problem, same input measure, both worst-case (or say why not).</li>
+    <li>A comparison has a <b>conclusion</b>: which wins, <em>under what conditions</em> — crossover points matter.</li>
+  </ul>
+  <table class="tbl" style="margin:8px auto;">
+    <tr><th>Claim</th><th>Quality</th></tr>
+    <tr><td>“Dijkstra is faster than Floyd–Warshall.”</td><td>Weak — faster at what, on what graphs?</td></tr>
+    <tr><td>“For one source, Dijkstra \(O((|V|+|E|)\log|V|)\) beats FW \(\Theta(|V|^3)\); if all pairs are needed and the graph is small and static, FW's simplicity wins.”</td><td>Strong — conditions and conclusion.</td></tr>
+  </table>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Memo 02 workshop</h1>
+</section>
+
+<section class="slide" data-topic="U4W04 · Memo 02 workshop">
+  <h2>Memo 02: the task</h2>
+  <ul>
+    <li>A formal time complexity analysis of <b>your</b> Unit 3 solution — module by module — plus the consequences (C6) and comparisons (C7) that follow.</li>
+    <li><b>Deliverables (Tue 18 Aug):</b> Memo 02 document + completed workbook (<code>marimo_memo02</code>) + Amendments A03 and A04.</li>
+    <li>Full brief: <code>Memo02_brief.pdf</code> on the course hub — read it before Friday's workshop.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The standard</span>
+    <p>Every module gets: loop/recurrence structure → tool → tightest bound → one-line justification. Then a whole-solution tally (sequence adds, keep the dominant term) — exactly like the VCAA FriendshipRecommender exemplar.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W04 · Memo 02 workshop">
+  <h2>Workshop method: the module inventory</h2>
+  <ol>
+    <li><b>List every module</b> of your solution (main + helpers). The workbook has the table.</li>
+    <li>For each: input size variables (\(n\)? \(|V|, |E|\)? both?), structure (loops / recursion / library call), tool, bound.</li>
+    <li>Library and ADT operations count too: dictionary lookup \(O(1)\), sorting \(O(n \log n)\), your graph ADT's neighbour scan — know its cost.</li>
+    <li><b>Tally:</b> compose module bounds along the main control flow; the dominant term is your headline bound.</li>
+  </ol>
+  <div class="box try"><span class="lbl">Today, before you leave</span>
+    <p>Complete the inventory for at least three modules, including your single most expensive one.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W04 · Memo 02 workshop">
+  <h2>Memo 02 traps (from marking last year's memos)</h2>
+  <ul class="small">
+    <li><b>Hidden costs inside calls:</b> “I call ShortestPath once, so it's \(O(1)\)” — no; the call costs what the callee costs.</li>
+    <li><b>Wrong input size:</b> analysing in terms of “the list” when the real variable is \(|V|\) and \(|E|\) of your facility graph.</li>
+    <li><b>Best-case smuggling:</b> quoting the early-exit case as the headline bound. Headline = worst case.</li>
+    <li><b>Unjustified library costs:</b> if you use <code>sort()</code>, say \(O(n \log n)\) and move on — but <em>say it</em>.</li>
+    <li><b>No tally:</b> six module bounds and no overall conclusion. The tally paragraph is where C5 marks concentrate.</li>
+    <li><b>Consequences that aren't:</b> see the consequences template — name sizes, implications, decisions.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W04 · Memo 02 workshop">
+  <h2>Between now and 18 August</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>When</th><th>What</th></tr>
+    <tr><td>This week P3</td><td>Workshop 1: module inventory + first bounds</td></tr>
+    <tr><td>Week 5 P2</td><td>Workshop 2: consequences &amp; comparisons paragraphs, A03/A04</td></tr>
+    <tr><td>Week 5 P3</td><td>AOS2 launch (teaching continues — memo work is yours)</td></tr>
+    <tr><td>Mon 17 Aug</td><td>Final check: workbook complete, authentication declaration signed</td></tr>
+    <tr><td><b>Tue 18 Aug</b></td><td><b>Submission 2 due: Memo 02 + A03 + A04 + workbook</b></td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Authentication reminder</span>
+    <p>Memo work happens in class and in your own workbook. Keep your seed unchanged, commit progress at each checkpoint — unexplained jumps in work are what authentication questions get asked about.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W04 · Formal Algorithm Analysis IV">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w04.py</code>: module inventory + scaling projection calculator — this <em>is</em> your Memo 02 scaffold.</li>
+    <li><b>Read</b> <code>Memo02_brief.pdf</code> before Friday.</li>
+    <li>Problem Set 2 feedback: Sections B and C marked together Monday.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>A bound is maths; a consequence names the input size, the implication at scale, and the decision that follows.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 16</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

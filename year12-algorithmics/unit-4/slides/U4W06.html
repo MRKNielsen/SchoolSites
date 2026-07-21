@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W06 — Intractability and the First Escape Routes</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W06 · Intractability and the First Escape Routes</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Intractability and the First Escape Routes</h1>
+  <p>Unit 4 AOS2 · Week 6 — NP-completeness, exact techniques, hill climbing</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W06 · Intractability">
+  <h2>This week</h2>
+  <ul>
+    <li>NP-completeness and reductions — why one hard problem makes thousands hard.</li>
+    <li>Exact techniques revisited for efficiency: dynamic programming and backtracking.</li>
+    <li>Heuristics I — hill climbing, and what it trades away.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Submission 2</span>
+    <p>Due Tuesday. From Wednesday, your head is in Memo 03 territory: <em>improving</em> your solution with this week's tools.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>NP-completeness and reductions</h1>
+</section>
+
+<section class="slide" data-topic="U4W06 · NP-completeness">
+  <h2>Reductions: solving one problem with another</h2>
+  <ul>
+    <li>Problem A <b>reduces</b> to problem B if any instance of A can be translated (in polynomial time) into an instance of B whose answer gives A's answer.</li>
+    <li>Consequence: if B is easy, A is easy. Contrapositive: if A is hard, B is at least as hard.</li>
+    <li>Reductions transfer hardness <em>upward</em> — they're how we prove problems hard without solving them.</li>
+  </ul>
+  <div class="box example"><span class="lbl">Example</span>
+    <p>"Is there a Hamiltonian circuit?" reduces to TSP-decision: set every edge weight to 1, missing edges to 2, ask for a tour of length ≤ \(|V|\). A TSP solver would answer the Hamiltonian question — so TSP is at least as hard as Hamiltonian circuit.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W06 · NP-completeness">
+  <h2>NP-complete: the hardest problems in NP</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">Definition</span>
+    <p>A problem is <b>NP-complete</b> if (1) it is in NP, and (2) <em>every</em> problem in NP reduces to it.</p>
+  </div>
+  <ul style="margin-top:16px;">
+    <li>Cook–Levin (1971): SAT is NP-complete. Karp (1972): 21 more, by reduction chains. Today: thousands, including TSP-decision, graph colouring, knapsack, timetabling…</li>
+    <li>Solve <em>any one</em> of them in polynomial time and you've solved <em>all</em> of NP — that's why nobody believes it's possible, and why P vs NP is worth $1M.</li>
+    <li>Practical reading: if your problem contains an NP-complete core, stop hunting for a fast exact algorithm.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W06 · NP-completeness">
+  <h2>Recognising a hard core in <em>your</em> problem</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>If your SAT problem needs…</th><th>It resembles…</th><th>Status</th></tr>
+    <tr><td>a single best route visiting all of a set</td><td>TSP</td><td>NP-hard</td></tr>
+    <tr><td>selecting items under a budget for max value</td><td>Knapsack</td><td>NP-hard</td></tr>
+    <tr><td>assigning with no conflicts (rooms, times, colours)</td><td>Graph colouring</td><td>NP-hard</td></tr>
+    <tr><td>shortest path between two points</td><td>Shortest path</td><td>P — relax!</td></tr>
+    <tr><td>connecting everything cheaply</td><td>MST</td><td>P — relax!</td></tr>
+  </table>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Which row is your SAT problem closest to? If a hard row: that's your Memo 03 opening sentence.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Exact techniques, used well</h1>
+</section>
+
+<section class="slide" data-topic="U4W06 · Exact techniques">
+  <h2>Dynamic programming: pay once per subproblem</h2>
+  <ul>
+    <li>Where naive recursion recomputes (Fib's exploding tree), DP <b>stores</b> each subproblem's answer: cost becomes (number of distinct subproblems) × (work each).</li>
+    <li>Fib: \(\Theta(\phi^n) \to \Theta(n)\). Knapsack: \(2^n\) subsets \(\to O(n \cdot W)\) table.</li>
+    <li>Note the fine print: \(O(n \cdot W)\) is polynomial in the <em>value</em> \(W\), not the input length — "pseudo-polynomial". Good enough when capacities are modest.</li>
+  </ul>
+  <div class="box key"><span class="lbl">When DP applies</span>
+    <p>Overlapping subproblems + optimal substructure (the best whole is built from best parts). If each subproblem is unique, DP buys nothing.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W06 · Exact techniques">
+  <h2>Backtracking: brute force with an early exit</h2>
+  <pre class="code" style="font-size:19px;"><span><b>Algorithm</b> Backtrack(partial):</span><span>    <b>If</b> partial violates a constraint <b>Do</b></span><span>        <b>Return</b>                     <i># prune this whole branch</i></span><span>    <b>If</b> partial is complete <b>Do</b></span><span>        record solution</span><span>        <b>Return</b></span><span>    <b>Foreach</b> extension of partial <b>Do</b></span><span>        Backtrack(partial + extension)</span></pre>
+  <ul>
+    <li>Worst case: still exponential. In practice: pruning can eliminate almost the entire tree.</li>
+    <li>Honest reporting: "worst case \(O(2^n)\), but constraint X prunes early in typical instances" — that sentence is exam gold.</li>
+  </ul>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Heuristics I: hill climbing</h1>
+</section>
+
+<section class="slide" data-topic="U4W06 · Hill climbing">
+  <h2>Hill climbing</h2>
+  <div class="cols even">
+    <div>
+      <pre class="code" style="margin-top:0; font-size:19px;"><span><b>Algorithm</b> HillClimb(problem):</span><span>    current ← random solution</span><span>    <b>While</b> improvement possible <b>Do</b></span><span>        best ← best neighbour of current</span><span>        <b>If</b> best is better than current <b>Do</b></span><span>            current ← best</span><span>        <b>Else</b> <b>Do</b></span><span>            <b>Return</b> current    <i># local optimum</i></span></pre>
+    </div>
+    <div class="small">
+      <ul>
+        <li>Needs: a <b>solution representation</b>, a <b>neighbourhood</b> (small edits), an <b>objective</b>.</li>
+        <li>TSP neighbourhood: swap two cities (2-opt). Each step is cheap and polynomial.</li>
+        <li>Terminates at a <b>local</b> optimum — possibly far from the global one.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The trade</span>
+    <p>You give up the <em>guarantee of optimality</em>; you get back <em>polynomial time</em>. State both halves whenever you propose a heuristic — that's C9/C10 language.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W06 · Hill climbing">
+  <h2>The local optimum problem</h2>
+  <ul>
+    <li>Hill climbing stops at the first peak — the objective landscape may hide a taller one across a valley.</li>
+    <li>Cheap fixes: <b>random restarts</b> (climb from many starting points, keep the best), larger neighbourhoods.</li>
+    <li>The principled fix — <em>sometimes accept a worse move</em> — is next week: simulated annealing.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>In the workbook's TSP sandbox: how often does a single hill climb from a random start find the true optimum on 9 cities? How much does 20 restarts improve it?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W06 · Intractability">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w06.py</code>: TSP sandbox — brute force vs nearest-neighbour vs hill climbing, head to head.</li>
+    <li><b>Problem Set 3</b>: intractability + heuristics — due start of Week 7.</li>
+    <li>Memo 03 brief lands next week; start noting which technique fits your bottleneck.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Reductions transfer hardness; DP pays once per subproblem; backtracking prunes; hill climbing trades optimality for polynomial time.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 13</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

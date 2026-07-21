@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W07 — Smarter Searches, Older Questions</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W07 · Smarter Searches, Older Questions</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Smarter Searches, Older Questions</h1>
+  <p>Unit 4 · Week 7 — Simulated annealing, Memo 03 launch, and the birth of computer science</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W07 · Smarter Searches, Older Questions">
+  <h2>This week</h2>
+  <ul>
+    <li>Simulated annealing and randomised search — accepting worse moves, on purpose.</li>
+    <li>Memo 03 workshop launch — designing your improved solution (brief on the hub).</li>
+    <li>AOS3 begins — Hilbert's dream, and the machine Turing built to break it.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Dates</span>
+    <p>Submission 3 (Memo 03 + A05 + A06 + test) due <b>Friday 4 September</b>. SAC (Unit 4 Outcome 3) <b>Friday 11 September</b> — AOS3 content starts now for that reason.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Simulated annealing</h1>
+</section>
+
+<section class="slide" data-topic="U4W07 · Simulated annealing">
+  <h2>Accepting worse moves, on purpose</h2>
+  <ul>
+    <li>Hill climbing's flaw: it can never go downhill, so it can never leave a local optimum.</li>
+    <li><b>Simulated annealing:</b> accept a worse neighbour with probability \(e^{-\Delta / T}\) — where \(\Delta\) is how much worse, and \(T\) is a "temperature" that starts high and <b>cools</b>.</li>
+    <li>Hot: bold exploration, almost random walk. Cold: cautious, converges like hill climbing. The schedule buys both behaviours in one run.</li>
+  </ul>
+  <div class="box example"><span class="lbl">The metallurgy metaphor</span>
+    <p>Slowly cooled metal settles into a low-energy crystal; quenched metal freezes its defects in place. Cool the search slowly and it settles into a deep optimum instead of freezing in the first pit it finds.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W07 · Simulated annealing">
+  <h2>Simulated annealing: the algorithm</h2>
+  <pre class="code" style="font-size:19px;"><span><b>Algorithm</b> SimulatedAnnealing(problem, T, cooling):</span><span>    current ← random solution</span><span>    best ← current</span><span>    <b>While</b> T > T_min <b>Do</b></span><span>        next ← random neighbour of current</span><span>        Δ ← cost(next) - cost(current)</span><span>        <b>If</b> Δ < 0 <b>Or</b> random(0,1) < e^(-Δ/T) <b>Do</b></span><span>            current ← next</span><span>        <b>If</b> cost(current) < cost(best) <b>Do</b></span><span>            best ← current</span><span>        T ← T * cooling            <i># e.g. 0.995</i></span><span>    <b>Return</b> best</span></pre>
+  <ul class="small">
+    <li>Two dials: initial \(T\) (how bold) and cooling rate (how patient). The workbook lets you feel both.</li>
+    <li>Keep a separate <code>best</code> — the walk may wander away from the best thing it ever saw.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W07 · Simulated annealing">
+  <h2>Choosing between the heuristics</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Technique</th><th>Strength</th><th>Weakness</th><th>Use when</th></tr>
+    <tr><td>Greedy construction</td><td>fast, simple</td><td>myopic</td><td>you need a decent start, fast</td></tr>
+    <tr><td>Hill climbing</td><td>improves any start</td><td>local optima</td><td>landscape is smooth</td></tr>
+    <tr><td>+ random restarts</td><td>cheap insurance</td><td>wasteful</td><td>climbs are cheap</td></tr>
+    <tr><td>Simulated annealing</td><td>escapes local optima</td><td>two parameters to tune</td><td>landscape is rugged</td></tr>
+    <tr><td>Randomised search</td><td>trivial, parallel</td><td>no learning</td><td>baseline / sanity check</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Memo 03 language</span>
+    <p>Justify the <em>choice</em>, not just the technique: "the landscape is rugged because ⟨constraint⟩ creates many local optima, so annealing over restarts."</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W07 · Workshop · Memo 03">
+  <h2>Memo 03 workshop launch</h2>
+  <ul>
+    <li><b>The task:</b> redesign your data model and algorithm combination for efficiency — using divide &amp; conquer, DP, backtracking, or heuristics — then analyse the improvement and compare to the original. Criteria 8, 9, 10.</li>
+    <li><b>Start from your Memo 02 bottleneck.</b> The board approved your audit; now it funds the redesign.</li>
+    <li>Brief (<code>Memo03_brief.pdf</code>) includes Amendments A05/A06 and the marking emphasis.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Today's exit ticket</span>
+    <p>One sentence: "My bottleneck is ⟨module, bound⟩; my improvement candidate is ⟨technique⟩ because ⟨reason⟩."</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  <p class="kicker">AOS3 begins</p>
+  <h1>Computer science: past and present</h1>
+</section>
+
+<section class="slide" data-topic="U4W07 · Computer science: past and present">
+  <h2>1900–1928: Hilbert's dream</h2>
+  <ul>
+    <li>David Hilbert asked for mathematics to be put on a mechanical footing — in particular the <b>Entscheidungsproblem</b> (1928): <em>is there a definite procedure that decides, for any mathematical statement, whether it is provable?</em></li>
+    <li>"Definite procedure" — what we would call an algorithm — had no formal definition yet. You cannot prove <em>no procedure exists</em> until you pin down what a procedure <em>is</em>.</li>
+    <li>Gödel's incompleteness (1931) wounded the dream; Turing and Church (1936) finished it — by inventing the definition computer science is built on.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Computer science was born from a question about the <em>limits</em> of computation — before any computer existed.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W07 · Computer science: past and present">
+  <h2>The Turing machine</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>An <b>infinite tape</b> of cells (the memory), a <b>read/write head</b>, a <b>finite set of states</b>, and a <b>transition table</b>: (state, symbol) → (write, move L/R, next state).</li>
+        <li>That's all. Every algorithm you have ever written can be simulated by one.</li>
+        <li><b>Church–Turing thesis:</b> anything computable by a "definite procedure" is computable by a Turing machine. Not a theorem — a definition that has survived every challenge since 1936.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 300 130" style="width:100%; height:auto;">
+        <g>
+          <rect x="10" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <rect x="50" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <rect x="90" y="55" width="40" height="40" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/>
+          <rect x="130" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <rect x="170" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <rect x="210" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <rect x="250" y="55" width="40" height="40" fill="#f6f8f9" stroke="#475569"/>
+          <text x="30" y="80" font-size="16" text-anchor="middle">1</text>
+          <text x="70" y="80" font-size="16" text-anchor="middle">0</text>
+          <text x="110" y="80" font-size="16" text-anchor="middle">1</text>
+          <text x="150" y="80" font-size="16" text-anchor="middle">1</text>
+          <text x="190" y="80" font-size="16" text-anchor="middle">□</text>
+          <text x="230" y="80" font-size="16" text-anchor="middle">□</text>
+          <polygon points="110,48 100,30 120,30" fill="#8b1f34"/>
+          <text x="110" y="20" font-size="13" text-anchor="middle" fill="#8b1f34">head · state q₂</text>
+          <text x="150" y="115" font-size="12" text-anchor="middle" fill="#64748b">…tape continues both ways…</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W07 · Computer science: past and present">
+  <h2>Why so deliberately simple?</h2>
+  <ul>
+    <li>To prove things <em>impossible</em>, the model must be simple enough to reason about — and powerful enough that "no Turing machine can do it" means "no algorithm can do it".</li>
+    <li>Universality: there is a single Turing machine that can simulate <em>any other</em>, given its description on the tape — the theoretical seed of the stored-program computer.</li>
+    <li>Next week: the payoff — a problem <em>provably no algorithm</em> can solve. Ever.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>The workbook has a Turing machine simulator. Build one that flips every bit on the tape; then one that adds 1 to a binary number. (Second one is harder than it looks.)</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W07 · Smarter Searches, Older Questions">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w07.py</code>: annealing visualiser (watch the temperature work) + Turing machine simulator.</li>
+    <li><b>Read</b> <code>Memo03_brief.pdf</code>; exit ticket sentence due before you leave P2.</li>
+    <li>PS3 feedback Monday. AOS3 continues next week: the Halting Problem.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Annealing escapes local optima by sometimes going downhill; Turing machines define what "algorithm" means — and therefore what no algorithm can do.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 12</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

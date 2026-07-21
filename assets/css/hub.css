@@ -1,0 +1,121 @@
+/* ============================================================
+   hub.css — COURSE HUB PAGES (term/unit overview with weekly
+   calendar, milestone timeline, links to slides & PDFs).
+   Immersive glass style matching course.css landings.
+   Requires tokens.css first; theme with a body class:
+     <body class="hub-page theme-specialist">
+       <header class="hub-head"> … <div class="timeline"> … </header>
+       <main> <div class="grid" id="weeks"> <div class="week" data-start="…">
+   Behaviour (current-week highlight, milestone states, countdown)
+   comes from ../js/hub.js.
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body.hub-page {
+  font-family: var(--font-body);
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--accent-dark) 55%, #000) 0%,
+    var(--accent-dark) 55%,
+    var(--accent) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #fff;
+  padding-bottom: 4rem;
+  line-height: 1.5;
+}
+.hub-page h1, .hub-page h2, .hub-page h3 { font-family: var(--font-display); }
+
+/* ---------- Header band ---------- */
+.hub-head { padding: 2.4rem 2.5rem 1.6rem; }
+.hub-head h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 800; }
+.hub-head p { opacity: .8; margin-top: .3rem; font-size: .95rem; }
+.head-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.backlink {
+  color: rgba(255,255,255,.85); font-size: .85rem; text-decoration: none;
+  font-family: var(--font-display); font-weight: 600;
+  border: 1px solid rgba(255,255,255,.3); border-radius: 100px;
+  padding: .45rem 1rem; background: rgba(255,255,255,.12);
+}
+.backlink:hover { background: rgba(255,255,255,.25); }
+
+/* ---------- Milestone timeline ---------- */
+.timeline { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1.2rem 2.5rem 0; position: relative; top: 1.4rem; }
+.mile {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+  border-left: 5px solid rgba(255,255,255,.5);
+  border-radius: 8px; padding: .55rem .9rem; flex: 1 1 150px; min-width: 150px;
+  color: #fff;
+}
+.mile b { display: block; font-size: .85rem; }
+.mile span { font-size: .78rem; color: rgba(255,255,255,.7); }
+.mile.m-test { border-left-color: var(--c-coral-500); }
+.mile.m-teal { border-left-color: var(--c-teal-400); }
+.mile.m-maroon { border-left-color: var(--c-pink-600); }
+.mile.m-amber { border-left-color: var(--c-amber-400); }
+.mile.done { opacity: .5; }
+.mile.next { outline: 2px solid rgba(255,255,255,.85); }
+.countdown { font-size: .78rem; color: var(--c-amber-400); font-weight: 700; }
+
+/* ---------- Weekly calendar ---------- */
+.hub-page main { max-width: 1180px; margin: 3.2rem auto 0; padding: 0 1.5rem; }
+.hub-page h2 { font-size: 1.15rem; margin: 1.8rem 0 .9rem; color: rgba(255,255,255,.9); }
+.hub-page .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; }
+.week {
+  /* dark neutral glass + desaturated backdrop so the cards read muted
+     against the saturated page gradient */
+  background: rgba(24,20,28,.30);
+  -webkit-backdrop-filter: saturate(.5);
+  backdrop-filter: saturate(.5);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  transition: background .15s ease, border-color .15s ease;
+}
+.week:hover { background: rgba(24,20,28,.38); }
+.week.current {
+  border: 2px solid var(--c-amber-400);
+  background: rgba(24,20,28,.42);
+  box-shadow: 0 2px 18px rgba(0,0,0,.25);
+}
+.week.current .wk-head::after {
+  content: "THIS WEEK"; background: var(--c-amber-400); color: var(--c-slate-900);
+  font-size: .62rem; font-weight: 800; padding: .15rem .45rem; border-radius: 4px;
+  margin-left: .5rem; letter-spacing: .05em;
+}
+.wk-head { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.wk-head h3 { font-size: 1rem; }
+.wk-head .dates { font-size: .78rem; color: rgba(255,255,255,.65); }
+
+/* Area-of-study / chapter tags */
+.aos { font-size: .65rem; font-weight: 700; letter-spacing: .06em; padding: .18rem .5rem; border-radius: 4px; color: #fff; }
+.aosC { background: rgba(255,255,255,.25); }
+.aosS { background: var(--c-maroon-600); }
+.aosP { background: var(--c-teal-400); }
+.aosR { background: var(--c-amber-400); color: var(--c-slate-900); }
+
+ul.periods { list-style: none; margin: .6rem 0 .2rem; }
+ul.periods li { font-size: .85rem; padding: .28rem 0 .28rem .9rem; position: relative; border-top: 1px dashed rgba(255,255,255,.25); color: rgba(255,255,255,.9); }
+ul.periods li::before { content: "\25B8"; position: absolute; left: 0; top: .28rem; font-size: .7rem; color: rgba(255,255,255,.5); }
+
+.milestone-chip {
+  display: inline-block; font-size: .7rem; font-weight: 700; color: #fff;
+  padding: .18rem .55rem; border-radius: 4px; margin: .45rem .3rem 0 0;
+}
+.c-accent { background: rgba(255,255,255,.25); }
+.c-navy { background: rgba(255,255,255,.25); }   /* legacy alias */
+.c-red { background: var(--c-coral-500); color: var(--c-slate-900); }
+.c-teal { background: var(--c-teal-400); }
+.c-maroon { background: var(--c-maroon-600); }
+.c-amber { background: var(--c-amber-400); color: var(--c-slate-900); }
+
+.links { margin-top: .6rem; padding-top: .5rem; border-top: 1px solid rgba(255,255,255,.2); display: flex; flex-wrap: wrap; gap: .35rem; }
+.links a {
+  font-size: .74rem; text-decoration: none; padding: .22rem .6rem; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.3); color: #fff;
+  background: rgba(255,255,255,.10);
+}
+.links a:hover { background: rgba(255,255,255,.22); }
+.legend { font-size: .75rem; color: rgba(255,255,255,.6); margin: .4rem 0 0; }
+.prog { font-size: .8rem; color: rgba(255,255,255,.6); margin: .3rem 0 .8rem; }
+
+.hub-page footer { text-align: center; font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 3rem; }

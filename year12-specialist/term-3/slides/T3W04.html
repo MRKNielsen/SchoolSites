@@ -12,93 +12,28 @@
   };
 </script>
 <script src="mathjax-tex-svg.js" async></script>
-<style>
-  :root {
-    --teal: #1F3A93; --teal-dark: #16296b;
-    --slate: #475569; --slate-dark: #334155;
-    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
-    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: var(--bg); overflow: hidden;
-    font-family: "Segoe UI", system-ui, sans-serif; }
-  #stage { position: absolute; inset: 0; display: flex; overflow-y: auto; padding: 5vh 5vw; }
-  .slide { width: 1280px; min-height: 720px; background: var(--paper); color: var(--ink);
-    display: none; flex-direction: column; padding: 52px 68px 64px; position: relative; margin: auto; flex-shrink: 0; border-radius: 6px; }
-  .slide.active { display: flex; }
-  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
-  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
-  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
-  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
-  .slide.title h1::after, .slide.section h1::after { background: #fff; }
-  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
-  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
-  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
-  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
-  ul, ol { margin-left: 30px; }
-  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
-  p { font-size: 25px; line-height: 1.5; }
-  .small li, .small p { font-size: 22px; }
-  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
-  .col { flex: 1; min-width: 0; }
-  .col.narrow { flex: .8; }
-  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
-  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
-  .box p, .box li { font-size: 23px; }
-  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
-  .key .lbl { color: var(--teal-dark); }
-  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
-  .try .lbl { color: var(--amber); }
-  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
-  .ex .lbl { color: var(--slate-dark); }
-  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
-  .defn .lbl { color: var(--maroon); }
-  mjx-container { font-size: 108% !important; }
-  table.t { border-collapse: collapse; margin-top: 8px; }
-  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
-  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
-  table.t td { border-bottom: 1px solid var(--line); }
-  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
-  table.t td.c, table.t th.c { text-align: center; }
-  .step { visibility: hidden; }
-  .step.shown { visibility: visible; }
-  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
-    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
-    font-family: inherit; letter-spacing: .04em; }
-  button.rvl:hover { background: var(--teal-dark); }
-  button.rvl.done { opacity: .25; cursor: default; }
-  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
-    border-radius: 0 0 6px 6px; }
-  .slide.title .footerbar, .slide.section .footerbar { display: none; }
-  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
-  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
-  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
-  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
-    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
-  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
 </head>
-<body>
-<div id="progress"></div>
-<div id="stage">
+<body class="deck-page theme-specialist">
+<div class="progress"></div>
+<div class="lessontag">T3W04 · Sample Mean &amp; CLT</div>
+<main class="deck">
 
 <!-- 1 · Title -->
-<section class="slide title">
+<section class="slide section-slide">
   <h1>The Sample Mean &amp; the Central Limit Theorem</h1>
-  <p>Chapter 15 (D–F) · Week 4 — Why averages are better behaved than the things they average</p>
-  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026</p>
+  <p>Chapter 15 (D–F) · Week 5 — Why averages are better behaved than the things they average</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 2 (Differential Equations): Mon 3 – Tue 4 Aug (Week 4) · 2 × 40 min · tech-free</p>
   <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
 </section>
 
 <!-- 2 · Week map -->
-<section class="slide">
-  <h1>This week: four lessons</h1>
-  <table class="t">
+<section class="slide" data-topic="T3W04 · Sample Mean &amp; CLT">
+  <h2>This week: four lessons</h2>
+  <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
     <tr><td class="c"><b>1</b></td><td>15D</td><td>\(\bar{X}\) as a random variable</td><td>state \(\bar{X} \sim N(\mu, \sigma^2/n)\) and use it</td></tr>
     <tr><td class="c"><b>2</b></td><td>15D</td><td>Totals and averages</td><td>solve lift/carton-style problems both ways</td></tr>
@@ -108,12 +43,11 @@
   <div class="box key"><span class="lbl">Key idea</span>
     <p>A new sample gives a new \(\bar{x}\) — so \(\bar{X}\) has a distribution of its own. Its centre matches the population, but its spread shrinks like \(1/\sqrt{n}\).</p>
   </div>
-  <div class="footerbar"><span>T3W04 · Sample Mean &amp; CLT</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 1 ═══ -->
 
-<section class="slide section" data-lesson="1">
+<section class="slide section-slide" data-lesson="1">
   <div class="kicker">Lesson 1 · 15D</div>
   <h1>The sample mean is a random variable</h1>
   <ul class="goals">
@@ -123,43 +57,40 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>\(\bar{X}\) as a linear combination</h1>
+<section class="slide" data-topic="Lesson 1 · The sample mean">
+  <h2>\(\bar{X}\) as a linear combination</h2>
   <p style="text-align:center; margin:6px 0 14px;">\[\bar{X} = \frac{X_1 + X_2 + \cdots + X_n}{n} \qquad\Rightarrow\qquad E(\bar{X}) = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}, \qquad \text{sd}(\bar{X}) = \frac{\sigma}{\sqrt{n}}\]</p>
   <ul>
     <li>This is last week's algebra: \(\text{Var}\left(\dfrac{1}{n}\sum X_i\right) = \dfrac{1}{n^2} \cdot n\sigma^2 = \dfrac{\sigma^2}{n}\).</li>
     <li>If the population is <b>normal</b>, \(N(\mu, \sigma^2)\), then \(\bar{X}\) is <b>exactly</b> normal: \(\bar{X} \sim N\!\left(\mu, \dfrac{\sigma^2}{n}\right)\).</li>
     <li>Quadrupling the sample size halves the standard deviation of \(\bar{X}\) — precision is bought at a square-root rate.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · The sample mean</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: individual vs average</h1>
-  <div class="box ex"><span class="lbl">Example 1</span>
+<section class="slide" data-topic="Lesson 1 · The sample mean">
+  <h2>Worked example: individual vs average</h2>
+  <div class="box example"><span class="lbl">Example 1</span>
     <p>IQ scores are \(N(100,\, 15^2)\). Nine people are chosen at random. Find \(P(\bar{X} &gt; 105)\), and compare with \(P(X &gt; 105)\) for one person.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">\(\bar{X} \sim N\!\left(100,\, \dfrac{15^2}{9}\right) = N(100,\, 5^2)\) — exactly normal, since the population is.</li>
-    <li class="step">\(P(\bar{X} &gt; 105) = P\!\left(Z &gt; \dfrac{105-100}{5}\right) = P(Z &gt; 1) \approx 0.159\).</li>
-    <li class="step">One person: \(P(X &gt; 105) = P\!\left(Z &gt; \dfrac{1}{3}\right) \approx 0.369\).</li>
+    <li class="frag">\(\bar{X} \sim N\!\left(100,\, \dfrac{15^2}{9}\right) = N(100,\, 5^2)\) — exactly normal, since the population is.</li>
+    <li class="frag">\(P(\bar{X} &gt; 105) = P\!\left(Z &gt; \dfrac{105-100}{5}\right) = P(Z &gt; 1) \approx 0.159\).</li>
+    <li class="frag">One person: \(P(X &gt; 105) = P\!\left(Z &gt; \dfrac{1}{3}\right) \approx 0.369\).</li>
   </ul>
   <div class="box key"><span class="lbl">Interpretation</span>
     <p>An <b>average</b> of nine is much less likely to stray 5 points from the mean than a single individual is. Averages smooth out extremes.</p>
   </div>
-  <div class="footerbar"><span>Lesson 1 · The sample mean</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>The distribution of \(\bar{X}\) narrows as \(n\) grows</h1>
-  <svg viewBox="0 0 980 380" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="90.55555555555554" y1="24" x2="90.55555555555554" y2="328.0" stroke="#e2e8f0"/><text x="90.55555555555554" y="350.0" font-size="16" fill="#475569" text-anchor="middle">60</text><line x1="292.7777777777778" y1="24" x2="292.7777777777778" y2="328.0" stroke="#e2e8f0"/><text x="292.7777777777778" y="350.0" font-size="16" fill="#475569" text-anchor="middle">80</text><line x1="495.0" y1="24" x2="495.0" y2="328.0" stroke="#e2e8f0"/><text x="495.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">100</text><line x1="697.2222222222222" y1="24" x2="697.2222222222222" y2="328.0" stroke="#e2e8f0"/><text x="697.2222222222222" y="350.0" font-size="16" fill="#475569" text-anchor="middle">120</text><line x1="899.4444444444445" y1="24" x2="899.4444444444445" y2="328.0" stroke="#e2e8f0"/><text x="899.4444444444445" y="350.0" font-size="16" fill="#475569" text-anchor="middle">140</text><line x1="40" y1="328.0" x2="950" y2="328.0" stroke="#475569" stroke-width="2"/><line x1="545.5555555555557" y1="30" x2="545.5555555555557" y2="328.0" stroke="#b45309" stroke-width="2" stroke-dasharray="6 5"/><text x="553.5555555555557" y="44" font-size="17" font-weight="700" fill="#b45309">x&#772; = 105</text><path d="M40.0,326.9 L43.8,326.9 L47.6,326.8 L51.4,326.7 L55.2,326.6 L59.0,326.5 L62.8,326.4 L66.5,326.2 L70.3,326.1 L74.1,326.0 L77.9,325.8 L81.7,325.7 L85.5,325.5 L89.3,325.3 L93.1,325.2 L96.9,325.0 L100.7,324.8 L104.5,324.5 L108.2,324.3 L112.0,324.1 L115.8,323.8 L119.6,323.6 L123.4,323.3 L127.2,323.0 L131.0,322.7 L134.8,322.3 L138.6,322.0 L142.4,321.6 L146.2,321.2 L150.0,320.8 L153.8,320.4 L157.5,320.0 L161.3,319.5 L165.1,319.1 L168.9,318.6 L172.7,318.1 L176.5,317.5 L180.3,317.0 L184.1,316.4 L187.9,315.8 L191.7,315.1 L195.5,314.5 L199.2,313.8 L203.0,313.1 L206.8,312.4 L210.6,311.6 L214.4,310.8 L218.2,310.0 L222.0,309.2 L225.8,308.3 L229.6,307.4 L233.4,306.5 L237.2,305.6 L241.0,304.6 L244.8,303.6 L248.5,302.6 L252.3,301.6 L256.1,300.5 L259.9,299.4 L263.7,298.3 L267.5,297.1 L271.3,295.9 L275.1,294.8 L278.9,293.5 L282.7,292.3 L286.5,291.0 L290.2,289.8 L294.0,288.5 L297.8,287.1 L301.6,285.8 L305.4,284.5 L309.2,283.1 L313.0,281.7 L316.8,280.3 L320.6,278.9 L324.4,277.5 L328.2,276.1 L332.0,274.6 L335.8,273.2 L339.5,271.7 L343.3,270.3 L347.1,268.9 L350.9,267.4 L354.7,266.0 L358.5,264.6 L362.3,263.1 L366.1,261.7 L369.9,260.3 L373.7,258.9 L377.5,257.6 L381.2,256.2 L385.0,254.9 L388.8,253.5 L392.6,252.3 L396.4,251.0 L400.2,249.8 L404.0,248.5 L407.8,247.4 L411.6,246.2 L415.4,245.1 L419.2,244.1 L423.0,243.0 L426.8,242.0 L430.5,241.1 L434.3,240.2 L438.1,239.3 L441.9,238.5 L445.7,237.8 L449.5,237.1 L453.3,236.4 L457.1,235.8 L460.9,235.3 L464.7,234.8 L468.5,234.3 L472.2,233.9 L476.0,233.6 L479.8,233.4 L483.6,233.1 L487.4,233.0 L491.2,232.9 L495.0,232.9 L498.8,232.9 L502.6,233.0 L506.4,233.1 L510.2,233.4 L514.0,233.6 L517.8,233.9 L521.5,234.3 L525.3,234.8 L529.1,235.3 L532.9,235.8 L536.7,236.4 L540.5,237.1 L544.3,237.8 L548.1,238.5 L551.9,239.3 L555.7,240.2 L559.5,241.1 L563.2,242.0 L567.0,243.0 L570.8,244.1 L574.6,245.1 L578.4,246.2 L582.2,247.4 L586.0,248.5 L589.8,249.8 L593.6,251.0 L597.4,252.3 L601.2,253.5 L605.0,254.9 L608.8,256.2 L612.5,257.6 L616.3,258.9 L620.1,260.3 L623.9,261.7 L627.7,263.1 L631.5,264.6 L635.3,266.0 L639.1,267.4 L642.9,268.9 L646.7,270.3 L650.5,271.7 L654.2,273.2 L658.0,274.6 L661.8,276.1 L665.6,277.5 L669.4,278.9 L673.2,280.3 L677.0,281.7 L680.8,283.1 L684.6,284.5 L688.4,285.8 L692.2,287.1 L696.0,288.5 L699.8,289.8 L703.5,291.0 L707.3,292.3 L711.1,293.5 L714.9,294.8 L718.7,295.9 L722.5,297.1 L726.3,298.3 L730.1,299.4 L733.9,300.5 L737.7,301.6 L741.5,302.6 L745.2,303.6 L749.0,304.6 L752.8,305.6 L756.6,306.5 L760.4,307.4 L764.2,308.3 L768.0,309.2 L771.8,310.0 L775.6,310.8 L779.4,311.6 L783.2,312.4 L787.0,313.1 L790.8,313.8 L794.5,314.5 L798.3,315.1 L802.1,315.8 L805.9,316.4 L809.7,317.0 L813.5,317.5 L817.3,318.1 L821.1,318.6 L824.9,319.1 L828.7,319.5 L832.5,320.0 L836.2,320.4 L840.0,320.8 L843.8,321.2 L847.6,321.6 L851.4,322.0 L855.2,322.3 L859.0,322.7 L862.8,323.0 L866.6,323.3 L870.4,323.6 L874.2,323.8 L878.0,324.1 L881.8,324.3 L885.5,324.5 L889.3,324.8 L893.1,325.0 L896.9,325.2 L900.7,325.3 L904.5,325.5 L908.3,325.7 L912.1,325.8 L915.9,326.0 L919.7,326.1 L923.5,326.2 L927.2,326.4 L931.0,326.5 L934.8,326.6 L938.6,326.7 L942.4,326.8 L946.2,326.9 L950.0,326.9" fill="none" stroke="#90A4AE" stroke-width="3.5"/><text x="677.0" y="285.0823529411765" font-size="18" font-weight="700" fill="#90A4AE">n = 1: N(100, 15&#178;)</text><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,328.0 L115.8,328.0 L119.6,328.0 L123.4,328.0 L127.2,328.0 L131.0,328.0 L134.8,328.0 L138.6,328.0 L142.4,328.0 L146.2,328.0 L150.0,328.0 L153.8,328.0 L157.5,328.0 L161.3,328.0 L165.1,328.0 L168.9,328.0 L172.7,328.0 L176.5,328.0 L180.3,328.0 L184.1,328.0 L187.9,327.9 L191.7,327.9 L195.5,327.9 L199.2,327.9 L203.0,327.9 L206.8,327.9 L210.6,327.8 L214.4,327.8 L218.2,327.8 L222.0,327.7 L225.8,327.7 L229.6,327.6 L233.4,327.5 L237.2,327.4 L241.0,327.3 L244.8,327.2 L248.5,327.0 L252.3,326.9 L256.1,326.7 L259.9,326.4 L263.7,326.2 L267.5,325.9 L271.3,325.5 L275.1,325.2 L278.9,324.7 L282.7,324.2 L286.5,323.7 L290.2,323.0 L294.0,322.3 L297.8,321.5 L301.6,320.6 L305.4,319.6 L309.2,318.5 L313.0,317.3 L316.8,316.0 L320.6,314.5 L324.4,312.9 L328.2,311.1 L332.0,309.1 L335.8,307.0 L339.5,304.7 L343.3,302.3 L347.1,299.6 L350.9,296.7 L354.7,293.6 L358.5,290.4 L362.3,286.9 L366.1,283.2 L369.9,279.2 L373.7,275.1 L377.5,270.8 L381.2,266.2 L385.0,261.5 L388.8,256.6 L392.6,251.5 L396.4,246.3 L400.2,240.9 L404.0,235.4 L407.8,229.8 L411.6,224.1 L415.4,218.4 L419.2,212.6 L423.0,206.8 L426.8,201.1 L430.5,195.4 L434.3,189.9 L438.1,184.4 L441.9,179.1 L445.7,174.0 L449.5,169.1 L453.3,164.5 L457.1,160.1 L460.9,156.1 L464.7,152.4 L468.5,149.1 L472.2,146.1 L476.0,143.6 L479.8,141.5 L483.6,139.9 L487.4,138.7 L491.2,138.0 L495.0,137.8 L498.8,138.0 L502.6,138.7 L506.4,139.9 L510.2,141.5 L514.0,143.6 L517.8,146.1 L521.5,149.1 L525.3,152.4 L529.1,156.1 L532.9,160.1 L536.7,164.5 L540.5,169.1 L544.3,174.0 L548.1,179.1 L551.9,184.4 L555.7,189.9 L559.5,195.4 L563.2,201.1 L567.0,206.8 L570.8,212.6 L574.6,218.4 L578.4,224.1 L582.2,229.8 L586.0,235.4 L589.8,240.9 L593.6,246.3 L597.4,251.5 L601.2,256.6 L605.0,261.5 L608.8,266.2 L612.5,270.8 L616.3,275.1 L620.1,279.2 L623.9,283.2 L627.7,286.9 L631.5,290.4 L635.3,293.6 L639.1,296.7 L642.9,299.6 L646.7,302.3 L650.5,304.7 L654.2,307.0 L658.0,309.1 L661.8,311.1 L665.6,312.9 L669.4,314.5 L673.2,316.0 L677.0,317.3 L680.8,318.5 L684.6,319.6 L688.4,320.6 L692.2,321.5 L696.0,322.3 L699.8,323.0 L703.5,323.7 L707.3,324.2 L711.1,324.7 L714.9,325.2 L718.7,325.5 L722.5,325.9 L726.3,326.2 L730.1,326.4 L733.9,326.7 L737.7,326.9 L741.5,327.0 L745.2,327.2 L749.0,327.3 L752.8,327.4 L756.6,327.5 L760.4,327.6 L764.2,327.7 L768.0,327.7 L771.8,327.8 L775.6,327.8 L779.4,327.8 L783.2,327.9 L787.0,327.9 L790.8,327.9 L794.5,327.9 L798.3,327.9 L802.1,327.9 L805.9,328.0 L809.7,328.0 L813.5,328.0 L817.3,328.0 L821.1,328.0 L824.9,328.0 L828.7,328.0 L832.5,328.0 L836.2,328.0 L840.0,328.0 L843.8,328.0 L847.6,328.0 L851.4,328.0 L855.2,328.0 L859.0,328.0 L862.8,328.0 L866.6,328.0 L870.4,328.0 L874.2,328.0 L878.0,328.0 L881.8,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#1F3A93" stroke-width="3.5"/><text x="616.3333333333333" y="184.94117647058823" font-size="18" font-weight="700" fill="#1F3A93">n = 4: sd 7.5</text><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,328.0 L115.8,328.0 L119.6,328.0 L123.4,328.0 L127.2,328.0 L131.0,328.0 L134.8,328.0 L138.6,328.0 L142.4,328.0 L146.2,328.0 L150.0,328.0 L153.8,328.0 L157.5,328.0 L161.3,328.0 L165.1,328.0 L168.9,328.0 L172.7,328.0 L176.5,328.0 L180.3,328.0 L184.1,328.0 L187.9,328.0 L191.7,328.0 L195.5,328.0 L199.2,328.0 L203.0,328.0 L206.8,328.0 L210.6,328.0 L214.4,328.0 L218.2,328.0 L222.0,328.0 L225.8,328.0 L229.6,328.0 L233.4,328.0 L237.2,328.0 L241.0,328.0 L244.8,328.0 L248.5,328.0 L252.3,328.0 L256.1,328.0 L259.9,328.0 L263.7,328.0 L267.5,328.0 L271.3,328.0 L275.1,328.0 L278.9,328.0 L282.7,328.0 L286.5,327.9 L290.2,327.9 L294.0,327.9 L297.8,327.9 L301.6,327.8 L305.4,327.7 L309.2,327.7 L313.0,327.6 L316.8,327.4 L320.6,327.3 L324.4,327.0 L328.2,326.8 L332.0,326.4 L335.8,326.0 L339.5,325.5 L343.3,324.8 L347.1,324.0 L350.9,323.1 L354.7,321.9 L358.5,320.5 L362.3,318.9 L366.1,316.9 L369.9,314.7 L373.7,312.0 L377.5,308.9 L381.2,305.3 L385.0,301.2 L388.8,296.5 L392.6,291.3 L396.4,285.4 L400.2,278.8 L404.0,271.5 L407.8,263.5 L411.6,254.9 L415.4,245.4 L419.2,235.4 L423.0,224.6 L426.8,213.3 L430.5,201.4 L434.3,189.1 L438.1,176.4 L441.9,163.6 L445.7,150.6 L449.5,137.7 L453.3,125.0 L457.1,112.6 L460.9,100.8 L464.7,89.6 L468.5,79.4 L472.2,70.1 L476.0,62.0 L479.8,55.2 L483.6,49.8 L487.4,45.8 L491.2,43.4 L495.0,42.6 L498.8,43.4 L502.6,45.8 L506.4,49.8 L510.2,55.2 L514.0,62.0 L517.8,70.1 L521.5,79.4 L525.3,89.6 L529.1,100.8 L532.9,112.6 L536.7,125.0 L540.5,137.7 L544.3,150.6 L548.1,163.6 L551.9,176.4 L555.7,189.1 L559.5,201.4 L563.2,213.3 L567.0,224.6 L570.8,235.4 L574.6,245.4 L578.4,254.9 L582.2,263.5 L586.0,271.5 L589.8,278.8 L593.6,285.4 L597.4,291.3 L601.2,296.5 L605.0,301.2 L608.8,305.3 L612.5,308.9 L616.3,312.0 L620.1,314.7 L623.9,316.9 L627.7,318.9 L631.5,320.5 L635.3,321.9 L639.1,323.1 L642.9,324.0 L646.7,324.8 L650.5,325.5 L654.2,326.0 L658.0,326.4 L661.8,326.8 L665.6,327.0 L669.4,327.3 L673.2,327.4 L677.0,327.6 L680.8,327.7 L684.6,327.7 L688.4,327.8 L692.2,327.9 L696.0,327.9 L699.8,327.9 L703.5,327.9 L707.3,328.0 L711.1,328.0 L714.9,328.0 L718.7,328.0 L722.5,328.0 L726.3,328.0 L730.1,328.0 L733.9,328.0 L737.7,328.0 L741.5,328.0 L745.2,328.0 L749.0,328.0 L752.8,328.0 L756.6,328.0 L760.4,328.0 L764.2,328.0 L768.0,328.0 L771.8,328.0 L775.6,328.0 L779.4,328.0 L783.2,328.0 L787.0,328.0 L790.8,328.0 L794.5,328.0 L798.3,328.0 L802.1,328.0 L805.9,328.0 L809.7,328.0 L813.5,328.0 L817.3,328.0 L821.1,328.0 L824.9,328.0 L828.7,328.0 L832.5,328.0 L836.2,328.0 L840.0,328.0 L843.8,328.0 L847.6,328.0 L851.4,328.0 L855.2,328.0 L859.0,328.0 L862.8,328.0 L866.6,328.0 L870.4,328.0 L874.2,328.0 L878.0,328.0 L881.8,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#8E244D" stroke-width="3.5"/><text x="195.8" y="70.49411764705886" font-size="18" font-weight="700" fill="#8E244D" text-anchor="end">n = 9: sd 5</text></svg>
+<section class="slide" data-topic="Lesson 1 · The sample mean">
+  <h2>The distribution of \(\bar{X}\) narrows as \(n\) grows</h2>
+  <svg viewBox="0 0 980 380" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="90.55555555555554" y1="24" x2="90.55555555555554" y2="328.0" stroke="#e2e8f0"/><text x="90.55555555555554" y="350.0" font-size="16" fill="#475569" text-anchor="middle">60</text><line x1="292.7777777777778" y1="24" x2="292.7777777777778" y2="328.0" stroke="#e2e8f0"/><text x="292.7777777777778" y="350.0" font-size="16" fill="#475569" text-anchor="middle">80</text><line x1="495.0" y1="24" x2="495.0" y2="328.0" stroke="#e2e8f0"/><text x="495.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">100</text><line x1="697.2222222222222" y1="24" x2="697.2222222222222" y2="328.0" stroke="#e2e8f0"/><text x="697.2222222222222" y="350.0" font-size="16" fill="#475569" text-anchor="middle">120</text><line x1="899.4444444444445" y1="24" x2="899.4444444444445" y2="328.0" stroke="#e2e8f0"/><text x="899.4444444444445" y="350.0" font-size="16" fill="#475569" text-anchor="middle">140</text><line x1="40" y1="328.0" x2="950" y2="328.0" stroke="#475569" stroke-width="2"/><line x1="545.5555555555557" y1="30" x2="545.5555555555557" y2="328.0" stroke="#b45309" stroke-width="2" stroke-dasharray="6 5"/><text x="553.5555555555557" y="44" font-size="17" font-weight="700" fill="#b45309">x&#772; = 105</text><path d="M40.0,326.9 L43.8,326.9 L47.6,326.8 L51.4,326.7 L55.2,326.6 L59.0,326.5 L62.8,326.4 L66.5,326.2 L70.3,326.1 L74.1,326.0 L77.9,325.8 L81.7,325.7 L85.5,325.5 L89.3,325.3 L93.1,325.2 L96.9,325.0 L100.7,324.8 L104.5,324.5 L108.2,324.3 L112.0,324.1 L115.8,323.8 L119.6,323.6 L123.4,323.3 L127.2,323.0 L131.0,322.7 L134.8,322.3 L138.6,322.0 L142.4,321.6 L146.2,321.2 L150.0,320.8 L153.8,320.4 L157.5,320.0 L161.3,319.5 L165.1,319.1 L168.9,318.6 L172.7,318.1 L176.5,317.5 L180.3,317.0 L184.1,316.4 L187.9,315.8 L191.7,315.1 L195.5,314.5 L199.2,313.8 L203.0,313.1 L206.8,312.4 L210.6,311.6 L214.4,310.8 L218.2,310.0 L222.0,309.2 L225.8,308.3 L229.6,307.4 L233.4,306.5 L237.2,305.6 L241.0,304.6 L244.8,303.6 L248.5,302.6 L252.3,301.6 L256.1,300.5 L259.9,299.4 L263.7,298.3 L267.5,297.1 L271.3,295.9 L275.1,294.8 L278.9,293.5 L282.7,292.3 L286.5,291.0 L290.2,289.8 L294.0,288.5 L297.8,287.1 L301.6,285.8 L305.4,284.5 L309.2,283.1 L313.0,281.7 L316.8,280.3 L320.6,278.9 L324.4,277.5 L328.2,276.1 L332.0,274.6 L335.8,273.2 L339.5,271.7 L343.3,270.3 L347.1,268.9 L350.9,267.4 L354.7,266.0 L358.5,264.6 L362.3,263.1 L366.1,261.7 L369.9,260.3 L373.7,258.9 L377.5,257.6 L381.2,256.2 L385.0,254.9 L388.8,253.5 L392.6,252.3 L396.4,251.0 L400.2,249.8 L404.0,248.5 L407.8,247.4 L411.6,246.2 L415.4,245.1 L419.2,244.1 L423.0,243.0 L426.8,242.0 L430.5,241.1 L434.3,240.2 L438.1,239.3 L441.9,238.5 L445.7,237.8 L449.5,237.1 L453.3,236.4 L457.1,235.8 L460.9,235.3 L464.7,234.8 L468.5,234.3 L472.2,233.9 L476.0,233.6 L479.8,233.4 L483.6,233.1 L487.4,233.0 L491.2,232.9 L495.0,232.9 L498.8,232.9 L502.6,233.0 L506.4,233.1 L510.2,233.4 L514.0,233.6 L517.8,233.9 L521.5,234.3 L525.3,234.8 L529.1,235.3 L532.9,235.8 L536.7,236.4 L540.5,237.1 L544.3,237.8 L548.1,238.5 L551.9,239.3 L555.7,240.2 L559.5,241.1 L563.2,242.0 L567.0,243.0 L570.8,244.1 L574.6,245.1 L578.4,246.2 L582.2,247.4 L586.0,248.5 L589.8,249.8 L593.6,251.0 L597.4,252.3 L601.2,253.5 L605.0,254.9 L608.8,256.2 L612.5,257.6 L616.3,258.9 L620.1,260.3 L623.9,261.7 L627.7,263.1 L631.5,264.6 L635.3,266.0 L639.1,267.4 L642.9,268.9 L646.7,270.3 L650.5,271.7 L654.2,273.2 L658.0,274.6 L661.8,276.1 L665.6,277.5 L669.4,278.9 L673.2,280.3 L677.0,281.7 L680.8,283.1 L684.6,284.5 L688.4,285.8 L692.2,287.1 L696.0,288.5 L699.8,289.8 L703.5,291.0 L707.3,292.3 L711.1,293.5 L714.9,294.8 L718.7,295.9 L722.5,297.1 L726.3,298.3 L730.1,299.4 L733.9,300.5 L737.7,301.6 L741.5,302.6 L745.2,303.6 L749.0,304.6 L752.8,305.6 L756.6,306.5 L760.4,307.4 L764.2,308.3 L768.0,309.2 L771.8,310.0 L775.6,310.8 L779.4,311.6 L783.2,312.4 L787.0,313.1 L790.8,313.8 L794.5,314.5 L798.3,315.1 L802.1,315.8 L805.9,316.4 L809.7,317.0 L813.5,317.5 L817.3,318.1 L821.1,318.6 L824.9,319.1 L828.7,319.5 L832.5,320.0 L836.2,320.4 L840.0,320.8 L843.8,321.2 L847.6,321.6 L851.4,322.0 L855.2,322.3 L859.0,322.7 L862.8,323.0 L866.6,323.3 L870.4,323.6 L874.2,323.8 L878.0,324.1 L881.8,324.3 L885.5,324.5 L889.3,324.8 L893.1,325.0 L896.9,325.2 L900.7,325.3 L904.5,325.5 L908.3,325.7 L912.1,325.8 L915.9,326.0 L919.7,326.1 L923.5,326.2 L927.2,326.4 L931.0,326.5 L934.8,326.6 L938.6,326.7 L942.4,326.8 L946.2,326.9 L950.0,326.9" fill="none" stroke="#90A4AE" stroke-width="3.5"/><text x="677.0" y="285.0823529411765" font-size="18" font-weight="700" fill="#90A4AE">n = 1: N(100, 15&#178;)</text><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,328.0 L115.8,328.0 L119.6,328.0 L123.4,328.0 L127.2,328.0 L131.0,328.0 L134.8,328.0 L138.6,328.0 L142.4,328.0 L146.2,328.0 L150.0,328.0 L153.8,328.0 L157.5,328.0 L161.3,328.0 L165.1,328.0 L168.9,328.0 L172.7,328.0 L176.5,328.0 L180.3,328.0 L184.1,328.0 L187.9,327.9 L191.7,327.9 L195.5,327.9 L199.2,327.9 L203.0,327.9 L206.8,327.9 L210.6,327.8 L214.4,327.8 L218.2,327.8 L222.0,327.7 L225.8,327.7 L229.6,327.6 L233.4,327.5 L237.2,327.4 L241.0,327.3 L244.8,327.2 L248.5,327.0 L252.3,326.9 L256.1,326.7 L259.9,326.4 L263.7,326.2 L267.5,325.9 L271.3,325.5 L275.1,325.2 L278.9,324.7 L282.7,324.2 L286.5,323.7 L290.2,323.0 L294.0,322.3 L297.8,321.5 L301.6,320.6 L305.4,319.6 L309.2,318.5 L313.0,317.3 L316.8,316.0 L320.6,314.5 L324.4,312.9 L328.2,311.1 L332.0,309.1 L335.8,307.0 L339.5,304.7 L343.3,302.3 L347.1,299.6 L350.9,296.7 L354.7,293.6 L358.5,290.4 L362.3,286.9 L366.1,283.2 L369.9,279.2 L373.7,275.1 L377.5,270.8 L381.2,266.2 L385.0,261.5 L388.8,256.6 L392.6,251.5 L396.4,246.3 L400.2,240.9 L404.0,235.4 L407.8,229.8 L411.6,224.1 L415.4,218.4 L419.2,212.6 L423.0,206.8 L426.8,201.1 L430.5,195.4 L434.3,189.9 L438.1,184.4 L441.9,179.1 L445.7,174.0 L449.5,169.1 L453.3,164.5 L457.1,160.1 L460.9,156.1 L464.7,152.4 L468.5,149.1 L472.2,146.1 L476.0,143.6 L479.8,141.5 L483.6,139.9 L487.4,138.7 L491.2,138.0 L495.0,137.8 L498.8,138.0 L502.6,138.7 L506.4,139.9 L510.2,141.5 L514.0,143.6 L517.8,146.1 L521.5,149.1 L525.3,152.4 L529.1,156.1 L532.9,160.1 L536.7,164.5 L540.5,169.1 L544.3,174.0 L548.1,179.1 L551.9,184.4 L555.7,189.9 L559.5,195.4 L563.2,201.1 L567.0,206.8 L570.8,212.6 L574.6,218.4 L578.4,224.1 L582.2,229.8 L586.0,235.4 L589.8,240.9 L593.6,246.3 L597.4,251.5 L601.2,256.6 L605.0,261.5 L608.8,266.2 L612.5,270.8 L616.3,275.1 L620.1,279.2 L623.9,283.2 L627.7,286.9 L631.5,290.4 L635.3,293.6 L639.1,296.7 L642.9,299.6 L646.7,302.3 L650.5,304.7 L654.2,307.0 L658.0,309.1 L661.8,311.1 L665.6,312.9 L669.4,314.5 L673.2,316.0 L677.0,317.3 L680.8,318.5 L684.6,319.6 L688.4,320.6 L692.2,321.5 L696.0,322.3 L699.8,323.0 L703.5,323.7 L707.3,324.2 L711.1,324.7 L714.9,325.2 L718.7,325.5 L722.5,325.9 L726.3,326.2 L730.1,326.4 L733.9,326.7 L737.7,326.9 L741.5,327.0 L745.2,327.2 L749.0,327.3 L752.8,327.4 L756.6,327.5 L760.4,327.6 L764.2,327.7 L768.0,327.7 L771.8,327.8 L775.6,327.8 L779.4,327.8 L783.2,327.9 L787.0,327.9 L790.8,327.9 L794.5,327.9 L798.3,327.9 L802.1,327.9 L805.9,328.0 L809.7,328.0 L813.5,328.0 L817.3,328.0 L821.1,328.0 L824.9,328.0 L828.7,328.0 L832.5,328.0 L836.2,328.0 L840.0,328.0 L843.8,328.0 L847.6,328.0 L851.4,328.0 L855.2,328.0 L859.0,328.0 L862.8,328.0 L866.6,328.0 L870.4,328.0 L874.2,328.0 L878.0,328.0 L881.8,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#d02670" stroke-width="3.5"/><text x="616.3333333333333" y="184.94117647058823" font-size="18" font-weight="700" fill="#d02670">n = 4: sd 7.5</text><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,328.0 L115.8,328.0 L119.6,328.0 L123.4,328.0 L127.2,328.0 L131.0,328.0 L134.8,328.0 L138.6,328.0 L142.4,328.0 L146.2,328.0 L150.0,328.0 L153.8,328.0 L157.5,328.0 L161.3,328.0 L165.1,328.0 L168.9,328.0 L172.7,328.0 L176.5,328.0 L180.3,328.0 L184.1,328.0 L187.9,328.0 L191.7,328.0 L195.5,328.0 L199.2,328.0 L203.0,328.0 L206.8,328.0 L210.6,328.0 L214.4,328.0 L218.2,328.0 L222.0,328.0 L225.8,328.0 L229.6,328.0 L233.4,328.0 L237.2,328.0 L241.0,328.0 L244.8,328.0 L248.5,328.0 L252.3,328.0 L256.1,328.0 L259.9,328.0 L263.7,328.0 L267.5,328.0 L271.3,328.0 L275.1,328.0 L278.9,328.0 L282.7,328.0 L286.5,327.9 L290.2,327.9 L294.0,327.9 L297.8,327.9 L301.6,327.8 L305.4,327.7 L309.2,327.7 L313.0,327.6 L316.8,327.4 L320.6,327.3 L324.4,327.0 L328.2,326.8 L332.0,326.4 L335.8,326.0 L339.5,325.5 L343.3,324.8 L347.1,324.0 L350.9,323.1 L354.7,321.9 L358.5,320.5 L362.3,318.9 L366.1,316.9 L369.9,314.7 L373.7,312.0 L377.5,308.9 L381.2,305.3 L385.0,301.2 L388.8,296.5 L392.6,291.3 L396.4,285.4 L400.2,278.8 L404.0,271.5 L407.8,263.5 L411.6,254.9 L415.4,245.4 L419.2,235.4 L423.0,224.6 L426.8,213.3 L430.5,201.4 L434.3,189.1 L438.1,176.4 L441.9,163.6 L445.7,150.6 L449.5,137.7 L453.3,125.0 L457.1,112.6 L460.9,100.8 L464.7,89.6 L468.5,79.4 L472.2,70.1 L476.0,62.0 L479.8,55.2 L483.6,49.8 L487.4,45.8 L491.2,43.4 L495.0,42.6 L498.8,43.4 L502.6,45.8 L506.4,49.8 L510.2,55.2 L514.0,62.0 L517.8,70.1 L521.5,79.4 L525.3,89.6 L529.1,100.8 L532.9,112.6 L536.7,125.0 L540.5,137.7 L544.3,150.6 L548.1,163.6 L551.9,176.4 L555.7,189.1 L559.5,201.4 L563.2,213.3 L567.0,224.6 L570.8,235.4 L574.6,245.4 L578.4,254.9 L582.2,263.5 L586.0,271.5 L589.8,278.8 L593.6,285.4 L597.4,291.3 L601.2,296.5 L605.0,301.2 L608.8,305.3 L612.5,308.9 L616.3,312.0 L620.1,314.7 L623.9,316.9 L627.7,318.9 L631.5,320.5 L635.3,321.9 L639.1,323.1 L642.9,324.0 L646.7,324.8 L650.5,325.5 L654.2,326.0 L658.0,326.4 L661.8,326.8 L665.6,327.0 L669.4,327.3 L673.2,327.4 L677.0,327.6 L680.8,327.7 L684.6,327.7 L688.4,327.8 L692.2,327.9 L696.0,327.9 L699.8,327.9 L703.5,327.9 L707.3,328.0 L711.1,328.0 L714.9,328.0 L718.7,328.0 L722.5,328.0 L726.3,328.0 L730.1,328.0 L733.9,328.0 L737.7,328.0 L741.5,328.0 L745.2,328.0 L749.0,328.0 L752.8,328.0 L756.6,328.0 L760.4,328.0 L764.2,328.0 L768.0,328.0 L771.8,328.0 L775.6,328.0 L779.4,328.0 L783.2,328.0 L787.0,328.0 L790.8,328.0 L794.5,328.0 L798.3,328.0 L802.1,328.0 L805.9,328.0 L809.7,328.0 L813.5,328.0 L817.3,328.0 L821.1,328.0 L824.9,328.0 L828.7,328.0 L832.5,328.0 L836.2,328.0 L840.0,328.0 L843.8,328.0 L847.6,328.0 L851.4,328.0 L855.2,328.0 L859.0,328.0 L862.8,328.0 L866.6,328.0 L870.4,328.0 L874.2,328.0 L878.0,328.0 L881.8,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#9d144d" stroke-width="3.5"/><text x="195.8" y="70.49411764705886" font-size="18" font-weight="700" fill="#9d144d" text-anchor="end">n = 9: sd 5</text></svg>
   <p style="font-size:21px; margin-top:4px; text-align:center;">The area beyond \(\bar{x} = 105\) shrinks from 0.369 (\(n=1\)) to 0.252 (\(n=4\)) to 0.159 (\(n=9\))</p>
-  <div class="footerbar"><span>Lesson 1 · The sample mean</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 1 — your turn</h1>
+<section class="slide" data-topic="Lesson 1 · Checkpoint">
+  <h2>Checkpoint 1 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Battery lifetimes are \(N(50,\, 6^2)\) hours. A random sample of 36 batteries is tested.</p>
     <ul style="margin-top:8px;">
@@ -167,17 +98,16 @@
       <li><b>(b)</b> Find \(P(\bar{X} &lt; 48)\), and compare with \(P(X &lt; 48)\) for a single battery.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(\bar{X} \sim N\!\left(50,\, \dfrac{36}{36}\right) = N(50,\, 1^2)\).</li>
-    <li class="step"><b>(b)</b> \(P(\bar{X} &lt; 48) = P(Z &lt; -2) \approx 0.023\); one battery: \(P(X &lt; 48) = P(Z &lt; -\tfrac13) \approx 0.369\).</li>
+    <li class="frag"><b>(a)</b> \(\bar{X} \sim N\!\left(50,\, \dfrac{36}{36}\right) = N(50,\, 1^2)\).</li>
+    <li class="frag"><b>(b)</b> \(P(\bar{X} &lt; 48) = P(Z &lt; -2) \approx 0.023\); one battery: \(P(X &lt; 48) = P(Z &lt; -\tfrac13) \approx 0.369\).</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 2 ═══ -->
 
-<section class="slide section" data-lesson="2">
+<section class="slide section-slide" data-lesson="2">
   <div class="kicker">Lesson 2 · 15D</div>
   <h1>Totals and averages</h1>
   <ul class="goals">
@@ -187,25 +117,24 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Worked example: totals are sample means in disguise</h1>
-  <div class="box ex"><span class="lbl">Example 2</span>
+<section class="slide" data-topic="Lesson 2 · Totals and averages">
+  <h2>Worked example: totals are sample means in disguise</h2>
+  <div class="box example"><span class="lbl">Example 2</span>
     <p>A lift's capacity is 1200 kg. Sixteen adults board; adult masses are \(N(70,\, 10^2)\) kg, independent. Find the probability the lift is overloaded.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Total \(T = X_1 + \cdots + X_{16}\): \(E(T) = 16 \times 70 = 1120\), \(\text{Var}(T) = 16 \times 100 = 1600\), so \(T \sim N(1120,\, 40^2)\).</li>
-    <li class="step">\(P(T &gt; 1200) = P\!\left(Z &gt; \dfrac{1200 - 1120}{40}\right) = P(Z &gt; 2) \approx 0.023\).</li>
-    <li class="step">Equivalent route: \(T &gt; 1200 \iff \bar{X} &gt; 75\), and \(\bar{X} \sim N(70,\, 2.5^2)\) — same \(z\), same answer.</li>
+    <li class="frag">Total \(T = X_1 + \cdots + X_{16}\): \(E(T) = 16 \times 70 = 1120\), \(\text{Var}(T) = 16 \times 100 = 1600\), so \(T \sim N(1120,\, 40^2)\).</li>
+    <li class="frag">\(P(T &gt; 1200) = P\!\left(Z &gt; \dfrac{1200 - 1120}{40}\right) = P(Z &gt; 2) \approx 0.023\).</li>
+    <li class="frag">Equivalent route: \(T &gt; 1200 \iff \bar{X} &gt; 75\), and \(\bar{X} \sim N(70,\, 2.5^2)\) — same \(z\), same answer.</li>
   </ul>
   <div class="box key"><span class="lbl">Note</span>
     <p>Var of the total is \(n\sigma^2 = 1600\), <b>not</b> \((n\sigma)^2 = 25600\). Sixteen independent people, not one person weighed sixteen times.</p>
   </div>
-  <div class="footerbar"><span>Lesson 2 · Totals and averages</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 2 — your turn</h1>
+<section class="slide" data-topic="Lesson 2 · Checkpoint">
+  <h2>Checkpoint 2 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Egg masses are \(N(60,\, 4^2)\) g, independent. A carton holds 12 eggs.</p>
     <ul style="margin-top:8px;">
@@ -214,18 +143,17 @@
       <li><b>(c)</b> A shop rejects cartons whose <b>average</b> egg mass is below 58 g. What proportion is rejected?</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(E(T) = 720\), \(\text{Var}(T) = 12 \times 16 = 192\): \(T \sim N(720,\, 192)\), sd \(\approx 13.86\) g.</li>
-    <li class="step"><b>(b)</b> \(P(T &gt; 740) = P\!\left(Z &gt; \dfrac{20}{13.86}\right) = P(Z &gt; 1.443) \approx 0.074\).</li>
-    <li class="step"><b>(c)</b> \(\bar{X} \sim N\!\left(60,\, \tfrac{16}{12}\right)\), sd \(\approx 1.155\); \(P(\bar{X} &lt; 58) = P(Z &lt; -1.732) \approx 0.042\).</li>
+    <li class="frag"><b>(a)</b> \(E(T) = 720\), \(\text{Var}(T) = 12 \times 16 = 192\): \(T \sim N(720,\, 192)\), sd \(\approx 13.86\) g.</li>
+    <li class="frag"><b>(b)</b> \(P(T &gt; 740) = P\!\left(Z &gt; \dfrac{20}{13.86}\right) = P(Z &gt; 1.443) \approx 0.074\).</li>
+    <li class="frag"><b>(c)</b> \(\bar{X} \sim N\!\left(60,\, \tfrac{16}{12}\right)\), sd \(\approx 1.155\); \(P(\bar{X} &lt; 58) = P(Z &lt; -1.732) \approx 0.042\).</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 3 ═══ -->
 
-<section class="slide section" data-lesson="3">
+<section class="slide section-slide" data-lesson="3">
   <div class="kicker">Lesson 3 · 15E–15F</div>
   <h1>Simulation and the central limit theorem</h1>
   <ul class="goals">
@@ -235,8 +163,8 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Simulating \(\bar{X}\)</h1>
+<section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
+  <h2>Simulating \(\bar{X}\)</h2>
   <ul>
     <li>Take a decidedly non-normal population — say rolls of a die, or a skewed waiting-time distribution.</li>
     <li>Draw a sample of size \(n\), record \(\bar{x}\). Repeat a few thousand times and histogram the results.</li>
@@ -245,11 +173,10 @@
   <div class="box try"><span class="lbl">Try it! (CAS / spreadsheet)</span>
     <p>Simulate 1000 samples of size \(n = 2, 5, 30\) from rolls of a fair die (\(\mu = 3.5\), \(\sigma^2 = \tfrac{35}{12}\)). Histogram the means. At what \(n\) does the bell shape convince you?</p>
   </div>
-  <div class="footerbar"><span>Lesson 3 · Simulation &amp; CLT</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>The central limit theorem</h1>
+<section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
+  <h2>The central limit theorem</h2>
   <div class="box defn"><span class="lbl">Theorem (informal)</span>
     <p>For a random sample of size \(n\) from <b>any</b> distribution with mean \(\mu\) and variance \(\sigma^2\), the distribution of \(\bar{X}\) is <b>approximately</b> \(N\!\left(\mu,\, \dfrac{\sigma^2}{n}\right)\) when \(n\) is large.</p>
   </div>
@@ -258,18 +185,16 @@
     <li>Normal population → \(\bar{X}\) exactly normal for <b>every</b> \(n\); CLT is only needed when the population isn't normal.</li>
     <li>This is what makes next week possible: inference about \(\mu\) without knowing the population's shape.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Simulation &amp; CLT</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Seeing it: a skewed population, a normal-looking mean</h1>
-  <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="285" y1="30" x2="285" y2="330" stroke="#e2e8f0"/><text x="285" y="352" font-size="16" fill="#475569" text-anchor="middle">1</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="715" y1="30" x2="715" y2="330" stroke="#e2e8f0"/><text x="715" y="352" font-size="16" fill="#475569" text-anchor="middle">3</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,200.0 L74.3,202.6 L78.6,205.1 L82.9,207.6 L87.2,210.0 L91.5,212.4 L95.8,214.7 L100.1,217.0 L104.4,219.2 L108.7,221.4 L113.0,223.6 L117.3,225.7 L121.6,227.7 L125.9,229.8 L130.2,231.7 L134.5,233.7 L138.8,235.6 L143.1,237.5 L147.4,239.3 L151.7,241.1 L156.0,242.9 L160.3,244.6 L164.6,246.3 L168.9,247.9 L173.2,249.6 L177.5,251.2 L181.8,252.7 L186.1,254.2 L190.4,255.7 L194.7,257.2 L199.0,258.7 L203.3,260.1 L207.6,261.5 L211.9,262.8 L216.2,264.1 L220.5,265.4 L224.8,266.7 L229.1,268.0 L233.4,269.2 L237.7,270.4 L242.0,271.6 L246.3,272.7 L250.6,273.9 L254.9,275.0 L259.2,276.1 L263.5,277.1 L267.8,278.2 L272.1,279.2 L276.4,280.2 L280.7,281.2 L285.0,282.2 L289.3,283.1 L293.6,284.1 L297.9,285.0 L302.2,285.9 L306.5,286.7 L310.8,287.6 L315.1,288.4 L319.4,289.2 L323.7,290.1 L328.0,290.8 L332.3,291.6 L336.6,292.4 L340.9,293.1 L345.2,293.9 L349.5,294.6 L353.8,295.3 L358.1,296.0 L362.4,296.6 L366.7,297.3 L371.0,297.9 L375.3,298.6 L379.6,299.2 L383.9,299.8 L388.2,300.4 L392.5,301.0 L396.8,301.6 L401.1,302.1 L405.4,302.7 L409.7,303.2 L414.0,303.8 L418.3,304.3 L422.6,304.8 L426.9,305.3 L431.2,305.8 L435.5,306.3 L439.8,306.7 L444.1,307.2 L448.4,307.6 L452.7,308.1 L457.0,308.5 L461.3,308.9 L465.6,309.4 L469.9,309.8 L474.2,310.2 L478.5,310.6 L482.8,310.9 L487.1,311.3 L491.4,311.7 L495.7,312.1 L500.0,312.4 L504.3,312.8 L508.6,313.1 L512.9,313.4 L517.2,313.8 L521.5,314.1 L525.8,314.4 L530.1,314.7 L534.4,315.0 L538.7,315.3 L543.0,315.6 L547.3,315.9 L551.6,316.2 L555.9,316.4 L560.2,316.7 L564.5,317.0 L568.8,317.2 L573.1,317.5 L577.4,317.7 L581.7,318.0 L586.0,318.2 L590.3,318.4 L594.6,318.7 L598.9,318.9 L603.2,319.1 L607.5,319.3 L611.8,319.5 L616.1,319.7 L620.4,320.0 L624.7,320.1 L629.0,320.3 L633.3,320.5 L637.6,320.7 L641.9,320.9 L646.2,321.1 L650.5,321.3 L654.8,321.4 L659.1,321.6 L663.4,321.8 L667.7,321.9 L672.0,322.1 L676.3,322.3 L680.6,322.4 L684.9,322.6 L689.2,322.7 L693.5,322.8 L697.8,323.0 L702.1,323.1 L706.4,323.3 L710.7,323.4 L715.0,323.5 L719.3,323.7 L723.6,323.8 L727.9,323.9 L732.2,324.0 L736.5,324.1 L740.8,324.3 L745.1,324.4 L749.4,324.5 L753.7,324.6 L758.0,324.7 L762.3,324.8 L766.6,324.9 L770.9,325.0 L775.2,325.1 L779.5,325.2 L783.8,325.3 L788.1,325.4 L792.4,325.5 L796.7,325.6 L801.0,325.7 L805.3,325.7 L809.6,325.8 L813.9,325.9 L818.2,326.0 L822.5,326.1 L826.8,326.2 L831.1,326.2 L835.4,326.3 L839.7,326.4 L844.0,326.4 L848.3,326.5 L852.6,326.6 L856.9,326.7 L861.2,326.7 L865.5,326.8 L869.8,326.8 L874.1,326.9 L878.4,327.0 L882.7,327.0 L887.0,327.1 L891.3,327.1 L895.6,327.2 L899.9,327.3 L904.2,327.3 L908.5,327.4 L912.8,327.4 L917.1,327.5 L921.4,327.5 L925.7,327.6 L930.0,327.6" fill="none" stroke="#90A4AE" stroke-width="3.5"/><path d="M134.5,329.8 L136.0,329.8 L137.5,329.8 L139.0,329.7 L140.5,329.7 L142.0,329.6 L143.5,329.6 L145.0,329.5 L146.5,329.4 L148.0,329.4 L149.6,329.3 L151.1,329.2 L152.6,329.0 L154.1,328.9 L155.6,328.8 L157.1,328.6 L158.6,328.4 L160.1,328.2 L161.6,328.0 L163.1,327.7 L164.6,327.4 L166.1,327.1 L167.6,326.8 L169.1,326.4 L170.6,325.9 L172.1,325.5 L173.6,324.9 L175.1,324.3 L176.6,323.7 L178.1,323.0 L179.7,322.2 L181.2,321.4 L182.7,320.5 L184.2,319.5 L185.7,318.4 L187.2,317.3 L188.7,316.0 L190.2,314.6 L191.7,313.2 L193.2,311.6 L194.7,309.9 L196.2,308.0 L197.7,306.0 L199.2,303.9 L200.7,301.7 L202.2,299.3 L203.7,296.7 L205.2,294.0 L206.7,291.1 L208.2,288.0 L209.7,284.8 L211.3,281.4 L212.8,277.8 L214.3,274.0 L215.8,270.0 L217.3,265.9 L218.8,261.5 L220.3,257.0 L221.8,252.3 L223.3,247.4 L224.8,242.4 L226.3,237.1 L227.8,231.7 L229.3,226.1 L230.8,220.4 L232.3,214.6 L233.8,208.5 L235.3,202.4 L236.8,196.2 L238.3,189.8 L239.8,183.4 L241.4,176.9 L242.9,170.4 L244.4,163.8 L245.9,157.2 L247.4,150.6 L248.9,144.0 L250.4,137.4 L251.9,131.0 L253.4,124.6 L254.9,118.3 L256.4,112.1 L257.9,106.1 L259.4,100.3 L260.9,94.7 L262.4,89.2 L263.9,84.0 L265.4,79.1 L266.9,74.5 L268.4,70.1 L269.9,66.1 L271.5,62.4 L273.0,59.0 L274.5,56.0 L276.0,53.4 L277.5,51.1 L279.0,49.3 L280.5,47.8 L282.0,46.8 L283.5,46.1 L285.0,45.9 L286.5,46.1 L288.0,46.8 L289.5,47.8 L291.0,49.3 L292.5,51.1 L294.0,53.4 L295.5,56.0 L297.0,59.0 L298.5,62.4 L300.1,66.1 L301.6,70.1 L303.1,74.5 L304.6,79.1 L306.1,84.0 L307.6,89.2 L309.1,94.7 L310.6,100.3 L312.1,106.1 L313.6,112.1 L315.1,118.3 L316.6,124.6 L318.1,131.0 L319.6,137.4 L321.1,144.0 L322.6,150.6 L324.1,157.2 L325.6,163.8 L327.1,170.4 L328.6,176.9 L330.1,183.4 L331.7,189.8 L333.2,196.2 L334.7,202.4 L336.2,208.5 L337.7,214.6 L339.2,220.4 L340.7,226.1 L342.2,231.7 L343.7,237.1 L345.2,242.4 L346.7,247.4 L348.2,252.3 L349.7,257.0 L351.2,261.5 L352.7,265.9 L354.2,270.0 L355.7,274.0 L357.2,277.8 L358.7,281.4 L360.2,284.8 L361.8,288.0 L363.3,291.1 L364.8,294.0 L366.3,296.7 L367.8,299.3 L369.3,301.7 L370.8,303.9 L372.3,306.0 L373.8,308.0 L375.3,309.9 L376.8,311.6 L378.3,313.2 L379.8,314.6 L381.3,316.0 L382.8,317.3 L384.3,318.4 L385.8,319.5 L387.3,320.5 L388.8,321.4 L390.4,322.2 L391.9,323.0 L393.4,323.7 L394.9,324.3 L396.4,324.9 L397.9,325.5 L399.4,325.9 L400.9,326.4 L402.4,326.8 L403.9,327.1 L405.4,327.4 L406.9,327.7 L408.4,328.0 L409.9,328.2 L411.4,328.4 L412.9,328.6 L414.4,328.8 L415.9,328.9 L417.4,329.0 L418.9,329.2 L420.5,329.3 L422.0,329.4 L423.5,329.4 L425.0,329.5 L426.5,329.6 L428.0,329.6 L429.5,329.7 L431.0,329.7 L432.5,329.8 L434.0,329.8 L435.5,329.8" fill="none" stroke="#1F3A93" stroke-width="3.5"/><line x1="285" y1="36" x2="285" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="522" y="230" font-size="19" font-weight="700" fill="#90A4AE">population: skewed, mean 1</text><text x="339" y="70" font-size="19" font-weight="700" fill="#1F3A93">X&#772; for n = 30 &#8776; N(1, 1/30)</text></svg>
+<section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
+  <h2>Seeing it: a skewed population, a normal-looking mean</h2>
+  <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="285" y1="30" x2="285" y2="330" stroke="#e2e8f0"/><text x="285" y="352" font-size="16" fill="#475569" text-anchor="middle">1</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="715" y1="30" x2="715" y2="330" stroke="#e2e8f0"/><text x="715" y="352" font-size="16" fill="#475569" text-anchor="middle">3</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,200.0 L74.3,202.6 L78.6,205.1 L82.9,207.6 L87.2,210.0 L91.5,212.4 L95.8,214.7 L100.1,217.0 L104.4,219.2 L108.7,221.4 L113.0,223.6 L117.3,225.7 L121.6,227.7 L125.9,229.8 L130.2,231.7 L134.5,233.7 L138.8,235.6 L143.1,237.5 L147.4,239.3 L151.7,241.1 L156.0,242.9 L160.3,244.6 L164.6,246.3 L168.9,247.9 L173.2,249.6 L177.5,251.2 L181.8,252.7 L186.1,254.2 L190.4,255.7 L194.7,257.2 L199.0,258.7 L203.3,260.1 L207.6,261.5 L211.9,262.8 L216.2,264.1 L220.5,265.4 L224.8,266.7 L229.1,268.0 L233.4,269.2 L237.7,270.4 L242.0,271.6 L246.3,272.7 L250.6,273.9 L254.9,275.0 L259.2,276.1 L263.5,277.1 L267.8,278.2 L272.1,279.2 L276.4,280.2 L280.7,281.2 L285.0,282.2 L289.3,283.1 L293.6,284.1 L297.9,285.0 L302.2,285.9 L306.5,286.7 L310.8,287.6 L315.1,288.4 L319.4,289.2 L323.7,290.1 L328.0,290.8 L332.3,291.6 L336.6,292.4 L340.9,293.1 L345.2,293.9 L349.5,294.6 L353.8,295.3 L358.1,296.0 L362.4,296.6 L366.7,297.3 L371.0,297.9 L375.3,298.6 L379.6,299.2 L383.9,299.8 L388.2,300.4 L392.5,301.0 L396.8,301.6 L401.1,302.1 L405.4,302.7 L409.7,303.2 L414.0,303.8 L418.3,304.3 L422.6,304.8 L426.9,305.3 L431.2,305.8 L435.5,306.3 L439.8,306.7 L444.1,307.2 L448.4,307.6 L452.7,308.1 L457.0,308.5 L461.3,308.9 L465.6,309.4 L469.9,309.8 L474.2,310.2 L478.5,310.6 L482.8,310.9 L487.1,311.3 L491.4,311.7 L495.7,312.1 L500.0,312.4 L504.3,312.8 L508.6,313.1 L512.9,313.4 L517.2,313.8 L521.5,314.1 L525.8,314.4 L530.1,314.7 L534.4,315.0 L538.7,315.3 L543.0,315.6 L547.3,315.9 L551.6,316.2 L555.9,316.4 L560.2,316.7 L564.5,317.0 L568.8,317.2 L573.1,317.5 L577.4,317.7 L581.7,318.0 L586.0,318.2 L590.3,318.4 L594.6,318.7 L598.9,318.9 L603.2,319.1 L607.5,319.3 L611.8,319.5 L616.1,319.7 L620.4,320.0 L624.7,320.1 L629.0,320.3 L633.3,320.5 L637.6,320.7 L641.9,320.9 L646.2,321.1 L650.5,321.3 L654.8,321.4 L659.1,321.6 L663.4,321.8 L667.7,321.9 L672.0,322.1 L676.3,322.3 L680.6,322.4 L684.9,322.6 L689.2,322.7 L693.5,322.8 L697.8,323.0 L702.1,323.1 L706.4,323.3 L710.7,323.4 L715.0,323.5 L719.3,323.7 L723.6,323.8 L727.9,323.9 L732.2,324.0 L736.5,324.1 L740.8,324.3 L745.1,324.4 L749.4,324.5 L753.7,324.6 L758.0,324.7 L762.3,324.8 L766.6,324.9 L770.9,325.0 L775.2,325.1 L779.5,325.2 L783.8,325.3 L788.1,325.4 L792.4,325.5 L796.7,325.6 L801.0,325.7 L805.3,325.7 L809.6,325.8 L813.9,325.9 L818.2,326.0 L822.5,326.1 L826.8,326.2 L831.1,326.2 L835.4,326.3 L839.7,326.4 L844.0,326.4 L848.3,326.5 L852.6,326.6 L856.9,326.7 L861.2,326.7 L865.5,326.8 L869.8,326.8 L874.1,326.9 L878.4,327.0 L882.7,327.0 L887.0,327.1 L891.3,327.1 L895.6,327.2 L899.9,327.3 L904.2,327.3 L908.5,327.4 L912.8,327.4 L917.1,327.5 L921.4,327.5 L925.7,327.6 L930.0,327.6" fill="none" stroke="#90A4AE" stroke-width="3.5"/><path d="M134.5,329.8 L136.0,329.8 L137.5,329.8 L139.0,329.7 L140.5,329.7 L142.0,329.6 L143.5,329.6 L145.0,329.5 L146.5,329.4 L148.0,329.4 L149.6,329.3 L151.1,329.2 L152.6,329.0 L154.1,328.9 L155.6,328.8 L157.1,328.6 L158.6,328.4 L160.1,328.2 L161.6,328.0 L163.1,327.7 L164.6,327.4 L166.1,327.1 L167.6,326.8 L169.1,326.4 L170.6,325.9 L172.1,325.5 L173.6,324.9 L175.1,324.3 L176.6,323.7 L178.1,323.0 L179.7,322.2 L181.2,321.4 L182.7,320.5 L184.2,319.5 L185.7,318.4 L187.2,317.3 L188.7,316.0 L190.2,314.6 L191.7,313.2 L193.2,311.6 L194.7,309.9 L196.2,308.0 L197.7,306.0 L199.2,303.9 L200.7,301.7 L202.2,299.3 L203.7,296.7 L205.2,294.0 L206.7,291.1 L208.2,288.0 L209.7,284.8 L211.3,281.4 L212.8,277.8 L214.3,274.0 L215.8,270.0 L217.3,265.9 L218.8,261.5 L220.3,257.0 L221.8,252.3 L223.3,247.4 L224.8,242.4 L226.3,237.1 L227.8,231.7 L229.3,226.1 L230.8,220.4 L232.3,214.6 L233.8,208.5 L235.3,202.4 L236.8,196.2 L238.3,189.8 L239.8,183.4 L241.4,176.9 L242.9,170.4 L244.4,163.8 L245.9,157.2 L247.4,150.6 L248.9,144.0 L250.4,137.4 L251.9,131.0 L253.4,124.6 L254.9,118.3 L256.4,112.1 L257.9,106.1 L259.4,100.3 L260.9,94.7 L262.4,89.2 L263.9,84.0 L265.4,79.1 L266.9,74.5 L268.4,70.1 L269.9,66.1 L271.5,62.4 L273.0,59.0 L274.5,56.0 L276.0,53.4 L277.5,51.1 L279.0,49.3 L280.5,47.8 L282.0,46.8 L283.5,46.1 L285.0,45.9 L286.5,46.1 L288.0,46.8 L289.5,47.8 L291.0,49.3 L292.5,51.1 L294.0,53.4 L295.5,56.0 L297.0,59.0 L298.5,62.4 L300.1,66.1 L301.6,70.1 L303.1,74.5 L304.6,79.1 L306.1,84.0 L307.6,89.2 L309.1,94.7 L310.6,100.3 L312.1,106.1 L313.6,112.1 L315.1,118.3 L316.6,124.6 L318.1,131.0 L319.6,137.4 L321.1,144.0 L322.6,150.6 L324.1,157.2 L325.6,163.8 L327.1,170.4 L328.6,176.9 L330.1,183.4 L331.7,189.8 L333.2,196.2 L334.7,202.4 L336.2,208.5 L337.7,214.6 L339.2,220.4 L340.7,226.1 L342.2,231.7 L343.7,237.1 L345.2,242.4 L346.7,247.4 L348.2,252.3 L349.7,257.0 L351.2,261.5 L352.7,265.9 L354.2,270.0 L355.7,274.0 L357.2,277.8 L358.7,281.4 L360.2,284.8 L361.8,288.0 L363.3,291.1 L364.8,294.0 L366.3,296.7 L367.8,299.3 L369.3,301.7 L370.8,303.9 L372.3,306.0 L373.8,308.0 L375.3,309.9 L376.8,311.6 L378.3,313.2 L379.8,314.6 L381.3,316.0 L382.8,317.3 L384.3,318.4 L385.8,319.5 L387.3,320.5 L388.8,321.4 L390.4,322.2 L391.9,323.0 L393.4,323.7 L394.9,324.3 L396.4,324.9 L397.9,325.5 L399.4,325.9 L400.9,326.4 L402.4,326.8 L403.9,327.1 L405.4,327.4 L406.9,327.7 L408.4,328.0 L409.9,328.2 L411.4,328.4 L412.9,328.6 L414.4,328.8 L415.9,328.9 L417.4,329.0 L418.9,329.2 L420.5,329.3 L422.0,329.4 L423.5,329.4 L425.0,329.5 L426.5,329.6 L428.0,329.6 L429.5,329.7 L431.0,329.7 L432.5,329.8 L434.0,329.8 L435.5,329.8" fill="none" stroke="#d02670" stroke-width="3.5"/><line x1="285" y1="36" x2="285" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="522" y="230" font-size="19" font-weight="700" fill="#90A4AE">population: skewed, mean 1</text><text x="339" y="70" font-size="19" font-weight="700" fill="#d02670">X&#772; for n = 30 &#8776; N(1, 1/30)</text></svg>
   <p style="font-size:21px; margin-top:4px; text-align:center;">Waiting times (skewed, mean 1, sd 1) — yet \(\bar{X}\) for \(n = 30\) is already close to \(N(1,\, 1/30)\). The population stays skewed; only \(\bar{X}\) turns normal.</p>
-  <div class="footerbar"><span>Lesson 3 · Simulation &amp; CLT</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 3 — true or false?</h1>
+<section class="slide" data-topic="Lesson 3 · Checkpoint">
+  <h2>Checkpoint 3 — true or false?</h2>
   <div class="box try"><span class="lbl">Try it! (≈4 min)</span>
     <ul style="margin-top:6px;">
       <li><b>(a)</b> \(\bar{X}\) is exactly normal only when the population is normal.</li>
@@ -278,17 +203,16 @@
       <li><b>(d)</b> For a normal population and \(n = 4\), we may use \(\bar{X} \sim N(\mu, \sigma^2/4)\) without invoking the CLT.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> True. &nbsp; <b>(b)</b> False — only the distribution of \(\bar{X}\) is approximately normal; the population never changes.</li>
-    <li class="step"><b>(c)</b> False — \(\sigma/\sqrt{n}\). &nbsp; <b>(d)</b> True: exactness comes from the normal population, no CLT needed.</li>
+    <li class="frag"><b>(a)</b> True. &nbsp; <b>(b)</b> False — only the distribution of \(\bar{X}\) is approximately normal; the population never changes.</li>
+    <li class="frag"><b>(c)</b> False — \(\sigma/\sqrt{n}\). &nbsp; <b>(d)</b> True: exactness comes from the normal population, no CLT needed.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 4 ═══ -->
 
-<section class="slide section" data-lesson="4">
+<section class="slide section-slide" data-lesson="4">
   <div class="kicker">Lesson 4 · 15F</div>
   <h1>Normal approximation to the binomial</h1>
   <ul class="goals">
@@ -298,28 +222,27 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Normal approximation to the binomial</h1>
+<section class="slide" data-topic="Lesson 4 · Normal ≈ binomial">
+  <h2>Normal approximation to the binomial</h2>
   <ul>
     <li>\(X \sim \text{Bi}(n, p)\) is a sum of \(n\) independent 0/1 variables — so the CLT applies to it.</li>
     <li>For large \(n\): \(X \mathrel{\dot\sim} N\big(np,\; np(1-p)\big)\). Guideline: fine when \(np\) and \(n(1-p)\) are both \(&gt; 5\) or so.</li>
   </ul>
-  <div class="box ex"><span class="lbl">Example 3</span>
+  <div class="box example"><span class="lbl">Example 3</span>
     <p>A fair coin is tossed 100 times. Estimate \(P(X \geq 60)\).</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">\(np = 50\), \(np(1-p) = 25\): \(X \mathrel{\dot\sim} N(50,\, 5^2)\).</li>
-    <li class="step">\(P(X \geq 60) \approx P\!\left(Z \geq \dfrac{60-50}{5}\right) = P(Z \geq 2) \approx 0.023\). (Exact binomial: 0.028 — close, and far quicker.)</li>
+    <li class="frag">\(np = 50\), \(np(1-p) = 25\): \(X \mathrel{\dot\sim} N(50,\, 5^2)\).</li>
+    <li class="frag">\(P(X \geq 60) \approx P\!\left(Z \geq \dfrac{60-50}{5}\right) = P(Z \geq 2) \approx 0.023\). (Exact binomial: 0.028 — close, and far quicker.)</li>
   </ul>
   <div class="box key"><span class="lbl">Sample proportion</span>
     <p>Dividing by \(n\): \(\hat{P} = X/n \mathrel{\dot\sim} N\big(p,\, \tfrac{p(1-p)}{n}\big)\) — the same fact in proportion form.</p>
   </div>
-  <div class="footerbar"><span>Lesson 4 · Normal ≈ binomial</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 4 — your turn</h1>
+<section class="slide" data-topic="Lesson 4 · Checkpoint">
+  <h2>Checkpoint 4 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>A fair die is rolled 180 times; \(X\) counts the sixes.</p>
     <ul style="margin-top:8px;">
@@ -328,17 +251,16 @@
       <li><b>(c)</b> Why is the approximation justified here?</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(X \sim \text{Bi}(180,\, \tfrac16)\): mean \(np = 30\), variance \(np(1-p) = 25\).</li>
-    <li class="step"><b>(b)</b> \(X \mathrel{\dot\sim} N(30,\, 5^2)\): \(P(X \geq 40) \approx P(Z \geq 2) \approx 0.023\).</li>
-    <li class="step"><b>(c)</b> \(np = 30\) and \(n(1-p) = 150\) are both comfortably above 5.</li>
+    <li class="frag"><b>(a)</b> \(X \sim \text{Bi}(180,\, \tfrac16)\): mean \(np = 30\), variance \(np(1-p) = 25\).</li>
+    <li class="frag"><b>(b)</b> \(X \mathrel{\dot\sim} N(30,\, 5^2)\): \(P(X \geq 40) \approx P(Z \geq 2) \approx 0.023\).</li>
+    <li class="frag"><b>(c)</b> \(np = 30\) and \(n(1-p) = 150\) are both comfortably above 5.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 4 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Week 4 summary</h1>
+<section class="slide" data-topic="T3W04 · Sample Mean &amp; CLT">
+  <h2>Week 5 summary</h2>
   <ul>
     <li>\(\bar{X}\) is a random variable: \(E(\bar{X}) = \mu\), \(\text{sd}(\bar{X}) = \sigma/\sqrt{n}\).</li>
     <li>Normal population → \(\bar{X}\) exactly normal; any population + large \(n\) → approximately normal (CLT).</li>
@@ -348,66 +270,17 @@
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Problem Set 3 (Random Variables) covers Weeks 3–4. Next week we start using \(\bar{X}\) to make decisions: confidence intervals and hypothesis tests (Chapter 16).</p>
   </div>
-  <div class="footerbar"><span>T3W04 · Sample Mean &amp; CLT</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
+</main>
+<a class="homebtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>–<span class="key">4</span> jump to lesson · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
 </div>
-<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
-<div id="counter"></div>
-<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
 
-<script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let cur = 0;
-  function fit() {
-    const s = Math.min(innerWidth * 0.9 / 1280, innerHeight * 0.9 / 720);
-    slides.forEach(sl => sl.style.zoom = s);
-  }
-  addEventListener('resize', fit); fit();
-  function syncBtns(sl) {
-    const left = sl.querySelector('.step:not(.shown)');
-    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
-  }
-  function revealNext(sl) {
-    const s = sl.querySelector('.step:not(.shown)');
-    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function unrevealLast(sl) {
-    const shown = sl.querySelectorAll('.step.shown');
-    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
-    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
-    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
-    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
-    location.hash = cur + 1;
-  }
-  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
-  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
-  addEventListener('keydown', e => {
-    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(slides.length - 1);
-    else if (['1','2','3','4'].includes(e.key)) {
-      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
-      if (target >= 0) show(target);
-    }
-    else if (e.key.toLowerCase() === 'f') {
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    }
-  });
-  addEventListener('click', e => {
-    if (e.target.closest('button.rvl, a')) return;
-    if (e.clientX > innerWidth * 0.66) next();
-    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
-  });
-  document.querySelectorAll('button.rvl').forEach(b =>
-    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
-  show(parseInt(location.hash.slice(1)) - 1 || 0);
-</script>
+<script src="../../../assets/js/deck.js" defer></script>
 </body>
 </html>

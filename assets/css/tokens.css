@@ -1,0 +1,113 @@
+/* ============================================================
+   tokens.css — GLOBAL DESIGN TOKENS
+   Single source of truth for the whole site: landing pages,
+   subject pages, and slide decks all consume these variables.
+
+   Edit here once → applies everywhere.
+
+   Layers:
+     1. Primitives  — raw colour values (never used directly in pages)
+     2. Semantics   — role-based tokens (what pages/decks actually use)
+     3. Type/space  — fonts, radii, shadows, sizes
+   Per-subject deck themes remap the semantic accents in deck.css.
+   ============================================================ */
+
+:root {
+
+  /* ---------- 1. Primitive palette ---------- */
+  --c-slate-900: #16263d;   /* darkest ink */
+  --c-slate-700: #1a2b34;
+  --c-slate-500: #4a5f68;
+  --c-slate-300: #9aa4b8;
+
+  --c-blue-700:  #24576f;
+  --c-blue-500:  #2f6f8f;   /* "chalk blue" — site default accent */
+  --c-blue-800:  #2456a6;   /* deck maths blue */
+
+  --c-navy-700:  #1f3a93;
+  --c-navy-900:  #16296b;
+
+  --c-amber-600: #d98a3d;
+  --c-amber-700: #9a6410;
+  --c-rust-600:  #b45309;   /* warm amber — readable on white */
+
+  --c-red-600:   #c23b32;
+  --c-green-600: #1e7d56;
+  --c-maroon-600:#8e244d;
+  --c-pink-600:  #d02670;
+  --c-pink-800:  #9d174d;
+  --c-teal-600:  #0e7490;
+  --c-algoteal-600:#0e7569; /* Algorithmics deep teal */
+  --c-algoteal-800:#0a5a50;
+  --c-forest-600:#1e7a4e;
+  --c-coral-500: #ff6b5e;   /* bright accents for dark/glass surfaces */
+  --c-amber-400: #f5a623;
+  --c-teal-400:  #18a999;
+  --c-violet-600:#7c3aed;
+
+  --c-paper-warm:#f6f4ef;   /* landing pages */
+  --c-paper-cool:#fbfcfe;   /* decks & hubs — bright, projection-friendly */
+  --c-white:     #ffffff;
+  --c-line:      #dfe3e0;
+  --c-line-cool: #dde5f0;   /* soft blue-grey hairlines */
+
+  /* ---------- 2. Semantic tokens ---------- */
+  --ink:        var(--c-slate-700);
+  --ink-soft:   var(--c-slate-500);
+  --muted:      var(--c-slate-500);
+  --paper:      var(--c-paper-warm);
+  --panel:      var(--c-white);
+  --card:       var(--c-white);
+  --line:       var(--c-line);
+
+  --accent:      var(--c-blue-500);  /* primary accent — themes remap this */
+  --accent-dark: var(--c-blue-700);
+  --accent-warm: var(--c-amber-600); /* secondary/highlight accent */
+
+  --pos:  var(--c-green-600);        /* correct / go */
+  --neg:  var(--c-red-600);          /* errors / emphasis / answers */
+  --warn: var(--c-amber-700);        /* caution / try-this */
+
+  /* Gradual-release pedagogy (I do / We do / You do) */
+  --ido:   #33508f;
+  --wedo:  #a8610f;
+  --youdo: var(--c-green-600);
+  --cas:   var(--c-violet-600);      /* CAS-calculator callouts */
+
+  /* ---------- 3. Type, space, chrome ---------- */
+  --font-display: "Bitter", Georgia, serif;              /* headings */
+  --font-body: "Source Sans 3", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  --font-math: Georgia, "Times New Roman", serif;        /* CSS-built maths */
+
+  --radius:    14px;
+  --radius-sm: 10px;
+  --shadow:    0 1px 2px rgba(26,43,52,.05), 0 8px 24px rgba(26,43,52,.06);
+  --maxw:      1040px;
+}
+
+/* ---------- Subject themes: remap accents only ----------
+   Set on <body> alongside the page class, e.g.
+   <body class="deck-page theme-specialist"> or
+   <body class="hub-page theme-science">.
+   New subject → add a block here (new hexes go in the primitives above). */
+body.theme-methods {          /* Mathematical Methods — blue / amber */
+  --accent: var(--c-blue-800);  --accent-dark: #1a3f7d;
+  --accent-warm: var(--c-amber-700);
+}
+body.theme-specialist {       /* Specialist — pink / warm amber */
+  --accent: var(--c-pink-600);  --accent-dark: var(--c-pink-800);
+  --accent-warm: var(--c-rust-600);
+}
+body.theme-primer {           /* Year 10 primer — teal / gold */
+  --accent: var(--c-teal-600);  --accent-dark: #0a5468;
+  --accent-warm: #b7791f;
+}
+body.theme-algorithmics {     /* Algorithmics — deep teal / warm amber */
+  --accent: var(--c-algoteal-600); --accent-dark: var(--c-algoteal-800);
+  --accent-warm: var(--c-rust-600);
+}
+body.theme-science {          /* Science — forest / amber */
+  --accent: var(--c-forest-600); --accent-dark: #155c3a;
+  --accent-warm: #f5a623;
+}

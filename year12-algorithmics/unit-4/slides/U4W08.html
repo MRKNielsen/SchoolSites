@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W08 — The Limits of Computation</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W08 · The Limits of Computation</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>The Limits of Computation</h1>
+  <p>Unit 4 AOS3 · Week 8 — The Halting Problem, and what "thinking machine" means</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026</p>
+</section>
+
+<section class="slide" data-topic="U4W08 · The Limits of Computation">
+  <h2>This week</h2>
+  <ul>
+    <li>The Halting Problem — a task <em>provably</em> no algorithm can do.</li>
+    <li>Memo 03 workshop 2 — improved design + analysis drafting.</li>
+    <li>The Turing Test, strong vs weak AI, and the Chinese Room.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Deadline</span>
+    <p><b>Submission 3 due Friday</b> (Memo 03 + A05 + A06 + workbook), with the in-class test. SAC is next Friday — everything from Weeks 7–9 is in scope.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>The Halting Problem</h1>
+</section>
+
+<section class="slide" data-topic="U4W08 · The Halting Problem">
+  <h2>The problem</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">Halting Problem</span>
+    <p>Given a program \(P\) and an input \(x\): does \(P\) eventually halt when run on \(x\), or does it loop forever?</p>
+  </div>
+  <ul style="margin-top:16px;">
+    <li>Last week your Turing machine simulator gave up at 2000 steps with "infinite loop?" — it couldn't <em>know</em>.</li>
+    <li>Claim (Turing, 1936): no algorithm \(H(P, x)\) can decide this correctly for <em>all</em> programs and inputs.</li>
+    <li>Not "we haven't found one yet" — <b>provably impossible</b>. The proof fits on one slide.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W08 · The Halting Problem">
+  <h2>The proof (by contradiction)</h2>
+  <ol class="small">
+    <li><b>Suppose</b> a halting decider \(H(P, x)\) exists: returns <em>halts</em> or <em>loops</em>, always correct, always terminates.</li>
+    <li><b>Build a troublemaker</b> using \(H\) as a component:</li>
+  </ol>
+  <pre class="code" style="font-size:19px; margin-top:6px;"><span><b>Algorithm</b> D(P):</span><span>    <b>If</b> H(P, P) = halts <b>Do</b>       <i># would P halt on itself?</i></span><span>        loop forever</span><span>    <b>Else</b> <b>Do</b></span><span>        <b>Return</b>                   <i># halt immediately</i></span></pre>
+  <ol class="small" start="3">
+    <li><b>Ask the fatal question:</b> what does \(D(D)\) do?</li>
+    <li>If \(H(D,D)\) says <em>halts</em> → \(D(D)\) loops forever. If \(H(D,D)\) says <em>loops</em> → \(D(D)\) halts. Either way \(H\) was <b>wrong</b>.</li>
+    <li>Contradiction. No such \(H\) exists. ∎</li>
+  </ol>
+  <div class="box key"><span class="lbl">The move to remember</span>
+    <p>Self-reference + contradiction — the same engine as "this statement is false", aimed at computation.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W08 · The Halting Problem">
+  <h2>What undecidability means (and doesn't)</h2>
+  <ul>
+    <li>It answers Hilbert: the Entscheidungsproblem has <b>no</b> solution — mathematics cannot be fully mechanised.</li>
+    <li>Practical shadow: perfect malware detection, perfect infinite-loop detection, perfect program-equivalence checking — all provably impossible in general.</li>
+    <li>It does <b>not</b> mean these tools can't exist at all — it means they must be incomplete: sometimes wrong, sometimes "don't know", or restricted to special cases.</li>
+    <li>Contrast with intractability: NP-hard = no <em>fast</em> algorithm (we believe); undecidable = no algorithm <em>at all</em> (we've proven).</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Sort these: "decide if a program prints 'hello'", "find the best TSP tour", "sort a list" — into P / NP-hard / undecidable, with one reason each.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W08 · Workshop 2 · Memo 03">
+  <h2>Memo 03 workshop 2</h2>
+  <ul>
+    <li>By end of period: improved design described, technique justified against one alternative, analysis started.</li>
+    <li>A06 experiment (optimality audit): run it <em>today</em> if you're heuristic-based — results take iteration.</li>
+    <li>Checkpoint Thursday; Submission 3 Friday.</li>
+  </ul>
+  <div class="box key"><span class="lbl">C10 sentence frame</span>
+    <p>"Compared to the original \(O(\dots)\) exact solution, the redesign achieves \(O(\dots)\) at the cost of ⟨guarantee⟩; on the A06 experiment the quality gap was ⟨x⟩%, which is acceptable/unacceptable for ⟨original requirement⟩ because ⟨reason⟩."</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Can machines think?</h1>
+</section>
+
+<section class="slide" data-topic="U4W08 · Can machines think?">
+  <h2>The Turing Test (1950)</h2>
+  <ul>
+    <li>Turing replaced "can machines think?" (hopelessly vague) with an operational game: an interrogator converses by text with a human and a machine; if the machine is <b>indistinguishable</b>, it passes.</li>
+    <li>The move: define intelligence by <em>behaviour</em>, not by inner substance.</li>
+    <li>Objections Turing pre-answered: the mathematical objection (machines have Gödel/halting limits — so do humans, arguably), the consciousness objection (how would you know for a human?), Lady Lovelace's objection (machines only do what they're told).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Note the connection</span>
+    <p>The same man proved what machines <em>cannot</em> do (halting) and asked whether they could <em>think</em>. The two questions frame this whole AOS.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W08 · Can machines think?">
+  <h2>Strong AI vs weak AI</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Claim</th><th>Passing the Turing Test would…</th></tr>
+    <tr><td><b>Weak AI</b></td><td>Machines can <em>simulate</em> intelligent behaviour — act as if they understand.</td><td>…demonstrate successful simulation. Fine.</td></tr>
+    <tr><td><b>Strong AI</b></td><td>A suitably programmed machine literally <em>has</em> a mind — it genuinely understands.</td><td>…be evidence of real understanding.</td></tr>
+  </table>
+  <ul style="margin-top:18px;">
+    <li>Weak AI is an engineering claim; strong AI is a philosophical one.</li>
+    <li>Searle's Chinese Room (1980) attacks <b>strong AI specifically</b> — next slide.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W08 · Can machines think?">
+  <h2>The Chinese Room</h2>
+  <ul class="small">
+    <li><b>Setup:</b> Searle, who knows no Chinese, sits in a room with a rulebook. Chinese questions come in; he follows the rules to assemble Chinese answers. To outsiders, the room "speaks Chinese" fluently.</li>
+    <li><b>The argument:</b> Searle manipulates symbols by rules without understanding a word — syntax alone. If running the right program were sufficient for understanding, Searle would understand Chinese. He doesn't. So <em>running a program is not sufficient for understanding</em> — strong AI is false.</li>
+    <li><b>The systems reply:</b> Searle is just the CPU; the <em>whole system</em> (man + rulebook + state) understands. Searle's counter: memorise the rulebook — still no understanding.</li>
+    <li><b>The robot reply:</b> ground the symbols in sensors and action, and understanding follows. Searle: still just more symbols coming in.</li>
+  </ul>
+  <div class="box key"><span class="lbl">For the SAC</span>
+    <p>You must be able to <em>describe</em> the argument and <em>mount a case for or against it</em> — pick a side, use a reply and a counter, and conclude. Fence-sitting scores the description marks only.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W08 · The Limits of Computation">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Workbook</b> <code>u4w08.py</code>: halting-style puzzles + a Chinese Room argument-mapper.</li>
+    <li><b>Friday: Submission 3</b> + in-class test (advanced design techniques).</li>
+    <li>Next week: machine learning — how data-driven algorithms learn — then the SAC on Friday.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Halting is undecidable by self-reference; the Turing Test defines intelligence behaviourally; the Chinese Room denies that syntax suffices for understanding.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 12</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

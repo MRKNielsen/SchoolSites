@@ -12,108 +12,42 @@
   };
 </script>
 <script src="mathjax-tex-svg.js" async></script>
-<style>
-  :root {
-    --teal: #1F3A93; --teal-dark: #16296b;
-    --slate: #475569; --slate-dark: #334155;
-    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
-    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: var(--bg); overflow: hidden;
-    font-family: "Segoe UI", system-ui, sans-serif; }
-  #stage { position: absolute; inset: 0; display: flex; overflow-y: auto; padding: 5vh 5vw; }
-  .slide { width: 1280px; min-height: 720px; background: var(--paper); color: var(--ink);
-    display: none; flex-direction: column; padding: 52px 68px 64px; position: relative; margin: auto; flex-shrink: 0; border-radius: 6px; }
-  .slide.active { display: flex; }
-  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
-  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
-  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
-  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
-  .slide.title h1::after, .slide.section h1::after { background: #fff; }
-  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
-  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
-  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
-  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
-  ul, ol { margin-left: 30px; }
-  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
-  p { font-size: 25px; line-height: 1.5; }
-  .small li, .small p { font-size: 22px; }
-  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
-  .col { flex: 1; min-width: 0; }
-  .col.narrow { flex: .8; }
-  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
-  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
-  .box p, .box li { font-size: 23px; }
-  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
-  .key .lbl { color: var(--teal-dark); }
-  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
-  .try .lbl { color: var(--amber); }
-  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
-  .ex .lbl { color: var(--slate-dark); }
-  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
-  .defn .lbl { color: var(--maroon); }
-  mjx-container { font-size: 108% !important; }
-  table.t { border-collapse: collapse; margin-top: 8px; }
-  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
-  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
-  table.t td { border-bottom: 1px solid var(--line); }
-  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
-  table.t td.c, table.t th.c { text-align: center; }
-  .step { visibility: hidden; }
-  .step.shown { visibility: visible; }
-  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
-    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
-    font-family: inherit; letter-spacing: .04em; }
-  button.rvl:hover { background: var(--teal-dark); }
-  button.rvl.done { opacity: .25; cursor: default; }
-  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
-    border-radius: 0 0 6px 6px; }
-  .slide.title .footerbar, .slide.section .footerbar { display: none; }
-  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
-  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
-  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
-  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
-    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
-  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
 </head>
-<body>
-<div id="progress"></div>
-<div id="stage">
+<body class="deck-page theme-specialist">
+<div class="progress"></div>
+<div class="lessontag">T3W03 · Linear Combinations I</div>
+<main class="deck">
 
 <!-- 1 · Title -->
-<section class="slide title">
+<section class="slide section-slide">
   <h1>Linear Combinations of Random Variables I</h1>
-  <p>Chapter 15 (A–C) · Week 3 — What happens to mean and spread when you scale, shift and add</p>
-  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 2 (Differential Equations) this week</p>
+  <p>Chapter 15 (A–C) · Week 5 — What happens to mean and spread when you scale, shift and add</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 3 (Probability &amp; Statistics): Thu 27 Aug, Week 7</p>
   <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
 </section>
 
 <!-- 2 · Week map -->
-<section class="slide">
-  <h1>This week: four lessons (SAC 2 runs this week too)</h1>
-  <table class="t">
+<section class="slide" data-topic="T3W03 · Linear Combinations I">
+  <h2>This week: four lessons</h2>
+  <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
     <tr><td class="c"><b>1</b></td><td>15A</td><td>One variable: \(aX + b\)</td><td>track mean and sd through scaling and shifting</td></tr>
     <tr><td class="c"><b>2</b></td><td>15B</td><td>Two variables: \(aX + bY\)</td><td>combine independent variables; \(2X\) vs \(X_1+X_2\)</td></tr>
     <tr><td class="c"><b>3</b></td><td>15C</td><td>Normal combinations</td><td>state the distribution, standardise, find probabilities</td></tr>
-    <tr><td class="c"><b>4</b></td><td>15A–C</td><td>Mixed practice + SAC 2</td><td>solve full multi-part combination problems</td></tr>
+    <tr><td class="c"><b>4</b></td><td>15A–C</td><td>Mixed practice + SAC 3 outlook</td><td>solve full multi-part combination problems</td></tr>
   </table>
   <div class="box key"><span class="lbl">Key idea</span>
     <p>Means combine exactly as you'd hope. Variances don't: they pick up <b>squared</b> coefficients, and they <b>add</b> even when you subtract. Most marks lost this term trace back to that one sentence.</p>
   </div>
-  <div class="footerbar"><span>T3W03 · Linear Combinations I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 1 · 15A ═══ -->
 
-<section class="slide section" data-lesson="1">
+<section class="slide section-slide" data-lesson="1">
   <div class="kicker">Lesson 1 · 15A</div>
   <h1>Linear functions of a random variable</h1>
   <ul class="goals">
@@ -123,43 +57,41 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Scaling and shifting: \(Y = aX + b\)</h1>
+<section class="slide" data-topic="Lesson 1 · Linear functions">
+  <h2>Scaling and shifting: \(Y = aX + b\)</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[E(aX + b) = a\,E(X) + b \qquad\quad \text{Var}(aX + b) = a^2\,\text{Var}(X) \qquad\quad \text{sd}(aX+b) = |a|\,\text{sd}(X)\]</p>
   <ul>
     <li>Shifting by \(b\) moves the centre but does nothing to the spread.</li>
     <li>Scaling by \(a\) stretches the spread by \(|a|\) — so the variance stretches by \(a^2\).</li>
   </ul>
-  <div class="box ex"><span class="lbl">Example 1</span>
+  <div class="box example"><span class="lbl">Example 1</span>
     <p>\(X\) has distribution \(P(X=0)=0.3\), \(P(X=1)=0.4\), \(P(X=2)=0.3\). Find \(E(Y)\) and \(\text{Var}(Y)\) for \(Y = 3X + 2\).</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">\(E(X) = 0(0.3) + 1(0.4) + 2(0.3) = 1\); \(E(X^2) = 0 + 0.4 + 4(0.3) = 1.6\), so \(\text{Var}(X) = 1.6 - 1 = 0.6\).</li>
-    <li class="step">\(E(Y) = 3(1) + 2 = 5\); \(\text{Var}(Y) = 3^2(0.6) = 5.4\). The \(+2\) never touches the variance.</li>
+    <li class="frag">\(E(X) = 0(0.3) + 1(0.4) + 2(0.3) = 1\); \(E(X^2) = 0 + 0.4 + 4(0.3) = 1.6\), so \(\text{Var}(X) = 1.6 - 1 = 0.6\).</li>
+    <li class="frag">\(E(Y) = 3(1) + 2 = 5\); \(\text{Var}(Y) = 3^2(0.6) = 5.4\). The \(+2\) never touches the variance.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · Linear functions</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: a change of units</h1>
-  <div class="box ex"><span class="lbl">Example 2</span>
+<section class="slide" data-topic="Lesson 1 · Linear functions">
+  <h2>Worked example: a change of units</h2>
+  <div class="box example"><span class="lbl">Example 2</span>
     <p>Daily maximum temperatures in January have mean \(25\,^{\circ}\)C and standard deviation \(2\,^{\circ}\)C. A US weather app reports \(F = 1.8C + 32\). Find the mean and standard deviation in \(^{\circ}\)F.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">\(E(F) = 1.8(25) + 32 = 77\,^{\circ}\)F.</li>
-    <li class="step">\(\text{sd}(F) = |1.8| \times 2 = 3.6\,^{\circ}\)F — the \(+32\) does not touch the spread.</li>
-    <li class="step">Variance if you need it: \(\text{Var}(F) = 1.8^2 \times 4 = 12.96\) — never \(1.8 \times 4\).</li>
+    <li class="frag">\(E(F) = 1.8(25) + 32 = 77\,^{\circ}\)F.</li>
+    <li class="frag">\(\text{sd}(F) = |1.8| \times 2 = 3.6\,^{\circ}\)F — the \(+32\) does not touch the spread.</li>
+    <li class="frag">Variance if you need it: \(\text{Var}(F) = 1.8^2 \times 4 = 12.96\) — never \(1.8 \times 4\).</li>
   </ul>
   <div class="box key"><span class="lbl">Workflow</span>
     <p>Write the linear relationship first, then read off \(a\) and \(b\). The formulas do the rest.</p>
   </div>
-  <div class="footerbar"><span>Lesson 1 · Linear functions</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 1 — your turn</h1>
+<section class="slide" data-topic="Lesson 1 · Checkpoint">
+  <h2>Checkpoint 1 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Item prices in a shop have mean \$40 and standard deviation \$6. A 10% tax is applied to each price, then a \$2 handling fee is added.</p>
     <ul style="margin-top:8px;">
@@ -167,17 +99,16 @@
       <li><b>(b)</b> Find the mean, standard deviation and variance of \(P\).</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(P = 1.1X + 2\).</li>
-    <li class="step"><b>(b)</b> \(E(P) = 1.1(40) + 2 = \$46\); \(\text{sd}(P) = 1.1 \times 6 = \$6.60\); \(\text{Var}(P) = 1.21 \times 36 = 43.56\).</li>
+    <li class="frag"><b>(a)</b> \(P = 1.1X + 2\).</li>
+    <li class="frag"><b>(b)</b> \(E(P) = 1.1(40) + 2 = \$46\); \(\text{sd}(P) = 1.1 \times 6 = \$6.60\); \(\text{Var}(P) = 1.21 \times 36 = 43.56\).</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 2 · 15B ═══ -->
 
-<section class="slide section" data-lesson="2">
+<section class="slide section-slide" data-lesson="2">
   <div class="kicker">Lesson 2 · 15B</div>
   <h1>Linear combinations of independent variables</h1>
   <ul class="goals">
@@ -187,8 +118,8 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Combining two variables: \(aX + bY\)</h1>
+<section class="slide" data-topic="Lesson 2 · Linear combinations">
+  <h2>Combining two variables: \(aX + bY\)</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[E(aX + bY) = a\,E(X) + b\,E(Y)\]</p>
   <p style="text-align:center; margin:6px 0 16px;">\[\text{Var}(aX + bY) = a^2\,\text{Var}(X) + b^2\,\text{Var}(Y) \quad \text{(for independent } X, Y\text{)}\]</p>
   <div class="box defn"><span class="lbl">The subtraction trap</span>
@@ -197,20 +128,19 @@
   <div class="box key"><span class="lbl">Requirement</span>
     <p>The variance rule needs <b>independence</b>. The expectation rule doesn't — it always holds.</p>
   </div>
-  <div class="footerbar"><span>Lesson 2 · Linear combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>The classic distinction: \(2X\) versus \(X_1 + X_2\)</h1>
-  <div class="cols">
+<section class="slide" data-topic="Lesson 2 · Linear combinations">
+  <h2>The classic distinction: \(2X\) versus \(X_1 + X_2\)</h2>
+  <div class="cols even">
     <div class="col">
-      <div class="box ex"><span class="lbl">2X — one measurement, doubled</span>
+      <div class="box example"><span class="lbl">2X — one measurement, doubled</span>
         <p>\(E(2X) = 2\mu\)</p>
         <p>\(\text{Var}(2X) = 4\sigma^2\)</p>
       </div>
     </div>
     <div class="col">
-      <div class="box ex"><span class="lbl">X₁ + X₂ — two independent copies</span>
+      <div class="box example"><span class="lbl">X₁ + X₂ — two independent copies</span>
         <p>\(E(X_1 + X_2) = 2\mu\)</p>
         <p>\(\text{Var}(X_1 + X_2) = 2\sigma^2\)</p>
       </div>
@@ -223,18 +153,16 @@
   <div class="box try"><span class="lbl">Discuss</span>
     <p>Generalise: \(\text{Var}(X_1 + \cdots + X_n) = n\sigma^2\), but \(\text{Var}(nX) = n^2\sigma^2\). Which grows faster, and why does that make sense?</p>
   </div>
-  <div class="footerbar"><span>Lesson 2 · Linear combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Same mean, different spread — drawn</h1>
+<section class="slide" data-topic="Lesson 2 · Linear combinations">
+  <h2>Same mean, different spread — drawn</h2>
   <p style="font-size:21px; margin:0 0 2px;">Take \(X \sim N(10, 2^2)\):</p>
-  <svg viewBox="0 0 980 380" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="105.0" y1="24" x2="105.0" y2="328.0" stroke="#e2e8f0"/><text x="105.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">8</text><line x1="235.0" y1="24" x2="235.0" y2="328.0" stroke="#e2e8f0"/><text x="235.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">12</text><line x1="365.0" y1="24" x2="365.0" y2="328.0" stroke="#e2e8f0"/><text x="365.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">16</text><line x1="495.0" y1="24" x2="495.0" y2="328.0" stroke="#e2e8f0"/><text x="495.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">20</text><line x1="625.0" y1="24" x2="625.0" y2="328.0" stroke="#e2e8f0"/><text x="625.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">24</text><line x1="755.0" y1="24" x2="755.0" y2="328.0" stroke="#e2e8f0"/><text x="755.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">28</text><line x1="885.0" y1="24" x2="885.0" y2="328.0" stroke="#e2e8f0"/><text x="885.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">32</text><line x1="40" y1="328.0" x2="950" y2="328.0" stroke="#475569" stroke-width="2"/><line x1="495.0" y1="28" x2="495.0" y2="328.0" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,327.9 L115.8,327.9 L119.6,327.9 L123.4,327.9 L127.2,327.9 L131.0,327.9 L134.8,327.9 L138.6,327.8 L142.4,327.8 L146.2,327.8 L150.0,327.7 L153.8,327.7 L157.5,327.6 L161.3,327.6 L165.1,327.5 L168.9,327.5 L172.7,327.4 L176.5,327.3 L180.3,327.2 L184.1,327.0 L187.9,326.9 L191.7,326.7 L195.5,326.5 L199.3,326.3 L203.0,326.1 L206.8,325.8 L210.6,325.5 L214.4,325.2 L218.2,324.8 L222.0,324.4 L225.8,323.9 L229.6,323.4 L233.4,322.8 L237.2,322.2 L241.0,321.5 L244.8,320.7 L248.5,319.9 L252.3,318.9 L256.1,317.9 L259.9,316.8 L263.7,315.5 L267.5,314.2 L271.3,312.7 L275.1,311.1 L278.9,309.4 L282.7,307.5 L286.5,305.4 L290.2,303.3 L294.0,300.9 L297.8,298.4 L301.6,295.6 L305.4,292.7 L309.2,289.6 L313.0,286.3 L316.8,282.8 L320.6,279.1 L324.4,275.2 L328.2,271.0 L332.0,266.7 L335.8,262.1 L339.5,257.2 L343.3,252.2 L347.1,246.9 L350.9,241.4 L354.7,235.7 L358.5,229.8 L362.3,223.7 L366.1,217.4 L369.9,210.9 L373.7,204.2 L377.5,197.4 L381.2,190.5 L385.0,183.4 L388.8,176.2 L392.6,168.9 L396.4,161.6 L400.2,154.2 L404.0,146.8 L407.8,139.4 L411.6,132.1 L415.4,124.8 L419.2,117.6 L423.0,110.5 L426.7,103.5 L430.5,96.7 L434.3,90.2 L438.1,83.8 L441.9,77.7 L445.7,71.9 L449.5,66.4 L453.3,61.2 L457.1,56.4 L460.9,52.0 L464.7,48.0 L468.5,44.4 L472.3,41.2 L476.0,38.5 L479.8,36.3 L483.6,34.5 L487.4,33.3 L491.2,32.5 L495.0,32.3 L498.8,32.5 L502.6,33.3 L506.4,34.5 L510.2,36.3 L514.0,38.5 L517.8,41.2 L521.5,44.4 L525.3,48.0 L529.1,52.0 L532.9,56.4 L536.7,61.2 L540.5,66.4 L544.3,71.9 L548.1,77.7 L551.9,83.8 L555.7,90.2 L559.5,96.7 L563.3,103.5 L567.0,110.5 L570.8,117.6 L574.6,124.8 L578.4,132.1 L582.2,139.4 L586.0,146.8 L589.8,154.2 L593.6,161.6 L597.4,168.9 L601.2,176.2 L605.0,183.4 L608.8,190.5 L612.5,197.4 L616.3,204.2 L620.1,210.9 L623.9,217.4 L627.7,223.7 L631.5,229.8 L635.3,235.7 L639.1,241.4 L642.9,246.9 L646.7,252.2 L650.5,257.2 L654.2,262.1 L658.0,266.7 L661.8,271.0 L665.6,275.2 L669.4,279.1 L673.2,282.8 L677.0,286.3 L680.8,289.6 L684.6,292.7 L688.4,295.6 L692.2,298.4 L696.0,300.9 L699.8,303.3 L703.5,305.4 L707.3,307.5 L711.1,309.4 L714.9,311.1 L718.7,312.7 L722.5,314.2 L726.3,315.5 L730.1,316.8 L733.9,317.9 L737.7,318.9 L741.5,319.9 L745.2,320.7 L749.0,321.5 L752.8,322.2 L756.6,322.8 L760.4,323.4 L764.2,323.9 L768.0,324.4 L771.8,324.8 L775.6,325.2 L779.4,325.5 L783.2,325.8 L787.0,326.1 L790.8,326.3 L794.5,326.5 L798.3,326.7 L802.1,326.9 L805.9,327.0 L809.7,327.2 L813.5,327.3 L817.3,327.4 L821.1,327.5 L824.9,327.5 L828.7,327.6 L832.5,327.6 L836.2,327.7 L840.0,327.7 L843.8,327.8 L847.6,327.8 L851.4,327.8 L855.2,327.9 L859.0,327.9 L862.8,327.9 L866.6,327.9 L870.4,327.9 L874.2,327.9 L878.0,327.9 L881.7,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#1F3A93" stroke-width="3.5"/><path d="M40.0,327.5 L43.8,327.5 L47.6,327.4 L51.4,327.4 L55.2,327.3 L59.0,327.2 L62.8,327.2 L66.5,327.1 L70.3,327.0 L74.1,326.9 L77.9,326.8 L81.7,326.7 L85.5,326.5 L89.3,326.4 L93.1,326.2 L96.9,326.1 L100.7,325.9 L104.5,325.7 L108.2,325.5 L112.0,325.3 L115.8,325.0 L119.6,324.8 L123.4,324.5 L127.2,324.2 L131.0,323.9 L134.8,323.5 L138.6,323.1 L142.4,322.7 L146.2,322.3 L150.0,321.8 L153.8,321.3 L157.5,320.8 L161.3,320.2 L165.1,319.6 L168.9,319.0 L172.7,318.3 L176.5,317.6 L180.3,316.8 L184.1,316.0 L187.9,315.2 L191.7,314.3 L195.5,313.3 L199.3,312.3 L203.0,311.2 L206.8,310.1 L210.6,308.9 L214.4,307.6 L218.2,306.3 L222.0,304.9 L225.8,303.5 L229.6,302.0 L233.4,300.4 L237.2,298.7 L241.0,297.0 L244.8,295.2 L248.5,293.3 L252.3,291.4 L256.1,289.3 L259.9,287.2 L263.7,285.0 L267.5,282.8 L271.3,280.4 L275.1,278.0 L278.9,275.5 L282.7,272.9 L286.5,270.2 L290.2,267.5 L294.0,264.7 L297.8,261.8 L301.6,258.8 L305.4,255.8 L309.2,252.7 L313.0,249.5 L316.8,246.3 L320.6,243.0 L324.4,239.6 L328.2,236.2 L332.0,232.8 L335.8,229.3 L339.5,225.7 L343.3,222.1 L347.1,218.5 L350.9,214.9 L354.7,211.2 L358.5,207.5 L362.3,203.8 L366.1,200.1 L369.9,196.4 L373.7,192.7 L377.5,189.1 L381.2,185.4 L385.0,181.8 L388.8,178.2 L392.6,174.6 L396.4,171.2 L400.2,167.7 L404.0,164.3 L407.8,161.0 L411.6,157.8 L415.4,154.7 L419.2,151.6 L423.0,148.7 L426.7,145.8 L430.5,143.1 L434.3,140.5 L438.1,138.0 L441.9,135.6 L445.7,133.4 L449.5,131.3 L453.3,129.4 L457.1,127.6 L460.9,126.0 L464.7,124.5 L468.5,123.2 L472.3,122.1 L476.0,121.1 L479.8,120.3 L483.6,119.7 L487.4,119.3 L491.2,119.0 L495.0,118.9 L498.8,119.0 L502.6,119.3 L506.4,119.7 L510.2,120.3 L514.0,121.1 L517.8,122.1 L521.5,123.2 L525.3,124.5 L529.1,126.0 L532.9,127.6 L536.7,129.4 L540.5,131.3 L544.3,133.4 L548.1,135.6 L551.9,138.0 L555.7,140.5 L559.5,143.1 L563.3,145.8 L567.0,148.7 L570.8,151.6 L574.6,154.7 L578.4,157.8 L582.2,161.0 L586.0,164.3 L589.8,167.7 L593.6,171.2 L597.4,174.6 L601.2,178.2 L605.0,181.8 L608.8,185.4 L612.5,189.1 L616.3,192.7 L620.1,196.4 L623.9,200.1 L627.7,203.8 L631.5,207.5 L635.3,211.2 L639.1,214.9 L642.9,218.5 L646.7,222.1 L650.5,225.7 L654.2,229.3 L658.0,232.8 L661.8,236.2 L665.6,239.6 L669.4,243.0 L673.2,246.3 L677.0,249.5 L680.8,252.7 L684.6,255.8 L688.4,258.8 L692.2,261.8 L696.0,264.7 L699.8,267.5 L703.5,270.2 L707.3,272.9 L711.1,275.5 L714.9,278.0 L718.7,280.4 L722.5,282.8 L726.3,285.0 L730.1,287.2 L733.9,289.3 L737.7,291.4 L741.5,293.3 L745.2,295.2 L749.0,297.0 L752.8,298.7 L756.6,300.4 L760.4,302.0 L764.2,303.5 L768.0,304.9 L771.8,306.3 L775.6,307.6 L779.4,308.9 L783.2,310.1 L787.0,311.2 L790.8,312.3 L794.5,313.3 L798.3,314.3 L802.1,315.2 L805.9,316.0 L809.7,316.8 L813.5,317.6 L817.3,318.3 L821.1,319.0 L824.9,319.6 L828.7,320.2 L832.5,320.8 L836.2,321.3 L840.0,321.8 L843.8,322.3 L847.6,322.7 L851.4,323.1 L855.2,323.5 L859.0,323.9 L862.8,324.2 L866.6,324.5 L870.4,324.8 L874.2,325.0 L878.0,325.3 L881.7,325.5 L885.5,325.7 L889.3,325.9 L893.1,326.1 L896.9,326.2 L900.7,326.4 L904.5,326.5 L908.3,326.7 L912.1,326.8 L915.9,326.9 L919.7,327.0 L923.5,327.1 L927.2,327.2 L931.0,327.2 L934.8,327.3 L938.6,327.4 L942.4,327.4 L946.2,327.5 L950.0,327.5" fill="none" stroke="#8E244D" stroke-width="3.5"/><text x="598.9999999999999" y="65.9310344827586" font-size="19" font-weight="700" fill="#1F3A93">X&#8321;+X&#8322; ~ N(20, 8)</text><text x="699.75" y="212.6896551724138" font-size="19" font-weight="700" fill="#8E244D">2X ~ N(20, 16)</text><text x="495.0" y="26" font-size="16" fill="#475569" text-anchor="middle">same mean, &#956; = 20</text></svg>
-  <div class="footerbar"><span>Lesson 2 · Linear combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+  <svg viewBox="0 0 980 380" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="105.0" y1="24" x2="105.0" y2="328.0" stroke="#e2e8f0"/><text x="105.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">8</text><line x1="235.0" y1="24" x2="235.0" y2="328.0" stroke="#e2e8f0"/><text x="235.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">12</text><line x1="365.0" y1="24" x2="365.0" y2="328.0" stroke="#e2e8f0"/><text x="365.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">16</text><line x1="495.0" y1="24" x2="495.0" y2="328.0" stroke="#e2e8f0"/><text x="495.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">20</text><line x1="625.0" y1="24" x2="625.0" y2="328.0" stroke="#e2e8f0"/><text x="625.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">24</text><line x1="755.0" y1="24" x2="755.0" y2="328.0" stroke="#e2e8f0"/><text x="755.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">28</text><line x1="885.0" y1="24" x2="885.0" y2="328.0" stroke="#e2e8f0"/><text x="885.0" y="350.0" font-size="16" fill="#475569" text-anchor="middle">32</text><line x1="40" y1="328.0" x2="950" y2="328.0" stroke="#475569" stroke-width="2"/><line x1="495.0" y1="28" x2="495.0" y2="328.0" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><path d="M40.0,328.0 L43.8,328.0 L47.6,328.0 L51.4,328.0 L55.2,328.0 L59.0,328.0 L62.8,328.0 L66.5,328.0 L70.3,328.0 L74.1,328.0 L77.9,328.0 L81.7,328.0 L85.5,328.0 L89.3,328.0 L93.1,328.0 L96.9,328.0 L100.7,328.0 L104.5,328.0 L108.2,328.0 L112.0,327.9 L115.8,327.9 L119.6,327.9 L123.4,327.9 L127.2,327.9 L131.0,327.9 L134.8,327.9 L138.6,327.8 L142.4,327.8 L146.2,327.8 L150.0,327.7 L153.8,327.7 L157.5,327.6 L161.3,327.6 L165.1,327.5 L168.9,327.5 L172.7,327.4 L176.5,327.3 L180.3,327.2 L184.1,327.0 L187.9,326.9 L191.7,326.7 L195.5,326.5 L199.3,326.3 L203.0,326.1 L206.8,325.8 L210.6,325.5 L214.4,325.2 L218.2,324.8 L222.0,324.4 L225.8,323.9 L229.6,323.4 L233.4,322.8 L237.2,322.2 L241.0,321.5 L244.8,320.7 L248.5,319.9 L252.3,318.9 L256.1,317.9 L259.9,316.8 L263.7,315.5 L267.5,314.2 L271.3,312.7 L275.1,311.1 L278.9,309.4 L282.7,307.5 L286.5,305.4 L290.2,303.3 L294.0,300.9 L297.8,298.4 L301.6,295.6 L305.4,292.7 L309.2,289.6 L313.0,286.3 L316.8,282.8 L320.6,279.1 L324.4,275.2 L328.2,271.0 L332.0,266.7 L335.8,262.1 L339.5,257.2 L343.3,252.2 L347.1,246.9 L350.9,241.4 L354.7,235.7 L358.5,229.8 L362.3,223.7 L366.1,217.4 L369.9,210.9 L373.7,204.2 L377.5,197.4 L381.2,190.5 L385.0,183.4 L388.8,176.2 L392.6,168.9 L396.4,161.6 L400.2,154.2 L404.0,146.8 L407.8,139.4 L411.6,132.1 L415.4,124.8 L419.2,117.6 L423.0,110.5 L426.7,103.5 L430.5,96.7 L434.3,90.2 L438.1,83.8 L441.9,77.7 L445.7,71.9 L449.5,66.4 L453.3,61.2 L457.1,56.4 L460.9,52.0 L464.7,48.0 L468.5,44.4 L472.3,41.2 L476.0,38.5 L479.8,36.3 L483.6,34.5 L487.4,33.3 L491.2,32.5 L495.0,32.3 L498.8,32.5 L502.6,33.3 L506.4,34.5 L510.2,36.3 L514.0,38.5 L517.8,41.2 L521.5,44.4 L525.3,48.0 L529.1,52.0 L532.9,56.4 L536.7,61.2 L540.5,66.4 L544.3,71.9 L548.1,77.7 L551.9,83.8 L555.7,90.2 L559.5,96.7 L563.3,103.5 L567.0,110.5 L570.8,117.6 L574.6,124.8 L578.4,132.1 L582.2,139.4 L586.0,146.8 L589.8,154.2 L593.6,161.6 L597.4,168.9 L601.2,176.2 L605.0,183.4 L608.8,190.5 L612.5,197.4 L616.3,204.2 L620.1,210.9 L623.9,217.4 L627.7,223.7 L631.5,229.8 L635.3,235.7 L639.1,241.4 L642.9,246.9 L646.7,252.2 L650.5,257.2 L654.2,262.1 L658.0,266.7 L661.8,271.0 L665.6,275.2 L669.4,279.1 L673.2,282.8 L677.0,286.3 L680.8,289.6 L684.6,292.7 L688.4,295.6 L692.2,298.4 L696.0,300.9 L699.8,303.3 L703.5,305.4 L707.3,307.5 L711.1,309.4 L714.9,311.1 L718.7,312.7 L722.5,314.2 L726.3,315.5 L730.1,316.8 L733.9,317.9 L737.7,318.9 L741.5,319.9 L745.2,320.7 L749.0,321.5 L752.8,322.2 L756.6,322.8 L760.4,323.4 L764.2,323.9 L768.0,324.4 L771.8,324.8 L775.6,325.2 L779.4,325.5 L783.2,325.8 L787.0,326.1 L790.8,326.3 L794.5,326.5 L798.3,326.7 L802.1,326.9 L805.9,327.0 L809.7,327.2 L813.5,327.3 L817.3,327.4 L821.1,327.5 L824.9,327.5 L828.7,327.6 L832.5,327.6 L836.2,327.7 L840.0,327.7 L843.8,327.8 L847.6,327.8 L851.4,327.8 L855.2,327.9 L859.0,327.9 L862.8,327.9 L866.6,327.9 L870.4,327.9 L874.2,327.9 L878.0,327.9 L881.7,328.0 L885.5,328.0 L889.3,328.0 L893.1,328.0 L896.9,328.0 L900.7,328.0 L904.5,328.0 L908.3,328.0 L912.1,328.0 L915.9,328.0 L919.7,328.0 L923.5,328.0 L927.2,328.0 L931.0,328.0 L934.8,328.0 L938.6,328.0 L942.4,328.0 L946.2,328.0 L950.0,328.0" fill="none" stroke="#d02670" stroke-width="3.5"/><path d="M40.0,327.5 L43.8,327.5 L47.6,327.4 L51.4,327.4 L55.2,327.3 L59.0,327.2 L62.8,327.2 L66.5,327.1 L70.3,327.0 L74.1,326.9 L77.9,326.8 L81.7,326.7 L85.5,326.5 L89.3,326.4 L93.1,326.2 L96.9,326.1 L100.7,325.9 L104.5,325.7 L108.2,325.5 L112.0,325.3 L115.8,325.0 L119.6,324.8 L123.4,324.5 L127.2,324.2 L131.0,323.9 L134.8,323.5 L138.6,323.1 L142.4,322.7 L146.2,322.3 L150.0,321.8 L153.8,321.3 L157.5,320.8 L161.3,320.2 L165.1,319.6 L168.9,319.0 L172.7,318.3 L176.5,317.6 L180.3,316.8 L184.1,316.0 L187.9,315.2 L191.7,314.3 L195.5,313.3 L199.3,312.3 L203.0,311.2 L206.8,310.1 L210.6,308.9 L214.4,307.6 L218.2,306.3 L222.0,304.9 L225.8,303.5 L229.6,302.0 L233.4,300.4 L237.2,298.7 L241.0,297.0 L244.8,295.2 L248.5,293.3 L252.3,291.4 L256.1,289.3 L259.9,287.2 L263.7,285.0 L267.5,282.8 L271.3,280.4 L275.1,278.0 L278.9,275.5 L282.7,272.9 L286.5,270.2 L290.2,267.5 L294.0,264.7 L297.8,261.8 L301.6,258.8 L305.4,255.8 L309.2,252.7 L313.0,249.5 L316.8,246.3 L320.6,243.0 L324.4,239.6 L328.2,236.2 L332.0,232.8 L335.8,229.3 L339.5,225.7 L343.3,222.1 L347.1,218.5 L350.9,214.9 L354.7,211.2 L358.5,207.5 L362.3,203.8 L366.1,200.1 L369.9,196.4 L373.7,192.7 L377.5,189.1 L381.2,185.4 L385.0,181.8 L388.8,178.2 L392.6,174.6 L396.4,171.2 L400.2,167.7 L404.0,164.3 L407.8,161.0 L411.6,157.8 L415.4,154.7 L419.2,151.6 L423.0,148.7 L426.7,145.8 L430.5,143.1 L434.3,140.5 L438.1,138.0 L441.9,135.6 L445.7,133.4 L449.5,131.3 L453.3,129.4 L457.1,127.6 L460.9,126.0 L464.7,124.5 L468.5,123.2 L472.3,122.1 L476.0,121.1 L479.8,120.3 L483.6,119.7 L487.4,119.3 L491.2,119.0 L495.0,118.9 L498.8,119.0 L502.6,119.3 L506.4,119.7 L510.2,120.3 L514.0,121.1 L517.8,122.1 L521.5,123.2 L525.3,124.5 L529.1,126.0 L532.9,127.6 L536.7,129.4 L540.5,131.3 L544.3,133.4 L548.1,135.6 L551.9,138.0 L555.7,140.5 L559.5,143.1 L563.3,145.8 L567.0,148.7 L570.8,151.6 L574.6,154.7 L578.4,157.8 L582.2,161.0 L586.0,164.3 L589.8,167.7 L593.6,171.2 L597.4,174.6 L601.2,178.2 L605.0,181.8 L608.8,185.4 L612.5,189.1 L616.3,192.7 L620.1,196.4 L623.9,200.1 L627.7,203.8 L631.5,207.5 L635.3,211.2 L639.1,214.9 L642.9,218.5 L646.7,222.1 L650.5,225.7 L654.2,229.3 L658.0,232.8 L661.8,236.2 L665.6,239.6 L669.4,243.0 L673.2,246.3 L677.0,249.5 L680.8,252.7 L684.6,255.8 L688.4,258.8 L692.2,261.8 L696.0,264.7 L699.8,267.5 L703.5,270.2 L707.3,272.9 L711.1,275.5 L714.9,278.0 L718.7,280.4 L722.5,282.8 L726.3,285.0 L730.1,287.2 L733.9,289.3 L737.7,291.4 L741.5,293.3 L745.2,295.2 L749.0,297.0 L752.8,298.7 L756.6,300.4 L760.4,302.0 L764.2,303.5 L768.0,304.9 L771.8,306.3 L775.6,307.6 L779.4,308.9 L783.2,310.1 L787.0,311.2 L790.8,312.3 L794.5,313.3 L798.3,314.3 L802.1,315.2 L805.9,316.0 L809.7,316.8 L813.5,317.6 L817.3,318.3 L821.1,319.0 L824.9,319.6 L828.7,320.2 L832.5,320.8 L836.2,321.3 L840.0,321.8 L843.8,322.3 L847.6,322.7 L851.4,323.1 L855.2,323.5 L859.0,323.9 L862.8,324.2 L866.6,324.5 L870.4,324.8 L874.2,325.0 L878.0,325.3 L881.7,325.5 L885.5,325.7 L889.3,325.9 L893.1,326.1 L896.9,326.2 L900.7,326.4 L904.5,326.5 L908.3,326.7 L912.1,326.8 L915.9,326.9 L919.7,327.0 L923.5,327.1 L927.2,327.2 L931.0,327.2 L934.8,327.3 L938.6,327.4 L942.4,327.4 L946.2,327.5 L950.0,327.5" fill="none" stroke="#9d144d" stroke-width="3.5"/><text x="598.9999999999999" y="65.9310344827586" font-size="19" font-weight="700" fill="#d02670">X&#8321;+X&#8322; ~ N(20, 8)</text><text x="699.75" y="212.6896551724138" font-size="19" font-weight="700" fill="#9d144d">2X ~ N(20, 16)</text><text x="495.0" y="26" font-size="16" fill="#475569" text-anchor="middle">same mean, &#956; = 20</text></svg>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 2 — your turn</h1>
+<section class="slide" data-topic="Lesson 2 · Checkpoint">
+  <h2>Checkpoint 2 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>\(X\) has mean 50 and variance 9; \(Y\) has mean 20 and variance 4; \(X\) and \(Y\) are independent.</p>
     <ul style="margin-top:8px;">
@@ -242,17 +170,16 @@
       <li><b>(b)</b> Five independent items each have mean 12 kg, sd 2 kg. Compare the sd of the <b>total</b> \(X_1 + \cdots + X_5\) with the sd of \(5X\).</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(E = 3(50) - 2(20) = 110\); \(\text{Var} = 9(9) + 4(4) = 97\) — note both terms <b>added</b>, sd \(= \sqrt{97} \approx 9.85\).</li>
-    <li class="step"><b>(b)</b> Total: \(\text{Var} = 5(4) = 20\), sd \(= 2\sqrt{5} \approx 4.47\) kg. \(5X\): \(\text{Var} = 25(4) = 100\), sd \(= 10\) kg — more than double.</li>
+    <li class="frag"><b>(a)</b> \(E = 3(50) - 2(20) = 110\); \(\text{Var} = 9(9) + 4(4) = 97\) — note both terms <b>added</b>, sd \(= \sqrt{97} \approx 9.85\).</li>
+    <li class="frag"><b>(b)</b> Total: \(\text{Var} = 5(4) = 20\), sd \(= 2\sqrt{5} \approx 4.47\) kg. \(5X\): \(\text{Var} = 25(4) = 100\), sd \(= 10\) kg — more than double.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 3 · 15C ═══ -->
 
-<section class="slide section" data-lesson="3">
+<section class="slide section-slide" data-lesson="3">
   <div class="kicker">Lesson 3 · 15C</div>
   <h1>Linear combinations of normal variables</h1>
   <ul class="goals">
@@ -262,52 +189,49 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Normality survives linear combination</h1>
+<section class="slide" data-topic="Lesson 3 · Normal combinations">
+  <h2>Normality survives linear combination</h2>
   <div class="box defn"><span class="lbl">Fact</span>
     <p>If \(X\) and \(Y\) are independent normals, then \(aX + bY + c\) is also <b>normal</b> — mean and variance from the rules above.</p>
   </div>
-  <div class="box ex"><span class="lbl">Example 3</span>
+  <div class="box example"><span class="lbl">Example 3</span>
     <p>Juice bottles: \(X \sim N(502,\, 2^2)\) mL. Find \(P(\text{four-pack total} &lt; 2000)\).</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">Name it: \(T = X_1 + X_2 + X_3 + X_4\) (four independent bottles, not \(4X\)).</li>
-    <li class="step">\(E(T) = 4 \times 502 = 2008\); \(\text{Var}(T) = 4 \times 4 = 16\); so \(T \sim N(2008,\, 4^2)\).</li>
-    <li class="step">\(P(T &lt; 2000) = P\left(Z &lt; \dfrac{2000 - 2008}{4}\right) = P(Z &lt; -2) \approx 0.0228\).</li>
+    <li class="frag">Name it: \(T = X_1 + X_2 + X_3 + X_4\) (four independent bottles, not \(4X\)).</li>
+    <li class="frag">\(E(T) = 4 \times 502 = 2008\); \(\text{Var}(T) = 4 \times 4 = 16\); so \(T \sim N(2008,\, 4^2)\).</li>
+    <li class="frag">\(P(T &lt; 2000) = P\left(Z &lt; \dfrac{2000 - 2008}{4}\right) = P(Z &lt; -2) \approx 0.0228\).</li>
   </ul>
   <div class="box key"><span class="lbl">All four steps carry marks</span>
     <p>Name the combination → mean &amp; variance → state the distribution → standardise.</p>
   </div>
-  <div class="footerbar"><span>Lesson 3 · Normal combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: comparing two normals</h1>
-  <div class="box ex"><span class="lbl">Example 4</span>
+<section class="slide" data-topic="Lesson 3 · Normal combinations">
+  <h2>Worked example: comparing two normals</h2>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>Tom's swim times are \(N(62,\, 1.5^2)\) s; Sam's are \(N(60,\, 2^2)\) s, independently. Find the probability Tom beats Sam in a race.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Tom wins when \(T &lt; S\), i.e. \(D = T - S &lt; 0\).</li>
-    <li class="step">\(E(D) = 62 - 60 = 2\); \(\text{Var}(D) = 1.5^2 + 2^2 = 6.25\), so \(D \sim N(2,\, 2.5^2)\).</li>
-    <li class="step">\(P(D &lt; 0) = P\left(Z &lt; \dfrac{0 - 2}{2.5}\right) = P(Z &lt; -0.8) \approx 0.212\).</li>
+    <li class="frag">Tom wins when \(T &lt; S\), i.e. \(D = T - S &lt; 0\).</li>
+    <li class="frag">\(E(D) = 62 - 60 = 2\); \(\text{Var}(D) = 1.5^2 + 2^2 = 6.25\), so \(D \sim N(2,\, 2.5^2)\).</li>
+    <li class="frag">\(P(D &lt; 0) = P\left(Z &lt; \dfrac{0 - 2}{2.5}\right) = P(Z &lt; -0.8) \approx 0.212\).</li>
   </ul>
   <div class="box key"><span class="lbl">Note the variance</span>
     <p>Even though we subtracted the means, we <b>added</b> the variances: \(1.5^2 + 2^2\), not \(2^2 - 1.5^2\).</p>
   </div>
-  <div class="footerbar"><span>Lesson 3 · Normal combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Seeing it: the difference is wider than either</h1>
-  <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">-8</text><line x1="156" y1="30" x2="156" y2="330" stroke="#e2e8f0"/><text x="156" y="352" font-size="16" fill="#475569" text-anchor="middle">-6</text><line x1="242" y1="30" x2="242" y2="330" stroke="#e2e8f0"/><text x="242" y="352" font-size="16" fill="#475569" text-anchor="middle">-4</text><line x1="328" y1="30" x2="328" y2="330" stroke="#e2e8f0"/><text x="328" y="352" font-size="16" fill="#475569" text-anchor="middle">-2</text><line x1="414" y1="30" x2="414" y2="330" stroke="#e2e8f0"/><text x="414" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="586" y1="30" x2="586" y2="330" stroke="#e2e8f0"/><text x="586" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="672" y1="30" x2="672" y2="330" stroke="#e2e8f0"/><text x="672" y="352" font-size="16" fill="#475569" text-anchor="middle">6</text><line x1="758" y1="30" x2="758" y2="330" stroke="#e2e8f0"/><text x="758" y="352" font-size="16" fill="#475569" text-anchor="middle">8</text><line x1="844" y1="30" x2="844" y2="330" stroke="#e2e8f0"/><text x="844" y="352" font-size="16" fill="#475569" text-anchor="middle">10</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">12</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,330.0 L70.0,329.9 L73.4,329.9 L76.9,329.9 L80.3,329.9 L83.8,329.8 L87.2,329.8 L90.6,329.8 L94.1,329.8 L97.5,329.7 L101.0,329.7 L104.4,329.7 L107.8,329.6 L111.3,329.6 L114.7,329.5 L118.2,329.5 L121.6,329.4 L125.0,329.4 L128.5,329.3 L131.9,329.2 L135.4,329.1 L138.8,329.0 L142.2,328.9 L145.7,328.8 L149.1,328.6 L152.6,328.5 L156.0,328.3 L159.4,328.2 L162.9,328.0 L166.3,327.7 L169.8,327.5 L173.2,327.3 L176.6,327.0 L180.1,326.7 L183.5,326.3 L187.0,326.0 L190.4,325.6 L193.8,325.2 L197.3,324.7 L200.7,324.2 L204.2,323.7 L207.6,323.1 L211.0,322.5 L214.5,321.8 L217.9,321.1 L221.4,320.3 L224.8,319.5 L228.2,318.6 L231.7,317.6 L235.1,316.6 L238.6,315.5 L242.0,314.3 L245.4,313.1 L248.9,311.8 L252.3,310.4 L255.8,308.9 L259.2,307.3 L262.6,305.6 L266.1,303.8 L269.5,302.0 L273.0,300.0 L276.4,297.9 L279.8,295.7 L283.3,293.4 L286.7,291.0 L290.2,288.4 L293.6,285.8 L297.0,283.0 L300.5,280.1 L303.9,277.1 L307.4,273.9 L310.8,270.7 L314.2,267.3 L317.7,263.7 L321.1,260.1 L324.6,256.3 L328.0,252.4 L331.4,248.3 L334.9,244.2 L338.3,239.9 L341.8,235.5 L345.2,231.0 L348.6,226.4 L352.1,221.6 L355.5,216.8 L359.0,211.9 L362.4,206.9 L365.8,201.8 L369.3,196.7 L372.7,191.5 L376.2,186.2 L379.6,180.9 L383.0,175.5 L386.5,170.1 L389.9,164.7 L393.4,159.3 L396.8,153.8 L400.2,148.4 L403.7,143.1 L407.1,137.7 L410.6,132.4 L414.0,127.2 L414.0,330.0 Z" fill="#8E244D" fill-opacity="0.22" stroke="none"/><path d="M70.0,329.9 L74.3,329.9 L78.6,329.9 L82.9,329.8 L87.2,329.8 L91.5,329.8 L95.8,329.8 L100.1,329.7 L104.4,329.7 L108.7,329.6 L113.0,329.6 L117.3,329.5 L121.6,329.4 L125.9,329.3 L130.2,329.2 L134.5,329.1 L138.8,329.0 L143.1,328.9 L147.4,328.7 L151.7,328.5 L156.0,328.3 L160.3,328.1 L164.6,327.9 L168.9,327.6 L173.2,327.3 L177.5,326.9 L181.8,326.5 L186.1,326.1 L190.4,325.6 L194.7,325.1 L199.0,324.5 L203.3,323.8 L207.6,323.1 L211.9,322.3 L216.2,321.4 L220.5,320.5 L224.8,319.5 L229.1,318.3 L233.4,317.1 L237.7,315.8 L242.0,314.3 L246.3,312.8 L250.6,311.1 L254.9,309.2 L259.2,307.3 L263.5,305.2 L267.8,302.9 L272.1,300.5 L276.4,297.9 L280.7,295.1 L285.0,292.2 L289.3,289.1 L293.6,285.8 L297.9,282.3 L302.2,278.6 L306.5,274.7 L310.8,270.7 L315.1,266.4 L319.4,261.9 L323.7,257.2 L328.0,252.4 L332.3,247.3 L336.6,242.0 L340.9,236.6 L345.2,231.0 L349.5,225.2 L353.8,219.2 L358.1,213.1 L362.4,206.9 L366.7,200.5 L371.0,194.1 L375.3,187.5 L379.6,180.9 L383.9,174.1 L388.2,167.4 L392.5,160.6 L396.8,153.8 L401.1,147.1 L405.4,140.4 L409.7,133.8 L414.0,127.2 L418.3,120.8 L422.6,114.5 L426.9,108.4 L431.2,102.5 L435.5,96.7 L439.8,91.3 L444.1,86.1 L448.4,81.1 L452.7,76.5 L457.0,72.2 L461.3,68.3 L465.6,64.7 L469.9,61.5 L474.2,58.7 L478.5,56.3 L482.8,54.3 L487.1,52.7 L491.4,51.6 L495.7,51.0 L500.0,50.7 L504.3,51.0 L508.6,51.6 L512.9,52.7 L517.2,54.3 L521.5,56.3 L525.8,58.7 L530.1,61.5 L534.4,64.7 L538.7,68.3 L543.0,72.2 L547.3,76.5 L551.6,81.1 L555.9,86.1 L560.2,91.3 L564.5,96.7 L568.8,102.5 L573.1,108.4 L577.4,114.5 L581.7,120.8 L586.0,127.2 L590.3,133.8 L594.6,140.4 L598.9,147.1 L603.2,153.8 L607.5,160.6 L611.8,167.4 L616.1,174.1 L620.4,180.9 L624.7,187.5 L629.0,194.1 L633.3,200.5 L637.6,206.9 L641.9,213.1 L646.2,219.2 L650.5,225.2 L654.8,231.0 L659.1,236.6 L663.4,242.0 L667.7,247.3 L672.0,252.4 L676.3,257.2 L680.6,261.9 L684.9,266.4 L689.2,270.7 L693.5,274.7 L697.8,278.6 L702.1,282.3 L706.4,285.8 L710.7,289.1 L715.0,292.2 L719.3,295.1 L723.6,297.9 L727.9,300.5 L732.2,302.9 L736.5,305.2 L740.8,307.3 L745.1,309.2 L749.4,311.1 L753.7,312.8 L758.0,314.3 L762.3,315.8 L766.6,317.1 L770.9,318.3 L775.2,319.5 L779.5,320.5 L783.8,321.4 L788.1,322.3 L792.4,323.1 L796.7,323.8 L801.0,324.5 L805.3,325.1 L809.6,325.6 L813.9,326.1 L818.2,326.5 L822.5,326.9 L826.8,327.3 L831.1,327.6 L835.4,327.9 L839.7,328.1 L844.0,328.3 L848.3,328.5 L852.6,328.7 L856.9,328.9 L861.2,329.0 L865.5,329.1 L869.8,329.2 L874.1,329.3 L878.4,329.4 L882.7,329.5 L887.0,329.6 L891.3,329.6 L895.6,329.7 L899.9,329.7 L904.2,329.8 L908.5,329.8 L912.8,329.8 L917.1,329.8 L921.4,329.9 L925.7,329.9 L930.0,329.9" fill="none" stroke="#1F3A93" stroke-width="3.5"/><line x1="414" y1="40" x2="414" y2="330" stroke="#8E244D" stroke-width="2" stroke-dasharray="6 5"/><line x1="500" y1="40" x2="500" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="508" y="56" font-size="17" fill="#475569">mean 2</text><text x="311" y="300" font-size="19" font-weight="700" fill="#8E244D" text-anchor="middle">P(D &lt; 0) &#8776; 0.212</text><text x="672" y="120" font-size="19" font-weight="700" fill="#1F3A93">D = T &#8722; S ~ N(2, 2.5&#178;)</text><text x="672" y="148" font-size="16" fill="#475569">sd(T) = 1.5,  sd(S) = 2,  sd(D) = &#8730;(1.5&#178;+2&#178;) = 2.5</text></svg>
+<section class="slide" data-topic="Lesson 3 · Normal combinations">
+  <h2>Seeing it: the difference is wider than either</h2>
+  <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">-8</text><line x1="156" y1="30" x2="156" y2="330" stroke="#e2e8f0"/><text x="156" y="352" font-size="16" fill="#475569" text-anchor="middle">-6</text><line x1="242" y1="30" x2="242" y2="330" stroke="#e2e8f0"/><text x="242" y="352" font-size="16" fill="#475569" text-anchor="middle">-4</text><line x1="328" y1="30" x2="328" y2="330" stroke="#e2e8f0"/><text x="328" y="352" font-size="16" fill="#475569" text-anchor="middle">-2</text><line x1="414" y1="30" x2="414" y2="330" stroke="#e2e8f0"/><text x="414" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="586" y1="30" x2="586" y2="330" stroke="#e2e8f0"/><text x="586" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="672" y1="30" x2="672" y2="330" stroke="#e2e8f0"/><text x="672" y="352" font-size="16" fill="#475569" text-anchor="middle">6</text><line x1="758" y1="30" x2="758" y2="330" stroke="#e2e8f0"/><text x="758" y="352" font-size="16" fill="#475569" text-anchor="middle">8</text><line x1="844" y1="30" x2="844" y2="330" stroke="#e2e8f0"/><text x="844" y="352" font-size="16" fill="#475569" text-anchor="middle">10</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">12</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,330.0 L70.0,329.9 L73.4,329.9 L76.9,329.9 L80.3,329.9 L83.8,329.8 L87.2,329.8 L90.6,329.8 L94.1,329.8 L97.5,329.7 L101.0,329.7 L104.4,329.7 L107.8,329.6 L111.3,329.6 L114.7,329.5 L118.2,329.5 L121.6,329.4 L125.0,329.4 L128.5,329.3 L131.9,329.2 L135.4,329.1 L138.8,329.0 L142.2,328.9 L145.7,328.8 L149.1,328.6 L152.6,328.5 L156.0,328.3 L159.4,328.2 L162.9,328.0 L166.3,327.7 L169.8,327.5 L173.2,327.3 L176.6,327.0 L180.1,326.7 L183.5,326.3 L187.0,326.0 L190.4,325.6 L193.8,325.2 L197.3,324.7 L200.7,324.2 L204.2,323.7 L207.6,323.1 L211.0,322.5 L214.5,321.8 L217.9,321.1 L221.4,320.3 L224.8,319.5 L228.2,318.6 L231.7,317.6 L235.1,316.6 L238.6,315.5 L242.0,314.3 L245.4,313.1 L248.9,311.8 L252.3,310.4 L255.8,308.9 L259.2,307.3 L262.6,305.6 L266.1,303.8 L269.5,302.0 L273.0,300.0 L276.4,297.9 L279.8,295.7 L283.3,293.4 L286.7,291.0 L290.2,288.4 L293.6,285.8 L297.0,283.0 L300.5,280.1 L303.9,277.1 L307.4,273.9 L310.8,270.7 L314.2,267.3 L317.7,263.7 L321.1,260.1 L324.6,256.3 L328.0,252.4 L331.4,248.3 L334.9,244.2 L338.3,239.9 L341.8,235.5 L345.2,231.0 L348.6,226.4 L352.1,221.6 L355.5,216.8 L359.0,211.9 L362.4,206.9 L365.8,201.8 L369.3,196.7 L372.7,191.5 L376.2,186.2 L379.6,180.9 L383.0,175.5 L386.5,170.1 L389.9,164.7 L393.4,159.3 L396.8,153.8 L400.2,148.4 L403.7,143.1 L407.1,137.7 L410.6,132.4 L414.0,127.2 L414.0,330.0 Z" fill="#9d144d" fill-opacity="0.22" stroke="none"/><path d="M70.0,329.9 L74.3,329.9 L78.6,329.9 L82.9,329.8 L87.2,329.8 L91.5,329.8 L95.8,329.8 L100.1,329.7 L104.4,329.7 L108.7,329.6 L113.0,329.6 L117.3,329.5 L121.6,329.4 L125.9,329.3 L130.2,329.2 L134.5,329.1 L138.8,329.0 L143.1,328.9 L147.4,328.7 L151.7,328.5 L156.0,328.3 L160.3,328.1 L164.6,327.9 L168.9,327.6 L173.2,327.3 L177.5,326.9 L181.8,326.5 L186.1,326.1 L190.4,325.6 L194.7,325.1 L199.0,324.5 L203.3,323.8 L207.6,323.1 L211.9,322.3 L216.2,321.4 L220.5,320.5 L224.8,319.5 L229.1,318.3 L233.4,317.1 L237.7,315.8 L242.0,314.3 L246.3,312.8 L250.6,311.1 L254.9,309.2 L259.2,307.3 L263.5,305.2 L267.8,302.9 L272.1,300.5 L276.4,297.9 L280.7,295.1 L285.0,292.2 L289.3,289.1 L293.6,285.8 L297.9,282.3 L302.2,278.6 L306.5,274.7 L310.8,270.7 L315.1,266.4 L319.4,261.9 L323.7,257.2 L328.0,252.4 L332.3,247.3 L336.6,242.0 L340.9,236.6 L345.2,231.0 L349.5,225.2 L353.8,219.2 L358.1,213.1 L362.4,206.9 L366.7,200.5 L371.0,194.1 L375.3,187.5 L379.6,180.9 L383.9,174.1 L388.2,167.4 L392.5,160.6 L396.8,153.8 L401.1,147.1 L405.4,140.4 L409.7,133.8 L414.0,127.2 L418.3,120.8 L422.6,114.5 L426.9,108.4 L431.2,102.5 L435.5,96.7 L439.8,91.3 L444.1,86.1 L448.4,81.1 L452.7,76.5 L457.0,72.2 L461.3,68.3 L465.6,64.7 L469.9,61.5 L474.2,58.7 L478.5,56.3 L482.8,54.3 L487.1,52.7 L491.4,51.6 L495.7,51.0 L500.0,50.7 L504.3,51.0 L508.6,51.6 L512.9,52.7 L517.2,54.3 L521.5,56.3 L525.8,58.7 L530.1,61.5 L534.4,64.7 L538.7,68.3 L543.0,72.2 L547.3,76.5 L551.6,81.1 L555.9,86.1 L560.2,91.3 L564.5,96.7 L568.8,102.5 L573.1,108.4 L577.4,114.5 L581.7,120.8 L586.0,127.2 L590.3,133.8 L594.6,140.4 L598.9,147.1 L603.2,153.8 L607.5,160.6 L611.8,167.4 L616.1,174.1 L620.4,180.9 L624.7,187.5 L629.0,194.1 L633.3,200.5 L637.6,206.9 L641.9,213.1 L646.2,219.2 L650.5,225.2 L654.8,231.0 L659.1,236.6 L663.4,242.0 L667.7,247.3 L672.0,252.4 L676.3,257.2 L680.6,261.9 L684.9,266.4 L689.2,270.7 L693.5,274.7 L697.8,278.6 L702.1,282.3 L706.4,285.8 L710.7,289.1 L715.0,292.2 L719.3,295.1 L723.6,297.9 L727.9,300.5 L732.2,302.9 L736.5,305.2 L740.8,307.3 L745.1,309.2 L749.4,311.1 L753.7,312.8 L758.0,314.3 L762.3,315.8 L766.6,317.1 L770.9,318.3 L775.2,319.5 L779.5,320.5 L783.8,321.4 L788.1,322.3 L792.4,323.1 L796.7,323.8 L801.0,324.5 L805.3,325.1 L809.6,325.6 L813.9,326.1 L818.2,326.5 L822.5,326.9 L826.8,327.3 L831.1,327.6 L835.4,327.9 L839.7,328.1 L844.0,328.3 L848.3,328.5 L852.6,328.7 L856.9,328.9 L861.2,329.0 L865.5,329.1 L869.8,329.2 L874.1,329.3 L878.4,329.4 L882.7,329.5 L887.0,329.6 L891.3,329.6 L895.6,329.7 L899.9,329.7 L904.2,329.8 L908.5,329.8 L912.8,329.8 L917.1,329.8 L921.4,329.9 L925.7,329.9 L930.0,329.9" fill="none" stroke="#d02670" stroke-width="3.5"/><line x1="414" y1="40" x2="414" y2="330" stroke="#9d144d" stroke-width="2" stroke-dasharray="6 5"/><line x1="500" y1="40" x2="500" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="508" y="56" font-size="17" fill="#475569">mean 2</text><text x="311" y="300" font-size="19" font-weight="700" fill="#9d144d" text-anchor="middle">P(D &lt; 0) &#8776; 0.212</text><text x="672" y="120" font-size="19" font-weight="700" fill="#d02670">D = T &#8722; S ~ N(2, 2.5&#178;)</text><text x="672" y="148" font-size="16" fill="#475569">sd(T) = 1.5,  sd(S) = 2,  sd(D) = &#8730;(1.5&#178;+2&#178;) = 2.5</text></svg>
   <p style="font-size:21px; margin-top:4px; text-align:center;">\(D = T - S\) has sd \(2.5\) — larger than Tom's \(1.5\) and Sam's \(2\). Subtracting <b>added</b> uncertainty. Tom wins on the shaded side \(D &lt; 0\).</p>
-  <div class="footerbar"><span>Lesson 3 · Normal combinations</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 3 — your turn</h1>
+<section class="slide" data-topic="Lesson 3 · Checkpoint">
+  <h2>Checkpoint 3 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Bottles are filled with \(X \sim N(502,\, 2^2)\) mL, independently.</p>
     <ul style="margin-top:8px;">
@@ -315,55 +239,51 @@
       <li><b>(b)</b> Find the probability a six-pack's total is less than 3000 mL.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(P(X &lt; 500) = P\!\left(Z &lt; \dfrac{-2}{2}\right) = P(Z &lt; -1) \approx 0.159\).</li>
-    <li class="step"><b>(b)</b> \(T \sim N(3012,\, 24)\), sd \(= \sqrt{24} \approx 4.90\); \(P(T &lt; 3000) = P(Z &lt; -2.449) \approx 0.007\).</li>
-    <li class="step">One bottle is short 16% of the time; a whole six-pack almost never is — independent errors partly cancel.</li>
+    <li class="frag"><b>(a)</b> \(P(X &lt; 500) = P\!\left(Z &lt; \dfrac{-2}{2}\right) = P(Z &lt; -1) \approx 0.159\).</li>
+    <li class="frag"><b>(b)</b> \(T \sim N(3012,\, 24)\), sd \(= \sqrt{24} \approx 4.90\); \(P(T &lt; 3000) = P(Z &lt; -2.449) \approx 0.007\).</li>
+    <li class="frag">One bottle is short 16% of the time; a whole six-pack almost never is — independent errors partly cancel.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 4 · mixed + SAC ═══ -->
 
-<section class="slide section" data-lesson="4">
+<section class="slide section-slide" data-lesson="4">
   <div class="kicker">Lesson 4 · 15A–15C</div>
-  <h1>Mixed practice — around SAC 2</h1>
+  <h1>Mixed practice</h1>
   <ul class="goals">
     <li>Full multi-part problems mixing scaling, combining and normal probability.</li>
-    <li>SAC 2 (Differential Equations) runs this week — final pointers.</li>
+    <li>SAC 3 (Probability &amp; Statistics) is Thu 27 Aug (Week 7) — this chapter is directly examinable.</li>
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Worked example: a full combination problem</h1>
-  <div class="box ex"><span class="lbl">Example 5</span>
+<section class="slide" data-topic="Lesson 4 · Mixed practice">
+  <h2>Worked example: a full combination problem</h2>
+  <div class="box example"><span class="lbl">Example 5</span>
     <p>A latte is one espresso shot \(X \sim N(30,\, 2^2)\) mL plus steamed milk \(M \sim N(180,\, 5^2)\) mL, independent. The cup holds 220 mL. Find the probability of overflow.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">\(L = X + M\): \(E(L) = 210\); \(\text{Var}(L) = 4 + 25 = 29\); so \(L \sim N(210,\, 29)\), sd \(= \sqrt{29} \approx 5.39\).</li>
-    <li class="step">\(P(L &gt; 220) = P\!\left(Z &gt; \dfrac{10}{\sqrt{29}}\right) = P(Z &gt; 1.857) \approx 0.032\).</li>
-    <li class="step">About 1 latte in 31 overflows. (What could the café change: \(\mu\) of the milk, or its \(\sigma\)? Both work — which is cheaper?)</li>
+    <li class="frag">\(L = X + M\): \(E(L) = 210\); \(\text{Var}(L) = 4 + 25 = 29\); so \(L \sim N(210,\, 29)\), sd \(= \sqrt{29} \approx 5.39\).</li>
+    <li class="frag">\(P(L &gt; 220) = P\!\left(Z &gt; \dfrac{10}{\sqrt{29}}\right) = P(Z &gt; 1.857) \approx 0.032\).</li>
+    <li class="frag">About 1 latte in 31 overflows. (What could the café change: \(\mu\) of the milk, or its \(\sigma\)? Both work — which is cheaper?)</li>
   </ul>
-  <div class="footerbar"><span>Lesson 4 · Mixed practice</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>SAC 2 this week: Differential Equations</h1>
+<section class="slide" data-topic="T3W03 · Linear Combinations I">
+  <h2>Next assessment: SAC 3 — Probability &amp; Statistics</h2>
   <ul>
-    <li>Rescheduled from Week 1 — it runs <b>this week</b>. Coverage: Chapters 8–11.</li>
-    <li>Expect: verifying solutions, separation of variables, setting up DEs from rates descriptions, slope fields, and applications (growth/decay, mixing, motion).</li>
-    <li>Bring bound reference and charged CAS. Chapter 15 continues around the SAC — keep both plates spinning.</li>
+    <li><b>Thu 27 Aug (Week 7)</b>. Coverage: Chapters 15–16 — everything in this deck is directly examinable.</li>
+    <li>The revision pack (full solutions at the back) is on the course hub.</li>
   </ul>
-  <div class="box key"><span class="lbl">Last-minute priority</span>
-    <p>Setting up the DE from words: identify the variables, write "rate of change of ___ with respect to ___", translate each phrase into a term.</p>
+  <div class="box key"><span class="lbl">Priority</span>
+    <p>The variance rules from 15A–C compound into the sample mean (15D–F) and inference (Ch 16) — nail them now and the rest of the pipeline follows.</p>
   </div>
-  <div class="footerbar"><span>T3W03 · Linear Combinations I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Week 3 summary</h1>
+<section class="slide" data-topic="T3W03 · Linear Combinations I">
+  <h2>Week 5 summary</h2>
   <ul>
     <li>\(E(aX+b) = aE(X)+b\); \(\text{Var}(aX+b) = a^2\text{Var}(X)\).</li>
     <li>Independent \(X, Y\): \(\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\) — plus sign always.</li>
@@ -373,66 +293,17 @@
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Next week: the most important linear combination of all — the sample mean \(\bar{X}\), and the central limit theorem (15D–F).</p>
   </div>
-  <div class="footerbar"><span>T3W03 · Linear Combinations I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
+</main>
+<a class="homebtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>–<span class="key">4</span> jump to lesson · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
 </div>
-<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
-<div id="counter"></div>
-<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
 
-<script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let cur = 0;
-  function fit() {
-    const s = Math.min(innerWidth * 0.9 / 1280, innerHeight * 0.9 / 720);
-    slides.forEach(sl => sl.style.zoom = s);
-  }
-  addEventListener('resize', fit); fit();
-  function syncBtns(sl) {
-    const left = sl.querySelector('.step:not(.shown)');
-    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
-  }
-  function revealNext(sl) {
-    const s = sl.querySelector('.step:not(.shown)');
-    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function unrevealLast(sl) {
-    const shown = sl.querySelectorAll('.step.shown');
-    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
-    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
-    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
-    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
-    location.hash = cur + 1;
-  }
-  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
-  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
-  addEventListener('keydown', e => {
-    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(slides.length - 1);
-    else if (['1','2','3','4'].includes(e.key)) {
-      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
-      if (target >= 0) show(target);
-    }
-    else if (e.key.toLowerCase() === 'f') {
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    }
-  });
-  addEventListener('click', e => {
-    if (e.target.closest('button.rvl, a')) return;
-    if (e.clientX > innerWidth * 0.66) next();
-    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
-  });
-  document.querySelectorAll('button.rvl').forEach(b =>
-    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
-  show(parseInt(location.hash.slice(1)) - 1 || 0);
-</script>
+<script src="../../../assets/js/deck.js" defer></script>
 </body>
 </html>

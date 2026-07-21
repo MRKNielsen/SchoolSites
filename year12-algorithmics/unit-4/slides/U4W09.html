@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W09 — Machines That Learn</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W09 · Machines That Learn</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Machines That Learn</h1>
+  <p>Unit 4 AOS3 · Week 9 — Data-driven algorithms, neural networks, and what we owe each other</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026 · SAC Friday</p>
+</section>
+
+<section class="slide" data-topic="U4W09 · Machines That Learn">
+  <h2>This week</h2>
+  <ul>
+    <li>Learning from data — SVMs, and the higher-dimension trick.</li>
+    <li>Multi-layer perceptrons, forward propagation, overfitting, and AI ethics.</li>
+    <li><b>SAC</b> — Unit 4 Outcome 3, 50 marks. Everything from Weeks 7–9.</li>
+  </ul>
+  <div class="box key"><span class="lbl">A different kind of algorithm</span>
+    <p>Everything until now was <em>designed</em>: a human specified every step. This week's algorithms are <em>trained</em>: the steps are fixed, but the behaviour comes from data.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Learning from data</h1>
+</section>
+
+<section class="slide" data-topic="U4W09 · Learning from data">
+  <h2>How a data-driven algorithm learns</h2>
+  <ul>
+    <li><b>Setup:</b> examples with labels (emails → spam/not; scans → tumour/not). Goal: a function that labels <em>new</em> examples correctly.</li>
+    <li><b>The loop:</b> pick a model with adjustable parameters → measure its error on training data → adjust parameters to reduce error → repeat.</li>
+    <li>Learning = <b>optimisation</b>: minimising an error objective over parameters. You already know this landscape — it's Week 7's, with millions of dimensions.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Training is search on an error landscape. Local optima, schedules, trade-offs — the AOS2 toolkit, aimed at parameters instead of tours.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W09 · Learning from data">
+  <h2>Support vector machines: the widest street</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>Binary classification with a <b>line</b> (2-D) or <b>hyperplane</b> (higher-D) separating the classes.</li>
+        <li>Many lines separate the data — SVM's <b>optimisation objective</b>: choose the one that <b>maximises the margin</b>, the distance to the nearest points of each class.</li>
+        <li>Those nearest points are the <b>support vectors</b> — they alone determine the boundary.</li>
+        <li>Wide margin ⇒ new points near the old ones still classify correctly ⇒ better generalisation.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 240 200" style="width:92%; height:auto;">
+        <line x1="30" y1="180" x2="200" y2="20" stroke="#334155" stroke-width="2"/>
+        <line x1="10" y1="172" x2="180" y2="12" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
+        <line x1="50" y1="188" x2="220" y2="28" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
+        <g fill="#0e7569">
+          <circle cx="45" cy="60" r="6"/><circle cx="70" cy="40" r="6"/>
+          <circle cx="35" cy="105" r="6"/><circle cx="80" cy="80" r="6" stroke="#8b1f34" stroke-width="2.5"/>
+        </g>
+        <g fill="#b45309">
+          <rect x="150" y="120" width="12" height="12"/><rect x="180" y="150" width="12" height="12"/>
+          <rect x="130" y="160" width="12" height="12" stroke="#8b1f34" stroke-width="2.5"/>
+          <rect x="195" y="105" width="12" height="12"/>
+        </g>
+        <text x="120" y="196" font-size="11" fill="#64748b" text-anchor="middle">circled points = support vectors</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W09 · Learning from data">
+  <h2>Not linearly separable? Add a dimension</h2>
+  <ul>
+    <li>Points inside vs outside a circle can't be split by any line in 2-D.</li>
+    <li>Create a new feature: \(z = x^2 + y^2\) (distance² from origin). In \((x, y, z)\)-space, inside-points sit <em>low</em>, outside-points sit <em>high</em> — a flat plane separates them perfectly.</li>
+    <li>General trick: map the data into a higher-dimensional space where a linear boundary works, then classify linearly there. (Kernels do this efficiently — the idea is what's examinable.)</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>XOR-style data — (0,0), (1,1) in class A; (0,1), (1,0) in class B — is not linearly separable. Find a third feature that separates it.</p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Neural networks</h1>
+</section>
+
+<section class="slide" data-topic="U4W09 · Neural networks">
+  <h2>The multi-layer perceptron (MLP)</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>Neuron:</b> weighted sum of inputs + bias, passed through an <b>activation function</b> (step, sigmoid, ReLU).</li>
+        <li><b>Layers:</b> input layer (the features) → hidden layer(s) → output layer (the classification).</li>
+        <li>Each connection has a <b>weight</b> — the parameters that training adjusts.</li>
+        <li>Hidden layers build intermediate features automatically — the learned version of the "add a dimension" trick.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 240 200" style="width:92%; height:auto;">
+        <g stroke="#94a3b8" stroke-width="1">
+          <line x1="40" y1="50" x2="120" y2="35"/><line x1="40" y1="50" x2="120" y2="100"/><line x1="40" y1="50" x2="120" y2="165"/>
+          <line x1="40" y1="150" x2="120" y2="35"/><line x1="40" y1="150" x2="120" y2="100"/><line x1="40" y1="150" x2="120" y2="165"/>
+          <line x1="120" y1="35" x2="200" y2="100"/><line x1="120" y1="100" x2="200" y2="100"/><line x1="120" y1="165" x2="200" y2="100"/>
+        </g>
+        <g>
+          <circle cx="40" cy="50" r="14" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/>
+          <circle cx="40" cy="150" r="14" fill="#f0f7f6" stroke="#0e7569" stroke-width="2"/>
+          <circle cx="120" cy="35" r="14" fill="#f4f6fa" stroke="#475569" stroke-width="2"/>
+          <circle cx="120" cy="100" r="14" fill="#f4f6fa" stroke="#475569" stroke-width="2"/>
+          <circle cx="120" cy="165" r="14" fill="#f4f6fa" stroke="#475569" stroke-width="2"/>
+          <circle cx="200" cy="100" r="14" fill="#fbf1f3" stroke="#8b1f34" stroke-width="2"/>
+        </g>
+        <text x="40" y="185" font-size="11" text-anchor="middle" fill="#64748b">inputs</text>
+        <text x="120" y="196" font-size="11" text-anchor="middle" fill="#64748b">hidden</text>
+        <text x="200" y="135" font-size="11" text-anchor="middle" fill="#64748b">output</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W09 · Neural networks">
+  <h2>Forward propagation: evaluating the network</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Worked example (SAC-style)</span>
+    <p class="small">Inputs \(x_1 = 1, x_2 = 0\). Hidden neuron \(h\): weights \(0.5, -0.3\), bias \(0.1\), step activation (fires if sum \(> 0\)).</p>
+    <p class="small">\(h\): \(0.5(1) + (-0.3)(0) + 0.1 = 0.6 > 0\) → output 1.</p>
+    <p class="small">Output neuron: weight from \(h\) is \(0.8\), bias \(-0.5\): \(0.8(1) - 0.5 = 0.3 > 0\) → <b>classify 1</b>.</p>
+  </div>
+  <ul style="margin-top:14px;">
+    <li>That's the whole procedure: weighted sum + bias, activation, layer by layer, left to right.</li>
+    <li>The SAC will give you a small network and ask you to evaluate it — show the sums, not just the answers.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W09 · Neural networks">
+  <h2>Overfitting and underfitting</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Underfitting</th><th>Overfitting</th></tr>
+    <tr><td>The model…</td><td>too simple for the pattern</td><td>memorised the training data, noise included</td></tr>
+    <tr><td>Training error</td><td>high</td><td>very low</td></tr>
+    <tr><td>New-data error</td><td>high</td><td><b>high</b> — the tell</td></tr>
+    <tr><td>Fix</td><td>more capacity, better features</td><td>more data, simpler model, hold-out testing</td></tr>
+  </table>
+  <ul style="margin-top:16px;">
+    <li>Consequence: a model is only as good as its <b>test</b> performance on data it never trained on. Training accuracy alone is marketing.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W09 · Neural networks">
+  <h2>Ethics: when trained systems decide</h2>
+  <ul class="small">
+    <li><b>Bias in, bias out:</b> models trained on historical decisions inherit historical prejudice — hiring, lending, policing. The algorithm is "fair" only if the data and objective were.</li>
+    <li><b>Opacity:</b> an MLP's decision lives in thousands of weights; explaining <em>why</em> one person was refused is hard. Contrast the designed algorithms of Units 3–4, which can be traced line by line.</li>
+    <li><b>Accountability:</b> when a trained system errs, who answers — the developer, the data curator, the deployer?</li>
+    <li><b>Discussion frame for the SAC:</b> name the stakeholder, the harm, the mechanism (data / objective / opacity), and a mitigation. Four moves, one paragraph.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Connect it back</span>
+    <p>The Chinese Room asked whether machines <em>understand</em>. Ethics asks something answerable now: whether we can <em>justify</em> the decisions we delegate to them.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W09 · Machines That Learn">
+  <h2>Friday: the SAC (Unit 4 Outcome 3)</h2>
+  <ul>
+    <li><b>50 marks, 100 minutes, structured questions.</b> 8% of your study score.</li>
+    <li>In scope: historical context (Hilbert → Turing), Turing machines, the Halting Problem, Turing Test / strong vs weak AI, Chinese Room (describe + argue a side), data-driven learning, SVM objective, higher dimensions, MLP structure, forward propagation (with working), over/underfitting, AI ethics.</li>
+    <li>Revision pack: <code>U4SACRevision.pdf</code> — dot-point checklist plus practice questions in SAC format.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Trained algorithms are optimisation over parameters: powerful, data-hungry, opaque — analyse them with the same honesty you applied to heuristics.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 12</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

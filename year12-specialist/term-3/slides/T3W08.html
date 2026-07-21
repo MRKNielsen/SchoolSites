@@ -12,83 +12,18 @@
   };
 </script>
 <script src="mathjax-tex-svg.js" async></script>
-<style>
-  :root {
-    --teal: #1F3A93; --teal-dark: #16296b;
-    --slate: #475569; --slate-dark: #334155;
-    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
-    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: var(--bg); overflow: hidden;
-    font-family: "Segoe UI", system-ui, sans-serif; }
-  #stage { position: absolute; inset: 0; display: flex; overflow-y: auto; padding: 5vh 5vw; }
-  .slide { width: 1280px; min-height: 720px; background: var(--paper); color: var(--ink);
-    display: none; flex-direction: column; padding: 52px 68px 64px; position: relative; margin: auto; flex-shrink: 0; border-radius: 6px; }
-  .slide.active { display: flex; }
-  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
-  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
-  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
-  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
-  .slide.title h1::after, .slide.section h1::after { background: #fff; }
-  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
-  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
-  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
-  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
-  ul, ol { margin-left: 30px; }
-  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
-  p { font-size: 25px; line-height: 1.5; }
-  .small li, .small p { font-size: 22px; }
-  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
-  .col { flex: 1; min-width: 0; }
-  .col.narrow { flex: .8; }
-  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
-  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
-  .box p, .box li { font-size: 23px; }
-  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
-  .key .lbl { color: var(--teal-dark); }
-  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
-  .try .lbl { color: var(--amber); }
-  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
-  .ex .lbl { color: var(--slate-dark); }
-  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
-  .defn .lbl { color: var(--maroon); }
-  mjx-container { font-size: 108% !important; }
-  table.t { border-collapse: collapse; margin-top: 8px; }
-  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
-  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
-  table.t td { border-bottom: 1px solid var(--line); }
-  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
-  table.t td.c, table.t th.c { text-align: center; }
-  .step { visibility: hidden; }
-  .step.shown { visibility: visible; }
-  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
-    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
-    font-family: inherit; letter-spacing: .04em; }
-  button.rvl:hover { background: var(--teal-dark); }
-  button.rvl.done { opacity: .25; cursor: default; }
-  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
-    border-radius: 0 0 6px 6px; }
-  .slide.title .footerbar, .slide.section .footerbar { display: none; }
-  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
-  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
-  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
-  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
-    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
-  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
 </head>
-<body>
-<div id="progress"></div>
-<div id="stage">
+<body class="deck-page theme-specialist">
+<div class="progress"></div>
+<div class="lessontag">T3W08 · Logic and Proof I</div>
+<main class="deck">
 
 <!-- 1 · Title -->
-<section class="slide title">
+<section class="slide section-slide">
   <h1>Logic and Proof I</h1>
   <p>Chapter 2 (A–B) · Week 8 — Proof techniques, quantifiers and counterexamples</p>
   <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026</p>
@@ -96,9 +31,9 @@
 </section>
 
 <!-- 2 · Week map -->
-<section class="slide">
-  <h1>This week: four lessons (+ SAC 3 feedback)</h1>
-  <table class="t">
+<section class="slide" data-topic="T3W08 · Logic and Proof I">
+  <h2>This week: four lessons (+ SAC 3 feedback)</h2>
+  <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
     <tr><td class="c"><b>1</b></td><td>2A</td><td>Conditionals &amp; direct proof</td><td>use converse/contrapositive correctly; write a direct proof</td></tr>
     <tr><td class="c"><b>2</b></td><td>2A</td><td>Proof by contrapositive</td><td>flip a statement and prove the concrete version</td></tr>
@@ -108,12 +43,11 @@
   <div class="box key"><span class="lbl">Key idea</span>
     <p>A proof is an argument that leaves no escape route. The technique you pick — direct, contrapositive, contradiction — is just a choice of <em>which direction to close the exits from</em>.</p>
   </div>
-  <div class="footerbar"><span>T3W08 · Logic and Proof I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 1 ═══ -->
 
-<section class="slide section" data-lesson="1">
+<section class="slide section-slide" data-lesson="1">
   <div class="kicker">Lesson 1 · 2A</div>
   <h1>Conditionals and direct proof</h1>
   <ul class="goals">
@@ -123,11 +57,11 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Conditional statements and their relatives</h1>
-  <div class="cols">
+<section class="slide" data-topic="Lesson 1 · Conditionals">
+  <h2>Conditional statements and their relatives</h2>
+  <div class="cols even">
     <div class="col">
-      <table class="t" style="margin:0 auto;">
+      <table class="tbl" style="margin:0 auto;">
         <tr><th>Statement</th><th>Form</th><th>Tied to original?</th></tr>
         <tr><td>Conditional</td><td>\(P \Rightarrow Q\)</td><td>—</td></tr>
         <tr><td>Converse</td><td>\(Q \Rightarrow P\)</td><td class="c"><b>No</b> — independent</td></tr>
@@ -139,48 +73,45 @@
       </ul>
     </div>
     <div class="col narrow">
-      <svg viewBox="0 0 430 390" style="width:100%;max-width:410px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><defs><marker id="qa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8E244D"/></marker></defs><rect x="30" y="40" width="160" height="54" rx="10" fill="#fff" stroke="#1F3A93" stroke-width="2.5"/><text x="110.0" y="74" font-size="20" font-weight="700" fill="#1F3A93" text-anchor="middle">P &#8658; Q</text><rect x="240" y="40" width="160" height="54" rx="10" fill="#fff" stroke="#475569" stroke-width="2.5"/><text x="320.0" y="74" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">Q &#8658; P</text><rect x="30" y="260" width="160" height="54" rx="10" fill="#fff" stroke="#1F3A93" stroke-width="2.5"/><text x="110.0" y="294" font-size="20" font-weight="700" fill="#1F3A93" text-anchor="middle">&#172;Q &#8658; &#172;P</text><rect x="240" y="260" width="160" height="54" rx="10" fill="#fff" stroke="#475569" stroke-width="2.5"/><text x="320.0" y="294" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">&#172;P &#8658; &#172;Q</text><line x1="110" y1="98" x2="110" y2="256" stroke="#1F3A93" stroke-width="3"/><text x="98" y="182" font-size="15" font-weight="700" fill="#1F3A93" text-anchor="end" transform="rotate(-90 98 182)"></text><text x="86" y="185" font-size="15" font-weight="700" fill="#1F3A93" text-anchor="middle" writing-mode="tb"></text><text x="126" y="180" font-size="15" font-weight="700" fill="#1F3A93">equivalent</text><line x1="320" y1="98" x2="320" y2="256" stroke="#475569" stroke-width="3"/><text x="336" y="180" font-size="15" font-weight="700" fill="#475569">equivalent</text><line x1="196" y1="67" x2="234" y2="67" stroke="#8E244D" stroke-width="2.5" stroke-dasharray="5 5"/><text x="215" y="30" font-size="15" font-weight="700" fill="#8E244D" text-anchor="middle">NOT equivalent</text><text x="215" y="350" font-size="16" fill="#475569" text-anchor="middle">columns stand or fall together;</text><text x="215" y="372" font-size="16" fill="#475569" text-anchor="middle">the two columns are independent</text></svg>
+      <svg viewBox="0 0 430 390" style="width:100%;max-width:410px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><defs><marker id="qa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9d144d"/></marker></defs><rect x="30" y="40" width="160" height="54" rx="10" fill="#fff" stroke="#d02670" stroke-width="2.5"/><text x="110.0" y="74" font-size="20" font-weight="700" fill="#d02670" text-anchor="middle">P &#8658; Q</text><rect x="240" y="40" width="160" height="54" rx="10" fill="#fff" stroke="#475569" stroke-width="2.5"/><text x="320.0" y="74" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">Q &#8658; P</text><rect x="30" y="260" width="160" height="54" rx="10" fill="#fff" stroke="#d02670" stroke-width="2.5"/><text x="110.0" y="294" font-size="20" font-weight="700" fill="#d02670" text-anchor="middle">&#172;Q &#8658; &#172;P</text><rect x="240" y="260" width="160" height="54" rx="10" fill="#fff" stroke="#475569" stroke-width="2.5"/><text x="320.0" y="294" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">&#172;P &#8658; &#172;Q</text><line x1="110" y1="98" x2="110" y2="256" stroke="#d02670" stroke-width="3"/><text x="98" y="182" font-size="15" font-weight="700" fill="#d02670" text-anchor="end" transform="rotate(-90 98 182)"></text><text x="86" y="185" font-size="15" font-weight="700" fill="#d02670" text-anchor="middle" writing-mode="tb"></text><text x="126" y="180" font-size="15" font-weight="700" fill="#d02670">equivalent</text><line x1="320" y1="98" x2="320" y2="256" stroke="#475569" stroke-width="3"/><text x="336" y="180" font-size="15" font-weight="700" fill="#475569">equivalent</text><line x1="196" y1="67" x2="234" y2="67" stroke="#9d144d" stroke-width="2.5" stroke-dasharray="5 5"/><text x="215" y="30" font-size="15" font-weight="700" fill="#9d144d" text-anchor="middle">NOT equivalent</text><text x="215" y="350" font-size="16" fill="#475569" text-anchor="middle">columns stand or fall together;</text><text x="215" y="372" font-size="16" fill="#475569" text-anchor="middle">the two columns are independent</text></svg>
     </div>
   </div>
-  <div class="footerbar"><span>Lesson 1 · Conditionals</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: direct proof</h1>
-  <div class="box ex"><span class="lbl">Example 1</span>
+<section class="slide" data-topic="Lesson 1 · Direct proof">
+  <h2>Worked example: direct proof</h2>
+  <div class="box example"><span class="lbl">Example 1</span>
     <p>Prove that the sum of two odd integers is even.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>Name the form:</b> let the integers be \(2m+1\) and \(2n+1\) for integers \(m, n\) — this is what "odd" <em>means</em>.</li>
-    <li class="step"><b>Algebra:</b> \((2m+1) + (2n+1) = 2m + 2n + 2 = 2(m+n+1)\).</li>
-    <li class="step"><b>Conclude:</b> \(m+n+1\) is an integer, so the sum is twice an integer — even. ∎</li>
+    <li class="frag"><b>Name the form:</b> let the integers be \(2m+1\) and \(2n+1\) for integers \(m, n\) — this is what "odd" <em>means</em>.</li>
+    <li class="frag"><b>Algebra:</b> \((2m+1) + (2n+1) = 2m + 2n + 2 = 2(m+n+1)\).</li>
+    <li class="frag"><b>Conclude:</b> \(m+n+1\) is an integer, so the sum is twice an integer — even. ∎</li>
   </ul>
   <div class="box key"><span class="lbl">The rhythm of direct proof</span>
     <p>Translate the hypothesis into algebraic form → manipulate → recognise the conclusion's form. Every definition you write down is a mark.</p>
   </div>
-  <div class="footerbar"><span>Lesson 1 · Direct proof</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 1 — your turn</h1>
+<section class="slide" data-topic="Lesson 1 · Checkpoint">
+  <h2>Checkpoint 1 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <ul style="margin-top:6px;">
       <li><b>(a)</b> Prove directly: the product of two odd integers is odd.</li>
       <li><b>(b)</b> State the converse and the contrapositive of: "if it is raining, the ground is wet." Which is logically equivalent to the original?</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \((2m+1)(2n+1) = 4mn + 2m + 2n + 1 = 2(2mn + m + n) + 1\) — odd. ∎</li>
-    <li class="step"><b>(b)</b> Converse: "if the ground is wet, it is raining" (not equivalent — sprinklers exist). Contrapositive: "if the ground is not wet, it is not raining" — equivalent.</li>
+    <li class="frag"><b>(a)</b> \((2m+1)(2n+1) = 4mn + 2m + 2n + 1 = 2(2mn + m + n) + 1\) — odd. ∎</li>
+    <li class="frag"><b>(b)</b> Converse: "if the ground is wet, it is raining" (not equivalent — sprinklers exist). Contrapositive: "if the ground is not wet, it is not raining" — equivalent.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 2 ═══ -->
 
-<section class="slide section" data-lesson="2">
+<section class="slide section-slide" data-lesson="2">
   <div class="kicker">Lesson 2 · 2A</div>
   <h1>Proof by contrapositive</h1>
   <ul class="goals">
@@ -189,56 +120,53 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Worked example: proof by contrapositive</h1>
-  <div class="box ex"><span class="lbl">Example 2</span>
+<section class="slide" data-topic="Lesson 2 · Contrapositive">
+  <h2>Worked example: proof by contrapositive</h2>
+  <div class="box example"><span class="lbl">Example 2</span>
     <p>Prove: if \(n^2\) is even, then \(n\) is even.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Direct attack is awkward — "\(n^2\) even" is hard to use. Contrapositive: <em>if \(n\) is odd, then \(n^2\) is odd</em>.</li>
-    <li class="step">\(n = 2k+1 \Rightarrow n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1\) — odd. ∎</li>
-    <li class="step">Since the contrapositive is equivalent, the original is proved.</li>
+    <li class="frag">Direct attack is awkward — "\(n^2\) even" is hard to use. Contrapositive: <em>if \(n\) is odd, then \(n^2\) is odd</em>.</li>
+    <li class="frag">\(n = 2k+1 \Rightarrow n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1\) — odd. ∎</li>
+    <li class="frag">Since the contrapositive is equivalent, the original is proved.</li>
   </ul>
   <div class="box key"><span class="lbl">When to reach for it</span>
     <p>When the hypothesis is a "negative-flavoured" or hard-to-manipulate condition and its negation is concrete. "Not even" becomes "odd = \(2k+1\)" — algebra you can touch.</p>
   </div>
-  <div class="footerbar"><span>Lesson 2 · Contrapositive</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: contrapositive with cases</h1>
-  <div class="box ex"><span class="lbl">Example 3</span>
+<section class="slide" data-topic="Lesson 2 · Contrapositive">
+  <h2>Worked example: contrapositive with cases</h2>
+  <div class="box example"><span class="lbl">Example 3</span>
     <p>Prove: if \(3\) divides \(n^2\), then \(3\) divides \(n\).</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Contrapositive: if \(3 \nmid n\), then \(3 \nmid n^2\). Now "not divisible" is concrete: \(n = 3k+1\) or \(n = 3k+2\).</li>
-    <li class="step">Case 1: \(n = 3k+1\): \(n^2 = 3(3k^2 + 2k) + 1\). &nbsp; Case 2: \(n = 3k+2\): \(n^2 = 3(3k^2 + 4k + 1) + 1\). Remainder 1 both times.</li>
-    <li class="step">Either way \(3 \nmid n^2\). ∎ &nbsp; Exhaustive cases are a legitimate technique — just say why they cover everything. (This is the engine inside the \(\sqrt{3}\)-irrational proof.)</li>
+    <li class="frag">Contrapositive: if \(3 \nmid n\), then \(3 \nmid n^2\). Now "not divisible" is concrete: \(n = 3k+1\) or \(n = 3k+2\).</li>
+    <li class="frag">Case 1: \(n = 3k+1\): \(n^2 = 3(3k^2 + 2k) + 1\). &nbsp; Case 2: \(n = 3k+2\): \(n^2 = 3(3k^2 + 4k + 1) + 1\). Remainder 1 both times.</li>
+    <li class="frag">Either way \(3 \nmid n^2\). ∎ &nbsp; Exhaustive cases are a legitimate technique — just say why they cover everything. (This is the engine inside the \(\sqrt{3}\)-irrational proof.)</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Contrapositive</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 2 — your turn</h1>
+<section class="slide" data-topic="Lesson 2 · Checkpoint">
+  <h2>Checkpoint 2 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <ul style="margin-top:6px;">
       <li><b>(a)</b> Prove by contrapositive: if \(n^2\) is odd, then \(n\) is odd.</li>
       <li><b>(b)</b> Prove by contrapositive: if \(5n + 3\) is even, then \(n\) is odd.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> Contrapositive: \(n\) even \(\Rightarrow n^2\) even. \(n = 2k \Rightarrow n^2 = 2(2k^2)\). ∎</li>
-    <li class="step"><b>(b)</b> Contrapositive: \(n\) even \(\Rightarrow 5n+3\) odd. \(n = 2k \Rightarrow 5n + 3 = 10k + 3 = 2(5k+1) + 1\) — odd. ∎</li>
+    <li class="frag"><b>(a)</b> Contrapositive: \(n\) even \(\Rightarrow n^2\) even. \(n = 2k \Rightarrow n^2 = 2(2k^2)\). ∎</li>
+    <li class="frag"><b>(b)</b> Contrapositive: \(n\) even \(\Rightarrow 5n+3\) odd. \(n = 2k \Rightarrow 5n + 3 = 10k + 3 = 2(5k+1) + 1\) — odd. ∎</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 3 ═══ -->
 
-<section class="slide section" data-lesson="3">
+<section class="slide section-slide" data-lesson="3">
   <div class="kicker">Lesson 3 · 2A</div>
   <h1>Proof by contradiction</h1>
   <ul class="goals">
@@ -247,41 +175,39 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Proof by contradiction: \(\sqrt{2}\) is irrational</h1>
-  <button class="rvl">Reveal ▸</button>
+<section class="slide" data-topic="Lesson 3 · Contradiction">
+  <h2>Proof by contradiction: \(\sqrt{2}\) is irrational</h2>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">Suppose not: \(\sqrt{2} = \dfrac{p}{q}\) with \(p, q\) integers sharing no common factor.</li>
-    <li class="step">Then \(p^2 = 2q^2\): \(p^2\) even, so \(p\) even (Lesson 2's theorem!) — write \(p = 2m\).</li>
-    <li class="step">Substitute: \(4m^2 = 2q^2 \Rightarrow q^2 = 2m^2\), so \(q\) is even too.</li>
-    <li class="step">Now \(p\) and \(q\) share the factor 2 — contradicting our "no common factor" setup. So no such fraction exists. ∎</li>
+    <li class="frag">Suppose not: \(\sqrt{2} = \dfrac{p}{q}\) with \(p, q\) integers sharing no common factor.</li>
+    <li class="frag">Then \(p^2 = 2q^2\): \(p^2\) even, so \(p\) even (Lesson 2's theorem!) — write \(p = 2m\).</li>
+    <li class="frag">Substitute: \(4m^2 = 2q^2 \Rightarrow q^2 = 2m^2\), so \(q\) is even too.</li>
+    <li class="frag">Now \(p\) and \(q\) share the factor 2 — contradicting our "no common factor" setup. So no such fraction exists. ∎</li>
   </ul>
   <div class="box key"><span class="lbl">Anatomy</span>
     <p>Negate precisely → deduce honestly → hit an impossibility → conclude. Note how the contrapositive result from Lesson 2 was a <b>lemma</b> here — proofs stack.</p>
   </div>
-  <div class="footerbar"><span>Lesson 3 · Contradiction</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 3 — your turn</h1>
+<section class="slide" data-topic="Lesson 3 · Checkpoint">
+  <h2>Checkpoint 3 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈6 min)</span>
     <ul style="margin-top:6px;">
       <li><b>(a)</b> Prove by contradiction: there is no largest integer.</li>
       <li><b>(b)</b> Prove by contradiction: there is no smallest positive rational number.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> Suppose \(N\) is the largest integer. Then \(N + 1\) is an integer and \(N + 1 &gt; N\) — contradiction. ∎</li>
-    <li class="step"><b>(b)</b> Suppose \(q\) is the smallest positive rational. Then \(\tfrac{q}{2}\) is rational, positive, and smaller — contradiction. ∎</li>
-    <li class="step">Both proofs manufacture a <b>better witness</b> from the assumed extreme one — a standard contradiction pattern.</li>
+    <li class="frag"><b>(a)</b> Suppose \(N\) is the largest integer. Then \(N + 1\) is an integer and \(N + 1 &gt; N\) — contradiction. ∎</li>
+    <li class="frag"><b>(b)</b> Suppose \(q\) is the smallest positive rational. Then \(\tfrac{q}{2}\) is rational, positive, and smaller — contradiction. ∎</li>
+    <li class="frag">Both proofs manufacture a <b>better witness</b> from the assumed extreme one — a standard contradiction pattern.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 4 ═══ -->
 
-<section class="slide section" data-lesson="4">
+<section class="slide section-slide" data-lesson="4">
   <div class="kicker">Lesson 4 · 2B</div>
   <h1>Quantifiers and counterexamples</h1>
   <ul class="goals">
@@ -291,9 +217,9 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>For all, there exists</h1>
-  <div class="cols">
+<section class="slide" data-topic="Lesson 4 · Quantifiers">
+  <h2>For all, there exists</h2>
+  <div class="cols even">
     <div class="col">
       <ul>
         <li>\(\forall\): "for all" — a universal claim. \(\forall x \in \mathbb{R},\; x^2 \geq 0\).</li>
@@ -312,28 +238,26 @@
   <div class="box key"><span class="lbl">Proof consequences</span>
     <p>To prove \(\forall\): argue for an <b>arbitrary</b> element. To disprove \(\forall\): exhibit <b>one</b> counterexample. To prove \(\exists\): exhibit one witness. To disprove \(\exists\): argue for all.</p>
   </div>
-  <div class="footerbar"><span>Lesson 4 · Quantifiers</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Disproof by counterexample</h1>
-  <div class="box ex"><span class="lbl">Example 4</span>
+<section class="slide" data-topic="Lesson 4 · Counterexamples">
+  <h2>Disproof by counterexample</h2>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>Claim: "for all primes \(p\), \(2^p - 1\) is prime." Disprove it.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">Test small primes: \(p = 2, 3, 5, 7\) give \(3, 7, 31, 127\) — all prime. Suspicious streak…</li>
-    <li class="step">\(p = 11\): \(2^{11} - 1 = 2047 = 23 \times 89\). One counterexample; claim dead. ∎</li>
-    <li class="step">Check both parts explicitly: \(11\) is prime (hypothesis ✓), \(2047\) is composite (conclusion ✗).</li>
+    <li class="frag">Test small primes: \(p = 2, 3, 5, 7\) give \(3, 7, 31, 127\) — all prime. Suspicious streak…</li>
+    <li class="frag">\(p = 11\): \(2^{11} - 1 = 2047 = 23 \times 89\). One counterexample; claim dead. ∎</li>
+    <li class="frag">Check both parts explicitly: \(11\) is prime (hypothesis ✓), \(2047\) is composite (conclusion ✗).</li>
   </ul>
   <div class="box key"><span class="lbl">Discipline</span>
     <p>A counterexample must satisfy the hypothesis and violate the conclusion — check both, every time. And remember: examples can <b>disprove</b> a universal claim, never prove one.</p>
   </div>
-  <div class="footerbar"><span>Lesson 4 · Counterexamples</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 4 — your turn</h1>
+<section class="slide" data-topic="Lesson 4 · Checkpoint">
+  <h2>Checkpoint 4 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <ul style="margin-top:6px;">
       <li><b>(a)</b> Disprove: "every prime is odd."</li>
@@ -341,16 +265,15 @@
       <li><b>(c)</b> Write the negation of: "\(\exists y\) such that \(\forall x\), \(y &gt; x\)." Is the negation true in \(\mathbb{R}\)?</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(p = 2\): prime and even. ∎ &nbsp; <b>(b)</b> \(x = \tfrac12\): \(\tfrac14 &lt; \tfrac12\) (or \(x = 0\): \(0 \not&gt; 0\)). ∎</li>
-    <li class="step"><b>(c)</b> "\(\forall y\, \exists x\) with \(x \geq y\)" — true: given any \(y\), take \(x = y\) (or \(y+1\)). No largest real exists.</li>
+    <li class="frag"><b>(a)</b> \(p = 2\): prime and even. ∎ &nbsp; <b>(b)</b> \(x = \tfrac12\): \(\tfrac14 &lt; \tfrac12\) (or \(x = 0\): \(0 \not&gt; 0\)). ∎</li>
+    <li class="frag"><b>(c)</b> "\(\forall y\, \exists x\) with \(x \geq y\)" — true: given any \(y\), take \(x = y\) (or \(y+1\)). No largest real exists.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 4 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Week 8 summary</h1>
+<section class="slide" data-topic="T3W08 · Logic and Proof I">
+  <h2>Week 8 summary</h2>
   <ul>
     <li>Contrapositive is equivalent; converse is not. "Iff" needs both directions.</li>
     <li>Contradiction: negate precisely, push to impossibility.</li>
@@ -360,66 +283,17 @@
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Next week the techniques meet real targets: inequalities (2C) and telescoping series (2D).</p>
   </div>
-  <div class="footerbar"><span>T3W08 · Logic and Proof I</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
+</main>
+<a class="homebtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>–<span class="key">4</span> jump to lesson · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
 </div>
-<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
-<div id="counter"></div>
-<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
 
-<script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let cur = 0;
-  function fit() {
-    const s = Math.min(innerWidth * 0.9 / 1280, innerHeight * 0.9 / 720);
-    slides.forEach(sl => sl.style.zoom = s);
-  }
-  addEventListener('resize', fit); fit();
-  function syncBtns(sl) {
-    const left = sl.querySelector('.step:not(.shown)');
-    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
-  }
-  function revealNext(sl) {
-    const s = sl.querySelector('.step:not(.shown)');
-    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function unrevealLast(sl) {
-    const shown = sl.querySelectorAll('.step.shown');
-    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
-    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
-    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
-    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
-    location.hash = cur + 1;
-  }
-  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
-  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
-  addEventListener('keydown', e => {
-    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(slides.length - 1);
-    else if (['1','2','3','4'].includes(e.key)) {
-      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
-      if (target >= 0) show(target);
-    }
-    else if (e.key.toLowerCase() === 'f') {
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    }
-  });
-  addEventListener('click', e => {
-    if (e.target.closest('button.rvl, a')) return;
-    if (e.clientX > innerWidth * 0.66) next();
-    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
-  });
-  document.querySelectorAll('button.rvl').forEach(b =>
-    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
-  show(parseInt(location.hash.slice(1)) - 1 || 0);
-</script>
+<script src="../../../assets/js/deck.js" defer></script>
 </body>
 </html>

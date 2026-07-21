@@ -12,93 +12,28 @@
   };
 </script>
 <script src="mathjax-tex-svg.js" async></script>
-<style>
-  :root {
-    --teal: #1F3A93; --teal-dark: #16296b;
-    --slate: #475569; --slate-dark: #334155;
-    --maroon: #8E244D; --amber: #b45309; --red: #c0392b;
-    --bg: #16222b; --paper: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: var(--bg); overflow: hidden;
-    font-family: "Segoe UI", system-ui, sans-serif; }
-  #stage { position: absolute; inset: 0; display: flex; overflow-y: auto; padding: 5vh 5vw; }
-  .slide { width: 1280px; min-height: 720px; background: var(--paper); color: var(--ink);
-    display: none; flex-direction: column; padding: 52px 68px 64px; position: relative; margin: auto; flex-shrink: 0; border-radius: 6px; }
-  .slide.active { display: flex; }
-  .slide h1 { font-size: 40px; color: var(--teal-dark); margin-bottom: 26px; font-weight: 700; }
-  .slide h1::after { content: ""; display: block; width: 72px; height: 4px; background: var(--teal); margin-top: 10px; border-radius: 2px; }
-  .slide.title, .slide.section { justify-content: center; background: linear-gradient(125deg, var(--teal-dark), var(--slate-dark)); color: #fff; }
-  .slide.title h1, .slide.section h1 { color: #fff; font-size: 54px; }
-  .slide.title h1::after, .slide.section h1::after { background: #fff; }
-  .slide.title p, .slide.section p { font-size: 26px; opacity: .85; margin-top: 14px; }
-  .slide.section .kicker { font-size: 20px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-  .slide.section ul.goals { margin-top: 26px; margin-left: 26px; max-width: 900px; }
-  .slide.section ul.goals li { font-size: 24px; opacity: .9; margin-bottom: 10px; }
-  .chip { display: inline-block; align-self: flex-start; margin-top: 30px; padding: 7px 18px; border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.4); font-size: 17px; letter-spacing: .06em; opacity: .85; }
-  ul, ol { margin-left: 30px; }
-  li { font-size: 25px; line-height: 1.5; margin-bottom: 12px; }
-  p { font-size: 25px; line-height: 1.5; }
-  .small li, .small p { font-size: 22px; }
-  .cols { display: flex; gap: 40px; flex: 1; min-height: 0; }
-  .col { flex: 1; min-width: 0; }
-  .col.narrow { flex: .8; }
-  .box { border-radius: 10px; padding: 18px 24px; margin-top: 18px; }
-  .box .lbl { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 6px; }
-  .box p, .box li { font-size: 23px; }
-  .key { background: #eff2fb; border-left: 6px solid var(--teal); }
-  .key .lbl { color: var(--teal-dark); }
-  .try { background: #fdf6ec; border-left: 6px solid var(--amber); }
-  .try .lbl { color: var(--amber); }
-  .ex  { background: #f4f6fa; border-left: 6px solid var(--slate); }
-  .ex .lbl { color: var(--slate-dark); }
-  .defn { background: #fbf1f3; border-left: 6px solid var(--maroon); }
-  .defn .lbl { color: var(--maroon); }
-  mjx-container { font-size: 108% !important; }
-  table.t { border-collapse: collapse; margin-top: 8px; }
-  table.t th, table.t td { font-size: 22px; padding: 8px 20px; text-align: left; }
-  table.t th { border-bottom: 3px solid var(--slate-dark); color: var(--slate-dark); }
-  table.t td { border-bottom: 1px solid var(--line); }
-  table.t tr:last-child td { border-bottom: 2px solid var(--slate-dark); }
-  table.t td.c, table.t th.c { text-align: center; }
-  .step { visibility: hidden; }
-  .step.shown { visibility: visible; }
-  button.rvl { align-self: flex-start; margin-top: 14px; background: var(--teal); color: #fff; border: none;
-    border-radius: 999px; padding: 8px 20px; font-size: 16px; font-weight: 700; cursor: pointer;
-    font-family: inherit; letter-spacing: .04em; }
-  button.rvl:hover { background: var(--teal-dark); }
-  button.rvl.done { opacity: .25; cursor: default; }
-  .footerbar { position: absolute; bottom: 0; left: 0; right: 0; height: 34px;
-    display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
-    font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); background: #fafcfd;
-    border-radius: 0 0 6px 6px; }
-  .slide.title .footerbar, .slide.section .footerbar { display: none; }
-  #progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--teal); z-index: 10; transition: width .2s; }
-  #counter { position: fixed; bottom: 12px; right: 18px; color: #cbd5e1; font-size: 14px; z-index: 10; }
-  #help { position: fixed; bottom: 12px; left: 18px; color: #64748b; font-size: 13px; z-index: 10; }
-  #homeBtn { position: fixed; top: 14px; right: 18px; z-index: 20; color: #cbd5e1;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(203,213,225,.35);
-    padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; }
-  #homeBtn:hover { background: rgba(255,255,255,.2); color: #fff; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
 </head>
-<body>
-<div id="progress"></div>
-<div id="stage">
+<body class="deck-page theme-specialist">
+<div class="progress"></div>
+<div class="lessontag">T3W06 · Inference II</div>
+<main class="deck">
 
 <!-- 1 · Title -->
-<section class="slide title">
+<section class="slide section-slide">
   <h1>Tails and Errors</h1>
-  <p>Chapter 16 (C–E) · Week 6 — One-tail vs two-tail tests, and the two ways to be wrong</p>
-  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 3 next week</p>
+  <p>Chapter 16 (C–E) · Weeks 6–7 — One-tail vs two-tail tests, and the two ways to be wrong</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 3: Thu 27 Aug (Week 7)</p>
   <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
 </section>
 
 <!-- 2 · Week map -->
-<section class="slide">
-  <h1>This week: four lessons</h1>
-  <table class="t">
+<section class="slide" data-topic="T3W06 · Inference II">
+  <h2>This week: four lessons</h2>
+  <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
     <tr><td class="c"><b>1</b></td><td>16C</td><td>One-tail vs two-tail</td><td>choose \(H_1\) from wording; double the tail correctly</td></tr>
     <tr><td class="c"><b>2</b></td><td>16D</td><td>Tests ↔ confidence intervals</td><td>connect a two-tail test to the matching CI</td></tr>
@@ -108,12 +43,11 @@
   <div class="box key"><span class="lbl">Key idea</span>
     <p>The tail structure comes from the <b>question</b>, not the data. Decide one-tail or two-tail from the wording <em>before</em> you look at \(\bar{x}\).</p>
   </div>
-  <div class="footerbar"><span>T3W06 · Inference II</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 1 ═══ -->
 
-<section class="slide section" data-lesson="1">
+<section class="slide section-slide" data-lesson="1">
   <div class="kicker">Lesson 1 · 16C</div>
   <h1>One-tail and two-tail tests</h1>
   <ul class="goals">
@@ -123,9 +57,9 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Choosing the alternative hypothesis</h1>
-  <table class="t" style="margin:0 auto;">
+<section class="slide" data-topic="Lesson 1 · One-tail vs two-tail">
+  <h2>Choosing the alternative hypothesis</h2>
+  <table class="tbl" style="margin:0 auto;">
     <tr><th>Wording of the question</th><th>\(H_1\)</th><th>p-value</th></tr>
     <tr><td>"has the mean <b>decreased</b>?"</td><td>\(\mu &lt; \mu_0\)</td><td>\(P(Z \leq z)\)</td></tr>
     <tr><td>"has the mean <b>increased</b>?"</td><td>\(\mu &gt; \mu_0\)</td><td>\(P(Z \geq z)\)</td></tr>
@@ -135,46 +69,42 @@
     <li>Two-tail: extreme in <b>either</b> direction counts as evidence against \(H_0\) — so the one-tail probability doubles.</li>
     <li>Same data can reject in a one-tail test yet fail to reject in a two-tail test.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · One-tail vs two-tail</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Worked example: the same data, two-tailed</h1>
-  <div class="box ex"><span class="lbl">Example 1</span>
+<section class="slide" data-topic="Lesson 1 · One-tail vs two-tail">
+  <h2>Worked example: the same data, two-tailed</h2>
+  <div class="box example"><span class="lbl">Example 1</span>
     <p>Last week's drug data (\(\mu_0 = 5\), \(\sigma = 1\), \(n = 25\), \(\bar{x} = 4.6\)), but now the question is only "does the new drug <b>change</b> mean recovery time?"</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">\(H_0: \mu = 5\); \(H_1: \mu \neq 5\). Test statistic unchanged: \(z = -2\).</li>
-    <li class="step">\(p = 2\,P(Z \geq 2) \approx 2(0.0228) = 0.0455\).</li>
-    <li class="step">Still \(&lt; 0.05\), so still reject — but only just. At \(\alpha = 0.02\) the one-tail test would reject and the two-tail wouldn't.</li>
+    <li class="frag">\(H_0: \mu = 5\); \(H_1: \mu \neq 5\). Test statistic unchanged: \(z = -2\).</li>
+    <li class="frag">\(p = 2\,P(Z \geq 2) \approx 2(0.0228) = 0.0455\).</li>
+    <li class="frag">Still \(&lt; 0.05\), so still reject — but only just. At \(\alpha = 0.02\) the one-tail test would reject and the two-tail wouldn't.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · One-tail vs two-tail</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>The same \(z = -2\), two different questions</h1>
-  <svg viewBox="0 0 980 340" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><text x="255.0" y="26" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">One-tail: H&#8321;: &#956; &lt; &#956;&#8320;</text><path d="M35.0,274.0 L35.0,273.9 L36.8,273.9 L38.7,273.9 L40.5,273.9 L42.3,273.9 L44.2,273.9 L46.0,273.9 L47.8,273.8 L49.7,273.8 L51.5,273.8 L53.3,273.8 L55.2,273.7 L57.0,273.7 L58.8,273.6 L60.7,273.6 L62.5,273.6 L64.3,273.5 L66.2,273.4 L68.0,273.4 L69.8,273.3 L71.7,273.2 L73.5,273.1 L75.3,273.0 L77.2,272.9 L79.0,272.8 L80.8,272.6 L82.7,272.5 L84.5,272.3 L86.3,272.1 L88.2,272.0 L90.0,271.7 L91.8,271.5 L93.7,271.2 L95.5,271.0 L97.3,270.7 L99.2,270.3 L101.0,270.0 L102.8,269.6 L104.7,269.1 L106.5,268.7 L108.3,268.2 L110.2,267.6 L112.0,267.1 L113.8,266.4 L115.7,265.8 L117.5,265.0 L119.3,264.3 L121.2,263.4 L123.0,262.6 L124.8,261.6 L126.7,260.6 L128.5,259.5 L130.3,258.4 L132.2,257.2 L134.0,255.9 L135.8,254.5 L137.7,253.1 L139.5,251.5 L141.3,249.9 L143.2,248.2 L145.0,246.4 L145.0,274.0 Z" fill="#8E244D" fill-opacity="0.35" stroke="none"/><path d="M35.0,273.9 L37.2,273.9 L39.4,273.9 L41.6,273.9 L43.8,273.9 L46.0,273.9 L48.2,273.8 L50.4,273.8 L52.6,273.8 L54.8,273.7 L57.0,273.7 L59.2,273.6 L61.4,273.6 L63.6,273.5 L65.8,273.5 L68.0,273.4 L70.2,273.3 L72.4,273.2 L74.6,273.1 L76.8,272.9 L79.0,272.8 L81.2,272.6 L83.4,272.4 L85.6,272.2 L87.8,272.0 L90.0,271.7 L92.2,271.4 L94.4,271.1 L96.6,270.8 L98.8,270.4 L101.0,270.0 L103.2,269.5 L105.4,269.0 L107.6,268.4 L109.8,267.7 L112.0,267.1 L114.2,266.3 L116.4,265.5 L118.6,264.6 L120.8,263.6 L123.0,262.6 L125.2,261.4 L127.4,260.2 L129.6,258.8 L131.8,257.4 L134.0,255.9 L136.2,254.2 L138.4,252.4 L140.6,250.6 L142.8,248.5 L145.0,246.4 L147.2,244.1 L149.4,241.7 L151.6,239.2 L153.8,236.5 L156.0,233.6 L158.2,230.7 L160.4,227.5 L162.6,224.3 L164.8,220.9 L167.0,217.3 L169.2,213.6 L171.4,209.8 L173.6,205.8 L175.8,201.7 L178.0,197.5 L180.2,193.1 L182.4,188.7 L184.6,184.1 L186.8,179.5 L189.0,174.7 L191.2,170.0 L193.4,165.1 L195.6,160.2 L197.8,155.3 L200.0,150.3 L202.2,145.4 L204.4,140.5 L206.6,135.6 L208.8,130.7 L211.0,125.9 L213.2,121.2 L215.4,116.7 L217.6,112.2 L219.8,107.9 L222.0,103.7 L224.2,99.7 L226.4,95.9 L228.6,92.3 L230.8,88.9 L233.0,85.8 L235.2,82.9 L237.4,80.3 L239.6,77.9 L241.8,75.9 L244.0,74.1 L246.2,72.7 L248.4,71.6 L250.6,70.7 L252.8,70.3 L255.0,70.1 L257.2,70.3 L259.4,70.7 L261.6,71.6 L263.8,72.7 L266.0,74.1 L268.2,75.9 L270.4,77.9 L272.6,80.3 L274.8,82.9 L277.0,85.8 L279.2,88.9 L281.4,92.3 L283.6,95.9 L285.8,99.7 L288.0,103.7 L290.2,107.9 L292.4,112.2 L294.6,116.7 L296.8,121.2 L299.0,125.9 L301.2,130.7 L303.4,135.6 L305.6,140.5 L307.8,145.4 L310.0,150.3 L312.2,155.3 L314.4,160.2 L316.6,165.1 L318.8,170.0 L321.0,174.7 L323.2,179.5 L325.4,184.1 L327.6,188.7 L329.8,193.1 L332.0,197.5 L334.2,201.7 L336.4,205.8 L338.6,209.8 L340.8,213.6 L343.0,217.3 L345.2,220.9 L347.4,224.3 L349.6,227.5 L351.8,230.7 L354.0,233.6 L356.2,236.5 L358.4,239.2 L360.6,241.7 L362.8,244.1 L365.0,246.4 L367.2,248.5 L369.4,250.6 L371.6,252.4 L373.8,254.2 L376.0,255.9 L378.2,257.4 L380.4,258.8 L382.6,260.2 L384.8,261.4 L387.0,262.6 L389.2,263.6 L391.4,264.6 L393.6,265.5 L395.8,266.3 L398.0,267.1 L400.2,267.7 L402.4,268.4 L404.6,269.0 L406.8,269.5 L409.0,270.0 L411.2,270.4 L413.4,270.8 L415.6,271.1 L417.8,271.4 L420.0,271.7 L422.2,272.0 L424.4,272.2 L426.6,272.4 L428.8,272.6 L431.0,272.8 L433.2,272.9 L435.4,273.1 L437.6,273.2 L439.8,273.3 L442.0,273.4 L444.2,273.5 L446.4,273.5 L448.6,273.6 L450.8,273.6 L453.0,273.7 L455.2,273.7 L457.4,273.8 L459.6,273.8 L461.8,273.8 L464.0,273.9 L466.2,273.9 L468.4,273.9 L470.6,273.9 L472.8,273.9 L475.0,273.9" fill="none" stroke="#1F3A93" stroke-width="3"/><line x1="35.0" y1="274.0" x2="475.0" y2="274.0" stroke="#475569" stroke-width="2"/><text x="145.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">-2</text><text x="255.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">0</text><text x="365.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">2</text><text x="255.0" y="326.0" font-size="18" font-weight="700" fill="#8E244D" text-anchor="middle">p = P(Z &#8804; &#8722;2) &#8776; 0.023</text><text x="730.0" y="26" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">Two-tail: H&#8321;: &#956; &#8800; &#956;&#8320;</text><path d="M510.0,274.0 L510.0,273.9 L511.8,273.9 L513.7,273.9 L515.5,273.9 L517.3,273.9 L519.2,273.9 L521.0,273.9 L522.8,273.8 L524.7,273.8 L526.5,273.8 L528.3,273.8 L530.2,273.7 L532.0,273.7 L533.8,273.6 L535.7,273.6 L537.5,273.6 L539.3,273.5 L541.2,273.4 L543.0,273.4 L544.8,273.3 L546.7,273.2 L548.5,273.1 L550.3,273.0 L552.2,272.9 L554.0,272.8 L555.8,272.6 L557.7,272.5 L559.5,272.3 L561.3,272.1 L563.2,272.0 L565.0,271.7 L566.8,271.5 L568.7,271.2 L570.5,271.0 L572.3,270.7 L574.2,270.3 L576.0,270.0 L577.8,269.6 L579.7,269.1 L581.5,268.7 L583.3,268.2 L585.2,267.6 L587.0,267.1 L588.8,266.4 L590.7,265.8 L592.5,265.0 L594.3,264.3 L596.2,263.4 L598.0,262.6 L599.8,261.6 L601.7,260.6 L603.5,259.5 L605.3,258.4 L607.2,257.2 L609.0,255.9 L610.8,254.5 L612.7,253.1 L614.5,251.5 L616.3,249.9 L618.2,248.2 L620.0,246.4 L620.0,274.0 Z" fill="#8E244D" fill-opacity="0.35" stroke="none"/><path d="M840.0,274.0 L840.0,246.4 L841.8,248.2 L843.7,249.9 L845.5,251.5 L847.3,253.1 L849.2,254.5 L851.0,255.9 L852.8,257.2 L854.7,258.4 L856.5,259.5 L858.3,260.6 L860.2,261.6 L862.0,262.6 L863.8,263.4 L865.7,264.3 L867.5,265.0 L869.3,265.8 L871.2,266.4 L873.0,267.1 L874.8,267.6 L876.7,268.2 L878.5,268.7 L880.3,269.1 L882.2,269.6 L884.0,270.0 L885.8,270.3 L887.7,270.7 L889.5,271.0 L891.3,271.2 L893.2,271.5 L895.0,271.7 L896.8,272.0 L898.7,272.1 L900.5,272.3 L902.3,272.5 L904.2,272.6 L906.0,272.8 L907.8,272.9 L909.7,273.0 L911.5,273.1 L913.3,273.2 L915.2,273.3 L917.0,273.4 L918.8,273.4 L920.7,273.5 L922.5,273.6 L924.3,273.6 L926.2,273.6 L928.0,273.7 L929.8,273.7 L931.7,273.8 L933.5,273.8 L935.3,273.8 L937.2,273.8 L939.0,273.9 L940.8,273.9 L942.7,273.9 L944.5,273.9 L946.3,273.9 L948.2,273.9 L950.0,273.9 L950.0,274.0 Z" fill="#8E244D" fill-opacity="0.35" stroke="none"/><path d="M510.0,273.9 L512.2,273.9 L514.4,273.9 L516.6,273.9 L518.8,273.9 L521.0,273.9 L523.2,273.8 L525.4,273.8 L527.6,273.8 L529.8,273.7 L532.0,273.7 L534.2,273.6 L536.4,273.6 L538.6,273.5 L540.8,273.5 L543.0,273.4 L545.2,273.3 L547.4,273.2 L549.6,273.1 L551.8,272.9 L554.0,272.8 L556.2,272.6 L558.4,272.4 L560.6,272.2 L562.8,272.0 L565.0,271.7 L567.2,271.4 L569.4,271.1 L571.6,270.8 L573.8,270.4 L576.0,270.0 L578.2,269.5 L580.4,269.0 L582.6,268.4 L584.8,267.7 L587.0,267.1 L589.2,266.3 L591.4,265.5 L593.6,264.6 L595.8,263.6 L598.0,262.6 L600.2,261.4 L602.4,260.2 L604.6,258.8 L606.8,257.4 L609.0,255.9 L611.2,254.2 L613.4,252.4 L615.6,250.6 L617.8,248.5 L620.0,246.4 L622.2,244.1 L624.4,241.7 L626.6,239.2 L628.8,236.5 L631.0,233.6 L633.2,230.7 L635.4,227.5 L637.6,224.3 L639.8,220.9 L642.0,217.3 L644.2,213.6 L646.4,209.8 L648.6,205.8 L650.8,201.7 L653.0,197.5 L655.2,193.1 L657.4,188.7 L659.6,184.1 L661.8,179.5 L664.0,174.7 L666.2,170.0 L668.4,165.1 L670.6,160.2 L672.8,155.3 L675.0,150.3 L677.2,145.4 L679.4,140.5 L681.6,135.6 L683.8,130.7 L686.0,125.9 L688.2,121.2 L690.4,116.7 L692.6,112.2 L694.8,107.9 L697.0,103.7 L699.2,99.7 L701.4,95.9 L703.6,92.3 L705.8,88.9 L708.0,85.8 L710.2,82.9 L712.4,80.3 L714.6,77.9 L716.8,75.9 L719.0,74.1 L721.2,72.7 L723.4,71.6 L725.6,70.7 L727.8,70.3 L730.0,70.1 L732.2,70.3 L734.4,70.7 L736.6,71.6 L738.8,72.7 L741.0,74.1 L743.2,75.9 L745.4,77.9 L747.6,80.3 L749.8,82.9 L752.0,85.8 L754.2,88.9 L756.4,92.3 L758.6,95.9 L760.8,99.7 L763.0,103.7 L765.2,107.9 L767.4,112.2 L769.6,116.7 L771.8,121.2 L774.0,125.9 L776.2,130.7 L778.4,135.6 L780.6,140.5 L782.8,145.4 L785.0,150.3 L787.2,155.3 L789.4,160.2 L791.6,165.1 L793.8,170.0 L796.0,174.7 L798.2,179.5 L800.4,184.1 L802.6,188.7 L804.8,193.1 L807.0,197.5 L809.2,201.7 L811.4,205.8 L813.6,209.8 L815.8,213.6 L818.0,217.3 L820.2,220.9 L822.4,224.3 L824.6,227.5 L826.8,230.7 L829.0,233.6 L831.2,236.5 L833.4,239.2 L835.6,241.7 L837.8,244.1 L840.0,246.4 L842.2,248.5 L844.4,250.6 L846.6,252.4 L848.8,254.2 L851.0,255.9 L853.2,257.4 L855.4,258.8 L857.6,260.2 L859.8,261.4 L862.0,262.6 L864.2,263.6 L866.4,264.6 L868.6,265.5 L870.8,266.3 L873.0,267.1 L875.2,267.7 L877.4,268.4 L879.6,269.0 L881.8,269.5 L884.0,270.0 L886.2,270.4 L888.4,270.8 L890.6,271.1 L892.8,271.4 L895.0,271.7 L897.2,272.0 L899.4,272.2 L901.6,272.4 L903.8,272.6 L906.0,272.8 L908.2,272.9 L910.4,273.1 L912.6,273.2 L914.8,273.3 L917.0,273.4 L919.2,273.5 L921.4,273.5 L923.6,273.6 L925.8,273.6 L928.0,273.7 L930.2,273.7 L932.4,273.8 L934.6,273.8 L936.8,273.8 L939.0,273.9 L941.2,273.9 L943.4,273.9 L945.6,273.9 L947.8,273.9 L950.0,273.9" fill="none" stroke="#1F3A93" stroke-width="3"/><line x1="510.0" y1="274.0" x2="950.0" y2="274.0" stroke="#475569" stroke-width="2"/><text x="620.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">-2</text><text x="730.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">0</text><text x="840.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">2</text><text x="730.0" y="326.0" font-size="18" font-weight="700" fill="#8E244D" text-anchor="middle">p = 2P(Z &#8805; 2) &#8776; 0.046</text></svg>
-  <div class="footerbar"><span>Lesson 1 · One-tail vs two-tail</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
+<section class="slide" data-topic="Lesson 1 · One-tail vs two-tail">
+  <h2>The same \(z = -2\), two different questions</h2>
+  <svg viewBox="0 0 980 340" style="width:100%;max-width:980px;display:block;margin:6px auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><text x="255.0" y="26" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">One-tail: H&#8321;: &#956; &lt; &#956;&#8320;</text><path d="M35.0,274.0 L35.0,273.9 L36.8,273.9 L38.7,273.9 L40.5,273.9 L42.3,273.9 L44.2,273.9 L46.0,273.9 L47.8,273.8 L49.7,273.8 L51.5,273.8 L53.3,273.8 L55.2,273.7 L57.0,273.7 L58.8,273.6 L60.7,273.6 L62.5,273.6 L64.3,273.5 L66.2,273.4 L68.0,273.4 L69.8,273.3 L71.7,273.2 L73.5,273.1 L75.3,273.0 L77.2,272.9 L79.0,272.8 L80.8,272.6 L82.7,272.5 L84.5,272.3 L86.3,272.1 L88.2,272.0 L90.0,271.7 L91.8,271.5 L93.7,271.2 L95.5,271.0 L97.3,270.7 L99.2,270.3 L101.0,270.0 L102.8,269.6 L104.7,269.1 L106.5,268.7 L108.3,268.2 L110.2,267.6 L112.0,267.1 L113.8,266.4 L115.7,265.8 L117.5,265.0 L119.3,264.3 L121.2,263.4 L123.0,262.6 L124.8,261.6 L126.7,260.6 L128.5,259.5 L130.3,258.4 L132.2,257.2 L134.0,255.9 L135.8,254.5 L137.7,253.1 L139.5,251.5 L141.3,249.9 L143.2,248.2 L145.0,246.4 L145.0,274.0 Z" fill="#9d144d" fill-opacity="0.35" stroke="none"/><path d="M35.0,273.9 L37.2,273.9 L39.4,273.9 L41.6,273.9 L43.8,273.9 L46.0,273.9 L48.2,273.8 L50.4,273.8 L52.6,273.8 L54.8,273.7 L57.0,273.7 L59.2,273.6 L61.4,273.6 L63.6,273.5 L65.8,273.5 L68.0,273.4 L70.2,273.3 L72.4,273.2 L74.6,273.1 L76.8,272.9 L79.0,272.8 L81.2,272.6 L83.4,272.4 L85.6,272.2 L87.8,272.0 L90.0,271.7 L92.2,271.4 L94.4,271.1 L96.6,270.8 L98.8,270.4 L101.0,270.0 L103.2,269.5 L105.4,269.0 L107.6,268.4 L109.8,267.7 L112.0,267.1 L114.2,266.3 L116.4,265.5 L118.6,264.6 L120.8,263.6 L123.0,262.6 L125.2,261.4 L127.4,260.2 L129.6,258.8 L131.8,257.4 L134.0,255.9 L136.2,254.2 L138.4,252.4 L140.6,250.6 L142.8,248.5 L145.0,246.4 L147.2,244.1 L149.4,241.7 L151.6,239.2 L153.8,236.5 L156.0,233.6 L158.2,230.7 L160.4,227.5 L162.6,224.3 L164.8,220.9 L167.0,217.3 L169.2,213.6 L171.4,209.8 L173.6,205.8 L175.8,201.7 L178.0,197.5 L180.2,193.1 L182.4,188.7 L184.6,184.1 L186.8,179.5 L189.0,174.7 L191.2,170.0 L193.4,165.1 L195.6,160.2 L197.8,155.3 L200.0,150.3 L202.2,145.4 L204.4,140.5 L206.6,135.6 L208.8,130.7 L211.0,125.9 L213.2,121.2 L215.4,116.7 L217.6,112.2 L219.8,107.9 L222.0,103.7 L224.2,99.7 L226.4,95.9 L228.6,92.3 L230.8,88.9 L233.0,85.8 L235.2,82.9 L237.4,80.3 L239.6,77.9 L241.8,75.9 L244.0,74.1 L246.2,72.7 L248.4,71.6 L250.6,70.7 L252.8,70.3 L255.0,70.1 L257.2,70.3 L259.4,70.7 L261.6,71.6 L263.8,72.7 L266.0,74.1 L268.2,75.9 L270.4,77.9 L272.6,80.3 L274.8,82.9 L277.0,85.8 L279.2,88.9 L281.4,92.3 L283.6,95.9 L285.8,99.7 L288.0,103.7 L290.2,107.9 L292.4,112.2 L294.6,116.7 L296.8,121.2 L299.0,125.9 L301.2,130.7 L303.4,135.6 L305.6,140.5 L307.8,145.4 L310.0,150.3 L312.2,155.3 L314.4,160.2 L316.6,165.1 L318.8,170.0 L321.0,174.7 L323.2,179.5 L325.4,184.1 L327.6,188.7 L329.8,193.1 L332.0,197.5 L334.2,201.7 L336.4,205.8 L338.6,209.8 L340.8,213.6 L343.0,217.3 L345.2,220.9 L347.4,224.3 L349.6,227.5 L351.8,230.7 L354.0,233.6 L356.2,236.5 L358.4,239.2 L360.6,241.7 L362.8,244.1 L365.0,246.4 L367.2,248.5 L369.4,250.6 L371.6,252.4 L373.8,254.2 L376.0,255.9 L378.2,257.4 L380.4,258.8 L382.6,260.2 L384.8,261.4 L387.0,262.6 L389.2,263.6 L391.4,264.6 L393.6,265.5 L395.8,266.3 L398.0,267.1 L400.2,267.7 L402.4,268.4 L404.6,269.0 L406.8,269.5 L409.0,270.0 L411.2,270.4 L413.4,270.8 L415.6,271.1 L417.8,271.4 L420.0,271.7 L422.2,272.0 L424.4,272.2 L426.6,272.4 L428.8,272.6 L431.0,272.8 L433.2,272.9 L435.4,273.1 L437.6,273.2 L439.8,273.3 L442.0,273.4 L444.2,273.5 L446.4,273.5 L448.6,273.6 L450.8,273.6 L453.0,273.7 L455.2,273.7 L457.4,273.8 L459.6,273.8 L461.8,273.8 L464.0,273.9 L466.2,273.9 L468.4,273.9 L470.6,273.9 L472.8,273.9 L475.0,273.9" fill="none" stroke="#d02670" stroke-width="3"/><line x1="35.0" y1="274.0" x2="475.0" y2="274.0" stroke="#475569" stroke-width="2"/><text x="145.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">-2</text><text x="255.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">0</text><text x="365.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">2</text><text x="255.0" y="326.0" font-size="18" font-weight="700" fill="#9d144d" text-anchor="middle">p = P(Z &#8804; &#8722;2) &#8776; 0.023</text><text x="730.0" y="26" font-size="20" font-weight="700" fill="#475569" text-anchor="middle">Two-tail: H&#8321;: &#956; &#8800; &#956;&#8320;</text><path d="M510.0,274.0 L510.0,273.9 L511.8,273.9 L513.7,273.9 L515.5,273.9 L517.3,273.9 L519.2,273.9 L521.0,273.9 L522.8,273.8 L524.7,273.8 L526.5,273.8 L528.3,273.8 L530.2,273.7 L532.0,273.7 L533.8,273.6 L535.7,273.6 L537.5,273.6 L539.3,273.5 L541.2,273.4 L543.0,273.4 L544.8,273.3 L546.7,273.2 L548.5,273.1 L550.3,273.0 L552.2,272.9 L554.0,272.8 L555.8,272.6 L557.7,272.5 L559.5,272.3 L561.3,272.1 L563.2,272.0 L565.0,271.7 L566.8,271.5 L568.7,271.2 L570.5,271.0 L572.3,270.7 L574.2,270.3 L576.0,270.0 L577.8,269.6 L579.7,269.1 L581.5,268.7 L583.3,268.2 L585.2,267.6 L587.0,267.1 L588.8,266.4 L590.7,265.8 L592.5,265.0 L594.3,264.3 L596.2,263.4 L598.0,262.6 L599.8,261.6 L601.7,260.6 L603.5,259.5 L605.3,258.4 L607.2,257.2 L609.0,255.9 L610.8,254.5 L612.7,253.1 L614.5,251.5 L616.3,249.9 L618.2,248.2 L620.0,246.4 L620.0,274.0 Z" fill="#9d144d" fill-opacity="0.35" stroke="none"/><path d="M840.0,274.0 L840.0,246.4 L841.8,248.2 L843.7,249.9 L845.5,251.5 L847.3,253.1 L849.2,254.5 L851.0,255.9 L852.8,257.2 L854.7,258.4 L856.5,259.5 L858.3,260.6 L860.2,261.6 L862.0,262.6 L863.8,263.4 L865.7,264.3 L867.5,265.0 L869.3,265.8 L871.2,266.4 L873.0,267.1 L874.8,267.6 L876.7,268.2 L878.5,268.7 L880.3,269.1 L882.2,269.6 L884.0,270.0 L885.8,270.3 L887.7,270.7 L889.5,271.0 L891.3,271.2 L893.2,271.5 L895.0,271.7 L896.8,272.0 L898.7,272.1 L900.5,272.3 L902.3,272.5 L904.2,272.6 L906.0,272.8 L907.8,272.9 L909.7,273.0 L911.5,273.1 L913.3,273.2 L915.2,273.3 L917.0,273.4 L918.8,273.4 L920.7,273.5 L922.5,273.6 L924.3,273.6 L926.2,273.6 L928.0,273.7 L929.8,273.7 L931.7,273.8 L933.5,273.8 L935.3,273.8 L937.2,273.8 L939.0,273.9 L940.8,273.9 L942.7,273.9 L944.5,273.9 L946.3,273.9 L948.2,273.9 L950.0,273.9 L950.0,274.0 Z" fill="#9d144d" fill-opacity="0.35" stroke="none"/><path d="M510.0,273.9 L512.2,273.9 L514.4,273.9 L516.6,273.9 L518.8,273.9 L521.0,273.9 L523.2,273.8 L525.4,273.8 L527.6,273.8 L529.8,273.7 L532.0,273.7 L534.2,273.6 L536.4,273.6 L538.6,273.5 L540.8,273.5 L543.0,273.4 L545.2,273.3 L547.4,273.2 L549.6,273.1 L551.8,272.9 L554.0,272.8 L556.2,272.6 L558.4,272.4 L560.6,272.2 L562.8,272.0 L565.0,271.7 L567.2,271.4 L569.4,271.1 L571.6,270.8 L573.8,270.4 L576.0,270.0 L578.2,269.5 L580.4,269.0 L582.6,268.4 L584.8,267.7 L587.0,267.1 L589.2,266.3 L591.4,265.5 L593.6,264.6 L595.8,263.6 L598.0,262.6 L600.2,261.4 L602.4,260.2 L604.6,258.8 L606.8,257.4 L609.0,255.9 L611.2,254.2 L613.4,252.4 L615.6,250.6 L617.8,248.5 L620.0,246.4 L622.2,244.1 L624.4,241.7 L626.6,239.2 L628.8,236.5 L631.0,233.6 L633.2,230.7 L635.4,227.5 L637.6,224.3 L639.8,220.9 L642.0,217.3 L644.2,213.6 L646.4,209.8 L648.6,205.8 L650.8,201.7 L653.0,197.5 L655.2,193.1 L657.4,188.7 L659.6,184.1 L661.8,179.5 L664.0,174.7 L666.2,170.0 L668.4,165.1 L670.6,160.2 L672.8,155.3 L675.0,150.3 L677.2,145.4 L679.4,140.5 L681.6,135.6 L683.8,130.7 L686.0,125.9 L688.2,121.2 L690.4,116.7 L692.6,112.2 L694.8,107.9 L697.0,103.7 L699.2,99.7 L701.4,95.9 L703.6,92.3 L705.8,88.9 L708.0,85.8 L710.2,82.9 L712.4,80.3 L714.6,77.9 L716.8,75.9 L719.0,74.1 L721.2,72.7 L723.4,71.6 L725.6,70.7 L727.8,70.3 L730.0,70.1 L732.2,70.3 L734.4,70.7 L736.6,71.6 L738.8,72.7 L741.0,74.1 L743.2,75.9 L745.4,77.9 L747.6,80.3 L749.8,82.9 L752.0,85.8 L754.2,88.9 L756.4,92.3 L758.6,95.9 L760.8,99.7 L763.0,103.7 L765.2,107.9 L767.4,112.2 L769.6,116.7 L771.8,121.2 L774.0,125.9 L776.2,130.7 L778.4,135.6 L780.6,140.5 L782.8,145.4 L785.0,150.3 L787.2,155.3 L789.4,160.2 L791.6,165.1 L793.8,170.0 L796.0,174.7 L798.2,179.5 L800.4,184.1 L802.6,188.7 L804.8,193.1 L807.0,197.5 L809.2,201.7 L811.4,205.8 L813.6,209.8 L815.8,213.6 L818.0,217.3 L820.2,220.9 L822.4,224.3 L824.6,227.5 L826.8,230.7 L829.0,233.6 L831.2,236.5 L833.4,239.2 L835.6,241.7 L837.8,244.1 L840.0,246.4 L842.2,248.5 L844.4,250.6 L846.6,252.4 L848.8,254.2 L851.0,255.9 L853.2,257.4 L855.4,258.8 L857.6,260.2 L859.8,261.4 L862.0,262.6 L864.2,263.6 L866.4,264.6 L868.6,265.5 L870.8,266.3 L873.0,267.1 L875.2,267.7 L877.4,268.4 L879.6,269.0 L881.8,269.5 L884.0,270.0 L886.2,270.4 L888.4,270.8 L890.6,271.1 L892.8,271.4 L895.0,271.7 L897.2,272.0 L899.4,272.2 L901.6,272.4 L903.8,272.6 L906.0,272.8 L908.2,272.9 L910.4,273.1 L912.6,273.2 L914.8,273.3 L917.0,273.4 L919.2,273.5 L921.4,273.5 L923.6,273.6 L925.8,273.6 L928.0,273.7 L930.2,273.7 L932.4,273.8 L934.6,273.8 L936.8,273.8 L939.0,273.9 L941.2,273.9 L943.4,273.9 L945.6,273.9 L947.8,273.9 L950.0,273.9" fill="none" stroke="#d02670" stroke-width="3"/><line x1="510.0" y1="274.0" x2="950.0" y2="274.0" stroke="#475569" stroke-width="2"/><text x="620.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">-2</text><text x="730.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">0</text><text x="840.0" y="298.0" font-size="16" fill="#475569" text-anchor="middle">2</text><text x="730.0" y="326.0" font-size="18" font-weight="700" fill="#9d144d" text-anchor="middle">p = 2P(Z &#8805; 2) &#8776; 0.046</text></svg>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 1 — your turn</h1>
+<section class="slide" data-topic="Lesson 1 · Checkpoint">
+  <h2>Checkpoint 1 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>A machine fills bags with \(\mu = 500\) g, \(\sigma = 8\) g. After maintenance, 16 bags average \(\bar{x} = 504.5\) g. Last week we tested "overfills". Now test: has the mean <b>changed</b>? Use \(\alpha = 0.05\), then \(\alpha = 0.01\).</p>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">\(H_1: \mu \neq 500\); \(z = 2.25\) as before; \(p = 2P(Z \geq 2.25) \approx 0.0244\).</li>
-    <li class="step">At \(\alpha = 0.05\): reject — evidence the mean has changed. At \(\alpha = 0.01\): do not reject — the same data no longer convince.</li>
-    <li class="step">Moral: the conclusion depends on both the tail structure and the significance level — state both before computing.</li>
+    <li class="frag">\(H_1: \mu \neq 500\); \(z = 2.25\) as before; \(p = 2P(Z \geq 2.25) \approx 0.0244\).</li>
+    <li class="frag">At \(\alpha = 0.05\): reject — evidence the mean has changed. At \(\alpha = 0.01\): do not reject — the same data no longer convince.</li>
+    <li class="frag">Moral: the conclusion depends on both the tail structure and the significance level — state both before computing.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 1 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 2 ═══ -->
 
-<section class="slide section" data-lesson="2">
+<section class="slide section-slide" data-lesson="2">
   <div class="kicker">Lesson 2 · 16D</div>
   <h1>Tests and confidence intervals</h1>
   <ul class="goals">
@@ -183,24 +113,23 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Two views of one computation</h1>
+<section class="slide" data-topic="Lesson 2 · Tests ↔ CIs">
+  <h2>Two views of one computation</h2>
   <div class="box defn"><span class="lbl">Fact (16D)</span>
     <p>A two-tail test at the 5% level rejects \(H_0: \mu = \mu_0\) <b>exactly when</b> \(\mu_0\) falls outside the 95% confidence interval \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\).</p>
   </div>
-  <div class="box ex"><span class="lbl">Example 2</span>
+  <div class="box example"><span class="lbl">Example 2</span>
     <p>A process should run at \(\mu_0 = 100\) units/hr; \(\sigma = 14\). A sample of \(n = 49\) hours gives \(\bar{x} = 104.2\). Test "has the rate changed?" at 5%, and confirm via the CI.</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:10px;">
-    <li class="step">\(z = \dfrac{104.2 - 100}{14/7} = 2.1\); \(p = 2P(Z \geq 2.1) \approx 0.036 &lt; 0.05\) → reject.</li>
-    <li class="step">CI: \(104.2 \pm 1.96(2) = (100.28,\; 108.12)\) — and \(100\) lies (just) outside. Consistent. ✓</li>
+    <li class="frag">\(z = \dfrac{104.2 - 100}{14/7} = 2.1\); \(p = 2P(Z \geq 2.1) \approx 0.036 &lt; 0.05\) → reject.</li>
+    <li class="frag">CI: \(104.2 \pm 1.96(2) = (100.28,\; 108.12)\) — and \(100\) lies (just) outside. Consistent. ✓</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Tests ↔ CIs</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 2 — your turn</h1>
+<section class="slide" data-topic="Lesson 2 · Checkpoint">
+  <h2>Checkpoint 2 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Same process (\(\mu_0 = 100\), \(\sigma = 14\), \(n = 49\)) but a different week gives \(\bar{x} = 103\).</p>
     <ul style="margin-top:8px;">
@@ -208,17 +137,16 @@
       <li><b>(b)</b> Find the 95% CI and confirm it tells the same story.</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> \(z = \dfrac{3}{2} = 1.5\); \(p = 2P(Z \geq 1.5) \approx 0.134 &gt; 0.05\) → do not reject.</li>
-    <li class="step"><b>(b)</b> CI \(= 103 \pm 3.92 = (99.08,\; 106.92)\), which <b>contains</b> 100 — same story, as it must.</li>
+    <li class="frag"><b>(a)</b> \(z = \dfrac{3}{2} = 1.5\); \(p = 2P(Z \geq 1.5) \approx 0.134 &gt; 0.05\) → do not reject.</li>
+    <li class="frag"><b>(b)</b> CI \(= 103 \pm 3.92 = (99.08,\; 106.92)\), which <b>contains</b> 100 — same story, as it must.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 2 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 3 ═══ -->
 
-<section class="slide section" data-lesson="3">
+<section class="slide section-slide" data-lesson="3">
   <div class="kicker">Lesson 3 · 16E</div>
   <h1>Type I and Type II errors</h1>
   <ul class="goals">
@@ -228,9 +156,9 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Two ways to be wrong</h1>
-  <table class="t" style="margin:0 auto;">
+<section class="slide" data-topic="Lesson 3 · Errors">
+  <h2>Two ways to be wrong</h2>
+  <table class="tbl" style="margin:0 auto;">
     <tr><th></th><th class="c">\(H_0\) true</th><th class="c">\(H_0\) false</th></tr>
     <tr><td><b>Reject \(H_0\)</b></td><td class="c" style="color:var(--red);"><b>Type I error</b></td><td class="c">correct ✓</td></tr>
     <tr><td><b>Do not reject \(H_0\)</b></td><td class="c">correct ✓</td><td class="c" style="color:var(--red);"><b>Type II error</b></td></tr>
@@ -240,12 +168,11 @@
     <li><b>Type II</b>: a miss — failing to detect a real change. Its probability depends on the true \(\mu\), \(n\) and \(\alpha\); we don't control it directly.</li>
     <li>Trade-off: shrinking \(\alpha\) makes false alarms rarer but misses more likely. More data improves both.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Errors</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Errors in context</h1>
-  <div class="box ex"><span class="lbl">Example 3</span>
+<section class="slide" data-topic="Lesson 3 · Errors">
+  <h2>Errors in context</h2>
+  <div class="box example"><span class="lbl">Example 3</span>
     <p>Testing whether a new drug reduces recovery time (\(H_0\): no change):</p>
     <ul style="margin-top:8px;">
       <li><b>Type I:</b> approving a drug that is actually no better — patients switch for nothing.</li>
@@ -255,11 +182,10 @@
   <div class="box key"><span class="lbl">Template sentence</span>
     <p>"Concluding that <em>[the change happened]</em> when in fact <em>[it didn't]</em>" — name the conclusion, name the truth, keep the units and the story.</p>
   </div>
-  <div class="footerbar"><span>Lesson 3 · Errors</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 3 — your turn</h1>
+<section class="slide" data-topic="Lesson 3 · Checkpoint">
+  <h2>Checkpoint 3 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>A factory tests whether a machine's fill mean has drifted from 500 g (two-tail).</p>
     <ul style="margin-top:8px;">
@@ -268,18 +194,17 @@
       <li><b>(c)</b> If underfilled bags trigger fines, which error is costlier — and what would you do to \(\alpha\)?</li>
     </ul>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step"><b>(a)</b> Concluding the fill mean has drifted from 500 g — and recalibrating — when in fact it is still 500 g.</li>
-    <li class="step"><b>(b)</b> Concluding there is no drift when the mean really has moved, so a faulty machine keeps running.</li>
-    <li class="step"><b>(c)</b> The miss (Type II) is costlier here: undetected underfilling accrues fines. Raising \(\alpha\) (say to 0.10) makes the test more sensitive — more false alarms, fewer misses.</li>
+    <li class="frag"><b>(a)</b> Concluding the fill mean has drifted from 500 g — and recalibrating — when in fact it is still 500 g.</li>
+    <li class="frag"><b>(b)</b> Concluding there is no drift when the mean really has moved, so a faulty machine keeps running.</li>
+    <li class="frag"><b>(c)</b> The miss (Type II) is costlier here: undetected underfilling accrues fines. Raising \(\alpha\) (say to 0.10) makes the test more sensitive — more false alarms, fewer misses.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 3 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
 <!-- ═══ LESSON 4 ═══ -->
 
-<section class="slide section" data-lesson="4">
+<section class="slide section-slide" data-lesson="4">
   <div class="kicker">Lesson 4 · 16E extension</div>
   <h1>How likely is a miss? — and SAC 3 prep</h1>
   <ul class="goals">
@@ -289,121 +214,69 @@
   </ul>
 </section>
 
-<section class="slide">
-  <h1>Extension: how likely is a miss?</h1>
-  <div class="box ex"><span class="lbl">Example 4</span>
+<section class="slide" data-topic="Lesson 4 · Error probabilities">
+  <h2>Extension: how likely is a miss?</h2>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>Drug test again: \(H_0: \mu = 5\), \(H_1: \mu &lt; 5\), \(\sigma = 1\), \(n = 25\), \(\alpha = 0.05\). If the drug truly gives \(\mu = 4.5\), what is the probability of a Type II error?</p>
   </div>
-  <button class="rvl">Reveal ▸</button>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Reject when \(z \leq -1.645\), i.e. \(\bar{x} \leq 5 - 1.645(0.2) = 4.671\).</li>
-    <li class="step">Type II = fail to reject although \(\mu = 4.5\): \(P(\bar{X} &gt; 4.671)\) with \(\bar{X} \sim N(4.5,\, 0.2^2)\).</li>
-    <li class="step">\(z = \dfrac{4.671 - 4.5}{0.2} = 0.855\), so \(P(\text{Type II}) = P(Z &gt; 0.855) \approx 0.20\).</li>
+    <li class="frag">Reject when \(z \leq -1.645\), i.e. \(\bar{x} \leq 5 - 1.645(0.2) = 4.671\).</li>
+    <li class="frag">Type II = fail to reject although \(\mu = 4.5\): \(P(\bar{X} &gt; 4.671)\) with \(\bar{X} \sim N(4.5,\, 0.2^2)\).</li>
+    <li class="frag">\(z = \dfrac{4.671 - 4.5}{0.2} = 0.855\), so \(P(\text{Type II}) = P(Z &gt; 0.855) \approx 0.20\).</li>
   </ul>
   <div class="box key"><span class="lbl">Reading</span>
     <p>Even a genuinely better drug is missed 20% of the time with \(n = 25\). Larger samples shrink this — which is why trials are big.</p>
   </div>
-  <div class="footerbar"><span>Lesson 4 · Error probabilities</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Checkpoint 4 — your turn</h1>
+<section class="slide" data-topic="Lesson 4 · Checkpoint">
+  <h2>Checkpoint 4 — your turn</h2>
   <div class="box try"><span class="lbl">Try it! (≈5 min)</span>
     <p>Repeat Example 4 with \(n = 100\) (everything else unchanged: \(\mu_0 = 5\), \(\sigma = 1\), \(\alpha = 0.05\), true \(\mu = 4.5\)).</p>
   </div>
-  <button class="rvl">Answers ▸</button>
+  <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
-    <li class="step">Now \(\text{sd}(\bar{X}) = 0.1\); reject when \(\bar{x} \leq 5 - 1.645(0.1) = 4.8355\).</li>
-    <li class="step">\(P(\text{Type II}) = P(\bar{X} &gt; 4.8355)\) with \(\bar{X} \sim N(4.5,\, 0.1^2)\): \(z = 3.355\), probability \(\approx 0.0004\).</li>
-    <li class="step">Quadrupling \(n\) took the miss rate from 20% to 0.04% — sample size is the strongest lever we have.</li>
+    <li class="frag">Now \(\text{sd}(\bar{X}) = 0.1\); reject when \(\bar{x} \leq 5 - 1.645(0.1) = 4.8355\).</li>
+    <li class="frag">\(P(\text{Type II}) = P(\bar{X} &gt; 4.8355)\) with \(\bar{X} \sim N(4.5,\, 0.1^2)\): \(z = 3.355\), probability \(\approx 0.0004\).</li>
+    <li class="frag">Quadrupling \(n\) took the miss rate from 20% to 0.04% — sample size is the strongest lever we have.</li>
   </ul>
-  <div class="footerbar"><span>Lesson 4 · Checkpoint</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>SAC 3 next week: Probability &amp; Statistics</h1>
+<section class="slide" data-topic="T3W06 · Inference II">
+  <h2>SAC 3 — Thu 27 Aug: Probability &amp; Statistics</h2>
   <ul>
     <li>Coverage: Chapter 15 (linear combinations, sample mean, CLT) + Chapter 16 (CIs, hypothesis tests, errors).</li>
-    <li>The <b>revision pack</b> (with full solutions at the back) is on the hub now; the practice SAC runs under timed conditions next week.</li>
+    <li>The <b>revision pack</b> (with full solutions at the back) is on the hub now; work the practice SAC under timed conditions before the day.</li>
     <li>Focus your revision on the four recurring mark-losers: variance scaling, \(2X\) vs \(X_1 + X_2\), one-tail vs two-tail, and conclusions out of context.</li>
   </ul>
   <div class="box key"><span class="lbl">This weekend</span>
     <p>Work the revision pack before Monday — the practice SAC will tell you much more if you've already found your weak spots.</p>
   </div>
-  <div class="footerbar"><span>T3W06 · Inference II</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
-<section class="slide">
-  <h1>Week 6 summary</h1>
+<section class="slide" data-topic="T3W06 · Inference II">
+  <h2>Chapter 16 summary</h2>
   <ul>
     <li>\(H_1\) direction comes from the question's wording; two-tail doubles the \(p\)-value.</li>
     <li>Two-tail test at level \(\alpha\) ↔ \((1-\alpha)\) confidence interval.</li>
     <li>Type I = false alarm, probability \(\alpha\); Type II = miss. Both described in context.</li>
-    <li>All of Chapters 15–16 is now on the table: SAC 3 next week.</li>
+    <li>All of Chapters 15–16 is now on the table: SAC 3 is Thu 27 Aug.</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Problem Set 4 (Hypothesis Testing) + the SAC 3 revision pack. Bring questions on Monday.</p>
   </div>
-  <div class="footerbar"><span>T3W06 · Inference II</span><span>VCE Specialist Mathematics 3&amp;4</span></div>
 </section>
 
+</main>
+<a class="homebtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>–<span class="key">4</span> jump to lesson · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
 </div>
-<a id="homeBtn" href="../" title="Back to course hub">&#8962; Home</a>
-<div id="counter"></div>
-<div id="help">→ / click reveals then advances · ← back · 1–4 jump to lesson · F fullscreen</div>
 
-<script>
-  const slides = [...document.querySelectorAll('.slide')];
-  let cur = 0;
-  function fit() {
-    const s = Math.min(innerWidth * 0.9 / 1280, innerHeight * 0.9 / 720);
-    slides.forEach(sl => sl.style.zoom = s);
-  }
-  addEventListener('resize', fit); fit();
-  function syncBtns(sl) {
-    const left = sl.querySelector('.step:not(.shown)');
-    sl.querySelectorAll('button.rvl').forEach(b => b.classList.toggle('done', !left));
-  }
-  function revealNext(sl) {
-    const s = sl.querySelector('.step:not(.shown)');
-    if (s) { s.classList.add('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function unrevealLast(sl) {
-    const shown = sl.querySelectorAll('.step.shown');
-    if (shown.length) { shown[shown.length - 1].classList.remove('shown'); syncBtns(sl); return true; }
-    return false;
-  }
-  function show(i) {
-    cur = Math.max(0, Math.min(slides.length - 1, i));
-    slides.forEach((sl, j) => sl.classList.toggle('active', j === cur));
-    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length;
-    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
-    location.hash = cur + 1;
-  }
-  function next() { if (!revealNext(slides[cur])) show(cur + 1); }
-  function prev() { if (!unrevealLast(slides[cur])) show(cur - 1); }
-  addEventListener('keydown', e => {
-    if (['ArrowRight', ' ', 'PageDown', 'ArrowDown'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft', 'PageUp', 'ArrowUp'].includes(e.key)) { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') show(0);
-    else if (e.key === 'End') show(slides.length - 1);
-    else if (['1','2','3','4'].includes(e.key)) {
-      const target = slides.findIndex(sl => sl.dataset.lesson === e.key);
-      if (target >= 0) show(target);
-    }
-    else if (e.key.toLowerCase() === 'f') {
-      document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-    }
-  });
-  addEventListener('click', e => {
-    if (e.target.closest('button.rvl, a')) return;
-    if (e.clientX > innerWidth * 0.66) next();
-    else if (e.clientX < innerWidth * 0.15) show(cur - 1);
-  });
-  document.querySelectorAll('button.rvl').forEach(b =>
-    b.addEventListener('click', () => revealNext(b.closest('.slide'))));
-  show(parseInt(location.hash.slice(1)) - 1 || 0);
-</script>
+<script src="../../../assets/js/deck.js" defer></script>
 </body>
 </html>

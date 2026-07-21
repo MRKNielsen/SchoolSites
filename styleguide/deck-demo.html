@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deck system demo — every component</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/deck.css">
+<style>
+  /* Demo-only: theme switcher */
+  .themebar { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 30; display: flex; gap: 6px; }
+  .themebar button { font-family: inherit; font-size: 12.5px; font-weight: 700; border: 1.5px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .themebar button.on { border-color: var(--accent); color: var(--accent); }
+  @media print { .themebar { display: none; } }
+</style>
+</head>
+<body class="deck-page theme-methods">
+
+<div class="progress"></div>
+<div class="lessontag">Styleguide · Deck demo</div>
+<a class="homebtn" href="../index.html">⌂ Home</a>
+
+<div class="themebar">
+  <button data-theme="theme-methods" class="on">Methods</button>
+  <button data-theme="theme-specialist">Specialist</button>
+  <button data-theme="theme-primer">Primer</button>
+  <button data-theme="theme-science">Science</button>
+  <button data-theme="">Default</button>
+</div>
+
+<main class="deck">
+
+  <!-- 1 · Title slide -->
+  <section class="slide title-slide active">
+    <p class="eyebrow">Styleguide <b>·</b> canonical deck system</p>
+    <h1>Every component,<br>one stylesheet.</h1>
+    <p class="subtitle">tokens.css + deck.css + deck.js — the template all decks are rebuilt onto.</p>
+    <p class="bigeq title-eq"><span class="m">f</span>(<span class="m">x</span>) = <span class="fr"><span class="nu">1</span><span class="de">2</span></span><span class="m">x</span><sup>2</sup> − 3<span class="m">x</span> + 1</p>
+    <div class="head-meta">
+      <span class="pill">Theme switcher above ↑</span>
+      <span class="pill">← → to navigate</span>
+      <span class="pill"><span class="key">R</span> reveals steps</span>
+      <span class="pill">Ctrl+P for handout print view</span>
+    </div>
+    <p class="start-hint">Use the pills at the top to preview each subject's colour theme live.</p>
+  </section>
+
+  <!-- 2 · Section divider -->
+  <section class="slide section-slide">
+    <p class="kicker">Part 1 of 3</p>
+    <h1>Section dividers</h1>
+    <p>Full-bleed gradient built from the theme's accent — switches with the subject.</p>
+    <ul>
+      <li>Learning intention one goes here</li>
+      <li>Learning intention two goes here</li>
+    </ul>
+    <span class="chip" style="border:1px solid rgba(255,255,255,.4); border-radius:999px; padding:7px 18px; align-self:flex-start; margin-top:30px;">VCE Mathematics · Unit 1</span>
+  </section>
+
+  <!-- 3 · Box system -->
+  <section class="slide">
+    <p class="eyebrow">Callouts <b>·</b> unified box system</p>
+    <h2>One <code>.box</code>, eight variants</h2>
+    <div class="cols even">
+      <div>
+        <div class="box key"><span class="lbl">Key idea</span><p>The gradient of a line measures rate of change: <span class="m">m</span> = rise ÷ run.</p></div>
+        <div class="box defn"><span class="lbl">Definition</span><p>A <b>sample space</b> ξ is the set of all possible outcomes of an experiment.</p></div>
+        <div class="box try"><span class="lbl">Try this</span><p>Find the gradient between (1, 3) and (4, 12) before revealing the working.</p></div>
+        <div class="box example"><span class="lbl">Example</span><p>Worked-example container, neutral styling.</p></div>
+      </div>
+      <div>
+        <div class="box hint"><span class="lbl">Hint</span><p>Draw a tree diagram before counting outcomes.</p></div>
+        <div class="box answer"><span class="lbl">Answer</span><p><span class="m">m</span> = 9 ÷ 3 = <b>3</b></p></div>
+        <div class="box question"><span class="lbl">Question 4b</span><p>Hence find Pr(<span class="m">A</span> ∩ <span class="m">B</span>′).</p></div>
+        <div class="box cas"><span class="lbl">CAS</span><p>Menu → 6: Statistics → 5: Distributions → binomPdf.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Gradual release + steps reveal -->
+  <section class="slide">
+    <p class="eyebrow">Pedagogy <b>·</b> gradual release + step reveal</p>
+    <h2><span class="phase-tag ido">I do</span> Worked example with revealed steps</h2>
+    <p class="lede">Phase tags: <span class="phase-tag ido">I do</span> <span class="phase-tag wedo">We do</span> <span class="phase-tag youdo">You do</span> <span class="phase-tag cas">CAS</span></p>
+    <div class="cols">
+      <div>
+        <div class="box question"><span class="lbl">Question</span><p>Solve 2<span class="m">x</span> + 5 = 17.</p></div>
+        <ol class="steps" id="demo-steps">
+          <li><span class="stepno">1</span> Subtract 5 from both sides: <span class="mu">2<span class="m">x</span> = 12</span></li>
+          <li><span class="stepno">2</span> Divide both sides by 2: <span class="mu"><span class="m">x</span> = 6</span></li>
+          <li class="ans"><span class="stepno">✓</span> Check: 2(6) + 5 = 17 ✓</li>
+        </ol>
+        <button class="reveal-btn" data-target="#demo-steps">Show working</button>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q"><b>Quick check:</b> what is the inverse operation of "multiply by 2"?</p>
+          <button class="reveal-btn">Show answer</button>
+          <div class="a">Divide by 2 — so the last step is <b>÷2</b> on both sides.</div>
+        </div>
+        <div class="qgrid">
+          <div class="qcard"><p class="q">Solve 3<span class="m">x</span> = 21</p><button class="reveal-btn">Answer</button><div class="a"><b><span class="m">x</span> = 7</b></div></div>
+          <div class="qcard"><p class="q">Solve <span class="m">x</span> − 4 = 10</p><button class="reveal-btn">Answer</button><div class="a"><b><span class="m">x</span> = 14</b></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Maths markup + work grid -->
+  <section class="slide">
+    <p class="eyebrow">Maths <b>·</b> CSS-built notation (no MathJax required)</p>
+    <h2>Fractions, work grids, equation boxes</h2>
+    <div class="cols even">
+      <div>
+        <p class="bigeq">Pr(<span class="m">A</span> | <span class="m">B</span>) = <span class="fr"><span class="nu">Pr(<span class="m">A</span> ∩ <span class="m">B</span>)</span><span class="de">Pr(<span class="m">B</span>)</span></span></p>
+        <div class="work">
+          <span class="wl">2<span class="m">x</span> + 5</span><span class="wr">= 17</span>
+          <span class="wl">2<span class="m">x</span></span><span class="wr">= 12</span>
+          <span class="wl"><span class="m">x</span></span><span class="wr">= 6</span>
+        </div>
+        <div class="eqrow">
+          <div class="eqbox"><span class="m">v</span> = <span class="fr"><span class="nu">d<span class="m">x</span></span><span class="de">d<span class="m">t</span></span></span></div>
+          <div class="eqbox"><span class="m">a</span> = <span class="fr"><span class="nu">d<span class="m">v</span></span><span class="de">d<span class="m">t</span></span></span></div>
+        </div>
+      </div>
+      <div>
+        <table class="tbl">
+          <tr><th>x</th><th class="c">0</th><th class="c">1</th><th class="c">2</th><th class="c">3</th></tr>
+          <tr><td>Pr(X = x)</td><td class="c">⅛</td><td class="c">⅜</td><td class="c">⅜</td><td class="c">⅛</td></tr>
+        </table>
+        <table class="tbl filled" style="margin-top:16px;">
+          <tr><th>Term</th><th>Meaning</th></tr>
+          <tr><td><b>Sample space</b></td><td>All possible outcomes</td></tr>
+          <tr><td><b>Event</b></td><td>A subset of the sample space</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · Graphs, legend, controls, part tabs -->
+  <section class="slide">
+    <p class="eyebrow">Figures <b>·</b> graph cards, legends, sliders, part tabs</p>
+    <h2>Graphs and interactives</h2>
+    <div class="cols">
+      <div>
+        <div class="graph-card">
+          <svg viewBox="0 0 400 220">
+            <line x1="40" y1="190" x2="380" y2="190" stroke="var(--c-slate-500)" stroke-width="2"/>
+            <line x1="40" y1="20" x2="40" y2="190" stroke="var(--c-slate-500)" stroke-width="2"/>
+            <path d="M40,180 Q160,180 210,105 T380,30" fill="none" stroke="var(--accent)" stroke-width="3.5"/>
+            <path d="M40,150 L380,60" fill="none" stroke="var(--neg)" stroke-width="3" stroke-dasharray="none"/>
+            <circle cx="210" cy="105" r="6" fill="var(--accent-warm)"/>
+          </svg>
+          <div class="legend">
+            <span><span class="pen accent"></span> f(x)</span>
+            <span><span class="pen neg"></span> tangent</span>
+            <span><span class="dot accent"></span> point of interest</span>
+          </div>
+        </div>
+        <div class="ctrl" style="margin-top:14px;">
+          <label>Gradient <span class="m">m</span> <output>1.5</output></label>
+          <input type="range" min="-3" max="3" step="0.1" value="1.5" oninput="this.closest('.ctrl').querySelector('output').textContent=this.value">
+        </div>
+      </div>
+      <div>
+        <div class="parts">
+          <button class="ptab active" data-part="#pp-a">Part a</button>
+          <button class="ptab" data-part="#pp-b">Part b</button>
+          <button class="ptab" data-part="#pp-c">Part c</button>
+        </div>
+        <div class="partpanel shown" id="pp-a"><p class="q">a) State the sample space.</p><p>ξ = {HH, HT, TH, TT}</p></div>
+        <div class="partpanel" id="pp-b"><p class="q">b) Find Pr(at least one head).</p><p>1 − Pr(TT) = 1 − ¼ = ¾</p></div>
+        <div class="partpanel" id="pp-c"><p class="q">c) Comment on independence.</p><p>Coin tosses are independent events.</p></div>
+        <details class="teacher">
+          <summary>Teacher notes (hidden when printed)</summary>
+          <div class="inner-d"><ul><li>Common error: listing HT and TH as one outcome.</li><li>Extension: three coins → 8 outcomes.</li></ul></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Overflow + scroll fade -->
+  <section class="slide">
+    <p class="eyebrow">Layout <b>·</b> vertical centring &amp; scroll fade</p>
+    <h2>Overflowing content scrolls, with a 15% fade hint</h2>
+    <p class="lede">Short slides centre vertically (equal space above and below). This slide is deliberately too tall: a fade zone appears at the bottom edge and disappears once you reach the end.</p>
+    <div class="box key"><span class="lbl">How it works</span><p>Slides use <code>justify-content: safe center</code> — centred when content fits, top-aligned scrolling when it doesn't. deck.js watches scroll position and toggles the fade.</p></div>
+    <div class="box example"><span class="lbl">Filler 1</span><p>Padding content to force this slide past one viewport height.</p></div>
+    <div class="box example"><span class="lbl">Filler 2</span><p>Keep scrolling — the fade below should still be visible.</p></div>
+    <div class="box example"><span class="lbl">Filler 3</span><p>Reveals and tabs re-measure the slide automatically, so opening an answer that pushes content off-screen also triggers the fade.</p></div>
+    <div class="box example"><span class="lbl">Filler 4</span><p>Nearly there…</p></div>
+    <div class="box answer"><span class="lbl">End of slide</span><p>The fade zone should now have disappeared.</p></div>
+  </section>
+
+  <!-- 8 · Exit slide -->
+  <section class="slide exit-slide">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go…</h1>
+      <ol>
+        <li>One thing the box system replaces from your old decks</li>
+        <li>Which theme looked right for each subject</li>
+        <li>Anything missing that your decks need</li>
+      </ol>
+      <p class="start-hint">Print preview (Ctrl+P) shows one slide per page with all answers revealed.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">R</span> reveal step</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 7</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../assets/js/deck.js" defer></script>
+<script>
+  /* Demo-only theme switcher */
+  document.querySelectorAll(".themebar button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.body.className = "deck-page " + btn.dataset.theme;
+      document.querySelectorAll(".themebar button").forEach(b => b.classList.toggle("on", b === btn));
+    });
+  });
+</script>
+</body>
+</html>

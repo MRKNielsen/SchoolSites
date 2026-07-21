@@ -1,0 +1,131 @@
+/* ============================================================
+   course.css — COURSE / UNIT LANDING PAGES
+   Immersive full-bleed landing in the subject's colour (the
+   year7-science bio-ecosystems look, generalised). Requires
+   tokens.css first; theme with a body class:
+     <body class="course-page theme-specialist">
+   Components:
+     .backlink · header (.unit-tag, h1, .sub, .meta-row,
+     .acknowledgement) · .deck-grid of .deck-card
+     (.dc-num/.dc-title/.dc-desc/.dc-quiz) · .deck-card.feature
+     full-width row cards (.fi icon, .fbody, .go) · footer
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body.course-page {
+  font-family: var(--font-body);
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--accent-dark) 55%, #000) 0%,
+    var(--accent-dark) 55%,
+    var(--accent) 100%);
+  min-height: 100vh;
+  padding: 5vh 5vw;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.course-page .backlink {
+  display: inline-block; margin-bottom: 2.5vh;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(0.82rem, 1.3vw, 1rem);
+  color: rgba(255,255,255,0.85); text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 100px;
+  padding: 0.4em 1.1em;
+}
+.course-page .backlink:hover { background: rgba(255,255,255,0.15); }
+
+/* ---------- Header ---------- */
+.course-page header { margin-bottom: 5vh; }
+.unit-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  padding: 0.3em 1em;
+  font-family: var(--font-display);
+  font-size: clamp(0.8rem, 1.3vw, 1rem);
+  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 1.5vh; color: rgba(255,255,255,0.9);
+}
+.course-page h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.08;
+  letter-spacing: -0.01em; margin-bottom: 1vh;
+}
+.course-page .sub {
+  font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+  color: rgba(255,255,255,0.8); max-width: 62ch;
+}
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 0.6em 0.9em;
+  margin-top: 1.6vh; font-size: clamp(0.82rem, 1.3vw, 1rem);
+  color: rgba(255,255,255,0.7);
+}
+.acknowledgement {
+  margin-top: 2.5vh; max-width: 75ch;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px; padding: 1.2em 1.4em;
+  font-size: clamp(0.8rem, 1.25vw, 0.95rem);
+  color: rgba(255,255,255,0.8);
+}
+
+/* ---------- Card grid ---------- */
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.6vh 1.2vw;
+}
+.deck-card {
+  display: flex; flex-direction: column; gap: 0.5vh;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 14px;
+  padding: 2vh 1.4vw;
+  color: #fff; text-decoration: none;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.deck-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.17);
+  border-color: rgba(255,255,255,0.4);
+}
+.dc-num {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  color: rgba(255,255,255,0.45); line-height: 1;
+}
+.dc-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1rem, 1.7vw, 1.3rem);
+}
+.dc-desc { font-size: clamp(0.82rem, 1.3vw, 1rem); color: rgba(255,255,255,0.75); }
+.dc-quiz {
+  margin-top: auto; padding-top: 0.8vh;
+  font-size: clamp(0.75rem, 1.15vw, 0.9rem); font-weight: 600;
+  color: rgba(255,255,255,0.65);
+}
+
+/* Full-width feature row (quiz / booklet / hub links) */
+.deck-card.feature {
+  grid-column: 1 / -1;
+  flex-direction: row; align-items: center; gap: 2vw;
+  padding: 2vh 2.5vw;
+  background: rgba(255,255,255,0.14);
+}
+.deck-card.feature:hover { background: rgba(255,255,255,0.2); }
+.deck-card.feature .fi { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1; }
+.deck-card.feature .fbody .dc-title { margin-bottom: 0.4vh; }
+.deck-card.feature .go {
+  margin-left: auto; font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.88rem, 1.4vw, 1.05rem); color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+}
+
+.course-page footer {
+  margin-top: 6vh;
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+}

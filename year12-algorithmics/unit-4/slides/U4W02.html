@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4W02 — Formal Algorithm Analysis II</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4W02 · Formal Algorithm Analysis II</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+<section class="slide section-slide active">
+  <h1>Formal Algorithm Analysis II</h1>
+  <p>Unit 4 AOS1 · Week 2 — The cost of the graph algorithms you already know</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026 · Test 1 Friday</p>
+</section>
+
+<section class="slide" data-topic="U4W02 · Formal Algorithm Analysis II">
+  <h2>This week</h2>
+  <ul>
+    <li>Derive — don't memorise — the complexity of BFS/DFS, Dijkstra, Prim's, Floyd–Warshall and PageRank.</li>
+    <li>Test 1 revision: worked C5-style questions and the classic traps.</li>
+    <li><b>Test 1</b> (SAT Criterion 5) — determining time complexity. 45 minutes.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Key idea</span>
+    <p>Graph algorithm bounds come from one question, asked carefully: <em>how many times is each node touched, and how many times is each edge touched?</em></p>
+  </div>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Graph algorithm complexity</h1>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>Input size for graphs: two numbers, not one</h2>
+  <ul>
+    <li>For lists, input size was one number \(n\). Graphs need <b>two</b>: \(|V|\) nodes and \(|E|\) edges.</li>
+    <li>They vary independently: a sparse road network has \(|E| \approx |V|\); a complete social graph has \(|E| = \dfrac{|V|(|V|-1)}{2} = \Theta(|V|^2)\).</li>
+    <li>A bound like \(O(|V| + |E|)\) is honest about both — collapsing it to one variable loses information.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>Your SAT model: is your graph sparse or dense? What is \(|E|\) as a function of \(|V|\) in <em>your</em> data model?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>Representation matters: adjacency list vs matrix</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Operation</th><th class="c">Adjacency list</th><th class="c">Adjacency matrix</th></tr>
+    <tr><td>Storage</td><td class="c">\(O(|V| + |E|)\)</td><td class="c">\(O(|V|^2)\)</td></tr>
+    <tr><td>Is \((u,v)\) an edge?</td><td class="c">\(O(\deg u)\)</td><td class="c">\(O(1)\)</td></tr>
+    <tr><td>Visit all neighbours of \(u\)</td><td class="c">\(O(\deg u)\)</td><td class="c">\(O(|V|)\)</td></tr>
+    <tr><td>Visit every edge once</td><td class="c">\(O(|V| + |E|)\)</td><td class="c">\(O(|V|^2)\)</td></tr>
+  </table>
+  <ul style="margin-top:24px;">
+    <li>The same algorithm can have <b>different complexity</b> depending on the data model underneath it.</li>
+    <li>This is exactly the C6/C7 connection: your data model choice has complexity consequences.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>BFS and DFS: \(O(|V| + |E|)\)</h2>
+  <div class="cols even">
+    <div>
+      <pre class="code" style="margin-top:0; font-size:19px;"><span><b>Algorithm</b> BFS(G, start):</span><span>    queue ← [start]</span><span>    mark start visited</span><span>    <b>While</b> queue not empty <b>Do</b></span><span>        v ← dequeue()</span><span>        <b>Foreach</b> neighbour u of v <b>Do</b></span><span>            <b>If</b> u not visited <b>Do</b></span><span>                mark u visited</span><span>                enqueue(u)</span></pre>
+    </div>
+    <div class="small">
+      <ul>
+        <li>Each node enters the queue <b>at most once</b> (the visited check): \(O(|V|)\) dequeues.</li>
+        <li>When \(v\) is dequeued, we scan its neighbours: over the whole run, every edge is scanned at most twice (once from each end): \(O(|E|)\).</li>
+        <li>Total: \(O(|V| + |E|)\). Same argument for DFS.</li>
+      </ul>
+      <div class="box key" style="margin-top:12px;"><span class="lbl">Technique</span>
+        <p><b>Amortise over the whole run</b> — don't multiply “neighbours per node” by “nodes”; count total edge-touches instead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>The classic trap: multiplying instead of amortising</h2>
+  <ul>
+    <li><b>Wrong:</b> “The <b>While</b> loop runs \(|V|\) times and the <b>Foreach</b> runs up to \(|V|\) times, so BFS is \(O(|V|^2)\).”</li>
+    <li>That bound is not <em>false</em> — it's <b>loose</b>. The inner loop runs \(\deg(v)\) times, and \(\sum_{v} \deg(v) = 2|E|\).</li>
+    <li><b>Right:</b> total inner-loop work across the whole run is \(O(|E|)\), so BFS is \(O(|V| + |E|)\).</li>
+  </ul>
+  <div class="box example"><span class="lbl">When are they the same?</span>
+    <p>On a dense graph \(|E| = \Theta(|V|^2)\), so \(O(|V|+|E|) = O(|V|^2)\). On a sparse graph (\(|E| = \Theta(|V|)\)), the amortised bound is a full factor of \(|V|\) better.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>Dijkstra with a binary-heap priority queue</h2>
+  <ul>
+    <li>Each node is extracted from the priority queue once: \(|V|\) extractions × \(O(\log |V|)\) each.</li>
+    <li>Each edge may trigger one distance update (decrease-key / re-insert): \(|E|\) updates × \(O(\log |V|)\) each.</li>
+    <li>Total: \[ O\big((|V| + |E|) \log |V|\big) \]</li>
+    <li>With a plain array instead of a heap: \(O(|V|^2)\) — better for <em>dense</em> graphs! The data structure changes the bound.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Try it!</span>
+    <p>From the SkyDrop SAC graph (7 nodes, 11 edges): roughly how many heap operations did your Dijkstra trace perform?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>Prim's: same skeleton, same bound</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li>Prim's grows a tree, always adding the cheapest edge to a new node — structurally the same loop as Dijkstra with a different key.</li>
+        <li>Heap version: \(O((|V| + |E|) \log |V|)\).</li>
+        <li>The proof-of-cost argument transfers: nodes extracted once, edges relax keys.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key" style="margin-top:0;"><span class="lbl">Exam habit</span>
+        <p>Don't just quote the bound — name the two ingredients: <em>how many times nodes pass through the structure</em>, and <em>how many times edges update it</em>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>Floyd–Warshall and PageRank</h2>
+  <div class="cols even small">
+    <div>
+      <pre class="code" style="margin-top:0;"><span><b>Foreach</b> k from 1 <b>To</b> |V| <b>Do</b></span><span>    <b>Foreach</b> i from 1 <b>To</b> |V| <b>Do</b></span><span>        <b>Foreach</b> j from 1 <b>To</b> |V| <b>Do</b></span><span>            <b>If</b> D[i][k] + D[k][j] &lt; D[i][j] <b>Do</b></span><span>                D[i][j] ← D[i][k] + D[k][j]</span></pre>
+      <p>Three independent full loops over nodes: \(\Theta(|V|^3)\), always — best case = worst case.</p>
+    </div>
+    <div>
+      <ul>
+        <li><b>PageRank:</b> each iteration touches every node and edge once: \(O(|V| + |E|)\) per iteration.</li>
+        <li>Run for \(k\) iterations (until convergence at tolerance): \(O(k(|V| + |E|))\).</li>
+        <li>Note the new ingredient: an <b>iteration count</b> that isn't a function of graph size but of convergence behaviour.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Graph algorithm complexity">
+  <h2>The reference table (justify every row)</h2>
+  <table class="tbl">
+    <tr><th>Algorithm</th><th>Worst case</th><th>One-line justification</th></tr>
+    <tr><td>BFS / DFS</td><td>\(O(|V| + |E|)\)</td><td>each node queued once, each edge scanned ≤ twice</td></tr>
+    <tr><td>Dijkstra (heap)</td><td>\(O((|V|+|E|) \log |V|)\)</td><td>\(|V|\) extractions + \(|E|\) key updates, each \(\log |V|\)</td></tr>
+    <tr><td>Dijkstra (array)</td><td>\(O(|V|^2)\)</td><td>\(|V|\) scans of an array of \(|V|\) distances</td></tr>
+    <tr><td>Prim's (heap)</td><td>\(O((|V|+|E|) \log |V|)\)</td><td>same skeleton as Dijkstra</td></tr>
+    <tr><td>Floyd–Warshall</td><td>\(\Theta(|V|^3)\)</td><td>triple nested loop over all nodes</td></tr>
+    <tr><td>PageRank</td><td>\(O(k(|V| + |E|))\)</td><td>\(k\) sweeps, each touching all nodes and edges</td></tr>
+  </table>
+</section>
+
+<section class="slide section-slide">
+  
+  <h1>Test 1 revision</h1>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>Test 1: what to expect</h2>
+  <ul>
+    <li><b>Friday, 45 minutes, 30 marks.</b> SAT Criterion 5: <em>skills in determining the time complexity of algorithms.</em></li>
+    <li>Question types: ordering growth classes · simplifying to tightest Big-O · applying the formal definition (find \(c, n_0\)) · analysing pseudocode (the bulk) · best vs worst case · one graph algorithm with justification.</li>
+    <li>Every "state the complexity" answer needs a <b>one-sentence justification</b> — the mark is for the reasoning.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The sentence pattern</span>
+    <p>“The loop runs ⟨count⟩ times as a function of ⟨input size⟩, the body is \(O(1)\) [or …], nesting multiplies, so the total is ⟨tightest bound⟩.”</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>The trap gallery</h2>
+  <ul class="small">
+    <li><b>Two sequential loops ≠ \(n^2\):</b> sequence <em>adds</em>; only nesting multiplies. \(O(n) + O(n) = O(n)\).</li>
+    <li><b>Halving/doubling loops are \(\log n\):</b> <code>j ← j * 2</code> or <code>n ← n div 2</code> — count how many multiplications reach \(n\).</li>
+    <li><b>Triangular loops are still \(n^2\):</b> \(\frac{n(n-1)}{2}\) — the ½ is a constant; don't answer \(O(n^2/2)\).</li>
+    <li><b>Early exit changes best case, not worst case:</b> a <b>Return</b> inside a loop doesn't lower the worst-case bound.</li>
+    <li><b>Loose is not wrong, but loses marks:</b> \(O(n^3)\) for a linear scan is technically true and scores poorly. Give the tightest bound.</li>
+    <li><b>Two input sizes stay two:</b> \(O(n \cdot m)\) does not simplify to \(O(n^2)\) unless \(n = m\) is stated.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>Worked example: mixed structure</h2>
+  <pre class="code" style="font-size:19px;"><span><b>Algorithm</b> Audit(L):</span><span>    seen ← 0</span><span>    <b>Foreach</b> x in L <b>Do</b>                <i># A</i></span><span>        seen ← seen + 1</span><span>    i ← 1</span><span>    <b>While</b> i ≤ length(L) <b>Do</b>            <i># B</i></span><span>        <b>Foreach</b> x in L <b>Do</b></span><span>            print(i, x)</span><span>        i ← i * 2</span></pre>
+  <ul>
+    <li>A: \(\Theta(n)\). &nbsp; B: outer loop doubles \(i\) → \(\log n\) passes; inner loop \(n\) each → \(\Theta(n \log n)\).</li>
+    <li>Sequence adds: \(\Theta(n) + \Theta(n \log n) = \Theta(n \log n)\).</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>Worked example: definition question</h2>
+  <div class="box defn" style="margin-top:0;"><span class="lbl">Question (4 marks)</span>
+    <p>Using the formal definition of Big-O, show that \(f(n) = 3n^2 + 10n\) is \(O(n^2)\).</p>
+  </div>
+  <ul style="margin-top:16px;">
+    <li>Claim constants up front: try \(c = 13\), \(n_0 = 1\).</li>
+    <li>For all \(n \geq 1\): \(10n \leq 10n^2\), so \(f(n) = 3n^2 + 10n \leq 3n^2 + 10n^2 = 13n^2 = c \cdot n^2\). ∎</li>
+    <li>Marks: choice of valid \(c\) (1), valid \(n_0\) (1), the inequality chain (2). Any valid pair works — bigger is fine.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Tip</span>
+    <p>Bound every lower-order term by the dominant term (needs \(n \ge 1\)), then add the coefficients. This always produces a valid \(c\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>Now you: four in eight minutes</h2>
+  <div class="cols even small">
+    <div>
+      <pre class="code" style="margin-top:0;"><span><i># Q1</i></span><span><b>Foreach</b> i from 1 <b>To</b> n <b>Do</b></span><span>    <b>Foreach</b> j from 1 <b>To</b> 10 <b>Do</b></span><span>        print(i, j)</span></pre>
+      <pre class="code"><span><i># Q2</i></span><span><b>Foreach</b> i from 1 <b>To</b> n <b>Do</b></span><span>    <b>Foreach</b> j from i <b>To</b> n <b>Do</b></span><span>        print(i, j)</span></pre>
+    </div>
+    <div>
+      <pre class="code" style="margin-top:0;"><span><i># Q3</i></span><span>i ← n</span><span><b>While</b> i &gt; 1 <b>Do</b></span><span>    <b>Foreach</b> j from 1 <b>To</b> n <b>Do</b></span><span>        print(j)</span><span>    i ← i div 2</span></pre>
+      <pre class="code"><span><i># Q4</i></span><span><b>Foreach</b> node v in G <b>Do</b></span><span>    <b>Foreach</b> neighbour u of v <b>Do</b></span><span>        check(u, v)</span></pre>
+    </div>
+  </div>
+  <p class="small" style="margin-top:4px;">Answers next slide — attempt first. State the tightest bound <em>and</em> the one-sentence justification.</p>
+</section>
+
+<section class="slide" data-topic="U4W02 · Test 1 revision">
+  <h2>Answers</h2>
+  <ul>
+    <li><b>Q1: \(\Theta(n)\)</b> — inner loop is a constant 10 iterations; \(10n\) total, constants drop.</li>
+    <li><b>Q2: \(\Theta(n^2)\)</b> — triangular: \(n + (n-1) + \dots + 1 = \frac{n(n+1)}{2}\).</li>
+    <li><b>Q3: \(\Theta(n \log n)\)</b> — outer halves \(i\): \(\log n\) passes; each does \(n\) work.</li>
+    <li><b>Q4: \(O(|V| + |E|)\)</b> — every edge scanned at most twice across the whole run; amortise, don't multiply.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Before Friday</span>
+    <p>Finish the revision paper (<code>U4Test1Revision.pdf</code>) — it mirrors the test structure question-for-question, with worked solutions at the back.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4W02 · Formal Algorithm Analysis II">
+  <h2>Friday: Test 1</h2>
+  <ul>
+    <li>45 minutes, 30 marks, closed book. Covers everything from Weeks 1–2.</li>
+    <li>This is <b>SAT Criterion 5</b> — it feeds directly into Submission 2 (18 August) alongside Memo 02.</li>
+    <li>Bring: pen, and the one-sentence pattern. Marks live in the justifications.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Count iterations as a function of input size, multiply nesting, add sequence, amortise edge-touches on graphs, keep the dominant term.</em></p>
+  </div>
+</section>
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter">1 / 19</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
