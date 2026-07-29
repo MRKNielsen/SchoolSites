@@ -277,52 +277,138 @@
     </div>
   </section>
 
-  <!-- 11. YEAR 8 EXTENSION 2: ECOSYSTEM DEGRADATION THRESHOLDS -->
-  <section class="slide" data-accent="violet" data-menu="Year 8: Ecosystem tipping points">
-    <div class="booklet-ref">&#128218; Booklet p.24 · Year 8 extension</div>
+  <!-- 11. YEAR 8 EXTENSION 2: THE BALL-IN-CUP MODEL OF RESILIENCE -->
+  <section class="slide" data-accent="violet" data-menu="Year 8: The ball-in-cup model">
+    <div class="booklet-ref">&#128218; Booklet p.24 &middot; Year 8 extension</div>
     <div class="kicker">Year 8 Extension</div>
-    <h1 class="slide-title">Tipping points — when ecosystems stop functioning</h1>
-    <div class="cols">
+    <h1 class="slide-title">Modelling resilience &mdash; the ball-in-cup model</h1>
+    <div class="cols narrow-left">
       <div>
-        <p class="body-text">Ecosystems can absorb some disturbance and bounce back — this is called <strong>resilience</strong>. But if stress exceeds a threshold (a "tipping point"), the ecosystem can shift permanently to a new state that provides far fewer services.</p>
-        <p class="body-text" style="margin-top:1.2vh;"><strong>Examples:</strong></p>
-        <ul class="bullets" style="margin-top:0.8vh;">
-          <li>Coral reef: bleaching events → algae dominance → no longer supports fish, tourism, or coastal protection</li>
-          <li>Wetland: nutrient runoff → algal bloom → oxygen depletion → collapse of aquatic ecosystem</li>
-          <li>Grassland: overgrazing → soil compaction → erosion → loss of provisioning services</li>
+        <p class="body-text">Ecologists picture an ecosystem as a <strong>ball rolling in a landscape of valleys</strong>. Where the ball sits tells you what state the ecosystem is in.</p>
+        <ul class="bullets" style="margin-top:1vh;">
+          <li><strong>Regime</strong> &mdash; a state the ecosystem can settle into and stay in (healthy forest, or bare eroded soil)</li>
+          <li><strong>Basin of attraction</strong> &mdash; the valley around a regime. A deep, wide valley means the ball keeps rolling back</li>
+          <li><strong>Perturbation</strong> &mdash; a disturbance that pushes the ball: fire, drought, flood, grazing, nutrient runoff</li>
+          <li><strong>Threshold</strong> (tipping point) &mdash; the peak between two valleys</li>
+          <li><strong>Resilience</strong> &mdash; how big a perturbation the ecosystem can take and still roll back to the same regime</li>
         </ul>
+        <p class="body-text" style="margin-top:1vh;">Regime 2 is drawn <strong>lower and deeper</strong> on purpose: the ball falls into it easily, but climbing back out takes far more energy than the push that sent it there.</p>
+        <div class="callout">
+          <div class="label">Resilience is not fixed</div>
+          <div class="ctext">Long-term stress &mdash; warming, pollution, over-harvesting &mdash; makes the valley shallower. A disturbance the ecosystem shrugged off 50 years ago may now be enough to tip it.</div>
+        </div>
       </div>
       <div>
         <div class="diagram">
-          <svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
-            <!-- Ball-in-cup diagram -->
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif" role="img" aria-label="Ball-in-cup model: a ball rests in the basin of attraction of Regime 1. A small perturbation is absorbed, but a large perturbation pushes the ball over the threshold and down into the deeper, lower basin of Regime 2.">
             <defs>
-              <marker id="ar2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
-                <path d="M0,0 L0,6 L7,3 z" fill="#FF6B5E"/>
+              <marker id="bic-green" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="12" refX="13" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L15,6 z" fill="#1E7A4E"/>
+              </marker>
+              <marker id="bic-coral" markerUnits="userSpaceOnUse" markerWidth="22" markerHeight="18" refX="19" refY="9" orient="auto">
+                <path d="M0,0 L0,18 L22,9 z" fill="#FF6B5E"/>
+              </marker>
+              <marker id="bic-lead" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto">
+                <path d="M0,0 L0,7 L8,3.5 z" fill="#5B6B82"/>
               </marker>
             </defs>
-            <text x="200" y="16" text-anchor="middle" font-size="14" font-weight="700" fill="#16223A">Ecosystem resilience model</text>
-            <!-- Healthy cup (deep = high resilience) -->
-            <path d="M26,50 Q26,144 106,144 Q186,144 186,50" fill="none" stroke="#1E7A4E" stroke-width="3"/>
-            <circle cx="106" cy="131" r="13" fill="#1E7A4E" opacity="0.9"/>
-            <text x="106" y="163" text-anchor="middle" font-size="11" fill="#1E7A4E">Healthy</text>
-            <text x="106" y="177" text-anchor="middle" font-size="11" fill="#1E7A4E">ecosystem</text>
-            <!-- Arrow labelled stress -->
-            <text x="238" y="82" text-anchor="middle" font-size="11" font-weight="600" fill="#FF6B5E">STRESS</text>
-            <text x="238" y="96" text-anchor="middle" font-size="10" fill="#FF6B5E">&#8594; past tipping point</text>
-            <path d="M203,116 Q238,102 270,116" fill="none" stroke="#FF6B5E" stroke-width="2" marker-end="url(#ar2)"/>
-            <!-- Degraded cup (shallower = less resilience) -->
-            <path d="M288,64 Q288,130 341,130 Q394,130 394,64" fill="none" stroke="#FF6B5E" stroke-width="3"/>
-            <circle cx="341" cy="117" r="13" fill="#FF6B5E" opacity="0.9"/>
-            <text x="341" y="149" text-anchor="middle" font-size="11" fill="#FF6B5E">Degraded</text>
-            <text x="341" y="163" text-anchor="middle" font-size="11" fill="#FF6B5E">state</text>
+
+            <!-- static landscape: Regime 2 sits lower and deeper than Regime 1 -->
+            <path d="M40,90 L40,336 L590,336 L590,158" fill="none" stroke="#B9C7DA" stroke-width="2"/>
+            <path d="M40,90 C90,90 105,190 150,190 C195,190 255,78 300,78 C345,78 405,252 450,252 C495,252 545,158 590,158"
+                  fill="none" stroke="#16305C" stroke-width="3.5" stroke-linecap="round"/>
+
+            <!-- threshold -->
+            <path d="M300,78 L300,336" fill="none" stroke="#5B6B82" stroke-width="1.6" stroke-dasharray="9 4 2 4"/>
+            <text x="291" y="230" text-anchor="middle" font-size="14" font-weight="600" fill="#5B6B82"
+                  transform="rotate(-90 291 230)">Threshold</text>
+
+            <!-- basin brackets -->
+            <path d="M112,208 L112,200 L188,200 L188,208" fill="none" stroke="#1E7A4E" stroke-width="2.5"/>
+            <path d="M412,270 L412,262 L488,262 L488,270" fill="none" stroke="#FF6B5E" stroke-width="2.5"/>
+
+            <!-- basin-of-attraction leader labels -->
+            <text x="72" y="138" text-anchor="middle" font-size="12.5" font-style="italic" fill="#5B6B82">basin of</text>
+            <text x="72" y="153" text-anchor="middle" font-size="12.5" font-style="italic" fill="#5B6B82">attraction</text>
+            <path d="M78,162 Q98,186 120,201" fill="none" stroke="#5B6B82" stroke-width="1.2" marker-end="url(#bic-lead)"/>
+            <text x="556" y="232" text-anchor="middle" font-size="12.5" font-style="italic" fill="#5B6B82">basin of</text>
+            <text x="556" y="247" text-anchor="middle" font-size="12.5" font-style="italic" fill="#5B6B82">attraction</text>
+            <path d="M552,256 Q526,262 496,266" fill="none" stroke="#5B6B82" stroke-width="1.2" marker-end="url(#bic-lead)"/>
+
+            <!-- regime labels -->
+            <text x="150" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#1E7A4E">REGIME 1</text>
+            <text x="150" y="250" text-anchor="middle" font-size="13" fill="#1E7A4E">healthy ecosystem</text>
+            <text x="450" y="294" text-anchor="middle" font-size="15" font-weight="700" fill="#FF6B5E">REGIME 2</text>
+            <text x="450" y="312" text-anchor="middle" font-size="13" fill="#FF6B5E">degraded ecosystem</text>
+
+            <!-- rest-position marker, always visible -->
+            <circle cx="170" cy="177" r="13" fill="none" stroke="#9AA8BD" stroke-width="1.6" stroke-dasharray="5 4"/>
+
+            <!-- state 0: at rest (hides once the first step is revealed) -->
+            <g class="svg-vanish">
+              <rect x="140" y="4" width="360" height="28" rx="8" fill="#EFE9FF"/>
+              <text x="320" y="23" text-anchor="middle" font-size="15" font-weight="700" fill="#7C5CE0">The ball-in-cup model of resilience</text>
+              <circle cx="170" cy="177" r="13" fill="#1E7A4E"/>
+            </g>
+
+            <!-- step 1: small perturbation, absorbed -->
+            <g class="svg-step svg-vanish">
+              <rect x="70" y="4" width="500" height="28" rx="8" fill="#E3F5EC"/>
+              <text x="320" y="23" text-anchor="middle" font-size="15" font-weight="700" fill="#1E7A4E">Disturbance is absorbed &#8212; the system persists in Regime 1</text>
+              <path d="M189,184 Q212,158 226,133" fill="none" stroke="#1E7A4E" stroke-width="3.5" marker-end="url(#bic-green)"/>
+              <text x="176" y="132" text-anchor="middle" font-size="12.5" font-weight="700" font-style="italic" fill="#1E7A4E"
+                    letter-spacing="0.06em" transform="rotate(-45 176 132)">PERTURBATION</text>
+              <circle cx="234" cy="105" r="13" fill="#1E7A4E"/>
+            </g>
+
+            <!-- step 2: large perturbation, regime shift into the lower basin -->
+            <g class="svg-step">
+              <rect x="60" y="4" width="520" height="28" rx="8" fill="#FFE9E6"/>
+              <text x="320" y="23" text-anchor="middle" font-size="15" font-weight="700" fill="#FF6B5E">Resilience is overcome &#8212; the system shifts to Regime 2</text>
+              <path d="M189,179 C234,84 258,52 300,52 C342,52 406,140 442,214"
+                    fill="none" stroke="#FF6B5E" stroke-width="5" stroke-linecap="round" marker-end="url(#bic-coral)"/>
+              <text x="176" y="120" text-anchor="middle" font-size="12.5" font-weight="700" font-style="italic" fill="#FF6B5E"
+                    letter-spacing="0.06em" transform="rotate(-55 176 120)">PERTURBATION</text>
+              <circle cx="455" cy="239" r="13" fill="#FF6B5E"/>
+            </g>
           </svg>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 12. RECAP -->
+  <!-- 12. YEAR 8 EXTENSION 3: REGIME SHIFTS IN THE REAL WORLD -->
+  <section class="slide" data-accent="coral" data-menu="Year 8: Regime shifts in the real world">
+    <div class="booklet-ref">&#128218; Booklet p.24 &middot; Year 8 extension</div>
+    <div class="kicker">Year 8 Extension</div>
+    <h1 class="slide-title">Regime shifts &mdash; and the services we lose</h1>
+    <div class="cols">
+      <div>
+        <p class="body-text">Once an ecosystem crosses a threshold, <strong>new feedbacks hold it in the new regime</strong>. Removing the original stress is often not enough to bring it back.</p>
+        <ul class="bullets" style="margin-top:1vh;">
+          <li><strong>Mountain ash forest &rarr; acacia scrub.</strong> Mountain ash needs about 20 years to produce seed. Two severe fires inside that window destroy the seed source, so the forest cannot return. <em>Services lost:</em> Melbourne's water yield, carbon storage, Leadbeater's possum habitat.</li>
+          <li><strong>Coral reef &rarr; algal reef.</strong> Marine heatwaves bleach the coral; nutrient runoff and the loss of grazing fish let algae take over, and the algae then smother new coral larvae. <em>Services lost:</em> fisheries, tourism, coastal protection.</li>
+          <li><strong>Clear wetland &rarr; turbid algal wetland.</strong> Fertiliser runoff triggers algal blooms; phosphorus stored in the sediment keeps feeding them even after the runoff stops. <em>Services lost:</em> water filtering, oxygen, aquatic habitat.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="callout">
+          <div class="label">Why prevention beats restoration</div>
+          <div class="ctext">Restoring a shifted ecosystem means pushing the ball all the way back over the threshold, which costs far more than keeping it in its original basin. Reef restoration trials run to millions of dollars per hectare; protecting a healthy reef costs a small fraction of that.</div>
+        </div>
+        <div class="callout">
+          <div class="label">Early warning signs</div>
+          <div class="ctext">As a basin gets shallower, an ecosystem takes longer to recover after each disturbance and its populations swing more wildly from year to year. Ecologists track those recovery times as a signal that a threshold is close.</div>
+        </div>
+        <div class="discuss">
+          <div class="dlabel">&#128172; Discuss</div>
+          <div class="dtext">Conservation budgets are limited. Should the money go to ecosystems that have already shifted regime, or to healthy ones still well inside their basin? Use the model to justify your answer.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. RECAP -->
   <section class="slide" data-accent="teal" data-menu="Recap">
     <div class="kicker">Section 7 · Recap</div>
     <h1 class="slide-title">What we covered</h1>
@@ -331,6 +417,7 @@
       <li>Victorian examples include Melbourne's water supply from mountain ash forests, pollination of food crops, and the Birrarung's role in water purification</li>
       <li>Biodiversity loss threatens ecosystem services — losing one species or one service can cascade through all categories</li>
       <li>Wurundjeri-Woiwurrung Caring for Country practices maintained ecosystem services for tens of thousands of years; modern conservation recognises their effectiveness</li>
+      <li><em>Year 8 extension:</em> the <strong>ball-in-cup model</strong> shows why services can be lost suddenly — past a <strong>threshold</strong>, an ecosystem shifts to a new <strong>regime</strong> and will not simply bounce back</li>
     </ul>
     <div class="discuss">
       <div class="dlabel">&#128172; Exit question</div>
@@ -342,7 +429,7 @@
 
 <nav class="nav">
   <button class="nav-prev" aria-label="Previous">&#8249;</button>
-  <span class="counter">1 / 12</span>
+  <span class="counter">1 / 13</span>
   <button class="nav-next" aria-label="Next">&#8250;</button>
 </nav>
 <button class="menu-btn" aria-label="Slide menu">&#9776;</button>

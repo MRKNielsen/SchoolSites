@@ -388,6 +388,16 @@ h2.slide-sub {
 /* Progressive dichotomous-key tree layers (deck 4, slide 9) */
 .tree-layer { opacity: 0; transition: opacity 0.45s ease; }
 .tree-layer.shown { opacity: 1; }
+
+/* ---- Step reveals inside an SVG diagram ----
+   deck.js treats .svg-step exactly like .we-step, so a <g class="svg-step">
+   fades in on the next click. A sibling <g class="svg-vanish"> fades OUT as
+   soon as any later step is revealed — that is how a ball "moves" between
+   positions without any animation code. */
+svg .svg-step  { opacity: 0; transition: opacity 0.45s ease; }
+svg .svg-step.revealed { opacity: 1; }
+svg .svg-vanish { opacity: 1; transition: opacity 0.45s ease; }
+svg .svg-vanish:has(~ .svg-step.revealed) { opacity: 0; }
 .reveal-hint {
   margin-top: auto;
   padding-top: 1.4vh;

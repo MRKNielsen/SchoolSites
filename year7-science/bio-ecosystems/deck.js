@@ -29,7 +29,10 @@
   const menuItems = Array.from(menuGrid.children);
 
   function stepsOf(slide) {
-    return Array.from(slide.querySelectorAll('.we-step'));
+    // .we-step = HTML worked-example steps; .svg-step = groups inside a
+    // diagram that reveal on the same click flow. Document order decides
+    // the sequence, so the two can be mixed on one slide.
+    return Array.from(slide.querySelectorAll('.we-step, .svg-step'));
   }
   function revealedCount(slide) {
     return stepsOf(slide).filter(s => s.classList.contains('revealed')).length;
