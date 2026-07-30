@@ -57,6 +57,12 @@ exercises every component and has a theme switcher. Start new decks from
 - Maths: prefer the CSS markup (`.m`, `.mu`, `.fr`/`.nu`/`.de`, `.work`,
   `.bigeq`, `.eqbox`) over MathJax; MathJax is permitted where notation
   demands it (mjx sizing is already handled).
+- Square roots must show a vinculum:
+  `<span class="rad">√<span class="rx">2</span></span>` (never a bare √
+  before a radicand). Inside SVG use
+  `√<tspan text-decoration="overline">2</tspan>` — CSS borders don't
+  apply to SVG text. A bare √ is fine when referring to the symbol
+  itself in prose.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
 - Vertical centring and overflow (15% top buffer, 15% bottom scroll fade)
