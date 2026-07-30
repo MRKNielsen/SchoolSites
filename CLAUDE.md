@@ -54,17 +54,24 @@ exercises every component and has a theme switcher. Start new decks from
   `.say` and `.note` asides. `.key` on its own is a *keyboard cap* — a
   key-idea callout is `.box.key`.
 - Gradual release tags: `<span class="phase-tag ido|wedo|youdo|cas">`.
-- Maths: prefer the CSS markup (`.m`, `.mu`, `.fr`/`.nu`/`.de`, `.work`,
-  `.bigeq`, `.eqbox`) over MathJax; MathJax is permitted where notation
-  demands it (mjx sizing is already handled).
+- Maths: **typeset whole expressions with MathJax**, e.g.
+  `\(\sin 30^\circ = \dfrac{1}{2}\)` — not half MathJax, half CSS. Mixing
+  the two inside one expression is what breaks layout (a MathJax radical
+  dropped into a CSS `.fr` collapses the fraction bar), and side-by-side
+  CSS and MathJax fractions don't match.
+- The CSS maths markup (`.m`, `.mu`, `.work`, `.bigeq`, `.eqbox`) is for
+  light inline notation in prose. `.fr`/`.nu`/`.de` is now reserved for
+  *styled word* fractions (e.g. colour-coded Opposite/Adjacent in
+  trigonometry) — numeric fractions use `\dfrac`.
 - Square roots are typeset with MathJax: `\(\sqrt{2}\)`. Never build a
   radical from a bare √ plus a CSS overbar — the bar will not meet the
   glyph. Copy `mathjax-tex-svg.js` into the deck's folder and add the
   standard config block (see any specialist or primer deck); its
   `pageReady` hook fires a `resize` so deck.js re-measures slide
-  overflow after typesetting. Inside SVG, MathJax can't reach the text —
-  use `√<tspan text-decoration="overline">2</tspan>`. A bare √ is fine
-  when referring to the symbol itself in prose.
+  overflow after typesetting. Inside SVG, MathJax can't reach the text,
+  and an overline `<tspan>` there reads as a detached bar — write a plain
+  `√2` in diagram labels. A bare √ is also fine when referring to the
+  symbol itself in prose.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
 - Vertical centring and overflow (15% top buffer, 15% bottom scroll fade)

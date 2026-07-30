@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
 <title>Chapter 8 — Probability — 10 Methods Primer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -50,7 +60,7 @@
   <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">both</text>
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">b only</text>
   <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">neither</text></svg></div><div>
-  <div class="box key"><span class="lbl">Probability</span><span class="formula" style="font-size:1.15rem">Pr(event) = <span class="fr"><span class="nu">favourable outcomes</span><span class="de">total outcomes</span></span></span></div>
+  <div class="box key"><span class="lbl">Probability</span><span class="formula" style="font-size:1.15rem">Pr(event) = \(\dfrac{\text{favourable} \text{outcomes}}{\text{total} \text{outcomes}}\)</span></div>
   <div class="box key frag"><span class="lbl">The four regions</span>only A · <b>both (A ∩ B — shaded)</b> · only B · neither. The four numbers always add to the total.</div>
   <div class="box key frag"><span class="lbl">Fill rule</span>Always put the <b>“both” number in first</b>, then subtract to find “only” regions.</div></div></div>
 </section>
@@ -65,7 +75,7 @@
   <text x="72" y="112" font-size="19" font-weight="bold" fill="#1c2733">10</text>
   <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">8</text>
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">6</text>
-  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Both first:</b> S ∩ B = 8 goes in the overlap.</span></div><div class="step frag"><span class="n">2</span><span><b>Only S:</b> 18 − 8 = 10. <b>Only B:</b> 14 − 8 = 6.</span></div><div class="step frag"><span class="n">3</span><span><b>Neither:</b> 30 − (10 + 8 + 6) = 6.</span></div><div class="step frag"><span class="n">4</span><span><b>Pr(neither):</b> <span class="fr"><span class="nu">6</span><span class="de">30</span></span> = <span class="fr"><span class="nu">1</span><span class="de">5</span></span></span></div>
+  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Both first:</b> S ∩ B = 8 goes in the overlap.</span></div><div class="step frag"><span class="n">2</span><span><b>Only S:</b> 18 − 8 = 10. <b>Only B:</b> 14 − 8 = 6.</span></div><div class="step frag"><span class="n">3</span><span><b>Neither:</b> 30 − (10 + 8 + 6) = 6.</span></div><div class="step frag"><span class="n">4</span><span><b>Pr(neither):</b> \(\dfrac{6}{30} = \dfrac{1}{5}\)</span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8A/8B">
@@ -80,7 +90,7 @@
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">6</text>
   <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div>
   <div class="box hint frag">Hint: add the three regions inside the circles.</div>
-  <div class="box answer frag">✔ Pr(S ∪ B) = <span class="fr"><span class="nu">10 + 8 + 6</span><span class="de">30</span></span> = <span class="fr"><span class="nu">24</span><span class="de">30</span></span> = <span class="fr"><span class="nu">4</span><span class="de">5</span></span></div>
+  <div class="box answer frag">✔ Pr(S ∪ B) = \(\dfrac{10 + 8 + 6}{30} = \dfrac{24}{30} = \dfrac{4}{5}\)</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8A/8B">
@@ -124,14 +134,14 @@
   <div><table class="tt"><tr><th></th><th>B</th><th>B′</th><th>Total</th></tr>
   <tr><th>S</th><td>8</td><td class="hl">10</td><td>18</td></tr>
   <tr><th>S′</th><td>6</td><td>6</td><td>12</td></tr>
-  <tr><th>Total</th><td class="hl">14</td><td>16</td><td>30</td></tr></table></div></div><div class="step frag"><span class="n">1</span><span><b>a)</b> Row S, column B′ → 10 students → Pr = <span class="fr"><span class="nu">10</span><span class="de">30</span></span> = <span class="fr"><span class="nu">1</span><span class="de">3</span></span></span></div><div class="step frag"><span class="n">2</span><span><b>b)</b> Column B total → 14 → Pr(B) = <span class="fr"><span class="nu">14</span><span class="de">30</span></span> = <span class="fr"><span class="nu">7</span><span class="de">15</span></span></span></div><div class="step frag"><span class="n">3</span><span><b>Check:</b> all four inner cells add to 30 ✔</span></div>
+  <tr><th>Total</th><td class="hl">14</td><td>16</td><td>30</td></tr></table></div></div><div class="step frag"><span class="n">1</span><span><b>a)</b> Row S, column B′ → 10 students → Pr = \(\dfrac{10}{30} = \dfrac{1}{3}\)</span></div><div class="step frag"><span class="n">2</span><span><b>b)</b> Column B total → 14 → Pr(B) = \(\dfrac{14}{30} = \dfrac{7}{15}\)</span></div><div class="step frag"><span class="n">3</span><span><b>Check:</b> all four inner cells add to 30 ✔</span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8B+">
   <h2>Your turn</h2>
   <div class="box question"><span class="lbl">Your turn</span>A two-way table has: A ∩ C = 5, A total = 12, C total = 9, grand total = 25. Complete the table and find Pr(neither A nor C).</div>
   <div class="box hint frag">Hint: only A = 12 − 5 = 7; only C = 9 − 5 = 4.</div>
-  <div class="box answer frag">✔ neither = 25 − (7 + 5 + 4) = 9 → Pr = <span class="fr"><span class="nu">9</span><span class="de">25</span></span></div>
+  <div class="box answer frag">✔ neither = 25 − (7 + 5 + 4) = 9 → Pr = \(\dfrac{9}{25}\)</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8B+">
@@ -225,7 +235,7 @@
   <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">8</text>
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">6</text>
   <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div><div>
-  <div class="box key"><span class="lbl">The rule</span><span class="formula" style="font-size:1.15rem">Pr(A | B) = <span class="fr"><span class="nu">Pr(A ∩ B)</span><span class="de">Pr(B)</span></span></span></div>
+  <div class="box key"><span class="lbl">The rule</span><span class="formula" style="font-size:1.15rem">Pr(A | B) = \(\dfrac{Pr(A ∩ B)}{Pr(B)}\)</span></div>
   <div class="box key frag"><span class="lbl">In words</span>“Given B” means: <b>B is the new total</b> (shaded). Count only inside B.</div></div></div>
   <div class="box try frag">“Given that ___ happened, the total is now ___, and the favourable part is ___.”</div>
 </section>
@@ -240,7 +250,7 @@
   <text x="72" y="112" font-size="19" font-weight="bold" fill="#1c2733">10</text>
   <text x="152" y="112" font-size="19" font-weight="bold" fill="#1c2733">8</text>
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">6</text>
-  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Given basketball:</b> new total = everyone in B = 8 + 6 = 14.</span></div><div class="step frag"><span class="n">2</span><span><b>Favourable inside B:</b> soccer AND basketball = 8.</span></div><div class="step frag"><span class="n">3</span><span><b>Answer:</b> Pr(S | B) = <span class="fr"><span class="nu">8</span><span class="de">14</span></span> = <span class="fr"><span class="nu">4</span><span class="de">7</span></span></span></div><div class="step frag"><span class="n">4</span><span><b>Compare:</b> Pr(S) = 18/30 = 3/5 — knowing B changed the probability!</span></div>
+  <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Given basketball:</b> new total = everyone in B = 8 + 6 = 14.</span></div><div class="step frag"><span class="n">2</span><span><b>Favourable inside B:</b> soccer AND basketball = 8.</span></div><div class="step frag"><span class="n">3</span><span><b>Answer:</b> Pr(S | B) = \(\dfrac{8}{14} = \dfrac{4}{7}\)</span></div><div class="step frag"><span class="n">4</span><span><b>Compare:</b> Pr(S) = 18/30 = 3/5 — knowing B changed the probability!</span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8D">
@@ -255,7 +265,7 @@
   <text x="234" y="112" font-size="19" font-weight="bold" fill="#1c2733">6</text>
   <text x="278" y="192" font-size="17" font-weight="bold" fill="#556">6</text></svg></div></div>
   <div class="box hint frag">Hint: new total = everyone in S = 10 + 8 = 18.</div>
-  <div class="box answer frag">✔ Pr(B | S) = <span class="fr"><span class="nu">8</span><span class="de">18</span></span> = <span class="fr"><span class="nu">4</span><span class="de">9</span></span> — different from Pr(S | B)! Order matters.</div>
+  <div class="box answer frag">✔ Pr(B | S) = \(\dfrac{8}{18} = \dfrac{4}{9}\) — different from Pr(S | B)! Order matters.</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8D">
@@ -292,7 +302,7 @@
   <tr><th>5</th><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td></tr>
   <tr><th>6</th><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr></table></div><div>
   <div class="box key"><span class="lbl">Key idea</span>Rows = first step, columns = second step. Every cell is one equally likely outcome: 6 × 6 = 36.</div>
-  <div class="box key frag"><span class="lbl">Count cells</span>Sum = 8 is highlighted: <b>5 cells</b> → Pr(sum 8) = <span class="fr"><span class="nu">5</span><span class="de">36</span></span></div></div></div>
+  <div class="box key frag"><span class="lbl">Count cells</span>Sum = 8 is highlighted: <b>5 cells</b> → Pr(sum 8) = \(\dfrac{5}{36}\)</div></div></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8E">
@@ -304,14 +314,14 @@
   <tr><th>3</th><td>4</td><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td></tr>
   <tr><th>4</th><td>5</td><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td></tr>
   <tr><th>5</th><td>6</td><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td></tr>
-  <tr><th>6</th><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr></table></div></div><div class="step frag"><span class="n">1</span><span><b>Draw the array</b> (6 × 6 sums).</span></div><div class="step frag"><span class="n">2</span><span><b>Highlight sum = 8:</b> (2,6), (3,5), (4,4), (5,3), (6,2) — 5 cells.</span></div><div class="step frag"><span class="n">3</span><span><b>Total cells:</b> 36.</span></div><div class="step frag"><span class="n">4</span><span><b>Answer:</b> Pr(sum 8) = <span class="fr"><span class="nu">5</span><span class="de">36</span></span></span></div>
+  <tr><th>6</th><td>7</td><td class="hl">8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr></table></div></div><div class="step frag"><span class="n">1</span><span><b>Draw the array</b> (6 × 6 sums).</span></div><div class="step frag"><span class="n">2</span><span><b>Highlight sum = 8:</b> (2,6), (3,5), (4,4), (5,3), (6,2) — 5 cells.</span></div><div class="step frag"><span class="n">3</span><span><b>Total cells:</b> 36.</span></div><div class="step frag"><span class="n">4</span><span><b>Answer:</b> Pr(sum 8) = \(\dfrac{5}{36}\)</span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8E">
   <h2>Your turn</h2>
   <div class="box question"><span class="lbl">Your turn</span>From the same array, find Pr(sum ≥ 10).</div>
   <div class="box hint frag">Hint: count cells showing 10, 11 and 12.</div>
-  <div class="box answer frag">✔ 3 + 2 + 1 = 6 cells → Pr = <span class="fr"><span class="nu">6</span><span class="de">36</span></span> = <span class="fr"><span class="nu">1</span><span class="de">6</span></span></div>
+  <div class="box answer frag">✔ 3 + 2 + 1 = 6 cells → Pr = \(\dfrac{6}{36} = \dfrac{1}{6}\)</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8E">
@@ -347,7 +357,7 @@
 <section class="slide" data-topic="Chapter 8 · 8F">
   <h2>Worked example 6</h2>
   <div class="box question"><span class="lbl">Worked example</span>Using the tree (3 red, 2 blue, with replacement), find Pr(the two counters are different colours).</div>
-  <div class="center"><svg viewBox="0 0 560 215" width="540"><line x1="45" y1="105" x2="150" y2="62" stroke="#556" stroke-width="2"/><line x1="45" y1="105" x2="150" y2="148" stroke="#556" stroke-width="2"/><circle cx="42" cy="105" r="5" fill="#1c2733"/><text x="72" y="68" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><text x="72" y="150" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><line x1="165" y1="62" x2="290" y2="30" stroke="#556" stroke-width="2"/><text x="210" y="40" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><circle cx="305" cy="30" r="15" fill="var(--neg)"/><text x="300" y="35" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="35" font-size="14.5" fill="#1c2733">RR: 9/25</text><line x1="165" y1="62" x2="290" y2="94" stroke="#556" stroke-width="2"/><text x="210" y="72" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><circle cx="305" cy="94" r="15" fill="var(--ido)"/><text x="300" y="99" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="99" font-size="14.5" fill="#1c2733">RB: 6/25</text><circle cx="150" cy="62" r="15" fill="var(--neg)"/><text x="145" y="67" font-size="14" fill="#fff" font-weight="bold">R</text><line x1="165" y1="148" x2="290" y2="116" stroke="#556" stroke-width="2"/><text x="210" y="126" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><circle cx="305" cy="116" r="15" fill="var(--neg)"/><text x="300" y="121" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="121" font-size="14.5" fill="#1c2733">BR: 6/25</text><line x1="165" y1="148" x2="290" y2="180" stroke="#556" stroke-width="2"/><text x="210" y="158" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><circle cx="305" cy="180" r="15" fill="var(--ido)"/><text x="300" y="185" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="185" font-size="14.5" fill="#1c2733">BB: 4/25</text><circle cx="150" cy="148" r="15" fill="var(--ido)"/><text x="145" y="153" font-size="14" fill="#fff" font-weight="bold">B</text></svg></div><div class="step frag"><span class="n">1</span><span><b>Which paths?</b> RB and BR.</span></div><div class="step frag"><span class="n">2</span><span><b>Multiply along each:</b> Pr(RB) = <span class="fr"><span class="nu">3</span><span class="de">5</span></span> × <span class="fr"><span class="nu">2</span><span class="de">5</span></span> = <span class="fr"><span class="nu">6</span><span class="de">25</span></span>; &nbsp; Pr(BR) = <span class="fr"><span class="nu">2</span><span class="de">5</span></span> × <span class="fr"><span class="nu">3</span><span class="de">5</span></span> = <span class="fr"><span class="nu">6</span><span class="de">25</span></span></span></div><div class="step frag"><span class="n">3</span><span><b>Add between:</b> <span class="fr"><span class="nu">6</span><span class="de">25</span></span> + <span class="fr"><span class="nu">6</span><span class="de">25</span></span> = <span class="fr"><span class="nu">12</span><span class="de">25</span></span></span></div>
+  <div class="center"><svg viewBox="0 0 560 215" width="540"><line x1="45" y1="105" x2="150" y2="62" stroke="#556" stroke-width="2"/><line x1="45" y1="105" x2="150" y2="148" stroke="#556" stroke-width="2"/><circle cx="42" cy="105" r="5" fill="#1c2733"/><text x="72" y="68" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><text x="72" y="150" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><line x1="165" y1="62" x2="290" y2="30" stroke="#556" stroke-width="2"/><text x="210" y="40" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><circle cx="305" cy="30" r="15" fill="var(--neg)"/><text x="300" y="35" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="35" font-size="14.5" fill="#1c2733">RR: 9/25</text><line x1="165" y1="62" x2="290" y2="94" stroke="#556" stroke-width="2"/><text x="210" y="72" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><circle cx="305" cy="94" r="15" fill="var(--ido)"/><text x="300" y="99" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="99" font-size="14.5" fill="#1c2733">RB: 6/25</text><circle cx="150" cy="62" r="15" fill="var(--neg)"/><text x="145" y="67" font-size="14" fill="#fff" font-weight="bold">R</text><line x1="165" y1="148" x2="290" y2="116" stroke="#556" stroke-width="2"/><text x="210" y="126" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><circle cx="305" cy="116" r="15" fill="var(--neg)"/><text x="300" y="121" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="121" font-size="14.5" fill="#1c2733">BR: 6/25</text><line x1="165" y1="148" x2="290" y2="180" stroke="#556" stroke-width="2"/><text x="210" y="158" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><circle cx="305" cy="180" r="15" fill="var(--ido)"/><text x="300" y="185" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="185" font-size="14.5" fill="#1c2733">BB: 4/25</text><circle cx="150" cy="148" r="15" fill="var(--ido)"/><text x="145" y="153" font-size="14" fill="#fff" font-weight="bold">B</text></svg></div><div class="step frag"><span class="n">1</span><span><b>Which paths?</b> RB and BR.</span></div><div class="step frag"><span class="n">2</span><span><b>Multiply along each:</b> Pr(RB) = \(\dfrac{3}{5} \times \dfrac{2}{5} = \dfrac{6}{25}\); &nbsp; Pr(BR) = \(\dfrac{2}{5} \times \dfrac{3}{5} = \dfrac{6}{25}\)</span></div><div class="step frag"><span class="n">3</span><span><b>Add between:</b> \(\dfrac{6}{25} + \dfrac{6}{25} = \dfrac{12}{25}\)</span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8F">
@@ -355,7 +365,7 @@
   <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Same bag (3 red, 2 blue), but now <b>without replacement</b>. Find Pr(both red).</div></div>
   <div class="center"><svg viewBox="0 0 560 215" width="540"><line x1="45" y1="105" x2="150" y2="62" stroke="#556" stroke-width="2"/><line x1="45" y1="105" x2="150" y2="148" stroke="#556" stroke-width="2"/><circle cx="42" cy="105" r="5" fill="#1c2733"/><text x="72" y="68" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/5</text><text x="72" y="150" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/5</text><line x1="165" y1="62" x2="290" y2="30" stroke="#556" stroke-width="2"/><text x="210" y="40" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/4</text><circle cx="305" cy="30" r="15" fill="var(--neg)"/><text x="300" y="35" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="35" font-size="14.5" fill="#1c2733">RR: ?</text><line x1="165" y1="62" x2="290" y2="94" stroke="#556" stroke-width="2"/><text x="210" y="72" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">2/4</text><circle cx="305" cy="94" r="15" fill="var(--ido)"/><text x="300" y="99" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="99" font-size="14.5" fill="#1c2733">RB</text><circle cx="150" cy="62" r="15" fill="var(--neg)"/><text x="145" y="67" font-size="14" fill="#fff" font-weight="bold">R</text><line x1="165" y1="148" x2="290" y2="116" stroke="#556" stroke-width="2"/><text x="210" y="126" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">3/4</text><circle cx="305" cy="116" r="15" fill="var(--neg)"/><text x="300" y="121" font-size="14" fill="#fff" font-weight="bold">R</text><text x="335" y="121" font-size="14.5" fill="#1c2733">BR</text><line x1="165" y1="148" x2="290" y2="180" stroke="#556" stroke-width="2"/><text x="210" y="158" font-size="13.5" fill="var(--accent-warm)" font-weight="bold">1/4</text><circle cx="305" cy="180" r="15" fill="var(--ido)"/><text x="300" y="185" font-size="14" fill="#fff" font-weight="bold">B</text><text x="335" y="185" font-size="14.5" fill="#1c2733">BB</text><circle cx="150" cy="148" r="15" fill="var(--ido)"/><text x="145" y="153" font-size="14" fill="#fff" font-weight="bold">B</text></svg></div></div>
   <div class="box hint frag">Hint: after taking a red, only 2 red remain out of 4 counters.</div>
-  <div class="box answer frag">✔ Pr(RR) = <span class="fr"><span class="nu">3</span><span class="de">5</span></span> × <span class="fr"><span class="nu">2</span><span class="de">4</span></span> = <span class="fr"><span class="nu">6</span><span class="de">20</span></span> = <span class="fr"><span class="nu">3</span><span class="de">10</span></span></div>
+  <div class="box answer frag">✔ Pr(RR) = \(\dfrac{3}{5} \times \dfrac{2}{4} = \dfrac{6}{20} = \dfrac{3}{10}\)</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8F">
@@ -463,7 +473,7 @@
 <section class="slide" data-topic="Chapter 8 · 8I">
   <h2>Key idea — order matters</h2>
   <div class="box key"><span class="lbl">Arrangements</span>Choosing r from n where order matters: start at n and multiply <b>r falling numbers</b>.<br><br>
-  <span class="formula" style="font-size:1.15rem">arrangements = n × (n−1) × … &nbsp; (r factors) = <span class="fr"><span class="nu">n!</span><span class="de">(n−r)!</span></span></span></div>
+  <span class="formula" style="font-size:1.15rem">arrangements = n × (n−1) × … &nbsp; (r factors) = \(\dfrac{n!}{(n - r)!}\)</span></div>
   <div class="box key frag"><span class="lbl">Spot it</span>Words like <b>1st/2nd/3rd, president/secretary, code, ranking</b> → order matters → arrangement.</div>
 </section>
 
@@ -499,14 +509,14 @@
 <section class="slide" data-topic="Chapter 8 · 8J">
   <h2>Key idea — divide out the repeats</h2>
   <div class="box key"><span class="lbl">Selections</span>Choosing r from n where order does NOT matter:<br><br>
-  <span class="formula" style="font-size:1.15rem">ⁿCᵣ = <span class="fr"><span class="nu">n!</span><span class="de">r!(n−r)!</span></span></span></div>
+  <span class="formula" style="font-size:1.15rem">ⁿCᵣ = \(\dfrac{n!}{r!(n - r)!}\)</span></div>
   <div class="box key frag"><span class="lbl">Why divide by r!</span>Every group of r was counted r! times as arrangements — divide the repeats out.</div>
   <div class="box key frag"><span class="lbl">Spot it</span>Words like <b>choose, select, committee (no roles), team, hand of cards</b> → selection.</div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8J">
   <h2>Worked example 10</h2>
-  <div class="box question"><span class="lbl">Worked example</span>A committee of 3 is chosen from 7 students (no roles). How many committees are possible?</div><div class="step frag"><span class="n">1</span><span><b>No roles → order does not matter</b> → selection.</span></div><div class="step frag"><span class="n">2</span><span><b>Formula:</b> ⁷C₃ = <span class="fr"><span class="nu">7 × 6 × 5</span><span class="de">3 × 2 × 1</span></span></span></div><div class="step frag"><span class="n">3</span><span><b>Calculate:</b> 210 ÷ 6 = <b>35 committees</b></span></div>
+  <div class="box question"><span class="lbl">Worked example</span>A committee of 3 is chosen from 7 students (no roles). How many committees are possible?</div><div class="step frag"><span class="n">1</span><span><b>No roles → order does not matter</b> → selection.</span></div><div class="step frag"><span class="n">2</span><span><b>Formula:</b> ⁷C₃ = \(\dfrac{7 \times 6 \times 5}{3 \times 2 \times 1}\)</span></div><div class="step frag"><span class="n">3</span><span><b>Calculate:</b> 210 ÷ 6 = <b>35 committees</b></span></div>
 </section>
 
 <section class="slide" data-topic="Chapter 8 · 8J">
