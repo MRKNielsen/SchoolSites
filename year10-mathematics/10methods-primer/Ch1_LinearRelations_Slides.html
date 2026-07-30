@@ -3,520 +3,789 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapter 1 — Linear Relations | 10 Methods</title>
-<style>
-  :root{
-    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
-    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#0e7490; --main2:#0a5468;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
-  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
-  #menu h1{color:var(--main2);font-size:2.1rem}
-  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
-  .wk{margin-bottom:20px}
-  .wk h2{font-size:1.05rem;color:var(--main2);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
-        padding:12px 14px;cursor:pointer;transition:.15s}
-  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
-  .card .code{font-weight:700;color:var(--main2);font-size:.95rem}
-  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
-  .card .vb{font-size:.8rem;color:#666;font-style:italic}
-  .card.rev{border-left-color:var(--rev)}
-  #stage{position:fixed;inset:0;display:none;flex-direction:column}
-  #bar{height:6px;background:#dfe6ee}
-  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
-  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main2);color:#fff}
-  #head .l{font-weight:600;font-size:.95rem}
-  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
-               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
-  #slide{flex:1;overflow-y:auto;padding:5vh 5vw;max-width:1150px;margin:0 auto;width:100%}
-  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
-  #foot .keys{font-size:.8rem}
-  #foot button{background:var(--main2);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
-  #foot button.ghost{background:#b9c6d4}
-  .stitle{color:var(--main2);font-size:1.9rem;margin-bottom:18px}
-  .lesson-title h2{font-size:2.3rem;color:var(--main2)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
-  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
-  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
-  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
-  table.vocab th{background:var(--main2);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
-  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
-  table.vocab td.t{font-weight:700;color:var(--main2);white-space:nowrap}
-  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
-  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
-  .key .kt{font-weight:700;color:var(--main2);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
-  .formula{background:#e7f3f6;border:2px solid var(--main);border-radius:10px;padding:12px 20px;display:inline-block;
-           font-size:1.35rem;margin:8px 8px 4px 0;font-family:Georgia,serif}
-  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
-  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
-  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
-  .step .n{background:var(--main2);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
-  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
-  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
-  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
-  .frame b{color:var(--adj)}
-  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
-  .exset h3{color:var(--main2);margin-bottom:10px}
-  .exset li{margin:8px 0 8px 22px}
-  .pill{display:inline-block;background:#e7f3f6;border:1px solid var(--main);color:var(--main2);border-radius:20px;padding:2px 12px;font-size:.9rem;font-weight:600;margin:2px}
-  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
-  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
-  .cols>div{flex:1;min-width:300px}
-  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
-  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
-  .fr .de{padding:0 6px}
-  .say{font-size:.85rem;color:#888;font-style:italic}
-  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
-  svg text{font-family:'Segoe UI',sans-serif}
-  .center{text-align:center}
-  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
-  .chk th{background:var(--main2);color:#fff;padding:8px 12px;text-align:left}
-  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
-</style>
+<title>Chapter 1 — Linear Relations — 10 Methods Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
 </head>
-<body>
+<body class="deck-page theme-primer">
+<div class="progress"></div>
+<div class="lessontag">Chapter 1 · Linear Relations</div>
+<a class="homebtn" href="index.html" title="Course home">&#8962; Course home</a>
+<main class="deck">
 
-<div id="menu"></div>
+<section class="slide section-slide">
+  <div class="kicker">10 Methods Primer</div>
+  <h1>Chapter 1 — Linear Relations</h1>
+  <p>10 Methods · Unit 1 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 1 Weeks 1–5 · CAT 1 (Units 1 &amp; 2) in Week 8 · <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>
+  <span class="chip">Use the course home page to jump to a lesson · <b>&rarr;</b> reveals then advances</span>
+</section>
 
-<div id="stage">
-  <div id="bar"><div id="fill"></div></div>
-  <div id="head">
-    <span class="l" id="hlbl"></span>
-    <button onclick="goMenu()">☰ Menu (Esc)</button>
-  </div>
-  <div id="slide"></div>
-  <div id="foot">
-    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
-    <span id="pgs"></span>
-    <span>
-      <button class="ghost" onclick="nav(-1)">← Back</button>
-      <button onclick="nav(1)">Next →</button>
-    </span>
-  </div>
-</div>
+<section class="slide section-slide" data-lesson="1">
+  <div class="kicker">LESSON 1 — WELCOME + SECTION 1A</div>
+  <h1>Welcome to 10 Methods · Review of algebra</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>set up my maths glossary and class routines</li>
+    <li>collect like terms and simplify expressions</li>
+    <li>expand a single bracket</li>
+  </ul>
 
-<script>
-/* ---------- helpers ---------- */
-const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
-const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
-  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
-  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
-const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
-const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
-  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
+</section>
 
-/* graph plotter with optional shaded region */
-function graf(o){
-  const W=o.w||310,H=o.h||250,[x0,x1]=o.xr,[y0,y1]=o.yr;
-  const X=x=>10+(x-x0)/(x1-x0)*(W-20), Y=y=>H-12-(y-y0)/(y1-y0)*(H-24);
-  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">`;
-  if(o.shade){ // {f, dir:'above'|'below'}
-    let pts='';
-    for(let i=0;i<=60;i++){const x=x0+(x1-x0)*i/60;let y=o.shade.f(x);y=Math.max(y0,Math.min(y1,y));
-      pts+=X(x).toFixed(1)+','+Y(y).toFixed(1)+' ';}
-    const edge=o.shade.dir==='above'?Y(y1):Y(y0);
-    pts+=X(x1).toFixed(1)+','+edge.toFixed(1)+' '+X(x0).toFixed(1)+','+edge.toFixed(1);
-    s+=`<polygon points="${pts}" fill="#0e7490" opacity="0.16"/>`;
-  }
-  if(y0<=0&&y1>=0)s+=`<line x1="6" y1="${Y(0).toFixed(1)}" x2="${W-6}" y2="${Y(0).toFixed(1)}" stroke="#888" stroke-width="1.5"/>
-   <text x="${W-16}" y="${(Y(0)+14).toFixed(1)}" font-size="12" fill="#666">x</text>`;
-  if(x0<=0&&x1>=0)s+=`<line x1="${X(0).toFixed(1)}" y1="6" x2="${X(0).toFixed(1)}" y2="${H-6}" stroke="#888" stroke-width="1.5"/>
-   <text x="${(X(0)+6).toFixed(1)}" y="16" font-size="12" fill="#666">y</text>`;
-  for(const c of o.curves||[]){
-    let d='',pen=false;
-    for(let i=0;i<=120;i++){
-      const x=x0+(x1-x0)*i/120, y=c.f(x);
-      if(!isFinite(y)||y<y0-(y1-y0)*0.05||y>y1+(y1-y0)*0.05){pen=false;continue;}
-      d+=(pen?' L ':' M ')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true;}
-    s+=`<path d="${d}" fill="none" stroke="${c.col||'#c0392b'}" stroke-width="2.6"${c.dash?' stroke-dasharray="7 5"':''}/>`;
-    if(c.lab)s+=`<text x="${X(c.lx).toFixed(1)}" y="${(Y(c.f(c.lx))-8).toFixed(1)}" font-size="13" fill="${c.col||'#c0392b'}" font-weight="bold">${c.lab}</text>`;}
-  for(const g of o.segs||[]){ // dashed construction segments [[x1,y1,x2,y2]]
-    s+=`<line x1="${X(g[0]).toFixed(1)}" y1="${Y(g[1]).toFixed(1)}" x2="${X(g[2]).toFixed(1)}" y2="${Y(g[3]).toFixed(1)}" stroke="#2266aa" stroke-width="1.8" stroke-dasharray="5 4"/>`;}
-  for(const m of o.marks||[]){
-    s+=`<circle cx="${X(m[0]).toFixed(1)}" cy="${Y(m[1]).toFixed(1)}" r="4" fill="#1F4E79"/>`;
-    if(m[2])s+=`<text x="${(X(m[0])+(m[3]??7)).toFixed(1)}" y="${(Y(m[1])+(m[4]??-8)).toFixed(1)}" font-size="12.5" fill="#1F4E79" font-weight="bold">${m[2]}</text>`;}
-  return s+'</svg>';
-}
-/* number line for inequalities: {min,max,pt,closed:true/false,dir:'left'|'right',lab} */
-function nline(o){
-  const W=430,H=76,X=v=>25+(v-o.min)/(o.max-o.min)*(W-50);
-  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">
-  <line x1="8" y1="44" x2="${W-8}" y2="44" stroke="#556" stroke-width="2"/>
-  <polygon points="${W-8},44 ${W-16},40 ${W-16},48" fill="#556"/>
-  <polygon points="8,44 16,40 16,48" fill="#556"/>`;
-  for(let v=Math.ceil(o.min);v<=Math.floor(o.max);v++){
-    s+=`<line x1="${X(v)}" y1="39" x2="${X(v)}" y2="49" stroke="#556" stroke-width="1.6"/>
-    <text x="${X(v)-(v<0?9:4)}" y="68" font-size="13" fill="#556">${v}</text>`;}
-  const px=X(o.pt), end=o.dir==='left'?X(o.min)+4:X(o.max)-4;
-  s+=`<line x1="${px}" y1="24" x2="${end}" y2="24" stroke="#c0392b" stroke-width="3.5"/>
-  <polygon points="${end},24 ${end+(o.dir==='left'?8:-8)},20 ${end+(o.dir==='left'?8:-8)},28" fill="#c0392b"/>
-  <circle cx="${px}" cy="24" r="6" fill="${o.closed?'#c0392b':'#fff'}" stroke="#c0392b" stroke-width="2.5"/>
-  ${o.lab?`<text x="${px-14}" y="12" font-size="14" fill="#c0392b" font-weight="bold">${o.lab}</text>`:''}</svg>`;
-  return s;
-}
-
-/* ---------- slide builders ---------- */
-const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
-  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
-
-/* ---------- lesson data ---------- */
-const LESSONS=[
-/* ===== L1 welcome + 1A ===== */
-{code:'1A · Term 1 Week 1 · Lesson 1 (Thu 29 Jan)',nm:'Welcome + Review of algebra',menu:['1A','Welcome + Review of algebra','pronumeral, term, like terms, coefficient'],
- slides:[
- title('LESSON 1 — WELCOME + SECTION 1A','Welcome to 10 Methods · Review of algebra',['set up my maths glossary and class routines','collect like terms and simplify expressions','expand a single bracket']),
- {h:'How every lesson works',b:`<div class="key"><span class="kt">Our routine (every single lesson)</span>
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <h2>How every lesson works</h2>
+  <div class="box key"><span class="lbl">Our routine (every single lesson)</span>
   🗣 <b>New words first</b> → 💡 <b>Key idea</b> → ✏ <b>Worked example</b> → 🙋 <b>Your turn</b> → 📘 <b>Textbook exercise</b></div>
-  <div class="key frag"><span class="kt">Your two tools</span>1️⃣ A <b>glossary</b> at the back of your book: word · meaning · your home language. 2️⃣ <b>Sentence frames</b> — ready-made sentences for asking and explaining.</div>
-  <div class="frame frag">Practice one now: “Can you explain <b>___</b> again, please?” — works in every lesson, for anything.</div>`},
- {h:'🗣 New words first',b:vocab([
-  ['pronumeral / variable','pro-NYOO-me-ral','a letter standing for a number, like x'],
-  ['term','term','one piece of an expression: 3x, −2y, 7'],
-  ['like terms','lyk terms','terms with exactly the same letters: 3x and −5x'],
-  ['coefficient','ko-e-FISH-ent','the number in front: the 3 in 3x'],
-  ['expand','ex-PAND','multiply out the brackets'],
-  ['simplify','SIM-pli-fy','write with as few terms as possible']])},
- {h:'Key idea — collect like terms, expand brackets',b:`<div class="key"><span class="kt">Like terms</span>Only like terms can be added: 3x + 5x = 8x ✔ &nbsp; but 3x + 5y stays 3x + 5y.</div>
-  <div class="key frag"><span class="kt">Expanding</span><span class="formula">a(b + c) = ab + ac</span> — the outside number multiplies <b>everything</b> inside.</div>`},
- {h:'Worked example 1',b:`<div class="q"><span class="tag">Worked example</span>Simplify: a) 3x + 2y − x + 5y &nbsp; b) 3(2x − 4) + 2x</div>`+steps([
-  `<b>a) Group like terms:</b> (3x − x) + (2y + 5y)`,
-  `<b>Simplify:</b> 2x + 7y`,
-  `<b>b) Expand first:</b> 6x − 12 + 2x <span class="say">(3 × 2x and 3 × −4)</span>`,
-  `<b>Collect:</b> 8x − 12`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify: a) 5a − 2b + a + 7b &nbsp; b) 2(3x + 1) − 4x</div>
-  <div class="hint frag">Hint: b) expand to 6x + 2 first.</div>
-  <div class="ans frag">✔ a) 6a + 5b &nbsp; b) 2x + 2</div>`},
- {h:'',b:exset('1A',['Fluency: like terms and expanding questions','Start your glossary with today’s six words','Frame: “___ and ___ are like terms because ___.”'])}
-]},
-/* ===== L2 1B ===== */
-{code:'1B · Term 1 Week 1 · Lesson 2 (Fri 30 Jan)',nm:'Solving linear equations',menu:['1B','Solving linear equations','equation, solve, inverse operation'],
- slides:[
- title('LESSON 2 — SECTION 1B','Solving linear equations',['explain what “solve” means','undo operations in reverse order','solve equations with x on both sides']),
- {h:'🗣 New words first',b:vocab([
-  ['equation','ee-KWAY-zhun','two expressions with an equals sign: 2x + 5 = 17'],
-  ['solve','solv','find the value of x that makes it TRUE'],
-  ['inverse operation','IN-verse','the undo: + ↔ −, × ↔ ÷'],
-  ['both sides','—','whatever you do to one side, do to the other'],
-  ['check / verify','chek','substitute your answer back in — does it work?']])},
- {h:'Key idea — keep the balance',b:`<div class="key"><span class="kt">Key idea</span>An equation is a balance ⚖. Do the <b>same inverse operation to both sides</b>, one step per line, until x is alone.</div>
-  <div class="key frag"><span class="kt">x on both sides?</span>First move the smaller x-term across, then solve as normal.</div>`},
- {h:'Worked example 2',b:`<div class="q"><span class="tag">Worked example</span>Solve: a) 2x + 5 = 17 &nbsp; b) 5x − 4 = 3x + 10</div>`+steps([
-  `<b>a) − 5 both sides:</b> 2x = 12`,
-  `<b>÷ 2 both sides:</b> x = 6. <b>Check:</b> 2(6) + 5 = 17 ✔`,
-  `<b>b) − 3x both sides:</b> 2x − 4 = 10`,
-  `<b>+ 4, then ÷ 2:</b> 2x = 14 → x = 7. <b>Check:</b> 31 = 31 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve: a) 4x − 3 = 13 &nbsp; b) 7x + 2 = 4x + 17</div>
-  <div class="hint frag">Hint: b) subtract 4x first.</div>
-  <div class="ans frag">✔ a) x = 4 &nbsp; b) 3x = 15 → x = 5</div>`},
- {h:'',b:exset('1B (start)',['One inverse operation per line — show every step','Check every third answer by substituting back','Frame: “I subtract ___ from both sides because ___.”'])}
-]},
-/* ===== L3 1B+ ===== */
-{code:'1B · Term 1 Week 2 · Lesson 3',nm:'Equations with brackets',menu:['1B+','Equations with brackets','expand, then solve'],
- slides:[
- title('LESSON 3 — SECTION 1B (CONTINUED)','Equations with brackets',['expand brackets before solving','solve equations with brackets on both sides','find and fix sign errors']),
- {h:'Key idea — expand, then solve',b:`<div class="key"><span class="kt">Routine</span>1️⃣ Expand all brackets → 2️⃣ collect like terms on each side → 3️⃣ solve as normal.</div>
-  <div class="key frag"><span class="kt">Careful</span>A minus in front of a bracket changes EVERY sign inside: −2(x − 3) = −2x <b>+ 6</b>.</div>`},
- {h:'Worked example 3',b:`<div class="q"><span class="tag">Worked example</span>Solve 3(x − 2) = 2(x + 4) + 1</div>`+steps([
-  `<b>Expand both sides:</b> 3x − 6 = 2x + 8 + 1`,
-  `<b>Collect:</b> 3x − 6 = 2x + 9`,
-  `<b>− 2x both sides:</b> x − 6 = 9`,
-  `<b>+ 6:</b> x = 15. <b>Check:</b> 3(13) = 2(19) + 1 → 39 = 39 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve 4(2x + 1) = 3x + 19</div>
-  <div class="hint frag">Hint: expand to 8x + 4 first.</div>
-  <div class="ans frag">✔ 8x + 4 = 3x + 19 → 5x = 15 → x = 3</div>`},
- {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>A student wrote: −3(x − 2) = −3x − 6</div>
-  <div class="ans frag">✔ The −3 must multiply the −2 as well: −3 × −2 = <b>+6</b>, so −3(x − 2) = −3x + 6.</div>
-  <div class="frame frag">“The minus outside changes <b>every sign</b> inside the bracket.”</div>`},
- {h:'',b:exset('1B (finish)',['Bracket equations, including brackets on both sides','Circle every minus sign BEFORE you expand','Challenge: equations with three brackets'])}
-]},
-/* ===== L4 1C ===== */
-{code:'1C · Term 1 Week 2 · Lesson 4',nm:'Linear inequalities',menu:['1C','Linear inequalities','inequality, reverse the sign, number line'],
- slides:[
- title('LESSON 4 — SECTION 1C','Linear inequalities',['read and write the four inequality symbols','solve inequalities like equations — with ONE special rule','graph solutions on a number line']),
- {h:'🗣 New words first',b:vocab([
-  ['inequality','in-ee-KWOL-i-tee','a statement with &lt;, &gt;, ≤ or ≥ instead of ='],
-  ['less than <','less than','strictly smaller — open circle ○ on the number line'],
-  ['at least ≥ / at most ≤','—','includes the number itself — closed circle ●'],
-  ['reverse the sign','re-VERSE','flip &lt; to &gt; when multiplying or dividing by a NEGATIVE']])},
- {h:'Key idea — one special rule',b:`<div class="key"><span class="kt">Solve like an equation…</span>same inverse operations, both sides — the inequality sign stays put…</div>
-  <div class="key frag"><span class="kt">…except</span><b>multiplying or dividing by a negative flips the sign.</b> Test it: 2 &lt; 4, but ×(−1) gives −2 &gt; −4. The flip keeps it true!</div>`},
- {h:'Worked example 4',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Solve 3 − 2x ≥ 9 and show the solution on a number line.</div></div>
-  <div class="center">${nline({min:-6,max:2,pt:-3,closed:true,dir:'left',lab:'x ≤ −3'})}</div></div>`+steps([
-  `<b>− 3 both sides:</b> −2x ≥ 6`,
-  `<b>÷ (−2) — FLIP the sign:</b> x ≤ −3`,
-  `<b>Number line:</b> closed circle at −3 (it is included), arrow to the left.`,
-  `<b>Check with x = −4:</b> 3 − 2(−4) = 11 ≥ 9 ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Solve 2x + 1 &lt; 7 and graph it on a number line.</div></div>
-  <div class="center">${nline({min:-2,max:6,pt:3,closed:false,dir:'left',lab:'x < 3'})}</div></div>
-  <div class="hint frag">Hint: no negatives here — the sign does not flip. Open or closed circle?</div>
-  <div class="ans frag">✔ 2x &lt; 6 → x &lt; 3 — <b>open</b> circle at 3 (3 is NOT included), arrow left.</div>`},
- {h:'',b:exset('1C',['Solve and graph — every answer gets a number line','Highlight each ×(−) or ÷(−) step: that is where the flip happens','Frame: “I flip the sign because I divided by a ___ number.”'])}
-]},
-/* ===== L5 1D ===== */
-{code:'1D · Term 1 Week 2 · Lesson 5',nm:'Equations with algebraic fractions',menu:['1D','Equations with fractions','denominator, common multiple'],
- slides:[
- title('LESSON 5 — SECTION 1D','Equations with algebraic fractions',['clear fractions by multiplying by a common multiple','solve equations with two fractions','keep working lines tidy and checkable']),
- {h:'🗣 New words first',b:vocab([
-  ['denominator','de-NOM-in-ay-tor','the bottom of a fraction'],
-  ['common multiple','KOM-on MUL-ti-pul','a number all denominators divide into: for 2 and 3, use 6'],
-  ['clear the fractions','—','multiply every term so no fractions remain']])},
- {h:'Key idea — multiply everything',b:`<div class="key"><span class="kt">Routine</span>1️⃣ Find the common multiple of the denominators → 2️⃣ multiply <b>every term</b> by it → 3️⃣ solve the fraction-free equation.</div>
-  <div class="key frag"><span class="kt">Careful</span>The whole top comes with brackets: 6 × ${fr('x + 3','2')} = 3(x + 3), not 3x + 3.</div>`},
- {h:'Worked example 5',b:`<div class="q"><span class="tag">Worked example</span>Solve ${fr('x + 3','2')} + ${fr('x − 1','3')} = 4</div>`+steps([
-  `<b>Common multiple of 2 and 3:</b> 6 — multiply every term by 6.`,
-  `<b>Clear:</b> 3(x + 3) + 2(x − 1) = 24`,
-  `<b>Expand and collect:</b> 3x + 9 + 2x − 2 = 24 → 5x + 7 = 24`,
-  `<b>Solve:</b> 5x = 17 → x = ${fr('17','5')} = 3.4 <span class="say">(fractions are fine as answers!)</span>`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve ${fr('2x − 1','5')} = ${fr('x + 2','3')}</div>
-  <div class="hint frag">Hint: multiply both sides by 15 — or cross-multiply.</div>
-  <div class="ans frag">✔ 3(2x − 1) = 5(x + 2) → 6x − 3 = 5x + 10 → x = 13</div>`},
- {h:'',b:exset('1D (start)',['Fraction equations — brackets around every numerator','Write the common multiple in the margin first','Check one answer by substituting back'])}
-]},
-/* ===== L6 1D+ ===== */
-{code:'1D · Term 1 Week 2 · Lesson 6',nm:'More complex equations — consolidation',menu:['1D+','Harder fraction equations','subtraction of fractions, check'],
- slides:[
- title('LESSON 6 — SECTION 1D (CONSOLIDATION)','More complex equations',['solve equations with subtracted fractions','avoid the minus-bracket trap','check solutions systematically']),
- {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Solve ${fr('3x + 2','4')} − ${fr('x − 1','2')} = 1</div>`+steps([
-  `<b>Multiply every term by 4:</b> (3x + 2) − 2(x − 1) = 4`,
-  `<b>Expand — watch the minus:</b> 3x + 2 − 2x + 2 = 4 <span class="say">(−2 × −1 = +2!)</span>`,
-  `<b>Collect:</b> x + 4 = 4`,
-  `<b>Solve:</b> x = 0. <b>Check:</b> ${fr('2','4')} − ${fr('−1','2')} = ${fr('1','2')} + ${fr('1','2')} = 1 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve ${fr('x + 5','3')} − ${fr('x','6')} = 2</div>
-  <div class="hint frag">Hint: multiply every term by 6: 2(x + 5) − x = 12.</div>
-  <div class="ans frag">✔ 2x + 10 − x = 12 → x = 2</div>`},
- {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>Solving ${fr('x + 1','2')} − ${fr('x − 3','4')} = 1, a student wrote: 2(x + 1) − (x − 3) = 4, then 2x + 2 − x − 3 = 4.</div>
-  <div class="ans frag">✔ The setup line is right; the expansion is wrong. −(x − 3) = −x <b>+ 3</b>. Correct: x + 5 = 4 → x = −1.</div>`},
- {h:'',b:exset('1D (finish)',['Mixed set: brackets, both sides, fractions together','Every minus bracket: write the sign change explicitly','Exit ticket: solve one equation and CHECK it in writing'])}
-]},
-/* ===== L7 1E ===== */
-{code:'1E · Term 1 Week 3 · Lesson 7',nm:'Graphing straight lines',menu:['1E','Graphing straight lines','gradient, y-intercept, x-intercept'],
- slides:[
- title('LESSON 7 — SECTION 1E','Graphing straight lines',['find x- and y-intercepts from a rule','sketch a line using its two intercepts','read gradient and y-intercept from y = mx + c']),
- {h:'🗣 New words first',b:vocab([
-  ['gradient m','GRAY-dee-ent','the slope: rise ÷ run — how steep the line is'],
-  ['y-intercept c','—','where the line crosses the y-axis (x = 0)'],
-  ['x-intercept','—','where the line crosses the x-axis (y = 0)'],
-  ['rise / run','ryz / run','up-or-down change ÷ across change']])},
- {h:'Key idea — two points make a line',b:`<div class="key"><span class="kt">Intercept method</span>Put x = 0 → y-intercept. Put y = 0 → x-intercept. Join the two points — done.</div>
-  <div class="key frag"><span class="kt">Gradient form</span><span class="formula">y = mx + c</span> m = gradient, c = y-intercept. Read them straight off the rule.</div>`},
- {h:'Worked example 7',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = 2x − 4 using the intercepts.</div></div>
-  <div class="center">${graf({xr:[-2.5,5],yr:[-6,5],curves:[{f:x=>2*x-4,lab:'y = 2x − 4',lx:3.4}],marks:[[0,-4,'(0, −4)',8,4],[2,0,'(2, 0)',8,-6]]})}</div></div>`+steps([
-  `<b>y-intercept:</b> x = 0 → y = −4 → (0, −4)`,
-  `<b>x-intercept:</b> y = 0 → 2x = 4 → x = 2 → (2, 0)`,
-  `<b>Plot both points, join with a ruler,</b> label the line and both intercepts.`,
-  `<b>Check the slope:</b> m = 2 — uphill, steepish ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = −x + 3 using the intercepts.</div></div>
-  <div class="center">${graf({xr:[-2,5.5],yr:[-2.5,5],curves:[{f:x=>3-x,col:'#2266aa'}],marks:[[0,3,'(0, 3)',8,-2],[3,0,'(3, 0)',8,14]]})}</div></div>
-  <div class="hint frag">Hint: both intercepts are 3 — but on different axes!</div>
-  <div class="ans frag">✔ (0, 3) and (3, 0); gradient −1, downhill.</div>`},
- {h:'',b:exset('1E',['Sketch by intercepts; label both points on every sketch','Then read m and c from rules without sketching','Frame: “The gradient is ___, so the line goes ___hill.”'])}
-]},
-/* ===== L8 1E/F ===== */
-{code:'1E/1F · Term 1 Week 3 · Lesson 8',nm:'Gradient and equation from a graph',menu:['1E/1F','Equation from a graph','rise over run, y = mx + c'],
- slides:[
- title('LESSON 8 — SECTIONS 1E/1F','Finding the equation from a graph',['measure gradient as rise over run','read c from the graph','write the rule y = mx + c']),
- {h:'Key idea — two readings, one rule',b:`<div class="key"><span class="kt">From any straight-line graph</span>1️⃣ Read <b>c</b> where it crosses the y-axis → 2️⃣ pick two nice grid points and count <b>rise ÷ run</b> → 3️⃣ write y = mx + c.</div>
-  <div class="key frag"><span class="kt">Signs</span>Downhill line → negative rise → negative m.</div>`},
- {h:'Worked example 8',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of this line.</div></div>
-  <div class="center">${graf({xr:[-2.5,3],yr:[-2,9],curves:[{f:x=>3*x+2}],segs:[[0,2,1,2],[1,2,1,5]],marks:[[0,2,'(0, 2)',-50,-2],[1,5,'(1, 5)',8,-2]]})}</div></div>`+steps([
-  `<b>y-intercept:</b> the line crosses at (0, 2) → c = 2`,
-  `<b>Rise over run:</b> from (0, 2) to (1, 5): rise 3, run 1 → m = 3`,
-  `<b>Rule:</b> y = 3x + 2`,
-  `<b>Check with the second point:</b> 3(1) + 2 = 5 ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of this line.</div></div>
-  <div class="center">${graf({xr:[-2,4],yr:[-4,4],curves:[{f:x=>-2*x+1,col:'#2266aa'}],marks:[[0,1,'(0, 1)',8,-2],[2,-3,'(2, −3)',8,4]]})}</div></div>
-  <div class="hint frag">Hint: from (0, 1) to (2, −3): rise −4, run 2.</div>
-  <div class="ans frag">✔ m = −2, c = 1 → <b>y = −2x + 1</b></div>`},
- {h:'',b:exset('1E (finish) + 1F (start)',['Equations from graphs — show the rise/run triangle on the graph','Then rules from a gradient + y-intercept given in words','Frame: “The rise is ___ and the run is ___, so m = ___.”'])}
-]},
-/* ===== L9 1F ===== */
-{code:'1F · Term 1 Week 3 · Lesson 9',nm:'Finding the equation of a line from two points',menu:['1F','Equation from two points','gradient formula, substitute a point'],
- slides:[
- title('LESSON 9 — SECTION 1F','Equation of a line from two points',['use the gradient formula','find c by substituting a point','write the full rule and check with the other point']),
- {h:'Key idea — gradient formula, then one point',b:`<div class="center"><span class="formula">m = ${fr('y₂ − y₁','x₂ − x₁')}</span></div>
-  <div class="key frag"><span class="kt">Routine</span>1️⃣ m from the two points → 2️⃣ y = mx + c with ONE point substituted → find c → 3️⃣ check with the OTHER point.</div>`},
- {h:'Worked example 9',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of the line through (1, 3) and (3, 11).</div></div>
-  <div class="center">${graf({xr:[-1.5,4.5],yr:[-4,13],curves:[{f:x=>4*x-1}],marks:[[1,3,'(1, 3)',-50,4],[3,11,'(3, 11)',8,0]]})}</div></div>`+steps([
-  `<b>Gradient:</b> m = ${fr('11 − 3','3 − 1')} = ${fr('8','2')} = 4`,
-  `<b>Substitute (1, 3):</b> 3 = 4(1) + c → c = −1`,
-  `<b>Rule:</b> y = 4x − 1`,
-  `<b>Check with (3, 11):</b> 4(3) − 1 = 11 ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of the line through (2, 5) and (4, 1).</div></div>
-  <div class="center">${graf({xr:[-0.5,6],yr:[-1.5,11],curves:[{f:x=>-2*x+9,col:'#2266aa'}],marks:[[2,5,'(2, 5)',-52,0],[4,1,'(4, 1)',8,0]]})}</div></div>
-  <div class="hint frag">Hint: m = (1 − 5) ÷ (4 − 2) = −2.</div>
-  <div class="ans frag">✔ 5 = −2(2) + c → c = 9 → <b>y = −2x + 9</b>. Check: −2(4) + 9 = 1 ✔</div>`},
- {h:'',b:exset('1F (finish)',['Two-point questions — always check with the unused point','Keep the subtraction order the SAME on top and bottom','Word problems: “passes through” means the point fits the rule'])}
-]},
-/* ===== L10 1G ===== */
-{code:'1G · Term 1 Week 3 · Lesson 10',nm:'Length and midpoint of a line segment',menu:['1G','Length and midpoint','segment, distance, midpoint, average'],
- slides:[
- title('LESSON 10 — SECTION 1G','Length and midpoint of a line segment',['find the length of a segment with Pythagoras','find the midpoint by averaging','draw the right-angled triangle that makes it work']),
- {h:'🗣 New words first',b:vocab([
-  ['line segment','SEG-ment','a piece of a line between two endpoints'],
-  ['length / distance','—','how long the segment is — Pythagoras!'],
-  ['midpoint','MID-poynt','the point exactly halfway — average the coordinates'],
-  ['average','AV-rij','add them, divide by 2']])},
- {h:'Key idea — a hidden right triangle',b:`<div class="center">
+  <div class="box key frag"><span class="lbl">Your two tools</span>1️⃣ A <b>glossary</b> at the back of your book: word · meaning · your home language. 2️⃣ <b>Sentence frames</b> — ready-made sentences for asking and explaining.</div>
+  <div class="box try frag">Practice one now: “Can you explain <b>___</b> again, please?” — works in every lesson, for anything.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">pronumeral / variable</td><td class="s">pro-NYOO-me-ral</td><td>a letter standing for a number, like x</td></tr><tr><td class="t">term</td><td class="s">term</td><td>one piece of an expression: 3x, −2y, 7</td></tr><tr><td class="t">like terms</td><td class="s">lyk terms</td><td>terms with exactly the same letters: 3x and −5x</td></tr><tr><td class="t">coefficient</td><td class="s">ko-e-FISH-ent</td><td>the number in front: the 3 in 3x</td></tr><tr><td class="t">expand</td><td class="s">ex-PAND</td><td>multiply out the brackets</td></tr><tr><td class="t">simplify</td><td class="s">SIM-pli-fy</td><td>write with as few terms as possible</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <h2>Key idea — collect like terms, expand brackets</h2>
+  <div class="box key"><span class="lbl">Like terms</span>Only like terms can be added: 3x + 5x = 8x ✔ &nbsp; but 3x + 5y stays 3x + 5y.</div>
+  <div class="box key frag"><span class="lbl">Expanding</span><span class="formula">a(b + c) = ab + ac</span> — the outside number multiplies <b>everything</b> inside.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <h2>Worked example 1</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Simplify: a) 3x + 2y − x + 5y &nbsp; b) 3(2x − 4) + 2x</div><div class="step frag"><span class="n">1</span><span><b>a) Group like terms:</b> (3x − x) + (2y + 5y)</span></div><div class="step frag"><span class="n">2</span><span><b>Simplify:</b> 2x + 7y</span></div><div class="step frag"><span class="n">3</span><span><b>b) Expand first:</b> 6x − 12 + 2x <span class="say">(3 × 2x and 3 × −4)</span></span></div><div class="step frag"><span class="n">4</span><span><b>Collect:</b> 8x − 12</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Simplify: a) 5a − 2b + a + 7b &nbsp; b) 2(3x + 1) − 4x</div>
+  <div class="box hint frag">Hint: b) expand to 6x + 2 first.</div>
+  <div class="box answer frag">✔ a) 6a + 5b &nbsp; b) 2x + 2</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1A">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1A</span><ul><li>Fluency: like terms and expanding questions</li><li>Start your glossary with today’s six words</li><li>Frame: “___ and ___ are like terms because ___.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="2">
+  <div class="kicker">LESSON 2 — SECTION 1B</div>
+  <h1>Solving linear equations</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>explain what “solve” means</li>
+    <li>undo operations in reverse order</li>
+    <li>solve equations with x on both sides</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">equation</td><td class="s">ee-KWAY-zhun</td><td>two expressions with an equals sign: 2x + 5 = 17</td></tr><tr><td class="t">solve</td><td class="s">solv</td><td>find the value of x that makes it TRUE</td></tr><tr><td class="t">inverse operation</td><td class="s">IN-verse</td><td>the undo: + ↔ −, × ↔ ÷</td></tr><tr><td class="t">both sides</td><td class="s">—</td><td>whatever you do to one side, do to the other</td></tr><tr><td class="t">check / verify</td><td class="s">chek</td><td>substitute your answer back in — does it work?</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B">
+  <h2>Key idea — keep the balance</h2>
+  <div class="box key"><span class="lbl">Key idea</span>An equation is a balance ⚖. Do the <b>same inverse operation to both sides</b>, one step per line, until x is alone.</div>
+  <div class="box key frag"><span class="lbl">x on both sides?</span>First move the smaller x-term across, then solve as normal.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B">
+  <h2>Worked example 2</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve: a) 2x + 5 = 17 &nbsp; b) 5x − 4 = 3x + 10</div><div class="step frag"><span class="n">1</span><span><b>a) − 5 both sides:</b> 2x = 12</span></div><div class="step frag"><span class="n">2</span><span><b>÷ 2 both sides:</b> x = 6. <b>Check:</b> 2(6) + 5 = 17 ✔</span></div><div class="step frag"><span class="n">3</span><span><b>b) − 3x both sides:</b> 2x − 4 = 10</span></div><div class="step frag"><span class="n">4</span><span><b>+ 4, then ÷ 2:</b> 2x = 14 → x = 7. <b>Check:</b> 31 = 31 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve: a) 4x − 3 = 13 &nbsp; b) 7x + 2 = 4x + 17</div>
+  <div class="box hint frag">Hint: b) subtract 4x first.</div>
+  <div class="box answer frag">✔ a) x = 4 &nbsp; b) 3x = 15 → x = 5</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1B (start)</span><ul><li>One inverse operation per line — show every step</li><li>Check every third answer by substituting back</li><li>Frame: “I subtract ___ from both sides because ___.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="3">
+  <div class="kicker">LESSON 3 — SECTION 1B (CONTINUED)</div>
+  <h1>Equations with brackets</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>expand brackets before solving</li>
+    <li>solve equations with brackets on both sides</li>
+    <li>find and fix sign errors</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B+">
+  <h2>Key idea — expand, then solve</h2>
+  <div class="box key"><span class="lbl">Routine</span>1️⃣ Expand all brackets → 2️⃣ collect like terms on each side → 3️⃣ solve as normal.</div>
+  <div class="box key frag"><span class="lbl">Careful</span>A minus in front of a bracket changes EVERY sign inside: −2(x − 3) = −2x <b>+ 6</b>.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B+">
+  <h2>Worked example 3</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve 3(x − 2) = 2(x + 4) + 1</div><div class="step frag"><span class="n">1</span><span><b>Expand both sides:</b> 3x − 6 = 2x + 8 + 1</span></div><div class="step frag"><span class="n">2</span><span><b>Collect:</b> 3x − 6 = 2x + 9</span></div><div class="step frag"><span class="n">3</span><span><b>− 2x both sides:</b> x − 6 = 9</span></div><div class="step frag"><span class="n">4</span><span><b>+ 6:</b> x = 15. <b>Check:</b> 3(13) = 2(19) + 1 → 39 = 39 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B+">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve 4(2x + 1) = 3x + 19</div>
+  <div class="box hint frag">Hint: expand to 8x + 4 first.</div>
+  <div class="box answer frag">✔ 8x + 4 = 3x + 19 → 5x = 15 → x = 3</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B+">
+  <h2>Error hunt</h2>
+  <div class="box question"><span class="lbl">Find the error (pairs)</span>A student wrote: −3(x − 2) = −3x − 6</div>
+  <div class="box answer frag">✔ The −3 must multiply the −2 as well: −3 × −2 = <b>+6</b>, so −3(x − 2) = −3x + 6.</div>
+  <div class="box try frag">“The minus outside changes <b>every sign</b> inside the bracket.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1B+">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1B (finish)</span><ul><li>Bracket equations, including brackets on both sides</li><li>Circle every minus sign BEFORE you expand</li><li>Challenge: equations with three brackets</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="4">
+  <div class="kicker">LESSON 4 — SECTION 1C</div>
+  <h1>Linear inequalities</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>read and write the four inequality symbols</li>
+    <li>solve inequalities like equations — with ONE special rule</li>
+    <li>graph solutions on a number line</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1C">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">inequality</td><td class="s">in-ee-KWOL-i-tee</td><td>a statement with &lt;, &gt;, ≤ or ≥ instead of =</td></tr><tr><td class="t">less than <</td><td class="s">less than</td><td>strictly smaller — open circle ○ on the number line</td></tr><tr><td class="t">at least ≥ / at most ≤</td><td class="s">—</td><td>includes the number itself — closed circle ●</td></tr><tr><td class="t">reverse the sign</td><td class="s">re-VERSE</td><td>flip &lt; to &gt; when multiplying or dividing by a NEGATIVE</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1C">
+  <h2>Key idea — one special rule</h2>
+  <div class="box key"><span class="lbl">Solve like an equation…</span>same inverse operations, both sides — the inequality sign stays put…</div>
+  <div class="box key frag"><span class="lbl">…except</span><b>multiplying or dividing by a negative flips the sign.</b> Test it: 2 &lt; 4, but ×(−1) gives −2 &gt; −4. The flip keeps it true!</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1C">
+  <h2>Worked example 4</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Solve 3 − 2x ≥ 9 and show the solution on a number line.</div></div>
+  <div class="center"><svg viewBox="0 0 430 76" width="430">
+  <line x1="8" y1="44" x2="422" y2="44" stroke="#556" stroke-width="2"/>
+  <polygon points="422,44 414,40 414,48" fill="#556"/>
+  <polygon points="8,44 16,40 16,48" fill="#556"/><line x1="25" y1="39" x2="25" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="16" y="68" font-size="13" fill="#556">-6</text><line x1="72.5" y1="39" x2="72.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="63.5" y="68" font-size="13" fill="#556">-5</text><line x1="120" y1="39" x2="120" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="111" y="68" font-size="13" fill="#556">-4</text><line x1="167.5" y1="39" x2="167.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="158.5" y="68" font-size="13" fill="#556">-3</text><line x1="215" y1="39" x2="215" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="206" y="68" font-size="13" fill="#556">-2</text><line x1="262.5" y1="39" x2="262.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="253.5" y="68" font-size="13" fill="#556">-1</text><line x1="310" y1="39" x2="310" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="306" y="68" font-size="13" fill="#556">0</text><line x1="357.5" y1="39" x2="357.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="353.5" y="68" font-size="13" fill="#556">1</text><line x1="405" y1="39" x2="405" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="401" y="68" font-size="13" fill="#556">2</text><line x1="167.5" y1="24" x2="29" y2="24" stroke="var(--neg)" stroke-width="3.5"/>
+  <polygon points="29,24 37,20 37,28" fill="var(--neg)"/>
+  <circle cx="167.5" cy="24" r="6" fill="var(--neg)" stroke="var(--neg)" stroke-width="2.5"/>
+  <text x="153.5" y="12" font-size="14" fill="var(--neg)" font-weight="bold">x ≤ −3</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>− 3 both sides:</b> −2x ≥ 6</span></div><div class="step frag"><span class="n">2</span><span><b>÷ (−2) — FLIP the sign:</b> x ≤ −3</span></div><div class="step frag"><span class="n">3</span><span><b>Number line:</b> closed circle at −3 (it is included), arrow to the left.</span></div><div class="step frag"><span class="n">4</span><span><b>Check with x = −4:</b> 3 − 2(−4) = 11 ≥ 9 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1C">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Solve 2x + 1 &lt; 7 and graph it on a number line.</div></div>
+  <div class="center"><svg viewBox="0 0 430 76" width="430">
+  <line x1="8" y1="44" x2="422" y2="44" stroke="#556" stroke-width="2"/>
+  <polygon points="422,44 414,40 414,48" fill="#556"/>
+  <polygon points="8,44 16,40 16,48" fill="#556"/><line x1="25" y1="39" x2="25" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="16" y="68" font-size="13" fill="#556">-2</text><line x1="72.5" y1="39" x2="72.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="63.5" y="68" font-size="13" fill="#556">-1</text><line x1="120" y1="39" x2="120" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="116" y="68" font-size="13" fill="#556">0</text><line x1="167.5" y1="39" x2="167.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="163.5" y="68" font-size="13" fill="#556">1</text><line x1="215" y1="39" x2="215" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="211" y="68" font-size="13" fill="#556">2</text><line x1="262.5" y1="39" x2="262.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="258.5" y="68" font-size="13" fill="#556">3</text><line x1="310" y1="39" x2="310" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="306" y="68" font-size="13" fill="#556">4</text><line x1="357.5" y1="39" x2="357.5" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="353.5" y="68" font-size="13" fill="#556">5</text><line x1="405" y1="39" x2="405" y2="49" stroke="#556" stroke-width="1.6"/>
+    <text x="401" y="68" font-size="13" fill="#556">6</text><line x1="262.5" y1="24" x2="29" y2="24" stroke="var(--neg)" stroke-width="3.5"/>
+  <polygon points="29,24 37,20 37,28" fill="var(--neg)"/>
+  <circle cx="262.5" cy="24" r="6" fill="#fff" stroke="var(--neg)" stroke-width="2.5"/>
+  <text x="248.5" y="12" font-size="14" fill="var(--neg)" font-weight="bold">x < 3</text></svg></div></div>
+  <div class="box hint frag">Hint: no negatives here — the sign does not flip. Open or closed circle?</div>
+  <div class="box answer frag">✔ 2x &lt; 6 → x &lt; 3 — <b>open</b> circle at 3 (3 is NOT included), arrow left.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1C">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1C</span><ul><li>Solve and graph — every answer gets a number line</li><li>Highlight each ×(−) or ÷(−) step: that is where the flip happens</li><li>Frame: “I flip the sign because I divided by a ___ number.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="5">
+  <div class="kicker">LESSON 5 — SECTION 1D</div>
+  <h1>Equations with algebraic fractions</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>clear fractions by multiplying by a common multiple</li>
+    <li>solve equations with two fractions</li>
+    <li>keep working lines tidy and checkable</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">denominator</td><td class="s">de-NOM-in-ay-tor</td><td>the bottom of a fraction</td></tr><tr><td class="t">common multiple</td><td class="s">KOM-on MUL-ti-pul</td><td>a number all denominators divide into: for 2 and 3, use 6</td></tr><tr><td class="t">clear the fractions</td><td class="s">—</td><td>multiply every term so no fractions remain</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D">
+  <h2>Key idea — multiply everything</h2>
+  <div class="box key"><span class="lbl">Routine</span>1️⃣ Find the common multiple of the denominators → 2️⃣ multiply <b>every term</b> by it → 3️⃣ solve the fraction-free equation.</div>
+  <div class="box key frag"><span class="lbl">Careful</span>The whole top comes with brackets: 6 × <span class="fr"><span class="nu">x + 3</span><span class="de">2</span></span> = 3(x + 3), not 3x + 3.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D">
+  <h2>Worked example 5</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve <span class="fr"><span class="nu">x + 3</span><span class="de">2</span></span> + <span class="fr"><span class="nu">x − 1</span><span class="de">3</span></span> = 4</div><div class="step frag"><span class="n">1</span><span><b>Common multiple of 2 and 3:</b> 6 — multiply every term by 6.</span></div><div class="step frag"><span class="n">2</span><span><b>Clear:</b> 3(x + 3) + 2(x − 1) = 24</span></div><div class="step frag"><span class="n">3</span><span><b>Expand and collect:</b> 3x + 9 + 2x − 2 = 24 → 5x + 7 = 24</span></div><div class="step frag"><span class="n">4</span><span><b>Solve:</b> 5x = 17 → x = <span class="fr"><span class="nu">17</span><span class="de">5</span></span> = 3.4 <span class="say">(fractions are fine as answers!)</span></span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve <span class="fr"><span class="nu">2x − 1</span><span class="de">5</span></span> = <span class="fr"><span class="nu">x + 2</span><span class="de">3</span></span></div>
+  <div class="box hint frag">Hint: multiply both sides by 15 — or cross-multiply.</div>
+  <div class="box answer frag">✔ 3(2x − 1) = 5(x + 2) → 6x − 3 = 5x + 10 → x = 13</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1D (start)</span><ul><li>Fraction equations — brackets around every numerator</li><li>Write the common multiple in the margin first</li><li>Check one answer by substituting back</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="6">
+  <div class="kicker">LESSON 6 — SECTION 1D (CONSOLIDATION)</div>
+  <h1>More complex equations</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>solve equations with subtracted fractions</li>
+    <li>avoid the minus-bracket trap</li>
+    <li>check solutions systematically</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D+">
+  <h2>Worked example 6</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve <span class="fr"><span class="nu">3x + 2</span><span class="de">4</span></span> − <span class="fr"><span class="nu">x − 1</span><span class="de">2</span></span> = 1</div><div class="step frag"><span class="n">1</span><span><b>Multiply every term by 4:</b> (3x + 2) − 2(x − 1) = 4</span></div><div class="step frag"><span class="n">2</span><span><b>Expand — watch the minus:</b> 3x + 2 − 2x + 2 = 4 <span class="say">(−2 × −1 = +2!)</span></span></div><div class="step frag"><span class="n">3</span><span><b>Collect:</b> x + 4 = 4</span></div><div class="step frag"><span class="n">4</span><span><b>Solve:</b> x = 0. <b>Check:</b> <span class="fr"><span class="nu">2</span><span class="de">4</span></span> − <span class="fr"><span class="nu">−1</span><span class="de">2</span></span> = <span class="fr"><span class="nu">1</span><span class="de">2</span></span> + <span class="fr"><span class="nu">1</span><span class="de">2</span></span> = 1 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D+">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve <span class="fr"><span class="nu">x + 5</span><span class="de">3</span></span> − <span class="fr"><span class="nu">x</span><span class="de">6</span></span> = 2</div>
+  <div class="box hint frag">Hint: multiply every term by 6: 2(x + 5) − x = 12.</div>
+  <div class="box answer frag">✔ 2x + 10 − x = 12 → x = 2</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D+">
+  <h2>Error hunt</h2>
+  <div class="box question"><span class="lbl">Find the error (pairs)</span>Solving <span class="fr"><span class="nu">x + 1</span><span class="de">2</span></span> − <span class="fr"><span class="nu">x − 3</span><span class="de">4</span></span> = 1, a student wrote: 2(x + 1) − (x − 3) = 4, then 2x + 2 − x − 3 = 4.</div>
+  <div class="box answer frag">✔ The setup line is right; the expansion is wrong. −(x − 3) = −x <b>+ 3</b>. Correct: x + 5 = 4 → x = −1.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1D+">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1D (finish)</span><ul><li>Mixed set: brackets, both sides, fractions together</li><li>Every minus bracket: write the sign change explicitly</li><li>Exit ticket: solve one equation and CHECK it in writing</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="7">
+  <div class="kicker">LESSON 7 — SECTION 1E</div>
+  <h1>Graphing straight lines</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>find x- and y-intercepts from a rule</li>
+    <li>sketch a line using its two intercepts</li>
+    <li>read gradient and y-intercept from y = mx + c</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">gradient m</td><td class="s">GRAY-dee-ent</td><td>the slope: rise ÷ run — how steep the line is</td></tr><tr><td class="t">y-intercept c</td><td class="s">—</td><td>where the line crosses the y-axis (x = 0)</td></tr><tr><td class="t">x-intercept</td><td class="s">—</td><td>where the line crosses the x-axis (y = 0)</td></tr><tr><td class="t">rise / run</td><td class="s">ryz / run</td><td>up-or-down change ÷ across change</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E">
+  <h2>Key idea — two points make a line</h2>
+  <div class="box key"><span class="lbl">Intercept method</span>Put x = 0 → y-intercept. Put y = 0 → x-intercept. Join the two points — done.</div>
+  <div class="box key frag"><span class="lbl">Gradient form</span><span class="formula">y = mx + c</span> m = gradient, c = y-intercept. Read them straight off the rule.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E">
+  <h2>Worked example 7</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Sketch y = 2x − 4 using the intercepts.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="114.7" x2="304" y2="114.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="128.7" font-size="12" fill="var(--muted)">x</text><line x1="106.7" y1="6" x2="106.7" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="112.7" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 58.3 248.3 L 60.8 245.7 L 63.2 243.1 L 65.6 240.6 L 68.0 238.0 L 70.4 235.4 L 72.8 232.9 L 75.3 230.3 L 77.7 227.7 L 80.1 225.2 L 82.5 222.6 L 84.9 220.0 L 87.3 217.5 L 89.8 214.9 L 92.2 212.3 L 94.6 209.8 L 97.0 207.2 L 99.4 204.6 L 101.8 202.0 L 104.3 199.5 L 106.7 196.9 L 109.1 194.3 L 111.5 191.8 L 113.9 189.2 L 116.3 186.6 L 118.8 184.1 L 121.2 181.5 L 123.6 178.9 L 126.0 176.4 L 128.4 173.8 L 130.8 171.2 L 133.3 168.7 L 135.7 166.1 L 138.1 163.5 L 140.5 161.0 L 142.9 158.4 L 145.3 155.8 L 147.8 153.3 L 150.2 150.7 L 152.6 148.1 L 155.0 145.5 L 157.4 143.0 L 159.8 140.4 L 162.3 137.8 L 164.7 135.3 L 167.1 132.7 L 169.5 130.1 L 171.9 127.6 L 174.3 125.0 L 176.8 122.4 L 179.2 119.9 L 181.6 117.3 L 184.0 114.7 L 186.4 112.2 L 188.8 109.6 L 191.3 107.0 L 193.7 104.5 L 196.1 101.9 L 198.5 99.3 L 200.9 96.8 L 203.3 94.2 L 205.8 91.6 L 208.2 89.0 L 210.6 86.5 L 213.0 83.9 L 215.4 81.3 L 217.8 78.8 L 220.3 76.2 L 222.7 73.6 L 225.1 71.1 L 227.5 68.5 L 229.9 65.9 L 232.3 63.4 L 234.8 60.8 L 237.2 58.2 L 239.6 55.7 L 242.0 53.1 L 244.4 50.5 L 246.8 48.0 L 249.3 45.4 L 251.7 42.8 L 254.1 40.3 L 256.5 37.7 L 258.9 35.1 L 261.3 32.5 L 263.8 30.0 L 266.2 27.4 L 268.6 24.8 L 271.0 22.3 L 273.4 19.7 L 275.8 17.1 L 278.3 14.6 L 280.7 12.0 L 283.1 9.4 L 285.5 6.9 L 287.9 4.3 L 290.3 1.7" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="238.1" y="49.2" font-size="13" fill="var(--neg)" font-weight="bold">y = 2x − 4</text><circle cx="106.7" cy="196.9" r="4" fill="var(--accent-dark)"/><text x="114.7" y="200.9" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, −4)</text><circle cx="184.0" cy="114.7" r="4" fill="var(--accent-dark)"/><text x="192.0" y="108.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 0)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>y-intercept:</b> x = 0 → y = −4 → (0, −4)</span></div><div class="step frag"><span class="n">2</span><span><b>x-intercept:</b> y = 0 → 2x = 4 → x = 2 → (2, 0)</span></div><div class="step frag"><span class="n">3</span><span><b>Plot both points, join with a ruler,</b> label the line and both intercepts.</span></div><div class="step frag"><span class="n">4</span><span><b>Check the slope:</b> m = 2 — uphill, steepish ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Sketch y = −x + 3 using the intercepts.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="162.7" x2="304" y2="162.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="176.7" font-size="12" fill="var(--muted)">x</text><line x1="87.3" y1="6" x2="87.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="93.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 12.0 L 12.4 13.9 L 14.8 15.8 L 17.3 17.7 L 19.7 19.5 L 22.1 21.4 L 24.5 23.3 L 26.9 25.2 L 29.3 27.1 L 31.8 28.9 L 34.2 30.8 L 36.6 32.7 L 39.0 34.6 L 41.4 36.5 L 43.8 38.4 L 46.3 40.3 L 48.7 42.1 L 51.1 44.0 L 53.5 45.9 L 55.9 47.8 L 58.3 49.7 L 60.8 51.6 L 63.2 53.4 L 65.6 55.3 L 68.0 57.2 L 70.4 59.1 L 72.8 61.0 L 75.3 62.8 L 77.7 64.7 L 80.1 66.6 L 82.5 68.5 L 84.9 70.4 L 87.3 72.3 L 89.8 74.2 L 92.2 76.0 L 94.6 77.9 L 97.0 79.8 L 99.4 81.7 L 101.8 83.6 L 104.3 85.4 L 106.7 87.3 L 109.1 89.2 L 111.5 91.1 L 113.9 93.0 L 116.3 94.9 L 118.8 96.8 L 121.2 98.6 L 123.6 100.5 L 126.0 102.4 L 128.4 104.3 L 130.8 106.2 L 133.3 108.1 L 135.7 109.9 L 138.1 111.8 L 140.5 113.7 L 142.9 115.6 L 145.3 117.5 L 147.8 119.3 L 150.2 121.2 L 152.6 123.1 L 155.0 125.0 L 157.4 126.9 L 159.8 128.8 L 162.3 130.7 L 164.7 132.5 L 167.1 134.4 L 169.5 136.3 L 171.9 138.2 L 174.3 140.1 L 176.8 141.9 L 179.2 143.8 L 181.6 145.7 L 184.0 147.6 L 186.4 149.5 L 188.8 151.4 L 191.3 153.3 L 193.7 155.1 L 196.1 157.0 L 198.5 158.9 L 200.9 160.8 L 203.3 162.7 L 205.8 164.6 L 208.2 166.4 L 210.6 168.3 L 213.0 170.2 L 215.4 172.1 L 217.8 174.0 L 220.3 175.8 L 222.7 177.7 L 225.1 179.6 L 227.5 181.5 L 229.9 183.4 L 232.3 185.3 L 234.8 187.2 L 237.2 189.0 L 239.6 190.9 L 242.0 192.8 L 244.4 194.7 L 246.8 196.6 L 249.3 198.4 L 251.7 200.3 L 254.1 202.2 L 256.5 204.1 L 258.9 206.0 L 261.3 207.9 L 263.8 209.8 L 266.2 211.6 L 268.6 213.5 L 271.0 215.4 L 273.4 217.3 L 275.8 219.2 L 278.3 221.1 L 280.7 222.9 L 283.1 224.8 L 285.5 226.7 L 287.9 228.6 L 290.3 230.5 L 292.8 232.3 L 295.2 234.2 L 297.6 236.1 L 300.0 238.0" fill="none" stroke="var(--ido)" stroke-width="2.6"/><circle cx="87.3" cy="72.3" r="4" fill="var(--accent-dark)"/><text x="95.3" y="70.3" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 3)</text><circle cx="203.3" cy="162.7" r="4" fill="var(--accent-dark)"/><text x="211.3" y="176.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(3, 0)</text></svg></div></div>
+  <div class="box hint frag">Hint: both intercepts are 3 — but on different axes!</div>
+  <div class="box answer frag">✔ (0, 3) and (3, 0); gradient −1, downhill.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1E</span><ul><li>Sketch by intercepts; label both points on every sketch</li><li>Then read m and c from rules without sketching</li><li>Frame: “The gradient is ___, so the line goes ___hill.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="8">
+  <div class="kicker">LESSON 8 — SECTIONS 1E/1F</div>
+  <h1>Finding the equation from a graph</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>measure gradient as rise over run</li>
+    <li>read c from the graph</li>
+    <li>write the rule y = mx + c</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E/1F">
+  <h2>Key idea — two readings, one rule</h2>
+  <div class="box key"><span class="lbl">From any straight-line graph</span>1️⃣ Read <b>c</b> where it crosses the y-axis → 2️⃣ pick two nice grid points and count <b>rise ÷ run</b> → 3️⃣ write y = mx + c.</div>
+  <div class="box key frag"><span class="lbl">Signs</span>Downhill line → negative rise → negative m.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E/1F">
+  <h2>Worked example 8</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Find the equation of this line.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="196.9" x2="304" y2="196.9" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="210.9" font-size="12" fill="var(--muted)">x</text><line x1="141.8" y1="6" x2="141.8" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="147.8" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 63.2 247.8 L 65.6 244.9 L 68.0 242.1 L 70.4 239.3 L 72.8 236.5 L 75.3 233.6 L 77.7 230.8 L 80.1 228.0 L 82.5 225.2 L 84.9 222.3 L 87.3 219.5 L 89.7 216.7 L 92.2 213.9 L 94.6 211.0 L 97.0 208.2 L 99.4 205.4 L 101.8 202.6 L 104.3 199.7 L 106.7 196.9 L 109.1 194.1 L 111.5 191.3 L 113.9 188.4 L 116.3 185.6 L 118.8 182.8 L 121.2 180.0 L 123.6 177.1 L 126.0 174.3 L 128.4 171.5 L 130.8 168.7 L 133.3 165.8 L 135.7 163.0 L 138.1 160.2 L 140.5 157.4 L 142.9 154.5 L 145.3 151.7 L 147.8 148.9 L 150.2 146.1 L 152.6 143.2 L 155.0 140.4 L 157.4 137.6 L 159.8 134.8 L 162.3 131.9 L 164.7 129.1 L 167.1 126.3 L 169.5 123.5 L 171.9 120.6 L 174.3 117.8 L 176.8 115.0 L 179.2 112.2 L 181.6 109.3 L 184.0 106.5 L 186.4 103.7 L 188.8 100.9 L 191.3 98.0 L 193.7 95.2 L 196.1 92.4 L 198.5 89.6 L 200.9 86.7 L 203.3 83.9 L 205.7 81.1 L 208.2 78.3 L 210.6 75.4 L 213.0 72.6 L 215.4 69.8 L 217.8 67.0 L 220.3 64.1 L 222.7 61.3 L 225.1 58.5 L 227.5 55.7 L 229.9 52.8 L 232.3 50.0 L 234.8 47.2 L 237.2 44.4 L 239.6 41.5 L 242.0 38.7 L 244.4 35.9 L 246.8 33.1 L 249.3 30.2 L 251.7 27.4 L 254.1 24.6 L 256.5 21.8 L 258.9 18.9 L 261.3 16.1 L 263.8 13.3 L 266.2 10.5 L 268.6 7.6 L 271.0 4.8 L 273.4 2.0" fill="none" stroke="var(--neg)" stroke-width="2.6"/><line x1="141.8" y1="155.8" x2="194.5" y2="155.8" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><line x1="194.5" y1="155.8" x2="194.5" y2="94.2" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><circle cx="141.8" cy="155.8" r="4" fill="var(--accent-dark)"/><text x="91.8" y="153.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 2)</text><circle cx="194.5" cy="94.2" r="4" fill="var(--accent-dark)"/><text x="202.5" y="92.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(1, 5)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>y-intercept:</b> the line crosses at (0, 2) → c = 2</span></div><div class="step frag"><span class="n">2</span><span><b>Rise over run:</b> from (0, 2) to (1, 5): rise 3, run 1 → m = 3</span></div><div class="step frag"><span class="n">3</span><span><b>Rule:</b> y = 3x + 2</span></div><div class="step frag"><span class="n">4</span><span><b>Check with the second point:</b> 3(1) + 2 = 5 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E/1F">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Find the equation of this line.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="125.0" x2="304" y2="125.0" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="139.0" font-size="12" fill="var(--muted)">x</text><line x1="106.7" y1="6" x2="106.7" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="112.7" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 24.5 0.7 L 26.9 3.5 L 29.3 6.4 L 31.8 9.2 L 34.2 12.0 L 36.6 14.8 L 39.0 17.7 L 41.4 20.5 L 43.8 23.3 L 46.3 26.1 L 48.7 28.9 L 51.1 31.8 L 53.5 34.6 L 55.9 37.4 L 58.3 40.3 L 60.8 43.1 L 63.2 45.9 L 65.6 48.7 L 68.0 51.6 L 70.4 54.4 L 72.8 57.2 L 75.3 60.0 L 77.7 62.8 L 80.1 65.7 L 82.5 68.5 L 84.9 71.3 L 87.3 74.2 L 89.7 77.0 L 92.2 79.8 L 94.6 82.6 L 97.0 85.4 L 99.4 88.3 L 101.8 91.1 L 104.3 93.9 L 106.7 96.8 L 109.1 99.6 L 111.5 102.4 L 113.9 105.2 L 116.3 108.1 L 118.8 110.9 L 121.2 113.7 L 123.6 116.5 L 126.0 119.3 L 128.4 122.2 L 130.8 125.0 L 133.3 127.8 L 135.7 130.7 L 138.1 133.5 L 140.5 136.3 L 142.9 139.1 L 145.3 141.9 L 147.8 144.8 L 150.2 147.6 L 152.6 150.4 L 155.0 153.3 L 157.4 156.1 L 159.8 158.9 L 162.3 161.7 L 164.7 164.6 L 167.1 167.4 L 169.5 170.2 L 171.9 173.0 L 174.3 175.8 L 176.8 178.7 L 179.2 181.5 L 181.6 184.3 L 184.0 187.2 L 186.4 190.0 L 188.8 192.8 L 191.3 195.6 L 193.7 198.4 L 196.1 201.3 L 198.5 204.1 L 200.9 206.9 L 203.3 209.8 L 205.7 212.6 L 208.2 215.4 L 210.6 218.2 L 213.0 221.1 L 215.4 223.9 L 217.8 226.7 L 220.3 229.5 L 222.7 232.4 L 225.1 235.2 L 227.5 238.0 L 229.9 240.8 L 232.3 243.6 L 234.8 246.5 L 237.2 249.3" fill="none" stroke="var(--ido)" stroke-width="2.6"/><circle cx="106.7" cy="96.8" r="4" fill="var(--accent-dark)"/><text x="114.7" y="94.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 1)</text><circle cx="203.3" cy="209.8" r="4" fill="var(--accent-dark)"/><text x="211.3" y="213.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, −3)</text></svg></div></div>
+  <div class="box hint frag">Hint: from (0, 1) to (2, −3): rise −4, run 2.</div>
+  <div class="box answer frag">✔ m = −2, c = 1 → <b>y = −2x + 1</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1E/1F">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1E (finish) + 1F (start)</span><ul><li>Equations from graphs — show the rise/run triangle on the graph</li><li>Then rules from a gradient + y-intercept given in words</li><li>Frame: “The rise is ___ and the run is ___, so m = ___.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="9">
+  <div class="kicker">LESSON 9 — SECTION 1F</div>
+  <h1>Equation of a line from two points</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>use the gradient formula</li>
+    <li>find c by substituting a point</li>
+    <li>write the full rule and check with the other point</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1F">
+  <h2>Key idea — gradient formula, then one point</h2>
+  <div class="center"><span class="formula">m = <span class="fr"><span class="nu">y₂ − y₁</span><span class="de">x₂ − x₁</span></span></span></div>
+  <div class="box key frag"><span class="lbl">Routine</span>1️⃣ m from the two points → 2️⃣ y = mx + c with ONE point substituted → find c → 3️⃣ check with the OTHER point.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1F">
+  <h2>Worked example 9</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Find the equation of the line through (1, 3) and (3, 11).</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="184.8" x2="304" y2="184.8" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="198.8" font-size="12" fill="var(--muted)">x</text><line x1="82.5" y1="6" x2="82.5" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="88.5" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 36.6 248.6 L 39.0 246.0 L 41.4 243.3 L 43.8 240.7 L 46.3 238.0 L 48.7 235.3 L 51.1 232.7 L 53.5 230.0 L 55.9 227.4 L 58.3 224.7 L 60.8 222.0 L 63.2 219.4 L 65.6 216.7 L 68.0 214.1 L 70.4 211.4 L 72.8 208.8 L 75.3 206.1 L 77.7 203.4 L 80.1 200.8 L 82.5 198.1 L 84.9 195.5 L 87.3 192.8 L 89.7 190.1 L 92.2 187.5 L 94.6 184.8 L 97.0 182.2 L 99.4 179.5 L 101.8 176.8 L 104.3 174.2 L 106.7 171.5 L 109.1 168.9 L 111.5 166.2 L 113.9 163.6 L 116.3 160.9 L 118.8 158.2 L 121.2 155.6 L 123.6 152.9 L 126.0 150.3 L 128.4 147.6 L 130.8 144.9 L 133.3 142.3 L 135.7 139.6 L 138.1 137.0 L 140.5 134.3 L 142.9 131.6 L 145.3 129.0 L 147.8 126.3 L 150.2 123.7 L 152.6 121.0 L 155.0 118.4 L 157.4 115.7 L 159.8 113.0 L 162.3 110.4 L 164.7 107.7 L 167.1 105.1 L 169.5 102.4 L 171.9 99.7 L 174.3 97.1 L 176.8 94.4 L 179.2 91.8 L 181.6 89.1 L 184.0 86.4 L 186.4 83.8 L 188.8 81.1 L 191.3 78.5 L 193.7 75.8 L 196.1 73.2 L 198.5 70.5 L 200.9 67.8 L 203.3 65.2 L 205.7 62.5 L 208.2 59.9 L 210.6 57.2 L 213.0 54.5 L 215.4 51.9 L 217.8 49.2 L 220.3 46.6 L 222.7 43.9 L 225.1 41.2 L 227.5 38.6 L 229.9 35.9 L 232.3 33.3 L 234.8 30.6 L 237.2 28.0 L 239.6 25.3 L 242.0 22.6 L 244.4 20.0 L 246.8 17.3 L 249.3 14.7 L 251.7 12.0 L 254.1 9.3 L 256.5 6.7 L 258.9 4.0 L 261.3 1.4" fill="none" stroke="var(--neg)" stroke-width="2.6"/><circle cx="130.8" cy="144.9" r="4" fill="var(--accent-dark)"/><text x="80.8" y="148.9" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(1, 3)</text><circle cx="227.5" cy="38.6" r="4" fill="var(--accent-dark)"/><text x="235.5" y="38.6" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(3, 11)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Gradient:</b> m = <span class="fr"><span class="nu">11 − 3</span><span class="de">3 − 1</span></span> = <span class="fr"><span class="nu">8</span><span class="de">2</span></span> = 4</span></div><div class="step frag"><span class="n">2</span><span><b>Substitute (1, 3):</b> 3 = 4(1) + c → c = −1</span></div><div class="step frag"><span class="n">3</span><span><b>Rule:</b> y = 4x − 1</span></div><div class="step frag"><span class="n">4</span><span><b>Check with (3, 11):</b> 4(3) − 1 = 11 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1F">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Find the equation of the line through (2, 5) and (4, 1).</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="210.9" x2="304" y2="210.9" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="224.9" font-size="12" fill="var(--muted)">x</text><line x1="32.3" y1="6" x2="32.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="38.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 30.1 L 12.4 32.0 L 14.8 34.0 L 17.3 36.0 L 19.7 37.9 L 22.1 39.9 L 24.5 41.8 L 26.9 43.8 L 29.3 45.7 L 31.8 47.7 L 34.2 49.7 L 36.6 51.6 L 39.0 53.6 L 41.4 55.5 L 43.8 57.5 L 46.3 59.5 L 48.7 61.4 L 51.1 63.4 L 53.5 65.3 L 55.9 67.3 L 58.3 69.3 L 60.8 71.2 L 63.2 73.2 L 65.6 75.1 L 68.0 77.1 L 70.4 79.0 L 72.8 81.0 L 75.3 83.0 L 77.7 84.9 L 80.1 86.9 L 82.5 88.8 L 84.9 90.8 L 87.3 92.8 L 89.8 94.7 L 92.2 96.7 L 94.6 98.6 L 97.0 100.6 L 99.4 102.6 L 101.8 104.5 L 104.2 106.5 L 106.7 108.4 L 109.1 110.4 L 111.5 112.3 L 113.9 114.3 L 116.3 116.3 L 118.8 118.2 L 121.2 120.2 L 123.6 122.1 L 126.0 124.1 L 128.4 126.1 L 130.8 128.0 L 133.3 130.0 L 135.7 131.9 L 138.1 133.9 L 140.5 135.8 L 142.9 137.8 L 145.3 139.8 L 147.8 141.7 L 150.2 143.7 L 152.6 145.6 L 155.0 147.6 L 157.4 149.6 L 159.8 151.5 L 162.3 153.5 L 164.7 155.4 L 167.1 157.4 L 169.5 159.4 L 171.9 161.3 L 174.3 163.3 L 176.8 165.2 L 179.2 167.2 L 181.6 169.1 L 184.0 171.1 L 186.4 173.1 L 188.8 175.0 L 191.3 177.0 L 193.7 178.9 L 196.1 180.9 L 198.5 182.9 L 200.9 184.8 L 203.3 186.8 L 205.8 188.7 L 208.2 190.7 L 210.6 192.6 L 213.0 194.6 L 215.4 196.6 L 217.8 198.5 L 220.3 200.5 L 222.7 202.4 L 225.1 204.4 L 227.5 206.4 L 229.9 208.3 L 232.3 210.3 L 234.7 212.2 L 237.2 214.2 L 239.6 216.2 L 242.0 218.1 L 244.4 220.1 L 246.8 222.0 L 249.3 224.0 L 251.7 225.9 L 254.1 227.9 L 256.5 229.9 L 258.9 231.8 L 261.3 233.8 L 263.8 235.7 L 266.2 237.7 L 268.6 239.7 L 271.0 241.6 L 273.4 243.6 L 275.8 245.5 L 278.3 247.5" fill="none" stroke="var(--ido)" stroke-width="2.6"/><circle cx="121.5" cy="120.5" r="4" fill="var(--accent-dark)"/><text x="69.5" y="120.5" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 5)</text><circle cx="210.8" cy="192.8" r="4" fill="var(--accent-dark)"/><text x="218.8" y="192.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(4, 1)</text></svg></div></div>
+  <div class="box hint frag">Hint: m = (1 − 5) ÷ (4 − 2) = −2.</div>
+  <div class="box answer frag">✔ 5 = −2(2) + c → c = 9 → <b>y = −2x + 9</b>. Check: −2(4) + 9 = 1 ✔</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1F">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1F (finish)</span><ul><li>Two-point questions — always check with the unused point</li><li>Keep the subtraction order the SAME on top and bottom</li><li>Word problems: “passes through” means the point fits the rule</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 10 — SECTION 1G</div>
+  <h1>Length and midpoint of a line segment</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>find the length of a segment with Pythagoras</li>
+    <li>find the midpoint by averaging</li>
+    <li>draw the right-angled triangle that makes it work</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1G">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">line segment</td><td class="s">SEG-ment</td><td>a piece of a line between two endpoints</td></tr><tr><td class="t">length / distance</td><td class="s">—</td><td>how long the segment is — Pythagoras!</td></tr><tr><td class="t">midpoint</td><td class="s">MID-poynt</td><td>the point exactly halfway — average the coordinates</td></tr><tr><td class="t">average</td><td class="s">AV-rij</td><td>add them, divide by 2</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1G">
+  <h2>Key idea — a hidden right triangle</h2>
+  <div class="center">
   <span class="formula">d = √((x₂−x₁)² + (y₂−y₁)²)</span>
-  <span class="formula">M = ${'('}${fr('x₁+x₂','2')}, ${fr('y₁+y₂','2')}${')'}</span></div>
-  <div class="key frag"><span class="kt">Why</span>The horizontal and vertical changes make a right-angled triangle — the segment is its hypotenuse.</div>`},
- {h:'Worked example 10',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>For A(1, 2) and B(7, 10), find the length AB and the midpoint M.</div></div>
-  <div class="center">${graf({xr:[-1,9],yr:[-1,12],curves:[{f:x=>(4*x+2)/3}],segs:[[1,2,7,2],[7,2,7,10]],marks:[[1,2,'A(1, 2)',-8,18],[7,10,'B(7, 10)',8,0],[4,6,'M(4, 6)',10,4]]})}</div></div>`+steps([
-  `<b>Changes:</b> across 7 − 1 = 6, up 10 − 2 = 8 <span class="say">(the dashed triangle)</span>`,
-  `<b>Length:</b> AB = √(6² + 8²) = √100 = <b>10 units</b>`,
-  `<b>Midpoint:</b> M = (${fr('1+7','2')}, ${fr('2+10','2')}) = <b>(4, 6)</b>`,
-  `<b>Sense check:</b> M sits on the segment, halfway ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>For P(−2, 3) and Q(4, −5), find the length PQ and the midpoint.</div></div>
-  <div class="center">${graf({xr:[-4,6.5],yr:[-7,5.5],curves:[{f:x=>3-4/3*(x+2),col:'#2266aa'}],segs:[[-2,3,4,3],[4,3,4,-5]],marks:[[-2,3,'P(−2, 3)',-16,-10],[4,-5,'Q(4, −5)',8,6],[1,-1,'M?',10,-2]]})}</div></div>
-  <div class="hint frag">Hint: across = 4 − (−2) = 6; down = −5 − 3 = −8. Squaring removes the minus.</div>
-  <div class="ans frag">✔ PQ = √(36 + 64) = <b>10 units</b>; midpoint (1, −1)</div>`},
- {h:'',b:exset('1G',['Length and midpoint — sketch the dashed triangle each time','Negative coordinates: brackets around every substitution','Extension: given the midpoint, find the missing endpoint'])}
-]},
-/* ===== L11 1H ===== */
-{code:'1H · Term 1 Week 4 · Lesson 11',nm:'Parallel and perpendicular lines',menu:['1H','Parallel & perpendicular','same gradient, negative reciprocal'],
- slides:[
- title('LESSON 11 — SECTION 1H','Parallel and perpendicular lines',['recognise parallel lines by gradient','use m₁ × m₂ = −1 for perpendicular lines','find equations of parallel/perpendicular lines through a point']),
- {h:'🗣 New words first',b:vocab([
-  ['parallel','PA-ra-lel','never meet — SAME gradient: m₁ = m₂'],
-  ['perpendicular','per-pen-DIK-yoo-lar','meet at 90° — gradients multiply to −1'],
-  ['negative reciprocal','re-SIP-ro-kal','flip the fraction and change the sign: 2 → −½']])},
- {h:'Key idea — the two gradient rules',b:`<div class="cols"><div>${graf({xr:[-1,5],yr:[-1,8],curves:[{f:x=>x+1,lab:'m = 1',lx:3.6},{f:x=>x+3,col:'#2266aa',lab:'m = 1',lx:2.2}]})}<p class="note">parallel: same m</p></div>
-  <div>${graf({xr:[-1,6],yr:[-1,7],curves:[{f:x=>2*x-1,lab:'m = 2',lx:2.9},{f:x=>-0.5*x+4,col:'#1e8449',lab:'m = −½',lx:4.2}],marks:[[2,3,'90°',10,-2]]})}<p class="note">perpendicular: m₁ × m₂ = −1</p></div></div>
-  <div class="key frag"><span class="kt">Quick pairs</span>2 ↔ −½ · ${fr('3','4')} ↔ −${fr('4','3')} · −5 ↔ ${fr('1','5')} — flip and flip the sign.</div>`},
- {h:'Worked example 11',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Find the equation of the line perpendicular to y = 2x + 1 passing through (4, 3).</div></div>
-  <div class="center">${graf({xr:[-1,7.5],yr:[-1,8.5],curves:[{f:x=>2*x+1,lab:'y = 2x + 1',lx:2.6},{f:x=>-0.5*x+5,col:'#1e8449',lab:'m = −½',lx:5.6}],marks:[[4,3,'(4, 3)',8,14]]})}</div></div>`+steps([
-  `<b>Perpendicular gradient:</b> m = −½ <span class="say">(2 × −½ = −1 ✔)</span>`,
-  `<b>Start the rule:</b> y = −½x + c`,
-  `<b>Substitute (4, 3):</b> 3 = −½(4) + c → 3 = −2 + c → c = 5`,
-  `<b>Answer:</b> y = −½x + 5`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Find the equation of the line parallel to y = −3x + 2 through (1, 4).</div></div>
-  <div class="center">${graf({xr:[-2,4],yr:[-4,9.5],curves:[{f:x=>-3*x+2,lab:'y = −3x + 2',lx:-1.4},{f:x=>-3*x+7,col:'#2266aa',dash:1}],marks:[[1,4,'(1, 4)',8,0]]})}</div></div>
-  <div class="hint frag">Hint: parallel keeps m = −3.</div>
-  <div class="ans frag">✔ 4 = −3(1) + c → c = 7 → <b>y = −3x + 7</b></div>`},
- {h:'',b:exset('1H',['Parallel first, then perpendicular questions','Write the gradient rule you used at the top of each answer','Frame: “Perpendicular to m = ___ is m = ___ because they multiply to −1.”'])}
-]},
-/* ===== L12 1I ===== */
-{code:'1I · Term 1 Week 4 · Lesson 12',nm:'Simultaneous equations — substitution',menu:['1I','Substitution','simultaneous, substitute, intersection'],
- slides:[
- title('LESSON 12 — SECTION 1I','Simultaneous equations using substitution',['explain what solving simultaneously means','substitute one rule into the other','check the solution in BOTH equations']),
- {h:'🗣 New words first',b:vocab([
-  ['simultaneous','sy-mul-TAY-nee-us','both true at the same time'],
-  ['substitute','SUB-sti-tyoot','replace y with what it equals'],
-  ['point of intersection','—','where the two lines cross — that (x, y) IS the solution']])},
- {h:'Key idea — the crossing point',b:`<div class="cols"><div>${graf({xr:[-1,5],yr:[-1,9],curves:[{f:x=>x+2,lab:'y = x + 2',lx:3.3},{f:x=>10-3*x,col:'#2266aa',lab:'3x + y = 10',lx:0.6}],marks:[[2,4,'(2, 4)',10,-2]]})}</div><div>
-  <div class="key"><span class="kt">Key idea</span>Two lines, one crossing point. Solving simultaneously finds that point with algebra.</div>
-  <div class="key frag"><span class="kt">When to substitute</span>Perfect when one equation already says “y = …” (or “x = …”).</div></div></div>`},
- {h:'Worked example 12',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Solve y = x + 2 and 3x + y = 10 simultaneously.</div></div>
-  <div class="center">${graf({xr:[-1,5],yr:[-1,9],curves:[{f:x=>x+2,lab:'y = x + 2',lx:3.3},{f:x=>10-3*x,col:'#2266aa',lab:'3x + y = 10',lx:0.6}],marks:[[2,4,'(2, 4)',10,-2]]})}</div></div>`+steps([
-  `<b>Substitute</b> y = x + 2 into the second: 3x + (x + 2) = 10`,
-  `<b>Solve:</b> 4x + 2 = 10 → x = 2`,
-  `<b>Back-substitute:</b> y = 2 + 2 = 4 → solution <b>(2, 4)</b>`,
-  `<b>Check in BOTH:</b> 4 = 2 + 2 ✔ and 6 + 4 = 10 ✔`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Solve y = 2x − 1 and x + y = 5.</div></div>
-  <div class="center">${graf({xr:[-1,5.5],yr:[-2.5,7.5],curves:[{f:x=>2*x-1,col:'#c0392b',lab:'y = 2x − 1',lx:3.4},{f:x=>5-x,col:'#2266aa',lab:'x + y = 5',lx:0.4}],marks:[[2,3,'?',10,-2]]})}</div></div>
-  <div class="hint frag">Hint: x + (2x − 1) = 5.</div>
-  <div class="ans frag">✔ 3x = 6 → x = 2, y = 3 → <b>(2, 3)</b>. Check both: 3 = 4 − 1 ✔, 2 + 3 = 5 ✔</div>`},
- {h:'',b:exset('1I (start)',['Substitution questions where one rule is ready-made','Always finish with the check in BOTH equations','Frame: “I replace y with ___ because the first rule tells me they are equal.”'])}
-]},
-/* ===== L13 1I+ ===== */
-{code:'1I · Term 1 Week 4 · Lesson 13',nm:'Substitution — consolidation',menu:['1I+','Substitution practice','rearrange first'],
- slides:[
- title('LESSON 13 — SECTION 1I (CONSOLIDATION)','Substitution with a rearrangement',['rearrange one equation before substituting','keep bracket discipline when substituting','decide which variable is easier to isolate']),
- {h:'Worked example 13',b:`<div class="q"><span class="tag">Worked example</span>Solve x = 2y − 3 and 2x + 3y = 8.</div>`+steps([
-  `<b>x is ready-made</b> — substitute into the second: 2(2y − 3) + 3y = 8`,
-  `<b>Expand:</b> 4y − 6 + 3y = 8`,
-  `<b>Solve:</b> 7y = 14 → y = 2`,
-  `<b>Back-substitute:</b> x = 2(2) − 3 = 1 → <b>(1, 2)</b>. Check: 2(1) + 3(2) = 8 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve y = 3x + 1 and 2x + 2y = 18.</div>
-  <div class="hint frag">Hint: 2x + 2(3x + 1) = 18 — brackets around the whole substitution!</div>
-  <div class="ans frag">✔ 8x + 2 = 18 → x = 2, y = 7 → <b>(2, 7)</b></div>`},
- {h:'Error hunt',b:`<div class="q"><span class="tag">Find the error (pairs)</span>Substituting y = x − 4 into 3x − 2y = 14, a student wrote: 3x − 2x − 4 = 14.</div>
-  <div class="ans frag">✔ Missing brackets! 3x − 2<b>(x − 4)</b> = 3x − 2x <b>+ 8</b>. Correct: x + 8 = 14 → x = 6, y = 2.</div>
-  <div class="frame frag">“When I substitute, the whole expression goes in <b>brackets</b>.”</div>`},
- {h:'',b:exset('1I (finish)',['Harder substitution — including rearrange-first questions','Brackets around EVERY substitution','Challenge: two equations, neither solved for x or y — you choose'])}
-]},
-/* ===== L14 1J ===== */
-{code:'1J · Term 1 Week 4 · Lesson 14',nm:'Simultaneous equations — elimination',menu:['1J','Elimination','eliminate, add or subtract equations'],
- slides:[
- title('LESSON 14 — SECTION 1J','Simultaneous equations using elimination',['line up equations and eliminate a variable','decide: add or subtract?','solve and check in both equations']),
- {h:'🗣 New words first',b:vocab([
-  ['eliminate','ee-LIM-in-ayt','make one variable disappear'],
-  ['matching coefficients','—','same size number on x (or y) in both equations'],
-  ['SSS / DDA','—','memory help: Same Signs Subtract · Different signs? Add']])},
- {h:'Key idea — make a variable vanish',b:`<div class="key"><span class="kt">Key idea</span>Line the equations up. If one variable has <b>matching coefficients</b>: same signs → <b>subtract</b>; opposite signs → <b>add</b>. That variable vanishes.</div>
-  <div class="key frag"><span class="kt">When elimination?</span>When neither equation is solved for x or y — no rearranging needed.</div>`},
- {h:'Worked example 14',b:`<div class="q"><span class="tag">Worked example</span>Solve 2x + 3y = 12 and 2x − y = 4.</div>`+steps([
-  `<b>Matching 2x, same sign → subtract:</b> (2x + 3y) − (2x − y) = 12 − 4`,
-  `<b>Careful with signs:</b> 3y − (−y) = 4y → 4y = 8 → y = 2`,
-  `<b>Back-substitute:</b> 2x − 2 = 4 → x = 3 → <b>(3, 2)</b>`,
-  `<b>Check both:</b> 6 + 6 = 12 ✔ and 6 − 2 = 4 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve x + 2y = 7 and 3x − 2y = 5.</div>
-  <div class="hint frag">Hint: the 2y terms have opposite signs → ADD the equations.</div>
-  <div class="ans frag">✔ 4x = 12 → x = 3, y = 2 → <b>(3, 2)</b></div>`},
- {h:'',b:exset('1J (start)',['Elimination with matching coefficients — decide add/subtract first','Write “+” or “−” next to the equations before you combine','Frame: “The ___ terms match with ___ signs, so I ___.”'])}
-]},
-/* ===== L15 1J+ ===== */
-{code:'1J · Term 1 Week 5 · Lesson 15',nm:'Elimination — multiply first',menu:['1J+','Elimination: multiply first','scale an equation'],
- slides:[
- title('LESSON 15 — SECTION 1J (CONTINUED)','Elimination — multiply first',['multiply an equation to create matching coefficients','choose the cheaper variable to match','solve any linear pair with elimination']),
- {h:'Key idea — make the match yourself',b:`<div class="key"><span class="kt">No match? Make one.</span>Multiply one (or both) equations by a number so a variable matches — then add or subtract as usual.</div>
-  <div class="key frag"><span class="kt">Choose wisely</span>Match whichever variable needs the smallest multiplication. Multiply EVERY term, including the right side!</div>`},
- {h:'Worked example 15',b:`<div class="q"><span class="tag">Worked example</span>Solve 3x + 2y = 16 and 2x − y = 6.</div>`+steps([
-  `<b>Match y:</b> multiply the second equation by 2 → 4x − 2y = 12`,
-  `<b>Opposite signs on y → add:</b> (3x + 2y) + (4x − 2y) = 16 + 12`,
-  `<b>Solve:</b> 7x = 28 → x = 4`,
-  `<b>Back-substitute:</b> 2(4) − y = 6 → y = 2 → <b>(4, 2)</b>. Check: 12 + 4 = 16 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve 2x + 5y = 16 and 3x + 2y = 13.</div>
-  <div class="hint frag">Hint: ×3 the first and ×2 the second → 6x in both → subtract.</div>
-  <div class="ans frag">✔ 6x + 15y = 48; 6x + 4y = 26 → 11y = 22 → y = 2, x = 3 → <b>(3, 2)</b></div>`},
- {h:'',b:exset('1J (finish)',['Multiply-first elimination; label each equation ①, ② and show “① × 3”','Multiply every term — right side included','Mixed set: choose substitution OR elimination and say why'])}
-]},
-/* ===== L16 1K ===== */
-{code:'1K · Term 1 Week 5 · Lesson 16',nm:'Applications of simultaneous equations',menu:['1K','Applications','define variables, translate, answer in words'],
- slides:[
- title('LESSON 16 — SECTION 1K','Applications of simultaneous equations',['define two variables with units','translate sentences into two equations','solve and answer in words']),
- {h:'Key idea — words to equations',b:`<div class="key"><span class="kt">Routine</span>1️⃣ <b>Define:</b> “let a = adult ticket price ($), c = child ticket price ($)” → 2️⃣ <b>Translate</b> each sentence into an equation → 3️⃣ <b>Solve</b> (substitution or elimination) → 4️⃣ <b>Answer in words with units.</b></div>
-  <div class="frame frag">“Let ___ = ___ (units). Let ___ = ___ (units).” — write this line FIRST, always.</div>`},
- {h:'Worked example 16',b:`<div class="q"><span class="tag">Worked example</span>2 adult and 3 child tickets cost $47. 1 adult and 2 child tickets cost $26. Find each price.</div>`+steps([
-  `<b>Define:</b> let a = adult price ($), c = child price ($).`,
-  `<b>Translate:</b> 2a + 3c = 47 &nbsp;①&nbsp; and a + 2c = 26 &nbsp;②`,
-  `<b>From ②:</b> a = 26 − 2c → substitute into ①: 2(26 − 2c) + 3c = 47`,
-  `<b>Solve:</b> 52 − c = 47 → c = 5, a = 16.`,
-  `<b>Answer in words:</b> “An adult ticket costs <b>$16</b> and a child ticket costs <b>$5</b>.” Check: 32 + 15 = 47 ✔`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>3 pens and 2 pencils cost $9.20. 1 pen and 4 pencils cost $6.40. Find the price of each.</div>
-  <div class="hint frag">Hint: from the second, p = 6.40 − 4q.</div>
-  <div class="ans frag">✔ 3(6.4 − 4q) + 2q = 9.2 → 19.2 − 10q = 9.2 → q = $1, p = $2.40. “A pen costs $2.40 and a pencil costs $1.”</div>`},
- {h:'',b:exset('1K',['Word problems — the “define” line earns a mark on its own','Answers in full sentences with units','Number puzzles: “the sum of two numbers is…” works the same way'])}
-]},
-/* ===== L17 1L ===== */
-{code:'1L · Term 1 Week 5 · Lesson 17',nm:'Regions on the Cartesian plane',menu:['1L','Regions (half planes)','half plane, boundary, test point'],
- slides:[
- title('LESSON 17 — SECTION 1L','Regions on the Cartesian plane',['sketch the boundary line (solid or dashed?)','use a test point to choose the side','shade and label the region']),
- {h:'🗣 New words first',b:vocab([
-  ['region / half plane','REE-jun','all the points on one side of a line'],
-  ['boundary line','BOWN-da-ree','the edge: solid for ≤ ≥, dashed for < >'],
-  ['test point','—','an easy point (usually (0, 0)) to check which side is true'],
-  ['shade','shayd','colour the side where the inequality is true']])},
- {h:'Worked example 17',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch the region y &gt; x − 2.</div></div>
-  <div class="center">${graf({xr:[-2.5,5.5],yr:[-4.5,4.5],shade:{f:x=>x-2,dir:'above'},curves:[{f:x=>x-2,dash:1,lab:'y = x − 2',lx:3.7}],marks:[[0,0,'test (0, 0) ✓',10,-4]]})}</div></div>`+steps([
-  `<b>Boundary:</b> y = x − 2 — strict inequality (&gt;) → <b>dashed</b> line.`,
-  `<b>Test (0, 0):</b> is 0 &gt; 0 − 2? Yes → (0, 0)'s side is the region.`,
-  `<b>Shade</b> the side containing (0, 0) (above the line) and label the region.`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch the region y ≤ −x + 3.</div></div>
-  <div class="center">${graf({xr:[-2,5.5],yr:[-3,5.5],shade:{f:x=>3-x,dir:'below'},curves:[{f:x=>3-x,col:'#2266aa'}],marks:[[0,0,'test (0, 0)',10,-4]]})}</div></div>
-  <div class="hint frag">Hint: ≤ means the boundary is solid and included. Test (0, 0): 0 ≤ 3 true.</div>
-  <div class="ans frag">✔ Solid line through (0, 3) and (3, 0); shade the side with (0, 0) — below the line.</div>`},
- {h:'',b:exset('1L',['Regions — the checklist: solid/dashed? test point shown? shaded + labelled?','Boundary sketching uses the 1E intercept method','Extension: two inequalities at once (overlapping regions)'])}
-]},
-/* ===== L18 revision ===== */
-{code:'Term 1 Week 5 · Lesson 18',nm:'Unit 1 review and progress check',menu:['★','Unit 1 review + progress quiz','CAT 1 (Units 1 & 2) is in Week 8'],cls:'rev',
- slides:[
- title('LESSON 18 — REVIEW','Unit 1 review and progress check',['check every checklist item for Chapter 1','complete the progress quiz','start my fix-it list — CAT 1 (Units 1 & 2) is in Week 8']),
- {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <span class="formula">M = (<span class="fr"><span class="nu">x₁+x₂</span><span class="de">2</span></span>, <span class="fr"><span class="nu">y₁+y₂</span><span class="de">2</span></span>)</span></div>
+  <div class="box key frag"><span class="lbl">Why</span>The horizontal and vertical changes make a right-angled triangle — the segment is its hypotenuse.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1G">
+  <h2>Worked example 10</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>For A(1, 2) and B(7, 10), find the length AB and the midpoint M.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="220.6" x2="304" y2="220.6" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="234.6" font-size="12" fill="var(--muted)">x</text><line x1="39.0" y1="6" x2="39.0" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="45.0" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 232.2 L 12.4 230.3 L 14.8 228.3 L 17.3 226.4 L 19.7 224.5 L 22.1 222.5 L 24.5 220.6 L 26.9 218.7 L 29.3 216.8 L 31.8 214.8 L 34.2 212.9 L 36.6 211.0 L 39.0 209.0 L 41.4 207.1 L 43.8 205.2 L 46.3 203.2 L 48.7 201.3 L 51.1 199.4 L 53.5 197.4 L 55.9 195.5 L 58.3 193.6 L 60.8 191.6 L 63.2 189.7 L 65.6 187.8 L 68.0 185.8 L 70.4 183.9 L 72.8 182.0 L 75.3 180.1 L 77.7 178.1 L 80.1 176.2 L 82.5 174.3 L 84.9 172.3 L 87.3 170.4 L 89.8 168.5 L 92.2 166.5 L 94.6 164.6 L 97.0 162.7 L 99.4 160.7 L 101.8 158.8 L 104.3 156.9 L 106.7 154.9 L 109.1 153.0 L 111.5 151.1 L 113.9 149.1 L 116.3 147.2 L 118.8 145.3 L 121.2 143.4 L 123.6 141.4 L 126.0 139.5 L 128.4 137.6 L 130.8 135.6 L 133.3 133.7 L 135.7 131.8 L 138.1 129.8 L 140.5 127.9 L 142.9 126.0 L 145.3 124.0 L 147.8 122.1 L 150.2 120.2 L 152.6 118.2 L 155.0 116.3 L 157.4 114.4 L 159.8 112.4 L 162.3 110.5 L 164.7 108.6 L 167.1 106.6 L 169.5 104.7 L 171.9 102.8 L 174.3 100.9 L 176.8 98.9 L 179.2 97.0 L 181.6 95.1 L 184.0 93.1 L 186.4 91.2 L 188.8 89.3 L 191.3 87.3 L 193.7 85.4 L 196.1 83.5 L 198.5 81.5 L 200.9 79.6 L 203.3 77.7 L 205.8 75.7 L 208.2 73.8 L 210.6 71.9 L 213.0 69.9 L 215.4 68.0 L 217.8 66.1 L 220.3 64.2 L 222.7 62.2 L 225.1 60.3 L 227.5 58.4 L 229.9 56.4 L 232.3 54.5 L 234.8 52.6 L 237.2 50.6 L 239.6 48.7 L 242.0 46.8 L 244.4 44.8 L 246.8 42.9 L 249.3 41.0 L 251.7 39.0 L 254.1 37.1 L 256.5 35.2 L 258.9 33.2 L 261.3 31.3 L 263.8 29.4 L 266.2 27.5 L 268.6 25.5 L 271.0 23.6 L 273.4 21.7 L 275.8 19.7 L 278.3 17.8 L 280.7 15.9 L 283.1 13.9 L 285.5 12.0 L 287.9 10.1 L 290.3 8.1 L 292.8 6.2 L 295.2 4.3 L 297.6 2.3" fill="none" stroke="var(--neg)" stroke-width="2.6"/><line x1="68.0" y1="185.8" x2="242.0" y2="185.8" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><line x1="242.0" y1="185.8" x2="242.0" y2="46.8" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><circle cx="68.0" cy="185.8" r="4" fill="var(--accent-dark)"/><text x="60.0" y="203.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">A(1, 2)</text><circle cx="242.0" cy="46.8" r="4" fill="var(--accent-dark)"/><text x="250.0" y="46.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">B(7, 10)</text><circle cx="155.0" cy="116.3" r="4" fill="var(--accent-dark)"/><text x="165.0" y="120.3" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">M(4, 6)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Changes:</b> across 7 − 1 = 6, up 10 − 2 = 8 <span class="say">(the dashed triangle)</span></span></div><div class="step frag"><span class="n">2</span><span><b>Length:</b> AB = √(6² + 8²) = √100 = <b>10 units</b></span></div><div class="step frag"><span class="n">3</span><span><b>Midpoint:</b> M = (<span class="fr"><span class="nu">1+7</span><span class="de">2</span></span>, <span class="fr"><span class="nu">2+10</span><span class="de">2</span></span>) = <b>(4, 6)</b></span></div><div class="step frag"><span class="n">4</span><span><b>Sense check:</b> M sits on the segment, halfway ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1G">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>For P(−2, 3) and Q(4, −5), find the length PQ and the midpoint.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="111.4" x2="304" y2="111.4" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="125.4" font-size="12" fill="var(--muted)">x</text><line x1="120.5" y1="6" x2="120.5" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="126.5" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 9.0 L 12.4 11.1 L 14.8 13.2 L 17.3 15.3 L 19.7 17.4 L 22.1 19.5 L 24.5 21.6 L 26.9 23.8 L 29.3 25.9 L 31.8 28.0 L 34.2 30.1 L 36.6 32.2 L 39.0 34.3 L 41.4 36.4 L 43.8 38.5 L 46.3 40.6 L 48.7 42.7 L 51.1 44.8 L 53.5 47.0 L 55.9 49.1 L 58.3 51.2 L 60.8 53.3 L 63.2 55.4 L 65.6 57.5 L 68.0 59.6 L 70.4 61.7 L 72.8 63.8 L 75.3 65.9 L 77.7 68.0 L 80.1 70.2 L 82.5 72.3 L 84.9 74.4 L 87.3 76.5 L 89.8 78.6 L 92.2 80.7 L 94.6 82.8 L 97.0 84.9 L 99.4 87.0 L 101.8 89.1 L 104.3 91.3 L 106.7 93.4 L 109.1 95.5 L 111.5 97.6 L 113.9 99.7 L 116.3 101.8 L 118.8 103.9 L 121.2 106.0 L 123.6 108.1 L 126.0 110.2 L 128.4 112.3 L 130.8 114.5 L 133.3 116.6 L 135.7 118.7 L 138.1 120.8 L 140.5 122.9 L 142.9 125.0 L 145.3 127.1 L 147.8 129.2 L 150.2 131.3 L 152.6 133.4 L 155.0 135.5 L 157.4 137.7 L 159.8 139.8 L 162.3 141.9 L 164.7 144.0 L 167.1 146.1 L 169.5 148.2 L 171.9 150.3 L 174.3 152.4 L 176.8 154.5 L 179.2 156.6 L 181.6 158.7 L 184.0 160.9 L 186.4 163.0 L 188.8 165.1 L 191.3 167.2 L 193.7 169.3 L 196.1 171.4 L 198.5 173.5 L 200.9 175.6 L 203.3 177.7 L 205.8 179.8 L 208.2 182.0 L 210.6 184.1 L 213.0 186.2 L 215.4 188.3 L 217.8 190.4 L 220.3 192.5 L 222.7 194.6 L 225.1 196.7 L 227.5 198.8 L 229.9 200.9 L 232.3 203.0 L 234.7 205.2 L 237.2 207.3 L 239.6 209.4 L 242.0 211.5 L 244.4 213.6 L 246.8 215.7 L 249.3 217.8 L 251.7 219.9 L 254.1 222.0 L 256.5 224.1 L 258.9 226.2 L 261.3 228.4 L 263.8 230.5 L 266.2 232.6 L 268.6 234.7 L 271.0 236.8 L 273.4 238.9 L 275.8 241.0 L 278.3 243.1 L 280.7 245.2 L 283.1 247.3" fill="none" stroke="var(--ido)" stroke-width="2.6"/><line x1="65.2" y1="57.2" x2="231.0" y2="57.2" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><line x1="231.0" y1="57.2" x2="231.0" y2="201.8" stroke="var(--ido)" stroke-width="1.8" stroke-dasharray="5 4"/><circle cx="65.2" cy="57.2" r="4" fill="var(--accent-dark)"/><text x="49.2" y="47.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">P(−2, 3)</text><circle cx="231.0" cy="201.8" r="4" fill="var(--accent-dark)"/><text x="239.0" y="207.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">Q(4, −5)</text><circle cx="148.1" cy="129.5" r="4" fill="var(--accent-dark)"/><text x="158.1" y="127.5" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">M?</text></svg></div></div>
+  <div class="box hint frag">Hint: across = 4 − (−2) = 6; down = −5 − 3 = −8. Squaring removes the minus.</div>
+  <div class="box answer frag">✔ PQ = √(36 + 64) = <b>10 units</b>; midpoint (1, −1)</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1G">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1G</span><ul><li>Length and midpoint — sketch the dashed triangle each time</li><li>Negative coordinates: brackets around every substitution</li><li>Extension: given the midpoint, find the missing endpoint</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 11 — SECTION 1H</div>
+  <h1>Parallel and perpendicular lines</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>recognise parallel lines by gradient</li>
+    <li>use m₁ × m₂ = −1 for perpendicular lines</li>
+    <li>find equations of parallel/perpendicular lines through a point</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1H">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">parallel</td><td class="s">PA-ra-lel</td><td>never meet — SAME gradient: m₁ = m₂</td></tr><tr><td class="t">perpendicular</td><td class="s">per-pen-DIK-yoo-lar</td><td>meet at 90° — gradients multiply to −1</td></tr><tr><td class="t">negative reciprocal</td><td class="s">re-SIP-ro-kal</td><td>flip the fraction and change the sign: 2 → −½</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1H">
+  <h2>Key idea — the two gradient rules</h2>
+  <div class="cols"><div><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="212.9" x2="304" y2="212.9" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="226.9" font-size="12" fill="var(--muted)">x</text><line x1="58.3" y1="6" x2="58.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="64.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 212.9 L 12.4 211.6 L 14.8 210.4 L 17.3 209.1 L 19.7 207.9 L 22.1 206.6 L 24.5 205.4 L 26.9 204.1 L 29.3 202.8 L 31.8 201.6 L 34.2 200.3 L 36.6 199.1 L 39.0 197.8 L 41.4 196.6 L 43.8 195.3 L 46.3 194.1 L 48.7 192.8 L 51.1 191.5 L 53.5 190.3 L 55.9 189.0 L 58.3 187.8 L 60.8 186.5 L 63.2 185.3 L 65.6 184.0 L 68.0 182.8 L 70.4 181.5 L 72.8 180.2 L 75.3 179.0 L 77.7 177.7 L 80.1 176.5 L 82.5 175.2 L 84.9 174.0 L 87.3 172.7 L 89.7 171.5 L 92.2 170.2 L 94.6 168.9 L 97.0 167.7 L 99.4 166.4 L 101.8 165.2 L 104.3 163.9 L 106.7 162.7 L 109.1 161.4 L 111.5 160.2 L 113.9 158.9 L 116.3 157.6 L 118.8 156.4 L 121.2 155.1 L 123.6 153.9 L 126.0 152.6 L 128.4 151.4 L 130.8 150.1 L 133.3 148.9 L 135.7 147.6 L 138.1 146.3 L 140.5 145.1 L 142.9 143.8 L 145.3 142.6 L 147.8 141.3 L 150.2 140.1 L 152.6 138.8 L 155.0 137.6 L 157.4 136.3 L 159.8 135.0 L 162.3 133.8 L 164.7 132.5 L 167.1 131.3 L 169.5 130.0 L 171.9 128.8 L 174.3 127.5 L 176.8 126.3 L 179.2 125.0 L 181.6 123.7 L 184.0 122.5 L 186.4 121.2 L 188.8 120.0 L 191.3 118.7 L 193.7 117.5 L 196.1 116.2 L 198.5 115.0 L 200.9 113.7 L 203.3 112.4 L 205.7 111.2 L 208.2 109.9 L 210.6 108.7 L 213.0 107.4 L 215.4 106.2 L 217.8 104.9 L 220.3 103.7 L 222.7 102.4 L 225.1 101.1 L 227.5 99.9 L 229.9 98.6 L 232.3 97.4 L 234.8 96.1 L 237.2 94.9 L 239.6 93.6 L 242.0 92.4 L 244.4 91.1 L 246.8 89.8 L 249.3 88.6 L 251.7 87.3 L 254.1 86.1 L 256.5 84.8 L 258.9 83.6 L 261.3 82.3 L 263.8 81.1 L 266.2 79.8 L 268.6 78.5 L 271.0 77.3 L 273.4 76.0 L 275.8 74.8 L 278.3 73.5 L 280.7 72.3 L 283.1 71.0 L 285.5 69.8 L 287.9 68.5 L 290.3 67.2 L 292.8 66.0 L 295.2 64.7 L 297.6 63.5 L 300.0 62.2" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="232.3" y="89.4" font-size="13" fill="var(--neg)" font-weight="bold">m = 1</text><path d=" M 10.0 162.7 L 12.4 161.4 L 14.8 160.2 L 17.3 158.9 L 19.7 157.6 L 22.1 156.4 L 24.5 155.1 L 26.9 153.9 L 29.3 152.6 L 31.8 151.4 L 34.2 150.1 L 36.6 148.9 L 39.0 147.6 L 41.4 146.3 L 43.8 145.1 L 46.3 143.8 L 48.7 142.6 L 51.1 141.3 L 53.5 140.1 L 55.9 138.8 L 58.3 137.6 L 60.8 136.3 L 63.2 135.0 L 65.6 133.8 L 68.0 132.5 L 70.4 131.3 L 72.8 130.0 L 75.3 128.8 L 77.7 127.5 L 80.1 126.3 L 82.5 125.0 L 84.9 123.7 L 87.3 122.5 L 89.7 121.2 L 92.2 120.0 L 94.6 118.7 L 97.0 117.5 L 99.4 116.2 L 101.8 115.0 L 104.3 113.7 L 106.7 112.4 L 109.1 111.2 L 111.5 109.9 L 113.9 108.7 L 116.3 107.4 L 118.8 106.2 L 121.2 104.9 L 123.6 103.7 L 126.0 102.4 L 128.4 101.1 L 130.8 99.9 L 133.3 98.6 L 135.7 97.4 L 138.1 96.1 L 140.5 94.9 L 142.9 93.6 L 145.3 92.4 L 147.8 91.1 L 150.2 89.8 L 152.6 88.6 L 155.0 87.3 L 157.4 86.1 L 159.8 84.8 L 162.3 83.6 L 164.7 82.3 L 167.1 81.1 L 169.5 79.8 L 171.9 78.5 L 174.3 77.3 L 176.8 76.0 L 179.2 74.8 L 181.6 73.5 L 184.0 72.3 L 186.4 71.0 L 188.8 69.8 L 191.3 68.5 L 193.7 67.2 L 196.1 66.0 L 198.5 64.7 L 200.9 63.5 L 203.3 62.2 L 205.7 61.0 L 208.2 59.7 L 210.6 58.5 L 213.0 57.2 L 215.4 55.9 L 217.8 54.7 L 220.3 53.4 L 222.7 52.2 L 225.1 50.9 L 227.5 49.7 L 229.9 48.4 L 232.3 47.2 L 234.8 45.9 L 237.2 44.6 L 239.6 43.4 L 242.0 42.1 L 244.4 40.9 L 246.8 39.6 L 249.3 38.4 L 251.7 37.1 L 254.1 35.9 L 256.5 34.6 L 258.9 33.3 L 261.3 32.1 L 263.8 30.8 L 266.2 29.6 L 268.6 28.3 L 271.0 27.1 L 273.4 25.8 L 275.8 24.6 L 278.3 23.3 L 280.7 22.0 L 283.1 20.8 L 285.5 19.5 L 287.9 18.3 L 290.3 17.0 L 292.8 15.8 L 295.2 14.5 L 297.6 13.3 L 300.0 12.0" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="164.7" y="74.3" font-size="13" fill="var(--ido)" font-weight="bold">m = 1</text></svg><p class="note">parallel: same m</p></div>
+  <div><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="209.8" x2="304" y2="209.8" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="223.8" font-size="12" fill="var(--muted)">x</text><line x1="51.4" y1="6" x2="51.4" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="57.4" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 43.8 248.4 L 46.3 245.1 L 48.7 241.8 L 51.1 238.5 L 53.5 235.2 L 55.9 231.9 L 58.3 228.6 L 60.8 225.3 L 63.2 222.0 L 65.6 218.7 L 68.0 215.4 L 70.4 212.1 L 72.8 208.8 L 75.3 205.5 L 77.7 202.2 L 80.1 198.9 L 82.5 195.6 L 84.9 192.3 L 87.3 189.0 L 89.8 185.7 L 92.2 182.4 L 94.6 179.1 L 97.0 175.8 L 99.4 172.6 L 101.8 169.3 L 104.3 166.0 L 106.7 162.7 L 109.1 159.4 L 111.5 156.1 L 113.9 152.8 L 116.3 149.5 L 118.8 146.2 L 121.2 142.9 L 123.6 139.6 L 126.0 136.3 L 128.4 133.0 L 130.8 129.7 L 133.3 126.4 L 135.7 123.1 L 138.1 119.8 L 140.5 116.5 L 142.9 113.2 L 145.3 109.9 L 147.8 106.6 L 150.2 103.3 L 152.6 100.0 L 155.0 96.8 L 157.4 93.5 L 159.8 90.2 L 162.3 86.9 L 164.7 83.6 L 167.1 80.3 L 169.5 77.0 L 171.9 73.7 L 174.3 70.4 L 176.8 67.1 L 179.2 63.8 L 181.6 60.5 L 184.0 57.2 L 186.4 53.9 L 188.8 50.6 L 191.3 47.3 L 193.7 44.0 L 196.1 40.7 L 198.5 37.4 L 200.9 34.1 L 203.3 30.8 L 205.7 27.5 L 208.2 24.2 L 210.6 20.9 L 213.0 17.6 L 215.4 14.4 L 217.8 11.1 L 220.3 7.8 L 222.7 4.5 L 225.1 1.2" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="171.6" y="66.2" font-size="13" fill="var(--neg)" font-weight="bold">m = 2</text><path d=" M 10.0 82.6 L 12.4 83.4 L 14.8 84.3 L 17.3 85.1 L 19.7 85.9 L 22.1 86.7 L 24.5 87.6 L 26.9 88.4 L 29.3 89.2 L 31.8 90.0 L 34.2 90.9 L 36.6 91.7 L 39.0 92.5 L 41.4 93.3 L 43.8 94.2 L 46.3 95.0 L 48.7 95.8 L 51.1 96.6 L 53.5 97.5 L 55.9 98.3 L 58.3 99.1 L 60.8 99.9 L 63.2 100.8 L 65.6 101.6 L 68.0 102.4 L 70.4 103.2 L 72.8 104.0 L 75.3 104.9 L 77.7 105.7 L 80.1 106.5 L 82.5 107.3 L 84.9 108.2 L 87.3 109.0 L 89.8 109.8 L 92.2 110.6 L 94.6 111.5 L 97.0 112.3 L 99.4 113.1 L 101.8 113.9 L 104.3 114.8 L 106.7 115.6 L 109.1 116.4 L 111.5 117.2 L 113.9 118.1 L 116.3 118.9 L 118.8 119.7 L 121.2 120.5 L 123.6 121.4 L 126.0 122.2 L 128.4 123.0 L 130.8 123.8 L 133.3 124.6 L 135.7 125.5 L 138.1 126.3 L 140.5 127.1 L 142.9 127.9 L 145.3 128.8 L 147.8 129.6 L 150.2 130.4 L 152.6 131.2 L 155.0 132.1 L 157.4 132.9 L 159.8 133.7 L 162.3 134.5 L 164.7 135.4 L 167.1 136.2 L 169.5 137.0 L 171.9 137.8 L 174.3 138.7 L 176.8 139.5 L 179.2 140.3 L 181.6 141.1 L 184.0 141.9 L 186.4 142.8 L 188.8 143.6 L 191.3 144.4 L 193.7 145.2 L 196.1 146.1 L 198.5 146.9 L 200.9 147.7 L 203.3 148.5 L 205.7 149.4 L 208.2 150.2 L 210.6 151.0 L 213.0 151.8 L 215.4 152.7 L 217.8 153.5 L 220.3 154.3 L 222.7 155.1 L 225.1 156.0 L 227.5 156.8 L 229.9 157.6 L 232.3 158.4 L 234.8 159.3 L 237.2 160.1 L 239.6 160.9 L 242.0 161.7 L 244.4 162.5 L 246.8 163.4 L 249.3 164.2 L 251.7 165.0 L 254.1 165.8 L 256.5 166.7 L 258.9 167.5 L 261.3 168.3 L 263.8 169.1 L 266.2 170.0 L 268.6 170.8 L 271.0 171.6 L 273.4 172.4 L 275.8 173.3 L 278.3 174.1 L 280.7 174.9 L 283.1 175.7 L 285.5 176.6 L 287.9 177.4 L 290.3 178.2 L 292.8 179.0 L 295.2 179.9 L 297.6 180.7 L 300.0 181.5" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="225.4" y="148.1" font-size="13" fill="#1e8449" font-weight="bold">m = −½</text><circle cx="134.3" cy="125.0" r="4" fill="var(--accent-dark)"/><text x="144.3" y="123.0" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">90°</text></svg><p class="note">perpendicular: m₁ × m₂ = −1</p></div></div>
+  <div class="box key frag"><span class="lbl">Quick pairs</span>2 ↔ −½ · <span class="fr"><span class="nu">3</span><span class="de">4</span></span> ↔ −<span class="fr"><span class="nu">4</span><span class="de">3</span></span> · −5 ↔ <span class="fr"><span class="nu">1</span><span class="de">5</span></span> — flip and flip the sign.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1H">
+  <h2>Worked example 11</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Find the equation of the line perpendicular to y = 2x + 1 passing through (4, 3).</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="214.2" x2="304" y2="214.2" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="228.2" font-size="12" fill="var(--muted)">x</text><line x1="44.1" y1="6" x2="44.1" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="50.1" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 238.0 L 12.4 234.6 L 14.8 231.3 L 17.3 227.9 L 19.7 224.5 L 22.1 221.1 L 24.5 217.8 L 26.9 214.4 L 29.3 211.0 L 31.8 207.7 L 34.2 204.3 L 36.6 200.9 L 39.0 197.6 L 41.4 194.2 L 43.8 190.8 L 46.3 187.4 L 48.7 184.1 L 51.1 180.7 L 53.5 177.3 L 55.9 174.0 L 58.3 170.6 L 60.8 167.2 L 63.2 163.9 L 65.6 160.5 L 68.0 157.1 L 70.4 153.7 L 72.8 150.4 L 75.3 147.0 L 77.7 143.6 L 80.1 140.3 L 82.5 136.9 L 84.9 133.5 L 87.3 130.2 L 89.7 126.8 L 92.2 123.4 L 94.6 120.0 L 97.0 116.7 L 99.4 113.3 L 101.8 109.9 L 104.3 106.6 L 106.7 103.2 L 109.1 99.8 L 111.5 96.5 L 113.9 93.1 L 116.3 89.7 L 118.8 86.3 L 121.2 83.0 L 123.6 79.6 L 126.0 76.2 L 128.4 72.9 L 130.8 69.5 L 133.3 66.1 L 135.7 62.8 L 138.1 59.4 L 140.5 56.0 L 142.9 52.6 L 145.3 49.3 L 147.8 45.9 L 150.2 42.5 L 152.6 39.2 L 155.0 35.8 L 157.4 32.4 L 159.8 29.0 L 162.3 25.7 L 164.7 22.3 L 167.1 18.9 L 169.5 15.6 L 171.9 12.2 L 174.3 8.8 L 176.8 5.5 L 179.2 2.1" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="132.8" y="58.7" font-size="13" fill="var(--neg)" font-weight="bold">y = 2x + 1</text><path d=" M 10.0 83.4 L 12.4 84.2 L 14.8 85.1 L 17.3 85.9 L 19.7 86.7 L 22.1 87.6 L 24.5 88.4 L 26.9 89.3 L 29.3 90.1 L 31.8 91.0 L 34.2 91.8 L 36.6 92.6 L 39.0 93.5 L 41.4 94.3 L 43.8 95.2 L 46.3 96.0 L 48.7 96.8 L 51.1 97.7 L 53.5 98.5 L 55.9 99.4 L 58.3 100.2 L 60.8 101.1 L 63.2 101.9 L 65.6 102.7 L 68.0 103.6 L 70.4 104.4 L 72.8 105.3 L 75.3 106.1 L 77.7 107.0 L 80.1 107.8 L 82.5 108.6 L 84.9 109.5 L 87.3 110.3 L 89.7 111.2 L 92.2 112.0 L 94.6 112.9 L 97.0 113.7 L 99.4 114.5 L 101.8 115.4 L 104.3 116.2 L 106.7 117.1 L 109.1 117.9 L 111.5 118.8 L 113.9 119.6 L 116.3 120.4 L 118.8 121.3 L 121.2 122.1 L 123.6 123.0 L 126.0 123.8 L 128.4 124.7 L 130.8 125.5 L 133.3 126.3 L 135.7 127.2 L 138.1 128.0 L 140.5 128.9 L 142.9 129.7 L 145.3 130.6 L 147.8 131.4 L 150.2 132.2 L 152.6 133.1 L 155.0 133.9 L 157.4 134.8 L 159.8 135.6 L 162.3 136.4 L 164.7 137.3 L 167.1 138.1 L 169.5 139.0 L 171.9 139.8 L 174.3 140.7 L 176.8 141.5 L 179.2 142.3 L 181.6 143.2 L 184.0 144.0 L 186.4 144.9 L 188.8 145.7 L 191.3 146.6 L 193.7 147.4 L 196.1 148.2 L 198.5 149.1 L 200.9 149.9 L 203.3 150.8 L 205.7 151.6 L 208.2 152.5 L 210.6 153.3 L 213.0 154.1 L 215.4 155.0 L 217.8 155.8 L 220.3 156.7 L 222.7 157.5 L 225.1 158.4 L 227.5 159.2 L 229.9 160.0 L 232.3 160.9 L 234.8 161.7 L 237.2 162.6 L 239.6 163.4 L 242.0 164.3 L 244.4 165.1 L 246.8 165.9 L 249.3 166.8 L 251.7 167.6 L 254.1 168.5 L 256.5 169.3 L 258.9 170.2 L 261.3 171.0 L 263.8 171.8 L 266.2 172.7 L 268.6 173.5 L 271.0 174.4 L 273.4 175.2 L 275.8 176.0 L 278.3 176.9 L 280.7 177.7 L 283.1 178.6 L 285.5 179.4 L 287.9 180.3 L 290.3 181.1 L 292.8 181.9 L 295.2 182.8 L 297.6 183.6 L 300.0 184.5" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="235.2" y="153.9" font-size="13" fill="#1e8449" font-weight="bold">m = −½</text><circle cx="180.6" cy="142.8" r="4" fill="var(--accent-dark)"/><text x="188.6" y="156.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(4, 3)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Perpendicular gradient:</b> m = −½ <span class="say">(2 × −½ = −1 ✔)</span></span></div><div class="step frag"><span class="n">2</span><span><b>Start the rule:</b> y = −½x + c</span></div><div class="step frag"><span class="n">3</span><span><b>Substitute (4, 3):</b> 3 = −½(4) + c → 3 = −2 + c → c = 5</span></div><div class="step frag"><span class="n">4</span><span><b>Answer:</b> y = −½x + 5</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1H">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Find the equation of the line parallel to y = −3x + 2 through (1, 4).</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="171.0" x2="304" y2="171.0" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="185.0" font-size="12" fill="var(--muted)">x</text><line x1="106.7" y1="6" x2="106.7" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="112.7" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 37.1 L 12.4 39.6 L 14.8 42.1 L 17.2 44.6 L 19.7 47.2 L 22.1 49.7 L 24.5 52.2 L 26.9 54.7 L 29.3 57.2 L 31.8 59.7 L 34.2 62.2 L 36.6 64.7 L 39.0 67.2 L 41.4 69.8 L 43.8 72.3 L 46.3 74.8 L 48.7 77.3 L 51.1 79.8 L 53.5 82.3 L 55.9 84.8 L 58.3 87.3 L 60.8 89.8 L 63.2 92.4 L 65.6 94.9 L 68.0 97.4 L 70.4 99.9 L 72.8 102.4 L 75.3 104.9 L 77.7 107.4 L 80.1 109.9 L 82.5 112.4 L 84.9 115.0 L 87.3 117.5 L 89.7 120.0 L 92.2 122.5 L 94.6 125.0 L 97.0 127.5 L 99.4 130.0 L 101.8 132.5 L 104.3 135.0 L 106.7 137.6 L 109.1 140.1 L 111.5 142.6 L 113.9 145.1 L 116.3 147.6 L 118.8 150.1 L 121.2 152.6 L 123.6 155.1 L 126.0 157.6 L 128.4 160.2 L 130.8 162.7 L 133.3 165.2 L 135.7 167.7 L 138.1 170.2 L 140.5 172.7 L 142.9 175.2 L 145.3 177.7 L 147.8 180.2 L 150.2 182.8 L 152.6 185.3 L 155.0 187.8 L 157.4 190.3 L 159.8 192.8 L 162.3 195.3 L 164.7 197.8 L 167.1 200.3 L 169.5 202.8 L 171.9 205.4 L 174.3 207.9 L 176.8 210.4 L 179.2 212.9 L 181.6 215.4 L 184.0 217.9 L 186.4 220.4 L 188.8 222.9 L 191.3 225.4 L 193.7 228.0 L 196.1 230.5 L 198.5 233.0 L 200.9 235.5 L 203.3 238.0 L 205.7 240.5 L 208.2 243.0 L 210.6 245.5 L 213.0 248.0" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="39.0" y="59.2" font-size="13" fill="var(--neg)" font-weight="bold">y = −3x + 2</text><path d=" M 55.9 1.1 L 58.3 3.6 L 60.8 6.1 L 63.2 8.7 L 65.6 11.2 L 68.0 13.7 L 70.4 16.2 L 72.8 18.7 L 75.3 21.2 L 77.7 23.7 L 80.1 26.2 L 82.5 28.7 L 84.9 31.3 L 87.3 33.8 L 89.7 36.3 L 92.2 38.8 L 94.6 41.3 L 97.0 43.8 L 99.4 46.3 L 101.8 48.8 L 104.3 51.3 L 106.7 53.9 L 109.1 56.4 L 111.5 58.9 L 113.9 61.4 L 116.3 63.9 L 118.8 66.4 L 121.2 68.9 L 123.6 71.4 L 126.0 73.9 L 128.4 76.5 L 130.8 79.0 L 133.3 81.5 L 135.7 84.0 L 138.1 86.5 L 140.5 89.0 L 142.9 91.5 L 145.3 94.0 L 147.8 96.5 L 150.2 99.1 L 152.6 101.6 L 155.0 104.1 L 157.4 106.6 L 159.8 109.1 L 162.3 111.6 L 164.7 114.1 L 167.1 116.6 L 169.5 119.1 L 171.9 121.7 L 174.3 124.2 L 176.8 126.7 L 179.2 129.2 L 181.6 131.7 L 184.0 134.2 L 186.4 136.7 L 188.8 139.2 L 191.3 141.7 L 193.7 144.3 L 196.1 146.8 L 198.5 149.3 L 200.9 151.8 L 203.3 154.3 L 205.7 156.8 L 208.2 159.3 L 210.6 161.8 L 213.0 164.3 L 215.4 166.9 L 217.8 169.4 L 220.3 171.9 L 222.7 174.4 L 225.1 176.9 L 227.5 179.4 L 229.9 181.9 L 232.3 184.4 L 234.8 186.9 L 237.2 189.5 L 239.6 192.0 L 242.0 194.5 L 244.4 197.0 L 246.8 199.5 L 249.3 202.0 L 251.7 204.5 L 254.1 207.0 L 256.5 209.5 L 258.9 212.1 L 261.3 214.6 L 263.8 217.1 L 266.2 219.6 L 268.6 222.1 L 271.0 224.6 L 273.4 227.1 L 275.8 229.6 L 278.3 232.1 L 280.7 234.7 L 283.1 237.2 L 285.5 239.7 L 287.9 242.2 L 290.3 244.7 L 292.8 247.2" fill="none" stroke="var(--ido)" stroke-width="2.6" stroke-dasharray="7 5"/><circle cx="155.0" cy="104.1" r="4" fill="var(--accent-dark)"/><text x="163.0" y="104.1" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(1, 4)</text></svg></div></div>
+  <div class="box hint frag">Hint: parallel keeps m = −3.</div>
+  <div class="box answer frag">✔ 4 = −3(1) + c → c = 7 → <b>y = −3x + 7</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1H">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1H</span><ul><li>Parallel first, then perpendicular questions</li><li>Write the gradient rule you used at the top of each answer</li><li>Frame: “Perpendicular to m = ___ is m = ___ because they multiply to −1.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 12 — SECTION 1I</div>
+  <h1>Simultaneous equations using substitution</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>explain what solving simultaneously means</li>
+    <li>substitute one rule into the other</li>
+    <li>check the solution in BOTH equations</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">simultaneous</td><td class="s">sy-mul-TAY-nee-us</td><td>both true at the same time</td></tr><tr><td class="t">substitute</td><td class="s">SUB-sti-tyoot</td><td>replace y with what it equals</td></tr><tr><td class="t">point of intersection</td><td class="s">—</td><td>where the two lines cross — that (x, y) IS the solution</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I">
+  <h2>Key idea — the crossing point</h2>
+  <div class="cols"><div><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="215.4" x2="304" y2="215.4" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="229.4" font-size="12" fill="var(--muted)">x</text><line x1="58.3" y1="6" x2="58.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="64.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 192.8 L 12.4 191.7 L 14.8 190.5 L 17.3 189.4 L 19.7 188.3 L 22.1 187.2 L 24.5 186.0 L 26.9 184.9 L 29.3 183.8 L 31.8 182.6 L 34.2 181.5 L 36.6 180.4 L 39.0 179.2 L 41.4 178.1 L 43.8 177.0 L 46.3 175.8 L 48.7 174.7 L 51.1 173.6 L 53.5 172.5 L 55.9 171.3 L 58.3 170.2 L 60.8 169.1 L 63.2 167.9 L 65.6 166.8 L 68.0 165.7 L 70.4 164.6 L 72.8 163.4 L 75.3 162.3 L 77.7 161.2 L 80.1 160.0 L 82.5 158.9 L 84.9 157.8 L 87.3 156.6 L 89.7 155.5 L 92.2 154.4 L 94.6 153.3 L 97.0 152.1 L 99.4 151.0 L 101.8 149.9 L 104.3 148.7 L 106.7 147.6 L 109.1 146.5 L 111.5 145.3 L 113.9 144.2 L 116.3 143.1 L 118.8 141.9 L 121.2 140.8 L 123.6 139.7 L 126.0 138.6 L 128.4 137.4 L 130.8 136.3 L 133.3 135.2 L 135.7 134.0 L 138.1 132.9 L 140.5 131.8 L 142.9 130.7 L 145.3 129.5 L 147.8 128.4 L 150.2 127.3 L 152.6 126.1 L 155.0 125.0 L 157.4 123.9 L 159.8 122.7 L 162.3 121.6 L 164.7 120.5 L 167.1 119.3 L 169.5 118.2 L 171.9 117.1 L 174.3 116.0 L 176.8 114.8 L 179.2 113.7 L 181.6 112.6 L 184.0 111.4 L 186.4 110.3 L 188.8 109.2 L 191.3 108.1 L 193.7 106.9 L 196.1 105.8 L 198.5 104.7 L 200.9 103.5 L 203.3 102.4 L 205.7 101.3 L 208.2 100.1 L 210.6 99.0 L 213.0 97.9 L 215.4 96.8 L 217.8 95.6 L 220.3 94.5 L 222.7 93.4 L 225.1 92.2 L 227.5 91.1 L 229.9 90.0 L 232.3 88.8 L 234.8 87.7 L 237.2 86.6 L 239.6 85.4 L 242.0 84.3 L 244.4 83.2 L 246.8 82.1 L 249.3 80.9 L 251.7 79.8 L 254.1 78.7 L 256.5 77.5 L 258.9 76.4 L 261.3 75.3 L 263.8 74.2 L 266.2 73.0 L 268.6 71.9 L 271.0 70.8 L 273.4 69.6 L 275.8 68.5 L 278.3 67.4 L 280.7 66.2 L 283.1 65.1 L 285.5 64.0 L 287.9 62.8 L 290.3 61.7 L 292.8 60.6 L 295.2 59.5 L 297.6 58.3 L 300.0 57.2" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="217.8" y="87.6" font-size="13" fill="var(--neg)" font-weight="bold">y = x + 2</text><path d=" M 68.0 3.0 L 70.4 6.4 L 72.8 9.7 L 75.3 13.1 L 77.7 16.5 L 80.1 19.9 L 82.5 23.3 L 84.9 26.7 L 87.3 30.1 L 89.7 33.5 L 92.2 36.9 L 94.6 40.3 L 97.0 43.6 L 99.4 47.0 L 101.8 50.4 L 104.3 53.8 L 106.7 57.2 L 109.1 60.6 L 111.5 64.0 L 113.9 67.4 L 116.3 70.8 L 118.8 74.2 L 121.2 77.5 L 123.6 80.9 L 126.0 84.3 L 128.4 87.7 L 130.8 91.1 L 133.3 94.5 L 135.7 97.9 L 138.1 101.3 L 140.5 104.7 L 142.9 108.1 L 145.3 111.4 L 147.8 114.8 L 150.2 118.2 L 152.6 121.6 L 155.0 125.0 L 157.4 128.4 L 159.8 131.8 L 162.3 135.2 L 164.7 138.6 L 167.1 141.9 L 169.5 145.3 L 171.9 148.7 L 174.3 152.1 L 176.8 155.5 L 179.2 158.9 L 181.6 162.3 L 184.0 165.7 L 186.4 169.1 L 188.8 172.5 L 191.3 175.8 L 193.7 179.2 L 196.1 182.6 L 198.5 186.0 L 200.9 189.4 L 203.3 192.8 L 205.7 196.2 L 208.2 199.6 L 210.6 203.0 L 213.0 206.4 L 215.4 209.8 L 217.8 213.1 L 220.3 216.5 L 222.7 219.9 L 225.1 223.3 L 227.5 226.7 L 229.9 230.1 L 232.3 233.5 L 234.8 236.9 L 237.2 240.3 L 239.6 243.7 L 242.0 247.0" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="87.3" y="22.1" font-size="13" fill="var(--ido)" font-weight="bold">3x + y = 10</text><circle cx="155.0" cy="125.0" r="4" fill="var(--accent-dark)"/><text x="165.0" y="123.0" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 4)</text></svg></div><div>
+  <div class="box key"><span class="lbl">Key idea</span>Two lines, one crossing point. Solving simultaneously finds that point with algebra.</div>
+  <div class="box key frag"><span class="lbl">When to substitute</span>Perfect when one equation already says “y = …” (or “x = …”).</div></div></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I">
+  <h2>Worked example 12</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Solve y = x + 2 and 3x + y = 10 simultaneously.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="215.4" x2="304" y2="215.4" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="229.4" font-size="12" fill="var(--muted)">x</text><line x1="58.3" y1="6" x2="58.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="64.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 192.8 L 12.4 191.7 L 14.8 190.5 L 17.3 189.4 L 19.7 188.3 L 22.1 187.2 L 24.5 186.0 L 26.9 184.9 L 29.3 183.8 L 31.8 182.6 L 34.2 181.5 L 36.6 180.4 L 39.0 179.2 L 41.4 178.1 L 43.8 177.0 L 46.3 175.8 L 48.7 174.7 L 51.1 173.6 L 53.5 172.5 L 55.9 171.3 L 58.3 170.2 L 60.8 169.1 L 63.2 167.9 L 65.6 166.8 L 68.0 165.7 L 70.4 164.6 L 72.8 163.4 L 75.3 162.3 L 77.7 161.2 L 80.1 160.0 L 82.5 158.9 L 84.9 157.8 L 87.3 156.6 L 89.7 155.5 L 92.2 154.4 L 94.6 153.3 L 97.0 152.1 L 99.4 151.0 L 101.8 149.9 L 104.3 148.7 L 106.7 147.6 L 109.1 146.5 L 111.5 145.3 L 113.9 144.2 L 116.3 143.1 L 118.8 141.9 L 121.2 140.8 L 123.6 139.7 L 126.0 138.6 L 128.4 137.4 L 130.8 136.3 L 133.3 135.2 L 135.7 134.0 L 138.1 132.9 L 140.5 131.8 L 142.9 130.7 L 145.3 129.5 L 147.8 128.4 L 150.2 127.3 L 152.6 126.1 L 155.0 125.0 L 157.4 123.9 L 159.8 122.7 L 162.3 121.6 L 164.7 120.5 L 167.1 119.3 L 169.5 118.2 L 171.9 117.1 L 174.3 116.0 L 176.8 114.8 L 179.2 113.7 L 181.6 112.6 L 184.0 111.4 L 186.4 110.3 L 188.8 109.2 L 191.3 108.1 L 193.7 106.9 L 196.1 105.8 L 198.5 104.7 L 200.9 103.5 L 203.3 102.4 L 205.7 101.3 L 208.2 100.1 L 210.6 99.0 L 213.0 97.9 L 215.4 96.8 L 217.8 95.6 L 220.3 94.5 L 222.7 93.4 L 225.1 92.2 L 227.5 91.1 L 229.9 90.0 L 232.3 88.8 L 234.8 87.7 L 237.2 86.6 L 239.6 85.4 L 242.0 84.3 L 244.4 83.2 L 246.8 82.1 L 249.3 80.9 L 251.7 79.8 L 254.1 78.7 L 256.5 77.5 L 258.9 76.4 L 261.3 75.3 L 263.8 74.2 L 266.2 73.0 L 268.6 71.9 L 271.0 70.8 L 273.4 69.6 L 275.8 68.5 L 278.3 67.4 L 280.7 66.2 L 283.1 65.1 L 285.5 64.0 L 287.9 62.8 L 290.3 61.7 L 292.8 60.6 L 295.2 59.5 L 297.6 58.3 L 300.0 57.2" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="217.8" y="87.6" font-size="13" fill="var(--neg)" font-weight="bold">y = x + 2</text><path d=" M 68.0 3.0 L 70.4 6.4 L 72.8 9.7 L 75.3 13.1 L 77.7 16.5 L 80.1 19.9 L 82.5 23.3 L 84.9 26.7 L 87.3 30.1 L 89.7 33.5 L 92.2 36.9 L 94.6 40.3 L 97.0 43.6 L 99.4 47.0 L 101.8 50.4 L 104.3 53.8 L 106.7 57.2 L 109.1 60.6 L 111.5 64.0 L 113.9 67.4 L 116.3 70.8 L 118.8 74.2 L 121.2 77.5 L 123.6 80.9 L 126.0 84.3 L 128.4 87.7 L 130.8 91.1 L 133.3 94.5 L 135.7 97.9 L 138.1 101.3 L 140.5 104.7 L 142.9 108.1 L 145.3 111.4 L 147.8 114.8 L 150.2 118.2 L 152.6 121.6 L 155.0 125.0 L 157.4 128.4 L 159.8 131.8 L 162.3 135.2 L 164.7 138.6 L 167.1 141.9 L 169.5 145.3 L 171.9 148.7 L 174.3 152.1 L 176.8 155.5 L 179.2 158.9 L 181.6 162.3 L 184.0 165.7 L 186.4 169.1 L 188.8 172.5 L 191.3 175.8 L 193.7 179.2 L 196.1 182.6 L 198.5 186.0 L 200.9 189.4 L 203.3 192.8 L 205.7 196.2 L 208.2 199.6 L 210.6 203.0 L 213.0 206.4 L 215.4 209.8 L 217.8 213.1 L 220.3 216.5 L 222.7 219.9 L 225.1 223.3 L 227.5 226.7 L 229.9 230.1 L 232.3 233.5 L 234.8 236.9 L 237.2 240.3 L 239.6 243.7 L 242.0 247.0" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="87.3" y="22.1" font-size="13" fill="var(--ido)" font-weight="bold">3x + y = 10</text><circle cx="155.0" cy="125.0" r="4" fill="var(--accent-dark)"/><text x="165.0" y="123.0" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 4)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Substitute</b> y = x + 2 into the second: 3x + (x + 2) = 10</span></div><div class="step frag"><span class="n">2</span><span><b>Solve:</b> 4x + 2 = 10 → x = 2</span></div><div class="step frag"><span class="n">3</span><span><b>Back-substitute:</b> y = 2 + 2 = 4 → solution <b>(2, 4)</b></span></div><div class="step frag"><span class="n">4</span><span><b>Check in BOTH:</b> 4 = 2 + 2 ✔ and 6 + 4 = 10 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Solve y = 2x − 1 and x + y = 5.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="181.5" x2="304" y2="181.5" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="195.5" font-size="12" fill="var(--muted)">x</text><line x1="54.6" y1="6" x2="54.6" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="60.6" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 249.3 L 12.4 246.9 L 14.8 244.4 L 17.3 242.0 L 19.7 239.5 L 22.1 237.1 L 24.5 234.6 L 26.9 232.2 L 29.3 229.7 L 31.8 227.3 L 34.2 224.8 L 36.6 222.4 L 39.0 219.9 L 41.4 217.5 L 43.8 215.0 L 46.3 212.6 L 48.7 210.1 L 51.1 207.7 L 53.5 205.2 L 55.9 202.8 L 58.3 200.3 L 60.8 197.9 L 63.2 195.4 L 65.6 193.0 L 68.0 190.5 L 70.4 188.1 L 72.8 185.6 L 75.3 183.2 L 77.7 180.7 L 80.1 178.3 L 82.5 175.8 L 84.9 173.4 L 87.3 171.0 L 89.8 168.5 L 92.2 166.1 L 94.6 163.6 L 97.0 161.2 L 99.4 158.7 L 101.8 156.3 L 104.2 153.8 L 106.7 151.4 L 109.1 148.9 L 111.5 146.5 L 113.9 144.0 L 116.3 141.6 L 118.8 139.1 L 121.2 136.7 L 123.6 134.2 L 126.0 131.8 L 128.4 129.3 L 130.8 126.9 L 133.3 124.4 L 135.7 122.0 L 138.1 119.5 L 140.5 117.1 L 142.9 114.6 L 145.3 112.2 L 147.8 109.7 L 150.2 107.3 L 152.6 104.8 L 155.0 102.4 L 157.4 100.0 L 159.8 97.5 L 162.3 95.1 L 164.7 92.6 L 167.1 90.2 L 169.5 87.7 L 171.9 85.3 L 174.3 82.8 L 176.8 80.4 L 179.2 77.9 L 181.6 75.5 L 184.0 73.0 L 186.4 70.6 L 188.8 68.1 L 191.3 65.7 L 193.7 63.2 L 196.1 60.8 L 198.5 58.3 L 200.9 55.9 L 203.3 53.4 L 205.8 51.0 L 208.2 48.5 L 210.6 46.1 L 213.0 43.6 L 215.4 41.2 L 217.8 38.7 L 220.3 36.3 L 222.7 33.8 L 225.1 31.4 L 227.5 28.9 L 229.9 26.5 L 232.3 24.1 L 234.7 21.6 L 237.2 19.2 L 239.6 16.7 L 242.0 14.3 L 244.4 11.8 L 246.8 9.4 L 249.3 6.9 L 251.7 4.5 L 254.1 2.0" fill="none" stroke="var(--neg)" stroke-width="2.6"/><text x="206.3" y="42.4" font-size="13" fill="var(--neg)" font-weight="bold">y = 2x − 1</text><path d=" M 10.0 45.9 L 12.4 47.1 L 14.8 48.3 L 17.3 49.6 L 19.7 50.8 L 22.1 52.0 L 24.5 53.2 L 26.9 54.5 L 29.3 55.7 L 31.8 56.9 L 34.2 58.1 L 36.6 59.4 L 39.0 60.6 L 41.4 61.8 L 43.8 63.0 L 46.3 64.3 L 48.7 65.5 L 51.1 66.7 L 53.5 67.9 L 55.9 69.2 L 58.3 70.4 L 60.8 71.6 L 63.2 72.8 L 65.6 74.1 L 68.0 75.3 L 70.4 76.5 L 72.8 77.7 L 75.3 79.0 L 77.7 80.2 L 80.1 81.4 L 82.5 82.6 L 84.9 83.8 L 87.3 85.1 L 89.8 86.3 L 92.2 87.5 L 94.6 88.7 L 97.0 90.0 L 99.4 91.2 L 101.8 92.4 L 104.2 93.6 L 106.7 94.9 L 109.1 96.1 L 111.5 97.3 L 113.9 98.5 L 116.3 99.8 L 118.8 101.0 L 121.2 102.2 L 123.6 103.4 L 126.0 104.7 L 128.4 105.9 L 130.8 107.1 L 133.3 108.3 L 135.7 109.6 L 138.1 110.8 L 140.5 112.0 L 142.9 113.2 L 145.3 114.5 L 147.8 115.7 L 150.2 116.9 L 152.6 118.1 L 155.0 119.3 L 157.4 120.6 L 159.8 121.8 L 162.3 123.0 L 164.7 124.2 L 167.1 125.5 L 169.5 126.7 L 171.9 127.9 L 174.3 129.1 L 176.8 130.4 L 179.2 131.6 L 181.6 132.8 L 184.0 134.0 L 186.4 135.3 L 188.8 136.5 L 191.3 137.7 L 193.7 138.9 L 196.1 140.2 L 198.5 141.4 L 200.9 142.6 L 203.3 143.8 L 205.8 145.1 L 208.2 146.3 L 210.6 147.5 L 213.0 148.7 L 215.4 150.0 L 217.8 151.2 L 220.3 152.4 L 222.7 153.6 L 225.1 154.9 L 227.5 156.1 L 229.9 157.3 L 232.3 158.5 L 234.7 159.7 L 237.2 161.0 L 239.6 162.2 L 242.0 163.4 L 244.4 164.6 L 246.8 165.9 L 249.3 167.1 L 251.7 168.3 L 254.1 169.5 L 256.5 170.8 L 258.9 172.0 L 261.3 173.2 L 263.8 174.4 L 266.2 175.7 L 268.6 176.9 L 271.0 178.1 L 273.4 179.3 L 275.8 180.6 L 278.3 181.8 L 280.7 183.0 L 283.1 184.2 L 285.5 185.5 L 287.9 186.7 L 290.3 187.9 L 292.8 189.1 L 295.2 190.4 L 297.6 191.6 L 300.0 192.8" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="72.5" y="69.5" font-size="13" fill="var(--ido)" font-weight="bold">x + y = 5</text><circle cx="143.8" cy="113.7" r="4" fill="var(--accent-dark)"/><text x="153.8" y="111.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">?</text></svg></div></div>
+  <div class="box hint frag">Hint: x + (2x − 1) = 5.</div>
+  <div class="box answer frag">✔ 3x = 6 → x = 2, y = 3 → <b>(2, 3)</b>. Check both: 3 = 4 − 1 ✔, 2 + 3 = 5 ✔</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1I (start)</span><ul><li>Substitution questions where one rule is ready-made</li><li>Always finish with the check in BOTH equations</li><li>Frame: “I replace y with ___ because the first rule tells me they are equal.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 13 — SECTION 1I (CONSOLIDATION)</div>
+  <h1>Substitution with a rearrangement</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>rearrange one equation before substituting</li>
+    <li>keep bracket discipline when substituting</li>
+    <li>decide which variable is easier to isolate</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I+">
+  <h2>Worked example 13</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve x = 2y − 3 and 2x + 3y = 8.</div><div class="step frag"><span class="n">1</span><span><b>x is ready-made</b> — substitute into the second: 2(2y − 3) + 3y = 8</span></div><div class="step frag"><span class="n">2</span><span><b>Expand:</b> 4y − 6 + 3y = 8</span></div><div class="step frag"><span class="n">3</span><span><b>Solve:</b> 7y = 14 → y = 2</span></div><div class="step frag"><span class="n">4</span><span><b>Back-substitute:</b> x = 2(2) − 3 = 1 → <b>(1, 2)</b>. Check: 2(1) + 3(2) = 8 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I+">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve y = 3x + 1 and 2x + 2y = 18.</div>
+  <div class="box hint frag">Hint: 2x + 2(3x + 1) = 18 — brackets around the whole substitution!</div>
+  <div class="box answer frag">✔ 8x + 2 = 18 → x = 2, y = 7 → <b>(2, 7)</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I+">
+  <h2>Error hunt</h2>
+  <div class="box question"><span class="lbl">Find the error (pairs)</span>Substituting y = x − 4 into 3x − 2y = 14, a student wrote: 3x − 2x − 4 = 14.</div>
+  <div class="box answer frag">✔ Missing brackets! 3x − 2<b>(x − 4)</b> = 3x − 2x <b>+ 8</b>. Correct: x + 8 = 14 → x = 6, y = 2.</div>
+  <div class="box try frag">“When I substitute, the whole expression goes in <b>brackets</b>.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1I+">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1I (finish)</span><ul><li>Harder substitution — including rearrange-first questions</li><li>Brackets around EVERY substitution</li><li>Challenge: two equations, neither solved for x or y — you choose</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 14 — SECTION 1J</div>
+  <h1>Simultaneous equations using elimination</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>line up equations and eliminate a variable</li>
+    <li>decide: add or subtract?</li>
+    <li>solve and check in both equations</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">eliminate</td><td class="s">ee-LIM-in-ayt</td><td>make one variable disappear</td></tr><tr><td class="t">matching coefficients</td><td class="s">—</td><td>same size number on x (or y) in both equations</td></tr><tr><td class="t">SSS / DDA</td><td class="s">—</td><td>memory help: Same Signs Subtract · Different signs? Add</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J">
+  <h2>Key idea — make a variable vanish</h2>
+  <div class="box key"><span class="lbl">Key idea</span>Line the equations up. If one variable has <b>matching coefficients</b>: same signs → <b>subtract</b>; opposite signs → <b>add</b>. That variable vanishes.</div>
+  <div class="box key frag"><span class="lbl">When elimination?</span>When neither equation is solved for x or y — no rearranging needed.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J">
+  <h2>Worked example 14</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve 2x + 3y = 12 and 2x − y = 4.</div><div class="step frag"><span class="n">1</span><span><b>Matching 2x, same sign → subtract:</b> (2x + 3y) − (2x − y) = 12 − 4</span></div><div class="step frag"><span class="n">2</span><span><b>Careful with signs:</b> 3y − (−y) = 4y → 4y = 8 → y = 2</span></div><div class="step frag"><span class="n">3</span><span><b>Back-substitute:</b> 2x − 2 = 4 → x = 3 → <b>(3, 2)</b></span></div><div class="step frag"><span class="n">4</span><span><b>Check both:</b> 6 + 6 = 12 ✔ and 6 − 2 = 4 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve x + 2y = 7 and 3x − 2y = 5.</div>
+  <div class="box hint frag">Hint: the 2y terms have opposite signs → ADD the equations.</div>
+  <div class="box answer frag">✔ 4x = 12 → x = 3, y = 2 → <b>(3, 2)</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1J (start)</span><ul><li>Elimination with matching coefficients — decide add/subtract first</li><li>Write “+” or “−” next to the equations before you combine</li><li>Frame: “The ___ terms match with ___ signs, so I ___.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 15 — SECTION 1J (CONTINUED)</div>
+  <h1>Elimination — multiply first</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>multiply an equation to create matching coefficients</li>
+    <li>choose the cheaper variable to match</li>
+    <li>solve any linear pair with elimination</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J+">
+  <h2>Key idea — make the match yourself</h2>
+  <div class="box key"><span class="lbl">No match? Make one.</span>Multiply one (or both) equations by a number so a variable matches — then add or subtract as usual.</div>
+  <div class="box key frag"><span class="lbl">Choose wisely</span>Match whichever variable needs the smallest multiplication. Multiply EVERY term, including the right side!</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J+">
+  <h2>Worked example 15</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Solve 3x + 2y = 16 and 2x − y = 6.</div><div class="step frag"><span class="n">1</span><span><b>Match y:</b> multiply the second equation by 2 → 4x − 2y = 12</span></div><div class="step frag"><span class="n">2</span><span><b>Opposite signs on y → add:</b> (3x + 2y) + (4x − 2y) = 16 + 12</span></div><div class="step frag"><span class="n">3</span><span><b>Solve:</b> 7x = 28 → x = 4</span></div><div class="step frag"><span class="n">4</span><span><b>Back-substitute:</b> 2(4) − y = 6 → y = 2 → <b>(4, 2)</b>. Check: 12 + 4 = 16 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J+">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve 2x + 5y = 16 and 3x + 2y = 13.</div>
+  <div class="box hint frag">Hint: ×3 the first and ×2 the second → 6x in both → subtract.</div>
+  <div class="box answer frag">✔ 6x + 15y = 48; 6x + 4y = 26 → 11y = 22 → y = 2, x = 3 → <b>(3, 2)</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1J+">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1J (finish)</span><ul><li>Multiply-first elimination; label each equation ①, ② and show “① × 3”</li><li>Multiply every term — right side included</li><li>Mixed set: choose substitution OR elimination and say why</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 16 — SECTION 1K</div>
+  <h1>Applications of simultaneous equations</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>define two variables with units</li>
+    <li>translate sentences into two equations</li>
+    <li>solve and answer in words</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1K">
+  <h2>Key idea — words to equations</h2>
+  <div class="box key"><span class="lbl">Routine</span>1️⃣ <b>Define:</b> “let a = adult ticket price ($), c = child ticket price ($)” → 2️⃣ <b>Translate</b> each sentence into an equation → 3️⃣ <b>Solve</b> (substitution or elimination) → 4️⃣ <b>Answer in words with units.</b></div>
+  <div class="box try frag">“Let ___ = ___ (units). Let ___ = ___ (units).” — write this line FIRST, always.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1K">
+  <h2>Worked example 16</h2>
+  <div class="box question"><span class="lbl">Worked example</span>2 adult and 3 child tickets cost $47. 1 adult and 2 child tickets cost $26. Find each price.</div><div class="step frag"><span class="n">1</span><span><b>Define:</b> let a = adult price ($), c = child price ($).</span></div><div class="step frag"><span class="n">2</span><span><b>Translate:</b> 2a + 3c = 47 &nbsp;①&nbsp; and a + 2c = 26 &nbsp;②</span></div><div class="step frag"><span class="n">3</span><span><b>From ②:</b> a = 26 − 2c → substitute into ①: 2(26 − 2c) + 3c = 47</span></div><div class="step frag"><span class="n">4</span><span><b>Solve:</b> 52 − c = 47 → c = 5, a = 16.</span></div><div class="step frag"><span class="n">5</span><span><b>Answer in words:</b> “An adult ticket costs <b>$16</b> and a child ticket costs <b>$5</b>.” Check: 32 + 15 = 47 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1K">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>3 pens and 2 pencils cost $9.20. 1 pen and 4 pencils cost $6.40. Find the price of each.</div>
+  <div class="box hint frag">Hint: from the second, p = 6.40 − 4q.</div>
+  <div class="box answer frag">✔ 3(6.4 − 4q) + 2q = 9.2 → 19.2 − 10q = 9.2 → q = $1, p = $2.40. “A pen costs $2.40 and a pencil costs $1.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1K">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1K</span><ul><li>Word problems — the “define” line earns a mark on its own</li><li>Answers in full sentences with units</li><li>Number puzzles: “the sum of two numbers is…” works the same way</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 17 — SECTION 1L</div>
+  <h1>Regions on the Cartesian plane</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>sketch the boundary line (solid or dashed?)</li>
+    <li>use a test point to choose the side</li>
+    <li>shade and label the region</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1L">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">region / half plane</td><td class="s">REE-jun</td><td>all the points on one side of a line</td></tr><tr><td class="t">boundary line</td><td class="s">BOWN-da-ree</td><td>the edge: solid for ≤ ≥, dashed for < ></td></tr><tr><td class="t">test point</td><td class="s">—</td><td>an easy point (usually (0, 0)) to check which side is true</td></tr><tr><td class="t">shade</td><td class="s">shayd</td><td>colour the side where the inequality is true</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1L">
+  <h2>Worked example 17</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Sketch the region y &gt; x − 2.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><polygon points="10.0,238.0 14.8,234.7 19.7,231.3 24.5,228.0 29.3,224.6 34.2,221.3 39.0,217.9 43.8,214.6 48.7,211.2 53.5,207.9 58.3,204.5 63.2,201.2 68.0,197.8 72.8,194.5 77.7,191.1 82.5,187.8 87.3,184.4 92.2,181.1 97.0,177.7 101.8,174.4 106.7,171.0 111.5,167.7 116.3,164.3 121.2,161.0 126.0,157.6 130.8,154.3 135.7,150.9 140.5,147.6 145.3,144.3 150.2,140.9 155.0,137.6 159.8,134.2 164.7,130.9 169.5,127.5 174.3,124.2 179.2,120.8 184.0,117.5 188.8,114.1 193.7,110.8 198.5,107.4 203.3,104.1 208.2,100.7 213.0,97.4 217.8,94.0 222.7,90.7 227.5,87.3 232.3,84.0 237.2,80.6 242.0,77.3 246.8,73.9 251.7,70.6 256.5,67.2 261.3,63.9 266.2,60.5 271.0,57.2 275.8,53.9 280.7,50.5 285.5,47.2 290.3,43.8 295.2,40.5 300.0,37.1 300.0,12.0 10.0,12.0" fill="var(--accent)" opacity="0.16"/><line x1="6" y1="125.0" x2="304" y2="125.0" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="139.0" font-size="12" fill="var(--muted)">x</text><line x1="100.6" y1="6" x2="100.6" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="106.6" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 238.0 L 12.4 236.3 L 14.8 234.7 L 17.3 233.0 L 19.7 231.3 L 22.1 229.6 L 24.5 228.0 L 26.9 226.3 L 29.3 224.6 L 31.8 222.9 L 34.2 221.3 L 36.6 219.6 L 39.0 217.9 L 41.4 216.2 L 43.8 214.6 L 46.3 212.9 L 48.7 211.2 L 51.1 209.5 L 53.5 207.9 L 55.9 206.2 L 58.3 204.5 L 60.8 202.8 L 63.2 201.2 L 65.6 199.5 L 68.0 197.8 L 70.4 196.1 L 72.8 194.5 L 75.3 192.8 L 77.7 191.1 L 80.1 189.5 L 82.5 187.8 L 84.9 186.1 L 87.3 184.4 L 89.8 182.8 L 92.2 181.1 L 94.6 179.4 L 97.0 177.7 L 99.4 176.1 L 101.8 174.4 L 104.3 172.7 L 106.7 171.0 L 109.1 169.4 L 111.5 167.7 L 113.9 166.0 L 116.3 164.3 L 118.8 162.7 L 121.2 161.0 L 123.6 159.3 L 126.0 157.6 L 128.4 156.0 L 130.8 154.3 L 133.3 152.6 L 135.7 150.9 L 138.1 149.3 L 140.5 147.6 L 142.9 145.9 L 145.3 144.3 L 147.8 142.6 L 150.2 140.9 L 152.6 139.2 L 155.0 137.6 L 157.4 135.9 L 159.8 134.2 L 162.3 132.5 L 164.7 130.9 L 167.1 129.2 L 169.5 127.5 L 171.9 125.8 L 174.3 124.2 L 176.8 122.5 L 179.2 120.8 L 181.6 119.1 L 184.0 117.5 L 186.4 115.8 L 188.8 114.1 L 191.3 112.4 L 193.7 110.8 L 196.1 109.1 L 198.5 107.4 L 200.9 105.7 L 203.3 104.1 L 205.8 102.4 L 208.2 100.7 L 210.6 99.1 L 213.0 97.4 L 215.4 95.7 L 217.8 94.0 L 220.3 92.4 L 222.7 90.7 L 225.1 89.0 L 227.5 87.3 L 229.9 85.7 L 232.3 84.0 L 234.8 82.3 L 237.2 80.6 L 239.6 79.0 L 242.0 77.3 L 244.4 75.6 L 246.8 73.9 L 249.3 72.3 L 251.7 70.6 L 254.1 68.9 L 256.5 67.2 L 258.9 65.6 L 261.3 63.9 L 263.8 62.2 L 266.2 60.5 L 268.6 58.9 L 271.0 57.2 L 273.4 55.5 L 275.8 53.9 L 278.3 52.2 L 280.7 50.5 L 283.1 48.8 L 285.5 47.2 L 287.9 45.5 L 290.3 43.8 L 292.8 42.1 L 295.2 40.5 L 297.6 38.8 L 300.0 37.1" fill="none" stroke="var(--neg)" stroke-width="2.6" stroke-dasharray="7 5"/><text x="234.8" y="74.3" font-size="13" fill="var(--neg)" font-weight="bold">y = x − 2</text><circle cx="100.6" cy="125.0" r="4" fill="var(--accent-dark)"/><text x="110.6" y="121.0" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">test (0, 0) ✓</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Boundary:</b> y = x − 2 — strict inequality (&gt;) → <b>dashed</b> line.</span></div><div class="step frag"><span class="n">2</span><span><b>Test (0, 0):</b> is 0 &gt; 0 − 2? Yes → (0, 0)'s side is the region.</span></div><div class="step frag"><span class="n">3</span><span><b>Shade</b> the side containing (0, 0) (above the line) and label the region.</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1L">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Sketch the region y ≤ −x + 3.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><polygon points="10.0,25.3 14.8,28.6 19.7,31.9 24.5,35.3 29.3,38.6 34.2,41.9 39.0,45.2 43.8,48.6 48.7,51.9 53.5,55.2 58.3,58.5 63.2,61.9 68.0,65.2 72.8,68.5 77.7,71.8 82.5,75.1 87.3,78.5 92.2,81.8 97.0,85.1 101.8,88.4 106.7,91.8 111.5,95.1 116.3,98.4 121.2,101.7 126.0,105.1 130.8,108.4 135.7,111.7 140.5,115.0 145.3,118.4 150.2,121.7 155.0,125.0 159.8,128.3 164.7,131.6 169.5,135.0 174.3,138.3 179.2,141.6 184.0,144.9 188.8,148.3 193.7,151.6 198.5,154.9 203.3,158.2 208.2,161.6 213.0,164.9 217.8,168.2 222.7,171.5 227.5,174.9 232.3,178.2 237.2,181.5 242.0,184.8 246.8,188.1 251.7,191.5 256.5,194.8 261.3,198.1 266.2,201.4 271.0,204.8 275.8,208.1 280.7,211.4 285.5,214.7 290.3,218.1 295.2,221.4 300.0,224.7 300.0,238.0 10.0,238.0" fill="var(--accent)" opacity="0.16"/><line x1="6" y1="158.2" x2="304" y2="158.2" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="172.2" font-size="12" fill="var(--muted)">x</text><line x1="87.3" y1="6" x2="87.3" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="93.3" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 25.3 L 12.4 27.0 L 14.8 28.6 L 17.3 30.3 L 19.7 31.9 L 22.1 33.6 L 24.5 35.3 L 26.9 36.9 L 29.3 38.6 L 31.8 40.3 L 34.2 41.9 L 36.6 43.6 L 39.0 45.2 L 41.4 46.9 L 43.8 48.6 L 46.3 50.2 L 48.7 51.9 L 51.1 53.5 L 53.5 55.2 L 55.9 56.9 L 58.3 58.5 L 60.8 60.2 L 63.2 61.9 L 65.6 63.5 L 68.0 65.2 L 70.4 66.8 L 72.8 68.5 L 75.3 70.2 L 77.7 71.8 L 80.1 73.5 L 82.5 75.1 L 84.9 76.8 L 87.3 78.5 L 89.8 80.1 L 92.2 81.8 L 94.6 83.5 L 97.0 85.1 L 99.4 86.8 L 101.8 88.4 L 104.3 90.1 L 106.7 91.8 L 109.1 93.4 L 111.5 95.1 L 113.9 96.8 L 116.3 98.4 L 118.8 100.1 L 121.2 101.7 L 123.6 103.4 L 126.0 105.1 L 128.4 106.7 L 130.8 108.4 L 133.3 110.0 L 135.7 111.7 L 138.1 113.4 L 140.5 115.0 L 142.9 116.7 L 145.3 118.4 L 147.8 120.0 L 150.2 121.7 L 152.6 123.3 L 155.0 125.0 L 157.4 126.7 L 159.8 128.3 L 162.3 130.0 L 164.7 131.6 L 167.1 133.3 L 169.5 135.0 L 171.9 136.6 L 174.3 138.3 L 176.8 140.0 L 179.2 141.6 L 181.6 143.3 L 184.0 144.9 L 186.4 146.6 L 188.8 148.3 L 191.3 149.9 L 193.7 151.6 L 196.1 153.3 L 198.5 154.9 L 200.9 156.6 L 203.3 158.2 L 205.8 159.9 L 208.2 161.6 L 210.6 163.2 L 213.0 164.9 L 215.4 166.5 L 217.8 168.2 L 220.3 169.9 L 222.7 171.5 L 225.1 173.2 L 227.5 174.9 L 229.9 176.5 L 232.3 178.2 L 234.8 179.8 L 237.2 181.5 L 239.6 183.2 L 242.0 184.8 L 244.4 186.5 L 246.8 188.1 L 249.3 189.8 L 251.7 191.5 L 254.1 193.1 L 256.5 194.8 L 258.9 196.5 L 261.3 198.1 L 263.8 199.8 L 266.2 201.4 L 268.6 203.1 L 271.0 204.8 L 273.4 206.4 L 275.8 208.1 L 278.3 209.8 L 280.7 211.4 L 283.1 213.1 L 285.5 214.7 L 287.9 216.4 L 290.3 218.1 L 292.8 219.7 L 295.2 221.4 L 297.6 223.0 L 300.0 224.7" fill="none" stroke="var(--ido)" stroke-width="2.6"/><circle cx="87.3" cy="158.2" r="4" fill="var(--accent-dark)"/><text x="97.3" y="154.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">test (0, 0)</text></svg></div></div>
+  <div class="box hint frag">Hint: ≤ means the boundary is solid and included. Test (0, 0): 0 ≤ 3 true.</div>
+  <div class="box answer frag">✔ Solid line through (0, 3) and (3, 0); shade the side with (0, 0) — below the line.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · 1L">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 1L</span><ul><li>Regions — the checklist: solid/dashed? test point shown? shaded + labelled?</li><li>Boundary sketching uses the 1E intercept method</li><li>Extension: two inequalities at once (overlapping regions)</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 18 — REVIEW</div>
+  <h1>Unit 1 review and progress check</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>check every checklist item for Chapter 1</li>
+    <li>complete the progress quiz</li>
+    <li>start my fix-it list — CAT 1 (Units 1 & 2) is in Week 8</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 1 · ★">
+  <h2>Checklist self-assessment</h2>
+  <table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
   <tr><td>1A: collect like terms and expand</td><td></td><td></td><td></td></tr>
   <tr><td>1B: solve equations, brackets, x both sides</td><td></td><td></td><td></td></tr>
   <tr><td>1C: solve inequalities and graph on a number line</td><td></td><td></td><td></td></tr>
@@ -527,73 +796,33 @@ const LESSONS=[
   <tr><td>1I/1J: simultaneous equations both ways</td><td></td><td></td><td></td></tr>
   <tr><td>1K: applications — define, translate, solve, answer</td><td></td><td></td><td></td></tr>
   <tr><td>1L: sketch and shade regions</td><td></td><td></td><td></td></tr></table>
-  <p class="note">😟 rows → fix-it list. CAT 1 covers Units 1 AND 2 — keep this list alive through the Indices unit.</p>`},
- {h:'Vocabulary quick quiz',b:`<div class="q"><span class="tag">Match the word to the meaning (with a partner)</span></div>
-  <div class="cols"><div class="key">1. gradient<br>2. simultaneous<br>3. inequality<br>4. midpoint<br>5. perpendicular<br>6. eliminate</div>
-  <div class="key">A. both true at the same time<br>B. make a variable disappear<br>C. rise over run<br>D. meet at 90°<br>E. statement with &lt; &gt; ≤ ≥<br>F. halfway point — average the coordinates</div></div>
-  <div class="ans frag">✔ 1-C, 2-A, 3-E, 4-F, 5-D, 6-B</div>`},
- {h:'Today’s work',b:`<div class="exset"><h3>📘 Unit 1 wrap</h3><ul>
+  <p class="note">😟 rows → fix-it list. CAT 1 covers Units 1 AND 2 — keep this list alive through the Indices unit.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · ★">
+  <h2>Vocabulary quick quiz</h2>
+  <div class="box question"><span class="lbl">Match the word to the meaning (with a partner)</span></div>
+  <div class="cols"><div class="box key">1. gradient<br>2. simultaneous<br>3. inequality<br>4. midpoint<br>5. perpendicular<br>6. eliminate</div>
+  <div class="box key">A. both true at the same time<br>B. make a variable disappear<br>C. rise over run<br>D. meet at 90°<br>E. statement with &lt; &gt; ≤ ≥<br>F. halfway point — average the coordinates</div></div>
+  <div class="box answer frag">✔ 1-C, 2-A, 3-E, 4-F, 5-D, 6-B</div>
+</section>
+
+<section class="slide" data-topic="Chapter 1 · ★">
+  <h2>Today’s work</h2>
+  <div class="box try exset"><span class="lbl">📘 Unit 1 wrap</span><ul>
   <li>Progress quiz 1A–1L under quiet conditions, then swap and mark</li>
   <li>Chapter 1 review: fluency set from your 😟 rows first</li>
   <li>Glossary check: you should own ~30 words from this unit</li>
-  <li>Next week: Unit 2 — Indices and Surds (Ch 3A–3E, 4A–4D). CAT 1 in Week 8 covers BOTH units.</li></ul></div>`}
-]}
-];
+  <li>Next week: Unit 2 — Indices and Surds (Ch 3A–3E, 4A–4D). CAT 1 in Week 8 covers BOTH units.</li></ul></div>
+</section>
 
-/* ---------- engine ---------- */
-let li=0,si=0;
-const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
-      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
-      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
-const WEEKS=[['Term 1 · Week 1 (starts Thu 29 Jan) — Welcome and algebra review',[0,1]],
-             ['Term 1 · Week 2 — Equations and inequalities',[2,3,4,5]],
-             ['Term 1 · Week 3 — Straight-line graphs',[6,7,8,9]],
-             ['Term 1 · Week 4 — Parallel lines and simultaneous equations',[10,11,12,13]],
-             ['Term 1 · Week 5 — Elimination, applications, regions, review',[14,15,16,17]]];
-function buildMenu(){
-  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main2);font-weight:600;text-decoration:none">⌂ Course home</a></p>
-  <h1>Chapter 1 — Linear Relations</h1>
-  <p class="sub">10 Methods · Unit 1 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 1 Weeks 1–5 · CAT 1 (Units 1 &amp; 2) in Week 8<br>
-  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
-  for(const [wn,ids] of WEEKS){
-    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
-    for(const id of ids){const L=LESSONS[id];
-      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
-      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
-      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
-    h+=`</div></div>`;}
-  menuEl.innerHTML=h;
-}
-function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
-function goMenu(){stage.style.display='none';menuEl.style.display='block';}
-function render(){
-  const L=LESSONS[li],S=L.slides[si];
-  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
-  slideEl.scrollTop=0;
-  hlbl.textContent=`${L.code} — ${L.nm}`;
-  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
-  fill.style.width=((si+1)/L.slides.length*100)+'%';
-}
-function frags(){return [...slideEl.querySelectorAll('.frag')];}
-function nav(dir){
-  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
-    if(f){f.classList.add('on');return;}
-    if(si<LESSONS[li].slides.length-1){si++;render();}
-    else if(li<LESSONS.length-1){openLesson(li+1);}
-    else goMenu();
-  }else{const on=frags().filter(x=>x.classList.contains('on'));
-    if(on.length){on[on.length-1].classList.remove('on');return;}
-    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
-    else goMenu();
-  }
-}
-document.addEventListener('keydown',e=>{
-  if(stage.style.display!=='flex')return;
-  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
-  if(e.key==='Escape')goMenu();
-});
-buildMenu();
-</script>
+</main>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>&ndash;<span class="key">9</span> jump to lesson</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+<script src="../../assets/js/deck.js" defer></script>
 </body>
 </html>

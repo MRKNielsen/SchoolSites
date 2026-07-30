@@ -173,6 +173,8 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 }
 .section-slide h1, .section-slide h2 { color: #fff; }
 .section-slide .kicker { font-size: 18px; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
+.section-slide .goals-lbl { font-weight: 700; opacity: .9; margin-top: 20px; }
+.section-slide .goals-lbl + ul { margin-top: 8px; }
 .section-slide ul { margin: 20px 0 0 26px; max-width: 900px; }
 .section-slide li { font-size: 21px; opacity: .9; margin-bottom: 10px; }
 .chip {
@@ -240,6 +242,40 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .steps li.ans .stepno { background: var(--neg); }
 .frag { visibility: hidden; }
 .frag.on, .frag.shown { visibility: visible; animation: slideIn .3s ease; }
+
+/* Numbered work-step cards — <div class="step frag"><span class="n">1</span><span>…</span></div>
+   (sequential working shown one line at a time; pairs with .frag reveals) */
+.step {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  padding: 12px 18px; margin: 8px 0;
+}
+.step .n {
+  background: var(--accent-dark); color: #fff; border-radius: 50%;
+  min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .95em; flex: none;
+}
+/* Pronunciation / aside text inside worked steps */
+.say { color: var(--muted); font-style: italic; }
+
+/* Small italic aside / reminder line */
+.note { font-size: .95em; color: var(--muted); font-style: italic; margin-top: 10px; }
+.section-slide .note { color: rgba(255,255,255,.75); }
+
+/* Inline formula chip */
+.formula {
+  display: inline-block; font-family: var(--font-math);
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border: 2px solid var(--accent); border-radius: var(--radius-sm);
+  padding: 8px 18px; margin: 8px 8px 4px 0; font-size: 1.1em;
+}
+
+/* Vocabulary table — word / say it / meaning */
+table.tbl.vocab td:first-child { font-weight: 700; color: var(--accent-dark); white-space: nowrap; }
+table.tbl.vocab td:nth-child(2) { font-style: italic; color: var(--muted); white-space: nowrap; }
+
+/* Exercise-set box keeps its list tidy */
+.box.exset ul { margin-left: 4px; }
 
 /* Q&A card with hidden answer */
 .qcard { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 12px; }

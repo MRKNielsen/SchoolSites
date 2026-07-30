@@ -584,6 +584,21 @@ svg .svg-vanish:has(~ .svg-step.revealed) { opacity: 0; }
   color: rgba(255,255,255,0.92);
 }
 
+/* ---- Text that wraps around a figure ----
+   .textflow establishes a block formatting context so the float is
+   contained; .wrap-right floats the figure and the body text, bullets and
+   callouts flow around it, then continue full width underneath. */
+.textflow { display: flow-root; flex: 1; min-height: 0; }
+.wrap-right {
+  float: right;
+  width: 50%;
+  margin: 0 0 1.4vh 2.4vw;
+}
+.wrap-right .diagram { margin: 0; }
+@media (max-width: 900px) {
+  .wrap-right { float: none; width: 100%; margin: 0 0 1.4vh; }
+}
+
 /* ---- Diagram holder ---- */
 .diagram {
   background: var(--white);

@@ -49,6 +49,10 @@ exercises every component and has a theme switcher. Start new decks from
   variants: `title-slide`, `section-slide`, `exit-slide`.
 - Callouts use the box system: `<div class="box key|defn|try|example|hint|answer|question|cas">`
   with a `<span class="lbl">Label</span>` first child.
+- Other content components: `.step`/`.n` numbered working cards,
+  `.formula` inline chip, `table.tbl.vocab` word/say-it/meaning tables,
+  `.say` and `.note` asides. `.key` on its own is a *keyboard cap* — a
+  key-idea callout is `.box.key`.
 - Gradual release tags: `<span class="phase-tag ido|wedo|youdo|cas">`.
 - Maths: prefer the CSS markup (`.m`, `.mu`, `.fr`/`.nu`/`.de`, `.work`,
   `.bigeq`, `.eqbox`) over MathJax; MathJax is permitted where notation
@@ -91,7 +95,9 @@ to need it, full width, ~80vh, card-style border.)
 
 ## Legacy content
 
-Old decks (year11-methods ch9/11, year12-specialist term-3,
-10methods-primer, year7-science bio-ecosystems) still carry inline styles.
-They are being rebuilt onto the canonical system — when touching one,
-port it to the shared assets rather than extending its inline styles.
+Ported already: year12-specialist (term-3 decks, hub, landing) and
+year10-mathematics/10methods-primer (9 decks + hub).
+
+Still on inline styles: year11-methods ch9/11, year7-science
+bio-ecosystems. When touching one, port it to the shared assets rather
+than extending its inline styles.

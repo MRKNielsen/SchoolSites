@@ -3,356 +3,448 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapter 3F–3L — Exponentials &amp; Logarithms | 10 Methods</title>
-<style>
-  :root{
-    --navy:#1F4E79; --bg:#f4f6f9; --card:#ffffff; --ink:#1c2733;
-    --adj:#2266aa; --gold:#b7791f; --rev:#2e7d32; --test:#c05621; --main:#1e8449; --main2:#14603a;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
-  #menu{position:fixed;inset:0;overflow-y:auto;background:var(--bg);padding:34px 46px;z-index:50}
-  #menu h1{color:var(--main);font-size:2.1rem}
-  #menu .sub{color:#555;margin:6px 0 22px;font-size:1.02rem}
-  .wk{margin-bottom:20px}
-  .wk h2{font-size:1.05rem;color:var(--main);border-bottom:2px solid var(--main);padding-bottom:4px;margin-bottom:10px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
-  .card{background:var(--card);border:1px solid #dde4ec;border-left:6px solid var(--main);border-radius:8px;
-        padding:12px 14px;cursor:pointer;transition:.15s}
-  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
-  .card .code{font-weight:700;color:var(--main);font-size:.95rem}
-  .card .nm{font-size:1.02rem;font-weight:600;margin:2px 0}
-  .card .vb{font-size:.8rem;color:#666;font-style:italic}
-  .card.rev{border-left-color:var(--rev)} .card.test{border-left-color:var(--test)}
-  #stage{position:fixed;inset:0;display:none;flex-direction:column}
-  #bar{height:6px;background:#dfe6ee}
-  #fill{height:100%;background:var(--main);width:0;transition:width .25s}
-  #head{display:flex;justify-content:space-between;align-items:center;padding:10px 26px;background:var(--main);color:#fff}
-  #head .l{font-weight:600;font-size:.95rem}
-  #head button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;
-               border-radius:6px;padding:4px 12px;cursor:pointer;font-size:.85rem}
-  #slide{flex:1;overflow-y:auto;padding:5vh 5vw;max-width:1150px;margin:0 auto;width:100%}
-  #foot{display:flex;justify-content:space-between;align-items:center;padding:8px 26px;color:#667;font-size:.85rem;background:#e9eef4}
-  #foot .keys{font-size:.8rem}
-  #foot button{background:var(--main);color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;margin-left:6px}
-  #foot button.ghost{background:#b9c6d4}
-  .stitle{color:var(--main);font-size:1.9rem;margin-bottom:18px}
-  .lesson-title h2{font-size:2.3rem;color:var(--main)} .lesson-title .code{font-size:1.1rem;color:var(--gold);font-weight:700;letter-spacing:.06em}
-  .li-box{background:var(--card);border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;margin-top:22px}
-  .li-box h3{font-size:1rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-  .li-box li{margin:6px 0 6px 20px;font-size:1.15rem}
-  table.vocab{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:1.08rem}
-  table.vocab th{background:var(--main);color:#fff;padding:9px 12px;text-align:left;font-size:.95rem}
-  table.vocab td{padding:9px 12px;border-bottom:1px solid #e5ebf2;vertical-align:top}
-  table.vocab td.t{font-weight:700;color:var(--main);white-space:nowrap}
-  table.vocab td.s{font-style:italic;color:#777;white-space:nowrap}
-  .key{background:var(--card);border:1px solid #dde4ec;border-radius:10px;padding:20px 24px;margin:12px 0;font-size:1.22rem;line-height:1.6}
-  .key .kt{font-weight:700;color:var(--main);display:block;margin-bottom:6px;font-size:1rem;text-transform:uppercase;letter-spacing:.05em}
-  .formula{background:#e9f5ee;border:2px solid var(--main);border-radius:10px;padding:14px 22px;display:inline-block;
-           font-size:1.4rem;margin:10px 8px 4px 0;font-family:Georgia,serif}
-  .q{background:#fff8e7;border-left:6px solid var(--gold);border-radius:8px;padding:16px 20px;font-size:1.25rem;margin-bottom:14px}
-  .q .tag{font-size:.85rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
-  .step{background:var(--card);border:1px solid #dde4ec;border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.18rem;display:flex;gap:14px;align-items:flex-start}
-  .step .n{background:var(--main);color:#fff;border-radius:50%;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem}
-  .ans{background:#e8f5e9;border-left:6px solid var(--rev);border-radius:8px;padding:14px 20px;font-size:1.22rem;margin:10px 0}
-  .hint{background:#f0f4ff;border-left:6px solid var(--adj);border-radius:8px;padding:12px 18px;font-size:1.1rem;margin:8px 0;font-style:italic}
-  .frame{background:var(--card);border:2px dashed var(--adj);border-radius:8px;padding:12px 18px;margin:8px 0;font-size:1.2rem}
-  .frame b{color:var(--adj)}
-  .exset{background:var(--card);border-radius:10px;border:1px solid #dde4ec;padding:22px 26px;font-size:1.2rem}
-  .exset h3{color:var(--main);margin-bottom:10px}
-  .exset li{margin:8px 0 8px 22px}
-  .pill{display:inline-block;background:#e9f5ee;border:1px solid var(--main);color:var(--main);border-radius:20px;padding:2px 12px;font-size:.9rem;font-weight:600;margin:2px}
-  .frag{visibility:hidden} .frag.on{visibility:visible;animation:up .3s}
-  @keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
-  .cols>div{flex:1;min-width:300px}
-  .fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
-  .fr .nu{border-bottom:2px solid currentColor;padding:0 6px}
-  .fr .de{padding:0 6px}
-  .say{font-size:.85rem;color:#888;font-style:italic}
-  .note{font-size:1rem;color:#666;margin-top:10px;font-style:italic}
-  svg text{font-family:'Segoe UI',sans-serif}
-  .center{text-align:center}
-  .chk{width:100%;border-collapse:collapse;background:var(--card);font-size:1.05rem}
-  .chk th{background:var(--main);color:#fff;padding:8px 12px;text-align:left}
-  .chk td{padding:8px 12px;border-bottom:1px solid #e5ebf2}
-</style>
+<title>Chapter 3F–3L — Exponentials &amp; Logarithms — 10 Methods Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
 </head>
-<body>
+<body class="deck-page theme-primer">
+<div class="progress"></div>
+<div class="lessontag">Chapter 3F–3L · Exponentials &amp; Logarithms</div>
+<a class="homebtn" href="index.html" title="Course home">&#8962; Course home</a>
+<main class="deck">
 
-<div id="menu"></div>
+<section class="slide section-slide">
+  <div class="kicker">10 Methods Primer</div>
+  <h1>Chapter 3F–3L — Exponentials &amp; Logarithms</h1>
+  <p>10 Methods · Unit 7 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 3 Wk 10 – Term 4 Wk 2 · assessed in the semester exam · <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>
+  <span class="chip">Use the course home page to jump to a lesson · <b>&rarr;</b> reveals then advances</span>
+</section>
 
-<div id="stage">
-  <div id="bar"><div id="fill"></div></div>
-  <div id="head">
-    <span class="l" id="hlbl"></span>
-    <button onclick="goMenu()">☰ Menu (Esc)</button>
-  </div>
-  <div id="slide"></div>
-  <div id="foot">
-    <span class="keys">← → arrow keys or buttons · Esc = menu</span>
-    <span id="pgs"></span>
-    <span>
-      <button class="ghost" onclick="nav(-1)">← Back</button>
-      <button onclick="nav(1)">Next →</button>
-    </span>
-  </div>
-</div>
+<section class="slide section-slide" data-lesson="1">
+  <div class="kicker">LESSON 1 — SECTION 3F</div>
+  <h1>Exponential relations and their graphs</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>recognise an exponential rule y = aˣ</li>
+    <li>sketch y = 2ˣ and label its features</li>
+    <li>identify the asymptote</li>
+  </ul>
 
-<script>
-/* ---------- helpers ---------- */
-const fr=(a,b)=>`<span class="fr"><span class="nu">${a}</span><span class="de">${b}</span></span>`;
-const vocab=rows=>`<table class="vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr>`+
-  rows.map(r=>`<tr><td class="t">${r[0]}</td><td class="s">${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</table>
-  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>`;
-const steps=arr=>arr.map((s,i)=>`<div class="step frag"><span class="n">${i+1}</span><span>${s}</span></div>`).join('');
-const exset=(name,items)=>`<div class="exset"><h3>📘 Your work: Exercise ${name}</h3><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>
-  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>`;
-function graf(o){
-  const W=o.w||310,H=o.h||250,[x0,x1]=o.xr,[y0,y1]=o.yr;
-  const X=x=>10+(x-x0)/(x1-x0)*(W-20), Y=y=>H-12-(y-y0)/(y1-y0)*(H-24);
-  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}">`;
-  if(y0<=0&&y1>=0)s+=`<line x1="6" y1="${Y(0).toFixed(1)}" x2="${W-6}" y2="${Y(0).toFixed(1)}" stroke="#888" stroke-width="1.5"/>
-   <text x="${W-16}" y="${(Y(0)+14).toFixed(1)}" font-size="12" fill="#666">${o.xlab||'x'}</text>`;
-  if(x0<=0&&x1>=0)s+=`<line x1="${X(0).toFixed(1)}" y1="6" x2="${X(0).toFixed(1)}" y2="${H-6}" stroke="#888" stroke-width="1.5"/>
-   <text x="${(X(0)+6).toFixed(1)}" y="16" font-size="12" fill="#666">${o.ylab||'y'}</text>`;
-  for(const v of o.hlines||[]){
-    s+=`<line x1="6" y1="${Y(v[0]).toFixed(1)}" x2="${W-6}" y2="${Y(v[0]).toFixed(1)}" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/>`;
-    if(v[1])s+=`<text x="${W-90}" y="${(Y(v[0])-6).toFixed(1)}" font-size="12" fill="#c05621" font-weight="bold">${v[1]}</text>`;
-  }
-  for(const c of o.curves){
-    let d='',pen=false;
-    for(let i=0;i<=120;i++){
-      const x=x0+(x1-x0)*i/120, y=c.f(x);
-      if(!isFinite(y)||y<y0-(y1-y0)*0.05||y>y1+(y1-y0)*0.05){pen=false;continue;}
-      d+=(pen?' L ':' M ')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true;
-    }
-    s+=`<path d="${d}" fill="none" stroke="${c.col||'#1e8449'}" stroke-width="2.6"${c.dash?' stroke-dasharray="6 4"':''}/>`;
-    if(c.lab)s+=`<text x="${X(c.lx).toFixed(1)}" y="${(Y(c.f(c.lx))-8).toFixed(1)}" font-size="13" fill="${c.col||'#1e8449'}" font-weight="bold">${c.lab}</text>`;
-  }
-  for(const m of o.marks||[]){
-    s+=`<circle cx="${X(m[0]).toFixed(1)}" cy="${Y(m[1]).toFixed(1)}" r="4" fill="#1F4E79"/>`;
-    if(m[2])s+=`<text x="${(X(m[0])+(m[3]??7)).toFixed(1)}" y="${(Y(m[1])+(m[4]??-8)).toFixed(1)}" font-size="12.5" fill="#1F4E79" font-weight="bold">${m[2]}</text>`;
-  }
-  return s+'</svg>';
-}
-/* log-scale number line */
-const logline=`<svg viewBox="0 0 560 110" width="540">
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">exponential</td><td class="s">ex-po-NEN-shul</td><td>a rule where x is in the power: y = 2ˣ</td></tr><tr><td class="t">base</td><td class="s">bayss</td><td>the number being powered — the 2 in y = 2ˣ</td></tr><tr><td class="t">asymptote</td><td class="s">AS-im-toht</td><td>a line the graph gets closer and closer to but never touches</td></tr><tr><td class="t">steep</td><td class="s">steep</td><td>rising very quickly</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F">
+  <h2>Key idea — the shape of y = 2ˣ</h2>
+  <div class="cols"><div><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="205.7" x2="304" y2="205.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="219.7" font-size="12" fill="var(--muted)">x</text><line x1="155.0" y1="6" x2="155.0" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="161.0" y="16" font-size="12" fill="var(--muted)">y</text><line x1="6" y1="205.7" x2="304" y2="205.7" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/><text x="220" y="199.7" font-size="12" fill="#c05621" font-weight="bold">asymptote y = 0</text><path d=" M 10.0 203.7 L 12.4 203.6 L 14.8 203.5 L 17.2 203.4 L 19.7 203.3 L 22.1 203.2 L 24.5 203.1 L 26.9 203.0 L 29.3 202.9 L 31.8 202.8 L 34.2 202.7 L 36.6 202.6 L 39.0 202.4 L 41.4 202.3 L 43.8 202.2 L 46.3 202.0 L 48.7 201.9 L 51.1 201.7 L 53.5 201.6 L 55.9 201.4 L 58.3 201.2 L 60.8 201.1 L 63.2 200.9 L 65.6 200.7 L 68.0 200.5 L 70.4 200.3 L 72.8 200.1 L 75.3 199.8 L 77.7 199.6 L 80.1 199.3 L 82.5 199.1 L 84.9 198.8 L 87.3 198.5 L 89.8 198.3 L 92.2 198.0 L 94.6 197.7 L 97.0 197.3 L 99.4 197.0 L 101.8 196.6 L 104.3 196.3 L 106.7 195.9 L 109.1 195.5 L 111.5 195.1 L 113.9 194.7 L 116.3 194.2 L 118.8 193.8 L 121.2 193.3 L 123.6 192.8 L 126.0 192.3 L 128.4 191.7 L 130.8 191.2 L 133.3 190.6 L 135.7 190.0 L 138.1 189.4 L 140.5 188.7 L 142.9 188.0 L 145.3 187.3 L 147.7 186.6 L 150.2 185.8 L 152.6 185.0 L 155.0 184.2 L 157.4 183.3 L 159.8 182.4 L 162.3 181.5 L 164.7 180.5 L 167.1 179.5 L 169.5 178.5 L 171.9 177.4 L 174.3 176.2 L 176.8 175.1 L 179.2 173.8 L 181.6 172.6 L 184.0 171.2 L 186.4 169.8 L 188.8 168.4 L 191.3 166.9 L 193.7 165.4 L 196.1 163.7 L 198.5 162.1 L 200.9 160.3 L 203.3 158.5 L 205.8 156.6 L 208.2 154.6 L 210.6 152.6 L 213.0 150.5 L 215.4 148.3 L 217.8 146.0 L 220.3 143.6 L 222.7 141.1 L 225.1 138.5 L 227.5 135.8 L 229.9 133.0 L 232.3 130.1 L 234.7 127.0 L 237.2 123.9 L 239.6 120.6 L 242.0 117.2 L 244.4 113.7 L 246.8 110.0 L 249.3 106.1 L 251.7 102.1 L 254.1 98.0 L 256.5 93.7 L 258.9 89.2 L 261.3 84.5 L 263.8 79.7 L 266.2 74.6 L 268.6 69.4 L 271.0 63.9 L 273.4 58.2 L 275.8 52.3 L 278.3 46.2 L 280.7 39.8 L 283.1 33.1 L 285.5 26.2 L 287.9 19.0 L 290.3 11.5 L 292.8 3.8" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="244.6" y="105.4" font-size="13" fill="#1e8449" font-weight="bold">y = 2ˣ</text><circle cx="155.0" cy="184.2" r="4" fill="var(--accent-dark)"/><text x="109.0" y="178.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 1)</text><circle cx="197.6" cy="162.7" r="4" fill="var(--accent-dark)"/><text x="205.6" y="164.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(1, 2)</text><circle cx="240.3" cy="119.6" r="4" fill="var(--accent-dark)"/><text x="248.3" y="121.6" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 4)</text></svg></div><div>
+  <div class="box key"><span class="lbl">Key features</span>y-intercept (0, 1) — because 2⁰ = 1.<br>Passes through (1, 2) — the base!<br>Asymptote: the x-axis (y = 0).</div>
+  <div class="box key frag"><span class="lbl">Left side</span>For negative x the graph gets tiny (2⁻³ = ⅛) but never reaches 0 — that is what “asymptote” means.</div></div></div>
+  <div class="box try frag">Say it: “The graph <b>approaches</b> y = 0 but never <b>touches</b> it.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F">
+  <h2>Worked example 1</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Sketch y = 3ˣ. Label the y-intercept, one more point, and the asymptote.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="208.5" x2="304" y2="208.5" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="222.5" font-size="12" fill="var(--muted)">x</text><line x1="160.0" y1="6" x2="160.0" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="166.0" y="16" font-size="12" fill="var(--muted)">y</text><line x1="6" y1="208.5" x2="304" y2="208.5" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/><text x="220" y="202.5" font-size="12" fill="#c05621" font-weight="bold">y = 0</text><path d=" M 10.0 207.8 L 12.4 207.8 L 14.8 207.7 L 17.3 207.7 L 19.7 207.6 L 22.1 207.6 L 24.5 207.5 L 26.9 207.5 L 29.3 207.4 L 31.8 207.3 L 34.2 207.3 L 36.6 207.2 L 39.0 207.1 L 41.4 207.1 L 43.8 207.0 L 46.3 206.9 L 48.7 206.8 L 51.1 206.7 L 53.5 206.6 L 55.9 206.5 L 58.3 206.4 L 60.8 206.3 L 63.2 206.2 L 65.6 206.1 L 68.0 205.9 L 70.4 205.8 L 72.8 205.6 L 75.3 205.5 L 77.7 205.3 L 80.1 205.1 L 82.5 204.9 L 84.9 204.7 L 87.3 204.5 L 89.8 204.3 L 92.2 204.1 L 94.6 203.9 L 97.0 203.6 L 99.4 203.3 L 101.8 203.0 L 104.3 202.7 L 106.7 202.4 L 109.1 202.1 L 111.5 201.8 L 113.9 201.4 L 116.3 201.0 L 118.8 200.6 L 121.2 200.1 L 123.6 199.7 L 126.0 199.2 L 128.4 198.7 L 130.8 198.2 L 133.3 197.6 L 135.7 197.0 L 138.1 196.4 L 140.5 195.7 L 142.9 195.0 L 145.3 194.3 L 147.8 193.5 L 150.2 192.7 L 152.6 191.8 L 155.0 190.9 L 157.4 190.0 L 159.8 188.9 L 162.3 187.9 L 164.7 186.7 L 167.1 185.6 L 169.5 184.3 L 171.9 183.0 L 174.3 181.6 L 176.8 180.1 L 179.2 178.6 L 181.6 176.9 L 184.0 175.2 L 186.4 173.4 L 188.8 171.5 L 191.3 169.5 L 193.7 167.3 L 196.1 165.1 L 198.5 162.7 L 200.9 160.2 L 203.3 157.6 L 205.8 154.8 L 208.2 151.9 L 210.6 148.8 L 213.0 145.5 L 215.4 142.1 L 217.8 138.5 L 220.3 134.7 L 222.7 130.6 L 225.1 126.4 L 227.5 121.9 L 229.9 117.2 L 232.3 112.2 L 234.8 107.0 L 237.2 101.4 L 239.6 95.6 L 242.0 89.4 L 244.4 82.9 L 246.8 76.1 L 249.2 68.9 L 251.7 61.2 L 254.1 53.2 L 256.5 44.7 L 258.9 35.8 L 261.3 26.4 L 263.8 16.5 L 266.2 6.0" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="245.0" y="73.3" font-size="13" fill="#1e8449" font-weight="bold">y = 3ˣ</text><circle cx="160.0" cy="188.9" r="4" fill="var(--accent-dark)"/><text x="114.0" y="182.9" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 1)</text><circle cx="210.0" cy="149.6" r="4" fill="var(--accent-dark)"/><text x="218.0" y="149.6" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(1, 3)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>y-intercept:</b> 3⁰ = 1 → (0, 1). Every y = aˣ passes through (0, 1).</span></div><div class="step frag"><span class="n">2</span><span><b>One more point:</b> x = 1 → y = 3 → (1, 3).</span></div><div class="step frag"><span class="n">3</span><span><b>Asymptote:</b> y = 0 — draw the curve hugging the x-axis on the left.</span></div><div class="step frag"><span class="n">4</span><span><b>Compare:</b> 3ˣ climbs faster than 2ˣ for x &gt; 0 (bigger base = steeper).</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>Sketch y = 2ˣ and y = 2⁻ˣ on the same axes. What transformation links them?</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="205.7" x2="304" y2="205.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="219.7" font-size="12" fill="var(--muted)">x</text><line x1="155.0" y1="6" x2="155.0" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="161.0" y="16" font-size="12" fill="var(--muted)">y</text><path d=" M 10.0 203.7 L 12.4 203.6 L 14.8 203.5 L 17.2 203.4 L 19.7 203.3 L 22.1 203.2 L 24.5 203.1 L 26.9 203.0 L 29.3 202.9 L 31.8 202.8 L 34.2 202.7 L 36.6 202.6 L 39.0 202.4 L 41.4 202.3 L 43.8 202.2 L 46.3 202.0 L 48.7 201.9 L 51.1 201.7 L 53.5 201.6 L 55.9 201.4 L 58.3 201.2 L 60.8 201.1 L 63.2 200.9 L 65.6 200.7 L 68.0 200.5 L 70.4 200.3 L 72.8 200.1 L 75.3 199.8 L 77.7 199.6 L 80.1 199.3 L 82.5 199.1 L 84.9 198.8 L 87.3 198.5 L 89.8 198.3 L 92.2 198.0 L 94.6 197.7 L 97.0 197.3 L 99.4 197.0 L 101.8 196.6 L 104.3 196.3 L 106.7 195.9 L 109.1 195.5 L 111.5 195.1 L 113.9 194.7 L 116.3 194.2 L 118.8 193.8 L 121.2 193.3 L 123.6 192.8 L 126.0 192.3 L 128.4 191.7 L 130.8 191.2 L 133.3 190.6 L 135.7 190.0 L 138.1 189.4 L 140.5 188.7 L 142.9 188.0 L 145.3 187.3 L 147.7 186.6 L 150.2 185.8 L 152.6 185.0 L 155.0 184.2 L 157.4 183.3 L 159.8 182.4 L 162.3 181.5 L 164.7 180.5 L 167.1 179.5 L 169.5 178.5 L 171.9 177.4 L 174.3 176.2 L 176.8 175.1 L 179.2 173.8 L 181.6 172.6 L 184.0 171.2 L 186.4 169.8 L 188.8 168.4 L 191.3 166.9 L 193.7 165.4 L 196.1 163.7 L 198.5 162.1 L 200.9 160.3 L 203.3 158.5 L 205.8 156.6 L 208.2 154.6 L 210.6 152.6 L 213.0 150.5 L 215.4 148.3 L 217.8 146.0 L 220.3 143.6 L 222.7 141.1 L 225.1 138.5 L 227.5 135.8 L 229.9 133.0 L 232.3 130.1 L 234.7 127.0 L 237.2 123.9 L 239.6 120.6 L 242.0 117.2 L 244.4 113.7 L 246.8 110.0 L 249.3 106.1 L 251.7 102.1 L 254.1 98.0 L 256.5 93.7 L 258.9 89.2 L 261.3 84.5 L 263.8 79.7 L 266.2 74.6 L 268.6 69.4 L 271.0 63.9 L 273.4 58.2 L 275.8 52.3 L 278.3 46.2 L 280.7 39.8 L 283.1 33.1 L 285.5 26.2 L 287.9 19.0 L 290.3 11.5 L 292.8 3.8" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="244.6" y="105.4" font-size="13" fill="#1e8449" font-weight="bold">y = 2ˣ</text><path d=" M 17.2 3.8 L 19.7 11.5 L 22.1 19.0 L 24.5 26.2 L 26.9 33.1 L 29.3 39.8 L 31.8 46.2 L 34.2 52.3 L 36.6 58.2 L 39.0 63.9 L 41.4 69.4 L 43.8 74.6 L 46.3 79.7 L 48.7 84.5 L 51.1 89.2 L 53.5 93.7 L 55.9 98.0 L 58.3 102.1 L 60.8 106.1 L 63.2 110.0 L 65.6 113.7 L 68.0 117.2 L 70.4 120.6 L 72.8 123.9 L 75.3 127.0 L 77.7 130.1 L 80.1 133.0 L 82.5 135.8 L 84.9 138.5 L 87.3 141.1 L 89.8 143.6 L 92.2 146.0 L 94.6 148.3 L 97.0 150.5 L 99.4 152.6 L 101.8 154.6 L 104.3 156.6 L 106.7 158.5 L 109.1 160.3 L 111.5 162.1 L 113.9 163.7 L 116.3 165.4 L 118.8 166.9 L 121.2 168.4 L 123.6 169.8 L 126.0 171.2 L 128.4 172.6 L 130.8 173.8 L 133.3 175.1 L 135.7 176.2 L 138.1 177.4 L 140.5 178.5 L 142.9 179.5 L 145.3 180.5 L 147.7 181.5 L 150.2 182.4 L 152.6 183.3 L 155.0 184.2 L 157.4 185.0 L 159.8 185.8 L 162.3 186.6 L 164.7 187.3 L 167.1 188.0 L 169.5 188.7 L 171.9 189.4 L 174.3 190.0 L 176.8 190.6 L 179.2 191.2 L 181.6 191.7 L 184.0 192.3 L 186.4 192.8 L 188.8 193.3 L 191.3 193.8 L 193.7 194.2 L 196.1 194.7 L 198.5 195.1 L 200.9 195.5 L 203.3 195.9 L 205.8 196.3 L 208.2 196.6 L 210.6 197.0 L 213.0 197.3 L 215.4 197.7 L 217.8 198.0 L 220.3 198.3 L 222.7 198.5 L 225.1 198.8 L 227.5 199.1 L 229.9 199.3 L 232.3 199.6 L 234.7 199.8 L 237.2 200.1 L 239.6 200.3 L 242.0 200.5 L 244.4 200.7 L 246.8 200.9 L 249.3 201.1 L 251.7 201.2 L 254.1 201.4 L 256.5 201.6 L 258.9 201.7 L 261.3 201.9 L 263.8 202.0 L 266.2 202.2 L 268.6 202.3 L 271.0 202.4 L 273.4 202.6 L 275.8 202.7 L 278.3 202.8 L 280.7 202.9 L 283.1 203.0 L 285.5 203.1 L 287.9 203.2 L 290.3 203.3 L 292.8 203.4 L 295.2 203.5 L 297.6 203.6 L 300.0 203.7" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="22.8" y="13.2" font-size="13" fill="var(--ido)" font-weight="bold">y = 2⁻ˣ</text><circle cx="155.0" cy="184.2" r="4" fill="var(--accent-dark)"/><text x="163.0" y="200.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, 1)</text></svg></div></div>
+  <div class="box hint frag">Hint: swap x for −x… which axis is the mirror?</div>
+  <div class="box answer frag">✔ y = 2⁻ˣ is y = 2ˣ <b>reflected in the y-axis</b>. Both share (0, 1) and asymptote y = 0. 2⁻ˣ shows <b>decay</b>.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3F</span><ul><li>Plot from a table first, then sketch directly</li><li>Always draw and label the asymptote — it is a feature, like a TP</li><li>Frame: “The graph approaches ___ but never touches it.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="2">
+  <div class="kicker">LESSON 2 — SECTION 3F (TECHNOLOGY)</div>
+  <h1>Translating exponential graphs</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>predict how +k and −k move the graph AND the asymptote</li>
+    <li>find x-intercepts when the graph is shifted down</li>
+    <li>check predictions with Desmos</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F+">
+  <h2>Key idea — the asymptote moves too</h2>
+  <div class="cols"><div><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="133.7" x2="304" y2="133.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="147.7" font-size="12" fill="var(--muted)">x</text><line x1="143.2" y1="6" x2="143.2" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="149.2" y="16" font-size="12" fill="var(--muted)">y</text><line x1="6" y1="203.2" x2="304" y2="203.2" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/><text x="220" y="197.2" font-size="12" fill="#c05621" font-weight="bold">y = −4</text><path d=" M 10.0 201.6 L 12.4 201.5 L 14.8 201.4 L 17.3 201.4 L 19.7 201.3 L 22.1 201.2 L 24.5 201.1 L 26.9 201.0 L 29.3 200.9 L 31.8 200.8 L 34.2 200.7 L 36.6 200.6 L 39.0 200.5 L 41.4 200.4 L 43.8 200.2 L 46.3 200.1 L 48.7 200.0 L 51.1 199.8 L 53.5 199.7 L 55.9 199.5 L 58.3 199.4 L 60.8 199.2 L 63.2 199.0 L 65.6 198.8 L 68.0 198.6 L 70.4 198.4 L 72.8 198.2 L 75.3 198.0 L 77.7 197.8 L 80.1 197.5 L 82.5 197.3 L 84.9 197.0 L 87.3 196.8 L 89.8 196.5 L 92.2 196.2 L 94.6 195.9 L 97.0 195.6 L 99.4 195.2 L 101.8 194.9 L 104.3 194.5 L 106.7 194.1 L 109.1 193.7 L 111.5 193.3 L 113.9 192.9 L 116.3 192.4 L 118.7 192.0 L 121.2 191.5 L 123.6 191.0 L 126.0 190.4 L 128.4 189.9 L 130.8 189.3 L 133.3 188.7 L 135.7 188.0 L 138.1 187.4 L 140.5 186.7 L 142.9 185.9 L 145.3 185.2 L 147.8 184.4 L 150.2 183.6 L 152.6 182.7 L 155.0 181.8 L 157.4 180.9 L 159.8 179.9 L 162.3 178.9 L 164.7 177.8 L 167.1 176.7 L 169.5 175.6 L 171.9 174.4 L 174.3 173.1 L 176.8 171.8 L 179.2 170.4 L 181.6 169.0 L 184.0 167.5 L 186.4 165.9 L 188.8 164.3 L 191.3 162.6 L 193.7 160.8 L 196.1 159.0 L 198.5 157.0 L 200.9 155.0 L 203.3 152.9 L 205.7 150.7 L 208.2 148.4 L 210.6 146.0 L 213.0 143.5 L 215.4 140.9 L 217.8 138.2 L 220.3 135.4 L 222.7 132.4 L 225.1 129.3 L 227.5 126.1 L 229.9 122.7 L 232.3 119.2 L 234.8 115.5 L 237.2 111.7 L 239.6 107.7 L 242.0 103.5 L 244.4 99.2 L 246.8 94.6 L 249.3 89.9 L 251.7 84.9 L 254.1 79.8 L 256.5 74.4 L 258.9 68.7 L 261.3 62.9 L 263.8 56.7 L 266.2 50.3 L 268.6 43.7 L 271.0 36.7 L 273.4 29.4 L 275.8 21.8 L 278.3 13.9 L 280.7 5.6" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="237.3" y="103.5" font-size="13" fill="#1e8449" font-weight="bold">y = 2ˣ − 4</text><circle cx="143.2" cy="185.8" r="4" fill="var(--accent-dark)"/><text x="151.2" y="201.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, −3)</text><circle cx="221.6" cy="133.7" r="4" fill="var(--accent-dark)"/><text x="229.6" y="127.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 0)</text></svg></div><div>
+  <div class="box key"><span class="lbl">Key idea</span>y = 2ˣ + k slides the whole graph (and its asymptote) up or down by k.</div>
+  <div class="box key frag"><span class="lbl">New feature!</span>Shift <b>down</b> and the graph now crosses the x-axis → an x-intercept appears.</div></div></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F+">
+  <h2>Worked example 2</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>For y = 2ˣ − 4, find the asymptote, y-intercept and x-intercept.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="133.7" x2="304" y2="133.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="147.7" font-size="12" fill="var(--muted)">x</text><line x1="143.2" y1="6" x2="143.2" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="149.2" y="16" font-size="12" fill="var(--muted)">y</text><line x1="6" y1="203.2" x2="304" y2="203.2" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/><text x="220" y="197.2" font-size="12" fill="#c05621" font-weight="bold">y = −4</text><path d=" M 10.0 201.6 L 12.4 201.5 L 14.8 201.4 L 17.3 201.4 L 19.7 201.3 L 22.1 201.2 L 24.5 201.1 L 26.9 201.0 L 29.3 200.9 L 31.8 200.8 L 34.2 200.7 L 36.6 200.6 L 39.0 200.5 L 41.4 200.4 L 43.8 200.2 L 46.3 200.1 L 48.7 200.0 L 51.1 199.8 L 53.5 199.7 L 55.9 199.5 L 58.3 199.4 L 60.8 199.2 L 63.2 199.0 L 65.6 198.8 L 68.0 198.6 L 70.4 198.4 L 72.8 198.2 L 75.3 198.0 L 77.7 197.8 L 80.1 197.5 L 82.5 197.3 L 84.9 197.0 L 87.3 196.8 L 89.8 196.5 L 92.2 196.2 L 94.6 195.9 L 97.0 195.6 L 99.4 195.2 L 101.8 194.9 L 104.3 194.5 L 106.7 194.1 L 109.1 193.7 L 111.5 193.3 L 113.9 192.9 L 116.3 192.4 L 118.7 192.0 L 121.2 191.5 L 123.6 191.0 L 126.0 190.4 L 128.4 189.9 L 130.8 189.3 L 133.3 188.7 L 135.7 188.0 L 138.1 187.4 L 140.5 186.7 L 142.9 185.9 L 145.3 185.2 L 147.8 184.4 L 150.2 183.6 L 152.6 182.7 L 155.0 181.8 L 157.4 180.9 L 159.8 179.9 L 162.3 178.9 L 164.7 177.8 L 167.1 176.7 L 169.5 175.6 L 171.9 174.4 L 174.3 173.1 L 176.8 171.8 L 179.2 170.4 L 181.6 169.0 L 184.0 167.5 L 186.4 165.9 L 188.8 164.3 L 191.3 162.6 L 193.7 160.8 L 196.1 159.0 L 198.5 157.0 L 200.9 155.0 L 203.3 152.9 L 205.7 150.7 L 208.2 148.4 L 210.6 146.0 L 213.0 143.5 L 215.4 140.9 L 217.8 138.2 L 220.3 135.4 L 222.7 132.4 L 225.1 129.3 L 227.5 126.1 L 229.9 122.7 L 232.3 119.2 L 234.8 115.5 L 237.2 111.7 L 239.6 107.7 L 242.0 103.5 L 244.4 99.2 L 246.8 94.6 L 249.3 89.9 L 251.7 84.9 L 254.1 79.8 L 256.5 74.4 L 258.9 68.7 L 261.3 62.9 L 263.8 56.7 L 266.2 50.3 L 268.6 43.7 L 271.0 36.7 L 273.4 29.4 L 275.8 21.8 L 278.3 13.9 L 280.7 5.6" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="237.3" y="103.5" font-size="13" fill="#1e8449" font-weight="bold">y = 2ˣ − 4</text><circle cx="143.2" cy="185.8" r="4" fill="var(--accent-dark)"/><text x="151.2" y="201.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(0, −3)</text><circle cx="221.6" cy="133.7" r="4" fill="var(--accent-dark)"/><text x="229.6" y="127.7" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(2, 0)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Asymptote:</b> y = 0 moves down 4 → y = −4.</span></div><div class="step frag"><span class="n">2</span><span><b>y-intercept:</b> x = 0 → y = 1 − 4 = −3.</span></div><div class="step frag"><span class="n">3</span><span><b>x-intercept:</b> 2ˣ − 4 = 0 → 2ˣ = 4 → x = 2.</span></div><div class="step frag"><span class="n">4</span><span><b>Check on the graph:</b> curve crosses at (2, 0) ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F+">
+  <h2>Predict → check → correct</h2>
+  <div class="box key"><span class="lbl">Desmos routine</span>1️⃣ Predict asymptote + intercepts on your whiteboard → 2️⃣ type the rule → 3️⃣ if wrong, name the part you missed.</div>
+  <div class="box question frag"><span class="lbl">Speed round (60 s each)</span>a) y = 2ˣ + 3 &nbsp; b) y = 3ˣ − 9 &nbsp; c) y = 2ˣ − 1</div>
+  <div class="box answer frag">✔ a) asymptote y = 3, y-int 4, no x-int · b) asymptote y = −9, y-int −8, x-int x = 2 · c) asymptote y = −1, y-int 0 (through the origin!)</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3F+">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3F (finish)</span><ul><li>Finish 3F including translated graphs</li><li>Desmos to CHECK only — predict first, every time</li><li>Exit ticket: rule with asymptote y = −2 crossing the y-axis at −1. (One answer: y = 2ˣ − 2.)</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="3">
+  <div class="kicker">LESSON 3 — SECTION 3G</div>
+  <h1>Exponential growth and decay</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>write a growth or decay rule from a percentage rate</li>
+    <li>calculate future amounts</li>
+    <li>recognise growth (rate added) vs decay (rate subtracted)</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3G">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">initial amount A₀</td><td class="s">in-ISH-al</td><td>the starting value — at time zero</td></tr><tr><td class="t">growth rate r%</td><td class="s">grohth</td><td>the percentage increase each time period</td></tr><tr><td class="t">decay</td><td class="s">de-KAY</td><td>decreasing by a percentage each period — losing value</td></tr><tr><td class="t">per annum (p.a.)</td><td class="s">per AN-um</td><td>each year</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3G">
+  <h2>Key idea — the growth/decay rule</h2>
+  <div class="center">
+  <span class="formula">A = A₀ (1 + <span class="fr"><span class="nu">r</span><span class="de">100</span></span>)ⁿ &nbsp; growth</span>
+  <span class="formula">A = A₀ (1 − <span class="fr"><span class="nu">r</span><span class="de">100</span></span>)ⁿ &nbsp; decay</span></div>
+  <div class="box key frag"><span class="lbl">Translate the percentage</span>grow 3% → multiply by <b>1.03</b> each year · lose 12% → multiply by <b>0.88</b> each year.</div>
+  <div class="box try frag">“Growing 3% each year means × 1.03, n times.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3G">
+  <h2>Worked example 3</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>A town of 2000 people grows by 3% per year. Write the rule and find the population after 5 years.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="224.2" x2="304" y2="224.2" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="238.2" font-size="12" fill="var(--muted)">n (years)</text><line x1="20.7" y1="6" x2="20.7" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="26.7" y="16" font-size="12" fill="var(--muted)">A</text><path d=" M 10.0 134.6 L 12.4 134.0 L 14.8 133.4 L 17.3 132.8 L 19.7 132.2 L 22.1 131.6 L 24.5 131.0 L 26.9 130.3 L 29.3 129.7 L 31.8 129.1 L 34.2 128.4 L 36.6 127.8 L 39.0 127.2 L 41.4 126.5 L 43.8 125.9 L 46.3 125.2 L 48.7 124.5 L 51.1 123.9 L 53.5 123.2 L 55.9 122.5 L 58.3 121.9 L 60.8 121.2 L 63.2 120.5 L 65.6 119.8 L 68.0 119.1 L 70.4 118.4 L 72.8 117.7 L 75.3 117.0 L 77.7 116.3 L 80.1 115.6 L 82.5 114.8 L 84.9 114.1 L 87.3 113.4 L 89.7 112.6 L 92.2 111.9 L 94.6 111.1 L 97.0 110.4 L 99.4 109.6 L 101.8 108.9 L 104.3 108.1 L 106.7 107.3 L 109.1 106.5 L 111.5 105.7 L 113.9 105.0 L 116.3 104.2 L 118.8 103.4 L 121.2 102.6 L 123.6 101.7 L 126.0 100.9 L 128.4 100.1 L 130.8 99.3 L 133.3 98.4 L 135.7 97.6 L 138.1 96.8 L 140.5 95.9 L 142.9 95.1 L 145.3 94.2 L 147.8 93.3 L 150.2 92.4 L 152.6 91.6 L 155.0 90.7 L 157.4 89.8 L 159.8 88.9 L 162.3 88.0 L 164.7 87.1 L 167.1 86.2 L 169.5 85.3 L 171.9 84.3 L 174.3 83.4 L 176.8 82.5 L 179.2 81.5 L 181.6 80.6 L 184.0 79.6 L 186.4 78.6 L 188.8 77.7 L 191.3 76.7 L 193.7 75.7 L 196.1 74.7 L 198.5 73.7 L 200.9 72.7 L 203.3 71.7 L 205.8 70.7 L 208.2 69.7 L 210.6 68.6 L 213.0 67.6 L 215.4 66.5 L 217.8 65.5 L 220.3 64.4 L 222.7 63.4 L 225.1 62.3 L 227.5 61.2 L 229.9 60.1 L 232.3 59.0 L 234.8 57.9 L 237.2 56.8 L 239.6 55.7 L 242.0 54.6 L 244.4 53.4 L 246.8 52.3 L 249.3 51.2 L 251.7 50.0 L 254.1 48.8 L 256.5 47.7 L 258.9 46.5 L 261.3 45.3 L 263.8 44.1 L 266.2 42.9 L 268.6 41.7 L 271.0 40.5 L 273.4 39.3 L 275.8 38.0 L 278.3 36.8 L 280.7 35.5 L 283.1 34.3 L 285.5 33.0 L 287.9 31.7 L 290.3 30.5 L 292.8 29.2 L 295.2 27.9 L 297.6 26.5 L 300.0 25.2" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="106.7" y="99.3" font-size="13" fill="#1e8449" font-weight="bold">A = 2000(1.03)ⁿ</text><circle cx="20.7" cy="131.9" r="4" fill="var(--accent-dark)"/><text x="12.7" y="149.9" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">2000</text><circle cx="74.4" cy="117.2" r="4" fill="var(--accent-dark)"/><text x="82.4" y="121.2" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(5, ≈2319)</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>Rule:</b> growth → A = 2000(1.03)ⁿ</span></div><div class="step frag"><span class="n">2</span><span><b>Substitute n = 5:</b> A = 2000 × 1.03⁵</span></div><div class="step frag"><span class="n">3</span><span><b>Calculate:</b> A = 2000 × 1.15927… ≈ 2318.5</span></div><div class="step frag"><span class="n">4</span><span><b>Answer in words:</b> “After 5 years the population is about <b>2319 people</b>.”</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3G">
+  <h2>Your turn</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Your turn</span>A $30 000 car loses 12% of its value each year. Write the rule and find its value after 3 years (nearest dollar).</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="219.2" x2="304" y2="219.2" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="233.2" font-size="12" fill="var(--muted)">n</text><line x1="23.2" y1="6" x2="23.2" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="29.2" y="16" font-size="12" fill="var(--muted)">V</text><path d=" M 10.0 18.4 L 12.4 20.7 L 14.8 23.1 L 17.3 25.3 L 19.7 27.6 L 22.1 29.8 L 24.5 32.0 L 26.9 34.2 L 29.3 36.4 L 31.8 38.5 L 34.2 40.6 L 36.6 42.7 L 39.0 44.7 L 41.4 46.8 L 43.8 48.8 L 46.3 50.8 L 48.7 52.7 L 51.1 54.7 L 53.5 56.6 L 55.9 58.5 L 58.3 60.3 L 60.8 62.2 L 63.2 64.0 L 65.6 65.8 L 68.0 67.6 L 70.4 69.4 L 72.8 71.1 L 75.3 72.9 L 77.7 74.6 L 80.1 76.2 L 82.5 77.9 L 84.9 79.6 L 87.3 81.2 L 89.7 82.8 L 92.2 84.4 L 94.6 85.9 L 97.0 87.5 L 99.4 89.0 L 101.8 90.5 L 104.3 92.0 L 106.7 93.5 L 109.1 95.0 L 111.5 96.4 L 113.9 97.9 L 116.3 99.3 L 118.8 100.7 L 121.2 102.1 L 123.6 103.4 L 126.0 104.8 L 128.4 106.1 L 130.8 107.4 L 133.3 108.7 L 135.7 110.0 L 138.1 111.3 L 140.5 112.5 L 142.9 113.8 L 145.3 115.0 L 147.8 116.2 L 150.2 117.4 L 152.6 118.6 L 155.0 119.8 L 157.4 120.9 L 159.8 122.1 L 162.3 123.2 L 164.7 124.3 L 167.1 125.4 L 169.5 126.5 L 171.9 127.6 L 174.3 128.7 L 176.8 129.7 L 179.2 130.8 L 181.6 131.8 L 184.0 132.8 L 186.4 133.8 L 188.8 134.8 L 191.3 135.8 L 193.7 136.8 L 196.1 137.7 L 198.5 138.7 L 200.9 139.6 L 203.3 140.5 L 205.7 141.5 L 208.2 142.4 L 210.6 143.3 L 213.0 144.1 L 215.4 145.0 L 217.8 145.9 L 220.3 146.7 L 222.7 147.6 L 225.1 148.4 L 227.5 149.2 L 229.9 150.1 L 232.3 150.9 L 234.8 151.7 L 237.2 152.4 L 239.6 153.2 L 242.0 154.0 L 244.4 154.7 L 246.8 155.5 L 249.3 156.2 L 251.7 157.0 L 254.1 157.7 L 256.5 158.4 L 258.9 159.1 L 261.3 159.8 L 263.8 160.5 L 266.2 161.2 L 268.6 161.9 L 271.0 162.5 L 273.4 163.2 L 275.8 163.8 L 278.3 164.5 L 280.7 165.1 L 283.1 165.8 L 285.5 166.4 L 287.9 167.0 L 290.3 167.6 L 292.8 168.2 L 295.2 168.8 L 297.6 169.4 L 300.0 170.0" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="112.8" y="89.2" font-size="13" fill="var(--ido)" font-weight="bold">V = 30000(0.88)ⁿ</text><circle cx="23.2" cy="30.8" r="4" fill="var(--accent-dark)"/><text x="29.2" y="44.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">30000</text><circle cx="102.3" cy="90.8" r="4" fill="var(--accent-dark)"/><text x="110.3" y="86.8" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">(3, ?)</text></svg></div></div>
+  <div class="box hint frag">Hint: decay → multiply by 0.88 three times.</div>
+  <div class="box answer frag">✔ V = 30000(0.88)ⁿ → V = 30000 × 0.88³ ≈ <b>$20 444</b>. “The car is worth about $20 444 after 3 years.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3G">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3G</span><ul><li>Write the rule BEFORE calculating — the rule earns marks</li><li>Growth or decay? Underline “increases/decreases” in the question</li><li>Answers in words with units ($, people, grams)</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="4">
+  <div class="kicker">LESSON 4 — SECTION 3H</div>
+  <h1>Compound interest</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>use A = P(1 + r/100)ⁿ</li>
+    <li>find the interest earned (A − P)</li>
+    <li>compare compound and simple interest</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3H">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">principal P</td><td class="s">PRIN-si-pal</td><td>the money you start with (invest or borrow)</td></tr><tr><td class="t">interest</td><td class="s">IN-trest</td><td>extra money earned (or charged)</td></tr><tr><td class="t">compound interest</td><td class="s">KOM-pownd</td><td>interest calculated on the principal AND past interest</td></tr><tr><td class="t">simple interest</td><td class="s">—</td><td>interest on the principal only — grows in a straight line</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3H">
+  <h2>Key idea — compound beats simple</h2>
+  <div class="cols"><div><svg viewBox="0 0 310 250" width="310"><line x1="23.2" y1="6" x2="23.2" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="29.2" y="16" font-size="12" fill="var(--muted)">A ($)</text><path d=" M 10.0 219.7 L 12.4 219.0 L 14.8 218.2 L 17.3 217.4 L 19.7 216.6 L 22.1 215.8 L 24.5 215.0 L 26.9 214.1 L 29.3 213.3 L 31.8 212.5 L 34.2 211.6 L 36.6 210.8 L 39.0 210.0 L 41.4 209.1 L 43.8 208.2 L 46.3 207.4 L 48.7 206.5 L 51.1 205.6 L 53.5 204.7 L 55.9 203.8 L 58.3 202.9 L 60.8 202.0 L 63.2 201.1 L 65.6 200.2 L 68.0 199.3 L 70.4 198.3 L 72.8 197.4 L 75.3 196.5 L 77.7 195.5 L 80.1 194.6 L 82.5 193.6 L 84.9 192.6 L 87.3 191.6 L 89.7 190.6 L 92.2 189.7 L 94.6 188.7 L 97.0 187.6 L 99.4 186.6 L 101.8 185.6 L 104.3 184.6 L 106.7 183.5 L 109.1 182.5 L 111.5 181.4 L 113.9 180.4 L 116.3 179.3 L 118.8 178.2 L 121.2 177.2 L 123.6 176.1 L 126.0 175.0 L 128.4 173.9 L 130.8 172.7 L 133.3 171.6 L 135.7 170.5 L 138.1 169.3 L 140.5 168.2 L 142.9 167.0 L 145.3 165.9 L 147.8 164.7 L 150.2 163.5 L 152.6 162.3 L 155.0 161.1 L 157.4 159.9 L 159.8 158.7 L 162.3 157.5 L 164.7 156.3 L 167.1 155.0 L 169.5 153.8 L 171.9 152.5 L 174.3 151.2 L 176.8 149.9 L 179.2 148.7 L 181.6 147.4 L 184.0 146.1 L 186.4 144.7 L 188.8 143.4 L 191.3 142.1 L 193.7 140.7 L 196.1 139.4 L 198.5 138.0 L 200.9 136.6 L 203.3 135.3 L 205.7 133.9 L 208.2 132.5 L 210.6 131.1 L 213.0 129.6 L 215.4 128.2 L 217.8 126.7 L 220.3 125.3 L 222.7 123.8 L 225.1 122.4 L 227.5 120.9 L 229.9 119.4 L 232.3 117.9 L 234.8 116.3 L 237.2 114.8 L 239.6 113.3 L 242.0 111.7 L 244.4 110.1 L 246.8 108.6 L 249.3 107.0 L 251.7 105.4 L 254.1 103.8 L 256.5 102.2 L 258.9 100.5 L 261.3 98.9 L 263.8 97.2 L 266.2 95.6 L 268.6 93.9 L 271.0 92.2 L 273.4 90.5 L 275.8 88.8 L 278.3 87.0 L 280.7 85.3 L 283.1 83.5 L 285.5 81.8 L 287.9 80.0 L 290.3 78.2 L 292.8 76.4 L 295.2 74.6 L 297.6 72.7 L 300.0 70.9" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="194.5" y="132.2" font-size="13" fill="#1e8449" font-weight="bold">compound</text><path d=" M 10.0 219.9 L 12.4 219.1 L 14.8 218.3 L 17.3 217.4 L 19.7 216.6 L 22.1 215.8 L 24.5 214.9 L 26.9 214.1 L 29.3 213.3 L 31.8 212.5 L 34.2 211.6 L 36.6 210.8 L 39.0 210.0 L 41.4 209.1 L 43.8 208.3 L 46.3 207.5 L 48.7 206.7 L 51.1 205.8 L 53.5 205.0 L 55.9 204.2 L 58.3 203.3 L 60.8 202.5 L 63.2 201.7 L 65.6 200.9 L 68.0 200.0 L 70.4 199.2 L 72.8 198.4 L 75.3 197.5 L 77.7 196.7 L 80.1 195.9 L 82.5 195.1 L 84.9 194.2 L 87.3 193.4 L 89.7 192.6 L 92.2 191.7 L 94.6 190.9 L 97.0 190.1 L 99.4 189.3 L 101.8 188.4 L 104.3 187.6 L 106.7 186.8 L 109.1 185.9 L 111.5 185.1 L 113.9 184.3 L 116.3 183.5 L 118.8 182.6 L 121.2 181.8 L 123.6 181.0 L 126.0 180.1 L 128.4 179.3 L 130.8 178.5 L 133.3 177.7 L 135.7 176.8 L 138.1 176.0 L 140.5 175.2 L 142.9 174.3 L 145.3 173.5 L 147.8 172.7 L 150.2 171.9 L 152.6 171.0 L 155.0 170.2 L 157.4 169.4 L 159.8 168.5 L 162.3 167.7 L 164.7 166.9 L 167.1 166.1 L 169.5 165.2 L 171.9 164.4 L 174.3 163.6 L 176.8 162.7 L 179.2 161.9 L 181.6 161.1 L 184.0 160.3 L 186.4 159.4 L 188.8 158.6 L 191.3 157.8 L 193.7 156.9 L 196.1 156.1 L 198.5 155.3 L 200.9 154.5 L 203.3 153.6 L 205.7 152.8 L 208.2 152.0 L 210.6 151.1 L 213.0 150.3 L 215.4 149.5 L 217.8 148.7 L 220.3 147.8 L 222.7 147.0 L 225.1 146.2 L 227.5 145.3 L 229.9 144.5 L 232.3 143.7 L 234.8 142.9 L 237.2 142.0 L 239.6 141.2 L 242.0 140.4 L 244.4 139.5 L 246.8 138.7 L 249.3 137.9 L 251.7 137.1 L 254.1 136.2 L 256.5 135.4 L 258.9 134.6 L 261.3 133.7 L 263.8 132.9 L 266.2 132.1 L 268.6 131.3 L 271.0 130.4 L 273.4 129.6 L 275.8 128.8 L 278.3 127.9 L 280.7 127.1 L 283.1 126.3 L 285.5 125.5 L 287.9 124.6 L 290.3 123.8 L 292.8 123.0 L 295.2 122.1 L 297.6 121.3 L 300.0 120.5" fill="none" stroke="var(--ido)" stroke-width="2.6"/><text x="214.3" y="141.9" font-size="13" fill="var(--ido)" font-weight="bold">simple</text><circle cx="23.2" cy="215.4" r="4" fill="var(--accent-dark)"/><text x="29.2" y="231.4" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">P = 5000</text></svg></div><div>
+  <div class="box key"><span class="lbl">Formula</span><span class="formula" style="font-size:1.25rem">A = P(1 + <span class="fr"><span class="nu">r</span><span class="de">100</span></span>)ⁿ</span></div>
+  <div class="box key frag"><span class="lbl">Why it curves</span>Each year's interest joins the principal, so next year earns interest on MORE money. Same rule as 3G growth!</div>
+  <div class="box key frag"><span class="lbl">Interest earned</span>Interest = A − P (the question often asks for this, not A).</div></div></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3H">
+  <h2>Worked example 4</h2>
+  <div class="box question"><span class="lbl">Worked example</span>$5000 is invested at 4% p.a. compound interest for 6 years. Find the final amount and the interest earned (nearest cent).</div><div class="step frag"><span class="n">1</span><span><b>Identify:</b> P = 5000, r = 4, n = 6.</span></div><div class="step frag"><span class="n">2</span><span><b>Rule:</b> A = 5000(1.04)⁶</span></div><div class="step frag"><span class="n">3</span><span><b>Calculate:</b> A = 5000 × 1.26532 ≈ $6326.60</span></div><div class="step frag"><span class="n">4</span><span><b>Interest earned:</b> 6326.60 − 5000 = <b>$1326.60</b></span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3H">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>$8000 is invested at 6% p.a. compounding yearly for 4 years. Find the final amount (nearest cent).</div>
+  <div class="box hint frag">Hint: A = 8000(1.06)⁴</div>
+  <div class="box answer frag">✔ A = 8000 × 1.26248 ≈ <b>$10 099.82</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3H">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3H</span><ul><li>Write P, r, n before the formula every time</li><li>“Interest earned” questions: remember to subtract P</li><li>Extension: compounding monthly → divide r by 12, multiply n by 12</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="5">
+  <div class="kicker">LESSON 5 — SECTION 3I</div>
+  <h1>Introducing logarithms</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>say what a logarithm asks</li>
+    <li>swap between index form and log form</li>
+    <li>evaluate simple logs without a calculator</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3I">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">logarithm (log)</td><td class="s">LOG-a-rith-um</td><td>the question “what power?” — log₂ 8 asks “2 to what power gives 8?”</td></tr><tr><td class="t">log form</td><td class="s">—</td><td>log₂ 8 = 3</td></tr><tr><td class="t">index form</td><td class="s">IN-dex</td><td>2³ = 8 — the same fact, written with a power</td></tr><tr><td class="t">base</td><td class="s">bayss</td><td>the small number: log₂ has base 2</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3I">
+  <h2>Key idea — log and index are the same fact</h2>
+  <div class="center"><span class="formula">logₐ x = y &nbsp;⟺&nbsp; aʸ = x</span></div>
+  <div class="box key frag"><span class="lbl">Read it aloud</span>log₂ 8 = 3 → “<b>2 to the power 3 gives 8</b>”. The log is the <b>power</b>.</div>
+  <div class="box key frag"><span class="lbl">Anchors</span>logₐ a = 1 (a¹ = a) &nbsp;·&nbsp; logₐ 1 = 0 (a⁰ = 1)</div>
+  <div class="box try frag">“log base ___ of ___ asks: ___ to what power gives ___?”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3I">
+  <h2>Worked example 5</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Evaluate without a calculator: a) log₁₀ 1000 &nbsp; b) log₂ 16 &nbsp; c) log₅ <span class="fr"><span class="nu">1</span><span class="de">25</span></span></div><div class="step frag"><span class="n">1</span><span><b>a)</b> 10 to what power gives 1000? 10³ = 1000 → log₁₀ 1000 = <b>3</b></span></div><div class="step frag"><span class="n">2</span><span><b>b)</b> 2 to what power gives 16? 2⁴ = 16 → log₂ 16 = <b>4</b></span></div><div class="step frag"><span class="n">3</span><span><b>c)</b> 5 to what power gives 1/25? 5⁻² = 1/25 → log₅ (1/25) = <b>−2</b> <span class="say">(negative indices: Chapter 3B!)</span></span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3I">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Evaluate: a) log₃ 81 &nbsp; b) log₁₀ 0.01</div>
+  <div class="box hint frag">Hint: 3⁴ = ? and 0.01 = 10⁻²</div>
+  <div class="box answer frag">✔ a) log₃ 81 = <b>4</b> &nbsp; b) log₁₀ 0.01 = <b>−2</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3I">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3I</span><ul><li>Swap between forms first, then evaluate</li><li>Say every log aloud as a “what power?” question</li><li>Calculator: the log button is base 10</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="6">
+  <div class="kicker">LESSON 6 — SECTION 3J</div>
+  <h1>Logarithmic scales</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>read a log scale (each step = ×10)</li>
+    <li>compare two values on a log scale</li>
+    <li>name real log scales: Richter, pH, decibels</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3J">
+  <h2>🗣 New words first</h2>
+  <table class="tbl vocab"><tr><th>Word / symbol</th><th>Say it</th><th>Meaning</th></tr><tr><td class="t">logarithmic scale</td><td class="s">—</td><td>a scale where each step multiplies by 10 (not adds 10)</td></tr><tr><td class="t">magnitude</td><td class="s">MAG-ni-tyood</td><td>size — earthquake magnitude uses the Richter scale</td></tr><tr><td class="t">pH</td><td class="s">pee-aych</td><td>acidity scale — LOWER pH = more acidic, each step ×10</td></tr><tr><td class="t">decibel (dB)</td><td class="s">DES-i-bel</td><td>loudness scale — also logarithmic</td></tr></table>
+  <p class="note">✏ Copy new words into your maths glossary. Write the word in your home language too.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3J">
+  <h2>Key idea — each step is ×10</h2>
+  <div class="center"><svg viewBox="0 0 560 110" width="540">
 <line x1="20" y1="55" x2="540" y2="55" stroke="#555" stroke-width="2"/>
-${[0,1,2,3,4,5].map(i=>`<line x1="${40+i*96}" y1="45" x2="${40+i*96}" y2="65" stroke="#555" stroke-width="2"/>
-<text x="${28+i*96}" y="86" font-size="14" fill="#1F4E79" font-weight="bold">${['1','10','100','1000','10⁴','10⁵'][i]}</text>
-<text x="${30+i*96}" y="34" font-size="12" fill="#1e8449">10${['⁰','¹','²','³','⁴','⁵'][i]}</text>`).join('')}
-<text x="200" y="12" font-size="13" fill="#c05621" font-weight="bold">each step = × 10 (one log unit)</text></svg>`;
+<line x1="40" y1="45" x2="40" y2="65" stroke="#555" stroke-width="2"/>
+<text x="28" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">1</text>
+<text x="30" y="34" font-size="12" fill="#1e8449">10⁰</text><line x1="136" y1="45" x2="136" y2="65" stroke="#555" stroke-width="2"/>
+<text x="124" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">10</text>
+<text x="126" y="34" font-size="12" fill="#1e8449">10¹</text><line x1="232" y1="45" x2="232" y2="65" stroke="#555" stroke-width="2"/>
+<text x="220" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">100</text>
+<text x="222" y="34" font-size="12" fill="#1e8449">10²</text><line x1="328" y1="45" x2="328" y2="65" stroke="#555" stroke-width="2"/>
+<text x="316" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">1000</text>
+<text x="318" y="34" font-size="12" fill="#1e8449">10³</text><line x1="424" y1="45" x2="424" y2="65" stroke="#555" stroke-width="2"/>
+<text x="412" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">10⁴</text>
+<text x="414" y="34" font-size="12" fill="#1e8449">10⁴</text><line x1="520" y1="45" x2="520" y2="65" stroke="#555" stroke-width="2"/>
+<text x="508" y="86" font-size="14" fill="var(--accent-dark)" font-weight="bold">10⁵</text>
+<text x="510" y="34" font-size="12" fill="#1e8449">10⁵</text>
+<text x="200" y="12" font-size="13" fill="#c05621" font-weight="bold">each step = × 10 (one log unit)</text></svg></div>
+  <div class="box key frag"><span class="lbl">Compare with a subtraction</span>Two values k steps apart on a log scale differ by a factor of 10ᵏ.<br>Magnitude 6 vs magnitude 4 → 10² = <b>100 times</b> bigger amplitude.</div>
+</section>
 
-/* ---------- slide builders ---------- */
-const title=(code,nm,li)=>({h:'',b:`<div class="lesson-title"><div class="code">${code}</div><h2>${nm}</h2></div>
-  <div class="li-box"><h3>🎯 Learning intentions — today I will…</h3><ul>${li.map(x=>`<li>${x}</li>`).join('')}</ul></div>`});
+<section class="slide" data-topic="Chapter 3F–3L · 3J">
+  <h2>Worked example 6</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Earthquake A is magnitude 6.0; earthquake B is magnitude 4.0. How many times larger is A's amplitude?</div><div class="step frag"><span class="n">1</span><span><b>Difference in magnitude:</b> 6 − 4 = 2 steps.</span></div><div class="step frag"><span class="n">2</span><span><b>Each step × 10:</b> factor = 10² = 100.</span></div><div class="step frag"><span class="n">3</span><span><b>Answer in words:</b> “A's amplitude is <b>100 times</b> larger than B's.”</span></div>
+</section>
 
-/* ---------- lesson data ---------- */
-const LESSONS=[
-/* ===== L1 3F ===== */
-{code:'3F · Term 3 Week 10 · Lesson 2',nm:'Exponential relations and their graphs',menu:['3F','Exponential graphs','exponential, base, asymptote'],
- slides:[
- title('LESSON 1 — SECTION 3F','Exponential relations and their graphs',['recognise an exponential rule y = aˣ','sketch y = 2ˣ and label its features','identify the asymptote']),
- {h:'🗣 New words first',b:vocab([
-  ['exponential','ex-po-NEN-shul','a rule where x is in the power: y = 2ˣ'],
-  ['base','bayss','the number being powered — the 2 in y = 2ˣ'],
-  ['asymptote','AS-im-toht','a line the graph gets closer and closer to but never touches'],
-  ['steep','steep','rising very quickly']])},
- {h:'Key idea — the shape of y = 2ˣ',b:`<div class="cols"><div>${graf({xr:[-3.4,3.4],yr:[-1.5,9],curves:[{f:x=>2**x,lab:'y = 2ˣ',lx:2.1}],hlines:[[0,'asymptote y = 0']],marks:[[0,1,'(0, 1)',-46,-6],[1,2,'(1, 2)',8,2],[2,4,'(2, 4)',8,2]]})}</div><div>
-  <div class="key"><span class="kt">Key features</span>y-intercept (0, 1) — because 2⁰ = 1.<br>Passes through (1, 2) — the base!<br>Asymptote: the x-axis (y = 0).</div>
-  <div class="key frag"><span class="kt">Left side</span>For negative x the graph gets tiny (2⁻³ = ⅛) but never reaches 0 — that is what “asymptote” means.</div></div></div>
-  <div class="frame frag">Say it: “The graph <b>approaches</b> y = 0 but never <b>touches</b> it.”</div>`},
- {h:'Worked example 1',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Sketch y = 3ˣ. Label the y-intercept, one more point, and the asymptote.</div></div>
-  <div class="center">${graf({xr:[-3,2.8],yr:[-1.5,10],curves:[{f:x=>3**x,lab:'y = 3ˣ',lx:1.7}],hlines:[[0,'y = 0']],marks:[[0,1,'(0, 1)',-46,-6],[1,3,'(1, 3)',8,0]]})}</div></div>`+steps([
-  `<b>y-intercept:</b> 3⁰ = 1 → (0, 1). Every y = aˣ passes through (0, 1).`,
-  `<b>One more point:</b> x = 1 → y = 3 → (1, 3).`,
-  `<b>Asymptote:</b> y = 0 — draw the curve hugging the x-axis on the left.`,
-  `<b>Compare:</b> 3ˣ climbs faster than 2ˣ for x &gt; 0 (bigger base = steeper).`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>Sketch y = 2ˣ and y = 2⁻ˣ on the same axes. What transformation links them?</div></div>
-  <div class="center">${graf({xr:[-3.4,3.4],yr:[-1.5,9],curves:[{f:x=>2**x,lab:'y = 2ˣ',lx:2.1},{f:x=>2**(-x),col:'#2266aa',lab:'y = 2⁻ˣ',lx:-3.1}],marks:[[0,1,'(0, 1)',8,16]]})}</div></div>
-  <div class="hint frag">Hint: swap x for −x… which axis is the mirror?</div>
-  <div class="ans frag">✔ y = 2⁻ˣ is y = 2ˣ <b>reflected in the y-axis</b>. Both share (0, 1) and asymptote y = 0. 2⁻ˣ shows <b>decay</b>.</div>`},
- {h:'',b:exset('3F',['Plot from a table first, then sketch directly','Always draw and label the asymptote — it is a feature, like a TP','Frame: “The graph approaches ___ but never touches it.”'])}
-]},
-/* ===== L2 3F tech ===== */
-{code:'3F · Term 3 Week 10 · Lesson 3',nm:'Exponential graphs — consolidation with technology',menu:['3F+','Translating exponentials (Desmos)','asymptote moves with k'],
- slides:[
- title('LESSON 2 — SECTION 3F (TECHNOLOGY)','Translating exponential graphs',['predict how +k and −k move the graph AND the asymptote','find x-intercepts when the graph is shifted down','check predictions with Desmos']),
- {h:'Key idea — the asymptote moves too',b:`<div class="cols"><div>${graf({xr:[-3.4,4],yr:[-6,7],curves:[{f:x=>2**x-4,lab:'y = 2ˣ − 4',lx:2.4}],hlines:[[-4,'y = −4']],marks:[[0,-3,'(0, −3)',8,16],[2,0,'(2, 0)',8,-6]]})}</div><div>
-  <div class="key"><span class="kt">Key idea</span>y = 2ˣ + k slides the whole graph (and its asymptote) up or down by k.</div>
-  <div class="key frag"><span class="kt">New feature!</span>Shift <b>down</b> and the graph now crosses the x-axis → an x-intercept appears.</div></div></div>`},
- {h:'Worked example 2',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>For y = 2ˣ − 4, find the asymptote, y-intercept and x-intercept.</div></div>
-  <div class="center">${graf({xr:[-3.4,4],yr:[-6,7],curves:[{f:x=>2**x-4,lab:'y = 2ˣ − 4',lx:2.4}],hlines:[[-4,'y = −4']],marks:[[0,-3,'(0, −3)',8,16],[2,0,'(2, 0)',8,-6]]})}</div></div>`+steps([
-  `<b>Asymptote:</b> y = 0 moves down 4 → y = −4.`,
-  `<b>y-intercept:</b> x = 0 → y = 1 − 4 = −3.`,
-  `<b>x-intercept:</b> 2ˣ − 4 = 0 → 2ˣ = 4 → x = 2.`,
-  `<b>Check on the graph:</b> curve crosses at (2, 0) ✔`])},
- {h:'Predict → check → correct',b:`<div class="key"><span class="kt">Desmos routine</span>1️⃣ Predict asymptote + intercepts on your whiteboard → 2️⃣ type the rule → 3️⃣ if wrong, name the part you missed.</div>
-  <div class="q frag"><span class="tag">Speed round (60 s each)</span>a) y = 2ˣ + 3 &nbsp; b) y = 3ˣ − 9 &nbsp; c) y = 2ˣ − 1</div>
-  <div class="ans frag">✔ a) asymptote y = 3, y-int 4, no x-int · b) asymptote y = −9, y-int −8, x-int x = 2 · c) asymptote y = −1, y-int 0 (through the origin!)</div>`},
- {h:'',b:exset('3F (finish)',['Finish 3F including translated graphs','Desmos to CHECK only — predict first, every time','Exit ticket: rule with asymptote y = −2 crossing the y-axis at −1. (One answer: y = 2ˣ − 2.)'])}
-]},
-/* ===== L3 3G ===== */
-{code:'3G · Term 3 Week 10 · Lesson 4',nm:'Exponential growth and decay',menu:['3G','Growth and decay','growth rate, decay, initial amount'],
- slides:[
- title('LESSON 3 — SECTION 3G','Exponential growth and decay',['write a growth or decay rule from a percentage rate','calculate future amounts','recognise growth (rate added) vs decay (rate subtracted)']),
- {h:'🗣 New words first',b:vocab([
-  ['initial amount A₀','in-ISH-al','the starting value — at time zero'],
-  ['growth rate r%','grohth','the percentage increase each time period'],
-  ['decay','de-KAY','decreasing by a percentage each period — losing value'],
-  ['per annum (p.a.)','per AN-um','each year']])},
- {h:'Key idea — the growth/decay rule',b:`<div class="center">
-  <span class="formula">A = A₀ ${'('}1 + ${fr('r','100')}${')ⁿ'} &nbsp; growth</span>
-  <span class="formula">A = A₀ ${'('}1 − ${fr('r','100')}${')ⁿ'} &nbsp; decay</span></div>
-  <div class="key frag"><span class="kt">Translate the percentage</span>grow 3% → multiply by <b>1.03</b> each year · lose 12% → multiply by <b>0.88</b> each year.</div>
-  <div class="frame frag">“Growing 3% each year means × 1.03, n times.”</div>`},
- {h:'Worked example 3',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>A town of 2000 people grows by 3% per year. Write the rule and find the population after 5 years.</div></div>
-  <div class="center">${graf({xr:[-1,26],yr:[-300,4600],xlab:'n (years)',ylab:'A',curves:[{f:n=>2000*1.03**n,lab:'A = 2000(1.03)ⁿ',lx:8}],marks:[[0,2000,'2000',-8,18],[5,2318.5,'(5, ≈2319)',8,4]]})}</div></div>`+steps([
-  `<b>Rule:</b> growth → A = 2000(1.03)ⁿ`,
-  `<b>Substitute n = 5:</b> A = 2000 × 1.03⁵`,
-  `<b>Calculate:</b> A = 2000 × 1.15927… ≈ 2318.5`,
-  `<b>Answer in words:</b> “After 5 years the population is about <b>2319 people</b>.”`])},
- {h:'Your turn',b:`<div class="cols"><div><div class="q"><span class="tag">Your turn</span>A $30 000 car loses 12% of its value each year. Write the rule and find its value after 3 years (nearest dollar).</div></div>
-  <div class="center">${graf({xr:[-0.5,10.5],yr:[-3000,33000],xlab:'n',ylab:'V',curves:[{f:n=>30000*0.88**n,col:'#2266aa',lab:'V = 30000(0.88)ⁿ',lx:3.4}],marks:[[0,30000,'30000',6,14],[3,20444,'(3, ?)',8,-4]]})}</div></div>
-  <div class="hint frag">Hint: decay → multiply by 0.88 three times.</div>
-  <div class="ans frag">✔ V = 30000(0.88)ⁿ → V = 30000 × 0.88³ ≈ <b>$20 444</b>. “The car is worth about $20 444 after 3 years.”</div>`},
- {h:'',b:exset('3G',['Write the rule BEFORE calculating — the rule earns marks','Growth or decay? Underline “increases/decreases” in the question','Answers in words with units ($, people, grams)'])}
-]},
-/* ===== L4 3H ===== */
-{code:'3H · Term 4 Week 1 · Lesson 5',nm:'Compound interest',menu:['3H','Compound interest','principal, interest, compound'],
- slides:[
- title('LESSON 4 — SECTION 3H','Compound interest',['use A = P(1 + r/100)ⁿ','find the interest earned (A − P)','compare compound and simple interest']),
- {h:'🗣 New words first',b:vocab([
-  ['principal P','PRIN-si-pal','the money you start with (invest or borrow)'],
-  ['interest','IN-trest','extra money earned (or charged)'],
-  ['compound interest','KOM-pownd','interest calculated on the principal AND past interest'],
-  ['simple interest','—','interest on the principal only — grows in a straight line']])},
- {h:'Key idea — compound beats simple',b:`<div class="cols"><div>${graf({xr:[-1,21],yr:[4000,14000],xlab:'n (years)',ylab:'A ($)',curves:[{f:n=>5000*1.04**n,lab:'compound',lx:13},{f:n=>5000+200*n,col:'#2266aa',lab:'simple',lx:14.5}],marks:[[0,5000,'P = 5000',6,16]]})}</div><div>
-  <div class="key"><span class="kt">Formula</span><span class="formula" style="font-size:1.25rem">A = P${'('}1 + ${fr('r','100')}${')ⁿ'}</span></div>
-  <div class="key frag"><span class="kt">Why it curves</span>Each year's interest joins the principal, so next year earns interest on MORE money. Same rule as 3G growth!</div>
-  <div class="key frag"><span class="kt">Interest earned</span>Interest = A − P (the question often asks for this, not A).</div></div></div>`},
- {h:'Worked example 4',b:`<div class="q"><span class="tag">Worked example</span>$5000 is invested at 4% p.a. compound interest for 6 years. Find the final amount and the interest earned (nearest cent).</div>`+steps([
-  `<b>Identify:</b> P = 5000, r = 4, n = 6.`,
-  `<b>Rule:</b> A = 5000(1.04)⁶`,
-  `<b>Calculate:</b> A = 5000 × 1.26532 ≈ $6326.60`,
-  `<b>Interest earned:</b> 6326.60 − 5000 = <b>$1326.60</b>`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>$8000 is invested at 6% p.a. compounding yearly for 4 years. Find the final amount (nearest cent).</div>
-  <div class="hint frag">Hint: A = 8000(1.06)⁴</div>
-  <div class="ans frag">✔ A = 8000 × 1.26248 ≈ <b>$10 099.82</b></div>`},
- {h:'',b:exset('3H',['Write P, r, n before the formula every time','“Interest earned” questions: remember to subtract P','Extension: compounding monthly → divide r by 12, multiply n by 12'])}
-]},
-/* ===== L5 3I ===== */
-{code:'3I · Term 4 Week 1 · Lesson 6',nm:'Introducing logarithms',menu:['3I','Introducing logarithms','logarithm, base, index form'],
- slides:[
- title('LESSON 5 — SECTION 3I','Introducing logarithms',['say what a logarithm asks','swap between index form and log form','evaluate simple logs without a calculator']),
- {h:'🗣 New words first',b:vocab([
-  ['logarithm (log)','LOG-a-rith-um','the question “what power?” — log₂ 8 asks “2 to what power gives 8?”'],
-  ['log form','—','log₂ 8 = 3'],
-  ['index form','IN-dex','2³ = 8 — the same fact, written with a power'],
-  ['base','bayss','the small number: log₂ has base 2']])},
- {h:'Key idea — log and index are the same fact',b:`<div class="center"><span class="formula">logₐ x = y &nbsp;⟺&nbsp; aʸ = x</span></div>
-  <div class="key frag"><span class="kt">Read it aloud</span>log₂ 8 = 3 → “<b>2 to the power 3 gives 8</b>”. The log is the <b>power</b>.</div>
-  <div class="key frag"><span class="kt">Anchors</span>logₐ a = 1 (a¹ = a) &nbsp;·&nbsp; logₐ 1 = 0 (a⁰ = 1)</div>
-  <div class="frame frag">“log base ___ of ___ asks: ___ to what power gives ___?”</div>`},
- {h:'Worked example 5',b:`<div class="q"><span class="tag">Worked example</span>Evaluate without a calculator: a) log₁₀ 1000 &nbsp; b) log₂ 16 &nbsp; c) log₅ ${fr('1','25')}</div>`+steps([
-  `<b>a)</b> 10 to what power gives 1000? 10³ = 1000 → log₁₀ 1000 = <b>3</b>`,
-  `<b>b)</b> 2 to what power gives 16? 2⁴ = 16 → log₂ 16 = <b>4</b>`,
-  `<b>c)</b> 5 to what power gives 1/25? 5⁻² = 1/25 → log₅ (1/25) = <b>−2</b> <span class="say">(negative indices: Chapter 3B!)</span>`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Evaluate: a) log₃ 81 &nbsp; b) log₁₀ 0.01</div>
-  <div class="hint frag">Hint: 3⁴ = ? and 0.01 = 10⁻²</div>
-  <div class="ans frag">✔ a) log₃ 81 = <b>4</b> &nbsp; b) log₁₀ 0.01 = <b>−2</b></div>`},
- {h:'',b:exset('3I',['Swap between forms first, then evaluate','Say every log aloud as a “what power?” question','Calculator: the log button is base 10'])}
-]},
-/* ===== L6 3J ===== */
-{code:'3J · Term 4 Week 1 · Lesson 7',nm:'Logarithmic scales',menu:['3J','Log scales','magnitude, Richter, pH, decibel'],
- slides:[
- title('LESSON 6 — SECTION 3J','Logarithmic scales',['read a log scale (each step = ×10)','compare two values on a log scale','name real log scales: Richter, pH, decibels']),
- {h:'🗣 New words first',b:vocab([
-  ['logarithmic scale','—','a scale where each step multiplies by 10 (not adds 10)'],
-  ['magnitude','MAG-ni-tyood','size — earthquake magnitude uses the Richter scale'],
-  ['pH','pee-aych','acidity scale — LOWER pH = more acidic, each step ×10'],
-  ['decibel (dB)','DES-i-bel','loudness scale — also logarithmic']])},
- {h:'Key idea — each step is ×10',b:`<div class="center">${logline}</div>
-  <div class="key frag"><span class="kt">Compare with a subtraction</span>Two values k steps apart on a log scale differ by a factor of 10ᵏ.<br>Magnitude 6 vs magnitude 4 → 10² = <b>100 times</b> bigger amplitude.</div>`},
- {h:'Worked example 6',b:`<div class="q"><span class="tag">Worked example</span>Earthquake A is magnitude 6.0; earthquake B is magnitude 4.0. How many times larger is A's amplitude?</div>`+steps([
-  `<b>Difference in magnitude:</b> 6 − 4 = 2 steps.`,
-  `<b>Each step × 10:</b> factor = 10² = 100.`,
-  `<b>Answer in words:</b> “A's amplitude is <b>100 times</b> larger than B's.”`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Lemon juice has pH 3; milk has pH 6. How many times more acidic is lemon juice?</div>
-  <div class="hint frag">Hint: 3 steps apart, and LOWER pH = MORE acidic.</div>
-  <div class="ans frag">✔ 10³ = <b>1000 times</b> more acidic.</div>`},
- {h:'',b:exset('3J',['Reading and comparing log-scale values','Real data: earthquakes, sound, acidity','Frame: “___ steps apart means 10 to the power ___ times bigger.”'])}
-]},
-/* ===== L7 3K ===== */
-{code:'3K (10A) · Term 4 Week 1 · Lesson 8',nm:'Laws of logarithms',menu:['3K','Log laws (10A)','product, quotient, power laws'],
- slides:[
- title('LESSON 7 — SECTION 3K (10A)','Laws of logarithms',['use the product, quotient and power laws','simplify log expressions to a single log','evaluate by combining logs']),
- {h:'Key idea — three laws',b:`<div class="center">
+<section class="slide" data-topic="Chapter 3F–3L · 3J">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Lemon juice has pH 3; milk has pH 6. How many times more acidic is lemon juice?</div>
+  <div class="box hint frag">Hint: 3 steps apart, and LOWER pH = MORE acidic.</div>
+  <div class="box answer frag">✔ 10³ = <b>1000 times</b> more acidic.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3J">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3J</span><ul><li>Reading and comparing log-scale values</li><li>Real data: earthquakes, sound, acidity</li><li>Frame: “___ steps apart means 10 to the power ___ times bigger.”</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="7">
+  <div class="kicker">LESSON 7 — SECTION 3K (10A)</div>
+  <h1>Laws of logarithms</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>use the product, quotient and power laws</li>
+    <li>simplify log expressions to a single log</li>
+    <li>evaluate by combining logs</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3K">
+  <h2>Key idea — three laws</h2>
+  <div class="center">
   <span class="formula">logₐ x + logₐ y = logₐ(xy)</span>
-  <span class="formula">logₐ x − logₐ y = logₐ ${fr('x','y')}</span>
+  <span class="formula">logₐ x − logₐ y = logₐ <span class="fr"><span class="nu">x</span><span class="de">y</span></span></span>
   <span class="formula">logₐ xⁿ = n logₐ x</span></div>
-  <div class="key frag"><span class="kt">They mirror the index laws</span>add logs ↔ multiply numbers · subtract logs ↔ divide numbers · coefficient ↔ power. Same family as 3A!</div>`},
- {h:'Worked example 7',b:`<div class="q"><span class="tag">Worked example</span>Simplify and evaluate: a) log₁₀ 4 + log₁₀ 25 &nbsp; b) log₂ 40 − log₂ 5</div>`+steps([
-  `<b>a) Product law:</b> log₁₀ 4 + log₁₀ 25 = log₁₀(4 × 25) = log₁₀ 100`,
-  `<b>Evaluate:</b> 10² = 100 → answer <b>2</b>`,
-  `<b>b) Quotient law:</b> log₂ 40 − log₂ 5 = log₂(40 ÷ 5) = log₂ 8`,
-  `<b>Evaluate:</b> 2³ = 8 → answer <b>3</b>`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Simplify and evaluate: 3 log₁₀ 2 + log₁₀ 12.5</div>
-  <div class="hint frag">Hint: power law first — 3 log₁₀ 2 = log₁₀ 2³ = log₁₀ 8.</div>
-  <div class="ans frag">✔ log₁₀ 8 + log₁₀ 12.5 = log₁₀ 100 = <b>2</b></div>`},
- {h:'',b:exset('3K',['One law at a time — write which law you used on each line','Aim for a single log, then evaluate if possible','Common error: log(x + y) is NOT log x + log y'])}
-]},
-/* ===== L8 3L ===== */
-{code:'3L (10A) · Term 4 Week 2 · Lesson 9',nm:'Solving exponential equations using logarithms',menu:['3L','Solving aˣ = b with logs (10A)','change of base, solve'],
- slides:[
- title('LESSON 8 — SECTION 3L (10A)','Solving exponential equations using logarithms',['solve aˣ = b exactly and as a decimal','use the calculator log button (base 10)','solve real growth problems for the time n']),
- {h:'Key idea — undo the power with a log',b:`<div class="center"><span class="formula">aˣ = b &nbsp;→&nbsp; x = logₐ b = ${fr('log₁₀ b','log₁₀ a')}</span></div>
-  <div class="key frag"><span class="kt">Calculator</span>Your log button is base 10: type <span class="pill">log(20) ÷ log(2)</span> for log₂ 20.</div>
-  <div class="key frag"><span class="kt">Why logs?</span>When x is in the power and b is not a nice power of a, logs are the only exact way out.</div>`},
- {h:'Worked example 8',b:`<div class="cols"><div><div class="q"><span class="tag">Worked example</span>Solve 2ˣ = 20, exact and to two decimal places.</div></div>
-  <div class="center">${graf({xr:[-1,6],yr:[-3,34],curves:[{f:x=>2**x,lab:'y = 2ˣ',lx:4.4}],hlines:[[20,'y = 20']],marks:[[4.32,20,'x ≈ 4.32',-70,-8]]})}</div></div>`+steps([
-  `<b>x is in the power</b> and 20 is not a power of 2 → use logs.`,
-  `<b>Exact:</b> x = log₂ 20 = ${fr('log 20','log 2')}`,
-  `<b>Calculator:</b> x = 1.30103 ÷ 0.30103 ≈ <b>4.32</b>`,
-  `<b>Check:</b> 2⁴ = 16 and 2⁵ = 32, so x between 4 and 5 ✔`])},
- {h:'Worked example 9 — in context',b:`<div class="q"><span class="tag">Worked example</span>A town of 2000 grows 3% per year: A = 2000(1.03)ⁿ. When will the population reach 4000 (i.e. double)?</div>`+steps([
-  `<b>Equation:</b> 2000(1.03)ⁿ = 4000 → (1.03)ⁿ = 2`,
-  `<b>Logs:</b> n = ${fr('log 2','log 1.03')}`,
-  `<b>Calculate:</b> n ≈ 0.30103 ÷ 0.01284 ≈ 23.4`,
-  `<b>Answer in words:</b> “The population doubles during the <b>24th year</b> (after about 23.4 years).”`])},
- {h:'Your turn',b:`<div class="q"><span class="tag">Your turn</span>Solve 3ˣ = 50 to two decimal places.</div>
-  <div class="hint frag">Hint: x = log 50 ÷ log 3.</div>
-  <div class="ans frag">✔ x = 1.69897 ÷ 0.47712 ≈ <b>3.56</b> (check: 3³ = 27, 3⁴ = 81 ✔)</div>`},
- {h:'',b:exset('3L',['Exact form first, then decimal — both may earn marks','Sanity check every answer between neighbouring powers','Context questions: answer in words with time units'])}
-]},
-/* ===== L9 consolidation ===== */
-{code:'Term 4 Week 2 · Lesson 10',nm:'Consolidation — mixed exponentials and logs',menu:['★','Consolidation: mixed problems','choose the tool'],cls:'rev',
- slides:[
- title('LESSON 9 — CONSOLIDATION','Mixed exponential and log problems',['choose the right tool without prompting','move between index form and log form fluently','solve growth/decay problems end to end']),
- {h:'Which tool? Decision guide',b:`<table class="chk"><tr><th>The question…</th><th>Tool</th></tr>
+  <div class="box key frag"><span class="lbl">They mirror the index laws</span>add logs ↔ multiply numbers · subtract logs ↔ divide numbers · coefficient ↔ power. Same family as 3A!</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3K">
+  <h2>Worked example 7</h2>
+  <div class="box question"><span class="lbl">Worked example</span>Simplify and evaluate: a) log₁₀ 4 + log₁₀ 25 &nbsp; b) log₂ 40 − log₂ 5</div><div class="step frag"><span class="n">1</span><span><b>a) Product law:</b> log₁₀ 4 + log₁₀ 25 = log₁₀(4 × 25) = log₁₀ 100</span></div><div class="step frag"><span class="n">2</span><span><b>Evaluate:</b> 10² = 100 → answer <b>2</b></span></div><div class="step frag"><span class="n">3</span><span><b>b) Quotient law:</b> log₂ 40 − log₂ 5 = log₂(40 ÷ 5) = log₂ 8</span></div><div class="step frag"><span class="n">4</span><span><b>Evaluate:</b> 2³ = 8 → answer <b>3</b></span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3K">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Simplify and evaluate: 3 log₁₀ 2 + log₁₀ 12.5</div>
+  <div class="box hint frag">Hint: power law first — 3 log₁₀ 2 = log₁₀ 2³ = log₁₀ 8.</div>
+  <div class="box answer frag">✔ log₁₀ 8 + log₁₀ 12.5 = log₁₀ 100 = <b>2</b></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3K">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3K</span><ul><li>One law at a time — write which law you used on each line</li><li>Aim for a single log, then evaluate if possible</li><li>Common error: log(x + y) is NOT log x + log y</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="8">
+  <div class="kicker">LESSON 8 — SECTION 3L (10A)</div>
+  <h1>Solving exponential equations using logarithms</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>solve aˣ = b exactly and as a decimal</li>
+    <li>use the calculator log button (base 10)</li>
+    <li>solve real growth problems for the time n</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3L">
+  <h2>Key idea — undo the power with a log</h2>
+  <div class="center"><span class="formula">aˣ = b &nbsp;→&nbsp; x = logₐ b = <span class="fr"><span class="nu">log₁₀ b</span><span class="de">log₁₀ a</span></span></span></div>
+  <div class="box key frag"><span class="lbl">Calculator</span>Your log button is base 10: type <span class="pill">log(20) ÷ log(2)</span> for log₂ 20.</div>
+  <div class="box key frag"><span class="lbl">Why logs?</span>When x is in the power and b is not a nice power of a, logs are the only exact way out.</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3L">
+  <h2>Worked example 8</h2>
+  <div class="cols"><div><div class="box question"><span class="lbl">Worked example</span>Solve 2ˣ = 20, exact and to two decimal places.</div></div>
+  <div class="center"><svg viewBox="0 0 310 250" width="310"><line x1="6" y1="219.7" x2="304" y2="219.7" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="294" y="233.7" font-size="12" fill="var(--muted)">x</text><line x1="51.4" y1="6" x2="51.4" y2="244" stroke="var(--muted)" stroke-width="1.5"/>
+   <text x="57.4" y="16" font-size="12" fill="var(--muted)">y</text><line x1="6" y1="97.5" x2="304" y2="97.5" stroke="#c05621" stroke-width="1.8" stroke-dasharray="5 4"/><text x="220" y="91.5" font-size="12" fill="#c05621" font-weight="bold">y = 20</text><path d=" M 10.0 216.6 L 12.4 216.5 L 14.8 216.4 L 17.3 216.2 L 19.7 216.1 L 22.1 215.9 L 24.5 215.8 L 26.9 215.6 L 29.3 215.5 L 31.8 215.3 L 34.2 215.1 L 36.6 214.9 L 39.0 214.7 L 41.4 214.5 L 43.8 214.3 L 46.3 214.1 L 48.7 213.8 L 51.1 213.6 L 53.5 213.4 L 55.9 213.1 L 58.3 212.8 L 60.8 212.5 L 63.2 212.2 L 65.6 211.9 L 68.0 211.6 L 70.4 211.3 L 72.8 210.9 L 75.3 210.6 L 77.7 210.2 L 80.1 209.8 L 82.5 209.4 L 84.9 209.0 L 87.3 208.5 L 89.8 208.1 L 92.2 207.6 L 94.6 207.1 L 97.0 206.6 L 99.4 206.0 L 101.8 205.5 L 104.3 204.9 L 106.7 204.3 L 109.1 203.6 L 111.5 203.0 L 113.9 202.3 L 116.3 201.6 L 118.8 200.8 L 121.2 200.1 L 123.6 199.2 L 126.0 198.4 L 128.4 197.5 L 130.8 196.6 L 133.3 195.7 L 135.7 194.7 L 138.1 193.6 L 140.5 192.6 L 142.9 191.4 L 145.3 190.3 L 147.8 189.1 L 150.2 187.8 L 152.6 186.5 L 155.0 185.1 L 157.4 183.7 L 159.8 182.2 L 162.3 180.7 L 164.7 179.1 L 167.1 177.4 L 169.5 175.6 L 171.9 173.8 L 174.3 171.9 L 176.8 170.0 L 179.2 167.9 L 181.6 165.8 L 184.0 163.5 L 186.4 161.2 L 188.8 158.8 L 191.3 156.3 L 193.7 153.7 L 196.1 151.0 L 198.5 148.1 L 200.9 145.2 L 203.3 142.1 L 205.7 138.9 L 208.2 135.6 L 210.6 132.1 L 213.0 128.5 L 215.4 124.7 L 217.8 120.8 L 220.3 116.7 L 222.7 112.5 L 225.1 108.1 L 227.5 103.5 L 229.9 98.7 L 232.3 93.7 L 234.8 88.5 L 237.2 83.1 L 239.6 77.4 L 242.0 71.5 L 244.4 65.4 L 246.8 59.1 L 249.3 52.4 L 251.7 45.5 L 254.1 38.4 L 256.5 30.9 L 258.9 23.1 L 261.3 15.0 L 263.8 6.5" fill="none" stroke="#1e8449" stroke-width="2.6"/><text x="233.7" y="82.7" font-size="13" fill="#1e8449" font-weight="bold">y = 2ˣ</text><circle cx="230.4" cy="97.5" r="4" fill="var(--accent-dark)"/><text x="160.4" y="89.5" font-size="12.5" fill="var(--accent-dark)" font-weight="bold">x ≈ 4.32</text></svg></div></div><div class="step frag"><span class="n">1</span><span><b>x is in the power</b> and 20 is not a power of 2 → use logs.</span></div><div class="step frag"><span class="n">2</span><span><b>Exact:</b> x = log₂ 20 = <span class="fr"><span class="nu">log 20</span><span class="de">log 2</span></span></span></div><div class="step frag"><span class="n">3</span><span><b>Calculator:</b> x = 1.30103 ÷ 0.30103 ≈ <b>4.32</b></span></div><div class="step frag"><span class="n">4</span><span><b>Check:</b> 2⁴ = 16 and 2⁵ = 32, so x between 4 and 5 ✔</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3L">
+  <h2>Worked example 9 — in context</h2>
+  <div class="box question"><span class="lbl">Worked example</span>A town of 2000 grows 3% per year: A = 2000(1.03)ⁿ. When will the population reach 4000 (i.e. double)?</div><div class="step frag"><span class="n">1</span><span><b>Equation:</b> 2000(1.03)ⁿ = 4000 → (1.03)ⁿ = 2</span></div><div class="step frag"><span class="n">2</span><span><b>Logs:</b> n = <span class="fr"><span class="nu">log 2</span><span class="de">log 1.03</span></span></span></div><div class="step frag"><span class="n">3</span><span><b>Calculate:</b> n ≈ 0.30103 ÷ 0.01284 ≈ 23.4</span></div><div class="step frag"><span class="n">4</span><span><b>Answer in words:</b> “The population doubles during the <b>24th year</b> (after about 23.4 years).”</span></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3L">
+  <h2>Your turn</h2>
+  <div class="box question"><span class="lbl">Your turn</span>Solve 3ˣ = 50 to two decimal places.</div>
+  <div class="box hint frag">Hint: x = log 50 ÷ log 3.</div>
+  <div class="box answer frag">✔ x = 1.69897 ÷ 0.47712 ≈ <b>3.56</b> (check: 3³ = 27, 3⁴ = 81 ✔)</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · 3L">
+  <div class="box try exset"><span class="lbl">📘 Your work: Exercise 3L</span><ul><li>Exact form first, then decimal — both may earn marks</li><li>Sanity check every answer between neighbouring powers</li><li>Context questions: answer in words with time units</li></ul>
+  <p class="note">Ask for help in any language you like — sentence frame: <b>“Can you explain … again, please?”</b></p></div>
+</section>
+
+<section class="slide section-slide" data-lesson="9">
+  <div class="kicker">LESSON 9 — CONSOLIDATION</div>
+  <h1>Mixed exponential and log problems</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>choose the right tool without prompting</li>
+    <li>move between index form and log form fluently</li>
+    <li>solve growth/decay problems end to end</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Which tool? Decision guide</h2>
+  <table class="chk"><tr><th>The question…</th><th>Tool</th></tr>
   <tr><td>asks for a sketch of y = aˣ (± k)</td><td>features + asymptote (3F)</td></tr>
   <tr><td>gives a % change over time</td><td>A = A₀(1 ± r/100)ⁿ (3G/3H)</td></tr>
   <tr><td>asks “what power?”</td><td>write in log form (3I)</td></tr>
   <tr><td>compares values on Richter/pH/dB</td><td>10^(difference) (3J)</td></tr>
   <tr><td>has logs to combine</td><td>log laws (3K)</td></tr>
   <tr><td>has x in the power, ugly number</td><td>x = log b ÷ log a (3L)</td></tr></table>
-  <div class="frame frag">“The x is in the ___, so I need ___.”</div>`},
- {h:'Today’s work',b:`<div class="exset"><h3>🧭 Choose your path (pairs)</h3><ul>
+  <div class="box try frag">“The x is in the ___, so I need ___.”</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Today’s work</h2>
+  <div class="box try exset"><span class="lbl">🧭 Choose your path (pairs)</span><ul>
   <li><b>Path 1 — Build:</b> Progress quiz 3F–3I with teacher support</li>
   <li><b>Path 2 — Strengthen:</b> Chapter 3 “Applications and problem-solving” (money + population tasks)</li>
   <li><b>Path 3 — Challenge:</b> Problem-solving and reasoning from 3K–3L</li></ul>
-  <p class="note">Every path: one full solution on the mini-whiteboard to share.</p></div>`},
- {h:'Exit ticket',b:`<div class="q"><span class="tag">Before you leave</span>Complete the frames:</div>
-  <div class="frame">1. A log asks the question “<b>___</b>?”.</div>
-  <div class="frame">2. Growing 5% per year means multiplying by <b>___</b> each year.</div>
-  <div class="frame">3. One thing I still need help with is <b>___</b>.</div>`}
-]},
-/* ===== L10 revision ===== */
-{code:'Term 4 Week 2 · Lesson 11',nm:'Revision — Chapter 3F–3L review',menu:['★','Revision: 3F–3L review','all unit vocabulary'],cls:'rev',
- slides:[
- title('LESSON 10 — REVISION','Chapter 3F–3L review',['check every checklist item for this unit','complete review questions at my level','build my fix-it list for the topic quiz and exam']),
- {h:'Checklist self-assessment',b:`<table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
+  <p class="note">Every path: one full solution on the mini-whiteboard to share.</p></div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Exit ticket</h2>
+  <div class="box question"><span class="lbl">Before you leave</span>Complete the frames:</div>
+  <div class="box try">1. A log asks the question “<b>___</b>?”.</div>
+  <div class="box try">2. Growing 5% per year means multiplying by <b>___</b> each year.</div>
+  <div class="box try">3. One thing I still need help with is <b>___</b>.</div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 10 — REVISION</div>
+  <h1>Chapter 3F–3L review</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>check every checklist item for this unit</li>
+    <li>complete review questions at my level</li>
+    <li>build my fix-it list for the topic quiz and exam</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Checklist self-assessment</h2>
+  <table class="chk"><tr><th>I can…</th><th>😃</th><th>😐</th><th>😟</th></tr>
   <tr><td>3F: sketch exponential graphs with the asymptote</td><td></td><td></td><td></td></tr>
   <tr><td>3G: write and use growth/decay rules</td><td></td><td></td><td></td></tr>
   <tr><td>3H: compound interest, including interest earned</td><td></td><td></td><td></td></tr>
@@ -360,88 +452,65 @@ const LESSONS=[
   <tr><td>3J: compare values on log scales</td><td></td><td></td><td></td></tr>
   <tr><td>3K: use the three log laws (10A)</td><td></td><td></td><td></td></tr>
   <tr><td>3L: solve aˣ = b with logs (10A)</td><td></td><td></td><td></td></tr></table>
-  <p class="note">😟 rows → fix-it list → those review questions first. This unit is assessed in the <b>semester exam</b>.</p>`},
- {h:'Vocabulary quick quiz',b:`<div class="q"><span class="tag">Match the word to the meaning (with a partner)</span></div>
-  <div class="cols"><div class="key">1. asymptote<br>2. principal<br>3. logarithm<br>4. decay<br>5. log scale<br>6. base</div>
-  <div class="key">A. the starting money<br>B. “what power?”<br>C. decreasing by a % each period<br>D. line the graph approaches but never touches<br>E. the number being powered<br>F. each step = ×10</div></div>
-  <div class="ans frag">✔ 1-D, 2-A, 3-B, 4-C, 5-F, 6-E</div>`},
- {h:'Today’s work',b:`<div class="exset"><h3>📘 Unit review</h3><ul>
+  <p class="note">😟 rows → fix-it list → those review questions first. This unit is assessed in the <b>semester exam</b>.</p>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Vocabulary quick quiz</h2>
+  <div class="box question"><span class="lbl">Match the word to the meaning (with a partner)</span></div>
+  <div class="cols"><div class="box key">1. asymptote<br>2. principal<br>3. logarithm<br>4. decay<br>5. log scale<br>6. base</div>
+  <div class="box key">A. the starting money<br>B. “what power?”<br>C. decreasing by a % each period<br>D. line the graph approaches but never touches<br>E. the number being powered<br>F. each step = ×10</div></div>
+  <div class="box answer frag">✔ 1-D, 2-A, 3-B, 4-C, 5-F, 6-E</div>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Today’s work</h2>
+  <div class="box try exset"><span class="lbl">📘 Unit review</span><ul>
   <li>Chapter checklist items for 3F–3L — tick honestly</li>
   <li>Review questions: fluency set, then applications</li>
   <li>10A students: include 3K/3L extended questions</li>
-  <li>Update your fix-it list for tomorrow's topic quiz</li></ul></div>`}
-]},
-/* ===== L11 topic quiz ===== */
-{code:'Term 4 Week 2 · Lesson 12',nm:'Topic quiz and feedback',menu:['★','Topic quiz + feedback','assessed in the semester exam'],cls:'test',
- slides:[
- title('LESSON 11 — TOPIC QUIZ','Topic quiz and feedback',['complete the Unit 7 topic quiz under quiet conditions','mark and analyse my errors straight away','bank this topic for the semester exam']),
- {h:'Before the quiz — command words',b:`<table class="vocab"><tr><th>Command word</th><th>It means…</th></tr>
+  <li>Update your fix-it list for tomorrow's topic quiz</li></ul></div>
+</section>
+
+<section class="slide section-slide">
+  <div class="kicker">LESSON 11 — TOPIC QUIZ</div>
+  <h1>Topic quiz and feedback</h1>
+  <p class="goals-lbl">🎯 Learning intentions — today I will…</p>
+  <ul>
+    <li>complete the Unit 7 topic quiz under quiet conditions</li>
+    <li>mark and analyse my errors straight away</li>
+    <li>bank this topic for the semester exam</li>
+  </ul>
+
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Before the quiz — command words</h2>
+  <table class="tbl vocab"><tr><th>Command word</th><th>It means…</th></tr>
   <tr><td class="t">Evaluate</td><td>find the number — e.g. log₂ 16 = 4</td></tr>
   <tr><td class="t">Sketch</td><td>curve + asymptote labelled + intercepts</td></tr>
   <tr><td class="t">Exact</td><td>leave as a log or fraction — no rounding</td></tr>
   <tr><td class="t">Hence</td><td>use the previous answer</td></tr>
-  <tr><td class="t">Show that</td><td>all steps to the given answer</td></tr></table>`},
- {h:'Today’s work',b:`<div class="exset"><h3>📝 Topic quiz (30 min) + instant feedback</h3><ul>
+  <tr><td class="t">Show that</td><td>all steps to the given answer</td></tr></table>
+</section>
+
+<section class="slide" data-topic="Chapter 3F–3L · ★">
+  <h2>Today’s work</h2>
+  <div class="box try exset"><span class="lbl">📝 Topic quiz (30 min) + instant feedback</span><ul>
   <li>Quiz covers 3F–3L; quiet conditions; bilingual dictionary permitted (check with your teacher)</li>
   <li>Swap-and-mark straight after; name each error type (calculation / reading / method / working)</li>
   <li>“My error in question ___ was ___. Next time I will ___.”</li>
   <li>This unit returns in the <b>CAT 3 semester exam</b> — keep your fix-it list!</li></ul>
-  <p class="note">Next lesson: Unit 8 Probability begins. 🎲</p></div>`}
-]}
-];
+  <p class="note">Next lesson: Unit 8 Probability begins. 🎲</p></div>
+</section>
 
-/* ---------- engine ---------- */
-let li=0,si=0;
-const menuEl=document.getElementById('menu'),stage=document.getElementById('stage'),
-      slideEl=document.getElementById('slide'),fill=document.getElementById('fill'),
-      hlbl=document.getElementById('hlbl'),pgs=document.getElementById('pgs');
-const WEEKS=[['Term 3 · Week 10 — Exponential graphs and growth (after CAT 2)',[0,1,2]],
-             ['Term 4 · Week 1 — Money, logarithms and log scales',[3,4,5,6]],
-             ['Term 4 · Week 2 — Solving with logs, consolidate, topic quiz',[7,8,9,10]]];
-function buildMenu(){
-  let h=`<p style="margin-bottom:10px"><a href="index.html" style="color:var(--main);font-weight:600;text-decoration:none">⌂ Course home</a></p>
-  <h1>Chapter 3F–3L — Exponentials &amp; Logarithms</h1>
-  <p class="sub">10 Methods · Unit 7 · Essential Mathematics VIC 10 &amp; 10A (3rd ed.) · Term 3 Wk 10 – Term 4 Wk 2 · assessed in the semester exam<br>
-  <b>ESL routine every lesson:</b> new words first → key idea → worked example → your turn → textbook exercise.</p>`;
-  for(const [wn,ids] of WEEKS){
-    h+=`<div class="wk"><h2>${wn}</h2><div class="cards">`;
-    for(const id of ids){const L=LESSONS[id];
-      h+=`<div class="card ${L.cls||''}" onclick="openLesson(${id})">
-      <div class="code">Lesson ${id+1} · ${L.menu[0]}</div><div class="nm">${L.menu[1]}</div>
-      <div class="vb">🗣 ${L.menu[2]}</div></div>`;}
-    h+=`</div></div>`;}
-  menuEl.innerHTML=h;
-}
-function openLesson(i){li=i;si=0;menuEl.style.display='none';stage.style.display='flex';render();}
-function goMenu(){stage.style.display='none';menuEl.style.display='block';}
-function render(){
-  const L=LESSONS[li],S=L.slides[si];
-  slideEl.innerHTML=(S.h?`<h2 class="stitle">${S.h}</h2>`:'')+S.b;
-  slideEl.scrollTop=0;
-  hlbl.textContent=`${L.code} — ${L.nm}`;
-  pgs.textContent=`Slide ${si+1} / ${L.slides.length}`;
-  fill.style.width=((si+1)/L.slides.length*100)+'%';
-}
-function frags(){return [...slideEl.querySelectorAll('.frag')];}
-function nav(dir){
-  if(dir>0){const f=frags().find(x=>!x.classList.contains('on'));
-    if(f){f.classList.add('on');return;}
-    if(si<LESSONS[li].slides.length-1){si++;render();}
-    else if(li<LESSONS.length-1){openLesson(li+1);}
-    else goMenu();
-  }else{const on=frags().filter(x=>x.classList.contains('on'));
-    if(on.length){on[on.length-1].classList.remove('on');return;}
-    if(si>0){si--;render();frags().forEach(x=>x.classList.add('on'));}
-    else goMenu();
-  }
-}
-document.addEventListener('keydown',e=>{
-  if(stage.style.display!=='flex')return;
-  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
-  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
-  if(e.key==='Escape')goMenu();
-});
-buildMenu();
-</script>
+</main>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">1</span>&ndash;<span class="key">9</span> jump to lesson</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+<script src="../../assets/js/deck.js" defer></script>
 </body>
 </html>
