@@ -262,19 +262,12 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .note { font-size: .95em; color: var(--muted); font-style: italic; margin-top: 10px; }
 .section-slide .note { color: rgba(255,255,255,.75); }
 
-/* Radical with vinculum (the bar over the radicand):
-     <span class="rad">√<span class="rx">2</span></span>
-   The √ stays real text (screen readers say "square root"); .rx draws
-   the overbar and tucks up against the glyph's arm.
-   In SVG, use <tspan text-decoration="overline"> instead — CSS borders
-   don't apply to SVG text. */
-.rad { white-space: nowrap; }
-.rad > .rx {
-  display: inline-block;
-  border-top: .075em solid currentColor;
-  padding: .1em .18em 0 .06em;
-  margin-left: -.05em;
-}
+/* Square roots: use MathJax — \(\sqrt{2}\) — never a CSS overbar.
+   A border-top can't reliably meet the √ glyph's arm across fonts and
+   zoom levels, so radicals are typeset properly instead. Load the local
+   mathjax-tex-svg.js in any deck that needs them (see CLAUDE.md).
+   Inside SVG, MathJax can't reach the text: use
+   √<tspan text-decoration="overline">2</tspan>. */
 
 /* Inline formula chip */
 .formula {
