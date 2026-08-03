@@ -1,0 +1,230 @@
+/* ============================================================
+   solutions.css — SOLUTION / ANSWER-KEY PAGES
+   A long-form marking key: hero band, sticky section nav, and
+   question/answer cards. Peer of course.css and hub.css.
+
+   Requires tokens.css first; theme with a body class:
+     <link rel="stylesheet" href="../../assets/css/tokens.css">
+     <link rel="stylesheet" href="../../assets/css/solutions.css">
+     <body class="solutions-page theme-science">
+
+   Components:
+     .hero (.back-btn, .unit-tag, h1, .sub, .meta-row, .teacher-note)
+     .toc sticky chip nav · section.lesson (.lesson-head, .lesson-num,
+     .lesson-title) · .qa card (.q with .qref/.marks, .a) ·
+     table.ans · .tag (.y8/.entry/.fn) · .note · .calc ·
+     .mcq-grid of .mcq · .lockscreen · footer
+
+   NOTE: some solution pages ship their answer body as an encrypted
+   blob injected at runtime, so these class names are a fixed contract
+   — rename them here and previously-encrypted pages stop rendering.
+   ============================================================ */
+
+body.solutions-page {
+  /* Compatibility aliases: encrypted answer payloads were authored
+     against these names and may carry inline var() references. */
+  --forest: var(--accent);
+  --forest-dark: var(--accent-dark);
+  --forest-light: color-mix(in srgb, var(--accent) 14%, #fff);
+  --amber: var(--accent-warm);
+  --amber-bg: color-mix(in srgb, var(--accent-warm) 16%, #fff);
+  --amber-ink: var(--warn);
+  --violet: var(--cas);
+  --violet-bg: #efe9ff;
+  --violet-ink: #4a2f91;
+  --coral: var(--neg);
+  --coral-bg: color-mix(in srgb, var(--neg) 12%, #fff);
+  --coral-ink: #7a1c14;
+  --grey: var(--muted);
+  --white: var(--card);
+
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--c-paper-cool);
+  color: var(--ink);
+  line-height: 1.6;
+}
+.solutions-page * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ---------- Hero band ---------- */
+.solutions-page .hero {
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--accent-dark) 55%, #000) 0%,
+    var(--accent-dark) 55%, var(--accent) 100%);
+  color: #fff;
+  padding: 4vh 6vw 5vh;
+}
+.solutions-page .back-btn {
+  display: inline-block; margin-bottom: 2.4vh;
+  font-family: var(--font-display); font-weight: 600; font-size: .92rem;
+  color: rgba(255,255,255,.9); text-decoration: none;
+  border: 1px solid rgba(255,255,255,.3); border-radius: 100px; padding: .4em 1.1em;
+}
+.solutions-page .back-btn:hover { background: rgba(255,255,255,.15); }
+.solutions-page .unit-tag {
+  display: inline-block; margin-bottom: 1.5vh;
+  background: color-mix(in srgb, var(--accent-warm) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-warm) 60%, transparent);
+  border-radius: 100px; padding: .3em 1em;
+  font-family: var(--font-display); font-size: .8rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: #ffe2b0;
+}
+.solutions-page .hero h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.9rem, 4.5vw, 3.2rem); line-height: 1.05; letter-spacing: -.02em;
+}
+.solutions-page .hero .sub {
+  font-size: clamp(1rem, 1.6vw, 1.25rem); color: rgba(255,255,255,.82);
+  max-width: 60ch; margin-top: 1.2vh;
+}
+.solutions-page .hero .meta-row {
+  display: flex; gap: 1.4vw; flex-wrap: wrap;
+  font-size: .9rem; color: rgba(255,255,255,.7); margin-top: 2vh;
+}
+.solutions-page .teacher-note {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 12px; padding: 1.4vh 1.8vw; margin-top: 2.4vh;
+  font-size: .95rem; color: rgba(255,255,255,.9); max-width: 80ch;
+}
+
+/* ---------- Sticky section nav ---------- */
+.solutions-page .toc {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--c-paper-cool) 95%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--c-line-cool);
+  padding: 1.2vh 6vw; display: flex; gap: .5em; flex-wrap: wrap;
+}
+.solutions-page .toc a {
+  font-family: var(--font-display); font-weight: 600; font-size: .78rem;
+  text-decoration: none; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border: 1px solid transparent; border-radius: 100px; padding: .3em .8em;
+}
+.solutions-page .toc a:hover { border-color: var(--accent); }
+.solutions-page .toc a.review {
+  color: var(--warn); background: color-mix(in srgb, var(--accent-warm) 16%, #fff);
+}
+
+/* ---------- Content ---------- */
+.solutions-page main { max-width: 1000px; margin: 0 auto; padding: 4vh 6vw 8vh; }
+.solutions-page section.lesson { margin-bottom: 5vh; scroll-margin-top: 70px; }
+.solutions-page .lesson-head {
+  display: flex; align-items: baseline; gap: .8em;
+  border-bottom: 3px solid var(--accent); padding-bottom: .6vh; margin-bottom: 2.4vh;
+}
+.solutions-page .lesson-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 2.2rem;
+  color: color-mix(in srgb, var(--accent) 32%, transparent); line-height: 1;
+}
+.solutions-page .lesson-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.3rem, 2.6vw, 1.8rem); color: var(--accent-dark);
+}
+
+/* Question / answer card */
+.solutions-page .qa {
+  border: 1px solid var(--c-line-cool); border-radius: 14px; overflow: hidden;
+  margin-bottom: 1.8vh; background: var(--card); box-shadow: var(--shadow);
+}
+.solutions-page .q {
+  background: color-mix(in srgb, var(--accent) 13%, #fff);
+  padding: 1.2vh 1.4vw; font-weight: 600; color: var(--accent-dark);
+  display: flex; gap: .6em; align-items: baseline;
+}
+.solutions-page .q .qref { font-family: var(--font-display); font-weight: 800; white-space: nowrap; }
+.solutions-page .q .marks {
+  margin-left: auto; font-family: var(--font-display); font-size: .78rem; font-weight: 700;
+  background: var(--accent); color: #fff; border-radius: 100px; padding: .15em .7em; white-space: nowrap;
+}
+.solutions-page .a { padding: 1.4vh 1.6vw; }
+.solutions-page .a p { margin-bottom: .8em; }
+.solutions-page .a p:last-child { margin-bottom: 0; }
+.solutions-page .a ul, .solutions-page .a ol { margin: .4em 0 .8em 1.4em; }
+.solutions-page .a li { margin-bottom: .35em; }
+.solutions-page .a strong { color: var(--accent-dark); }
+.solutions-page .sp { color: var(--muted); font-style: italic; }
+
+.solutions-page table.ans {
+  width: 100%; border-collapse: collapse; margin: .6em 0 .9em; font-size: .92rem;
+}
+.solutions-page table.ans th, .solutions-page table.ans td {
+  border: 1px solid var(--c-line-cool); padding: .5em .7em; text-align: left; vertical-align: top;
+}
+.solutions-page table.ans th {
+  background: color-mix(in srgb, var(--accent) 13%, #fff); color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700;
+}
+.solutions-page table.ans tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--accent) 4%, #fff);
+}
+
+/* Inline markers */
+.solutions-page .tag {
+  display: inline-block; font-size: .72rem; font-family: var(--font-display); font-weight: 700;
+  border-radius: 6px; padding: .1em .55em; margin-right: .3em; vertical-align: middle;
+}
+.solutions-page .tag.y8 { background: #efe9ff; color: #4a2f91; }
+.solutions-page .tag.entry {
+  background: color-mix(in srgb, var(--accent-warm) 18%, #fff); color: var(--warn);
+}
+.solutions-page .tag.fn { background: var(--country-bg); color: var(--country); }
+
+.solutions-page .note {
+  border-left: 4px solid var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 14%, #fff);
+  padding: .8em 1em; border-radius: 0 8px 8px 0; font-size: .9rem; margin: .6em 0; color: var(--warn);
+}
+.solutions-page .note strong { color: var(--warn); }
+.solutions-page .calc {
+  font-family: var(--font-mono);
+  background: color-mix(in srgb, var(--accent) 4%, #fff);
+  border: 1px solid var(--c-line-cool); border-radius: 8px;
+  padding: .7em .9em; margin: .6em 0; font-size: .9rem;
+}
+
+/* Multiple-choice answer grid */
+.solutions-page .mcq-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: .7em; margin: 1em 0;
+}
+.solutions-page .mcq {
+  border: 1px solid var(--c-line-cool); border-radius: 10px;
+  padding: .7em; text-align: center; background: var(--card);
+}
+.solutions-page .mcq .num { font-family: var(--font-display); font-size: .78rem; color: var(--muted); }
+.solutions-page .mcq .let {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.5rem;
+  color: var(--accent); line-height: 1.1;
+}
+
+/* ---------- Staff password gate ---------- */
+.lockscreen { max-width: 520px; margin: 8vh auto; padding: 0 6vw; text-align: center; }
+.lockscreen .lock-icon { font-size: 3rem; line-height: 1; margin-bottom: 1.5vh; }
+.lockscreen h2 {
+  font-family: var(--font-display); color: var(--accent-dark);
+  font-size: 1.5rem; margin-bottom: 1vh;
+}
+.lockscreen p { color: var(--muted); margin-bottom: 2.5vh; }
+.lockscreen form { display: flex; gap: .6em; justify-content: center; flex-wrap: wrap; }
+.lockscreen input {
+  font-family: var(--font-body); font-size: 1rem; padding: .7em 1em;
+  border: 1px solid var(--c-line-cool); border-radius: 10px; min-width: 220px; outline: none;
+}
+.lockscreen input:focus-visible { border-color: var(--accent); outline: 2px solid var(--accent); }
+.lockscreen button {
+  font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; padding: .7em 1.4em; cursor: pointer;
+}
+.lockscreen button:hover { background: var(--accent-dark); }
+.lockscreen .err { color: var(--neg); margin-top: 1.5vh; height: 1.2em; font-size: .9rem; }
+
+.solutions-page footer {
+  text-align: center; padding: 4vh 6vw;
+  color: var(--muted); font-size: .85rem; border-top: 1px solid var(--c-line-cool);
+}
+
+@media print {
+  .solutions-page .toc, .lockscreen, .solutions-page .back-btn { display: none; }
+  .solutions-page .qa { break-inside: avoid; }
+}

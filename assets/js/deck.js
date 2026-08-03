@@ -48,6 +48,7 @@
     history.replaceState(null, "", "#" + (cur + 1));
     updateTag();
     updateFade();
+    markMenu();
   }
 
   /* Frag reveals: forward nav reveals remaining .frag fragments on the
@@ -83,6 +84,8 @@
   /* Keyboard */
   document.addEventListener("keydown", e => {
     if (e.target.matches("input, textarea, select")) return;
+    const m = document.querySelector(".slidemenu");
+    if (m && !m.hidden) return;           /* menu open: let it own the keyboard */
     if (/^[1-9]$/.test(e.key)) {          /* jump to <section data-lesson="n"> */
       const t = slides.findIndex(s => s.dataset.lesson === e.key);
       if (t >= 0) { go(t); return; }
@@ -179,6 +182,39 @@
       if (panel) panel.classList.add("shown");
     });
   });
+
+  /* Slide-jump menu (opt-in): needs a .slidemenu overlay containing
+     .menugrid, plus a .menubtn to open it. Entries are built from every
+     slide carrying data-menu. Absent markup → nothing happens. */
+  const menu = document.querySelector(".slidemenu");
+  const menuGrid = menu && menu.querySelector(".menugrid");
+  let menuItems = [];
+  if (menuGrid) {
+    slides.forEach((s, i) => {
+      const item = document.createElement("button");
+      item.className = "menuitem";
+      item.innerHTML = '<span class="mi-num">' + String(i + 1).padStart(2, "0") + "</span>" +
+                       '<div class="mi-title"></div>';
+      item.querySelector(".mi-title").textContent = s.dataset.menu || "Slide " + (i + 1);
+      item.addEventListener("click", () => { go(i); closeMenu(); });
+      menuGrid.appendChild(item);
+    });
+    menuItems = Array.from(menuGrid.children);
+  }
+  function markMenu() {
+    menuItems.forEach((m, i) => m.classList.toggle("active", i === cur));
+  }
+  function openMenu() { if (!menu) return; markMenu(); menu.hidden = false; }
+  function closeMenu() { if (menu) menu.hidden = true; }
+  function toggleMenu() { if (menu) (menu.hidden ? openMenu() : closeMenu()); }
+  document.querySelectorAll(".menubtn").forEach(b => b.addEventListener("click", toggleMenu));
+  document.querySelectorAll(".menuclose").forEach(b => b.addEventListener("click", closeMenu));
+  if (menu) {
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeMenu();
+      else if ((e.key === "m" || e.key === "M") && !e.target.matches("input, textarea, select")) toggleMenu();
+    });
+  }
 
   /* Init: honour #n in URL, set chrome */
   const fromHash = parseInt(location.hash.slice(1), 10);

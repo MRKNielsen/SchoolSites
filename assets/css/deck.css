@@ -156,6 +156,31 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .pill { font-size: 14px; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 13px; }
 .head-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
 
+/* Booklet/textbook page reference — small chip in the flow, usually
+   right after the .eyebrow. Kept in-flow (not fixed) so it can't
+   collide with .homebtn and still prints. */
+.bookref {
+  display: inline-block; margin-bottom: 10px;
+  font-size: 13px; font-weight: 700; letter-spacing: .04em;
+  color: var(--accent-dark); background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff);
+  border-radius: 999px; padding: 3px 12px;
+}
+
+/* ---------- Prose defaults inside slides ----------
+   The global reset zeroes all margins/padding, which is right for
+   components but leaves bare prose with no rhythm: consecutive
+   paragraphs sit flush, and bare lists get no indent (unlike lists
+   inside a .box, which have had padding-left since the start).
+   These match that existing convention and are scoped to .slide so
+   they can't leak into chrome or cards. */
+.slide > p + p, .slide .cols p + p { margin-top: 10px; }
+.slide > ul, .slide > ol,
+.slide .cols > div > ul, .slide .cols > div > ol { margin-top: 10px; padding-left: 22px; }
+.slide li + li { margin-top: 7px; }
+.slide p + ul, .slide p + ol { margin-top: 8px; }
+.slide ul + p, .slide ol + p { margin-top: 10px; }
+
 /* ---------- Layout ---------- */
 .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: start; }
 .cols.even { grid-template-columns: 1fr 1fr; }
@@ -212,6 +237,11 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .box.flag .lbl { color: var(--warn); }
 .box.cas      { background: #f3effd; border-color: var(--cas); }
 .box.cas .lbl { color: var(--cas); }
+/* First Nations perspectives / Caring for Country — earth tone, fixed
+   across subjects (does not follow the theme accent). */
+.box.country      { background: var(--country-bg); border-color: var(--country); }
+.box.country .lbl { color: var(--country); }
+.box.country p + p { margin-top: 8px; }
 
 /* ---------- Pedagogy: gradual release ---------- */
 .phase-tag {
@@ -242,6 +272,9 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .steps li.ans .stepno { background: var(--neg); }
 .frag { visibility: hidden; }
 .frag.on, .frag.shown { visibility: visible; animation: slideIn .3s ease; }
+/* .frag works on SVG groups too — <g class="frag"> reveals a diagram
+   layer on the same forward-nav click flow as prose fragments. */
+svg .frag { transition: opacity .4s ease; }
 
 /* Numbered work-step cards — <div class="step frag"><span class="n">1</span><span>…</span></div>
    (sequential working shown one line at a time; pairs with .frag reveals) */
@@ -255,6 +288,11 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: .95em; flex: none;
 }
+/* Continuation of the step above: no new number, aligned to the text
+   column so the two read as one move split over two reveals. */
+.step.substep { border-top: none; margin-top: -4px; padding-top: 6px; }
+.step .n-blank { min-width: 30px; flex: none; }
+
 /* Pronunciation / aside text inside worked steps */
 .say { color: var(--muted); font-style: italic; }
 
@@ -292,6 +330,33 @@ table.tbl.vocab td:nth-child(2) { font-style: italic; color: var(--muted); white
 .qcard .a b { color: var(--neg); }
 .qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 900px) { .qgrid { grid-template-columns: 1fr; } }
+
+/* ---------- Option chooser ----------
+   "Pick the one that fits" cards. Unlike a normal .frag the chooser
+   stays visible from the start — revealing it highlights the correct
+   option rather than showing the block, so students commit to an
+   answer first. (.chooser.frag out-specifies .frag's visibility.)
+
+     <div class="chooser frag">
+       <p class="ch-tag">1 · Kingdom <span class="ch-clue">— which group?</span></p>
+       <div class="opts">
+         <div class="opt"><b>Plantae</b><span>Makes its own food.</span></div>
+         <div class="opt correct"><b>Animalia</b><span>Eats other organisms.</span></div>
+       </div>
+     </div>                                                          */
+.chooser.frag { visibility: visible; }
+.chooser + .chooser { border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 12px; }
+.ch-tag { font-family: var(--font-display); font-weight: 700; color: var(--accent-dark); margin-bottom: 8px; }
+.ch-clue { font-family: var(--font-body); font-weight: 400; font-size: .85em; color: var(--muted); }
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.opt {
+  background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  padding: 9px 13px; transition: border-color .3s, background .3s;
+}
+.opt b { display: block; font-size: 15.5px; }
+.opt span { display: block; font-size: 13.5px; color: var(--muted); line-height: 1.3; margin-top: 2px; }
+.chooser.on .opt.correct { background: color-mix(in srgb, var(--pos) 13%, #fff); border-color: var(--pos); }
+.chooser.on .opt.correct b::after { content: " \2713"; color: var(--pos); }
 
 /* Part-by-part worked example */
 .parts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -365,11 +430,68 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 .dot.accent { background: var(--accent); }
 .dot.grey { background: var(--c-slate-300); }
 
+/* ---------- Figure with text wrapping around it ----------
+   For the cases .cols can't express: prose that flows around a
+   figure and then continues full width beneath it. .textflow
+   establishes a block formatting context so the float is contained. */
+.textflow { display: flow-root; }
+.figure-right { float: right; width: 48%; margin: 0 0 14px 26px; }
+.figure-right .graph-card { margin: 0; }
+@media (max-width: 900px) { .figure-right { float: none; width: 100%; margin: 0 0 14px; } }
+
+/* Diagram layer that disappears once a later layer is revealed —
+   how a figure shows an object "moving" without animation code:
+   <g class="vanish">…</g> followed by <g class="frag">…</g> */
+svg .vanish { opacity: 1; transition: opacity .4s ease; }
+svg .vanish:has(~ .frag.on) { opacity: 0; }
+
+/* Diagram layer paired to a prose fragment in the other column, where
+   document order can't give the right sequence. Opts out of deck.js's
+   frag count; a tiny per-deck script mirrors .on across from the prose. */
+svg .keylayer { opacity: 0; transition: opacity .4s ease; }
+svg .keylayer.on { opacity: 1; }
+
 /* ---------- Interactive controls ---------- */
 .ctrl { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 14px 18px; }
 .ctrl label { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; margin-bottom: 5px; }
 .ctrl label output { color: var(--neg); font-variant-numeric: tabular-nums; font-family: var(--font-math); }
 input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+/* ---------- Slide-jump menu (opt-in) ----------
+   Long decks can offer a contents overlay. Add a .menubtn inside
+   .chrome and the overlay markup; deck.js builds the grid from every
+   <section class="slide" data-menu="Title">. Decks without the markup
+   are unaffected — deck.js no-ops when .slidemenu is absent.
+
+     <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+     <div class="slidemenu" hidden>
+       <button class="menuclose" aria-label="Close menu">×</button>
+       <h2>Slide overview</h2>
+       <div class="menugrid"></div>
+     </div>                                                        */
+.slidemenu {
+  position: fixed; inset: 0; z-index: 30;
+  background: color-mix(in srgb, var(--c-slate-900) 96%, transparent);
+  padding: 8vh 6vw; overflow-y: auto;
+}
+.slidemenu[hidden] { display: none; }
+.slidemenu h2 { color: #fff; margin-bottom: 3vh; }
+.menugrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.menuitem {
+  text-align: left; cursor: pointer; color: #fff; font-family: inherit;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  transition: background .15s ease, transform .15s ease;
+}
+.menuitem:hover { background: color-mix(in srgb, var(--accent) 60%, transparent); transform: translateY(-2px); }
+.menuitem.active { border-color: var(--accent-warm); background: color-mix(in srgb, var(--accent-warm) 22%, transparent); }
+.menuitem .mi-num { font-family: var(--font-display); font-weight: 800; font-size: 13px; letter-spacing: .06em; color: var(--accent-warm); }
+.menuitem .mi-title { font-weight: 600; font-size: 16px; margin-top: 3px; }
+.menuclose {
+  position: fixed; top: 3vh; right: 6vw; z-index: 31;
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 22px;
+  background: #fff; color: var(--c-slate-900); border: none;
+}
 
 /* ---------- Teacher notes (hidden in print) ---------- */
 .teacher { margin-top: 14px; border: 1.5px dashed var(--line); border-radius: var(--radius-sm); background: var(--card); }
@@ -391,7 +513,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
   .qcard .a { display: block !important; }
   .steps li, .frag { opacity: 1 !important; visibility: visible !important; transform: none !important; }
   .partpanel { display: block !important; }
-  .teacher { display: none; }
+  .teacher, .slidemenu, .menuclose { display: none; }
   .section-slide { background: #fff; color: var(--ink); }
   .section-slide h1, .section-slide h2 { color: var(--ink); }
 }

@@ -1,9 +1,10 @@
 /* ============================================================
    Biodiversity & Ecosystems — Spaced Retrieval Question Bank
    200 multiple-choice questions tagged by deck (1–11).
+   Consumed by assets/js/quiz.js (in-deck retrieval slides) and quiz.html.
    Format: { deck: N, q: "question text", opts: ["A","B","C","D"], ans: 0-indexed-int }
    ============================================================ */
-window.BIO_QUESTIONS = [
+window.RETRIEVAL_QUESTIONS = [
 
   /* ── DECK 1: Living or Non-living? ─────────────────────────── */
   { deck:1, q:"What is the scientific word for a living thing?", opts:["Habitat","Organism","Species","Ecosystem"], ans:1 },

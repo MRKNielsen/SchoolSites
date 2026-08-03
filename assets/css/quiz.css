@@ -1,0 +1,209 @@
+/* ============================================================
+   quiz.css — RETRIEVAL QUIZ COMPONENTS (opt-in)
+   Multiple-choice question cards with instant feedback. Used by
+   the in-deck spaced-retrieval slide and by standalone quiz pages.
+
+   Requires tokens.css first. Pair with assets/js/quiz.js:
+     <link rel="stylesheet" href="../../assets/css/quiz.css">
+     <script src="questions.js"></script>
+     <script src="../../assets/js/quiz.js" defer></script>
+
+   In-deck slide markup (deck.css also loaded):
+     <section class="slide quiz-slide" data-quiz-before="9">
+       <p class="eyebrow">Spaced retrieval · 5 minutes</p>
+       <h2>Warm-up quiz</h2>
+       <div class="quiz-container"></div>
+     </section>
+
+   Colours come from the theme accent plus the shared --pos/--neg
+   tokens, so a quiz matches whatever subject it is dropped into.
+   ============================================================ */
+
+.quiz-container { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.quiz-none { color: var(--muted); font-style: italic; padding: 12px 0; }
+
+.quiz-q {
+  background: var(--card); border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm); padding: 14px 18px;
+}
+.qq-text { font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
+.qq-num { font-family: var(--font-display); font-weight: 800; color: var(--accent); margin-right: .35em; }
+
+.qq-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+@media (max-width: 900px) { .qq-opts { grid-template-columns: 1fr; } }
+.qq-opt {
+  text-align: left; cursor: pointer; font-family: inherit; font-size: 15.5px; line-height: 1.35;
+  background: var(--paper); color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 8px 13px;
+  transition: background .15s ease, border-color .15s ease;
+}
+.qq-opt:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 10%, #fff); border-color: var(--accent); }
+.qq-opt:disabled { cursor: default; }
+.qq-opt.correct {
+  background: color-mix(in srgb, var(--pos) 15%, #fff);
+  border-color: var(--pos); color: var(--pos); font-weight: 700;
+}
+.qq-opt.wrong {
+  background: color-mix(in srgb, var(--neg) 13%, #fff);
+  border-color: var(--neg); color: var(--neg);
+}
+.qq-feedback { margin-top: 8px; font-size: 15px; font-weight: 700; min-height: 1.4em; }
+.qq-feedback.fb-correct { color: var(--pos); }
+.qq-feedback.fb-wrong { color: var(--neg); }
+
+/* Running tally, revealed once every question has been answered */
+.quiz-tally {
+  display: none; margin-top: 12px; padding: 10px 18px; text-align: center;
+  font-family: var(--font-display); font-weight: 700;
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border: 1.5px solid var(--accent); border-radius: var(--radius-sm);
+  color: var(--accent-dark);
+}
+.quiz-tally.shown { display: block; }
+
+@media print {
+  .qq-opt { border-color: var(--line) !important; background: #fff !important; }
+  .quiz-tally { display: none !important; }
+}
+
+/* ============================================================
+   STANDALONE QUIZ PAGE
+   A full-bleed, one-question-at-a-time quiz app in the subject
+   colour — topic chips to pick a scope, then a card per question
+   and a score ring at the end. Same gradient language as
+   course.css so a unit's quiz matches its landing page.
+
+     <body class="quizapp-page theme-science">
+   All rules below are scoped to that class, so loading quiz.css in
+   a deck can't affect the deck.
+   ============================================================ */
+body.quizapp-page {
+  margin: 0; padding: 5vh 6vw; min-height: 100vh; color: #fff;
+  font-family: var(--font-body); line-height: 1.5;
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--accent-dark) 55%, #000) 0%,
+    var(--accent-dark) 55%, var(--accent) 100%);
+}
+.quizapp-page * { box-sizing: border-box; }
+.quizapp-page .page-header { margin-bottom: 4vh; }
+.quizapp-page .back-link {
+  display: inline-flex; align-items: center; gap: .4em; margin-bottom: 2vh;
+  color: rgba(255,255,255,.7); text-decoration: none; font-size: .92rem;
+}
+.quizapp-page .back-link:hover { color: #fff; }
+.quizapp-page h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1;
+  letter-spacing: -.02em; margin: 0 0 .6vh;
+}
+.quizapp-page .sub { font-size: clamp(.95rem, 1.6vw, 1.25rem); color: rgba(255,255,255,.75); margin: 0; }
+
+/* Setup: pick a topic scope */
+.quizapp-page #setup {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px; padding: 3vh 3vw; max-width: 680px; margin-top: 3vh;
+}
+.quizapp-page .setup-row { margin-bottom: 2.5vh; }
+.quizapp-page .setup-label {
+  display: block; margin-bottom: 1vh; font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(.88rem, 1.4vw, 1.05rem); color: rgba(255,255,255,.9);
+}
+.quizapp-page .chip-group { display: flex; flex-wrap: wrap; gap: .6em; }
+.quizapp-page .chip {
+  background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.25);
+  border-radius: 100px; padding: .35em 1.1em; cursor: pointer; user-select: none;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(.82rem, 1.3vw, 1rem); color: rgba(255,255,255,.85);
+  transition: background .15s, border-color .15s, color .15s;
+}
+.quizapp-page .chip:hover { background: rgba(255,255,255,.22); color: #fff; }
+.quizapp-page .chip.active { background: #fff; border-color: #fff; color: var(--accent-dark); }
+.quizapp-page .start-btn {
+  display: inline-flex; align-items: center; gap: .5em; margin-top: 1vh;
+  background: #fff; color: var(--accent-dark); border: none; border-radius: 100px;
+  padding: .7em 2em; cursor: pointer; box-shadow: var(--shadow);
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(1rem, 1.8vw, 1.3rem);
+  transition: transform .15s, box-shadow .15s;
+}
+.quizapp-page .start-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+
+/* Question run */
+.quizapp-page #quiz { display: none; max-width: 780px; }
+.quizapp-page .progress-bar-wrap { background: rgba(255,255,255,.18); border-radius: 100px; height: 6px; margin-bottom: 3vh; }
+.quizapp-page .progress-bar-fill { height: 100%; background: var(--accent-warm); border-radius: 100px; transition: width .4s ease; }
+.quizapp-page .q-counter {
+  margin-bottom: .8vh; font-family: var(--font-display);
+  font-size: clamp(.85rem, 1.4vw, 1.05rem); color: rgba(255,255,255,.6);
+}
+.quizapp-page .q-card {
+  background: var(--c-paper-cool); color: var(--c-slate-900);
+  border-radius: var(--radius); padding: 3vh 3vw; box-shadow: 0 16px 56px rgba(0,0,0,.25);
+}
+.quizapp-page .q-deck-tag {
+  display: inline-block; margin-bottom: 1.4vh; padding: .25em .8em; border-radius: 100px;
+  background: color-mix(in srgb, var(--accent) 14%, #fff); color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700; font-size: .78rem;
+  text-transform: uppercase; letter-spacing: .07em;
+}
+.quizapp-page .q-text {
+  font-size: clamp(1.05rem, 1.9vw, 1.45rem); font-weight: 600;
+  line-height: 1.45; margin-bottom: 2vh;
+}
+.quizapp-page .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+@media (max-width: 600px) { .quizapp-page .opts { grid-template-columns: 1fr; } }
+.quizapp-page .opt-btn {
+  text-align: left; cursor: pointer; line-height: 1.4;
+  background: #fff; color: var(--c-slate-900);
+  border: 2px solid var(--c-line-cool); border-radius: 10px; padding: 10px 14px;
+  font-family: var(--font-body); font-size: clamp(.92rem, 1.5vw, 1.15rem);
+  transition: background .15s, border-color .15s;
+}
+.quizapp-page .opt-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 10%, #fff); border-color: var(--accent);
+}
+.quizapp-page .opt-btn:disabled { cursor: default; }
+.quizapp-page .opt-btn.correct {
+  background: color-mix(in srgb, var(--pos) 15%, #fff); border-color: var(--pos);
+  color: var(--pos); font-weight: 700;
+}
+.quizapp-page .opt-btn.wrong {
+  background: color-mix(in srgb, var(--neg) 13%, #fff); border-color: var(--neg); color: var(--neg);
+}
+.quizapp-page .feedback {
+  margin-top: 1.6vh; font-weight: 700; min-height: 1.4em;
+  font-size: clamp(.92rem, 1.5vw, 1.15rem); color: var(--c-slate-900);
+}
+.quizapp-page .feedback .correct-label { color: var(--pos); }
+.quizapp-page .feedback .wrong-label { color: var(--neg); }
+.quizapp-page .next-btn {
+  display: none; margin-top: 2vh; cursor: pointer;
+  background: var(--accent); color: #fff; border: none; border-radius: 100px; padding: .65em 2em;
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(.95rem, 1.6vw, 1.2rem);
+  transition: transform .15s, background .15s;
+}
+.quizapp-page .next-btn:hover { transform: translateY(-2px); background: var(--accent-dark); }
+
+/* Results */
+.quizapp-page #results { display: none; max-width: 680px; text-align: center; }
+.quizapp-page .score-ring {
+  width: clamp(120px, 20vw, 180px); height: clamp(120px, 20vw, 180px);
+  border-radius: 50%; margin: 3vh auto;
+  background: rgba(255,255,255,.12); border: 6px solid rgba(255,255,255,.3);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.quizapp-page .score-num { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 5vw, 3.5rem); }
+.quizapp-page .score-denom { font-size: clamp(.9rem, 1.5vw, 1.1rem); color: rgba(255,255,255,.7); }
+.quizapp-page .result-msg {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem); margin-bottom: 1vh;
+}
+.quizapp-page .result-sub { font-size: clamp(.9rem, 1.5vw, 1.15rem); color: rgba(255,255,255,.75); margin-bottom: 3vh; }
+.quizapp-page .result-btns { display: flex; gap: 1em; justify-content: center; flex-wrap: wrap; }
+.quizapp-page .result-btns button {
+  border: none; border-radius: 100px; padding: .65em 1.8em; cursor: pointer;
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(.92rem, 1.5vw, 1.1rem);
+  transition: transform .15s;
+}
+.quizapp-page .result-btns button:hover { transform: translateY(-2px); }
+.quizapp-page .btn-primary { background: #fff; color: var(--accent-dark); }
+.quizapp-page .btn-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1.5px solid rgba(255,255,255,.3); }

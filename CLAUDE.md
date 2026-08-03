@@ -27,8 +27,26 @@ Plus the fonts:
 - `assets/css/deck.css` — the canonical slide system: layout, chrome,
   callout boxes, pedagogy tags, reveals, maths markup, tables, print rules.
 - `assets/js/deck.js` — shared navigation (keys/buttons/swipe), progress,
-  step reveals, answer toggles, part tabs, scroll-fade. Never copy nav JS
-  into a deck.
+  step reveals, answer toggles, part tabs, scroll-fade, slide-jump menu.
+  Never copy nav JS into a deck.
+
+Optional modules — link only when a deck uses them:
+
+- `assets/css/quiz.css` + `assets/js/quiz.js` — multiple-choice retrieval
+  quizzes. A unit-local `questions.js` sets
+  `window.RETRIEVAL_QUESTIONS = [{deck, q, opts, ans}]`; a slide marked
+  `class="slide quiz-slide" data-quiz-before="9" data-quiz-count="5"`
+  containing `<div class="quiz-container"></div>` draws that many
+  questions at random from earlier lessons and scores them. quiz.css also
+  styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
+- Slide-jump menu — add `<button class="navbtn menubtn">` inside
+  `.chrome` plus a `.slidemenu` overlay containing `.menugrid`, and give
+  each slide a `data-menu="…"` title. deck.js builds the contents grid
+  and binds `M`/Escape. Decks without the markup are unaffected.
+
+Other page types: `assets/css/course.css` (unit landing),
+`assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
+(answer-key pages), `assets/css/site.css` (plain index pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -49,10 +67,19 @@ exercises every component and has a theme switcher. Start new decks from
   variants: `title-slide`, `section-slide`, `exit-slide`.
 - Callouts use the box system: `<div class="box key|defn|try|example|hint|answer|question|cas">`
   with a `<span class="lbl">Label</span>` first child.
-- Other content components: `.step`/`.n` numbered working cards,
-  `.formula` inline chip, `table.tbl.vocab` word/say-it/meaning tables,
-  `.say` and `.note` asides. `.key` on its own is a *keyboard cap* — a
-  key-idea callout is `.box.key`.
+- Other content components: `.step`/`.n` numbered working cards
+  (`.step.substep` + `.n-blank` continues the step above without a new
+  number), `.formula` inline chip, `table.tbl.vocab` word/say-it/meaning
+  tables, `.say` and `.note` asides, `.bookref` booklet-page chip,
+  `.chooser`/`.opts`/`.opt.correct` "pick the one that fits" cards,
+  `.textflow`/`.figure-right` for prose wrapping a figure. `.key` on its
+  own is a *keyboard cap* — a key-idea callout is `.box.key`.
+- `.box.country` is the First Nations / Caring for Country callout. Like
+  the pedagogy colours it keeps one earth tone across every subject and
+  does not follow the theme accent.
+- Bare `<p>` and `<ul>`/`<ol>` directly inside a slide get their spacing
+  and indent from the prose defaults in deck.css — don't add per-slide
+  margin styles.
 - Gradual release tags: `<span class="phase-tag ido|wedo|youdo|cas">`.
 - Maths: **typeset whole expressions with MathJax**, e.g.
   `\(\sin 30^\circ = \dfrac{1}{2}\)` — not half MathJax, half CSS. Mixing
@@ -74,6 +101,12 @@ exercises every component and has a theme switcher. Start new decks from
   symbol itself in prose.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
+  `.frag` reveals on forward navigation and works on SVG groups too, so
+  a `<g class="frag">` is a diagram layer. `<g class="vanish">` fades out
+  once a later `.frag` appears. Where a diagram layer must pair with
+  prose in the *other* column (document order can't express that), mark
+  it `.keylayer` and mirror `.on` across with a short per-deck script —
+  see the dichotomous-key slide in year7-science deck4.
 - Vertical centring and overflow (15% top buffer, 15% bottom scroll fade)
   are automatic — do not add per-slide spacing hacks.
 - Chrome (nav buttons, counter, hints) is sized in viewport units on
@@ -110,9 +143,14 @@ to need it, full width, ~80vh, card-style border.)
 
 ## Legacy content
 
-Ported already: year12-specialist (term-3 decks, hub, landing) and
-year10-mathematics/10methods-primer (9 decks + hub).
+Ported already: year12-specialist (term-3 decks, hub, landing),
+year10-mathematics/10methods-primer (9 decks + hub), and year7-science
+bio-ecosystems (11 decks, landing, quiz, solutions — its unit-local
+deck.css/deck.js are gone).
 
-Still on inline styles: year11-methods ch9/11, year7-science
-bio-ecosystems. When touching one, port it to the shared assets rather
-than extending its inline styles.
+Still on inline styles: year11-methods ch9/11. When touching one, port it
+to the shared assets rather than extending its inline styles.
+
+Note on SVG diagrams: convert *theme* colours in figures to tokens, but
+leave genuinely illustrative hues (a fox is orange, water is blue) as
+literal hex — those are content, not palette.
