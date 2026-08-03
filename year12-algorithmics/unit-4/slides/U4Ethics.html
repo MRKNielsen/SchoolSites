@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Ethics — When We Delegate the Decision</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">U4 Ethics · When We Delegate the Decision</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>When We Delegate the Decision</h1>
+  <p>Unit 4 AOS3 · Week 6 — Ethics of data-driven algorithms and AI</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Term 3, 2026 · SAT Submission 2 due Tuesday</p>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Overview" data-menu="This week">
+  <h2>This week</h2>
+  <ul>
+    <li><b>Tuesday</b> — the four dimensions: transparency, accountability, bias, machine ethics.</li>
+    <li><b>Thursday</b> — three case studies, one of them Australian.</li>
+    <li><b>Friday</b> — writing about ethics: the four-move paragraph, then practice.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Why this sits in an algorithms course</span>
+    <p>Not as a moral coda. Every claim you'll make here is a claim about a <em>mechanism</em> — training data, an objective function, a model's opacity. Ethics questions in this subject are answered with the analysis you already have.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Overview" data-menu="Designed vs trained">
+  <h2>Recap: designed vs trained algorithms</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Designed (Units 3–4 AOS1–2)</th><th>Trained (AOS3)</th></tr>
+    <tr><td>Where behaviour comes from</td><td>a human specified every step</td><td>data, via an optimisation loop</td></tr>
+    <tr><td>Can you trace a decision?</td><td>yes — line by line</td><td>rarely — thousands of weights</td></tr>
+    <tr><td>What you verify</td><td>correctness, complexity</td><td>test-set performance, disparate impact</td></tr>
+    <tr><td>Who is answerable</td><td>the person who wrote the rule</td><td>contested</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">Careful</span>
+    <p>Harm is not exclusive to trained systems. One of Thursday's cases is a plain, fully traceable rule — and it did more damage than either of the others.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Four dimensions">
+  <h1>The four dimensions</h1>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Four dimensions" data-menu="1 · Transparency">
+  <h2>1 · Transparency</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>The extent to which the internal workings of a system can be understood and explained to those affected by its decisions.</p>
+  </div>
+  <ul class="small">
+    <li><b>The black box problem:</b> a deep network produces an output with no human-readable reason — opaque even to the people who trained it.</li>
+    <li><b>Why it matters:</b> an affected person cannot challenge what they cannot see; a regulator cannot check compliance; a developer cannot find the fault.</li>
+    <li><b>Responses:</b> <em>interpretable models</em> (decision trees, linear models — understandable by construction), <em>post-hoc explanation</em> tools, and <em>explainable AI</em> techniques generally.</li>
+    <li><b>The trade-off:</b> the most interpretable model is often not the most accurate one. That choice is itself an ethical decision, made by a person.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Four dimensions" data-menu="2 · Accountability">
+  <h2>2 · Accountability</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>The assignment of responsibility for a system's decisions and their consequences.</p>
+  </div>
+  <ul class="small">
+    <li><b>The accountability gap:</b> automating a decision does not automate responsibility for it — but it does break the human chain that used to carry it.</li>
+    <li>Candidates: the developer, the data curator, the organisation that deployed it, the operator who accepted the output.</li>
+    <li><b>Responses:</b> audit trails and decision logs, human-in-the-loop requirements for high-stakes decisions, statutory frameworks (e.g. the EU AI Act).</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Don't conflate these two</span>
+    <p><b>Transparency</b> asks <em>can we understand the decision?</em> &nbsp;<b>Accountability</b> asks <em>who answers for the outcome?</em> A system can be perfectly transparent and still have nobody accountable.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Four dimensions" data-menu="3 · Bias">
+  <h2>3 · Bias — four mechanisms</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Mechanism</th><th>What goes wrong</th><th>Example</th></tr>
+    <tr><td><b>Historical</b></td><td>the training data records past discrimination, so the model reproduces it</td><td>hiring model trained on who was hired before</td></tr>
+    <tr><td><b>Representation</b></td><td>a group is under-represented in the data, so accuracy is worse for them</td><td>medical model trained mostly on male patients</td></tr>
+    <tr><td><b>Measurement</b></td><td>a proxy feature encodes a protected attribute</td><td>postcode standing in for ethnicity in lending</td></tr>
+    <tr><td><b>Feedback loop</b></td><td>biased outputs generate the next round of biased training data</td><td>predictive policing directing patrols, which generate arrests</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">Common mistake</span>
+    <p>Algorithmic bias does not require anyone to be prejudiced. It arises from data and objectives, and appears reliably in systems built by people trying to be fair.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Four dimensions" data-menu="Fairness is not one thing">
+  <h2>Fairness is not one property</h2>
+  <p class="small">Two reasonable definitions of a fair classifier:</p>
+  <ul class="small">
+    <li><b>Calibration:</b> among everyone the model scores as high-risk, the same proportion actually reoffends — regardless of group.</li>
+    <li><b>Equal error rates:</b> the model wrongly flags the same proportion of <em>non</em>-reoffenders in each group.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Impossibility result</span>
+    <p>If the base rate \(p\) genuinely differs between two groups, and the classifier is not perfect, <b>no model can satisfy both conditions at once.</b> This is a theorem, not an engineering shortfall — you cannot buy your way out with more data or a bigger network.</p>
+  </div>
+  <div class="box try"><span class="lbl">Why this belongs in this subject</span>
+    <p>Compare intractability. The response to an NP-hard problem was to choose a trade-off openly and justify it. Same move here: <em>fairness</em> is a choice among incompatible definitions, and the choice must be argued, not assumed.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Four dimensions" data-menu="4 · Machine ethics">
+  <h2>4 · Machine ethics</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>How to design systems that act in morally acceptable ways — and whether ethical principles can be encoded into an algorithm at all.</p>
+  </div>
+  <div class="cols">
+    <div>
+      <p class="small"><b>The standard questions</b></p>
+      <ul class="small">
+        <li>An unavoidable crash: does the vehicle protect the passenger or the pedestrian?</li>
+        <li>May an autonomous weapon decide to use lethal force?</li>
+        <li>How should a triage model allocate scarce ICU beds?</li>
+      </ul>
+    </div>
+    <div>
+      <table class="tbl small">
+        <tr><th>Framework</th><th>Encoded as</th></tr>
+        <tr><td>Utilitarian</td><td>maximise total welfare — may sacrifice a minority</td></tr>
+        <tr><td>Deontological</td><td>hard rules; some actions always forbidden</td></tr>
+        <tr><td>Virtue</td><td>behave as a fair, honest agent would</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">The finding that matters</span>
+    <p>MIT's <em>Moral Machine</em> collected millions of responses to crash dilemmas worldwide and found the preferences vary systematically <b>by culture</b>. There may be no single machine ethics acceptable everywhere — which makes "just program in the right values" an empty instruction.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Case studies">
+  <h1>Three case studies</h1>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Case studies" data-menu="Case 1 · Robodebt">
+  <h2>Case 1 · Robodebt (Australia, 2015–2019)</h2>
+  <ul class="small">
+    <li><b>The mechanism:</b> annual income reported to the ATO was <b>averaged</b> across 26 fortnights and compared to what a recipient had declared. Any gap was raised as a debt.</li>
+    <li><b>Why the maths fails:</b> averaging assumes income arrives evenly. Casual and seasonal workers — precisely the welfare population — earn unevenly, so the average manufactures a discrepancy where none exists.</li>
+    <li><b>The reversal:</b> the scheme shifted the onus of proof onto the recipient, who had to disprove a debt the department had never established.</li>
+    <li><b>Scale:</b> around <b>$746 million</b> wrongly recovered from roughly <b>381,000</b> people; a Royal Commission found the averaging method unlawful. The human cost included deaths by suicide.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The lesson</span>
+    <p>No neural network. No opacity — the rule was arithmetic and fully traceable. The failure was an <b>invalid modelling assumption deployed at scale with no route of appeal</b>. Transparency alone guarantees nothing.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Case studies" data-menu="Case 2 · COMPAS">
+  <h2>Case 2 · COMPAS recidivism scoring (US)</h2>
+  <ul class="small">
+    <li><b>The system:</b> a proprietary risk score used to inform bail and sentencing decisions.</li>
+    <li><b>ProPublica's 2016 finding:</b> among defendants who did <em>not</em> go on to reoffend, Black defendants were wrongly flagged high-risk at roughly <b>twice</b> the rate of white defendants.</li>
+    <li><b>The vendor's reply:</b> the score was <em>calibrated</em> — a given score meant the same reoffending likelihood for either group. Both parties were reading true numbers.</li>
+    <li><b>The resolution:</b> the previous slide's theorem. Different base rates made the two fairness criteria mathematically incompatible; the dispute was never really empirical.</li>
+    <li><b>Compounding factor:</b> the model was a trade secret, so defendants could not inspect the basis of a decision about their liberty.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The lesson</span>
+    <p>"Is this algorithm fair?" is under-specified. Ask <em>fair by which criterion</em>, <em>at whose expense</em>, and <em>who chose</em>.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Case studies" data-menu="Case 3 · Gender Shades">
+  <h2>Case 3 · Facial analysis — <i>Gender Shades</i> (2018)</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>Buolamwini and Gebru audited three commercial gender-classification products.</li>
+        <li>Error rate for <b>lighter-skinned men: as low as 0.8%</b>. For <b>darker-skinned women: up to 34.7%</b>.</li>
+        <li><b>Mechanism:</b> representation bias — benchmark datasets were overwhelmingly light-skinned, so aggregate accuracy looked excellent while a subgroup failed badly.</li>
+        <li><b>Intersectionality:</b> reporting accuracy by skin tone alone, or by gender alone, hides the worst cell. The disparity only appears when you cross them.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 240 190" style="width:96%; height:auto;">
+        <line x1="42" y1="150" x2="230" y2="150" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="42" y1="20" x2="42" y2="150" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="60" y="147" width="34" height="3" fill="#0e7569"/>
+        <rect x="115" y="126" width="34" height="24" fill="#0e7569"/>
+        <rect x="170" y="30" width="34" height="120" fill="#8b1f34"/>
+        <text x="77" y="141" font-size="10" fill="#334155" text-anchor="middle">0.8%</text>
+        <text x="132" y="120" font-size="10" fill="#334155" text-anchor="middle">7%</text>
+        <text x="187" y="24" font-size="10" fill="#334155" text-anchor="middle">34.7%</text>
+        <text x="77" y="164" font-size="9" fill="#64748b" text-anchor="middle">lighter</text>
+        <text x="77" y="175" font-size="9" fill="#64748b" text-anchor="middle">men</text>
+        <text x="132" y="164" font-size="9" fill="#64748b" text-anchor="middle">overall</text>
+        <text x="132" y="175" font-size="9" fill="#64748b" text-anchor="middle">average</text>
+        <text x="187" y="164" font-size="9" fill="#64748b" text-anchor="middle">darker</text>
+        <text x="187" y="175" font-size="9" fill="#64748b" text-anchor="middle">women</text>
+        <text x="20" y="88" font-size="10" fill="#64748b" text-anchor="middle" transform="rotate(-90 20 88)">error rate</text>
+      </svg>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The lesson</span>
+    <p>An aggregate accuracy figure is a <b>political choice about who counts</b>. Always ask what the disaggregated numbers look like.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Case studies" data-menu="Compare the three">
+  <h2>Comparing the three</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Robodebt</th><th>COMPAS</th><th>Gender Shades</th></tr>
+    <tr><td>Trained or designed?</td><td>designed (a rule)</td><td>trained</td><td>trained</td></tr>
+    <tr><td>Primary dimension</td><td>accountability</td><td>bias + transparency</td><td>bias</td></tr>
+    <tr><td>Mechanism</td><td>invalid averaging assumption</td><td>incompatible fairness criteria</td><td>representation bias</td></tr>
+    <tr><td>Was it opaque?</td><td>no</td><td>yes (trade secret)</td><td>partly</td></tr>
+    <tr><td>Mitigation missed</td><td>appeal route, onus of proof</td><td>stating the fairness criterion</td><td>disaggregated testing</td></tr>
+  </table>
+  <div class="box try"><span class="lbl">Discuss</span>
+    <p>Rank these three by severity of harm. Then rank them by how <em>opaque</em> the system was. The orders don't match — what follows from that for "explainability will fix AI ethics"?</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Writing about it">
+  <h1>Writing about ethics</h1>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Writing" data-menu="The four-move paragraph">
+  <h2>The four-move paragraph</h2>
+  <p class="small">Ethics answers lose marks for being opinion. This frame keeps them analytical — four moves, one paragraph.</p>
+  <ol class="steps" id="frame">
+    <li><span class="stepno">1</span> <b>Stakeholder</b> — name who is affected. Not "society"; the specific group bearing the cost.</li>
+    <li><span class="stepno">2</span> <b>Harm</b> — state what they lose, concretely.</li>
+    <li><span class="stepno">3</span> <b>Mechanism</b> — the technical cause: which data, which objective, which opacity. <em>This is the mark that separates Algorithmics from a general essay.</em></li>
+    <li><span class="stepno">4</span> <b>Mitigation</b> — a specific change, plus what it costs. "Remove the bias" is not a mitigation.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#frame">Show the four moves</button>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Writing" data-menu="Worked exemplar">
+  <h2>Worked exemplar</h2>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question</span>
+    <p class="small">A bank deploys a neural network to screen loan applications. Discuss one ethical issue this raises. (4 marks)</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small"><b>[Stakeholder]</b> Applicants from postcodes historically under-served by the bank are the group at risk. <b>[Harm]</b> They face systematically higher rejection rates and cannot obtain a reason for the decision, so they cannot correct or contest it. <b>[Mechanism]</b> The model is trained on the bank's own past approvals, so historical bias is reproduced; postcode functions as a measurement proxy for ethnicity even though ethnicity is never an input, and the network's weights give no traceable justification for an individual refusal. <b>[Mitigation]</b> Test approval rates disaggregated by postcode and demographic group before deployment, and require an interpretable model for refusals so a reason can be issued — accepting a likely reduction in overall predictive accuracy as the cost.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Note the last clause</span>
+    <p>Naming the cost of your own mitigation is what makes it an analysis rather than a wish.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="U4 Ethics · Writing" data-menu="Practice">
+  <h2>Practice</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Distinguish transparency from accountability, with an example where a system has one and not the other. (3 marks)</p>
+      <p class="a">Transparency = the workings can be understood and explained to those affected; accountability = a party is answerable for the outcome. <b>Robodebt</b> was fully transparent — the averaging rule was simple arithmetic — yet no one was answerable, and recipients had no effective appeal. So transparency does not entail accountability.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">A model has 94% overall accuracy. Explain why this figure alone is insufficient to judge it fair. (3 marks)</p>
+      <p class="a">Aggregate accuracy is dominated by the largest group in the test set, so a minority subgroup can fail badly while the headline number stays high — as in <b>Gender Shades</b>, where an acceptable average concealed a 34.7% error rate for darker-skinned women. Fairness requires <b>disaggregated</b> performance across the affected groups.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Two audits of one classifier reach opposite conclusions about its fairness, and neither has made an error. Explain how. (3 marks)</p>
+      <p class="a">They are applying different fairness criteria. If group base rates differ and the classifier is imperfect, <b>calibration</b> and <b>equal false-positive rates</b> cannot both hold — an impossibility result, not a bug. One audit finds it calibrated and fair; the other finds unequal error rates and unfair. Both are correct; the criterion must be chosen and justified. (This was the <b>COMPAS</b> dispute.)</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why might a developer choose a less accurate model deliberately? (2 marks)</p>
+      <p class="a">To gain <b>interpretability</b>. A decision tree or linear model can supply a human-readable reason for each decision, enabling affected people to contest it and regulators to verify compliance. In a high-stakes setting the ability to explain and appeal can outweigh a small accuracy loss.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Four questions to carry</h1>
+    <ol>
+      <li>Can we <b>understand</b> the decision?</li>
+      <li>Who <b>answers</b> for it?</li>
+      <li>Fair <b>to whom</b>, and by <b>which criterion</b>?</li>
+      <li>How should it decide when the ethical frameworks disagree?</li>
+    </ol>
+    <p class="start-hint">Next: Week 7 review, then the SAC on Friday 28 August.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Ethics — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
