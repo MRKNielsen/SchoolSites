@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff blob tool &mdash; encrypt &amp; decrypt gated pages</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+/* Staff-only build tool, never linked from the site and never served to
+   students — it carries a small local style block rather than earning a
+   page type in the design system. */
+body.crypt-page{background:var(--paper);color:var(--ink);font-family:var(--font-body);margin:0}
+.crypt-wrap{max-width:860px;margin:0 auto;padding:5vh 6vw 10vh}
+.crypt-wrap h1{font-family:var(--font-display);color:var(--accent-dark);font-size:1.7rem;margin:0 0 .3em}
+.crypt-wrap .lede{color:var(--muted);margin:0 0 2.4em;max-width:62ch;line-height:1.55}
+.crypt-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:1.6em 1.8em;margin-bottom:1.6em}
+.crypt-card h2{font-family:var(--font-display);font-size:1.15rem;color:var(--accent-dark);margin:0 0 .2em}
+.crypt-card p.hint{color:var(--muted);font-size:.9rem;margin:0 0 1.2em;line-height:1.5}
+label.f{display:block;margin-bottom:1em}
+label.f > span{display:block;font-size:.72rem;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:.35em}
+label.f input[type=password],label.f input[type=file],label.f textarea{
+  width:100%;font:inherit;font-size:.95rem;padding:.6em .75em;box-sizing:border-box;
+  border:1px solid var(--line-strong);border-radius:var(--radius-sm);background:var(--panel);color:inherit}
+label.f textarea{font-family:var(--font-mono);font-size:.8rem;resize:vertical;line-height:1.5}
+.row{display:flex;gap:.6em;flex-wrap:wrap;align-items:center}
+button.go{font-family:var(--font-display);font-weight:700;font-size:.95rem;background:var(--accent);
+  color:var(--c-white);border:none;border-radius:var(--radius-sm);padding:.65em 1.3em;cursor:pointer}
+button.go:hover{background:var(--accent-dark)}
+button.go.ghost{background:var(--panel);color:var(--accent-dark);border:1px solid var(--line-strong)}
+button.go.ghost:hover{background:var(--paper)}
+.msg{font-size:.9rem;margin-top:.9em;min-height:1.3em}
+.msg.ok{color:var(--pos)} .msg.bad{color:var(--neg)}
+.warnbox{background:var(--accent-warm-soft);border-left:4px solid var(--accent-warm);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.9em 1.1em;font-size:.9rem;
+  line-height:1.55;margin-bottom:2em}
+.warnbox strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);padding:.1em .35em;border-radius:4px}
+</style>
+</head>
+<body class="crypt-page theme-science">
+<div class="crypt-wrap">
+
+<h1>Staff blob tool</h1>
+<p class="lede">Encrypts a page&rsquo;s content behind the staff password, and decrypts it back again for editing. Everything happens in this browser &mdash; the password is never sent anywhere and never stored. Used by <code>solutions.html</code> and <code>rubric.html</code> in the Year 7 Science ecosystems unit.</p>
+
+<div class="warnbox">
+  <strong>Keep plaintext out of the repo.</strong> After encrypting, delete the
+  <code>*-payload.html</code> file you fed in &mdash; <code>.gitignore</code> stops it being
+  committed by accident, but the file still sits in your working copy. To edit a gated page
+  later, decrypt it here, change it, and encrypt it again.
+</div>
+
+<div class="crypt-card">
+  <h2>Encrypt</h2>
+  <p class="hint">Choose the plaintext payload &mdash; the HTML that should sit inside <code>&lt;div id="content"&gt;</code> once unlocked. You get back one line to paste over the <code>var BLOB = &hellip;</code> line in the gated page.</p>
+  <label class="f"><span>Payload file</span><input type="file" id="encFile" accept=".html,.htm,.txt"></label>
+  <label class="f"><span>Staff password</span><input type="password" id="encPw" autocomplete="new-password" placeholder="Staff password"></label>
+  <label class="f"><span>Confirm password</span><input type="password" id="encPw2" autocomplete="new-password" placeholder="Type it again"></label>
+  <div class="row">
+    <button class="go" id="btnEnc">Encrypt</button>
+    <button class="go ghost" id="btnCopy" hidden>Copy the line</button>
+    <button class="go ghost" id="btnDl" hidden>Download as .txt</button>
+  </div>
+  <p class="msg" id="encMsg"></p>
+  <label class="f" id="encOutWrap" hidden style="margin-top:1em"><span>Paste this over the <code>var BLOB</code> line</span><textarea id="encOut" rows="4" readonly></textarea></label>
+</div>
+
+<div class="crypt-card">
+  <h2>Decrypt</h2>
+  <p class="hint">Choose a gated page (<code>solutions.html</code>, <code>rubric.html</code>) and it pulls the blob out, decrypts it, and hands back the plaintext payload to edit.</p>
+  <label class="f"><span>Gated page</span><input type="file" id="decFile" accept=".html,.htm,.txt"></label>
+  <label class="f"><span>Staff password</span><input type="password" id="decPw" autocomplete="off" placeholder="Staff password"></label>
+  <div class="row">
+    <button class="go" id="btnDec">Decrypt</button>
+    <button class="go ghost" id="btnDecDl" hidden>Download payload</button>
+  </div>
+  <p class="msg" id="decMsg"></p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var ITER = 250000;
+  var $ = function(s){ return document.querySelector(s); };
+
+  function toB64(buf){
+    var a = new Uint8Array(buf), s = "";
+    for(var i=0;i<a.length;i++) s += String.fromCharCode(a[i]);
+    return btoa(s);
+  }
+  function fromB64(s){
+    var bin = atob(s), a = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) a[i] = bin.charCodeAt(i);
+    return a;
+  }
+  async function deriveKey(pw, salt, iter, usage){
+    var baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), {name:"PBKDF2"}, false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      {name:"PBKDF2", salt:salt, iterations:iter, hash:"SHA-256"},
+      baseKey, {name:"AES-GCM", length:256}, false, [usage]);
+  }
+  function readFile(input){
+    return new Promise(function(resolve, reject){
+      var f = input.files && input.files[0];
+      if(!f){ reject(new Error("Choose a file first.")); return; }
+      var r = new FileReader();
+      r.onload = function(){ resolve(r.result); };
+      r.onerror = function(){ reject(new Error("Could not read that file.")); };
+      r.readAsText(f, "utf-8");
+    });
+  }
+  function say(el, text, cls){
+    el.textContent = text;
+    el.className = "msg" + (cls ? " " + cls : "");
+  }
+  function download(name, text){
+    var url = URL.createObjectURL(new Blob([text], {type:"text/plain;charset=utf-8"}));
+    var a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  /* ---------------- encrypt ---------------- */
+  var encLine = "";
+  $("#btnEnc").addEventListener("click", async function(){
+    var msg = $("#encMsg");
+    var pw = $("#encPw").value, pw2 = $("#encPw2").value;
+    if(!pw){ say(msg, "Enter the staff password.", "bad"); return; }
+    if(pw !== pw2){ say(msg, "The two passwords do not match.", "bad"); return; }
+    try{
+      var plain = await readFile($("#encFile"));
+      say(msg, "Deriving key…", null);
+      var salt = crypto.getRandomValues(new Uint8Array(16));
+      var iv   = crypto.getRandomValues(new Uint8Array(12));
+      var key  = await deriveKey(pw, salt, ITER, "encrypt");
+      var ct   = await crypto.subtle.encrypt({name:"AES-GCM", iv:iv}, key, new TextEncoder().encode(plain));
+      encLine = "var BLOB = " + JSON.stringify({
+        salt: toB64(salt), iv: toB64(iv), iter: ITER, ct: toB64(ct)
+      }) + ";";
+      $("#encOut").value = encLine;
+      $("#encOutWrap").hidden = false;
+      $("#btnCopy").hidden = false;
+      $("#btnDl").hidden = false;
+      say(msg, "Encrypted " + plain.length.toLocaleString() + " characters. Paste the line below over the " +
+               "var BLOB line in the gated page, then delete the plaintext payload.", "ok");
+    }catch(e){
+      say(msg, e.message || "Encryption failed.", "bad");
+    }
+  });
+  $("#btnCopy").addEventListener("click", function(){
+    navigator.clipboard.writeText(encLine).then(function(){
+      say($("#encMsg"), "Copied.", "ok");
+    }, function(){
+      $("#encOut").select();
+      say($("#encMsg"), "Could not reach the clipboard — the text is selected, copy it by hand.", "bad");
+    });
+  });
+  $("#btnDl").addEventListener("click", function(){ download("blob-line.txt", encLine); });
+
+  /* ---------------- decrypt ---------------- */
+  var decOut = "", decName = "payload.html";
+  $("#btnDec").addEventListener("click", async function(){
+    var msg = $("#decMsg");
+    var pw = $("#decPw").value;
+    if(!pw){ say(msg, "Enter the staff password.", "bad"); return; }
+    try{
+      var src = await readFile($("#decFile"));
+      decName = ($("#decFile").files[0].name || "page.html").replace(/\.html?$/i, "") + "-payload.html";
+      /* Pull the blob out of the page source without executing anything. */
+      var m = src.match(/var\s+BLOB\s*=\s*(\{[\s\S]*?\})\s*;/);
+      if(!m){ say(msg, "No 'var BLOB = {…};' line found in that file.", "bad"); return; }
+      var blob = JSON.parse(m[1]);
+      if(!blob.salt || !blob.iv || !blob.ct){ say(msg, "That blob is missing salt, iv or ct.", "bad"); return; }
+      say(msg, "Deriving key…", null);
+      var key = await deriveKey(pw, fromB64(blob.salt), blob.iter || ITER, "decrypt");
+      var pt  = await crypto.subtle.decrypt({name:"AES-GCM", iv:fromB64(blob.iv)}, key, fromB64(blob.ct));
+      decOut = new TextDecoder().decode(pt);
+      $("#btnDecDl").hidden = false;
+      say(msg, "Decrypted " + decOut.length.toLocaleString() + " characters (" +
+               (blob.iter || ITER).toLocaleString() + " PBKDF2 iterations). Download it below.", "ok");
+    }catch(e){
+      if(e && e.name === "OperationError"){ say(msg, "Wrong password, or the blob is corrupt.", "bad"); }
+      else { say(msg, e.message || "Decryption failed.", "bad"); }
+    }
+  });
+  $("#btnDecDl").addEventListener("click", function(){ download(decName, decOut); });
+})();
+</script>
+</body>
+</html>

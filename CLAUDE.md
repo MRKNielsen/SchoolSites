@@ -176,8 +176,8 @@ Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
   `<span class="tag ws">Worksheet</span>`, under a `.subhead` divider at
   the end of that lesson's section. Note that bio-ecosystems'
   `solutions.html` ships its answers as an encrypted blob — adding to it
-  means decrypting with the staff password, splicing, and re-encrypting
-  with the same salt and iteration count.
+  means decrypting, splicing, and re-encrypting via
+  `tools/staff-crypt.html` (see "Staff-gated pages").
 
 On the unit landing page each worksheet is linked directly under its
 lesson: wrap the `.deck-card` and a `.dc-wslink` in a `.deck-item`
@@ -186,6 +186,41 @@ lesson: wrap the `.deck-card` and a `.dc-wslink` in a `.deck-item`
 are unaffected. course.css also has `.ws-strip` / `.ws-link` (`.wl-num`,
 `.wl-title`, `.wl-marks`) under a `.section-head` + `.section-sub` for a
 standalone all-worksheets list, if a unit wants one instead.
+
+## Staff-gated pages
+
+Some pages are for teachers only and ship their content as an encrypted
+blob decrypted in the browser with the staff password: `solutions.html`
+(answer key) and `rubric.html` (the Ecosystem Investigation marking tool)
+in year7-science/bio-ecosystems. The shell links tokens.css +
+solutions.css and uses the shared `.lockscreen` component; the payload
+lives in a single `var BLOB = {salt, iv, iter, ct};` line
+(PBKDF2-SHA256 → AES-GCM).
+
+- **`tools/staff-crypt.html`** does the encrypting and decrypting —
+  open it locally, it never sends the password anywhere. Editing a gated
+  page means: decrypt → edit the payload → re-encrypt → paste the new
+  `var BLOB` line. A *fresh* salt and iteration count each time is fine;
+  the page reads both out of the blob. (Earlier notes here claimed they
+  had to be reused — they don't.)
+- Plaintext payloads are `*-payload.html` and are **gitignored**.
+  Committing one defeats the lock. The encrypted page is the source of
+  truth; round-trip through staff-crypt to make changes.
+- `rubric.html` differs from `solutions.html` in that its payload is an
+  *application*, not static markup. `innerHTML` never executes injected
+  `<script>` elements, so the unlock handler re-creates each one as a
+  fresh node. It also swaps `body.solutions-page` for
+  `body.rubric-page` on unlock — otherwise the solutions-page rules
+  out-specify the tool's own.
+- The marking tool autosaves to `localStorage` so a refresh doesn't lose
+  a class's marks. That means student names and marks sit in the
+  browser profile: use *Save file* then *Clear all marks* on a shared
+  machine.
+- Its palette is mapped onto tokens in one `body.rubric-page` block —
+  band ramp (`--c-band-0..4`) and rubric part hues (`--c-part-b/c/d`)
+  are primitives in tokens.css. Like the pedagogy colours these stay
+  constant across subjects so a printed rubric reads the same whichever
+  subject issued it; Part A follows the theme accent.
 
 ## PDFs
 

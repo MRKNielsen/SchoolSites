@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rubric &amp; Report Generator &mdash; Biodiversity &amp; Ecosystems | Year 7 Science</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/solutions.css">
+</head>
+<body class="solutions-page theme-science">
+
+<div class="hero">
+  <a class="back-btn" href="index.html">&#8592; Back to unit</a>
+  <div class="unit-tag">Teacher Marking Tool &middot; Confidential</div>
+  <h1>Rubric &amp; Report Generator</h1>
+  <p class="sub">Tick off the evidence question by question and the tool works out each student&rsquo;s band on every strand, drafts a report comment, sorts the class into teaching groups, and prints a filled rubric per student.</p>
+  <div class="meta-row">
+    <span>Ecosystem Investigation (CAT)</span><span>&middot;</span>
+    <span>Year 7 core + Year 8 extension</span><span>&middot;</span>
+    <span>Victorian Curriculum F&ndash;10 v2.0</span>
+  </div>
+</div>
+
+<div class="lockscreen" id="lock">
+  <div class="lock-icon">&#128273;</div>
+  <h2>Staff access only</h2>
+  <p>This marking tool is password protected. Enter the staff password to open it.</p>
+  <form id="unlockForm">
+    <input id="pw" type="password" autocomplete="off" placeholder="Password" autofocus />
+    <button type="submit">Unlock</button>
+  </form>
+  <p class="err" id="err"></p>
+</div>
+<div id="content"></div>
+
+<!-- ============================================================
+     Encrypted payload. Regenerate with tools/staff-crypt.html:
+     encrypt year7-science/bio-ecosystems/rubric-payload.html with
+     the staff password and paste the result over the line below.
+     Keep the plaintext payload out of the repo (.gitignore covers
+     *-payload.html) — committing it defeats the lock.
+     ============================================================ -->
+<script id="blob">var BLOB = null;</script>
+
+<script>
+(function(){
+  var b64 = function(s){var bin=atob(s);var a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;};
+
+  async function unlock(pw){
+    var enc = new TextEncoder();
+    var baseKey = await crypto.subtle.importKey("raw", enc.encode(pw), {name:"PBKDF2"}, false, ["deriveKey"]);
+    var key = await crypto.subtle.deriveKey(
+      {name:"PBKDF2", salt:b64(BLOB.salt), iterations:BLOB.iter, hash:"SHA-256"},
+      baseKey, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+    var pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(BLOB.iv)}, key, b64(BLOB.ct));
+    return new TextDecoder().decode(pt);
+  }
+
+  /* The payload is a whole application, not a static answer key, so unlike
+     solutions.html it has to run: innerHTML never executes injected <script>
+     elements, so replace each one with a fresh node the parser will run. */
+  function activateScripts(root){
+    var scripts = Array.prototype.slice.call(root.querySelectorAll("script"));
+    scripts.forEach(function(old){
+      var s = document.createElement("script");
+      for(var i=0;i<old.attributes.length;i++){
+        s.setAttribute(old.attributes[i].name, old.attributes[i].value);
+      }
+      s.textContent = old.textContent;
+      old.parentNode.replaceChild(s, old);
+    });
+  }
+
+  var form = document.getElementById("unlockForm");
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+    var err = document.getElementById("err");
+    err.textContent = "";
+    if(!BLOB){ err.textContent = "This page has no payload yet — encrypt rubric-payload.html with tools/staff-crypt.html."; return; }
+    var html;
+    try{
+      html = await unlock(document.getElementById("pw").value);
+    }catch(ex){
+      err.textContent = "Incorrect password. Try again.";
+      document.getElementById("pw").value = "";
+      document.getElementById("pw").focus();
+      return;
+    }
+    /* Drop the solution-page chrome: the tool brings its own masthead, and
+       body.solutions-page would otherwise out-specify the tool's own rules. */
+    var hero = document.querySelector(".hero");
+    if(hero) hero.remove();
+    document.getElementById("lock").remove();
+    document.body.className = "rubric-page theme-science";
+    var content = document.getElementById("content");
+    content.innerHTML = html;
+    activateScripts(content);
+    window.scrollTo(0,0);
+  });
+})();
+</script>
+</body>
+</html>
