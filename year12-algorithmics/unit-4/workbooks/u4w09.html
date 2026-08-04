@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>u4w09</title>
+    <script type="module" crossorigin src="./assets/index-Gv23EHlE.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-TXkS1QI3.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-BlG0ZrO0.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Blw4afVn.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-C0195JsF.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-DOVIEEPN.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-i2ImZxgc.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BUCH2FMc.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-Dun7Qe4B.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-B7U4xkIN.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-XrBBnd7s.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DYvqRARy.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-B92a4ePY.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-DDGiD1NW.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-CTDqNQr6.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-CCi6aOPm.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BLN8PNJV.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-w-Qo9n0R.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-rzLRd0j9.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-Eq0ag8.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-BP75_5jJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-4bZlU7jl.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-BwJoaaDM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-CkiqGLcK.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-BWBBpCkT.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-CDyU_g2F.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-BmukRjSi.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-D2igisxY.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-B-Q7J_6d.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-ImXS-885.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-C8EV1PoE.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-9-v2bhoi.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-lLOBhc-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-CbdaHKzX.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-Bxv9B31g.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DbOq36rN.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings--BknHX9C.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-CGKw_kwj.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-DoEg0XwL.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-DGx5Af-C.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BKO-pHK6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-12S8I4CH.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DYEuVkEX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CiVShZKM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BJZAIIze.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-aRc_dRed.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DnjsPBRJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DcwTQG1A.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CPjTeT8p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DI1-Z60I.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-FMMSUPAS.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Ct2FT81-.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-CWmnYhGI.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-D5tzp-Y6.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-OiXznToA.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CKO8g4BU.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-BNL5rxQw.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-CJLUCcQg.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-C5HnBH5U.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-WiYBwhUO.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-Bb8Lz8ko.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-BCVepWLJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-JDKr83KO.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-rmawRqQP.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-BUSmWJKC.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-BFPaAUK_.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-4-Qvf4uR.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-5hBv4sjD.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-JxFwu-3G.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-fY-ZfT0b.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-CWQ4BYr-.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BJVx3eBW.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-jlwhGxSb.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-BS_NcSch.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-dHmZR8bI.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-wcQA1Np1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-DZ4glj3f.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-Bxb1_Gtw.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-3iHFdt22.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-neDQUo4Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-C1rWkDWe.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-DbljozeY.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-Rxc-B11B.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-BttHlyvs.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-Bxz_8e44.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-DUCpRFlS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-Cu5WMawt.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-DzTD8LVq.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BOZA7gbn.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-CYq4mK5a.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-BiQ4VzX-.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-D-V4psAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-CN9yTa5s.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-B6HBbAwF.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Bg5iAViP.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-A-Ant1Ad.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-Dx_STMJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-CYQpNADu.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-CzJx-MnJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-Dqxie4gq.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BsxD35VE.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-Bcz1Zikb.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-PgHhDa-M.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-DwYUg-o4.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CH2plyy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-j6fR_dBA.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-BSxEOIn2.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-DzmLpc9A.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CCTAhdFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-CjNeNXDB.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-D7naiWNs.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-C2LWzsCZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B9D0JO9U.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-lG8j6oqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-rtpVEy3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D4GMDkIf.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-WiCgGm__.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-D-tcnZC7.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-C_B8Ux9M.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-BOlXZUla.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-dL5J5ZsZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-AgXtozBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-72W0TZ3L.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-Z-MD3n3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-D2UI9WX5.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-iDRxid4h.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DNNRTPQJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-C7opZZRp.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DREOGG_c.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CIPE8AIY.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-CcU5wNVj.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DBlzcHYf.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-OVajJBPR.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-CboCOq4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-B30N1GS0.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CYfbPYQ0.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-DAu6VO6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CJH9JNGH.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-5XI2VU-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-CODNoWOy.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-90X9nql5.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-852X_cqy.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-BNTWOaI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CsW0tABf.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-CsGOoEZv.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-CqjrpwRC.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-W6ZZMHnc.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-DtCcemo9.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-sLaKP2vj.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-BYlqbYKI.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-Bl8_FVn8.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-CFj86iac.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CSMoa-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-jdbI9Q8O.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-C-Nli4KG.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-hLJmVjNJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-icFgkNy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-C638SUfx.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-gYgfF8y5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-hMc_3QZy.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CSsM95b1.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Bd5tsfm_.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-D1xb4gl6.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-aSiY8T7C.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-Dwo3iXzC.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-DS0r7dNZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DFICx2Qv.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-BL4YVsPy.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-D0TWQ6iT.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-BVzo2MHf.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-8Nlyq3mV.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.23.16\"\napp = marimo.App(width=\"medium\")\n\n\n@app.cell\ndef imports():\n    import marimo as mo\n    import math\n    import random\n    import matplotlib.pyplot as plt\n\n    return math, mo, plt, random\n\n\n@app.cell\ndef header(mo):\n    mo.md(\"\"\"\n    # Unit 4 AOS3 \u2014 Forward Propagation Lab\n\n    **VCE Algorithmics (HESS) \u00b7 AOS3 \u00b7 SAC Friday 28 August**\n\n    - **Part A** \u2014 separating lines and margins (SVM intuition).\n    - **Part B** \u2014 the higher-dimension trick, live.\n    - **Part C** \u2014 forward propagation calculator: check your hand-working.\n    - **Part D** \u2014 over/underfitting demonstration.\n    - **Part E** \u2014 SAC checkpoint questions.\n    \"\"\")\n    return\n\n\n@app.cell\ndef part_a_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part A \u2014 Which line? (SVM's answer: the widest street)\n\n    Both dashed lines separate the training data. Drag the slider to move a\n    **new test point** along the x-axis and see which line keeps classifying it correctly.\n    \"\"\")\n    return\n\n\n@app.cell\ndef a_controls(mo):\n    test_x = mo.ui.slider(0, 100, value=45, step=1, label=\"New point x-position\")\n    return (test_x,)\n\n\n@app.cell\ndef a_plot(mo, plt, test_x):\n    _A = [(15, 70), (25, 80), (20, 55), (30, 68)]\n    _B = [(70, 30), (80, 20), (75, 42), (88, 33)]\n\n    _fig, _ax = plt.subplots(figsize=(7, 4.4))\n    _ax.scatter([p[0] for p in _A], [p[1] for p in _A], c=\"#0e7569\", s=70, label=\"class A\")\n    _ax.scatter([p[0] for p in _B], [p[1] for p in _B], marker=\"s\", c=\"#b45309\", s=70, label=\"class B\")\n    # narrow-margin line hugging class A vs max-margin line\n    _ax.plot([32, 40], [100, 0], \"--\", color=\"#c0392b\", label=\"line 1 (hugs A)\")\n    _ax.plot([20, 85], [100, 0], \"-\", color=\"#334155\", linewidth=2, label=\"line 2 (max margin)\")\n    _ty = 50\n    _ax.scatter([test_x.value], [_ty], marker=\"*\", s=220, c=\"#8b1f34\", zorder=5, label=\"new point\")\n    _ax.set_xlim(0, 100); _ax.set_ylim(0, 100)\n    _ax.legend(fontsize=8, loc=\"upper right\")\n    _ax.set_title(\"Both lines separate the training data \u2014 only one is robust\")\n    mo.mpl.interactive(_fig)\n    return\n\n\n@app.cell\ndef a_question(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"A1. State the SVM optimisation objective in one sentence, and explain (using the \"\n        \"star point) why maximising the margin improves classification of NEW data.\",\n        rows=4,\n    )\n    _q\n    return\n\n\n@app.cell\ndef part_b_header(mo):\n    mo.md(r\"\"\"\n    ---\n    ## Part B \u2014 Higher dimensions, live\n\n    Circle data: class A inside, class B outside. No line works in 2-D.\n    Add the feature \\(z = x^2 + y^2\\) and watch a plane do the job.\n    \"\"\")\n    return\n\n\n@app.cell\ndef b_plot(math, mo, plt, random):\n    _rng = random.Random(5)\n    _A = [(r * math.cos(t), r * math.sin(t))\n          for r, t in [(_rng.uniform(0, 1.6), _rng.uniform(0, 6.28)) for _ in range(25)]]\n    _B = [(r * math.cos(t), r * math.sin(t))\n          for r, t in [(_rng.uniform(2.4, 4), _rng.uniform(0, 6.28)) for _ in range(25)]]\n\n    _fig = plt.figure(figsize=(9, 3.8))\n    _ax1 = _fig.add_subplot(121)\n    _ax1.scatter([p[0] for p in _A], [p[1] for p in _A], c=\"#0e7569\", s=30)\n    _ax1.scatter([p[0] for p in _B], [p[1] for p in _B], marker=\"s\", c=\"#b45309\", s=30)\n    _ax1.set_title(\"2-D: no separating line\", fontsize=10)\n    _ax1.set_aspect(\"equal\")\n\n    _ax2 = _fig.add_subplot(122, projection=\"3d\")\n    _ax2.scatter([p[0] for p in _A], [p[1] for p in _A], [p[0]**2 + p[1]**2 for p in _A], c=\"#0e7569\", s=25)\n    _ax2.scatter([p[0] for p in _B], [p[1] for p in _B], [p[0]**2 + p[1]**2 for p in _B], marker=\"s\", c=\"#b45309\", s=25)\n    import numpy as _np\n    _xx, _yy = _np.meshgrid(_np.linspace(-4, 4, 8), _np.linspace(-4, 4, 8))\n    _ax2.plot_surface(_xx, _yy, _np.full_like(_xx, 4.0), alpha=0.25, color=\"#475569\")\n    _ax2.set_title(\"3-D with z = x\u00b2 + y\u00b2: plane at z = 4 separates\", fontsize=10)\n    mo.mpl.interactive(_fig)\n    return\n\n\n@app.cell\ndef b_question(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"B1. Explain in 2\u20133 sentences how creating higher-dimensional features allows \"\n        \"linear classification of non-linearly-separable data. Use this example.\",\n        rows=4,\n    )\n    _q\n    return\n\n\n@app.cell\ndef part_c_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part C \u2014 Forward propagation calculator\n\n    A 2-input, 2-hidden, 1-output MLP with **step activations** (fire if sum + bias \u003E 0).\n    Set the inputs and weights, **compute the output by hand first**, then reveal.\n    \"\"\")\n    return\n\n\n@app.cell\ndef c_controls(mo):\n    x1 = mo.ui.number(value=1.0, label=\"x\u2081\")\n    x2 = mo.ui.number(value=0.0, label=\"x\u2082\")\n    w = {\n        \"w11\": mo.ui.number(value=0.5, step=0.1, label=\"w x\u2081\u2192h\u2081\"),\n        \"w21\": mo.ui.number(value=-0.3, step=0.1, label=\"w x\u2082\u2192h\u2081\"),\n        \"b1\": mo.ui.number(value=0.1, step=0.1, label=\"bias h\u2081\"),\n        \"w12\": mo.ui.number(value=-0.4, step=0.1, label=\"w x\u2081\u2192h\u2082\"),\n        \"w22\": mo.ui.number(value=0.9, step=0.1, label=\"w x\u2082\u2192h\u2082\"),\n        \"b2\": mo.ui.number(value=-0.2, step=0.1, label=\"bias h\u2082\"),\n        \"v1\": mo.ui.number(value=0.8, step=0.1, label=\"w h\u2081\u2192out\"),\n        \"v2\": mo.ui.number(value=0.7, step=0.1, label=\"w h\u2082\u2192out\"),\n        \"bo\": mo.ui.number(value=-0.5, step=0.1, label=\"bias out\"),\n    }\n    reveal = mo.ui.checkbox(value=False, label=\"Reveal working\")\n    mo.vstack([\n        mo.hstack([x1, x2], gap=1),\n        mo.hstack([w[\"w11\"], w[\"w21\"], w[\"b1\"]], gap=1),\n        mo.hstack([w[\"w12\"], w[\"w22\"], w[\"b2\"]], gap=1),\n        mo.hstack([w[\"v1\"], w[\"v2\"], w[\"bo\"], reveal], gap=1),\n    ], gap=0.5)\n    return reveal, w, x1, x2\n\n\n@app.cell\ndef c_calc(mo, reveal, w, x1, x2):\n    mo.stop(not reveal.value, mo.md(\"*Compute by hand first, then tick 'Reveal working'.*\"))\n\n    _s1 = w[\"w11\"].value * x1.value + w[\"w21\"].value * x2.value + w[\"b1\"].value\n    _h1 = 1 if _s1 \u003E 0 else 0\n    _s2 = w[\"w12\"].value * x1.value + w[\"w22\"].value * x2.value + w[\"b2\"].value\n    _h2 = 1 if _s2 \u003E 0 else 0\n    _so = w[\"v1\"].value * _h1 + w[\"v2\"].value * _h2 + w[\"bo\"].value\n    _out = 1 if _so \u003E 0 else 0\n\n    mo.md(f\"\"\"\n    | Neuron | Weighted sum + bias | Activation (step) |\n    |---|---|---|\n    | h\u2081 | {w[\"w11\"].value}\u00b7{x1.value} + {w[\"w21\"].value}\u00b7{x2.value} + {w[\"b1\"].value} = **{_s1:.2f}** | {_h1} |\n    | h\u2082 | {w[\"w12\"].value}\u00b7{x1.value} + {w[\"w22\"].value}\u00b7{x2.value} + {w[\"b2\"].value} = **{_s2:.2f}** | {_h2} |\n    | out | {w[\"v1\"].value}\u00b7{_h1} + {w[\"v2\"].value}\u00b7{_h2} + {w[\"bo\"].value} = **{_so:.2f}** | **{_out}** |\n\n    **Network output: {_out}.** In the SAC, the sums in column 2 are where the marks live.\n    \"\"\")\n    return\n\n\n@app.cell\ndef part_d_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part D \u2014 Overfitting, demonstrated\n\n    Same data, three polynomial models. Training error falls as the model grows \u2014\n    but watch the **test points** (stars) the model never saw.\n    \"\"\")\n    return\n\n\n@app.cell\ndef d_plot(mo, plt, random):\n    _rng = random.Random(3)\n    def _true(x):\n        return 0.5 * x + 1\n    _train = [(x, _true(x) + _rng.gauss(0, 0.55)) for x in [1, 2, 3, 4.2, 5, 6.5, 7.5, 9]]\n    _test = [(x, _true(x) + _rng.gauss(0, 0.55)) for x in [1.5, 4.8, 8.2]]\n\n    def _fit_poly(pts, deg):\n        import numpy as np\n        xs, ys = [p[0] for p in pts], [p[1] for p in pts]\n        return np.poly1d(np.polyfit(xs, ys, deg))\n\n    import numpy as np\n    _grid = np.linspace(0.5, 9.5, 200)\n    _fig, _axes = plt.subplots(1, 3, figsize=(10, 3.2))\n    for _ax, _deg, _name in zip(_axes, [0, 1, 7], [\"degree 0 (underfit)\", \"degree 1 (good)\", \"degree 7 (overfit)\"]):\n        _p = _fit_poly(_train, _deg)\n        _tr_err = sum((_p(x) - y) ** 2 for x, y in _train) / len(_train)\n        _te_err = sum((_p(x) - y) ** 2 for x, y in _test) / len(_test)\n        _ax.scatter([p[0] for p in _train], [p[1] for p in _train], s=28, c=\"#0e7569\")\n        _ax.scatter([p[0] for p in _test], [p[1] for p in _test], marker=\"*\", s=140, c=\"#8b1f34\", zorder=5)\n        _ax.plot(_grid, _p(_grid), color=\"#475569\", linewidth=1.6)\n        _ax.set_ylim(-1, 8)\n        _ax.set_title(f\"{_name}\\ntrain err {_tr_err:.2f} \u00b7 TEST err {_te_err:.2f}\", fontsize=9)\n        _ax.set_xticks([]); _ax.set_yticks([])\n    mo.mpl.interactive(_fig)\n    return\n\n\n@app.cell\ndef d_question(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"D1. Using the three panels: define overfitting and underfitting, identify the \"\n        \"tell-tale error pattern of each, and state one fix for each.\",\n        rows=5,\n    )\n    _q\n    return\n\n\n@app.cell\ndef part_e_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part E \u2014 SAC checkpoint\n\n    Closed-book answers, timed if you can.\n    \"\"\")\n    return\n\n\n@app.cell\ndef e1(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"E1. Describe the general structure of a Turing machine (4 components) and state \"\n        \"the Church\u2013Turing thesis.\",\n        rows=4,\n    )\n    _q\n    return\n\n\n@app.cell\ndef e2(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"E2. Outline the Halting Problem proof in five moves (assumption \u2192 construction \u2192 \"\n        \"question \u2192 contradiction \u2192 conclusion).\",\n        rows=5,\n    )\n    _q\n    return\n\n\n@app.cell\ndef e3(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"E3. Distinguish strong AI from weak AI, and state precisely which one the Chinese \"\n        \"Room argument targets.\",\n        rows=3,\n    )\n    _q\n    return\n\n\n@app.cell\ndef e4(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"E4. An AI screening tool trained on a decade of hiring data rejects candidates \"\n        \"from certain postcodes at a higher rate. Write an ethics paragraph: stakeholder \u2192 harm \"\n        \"\u2192 mechanism \u2192 mitigation.\",\n        rows=5,\n    )\n    _q\n    return\n\n\n@app.cell\ndef footer(mo):\n    mo.md(\"\"\"\n    ---\n    **SAC Friday 28 August \u00b7 50 marks \u00b7 100 minutes.** Revision pack: `U4SACRevision.pdf`.\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.23.16%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20imports()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20math%0A%20%20%20%20import%20random%0A%20%20%20%20import%20matplotlib.pyplot%20as%20plt%0A%0A%20%20%20%20return%20math%2C%20mo%2C%20plt%2C%20random%0A%0A%0A%40app.cell%0Adef%20header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20Unit%204%20AOS3%20%E2%80%94%20Forward%20Propagation%20Lab%0A%0A%20%20%20%20**VCE%20Algorithmics%20(HESS)%20%C2%B7%20AOS3%20%C2%B7%20SAC%20Friday%2028%20August**%0A%0A%20%20%20%20-%20**Part%20A**%20%E2%80%94%20separating%20lines%20and%20margins%20(SVM%20intuition).%0A%20%20%20%20-%20**Part%20B**%20%E2%80%94%20the%20higher-dimension%20trick%2C%20live.%0A%20%20%20%20-%20**Part%20C**%20%E2%80%94%20forward%20propagation%20calculator%3A%20check%20your%20hand-working.%0A%20%20%20%20-%20**Part%20D**%20%E2%80%94%20over%2Funderfitting%20demonstration.%0A%20%20%20%20-%20**Part%20E**%20%E2%80%94%20SAC%20checkpoint%20questions.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_a_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20A%20%E2%80%94%20Which%20line%3F%20(SVM's%20answer%3A%20the%20widest%20street)%0A%0A%20%20%20%20Both%20dashed%20lines%20separate%20the%20training%20data.%20Drag%20the%20slider%20to%20move%20a%0A%20%20%20%20**new%20test%20point**%20along%20the%20x-axis%20and%20see%20which%20line%20keeps%20classifying%20it%20correctly.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20a_controls(mo)%3A%0A%20%20%20%20test_x%20%3D%20mo.ui.slider(0%2C%20100%2C%20value%3D45%2C%20step%3D1%2C%20label%3D%22New%20point%20x-position%22)%0A%20%20%20%20return%20(test_x%2C)%0A%0A%0A%40app.cell%0Adef%20a_plot(mo%2C%20plt%2C%20test_x)%3A%0A%20%20%20%20_A%20%3D%20%5B(15%2C%2070)%2C%20(25%2C%2080)%2C%20(20%2C%2055)%2C%20(30%2C%2068)%5D%0A%20%20%20%20_B%20%3D%20%5B(70%2C%2030)%2C%20(80%2C%2020)%2C%20(75%2C%2042)%2C%20(88%2C%2033)%5D%0A%0A%20%20%20%20_fig%2C%20_ax%20%3D%20plt.subplots(figsize%3D(7%2C%204.4))%0A%20%20%20%20_ax.scatter(%5Bp%5B0%5D%20for%20p%20in%20_A%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_A%5D%2C%20c%3D%22%230e7569%22%2C%20s%3D70%2C%20label%3D%22class%20A%22)%0A%20%20%20%20_ax.scatter(%5Bp%5B0%5D%20for%20p%20in%20_B%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_B%5D%2C%20marker%3D%22s%22%2C%20c%3D%22%23b45309%22%2C%20s%3D70%2C%20label%3D%22class%20B%22)%0A%20%20%20%20%23%20narrow-margin%20line%20hugging%20class%20A%20vs%20max-margin%20line%0A%20%20%20%20_ax.plot(%5B32%2C%2040%5D%2C%20%5B100%2C%200%5D%2C%20%22--%22%2C%20color%3D%22%23c0392b%22%2C%20label%3D%22line%201%20(hugs%20A)%22)%0A%20%20%20%20_ax.plot(%5B20%2C%2085%5D%2C%20%5B100%2C%200%5D%2C%20%22-%22%2C%20color%3D%22%23334155%22%2C%20linewidth%3D2%2C%20label%3D%22line%202%20(max%20margin)%22)%0A%20%20%20%20_ty%20%3D%2050%0A%20%20%20%20_ax.scatter(%5Btest_x.value%5D%2C%20%5B_ty%5D%2C%20marker%3D%22*%22%2C%20s%3D220%2C%20c%3D%22%238b1f34%22%2C%20zorder%3D5%2C%20label%3D%22new%20point%22)%0A%20%20%20%20_ax.set_xlim(0%2C%20100)%3B%20_ax.set_ylim(0%2C%20100)%0A%20%20%20%20_ax.legend(fontsize%3D8%2C%20loc%3D%22upper%20right%22)%0A%20%20%20%20_ax.set_title(%22Both%20lines%20separate%20the%20training%20data%20%E2%80%94%20only%20one%20is%20robust%22)%0A%20%20%20%20mo.mpl.interactive(_fig)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20a_question(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22A1.%20State%20the%20SVM%20optimisation%20objective%20in%20one%20sentence%2C%20and%20explain%20(using%20the%20%22%0A%20%20%20%20%20%20%20%20%22star%20point)%20why%20maximising%20the%20margin%20improves%20classification%20of%20NEW%20data.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D4%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_b_header(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20B%20%E2%80%94%20Higher%20dimensions%2C%20live%0A%0A%20%20%20%20Circle%20data%3A%20class%20A%20inside%2C%20class%20B%20outside.%20No%20line%20works%20in%202-D.%0A%20%20%20%20Add%20the%20feature%20%5C(z%20%3D%20x%5E2%20%2B%20y%5E2%5C)%20and%20watch%20a%20plane%20do%20the%20job.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20b_plot(math%2C%20mo%2C%20plt%2C%20random)%3A%0A%20%20%20%20_rng%20%3D%20random.Random(5)%0A%20%20%20%20_A%20%3D%20%5B(r%20*%20math.cos(t)%2C%20r%20*%20math.sin(t))%0A%20%20%20%20%20%20%20%20%20%20for%20r%2C%20t%20in%20%5B(_rng.uniform(0%2C%201.6)%2C%20_rng.uniform(0%2C%206.28))%20for%20_%20in%20range(25)%5D%5D%0A%20%20%20%20_B%20%3D%20%5B(r%20*%20math.cos(t)%2C%20r%20*%20math.sin(t))%0A%20%20%20%20%20%20%20%20%20%20for%20r%2C%20t%20in%20%5B(_rng.uniform(2.4%2C%204)%2C%20_rng.uniform(0%2C%206.28))%20for%20_%20in%20range(25)%5D%5D%0A%0A%20%20%20%20_fig%20%3D%20plt.figure(figsize%3D(9%2C%203.8))%0A%20%20%20%20_ax1%20%3D%20_fig.add_subplot(121)%0A%20%20%20%20_ax1.scatter(%5Bp%5B0%5D%20for%20p%20in%20_A%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_A%5D%2C%20c%3D%22%230e7569%22%2C%20s%3D30)%0A%20%20%20%20_ax1.scatter(%5Bp%5B0%5D%20for%20p%20in%20_B%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_B%5D%2C%20marker%3D%22s%22%2C%20c%3D%22%23b45309%22%2C%20s%3D30)%0A%20%20%20%20_ax1.set_title(%222-D%3A%20no%20separating%20line%22%2C%20fontsize%3D10)%0A%20%20%20%20_ax1.set_aspect(%22equal%22)%0A%0A%20%20%20%20_ax2%20%3D%20_fig.add_subplot(122%2C%20projection%3D%223d%22)%0A%20%20%20%20_ax2.scatter(%5Bp%5B0%5D%20for%20p%20in%20_A%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_A%5D%2C%20%5Bp%5B0%5D**2%20%2B%20p%5B1%5D**2%20for%20p%20in%20_A%5D%2C%20c%3D%22%230e7569%22%2C%20s%3D25)%0A%20%20%20%20_ax2.scatter(%5Bp%5B0%5D%20for%20p%20in%20_B%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_B%5D%2C%20%5Bp%5B0%5D**2%20%2B%20p%5B1%5D**2%20for%20p%20in%20_B%5D%2C%20marker%3D%22s%22%2C%20c%3D%22%23b45309%22%2C%20s%3D25)%0A%20%20%20%20import%20numpy%20as%20_np%0A%20%20%20%20_xx%2C%20_yy%20%3D%20_np.meshgrid(_np.linspace(-4%2C%204%2C%208)%2C%20_np.linspace(-4%2C%204%2C%208))%0A%20%20%20%20_ax2.plot_surface(_xx%2C%20_yy%2C%20_np.full_like(_xx%2C%204.0)%2C%20alpha%3D0.25%2C%20color%3D%22%23475569%22)%0A%20%20%20%20_ax2.set_title(%223-D%20with%20z%20%3D%20x%C2%B2%20%2B%20y%C2%B2%3A%20plane%20at%20z%20%3D%204%20separates%22%2C%20fontsize%3D10)%0A%20%20%20%20mo.mpl.interactive(_fig)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20b_question(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22B1.%20Explain%20in%202%E2%80%933%20sentences%20how%20creating%20higher-dimensional%20features%20allows%20%22%0A%20%20%20%20%20%20%20%20%22linear%20classification%20of%20non-linearly-separable%20data.%20Use%20this%20example.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D4%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_c_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20C%20%E2%80%94%20Forward%20propagation%20calculator%0A%0A%20%20%20%20A%202-input%2C%202-hidden%2C%201-output%20MLP%20with%20**step%20activations**%20(fire%20if%20sum%20%2B%20bias%20%3E%200).%0A%20%20%20%20Set%20the%20inputs%20and%20weights%2C%20**compute%20the%20output%20by%20hand%20first**%2C%20then%20reveal.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20c_controls(mo)%3A%0A%20%20%20%20x1%20%3D%20mo.ui.number(value%3D1.0%2C%20label%3D%22x%E2%82%81%22)%0A%20%20%20%20x2%20%3D%20mo.ui.number(value%3D0.0%2C%20label%3D%22x%E2%82%82%22)%0A%20%20%20%20w%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%22w11%22%3A%20mo.ui.number(value%3D0.5%2C%20step%3D0.1%2C%20label%3D%22w%20x%E2%82%81%E2%86%92h%E2%82%81%22)%2C%0A%20%20%20%20%20%20%20%20%22w21%22%3A%20mo.ui.number(value%3D-0.3%2C%20step%3D0.1%2C%20label%3D%22w%20x%E2%82%82%E2%86%92h%E2%82%81%22)%2C%0A%20%20%20%20%20%20%20%20%22b1%22%3A%20mo.ui.number(value%3D0.1%2C%20step%3D0.1%2C%20label%3D%22bias%20h%E2%82%81%22)%2C%0A%20%20%20%20%20%20%20%20%22w12%22%3A%20mo.ui.number(value%3D-0.4%2C%20step%3D0.1%2C%20label%3D%22w%20x%E2%82%81%E2%86%92h%E2%82%82%22)%2C%0A%20%20%20%20%20%20%20%20%22w22%22%3A%20mo.ui.number(value%3D0.9%2C%20step%3D0.1%2C%20label%3D%22w%20x%E2%82%82%E2%86%92h%E2%82%82%22)%2C%0A%20%20%20%20%20%20%20%20%22b2%22%3A%20mo.ui.number(value%3D-0.2%2C%20step%3D0.1%2C%20label%3D%22bias%20h%E2%82%82%22)%2C%0A%20%20%20%20%20%20%20%20%22v1%22%3A%20mo.ui.number(value%3D0.8%2C%20step%3D0.1%2C%20label%3D%22w%20h%E2%82%81%E2%86%92out%22)%2C%0A%20%20%20%20%20%20%20%20%22v2%22%3A%20mo.ui.number(value%3D0.7%2C%20step%3D0.1%2C%20label%3D%22w%20h%E2%82%82%E2%86%92out%22)%2C%0A%20%20%20%20%20%20%20%20%22bo%22%3A%20mo.ui.number(value%3D-0.5%2C%20step%3D0.1%2C%20label%3D%22bias%20out%22)%2C%0A%20%20%20%20%7D%0A%20%20%20%20reveal%20%3D%20mo.ui.checkbox(value%3DFalse%2C%20label%3D%22Reveal%20working%22)%0A%20%20%20%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20mo.hstack(%5Bx1%2C%20x2%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%20%20%20%20mo.hstack(%5Bw%5B%22w11%22%5D%2C%20w%5B%22w21%22%5D%2C%20w%5B%22b1%22%5D%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%20%20%20%20mo.hstack(%5Bw%5B%22w12%22%5D%2C%20w%5B%22w22%22%5D%2C%20w%5B%22b2%22%5D%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%20%20%20%20mo.hstack(%5Bw%5B%22v1%22%5D%2C%20w%5B%22v2%22%5D%2C%20w%5B%22bo%22%5D%2C%20reveal%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%5D%2C%20gap%3D0.5)%0A%20%20%20%20return%20reveal%2C%20w%2C%20x1%2C%20x2%0A%0A%0A%40app.cell%0Adef%20c_calc(mo%2C%20reveal%2C%20w%2C%20x1%2C%20x2)%3A%0A%20%20%20%20mo.stop(not%20reveal.value%2C%20mo.md(%22*Compute%20by%20hand%20first%2C%20then%20tick%20'Reveal%20working'.*%22))%0A%0A%20%20%20%20_s1%20%3D%20w%5B%22w11%22%5D.value%20*%20x1.value%20%2B%20w%5B%22w21%22%5D.value%20*%20x2.value%20%2B%20w%5B%22b1%22%5D.value%0A%20%20%20%20_h1%20%3D%201%20if%20_s1%20%3E%200%20else%200%0A%20%20%20%20_s2%20%3D%20w%5B%22w12%22%5D.value%20*%20x1.value%20%2B%20w%5B%22w22%22%5D.value%20*%20x2.value%20%2B%20w%5B%22b2%22%5D.value%0A%20%20%20%20_h2%20%3D%201%20if%20_s2%20%3E%200%20else%200%0A%20%20%20%20_so%20%3D%20w%5B%22v1%22%5D.value%20*%20_h1%20%2B%20w%5B%22v2%22%5D.value%20*%20_h2%20%2B%20w%5B%22bo%22%5D.value%0A%20%20%20%20_out%20%3D%201%20if%20_so%20%3E%200%20else%200%0A%0A%20%20%20%20mo.md(f%22%22%22%0A%20%20%20%20%7C%20Neuron%20%7C%20Weighted%20sum%20%2B%20bias%20%7C%20Activation%20(step)%20%7C%0A%20%20%20%20%7C---%7C---%7C---%7C%0A%20%20%20%20%7C%20h%E2%82%81%20%7C%20%7Bw%5B%22w11%22%5D.value%7D%C2%B7%7Bx1.value%7D%20%2B%20%7Bw%5B%22w21%22%5D.value%7D%C2%B7%7Bx2.value%7D%20%2B%20%7Bw%5B%22b1%22%5D.value%7D%20%3D%20**%7B_s1%3A.2f%7D**%20%7C%20%7B_h1%7D%20%7C%0A%20%20%20%20%7C%20h%E2%82%82%20%7C%20%7Bw%5B%22w12%22%5D.value%7D%C2%B7%7Bx1.value%7D%20%2B%20%7Bw%5B%22w22%22%5D.value%7D%C2%B7%7Bx2.value%7D%20%2B%20%7Bw%5B%22b2%22%5D.value%7D%20%3D%20**%7B_s2%3A.2f%7D**%20%7C%20%7B_h2%7D%20%7C%0A%20%20%20%20%7C%20out%20%7C%20%7Bw%5B%22v1%22%5D.value%7D%C2%B7%7B_h1%7D%20%2B%20%7Bw%5B%22v2%22%5D.value%7D%C2%B7%7B_h2%7D%20%2B%20%7Bw%5B%22bo%22%5D.value%7D%20%3D%20**%7B_so%3A.2f%7D**%20%7C%20**%7B_out%7D**%20%7C%0A%0A%20%20%20%20**Network%20output%3A%20%7B_out%7D.**%20In%20the%20SAC%2C%20the%20sums%20in%20column%202%20are%20where%20the%20marks%20live.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_d_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20D%20%E2%80%94%20Overfitting%2C%20demonstrated%0A%0A%20%20%20%20Same%20data%2C%20three%20polynomial%20models.%20Training%20error%20falls%20as%20the%20model%20grows%20%E2%80%94%0A%20%20%20%20but%20watch%20the%20**test%20points**%20(stars)%20the%20model%20never%20saw.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20d_plot(mo%2C%20plt%2C%20random)%3A%0A%20%20%20%20_rng%20%3D%20random.Random(3)%0A%20%20%20%20def%20_true(x)%3A%0A%20%20%20%20%20%20%20%20return%200.5%20*%20x%20%2B%201%0A%20%20%20%20_train%20%3D%20%5B(x%2C%20_true(x)%20%2B%20_rng.gauss(0%2C%200.55))%20for%20x%20in%20%5B1%2C%202%2C%203%2C%204.2%2C%205%2C%206.5%2C%207.5%2C%209%5D%5D%0A%20%20%20%20_test%20%3D%20%5B(x%2C%20_true(x)%20%2B%20_rng.gauss(0%2C%200.55))%20for%20x%20in%20%5B1.5%2C%204.8%2C%208.2%5D%5D%0A%0A%20%20%20%20def%20_fit_poly(pts%2C%20deg)%3A%0A%20%20%20%20%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20%20%20%20%20xs%2C%20ys%20%3D%20%5Bp%5B0%5D%20for%20p%20in%20pts%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20pts%5D%0A%20%20%20%20%20%20%20%20return%20np.poly1d(np.polyfit(xs%2C%20ys%2C%20deg))%0A%0A%20%20%20%20import%20numpy%20as%20np%0A%20%20%20%20_grid%20%3D%20np.linspace(0.5%2C%209.5%2C%20200)%0A%20%20%20%20_fig%2C%20_axes%20%3D%20plt.subplots(1%2C%203%2C%20figsize%3D(10%2C%203.2))%0A%20%20%20%20for%20_ax%2C%20_deg%2C%20_name%20in%20zip(_axes%2C%20%5B0%2C%201%2C%207%5D%2C%20%5B%22degree%200%20(underfit)%22%2C%20%22degree%201%20(good)%22%2C%20%22degree%207%20(overfit)%22%5D)%3A%0A%20%20%20%20%20%20%20%20_p%20%3D%20_fit_poly(_train%2C%20_deg)%0A%20%20%20%20%20%20%20%20_tr_err%20%3D%20sum((_p(x)%20-%20y)%20**%202%20for%20x%2C%20y%20in%20_train)%20%2F%20len(_train)%0A%20%20%20%20%20%20%20%20_te_err%20%3D%20sum((_p(x)%20-%20y)%20**%202%20for%20x%2C%20y%20in%20_test)%20%2F%20len(_test)%0A%20%20%20%20%20%20%20%20_ax.scatter(%5Bp%5B0%5D%20for%20p%20in%20_train%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_train%5D%2C%20s%3D28%2C%20c%3D%22%230e7569%22)%0A%20%20%20%20%20%20%20%20_ax.scatter(%5Bp%5B0%5D%20for%20p%20in%20_test%5D%2C%20%5Bp%5B1%5D%20for%20p%20in%20_test%5D%2C%20marker%3D%22*%22%2C%20s%3D140%2C%20c%3D%22%238b1f34%22%2C%20zorder%3D5)%0A%20%20%20%20%20%20%20%20_ax.plot(_grid%2C%20_p(_grid)%2C%20color%3D%22%23475569%22%2C%20linewidth%3D1.6)%0A%20%20%20%20%20%20%20%20_ax.set_ylim(-1%2C%208)%0A%20%20%20%20%20%20%20%20_ax.set_title(f%22%7B_name%7D%5Cntrain%20err%20%7B_tr_err%3A.2f%7D%20%C2%B7%20TEST%20err%20%7B_te_err%3A.2f%7D%22%2C%20fontsize%3D9)%0A%20%20%20%20%20%20%20%20_ax.set_xticks(%5B%5D)%3B%20_ax.set_yticks(%5B%5D)%0A%20%20%20%20mo.mpl.interactive(_fig)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20d_question(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22D1.%20Using%20the%20three%20panels%3A%20define%20overfitting%20and%20underfitting%2C%20identify%20the%20%22%0A%20%20%20%20%20%20%20%20%22tell-tale%20error%20pattern%20of%20each%2C%20and%20state%20one%20fix%20for%20each.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D5%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_e_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20E%20%E2%80%94%20SAC%20checkpoint%0A%0A%20%20%20%20Closed-book%20answers%2C%20timed%20if%20you%20can.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20e1(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22E1.%20Describe%20the%20general%20structure%20of%20a%20Turing%20machine%20(4%20components)%20and%20state%20%22%0A%20%20%20%20%20%20%20%20%22the%20Church%E2%80%93Turing%20thesis.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D4%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20e2(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22E2.%20Outline%20the%20Halting%20Problem%20proof%20in%20five%20moves%20(assumption%20%E2%86%92%20construction%20%E2%86%92%20%22%0A%20%20%20%20%20%20%20%20%22question%20%E2%86%92%20contradiction%20%E2%86%92%20conclusion).%22%2C%0A%20%20%20%20%20%20%20%20rows%3D5%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20e3(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22E3.%20Distinguish%20strong%20AI%20from%20weak%20AI%2C%20and%20state%20precisely%20which%20one%20the%20Chinese%20%22%0A%20%20%20%20%20%20%20%20%22Room%20argument%20targets.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D3%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20e4(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22E4.%20An%20AI%20screening%20tool%20trained%20on%20a%20decade%20of%20hiring%20data%20rejects%20candidates%20%22%0A%20%20%20%20%20%20%20%20%22from%20certain%20postcodes%20at%20a%20higher%20rate.%20Write%20an%20ethics%20paragraph%3A%20stakeholder%20%E2%86%92%20harm%20%22%0A%20%20%20%20%20%20%20%20%22%E2%86%92%20mechanism%20%E2%86%92%20mitigation.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D5%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20footer(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20**SAC%20Friday%2028%20August%20%C2%B7%2050%20marks%20%C2%B7%20100%20minutes.**%20Revision%20pack%3A%20%60U4SACRevision.pdf%60.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.23.16",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>

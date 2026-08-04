@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>u4w04</title>
+    <script type="module" crossorigin src="./assets/index-Gv23EHlE.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-TXkS1QI3.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-BlG0ZrO0.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Blw4afVn.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-C0195JsF.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-DOVIEEPN.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-i2ImZxgc.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BUCH2FMc.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-Dun7Qe4B.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-B7U4xkIN.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-XrBBnd7s.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DYvqRARy.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-B92a4ePY.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-DDGiD1NW.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-CTDqNQr6.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-CCi6aOPm.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BLN8PNJV.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-w-Qo9n0R.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-rzLRd0j9.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-Eq0ag8.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-BP75_5jJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-4bZlU7jl.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-BwJoaaDM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-CkiqGLcK.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-BWBBpCkT.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-CDyU_g2F.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-BmukRjSi.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-D2igisxY.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-B-Q7J_6d.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-ImXS-885.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-C8EV1PoE.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-9-v2bhoi.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-lLOBhc-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-CbdaHKzX.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-Bxv9B31g.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DbOq36rN.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings--BknHX9C.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-CGKw_kwj.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-DoEg0XwL.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-DGx5Af-C.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BKO-pHK6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-12S8I4CH.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DYEuVkEX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CiVShZKM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BJZAIIze.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-aRc_dRed.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DnjsPBRJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DcwTQG1A.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CPjTeT8p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DI1-Z60I.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-FMMSUPAS.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Ct2FT81-.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-CWmnYhGI.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-D5tzp-Y6.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-OiXznToA.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CKO8g4BU.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-BNL5rxQw.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-CJLUCcQg.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-C5HnBH5U.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-WiYBwhUO.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-Bb8Lz8ko.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-BCVepWLJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-JDKr83KO.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-rmawRqQP.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-BUSmWJKC.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-BFPaAUK_.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-4-Qvf4uR.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-5hBv4sjD.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-JxFwu-3G.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-fY-ZfT0b.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-CWQ4BYr-.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BJVx3eBW.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-jlwhGxSb.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-BS_NcSch.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-dHmZR8bI.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-wcQA1Np1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-DZ4glj3f.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-Bxb1_Gtw.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-3iHFdt22.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-neDQUo4Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-C1rWkDWe.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-DbljozeY.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-Rxc-B11B.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-BttHlyvs.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-Bxz_8e44.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-DUCpRFlS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-Cu5WMawt.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-DzTD8LVq.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BOZA7gbn.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-CYq4mK5a.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-BiQ4VzX-.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-D-V4psAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-CN9yTa5s.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-B6HBbAwF.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Bg5iAViP.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-A-Ant1Ad.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-Dx_STMJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-CYQpNADu.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-CzJx-MnJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-Dqxie4gq.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BsxD35VE.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-Bcz1Zikb.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-PgHhDa-M.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-DwYUg-o4.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CH2plyy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-j6fR_dBA.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-BSxEOIn2.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-DzmLpc9A.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CCTAhdFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-CjNeNXDB.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-D7naiWNs.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-C2LWzsCZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B9D0JO9U.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-lG8j6oqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-rtpVEy3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D4GMDkIf.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-WiCgGm__.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-D-tcnZC7.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-C_B8Ux9M.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-BOlXZUla.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-dL5J5ZsZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-AgXtozBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-72W0TZ3L.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-Z-MD3n3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-D2UI9WX5.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-iDRxid4h.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DNNRTPQJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-C7opZZRp.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DREOGG_c.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CIPE8AIY.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-CcU5wNVj.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DBlzcHYf.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-OVajJBPR.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-CboCOq4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-B30N1GS0.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CYfbPYQ0.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-DAu6VO6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CJH9JNGH.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-5XI2VU-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-CODNoWOy.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-90X9nql5.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-852X_cqy.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-BNTWOaI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CsW0tABf.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-CsGOoEZv.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-CqjrpwRC.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-W6ZZMHnc.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-DtCcemo9.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-sLaKP2vj.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-BYlqbYKI.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-Bl8_FVn8.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-CFj86iac.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CSMoa-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-jdbI9Q8O.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-C-Nli4KG.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-hLJmVjNJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-icFgkNy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-C638SUfx.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-gYgfF8y5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-hMc_3QZy.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CSsM95b1.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Bd5tsfm_.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-D1xb4gl6.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-aSiY8T7C.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-Dwo3iXzC.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-DS0r7dNZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DFICx2Qv.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-BL4YVsPy.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-D0TWQ6iT.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-BVzo2MHf.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-8Nlyq3mV.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.23.16\"\napp = marimo.App(width=\"medium\")\n\n\n@app.cell\ndef imports():\n    import marimo as mo\n    import math\n    import json\n    import datetime\n    import os\n\n    SAVE_FILE = \"responses_u4w04.json\"\n    return math, mo\n\n\n@app.cell\ndef header(mo):\n    mo.md(\"\"\"\n    # Unit 4 AOS1 \u2014 Memo 02 Scaffold\n\n    **VCE Algorithmics (HESS) \u00b7 AOS1 \u00b7 SAT Criteria 5\u20137**\n\n    This workbook is your working document for Memo 02 (due **Tue 18 August**\n    with Amendments A03/A04). Everything you draft here transfers directly\n    into the memo.\n\n    - **Part A** \u2014 module inventory: every module, its structure, tool, and bound.\n    - **Part B** \u2014 the tally: compose your headline bound.\n    - **Part C** \u2014 scaling projections: what your bound means at real sizes (C6).\n    - **Part D** \u2014 consequences \u0026 comparison paragraph drafts (C6, C7).\n    \"\"\")\n    return\n\n\n@app.cell\ndef part_a_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part A \u2014 Module inventory\n\n    One entry per module of your Unit 3 solution (including helpers).\n    For **structure**, describe loops/recursion in one line, e.g.\n    \"double loop over all node pairs\" or \"recurrence T(n) = T(n/2) + c\".\n    For **tool**: loop counting \u00b7 amortised edge count \u00b7 expansion \u00b7 Master Theorem case k.\n    \"\"\")\n    return\n\n\n@app.cell\ndef module_rows(mo):\n    def _module_entry(i):\n        return mo.vstack([\n            mo.md(f\"### Module {i}\"),\n            mo.hstack([\n                mo.ui.text(placeholder=\"e.g. BuildFacilityGraph\", label=\"Name\"),\n                mo.ui.text(placeholder=\"e.g. |V|, |E| of facility graph\", label=\"Input size variables\"),\n            ], gap=1),\n            mo.ui.text(placeholder=\"Loop / recursion structure in one line\", label=\"Structure\", full_width=True),\n            mo.hstack([\n                mo.ui.text(placeholder=\"e.g. amortised edge count\", label=\"Tool\"),\n                mo.ui.text(placeholder=\"e.g. O(|V| + |E|)\", label=\"Tightest worst-case bound\"),\n            ], gap=1),\n            mo.ui.text(placeholder=\"One-sentence justification\", label=\"Justification\", full_width=True),\n        ], gap=0.5)\n\n    mo.vstack([_module_entry(i) for i in range(1, 7)], gap=1.5)\n    return\n\n\n@app.cell\ndef part_b_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part B \u2014 The tally\n\n    Compose your module bounds along the main control flow, exactly like the\n    VCAA FriendshipRecommender exemplar: list each module's bound, note which\n    run inside loops (multiply!), add the sequence, keep the dominant term.\n    \"\"\")\n    return\n\n\n@app.cell\ndef tally(mo):\n    _tally = mo.ui.text_area(\n        placeholder=(\n            \"e.g.\\n\"\n            \"BuildGraph: O(|V|\u00b2)  (runs once)\\n\"\n            \"InitialiseEdges: O(|E|) = O(|V|\u00b2) on complete graph  (runs once)\\n\"\n            \"AdjustWeights: O(k) per edge \u00d7 |V|\u00b2 edges = O(|V|\u00b2)\\n\"\n            \"FloydWarshall: O(|V|\u00b3)  (runs once)\\n\"\n            \"Recommend: O(|V|\u00b2)\\n\"\n            \"TALLY: 2\u00b7O(|V|\u00b2) + O(|V|\u00b2) + O(|V|\u00b3) + O(|V|\u00b2) = O(|V|\u00b3)\\n\"\n            \"HEADLINE: O(|V|\u00b3), dominated by Floyd\u2013Warshall.\"\n        ),\n        label=\"Your tally\",\n        rows=10,\n        full_width=True,\n    )\n    _tally\n    return\n\n\n@app.cell\ndef part_c_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part C \u2014 Scaling projections (C6 evidence)\n\n    Enter your headline bound and your realistic input sizes.\n    The calculator shows projected operation counts and rough wall-clock time\n    at 10\u2079 ops/second \u2014 the raw material for your consequences paragraph.\n    \"\"\")\n    return\n\n\n@app.cell\ndef scaling_controls(mo):\n    bound = mo.ui.dropdown(\n        options=[\"n\", \"n log n\", \"n\u00b2\", \"n\u00b3\", \"2\u207f\"],\n        value=\"n\u00b3\",\n        label=\"Headline bound (in one size variable n)\",\n    )\n    n_now = mo.ui.number(value=50, start=1, stop=10**9, label=\"Realistic n today\")\n    n_scale = mo.ui.dropdown(options=[\"2\", \"10\", \"100\"], value=\"10\", label=\"Growth factor to test\")\n    mo.hstack([bound, n_now, n_scale], justify=\"start\", gap=1.5)\n    return bound, n_now, n_scale\n\n\n@app.cell\ndef scaling_calc(bound, math, mo, n_now, n_scale):\n    def _ops(kind, n):\n        if kind == \"n\":\n            return n\n        if kind == \"n log n\":\n            return n * max(math.log2(n), 1)\n        if kind == \"n\u00b2\":\n            return n**2\n        if kind == \"n\u00b3\":\n            return n**3\n        return 2**n if n \u003C= 100 else float(\"inf\")\n\n    def _fmt_time(ops):\n        if ops == float(\"inf\"):\n            return \"beyond astronomical\"\n        s = ops / 1e9\n        if s \u003C 1e-3:\n            return f\"{s*1e6:.1f} \u00b5s\"\n        if s \u003C 1:\n            return f\"{s*1e3:.1f} ms\"\n        if s \u003C 60:\n            return f\"{s:.1f} s\"\n        if s \u003C 3600:\n            return f\"{s/60:.1f} min\"\n        if s \u003C 86400 * 365:\n            return f\"{s/3600:.1f} h\"\n        return f\"{s/(86400*365):,.0f} years\"\n\n    _n1 = int(n_now.value)\n    _n2 = _n1 * int(n_scale.value)\n    _o1, _o2 = _ops(bound.value, _n1), _ops(bound.value, _n2)\n    _ratio = \"\u221e\" if _o2 == float(\"inf\") else f\"\u00d7{_o2/_o1:,.0f}\"\n\n    mo.md(f\"\"\"\n    | | n = {_n1:,} | n = {_n2:,} ({n_scale.value}\u00d7 growth) |\n    |---|---|---|\n    | Operations ({bound.value}) | {_o1:,.0f} | {\"\u221e\" if _o2 == float(\"inf\") else f\"{_o2:,.0f}\"} |\n    | Time @ 10\u2079 ops/s | {_fmt_time(_o1)} | {_fmt_time(_o2)} |\n\n    **Growth multiplier: {_ratio}.**\n    Sentence starter: *\"At today's scale (n \u2248 {_n1:,}) the solution runs in {_fmt_time(_o1)};\n    if the input grows {n_scale.value}\u00d7, this becomes {_fmt_time(_o2)} \u2014 a {_ratio} increase.\"*\n    \"\"\")\n    return\n\n\n@app.cell\ndef part_d_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part D \u2014 Paragraph drafts\n\n    Use the four-sentence template from class:\n    **bound \u2192 scale \u2192 implication \u2192 decision.**\n    \"\"\")\n    return\n\n\n@app.cell\ndef d_consequences(mo):\n    _c6 = mo.ui.text_area(\n        placeholder=\"Sentence 1 (bound): ...\\nSentence 2 (scale): ...\\nSentence 3 (implication): ...\\nSentence 4 (decision): ...\",\n        label=\"C6 draft \u2014 consequences of your headline bound\",\n        rows=7,\n        full_width=True,\n    )\n    _c6\n    return\n\n\n@app.cell\ndef d_comparison(mo):\n    _c7 = mo.ui.text_area(\n        placeholder=(\n            \"Compare your chosen algorithm against at least one alternative for the same task.\\n\"\n            \"State both bounds, the conditions under which each wins, and your conclusion.\"\n        ),\n        label=\"C7 draft \u2014 comparison of solutions\",\n        rows=7,\n        full_width=True,\n    )\n    _c7\n    return\n\n\n@app.cell\ndef d_bottleneck(mo):\n    _bn = mo.ui.text_area(\n        placeholder=\"Which module dominates the tally, and why is it the natural target for Unit 4 Outcome 2 improvement?\",\n        label=\"Bridge to Memo 03 \u2014 name your bottleneck\",\n        rows=4,\n        full_width=True,\n    )\n    _bn\n    return\n\n\n@app.cell\ndef checklist(mo):\n    mo.md(\"\"\"\n    ---\n    ## Submission checklist (Tue 18 Aug)\n\n    - [ ] Every module has: structure, tool, tightest bound, justification\n    - [ ] Tally paragraph with headline bound\n    - [ ] C6 consequences paragraph (four sentences, names real sizes)\n    - [ ] C7 comparison with conditions and a conclusion\n    - [ ] Amendments A03 and A04 completed\n    - [ ] Workbook saved; authentication declaration signed\n    - [ ] Seed unchanged from Submission 1\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.23.16%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20imports()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%20%20%20%20import%20math%0A%20%20%20%20import%20json%0A%20%20%20%20import%20datetime%0A%20%20%20%20import%20os%0A%0A%20%20%20%20SAVE_FILE%20%3D%20%22responses_u4w04.json%22%0A%20%20%20%20return%20math%2C%20mo%0A%0A%0A%40app.cell%0Adef%20header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20Unit%204%20AOS1%20%E2%80%94%20Memo%2002%20Scaffold%0A%0A%20%20%20%20**VCE%20Algorithmics%20(HESS)%20%C2%B7%20AOS1%20%C2%B7%20SAT%20Criteria%205%E2%80%937**%0A%0A%20%20%20%20This%20workbook%20is%20your%20working%20document%20for%20Memo%2002%20(due%20**Tue%2018%20August**%0A%20%20%20%20with%20Amendments%20A03%2FA04).%20Everything%20you%20draft%20here%20transfers%20directly%0A%20%20%20%20into%20the%20memo.%0A%0A%20%20%20%20-%20**Part%20A**%20%E2%80%94%20module%20inventory%3A%20every%20module%2C%20its%20structure%2C%20tool%2C%20and%20bound.%0A%20%20%20%20-%20**Part%20B**%20%E2%80%94%20the%20tally%3A%20compose%20your%20headline%20bound.%0A%20%20%20%20-%20**Part%20C**%20%E2%80%94%20scaling%20projections%3A%20what%20your%20bound%20means%20at%20real%20sizes%20(C6).%0A%20%20%20%20-%20**Part%20D**%20%E2%80%94%20consequences%20%26%20comparison%20paragraph%20drafts%20(C6%2C%20C7).%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_a_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20A%20%E2%80%94%20Module%20inventory%0A%0A%20%20%20%20One%20entry%20per%20module%20of%20your%20Unit%203%20solution%20(including%20helpers).%0A%20%20%20%20For%20**structure**%2C%20describe%20loops%2Frecursion%20in%20one%20line%2C%20e.g.%0A%20%20%20%20%22double%20loop%20over%20all%20node%20pairs%22%20or%20%22recurrence%20T(n)%20%3D%20T(n%2F2)%20%2B%20c%22.%0A%20%20%20%20For%20**tool**%3A%20loop%20counting%20%C2%B7%20amortised%20edge%20count%20%C2%B7%20expansion%20%C2%B7%20Master%20Theorem%20case%20k.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20module_rows(mo)%3A%0A%20%20%20%20def%20_module_entry(i)%3A%0A%20%20%20%20%20%20%20%20return%20mo.vstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.md(f%22%23%23%23%20Module%20%7Bi%7D%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.hstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22e.g.%20BuildFacilityGraph%22%2C%20label%3D%22Name%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22e.g.%20%7CV%7C%2C%20%7CE%7C%20of%20facility%20graph%22%2C%20label%3D%22Input%20size%20variables%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22Loop%20%2F%20recursion%20structure%20in%20one%20line%22%2C%20label%3D%22Structure%22%2C%20full_width%3DTrue)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.hstack(%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22e.g.%20amortised%20edge%20count%22%2C%20label%3D%22Tool%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22e.g.%20O(%7CV%7C%20%2B%20%7CE%7C)%22%2C%20label%3D%22Tightest%20worst-case%20bound%22)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%2C%20gap%3D1)%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20mo.ui.text(placeholder%3D%22One-sentence%20justification%22%2C%20label%3D%22Justification%22%2C%20full_width%3DTrue)%2C%0A%20%20%20%20%20%20%20%20%5D%2C%20gap%3D0.5)%0A%0A%20%20%20%20mo.vstack(%5B_module_entry(i)%20for%20i%20in%20range(1%2C%207)%5D%2C%20gap%3D1.5)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_b_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20B%20%E2%80%94%20The%20tally%0A%0A%20%20%20%20Compose%20your%20module%20bounds%20along%20the%20main%20control%20flow%2C%20exactly%20like%20the%0A%20%20%20%20VCAA%20FriendshipRecommender%20exemplar%3A%20list%20each%20module's%20bound%2C%20note%20which%0A%20%20%20%20run%20inside%20loops%20(multiply!)%2C%20add%20the%20sequence%2C%20keep%20the%20dominant%20term.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20tally(mo)%3A%0A%20%20%20%20_tally%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D(%0A%20%20%20%20%20%20%20%20%20%20%20%20%22e.g.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22BuildGraph%3A%20O(%7CV%7C%C2%B2)%20%20(runs%20once)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22InitialiseEdges%3A%20O(%7CE%7C)%20%3D%20O(%7CV%7C%C2%B2)%20on%20complete%20graph%20%20(runs%20once)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22AdjustWeights%3A%20O(k)%20per%20edge%20%C3%97%20%7CV%7C%C2%B2%20edges%20%3D%20O(%7CV%7C%C2%B2)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22FloydWarshall%3A%20O(%7CV%7C%C2%B3)%20%20(runs%20once)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Recommend%3A%20O(%7CV%7C%C2%B2)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22TALLY%3A%202%C2%B7O(%7CV%7C%C2%B2)%20%2B%20O(%7CV%7C%C2%B2)%20%2B%20O(%7CV%7C%C2%B3)%20%2B%20O(%7CV%7C%C2%B2)%20%3D%20O(%7CV%7C%C2%B3)%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22HEADLINE%3A%20O(%7CV%7C%C2%B3)%2C%20dominated%20by%20Floyd%E2%80%93Warshall.%22%0A%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20label%3D%22Your%20tally%22%2C%0A%20%20%20%20%20%20%20%20rows%3D10%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20_tally%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_c_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20C%20%E2%80%94%20Scaling%20projections%20(C6%20evidence)%0A%0A%20%20%20%20Enter%20your%20headline%20bound%20and%20your%20realistic%20input%20sizes.%0A%20%20%20%20The%20calculator%20shows%20projected%20operation%20counts%20and%20rough%20wall-clock%20time%0A%20%20%20%20at%2010%E2%81%B9%20ops%2Fsecond%20%E2%80%94%20the%20raw%20material%20for%20your%20consequences%20paragraph.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20scaling_controls(mo)%3A%0A%20%20%20%20bound%20%3D%20mo.ui.dropdown(%0A%20%20%20%20%20%20%20%20options%3D%5B%22n%22%2C%20%22n%20log%20n%22%2C%20%22n%C2%B2%22%2C%20%22n%C2%B3%22%2C%20%222%E2%81%BF%22%5D%2C%0A%20%20%20%20%20%20%20%20value%3D%22n%C2%B3%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22Headline%20bound%20(in%20one%20size%20variable%20n)%22%2C%0A%20%20%20%20)%0A%20%20%20%20n_now%20%3D%20mo.ui.number(value%3D50%2C%20start%3D1%2C%20stop%3D10**9%2C%20label%3D%22Realistic%20n%20today%22)%0A%20%20%20%20n_scale%20%3D%20mo.ui.dropdown(options%3D%5B%222%22%2C%20%2210%22%2C%20%22100%22%5D%2C%20value%3D%2210%22%2C%20label%3D%22Growth%20factor%20to%20test%22)%0A%20%20%20%20mo.hstack(%5Bbound%2C%20n_now%2C%20n_scale%5D%2C%20justify%3D%22start%22%2C%20gap%3D1.5)%0A%20%20%20%20return%20bound%2C%20n_now%2C%20n_scale%0A%0A%0A%40app.cell%0Adef%20scaling_calc(bound%2C%20math%2C%20mo%2C%20n_now%2C%20n_scale)%3A%0A%20%20%20%20def%20_ops(kind%2C%20n)%3A%0A%20%20%20%20%20%20%20%20if%20kind%20%3D%3D%20%22n%22%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20n%0A%20%20%20%20%20%20%20%20if%20kind%20%3D%3D%20%22n%20log%20n%22%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20n%20*%20max(math.log2(n)%2C%201)%0A%20%20%20%20%20%20%20%20if%20kind%20%3D%3D%20%22n%C2%B2%22%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20n**2%0A%20%20%20%20%20%20%20%20if%20kind%20%3D%3D%20%22n%C2%B3%22%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20n**3%0A%20%20%20%20%20%20%20%20return%202**n%20if%20n%20%3C%3D%20100%20else%20float(%22inf%22)%0A%0A%20%20%20%20def%20_fmt_time(ops)%3A%0A%20%20%20%20%20%20%20%20if%20ops%20%3D%3D%20float(%22inf%22)%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20%22beyond%20astronomical%22%0A%20%20%20%20%20%20%20%20s%20%3D%20ops%20%2F%201e9%0A%20%20%20%20%20%20%20%20if%20s%20%3C%201e-3%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%7Bs*1e6%3A.1f%7D%20%C2%B5s%22%0A%20%20%20%20%20%20%20%20if%20s%20%3C%201%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%7Bs*1e3%3A.1f%7D%20ms%22%0A%20%20%20%20%20%20%20%20if%20s%20%3C%2060%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%7Bs%3A.1f%7D%20s%22%0A%20%20%20%20%20%20%20%20if%20s%20%3C%203600%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%7Bs%2F60%3A.1f%7D%20min%22%0A%20%20%20%20%20%20%20%20if%20s%20%3C%2086400%20*%20365%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20f%22%7Bs%2F3600%3A.1f%7D%20h%22%0A%20%20%20%20%20%20%20%20return%20f%22%7Bs%2F(86400*365)%3A%2C.0f%7D%20years%22%0A%0A%20%20%20%20_n1%20%3D%20int(n_now.value)%0A%20%20%20%20_n2%20%3D%20_n1%20*%20int(n_scale.value)%0A%20%20%20%20_o1%2C%20_o2%20%3D%20_ops(bound.value%2C%20_n1)%2C%20_ops(bound.value%2C%20_n2)%0A%20%20%20%20_ratio%20%3D%20%22%E2%88%9E%22%20if%20_o2%20%3D%3D%20float(%22inf%22)%20else%20f%22%C3%97%7B_o2%2F_o1%3A%2C.0f%7D%22%0A%0A%20%20%20%20mo.md(f%22%22%22%0A%20%20%20%20%7C%20%7C%20n%20%3D%20%7B_n1%3A%2C%7D%20%7C%20n%20%3D%20%7B_n2%3A%2C%7D%20(%7Bn_scale.value%7D%C3%97%20growth)%20%7C%0A%20%20%20%20%7C---%7C---%7C---%7C%0A%20%20%20%20%7C%20Operations%20(%7Bbound.value%7D)%20%7C%20%7B_o1%3A%2C.0f%7D%20%7C%20%7B%22%E2%88%9E%22%20if%20_o2%20%3D%3D%20float(%22inf%22)%20else%20f%22%7B_o2%3A%2C.0f%7D%22%7D%20%7C%0A%20%20%20%20%7C%20Time%20%40%2010%E2%81%B9%20ops%2Fs%20%7C%20%7B_fmt_time(_o1)%7D%20%7C%20%7B_fmt_time(_o2)%7D%20%7C%0A%0A%20%20%20%20**Growth%20multiplier%3A%20%7B_ratio%7D.**%0A%20%20%20%20Sentence%20starter%3A%20*%22At%20today's%20scale%20(n%20%E2%89%88%20%7B_n1%3A%2C%7D)%20the%20solution%20runs%20in%20%7B_fmt_time(_o1)%7D%3B%0A%20%20%20%20if%20the%20input%20grows%20%7Bn_scale.value%7D%C3%97%2C%20this%20becomes%20%7B_fmt_time(_o2)%7D%20%E2%80%94%20a%20%7B_ratio%7D%20increase.%22*%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_d_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20D%20%E2%80%94%20Paragraph%20drafts%0A%0A%20%20%20%20Use%20the%20four-sentence%20template%20from%20class%3A%0A%20%20%20%20**bound%20%E2%86%92%20scale%20%E2%86%92%20implication%20%E2%86%92%20decision.**%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20d_consequences(mo)%3A%0A%20%20%20%20_c6%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Sentence%201%20(bound)%3A%20...%5CnSentence%202%20(scale)%3A%20...%5CnSentence%203%20(implication)%3A%20...%5CnSentence%204%20(decision)%3A%20...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22C6%20draft%20%E2%80%94%20consequences%20of%20your%20headline%20bound%22%2C%0A%20%20%20%20%20%20%20%20rows%3D7%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20_c6%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20d_comparison(mo)%3A%0A%20%20%20%20_c7%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D(%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Compare%20your%20chosen%20algorithm%20against%20at%20least%20one%20alternative%20for%20the%20same%20task.%5Cn%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%22State%20both%20bounds%2C%20the%20conditions%20under%20which%20each%20wins%2C%20and%20your%20conclusion.%22%0A%20%20%20%20%20%20%20%20)%2C%0A%20%20%20%20%20%20%20%20label%3D%22C7%20draft%20%E2%80%94%20comparison%20of%20solutions%22%2C%0A%20%20%20%20%20%20%20%20rows%3D7%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20_c7%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20d_bottleneck(mo)%3A%0A%20%20%20%20_bn%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Which%20module%20dominates%20the%20tally%2C%20and%20why%20is%20it%20the%20natural%20target%20for%20Unit%204%20Outcome%202%20improvement%3F%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22Bridge%20to%20Memo%2003%20%E2%80%94%20name%20your%20bottleneck%22%2C%0A%20%20%20%20%20%20%20%20rows%3D4%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20_bn%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20checklist(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Submission%20checklist%20(Tue%2018%20Aug)%0A%0A%20%20%20%20-%20%5B%20%5D%20Every%20module%20has%3A%20structure%2C%20tool%2C%20tightest%20bound%2C%20justification%0A%20%20%20%20-%20%5B%20%5D%20Tally%20paragraph%20with%20headline%20bound%0A%20%20%20%20-%20%5B%20%5D%20C6%20consequences%20paragraph%20(four%20sentences%2C%20names%20real%20sizes)%0A%20%20%20%20-%20%5B%20%5D%20C7%20comparison%20with%20conditions%20and%20a%20conclusion%0A%20%20%20%20-%20%5B%20%5D%20Amendments%20A03%20and%20A04%20completed%0A%20%20%20%20-%20%5B%20%5D%20Workbook%20saved%3B%20authentication%20declaration%20signed%0A%20%20%20%20-%20%5B%20%5D%20Seed%20unchanged%20from%20Submission%201%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.23.16",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <!-- Preload is necessary because we show these images when we disconnect from the server,
+    but at that point we cannot load these images from the server -->
+    <link rel="preload" href="./assets/gradient-yHQUC_QB.png" as="image" />
+    <link rel="preload" href="./assets/noise-60BoTA8O.png" as="image" />
+    <!-- Preload the fonts -->
+    <link rel="preload" href="./assets/Lora-VariableFont_wght-CZceb_kH.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Regular-Bam3NpBI.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/PTSans-Bold-C_DwAp7Z.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Regular-CEsLFVD9.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Medium-D5MAsWEG.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="./assets/FiraMono-Bold-C6PDArdf.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="a marimo app" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script data-marimo="true">
+      function __resizeIframe(obj) {
+        const scrollbarHeight = 20; // Max between windows, mac, and linux
+
+        function setHeight() {
+          // Guard against race condition where iframe isn't ready
+          if (!obj.contentWindow?.document?.documentElement) {
+            return;
+          }
+          const element = obj.contentWindow.document.documentElement;
+          // If there is no vertical scrollbar, we don't need to resize the iframe
+          if (element.scrollHeight === element.clientHeight) {
+            return;
+          }
+
+          // Create a new height that includes the scrollbar height if it's visible
+          const hasHorizontalScrollbar = element.scrollWidth > element.clientWidth;
+          const newHeight = element.scrollHeight + (hasHorizontalScrollbar ? scrollbarHeight : 0);
+
+          // Only update the height if it's different from the current height
+          if (obj.style.height !== `${newHeight}px`) {
+            obj.style.height = `${newHeight}px`;
+          }
+        }
+
+        // Resize the iframe to the height of the content and bottom scrollbar height
+        setHeight();
+
+        // Resize the iframe when the content changes
+        const resizeObserver = new ResizeObserver((_entries) => {
+          setHeight();
+        });
+        // Only observe if iframe content is ready
+        if (obj.contentWindow?.document?.body) {
+          resizeObserver.observe(obj.contentWindow.document.body);
+        }
+      }
+    </script>
+    <marimo-filename hidden>notebook.py</marimo-filename>
+    <!-- TODO(Trevor): Legacy, required by VS Code plugin. Remove when plugin is updated (see marimo/server/_templates/template.py) -->
+    <marimo-version data-version="{{ version }}" hidden></marimo-version>
+    <marimo-user-config data-config="{{ user_config }}" hidden></marimo-user-config>
+    <marimo-server-token data-token="{{ server_token }}" hidden></marimo-server-token>
+    <!-- /TODO -->
+    <title>u4w08</title>
+    <script type="module" crossorigin src="./assets/index-Gv23EHlE.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-TXkS1QI3.js">
+    <link rel="modulepreload" crossorigin href="./assets/objects-BlG0ZrO0.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-LvLJmgfZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-Bj1aDYRI.js">
+    <link rel="modulepreload" crossorigin href="./assets/compiler-runtime-B3qBwwSJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Blw4afVn.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEventListener-C0195JsF.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-DOVIEEPN.js">
+    <link rel="modulepreload" crossorigin href="./assets/precisionRound-i2ImZxgc.js">
+    <link rel="modulepreload" crossorigin href="./assets/defaultLocale-BUCH2FMc.js">
+    <link rel="modulepreload" crossorigin href="./assets/vega-loader.browser-Dun7Qe4B.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-B7U4xkIN.js">
+    <link rel="modulepreload" crossorigin href="./assets/clsx-XrBBnd7s.js">
+    <link rel="modulepreload" crossorigin href="./assets/cn-DYvqRARy.js">
+    <link rel="modulepreload" crossorigin href="./assets/badge-B92a4ePY.js">
+    <link rel="modulepreload" crossorigin href="./assets/button-DDGiD1NW.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-CSu739Rf.js">
+    <link rel="modulepreload" crossorigin href="./assets/fullscreen-CTDqNQr6.js">
+    <link rel="modulepreload" crossorigin href="./assets/menu-items-CCi6aOPm.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BLN8PNJV.js">
+    <link rel="modulepreload" crossorigin href="./assets/createLucideIcon-w-Qo9n0R.js">
+    <link rel="modulepreload" crossorigin href="./assets/check-rzLRd0j9.js">
+    <link rel="modulepreload" crossorigin href="./assets/x-C-Eq0ag8.js">
+    <link rel="modulepreload" crossorigin href="./assets/select-BP75_5jJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/tooltip-4bZlU7jl.js">
+    <link rel="modulepreload" crossorigin href="./assets/use-toast-BwJoaaDM.js">
+    <link rel="modulepreload" crossorigin href="./assets/useEvent-D91BmmQi.js">
+    <link rel="modulepreload" crossorigin href="./assets/invariant-CkiqGLcK.js">
+    <link rel="modulepreload" crossorigin href="./assets/isObject-DvLSfCY5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseFor-DKD1r8uL.js">
+    <link rel="modulepreload" crossorigin href="./assets/merge-_9WLTEyt.js">
+    <link rel="modulepreload" crossorigin href="./assets/zod-H_cgTO0M.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-BWBBpCkT.js">
+    <link rel="modulepreload" crossorigin href="./assets/constants-CDyU_g2F.js">
+    <link rel="modulepreload" crossorigin href="./assets/session-BmukRjSi.js">
+    <link rel="modulepreload" crossorigin href="./assets/Deferred-D2igisxY.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-B-Q7J_6d.js">
+    <link rel="modulepreload" crossorigin href="./assets/uuid-ImXS-885.js">
+    <link rel="modulepreload" crossorigin href="./assets/DeferredRequestRegistry-C8EV1PoE.js">
+    <link rel="modulepreload" crossorigin href="./assets/requests-9-v2bhoi.js">
+    <link rel="modulepreload" crossorigin href="./assets/useLifecycle-lLOBhc-1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNonce-CbdaHKzX.js">
+    <link rel="modulepreload" crossorigin href="./assets/useTheme-Bxv9B31g.js">
+    <link rel="modulepreload" crossorigin href="./assets/arrays-DbOq36rN.js">
+    <link rel="modulepreload" crossorigin href="./assets/strings--BknHX9C.js">
+    <link rel="modulepreload" crossorigin href="./assets/once-CGKw_kwj.js">
+    <link rel="modulepreload" crossorigin href="./assets/capabilities-DoEg0XwL.js">
+    <link rel="modulepreload" crossorigin href="./assets/createReducer-DGx5Af-C.js">
+    <link rel="modulepreload" crossorigin href="./assets/paths-BKO-pHK6.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-12S8I4CH.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DYEuVkEX.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CiVShZKM.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-BJZAIIze.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-aRc_dRed.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DnjsPBRJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DcwTQG1A.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-CPjTeT8p.js">
+    <link rel="modulepreload" crossorigin href="./assets/dist-DI1-Z60I.js">
+    <link rel="modulepreload" crossorigin href="./assets/stex-FMMSUPAS.js">
+    <link rel="modulepreload" crossorigin href="./assets/toDate-Ct2FT81-.js">
+    <link rel="modulepreload" crossorigin href="./assets/purify.es-CWmnYhGI.js">
+    <link rel="modulepreload" crossorigin href="./assets/cjs-D5tzp-Y6.js">
+    <link rel="modulepreload" crossorigin href="./assets/isSymbol-BT6B8Bon.js">
+    <link rel="modulepreload" crossorigin href="./assets/now-CsYTPAhW.js">
+    <link rel="modulepreload" crossorigin href="./assets/debounce-OiXznToA.js">
+    <link rel="modulepreload" crossorigin href="./assets/database-zap-CKO8g4BU.js">
+    <link rel="modulepreload" crossorigin href="./assets/main-BNL5rxQw.js">
+    <link rel="modulepreload" crossorigin href="./assets/cells-CJLUCcQg.js">
+    <link rel="modulepreload" crossorigin href="./assets/kbd-C5HnBH5U.js">
+    <link rel="modulepreload" crossorigin href="./assets/useInstallPackage-WiYBwhUO.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-dialog-Bb8Lz8ko.js">
+    <link rel="modulepreload" crossorigin href="./assets/dialog-BCVepWLJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDebounce-JDKr83KO.js">
+    <link rel="modulepreload" crossorigin href="./assets/numbers-rmawRqQP.js">
+    <link rel="modulepreload" crossorigin href="./assets/SSRProvider-BUSmWJKC.js">
+    <link rel="modulepreload" crossorigin href="./assets/context-BFPaAUK_.js">
+    <link rel="modulepreload" crossorigin href="./assets/useNumberFormatter-4-Qvf4uR.js">
+    <link rel="modulepreload" crossorigin href="./assets/usePress-5hBv4sjD.js">
+    <link rel="modulepreload" crossorigin href="./assets/input-JxFwu-3G.js">
+    <link rel="modulepreload" crossorigin href="./assets/ImperativeModal-fY-ZfT0b.js">
+    <link rel="modulepreload" crossorigin href="./assets/cell-link-CWQ4BYr-.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-BJVx3eBW.js">
+    <link rel="modulepreload" crossorigin href="./assets/alert-jlwhGxSb.js">
+    <link rel="modulepreload" crossorigin href="./assets/chevron-right-BS_NcSch.js">
+    <link rel="modulepreload" crossorigin href="./assets/dropdown-menu-dHmZR8bI.js">
+    <link rel="modulepreload" crossorigin href="./assets/links-wcQA1Np1.js">
+    <link rel="modulepreload" crossorigin href="./assets/useRunCells-DZ4glj3f.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-Bxb1_Gtw.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-3iHFdt22.js">
+    <link rel="modulepreload" crossorigin href="./assets/copy-icon-neDQUo4Q.js">
+    <link rel="modulepreload" crossorigin href="./assets/RenderHTML-C1rWkDWe.js">
+    <link rel="modulepreload" crossorigin href="./assets/datasource-DbljozeY.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-Rxc-B11B.js">
+    <link rel="modulepreload" crossorigin href="./assets/hat-glasses-BttHlyvs.js">
+    <link rel="modulepreload" crossorigin href="./assets/package-Bxz_8e44.js">
+    <link rel="modulepreload" crossorigin href="./assets/sparkles-DUCpRFlS.js">
+    <link rel="modulepreload" crossorigin href="./assets/MarimoErrorOutput-Cu5WMawt.js">
+    <link rel="modulepreload" crossorigin href="./assets/ErrorBoundary-DzTD8LVq.js">
+    <link rel="modulepreload" crossorigin href="./assets/eye-off-BOZA7gbn.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-cw-CYq4mK5a.js">
+    <link rel="modulepreload" crossorigin href="./assets/tree-actions-BiQ4VzX-.js">
+    <link rel="modulepreload" crossorigin href="./assets/spinner-D-V4psAa.js">
+    <link rel="modulepreload" crossorigin href="./assets/html-to-image-CN9yTa5s.js">
+    <link rel="modulepreload" crossorigin href="./assets/focus-B6HBbAwF.js">
+    <link rel="modulepreload" crossorigin href="./assets/useAsyncData-Bg5iAViP.js">
+    <link rel="modulepreload" crossorigin href="./assets/LazyAnyLanguageCodeMirror-A-Ant1Ad.js">
+    <link rel="modulepreload" crossorigin href="./assets/micromark-factory-space-Dx_STMJD.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-5FQGJX7Z-CYQpNADu.js">
+    <link rel="modulepreload" crossorigin href="./assets/markdown-renderer-CzJx-MnJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/command-Dqxie4gq.js">
+    <link rel="modulepreload" crossorigin href="./assets/field-BsxD35VE.js">
+    <link rel="modulepreload" crossorigin href="./assets/popover-Bcz1Zikb.js">
+    <link rel="modulepreload" crossorigin href="./assets/errors-PgHhDa-M.js">
+    <link rel="modulepreload" crossorigin href="./assets/download-DwYUg-o4.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-CH2plyy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/useIframeCapabilities-j6fR_dBA.js">
+    <link rel="modulepreload" crossorigin href="./assets/error-banner-BSxEOIn2.js">
+    <link rel="modulepreload" crossorigin href="./assets/formats-DzmLpc9A.js">
+    <link rel="modulepreload" crossorigin href="./assets/utils-CCTAhdFi.js">
+    <link rel="modulepreload" crossorigin href="./assets/en-US-CjNeNXDB.js">
+    <link rel="modulepreload" crossorigin href="./assets/isValid-D7naiWNs.js">
+    <link rel="modulepreload" crossorigin href="./assets/dates-C2LWzsCZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/extends-B9D0JO9U.js">
+    <link rel="modulepreload" crossorigin href="./assets/emotion-is-prop-valid.esm-lG8j6oqk.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDateFormatter-rtpVEy3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-icons.esm-D4GMDkIf.js">
+    <link rel="modulepreload" crossorigin href="./assets/RSPContexts-WiCgGm__.js">
+    <link rel="modulepreload" crossorigin href="./assets/table-D-tcnZC7.js">
+    <link rel="modulepreload" crossorigin href="./assets/ellipsis-C_B8Ux9M.js">
+    <link rel="modulepreload" crossorigin href="./assets/external-link-BOlXZUla.js">
+    <link rel="modulepreload" crossorigin href="./assets/message-circle-dL5J5ZsZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/plus-AgXtozBz.js">
+    <link rel="modulepreload" crossorigin href="./assets/trash-2-72W0TZ3L.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-resizable-panels.browser.esm-Z-MD3n3J.js">
+    <link rel="modulepreload" crossorigin href="./assets/JsonOutput-D2UI9WX5.js">
+    <link rel="modulepreload" crossorigin href="./assets/chart-no-axes-column-iDRxid4h.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-function-DNNRTPQJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/spec-C7opZZRp.js">
+    <link rel="modulepreload" crossorigin href="./assets/column-preview-DREOGG_c.js">
+    <link rel="modulepreload" crossorigin href="./assets/icons-CIPE8AIY.js">
+    <link rel="modulepreload" crossorigin href="./assets/radio-group-CcU5wNVj.js">
+    <link rel="modulepreload" crossorigin href="./assets/floating-outline-DBlzcHYf.js">
+    <link rel="modulepreload" crossorigin href="./assets/switch-OVajJBPR.js">
+    <link rel="modulepreload" crossorigin href="./assets/objectWithoutPropertiesLoose-CboCOq4o.js">
+    <link rel="modulepreload" crossorigin href="./assets/esm-B30N1GS0.js">
+    <link rel="modulepreload" crossorigin href="./assets/readonly-python-code-CYfbPYQ0.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-headphone-DAu6VO6j.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-CJH9JNGH.js">
+    <link rel="modulepreload" crossorigin href="./assets/image-5XI2VU-q.js">
+    <link rel="modulepreload" crossorigin href="./assets/file-icons-CODNoWOy.js">
+    <link rel="modulepreload" crossorigin href="./assets/events-90X9nql5.js">
+    <link rel="modulepreload" crossorigin href="./assets/share-852X_cqy.js">
+    <link rel="modulepreload" crossorigin href="./assets/blob-BNTWOaI9.js">
+    <link rel="modulepreload" crossorigin href="./assets/memoize-Tp7rARFe.js">
+    <link rel="modulepreload" crossorigin href="./assets/get-C-qh_et5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_baseSet-CsW0tABf.js">
+    <link rel="modulepreload" crossorigin href="./assets/state-CsGOoEZv.js">
+    <link rel="modulepreload" crossorigin href="./assets/label-CqjrpwRC.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-W6ZZMHnc.js">
+    <link rel="modulepreload" crossorigin href="./assets/textarea-DtCcemo9.js">
+    <link rel="modulepreload" crossorigin href="./assets/refresh-ccw-sLaKP2vj.js">
+    <link rel="modulepreload" crossorigin href="./assets/form-BYlqbYKI.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderShortcut-Bl8_FVn8.js">
+    <link rel="modulepreload" crossorigin href="./assets/useBoolean-CFj86iac.js">
+    <link rel="modulepreload" crossorigin href="./assets/useDeepCompareMemoize-CSMoa-ga.js">
+    <link rel="modulepreload" crossorigin href="./assets/types-jdbI9Q8O.js">
+    <link rel="modulepreload" crossorigin href="./assets/semaphore-C-Nli4KG.js">
+    <link rel="modulepreload" crossorigin href="./assets/fileToBase64-hLJmVjNJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/pathUtils-icFgkNy9.js">
+    <link rel="modulepreload" crossorigin href="./assets/prop-types-C638SUfx.js">
+    <link rel="modulepreload" crossorigin href="./assets/es-gYgfF8y5.js">
+    <link rel="modulepreload" crossorigin href="./assets/_hasPath-hMc_3QZy.js">
+    <link rel="modulepreload" crossorigin href="./assets/hasIn-CSsM95b1.js">
+    <link rel="modulepreload" crossorigin href="./assets/flatten-Bd5tsfm_.js">
+    <link rel="modulepreload" crossorigin href="./assets/pick-D1xb4gl6.js">
+    <link rel="modulepreload" crossorigin href="./assets/code-xml-aSiY8T7C.js">
+    <link rel="modulepreload" crossorigin href="./assets/globe-Dwo3iXzC.js">
+    <link rel="modulepreload" crossorigin href="./assets/house-DS0r7dNZ.js">
+    <link rel="modulepreload" crossorigin href="./assets/square-DFICx2Qv.js">
+    <link rel="modulepreload" crossorigin href="./assets/triangle-alert-BL4YVsPy.js">
+    <link rel="modulepreload" crossorigin href="./assets/bundle.esm-D0TWQ6iT.js">
+    <link rel="stylesheet" crossorigin href="./assets/cells-BVzo2MHf.css">
+    <link rel="stylesheet" crossorigin href="./assets/markdown-renderer-DdDKmWlR.css">
+    <link rel="stylesheet" crossorigin href="./assets/JsonOutput-BQtz7-np.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-8Nlyq3mV.css">
+  <marimo-wasm hidden=""></marimo-wasm>
+    <script>
+        if (window.location.protocol === 'file:') {
+            alert('Warning: This file must be served by an HTTP server to function correctly.');
+        }
+    </script>
+    
+    <style>
+        #save-button {
+            display: none !important;
+        }
+        #filename-input {
+            display: none !important;
+        }
+    </style>
+    
+<script data-marimo="true">
+    Object.defineProperty(window, "__MARIMO_EXPORT_CONTEXT__", {
+        value: Object.freeze({
+            trusted: true,
+            notebookCode: "import marimo\n\n__generated_with = \"0.23.16\"\napp = marimo.App(width=\"medium\")\n\n\n@app.cell\ndef imports():\n    import marimo as mo\n\n    return (mo,)\n\n\n@app.cell\ndef header(mo):\n    mo.md(\"\"\"\n    # Unit 4 AOS3 \u2014 Undecidability and the Chinese Room\n\n    **VCE Algorithmics (HESS) \u00b7 AOS3: Computer science, past and present**\n\n    - **Part A** \u2014 the proof, reconstructed by you.\n    - **Part B** \u2014 decidable or not? Classification drills.\n    - **Part C** \u2014 Chinese Room argument mapper (SAC prep).\n    - **Part D** \u2014 SAT Final Submission checklist.\n    \"\"\")\n    return\n\n\n@app.cell\ndef part_a_header(mo):\n    mo.md(r\"\"\"\n    ---\n    ## Part A \u2014 Reconstruct the proof\n\n    The Halting Problem proof has five moves. Put them in your own words \u2014\n    if you can rebuild it from memory, the SAC question is free marks.\n    \"\"\")\n    return\n\n\n@app.cell\ndef a1(mo):\n    _q1 = mo.ui.text(label=\"Move 1 \u2014 the assumption (suppose ...):\", full_width=True)\n    _q2 = mo.ui.text(label=\"Move 2 \u2014 the construction (build D that ...):\", full_width=True)\n    _q3 = mo.ui.text(label=\"Move 3 \u2014 the fatal question (run ... on ...):\", full_width=True)\n    _q4 = mo.ui.text(label=\"Move 4 \u2014 the case analysis (both cases contradict because ...):\", full_width=True)\n    _q5 = mo.ui.text(label=\"Move 5 \u2014 the conclusion:\", full_width=True)\n    mo.vstack([_q1, _q2, _q3, _q4, _q5], gap=0.5)\n    return\n\n\n@app.cell\ndef a2(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"A2. A student objects: 'Just run P on x and see if it stops.' Explain precisely \"\n        \"why this fails as a decision procedure.\",\n        rows=3,\n    )\n    _q\n    return\n\n\n@app.cell\ndef part_b_header(mo):\n    mo.md(r\"\"\"\n    ---\n    ## Part B \u2014 Decidable or not?\n\n    Classify each task: **P** (tractable), **NP-hard** (decidable, likely intractable),\n    or **undecidable**. One-line reason each.\n\n    | # | Task | Your classification |\n    |---|---|---|\n    | 1 | Sort 10\u2076 numbers | ? |\n    | 2 | Best TSP tour on 500 cities | ? |\n    | 3 | Will this program halt on this input? | ? |\n    | 4 | Does this program print \"hello\" within 10\u2076 steps? | ? |\n    | 5 | Does this program print \"hello\" *ever*? | ? |\n    | 6 | Shortest path in a road network | ? |\n    | 7 | Are these two programs equivalent on all inputs? | ? |\n\n    Rows 4 vs 5 is the trap \u2014 bounded questions are decidable (just simulate);\n    unbounded ones smuggle in halting.\n    \"\"\")\n    return\n\n\n@app.cell\ndef b1(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"1. P \u2014 ...\\n2. ...\",\n        label=\"Your classifications with reasons\",\n        rows=8,\n        full_width=True,\n    )\n    _q\n    return\n\n\n@app.cell\ndef part_c_header(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part C \u2014 Chinese Room argument mapper\n\n    The SAC asks you to *describe* the argument and *mount a case for or against it*.\n    Build your case here.\n    \"\"\")\n    return\n\n\n@app.cell\ndef c_side(mo):\n    side = mo.ui.radio(\n        options=[\"FOR Searle (syntax is not sufficient for understanding)\",\n                 \"AGAINST Searle (the argument fails)\"],\n        label=\"Pick your side\",\n    )\n    side\n    return (side,)\n\n\n@app.cell\ndef c_map(mo, side):\n    mo.stop(side.value is None, mo.md(\"*Pick a side first \u2014 fence-sitting scores description marks only.*\"))\n    _s1 = mo.ui.text_area(label=\"1. State the argument accurately (setup + conclusion, 3\u20134 sentences):\", rows=4, full_width=True)\n    _s2 = mo.ui.text_area(label=\"2. Your strongest point (if FOR: rebut the systems or robot reply; if AGAINST: press one reply hard):\", rows=4, full_width=True)\n    _s3 = mo.ui.text_area(label=\"3. The best objection to YOUR side, stated fairly:\", rows=3, full_width=True)\n    _s4 = mo.ui.text_area(label=\"4. Your response to that objection + conclusion:\", rows=3, full_width=True)\n    mo.vstack([mo.md(f\"**Building the case: {side.value}**\"), _s1, _s2, _s3, _s4], gap=0.5)\n    return\n\n\n@app.cell\ndef c2(mo):\n    _q = mo.ui.text_area(\n        placeholder=\"Answer...\",\n        label=\"C2. Connect the pieces: does the Chinese Room argument, if sound, mean a machine \"\n        \"could never PASS the Turing Test \u2014 or something else? (Careful: behaviour vs understanding.)\",\n        rows=3,\n    )\n    _q\n    return\n\n\n@app.cell\ndef checklist(mo):\n    mo.md(\"\"\"\n    ---\n    ## Part D \u2014 SAT Final Submission checklist (due Fri 4 Sep)\n\n    - [ ] Improved design described; change from Memo 01 stated precisely (C8)\n    - [ ] Technique justified against at least one alternative (C9)\n    - [ ] Complexity analysis of the redesign, tools named (C9)\n    - [ ] Comparison to original: bounds, trade-offs, fitness-for-purpose conclusion (C10)\n    - [ ] A05 \u2014 rush-hour constraint: per-update cost analysed\n    - [ ] A06 \u2014 optimality audit experiment run and reported\n    - [ ] Workbook saved \u00b7 declaration signed \u00b7 seed unchanged\n    - [ ] In-class test Friday 4 September: advanced design techniques (AOS2\u20133)\n    \"\"\")\n    return\n\n\nif __name__ == \"__main__\":\n    app.run()\n",
+        }),
+        writable: false,
+        configurable: false,
+    });
+</script>
+<marimo-code hidden="">import%20marimo%0A%0A__generated_with%20%3D%20%220.23.16%22%0Aapp%20%3D%20marimo.App(width%3D%22medium%22)%0A%0A%0A%40app.cell%0Adef%20imports()%3A%0A%20%20%20%20import%20marimo%20as%20mo%0A%0A%20%20%20%20return%20(mo%2C)%0A%0A%0A%40app.cell%0Adef%20header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20%23%20Unit%204%20AOS3%20%E2%80%94%20Undecidability%20and%20the%20Chinese%20Room%0A%0A%20%20%20%20**VCE%20Algorithmics%20(HESS)%20%C2%B7%20AOS3%3A%20Computer%20science%2C%20past%20and%20present**%0A%0A%20%20%20%20-%20**Part%20A**%20%E2%80%94%20the%20proof%2C%20reconstructed%20by%20you.%0A%20%20%20%20-%20**Part%20B**%20%E2%80%94%20decidable%20or%20not%3F%20Classification%20drills.%0A%20%20%20%20-%20**Part%20C**%20%E2%80%94%20Chinese%20Room%20argument%20mapper%20(SAC%20prep).%0A%20%20%20%20-%20**Part%20D**%20%E2%80%94%20SAT%20Final%20Submission%20checklist.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_a_header(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20A%20%E2%80%94%20Reconstruct%20the%20proof%0A%0A%20%20%20%20The%20Halting%20Problem%20proof%20has%20five%20moves.%20Put%20them%20in%20your%20own%20words%20%E2%80%94%0A%20%20%20%20if%20you%20can%20rebuild%20it%20from%20memory%2C%20the%20SAC%20question%20is%20free%20marks.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20a1(mo)%3A%0A%20%20%20%20_q1%20%3D%20mo.ui.text(label%3D%22Move%201%20%E2%80%94%20the%20assumption%20(suppose%20...)%3A%22%2C%20full_width%3DTrue)%0A%20%20%20%20_q2%20%3D%20mo.ui.text(label%3D%22Move%202%20%E2%80%94%20the%20construction%20(build%20D%20that%20...)%3A%22%2C%20full_width%3DTrue)%0A%20%20%20%20_q3%20%3D%20mo.ui.text(label%3D%22Move%203%20%E2%80%94%20the%20fatal%20question%20(run%20...%20on%20...)%3A%22%2C%20full_width%3DTrue)%0A%20%20%20%20_q4%20%3D%20mo.ui.text(label%3D%22Move%204%20%E2%80%94%20the%20case%20analysis%20(both%20cases%20contradict%20because%20...)%3A%22%2C%20full_width%3DTrue)%0A%20%20%20%20_q5%20%3D%20mo.ui.text(label%3D%22Move%205%20%E2%80%94%20the%20conclusion%3A%22%2C%20full_width%3DTrue)%0A%20%20%20%20mo.vstack(%5B_q1%2C%20_q2%2C%20_q3%2C%20_q4%2C%20_q5%5D%2C%20gap%3D0.5)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20a2(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22A2.%20A%20student%20objects%3A%20'Just%20run%20P%20on%20x%20and%20see%20if%20it%20stops.'%20Explain%20precisely%20%22%0A%20%20%20%20%20%20%20%20%22why%20this%20fails%20as%20a%20decision%20procedure.%22%2C%0A%20%20%20%20%20%20%20%20rows%3D3%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_b_header(mo)%3A%0A%20%20%20%20mo.md(r%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20B%20%E2%80%94%20Decidable%20or%20not%3F%0A%0A%20%20%20%20Classify%20each%20task%3A%20**P**%20(tractable)%2C%20**NP-hard**%20(decidable%2C%20likely%20intractable)%2C%0A%20%20%20%20or%20**undecidable**.%20One-line%20reason%20each.%0A%0A%20%20%20%20%7C%20%23%20%7C%20Task%20%7C%20Your%20classification%20%7C%0A%20%20%20%20%7C---%7C---%7C---%7C%0A%20%20%20%20%7C%201%20%7C%20Sort%2010%E2%81%B6%20numbers%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%202%20%7C%20Best%20TSP%20tour%20on%20500%20cities%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%203%20%7C%20Will%20this%20program%20halt%20on%20this%20input%3F%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%204%20%7C%20Does%20this%20program%20print%20%22hello%22%20within%2010%E2%81%B6%20steps%3F%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%205%20%7C%20Does%20this%20program%20print%20%22hello%22%20*ever*%3F%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%206%20%7C%20Shortest%20path%20in%20a%20road%20network%20%7C%20%3F%20%7C%0A%20%20%20%20%7C%207%20%7C%20Are%20these%20two%20programs%20equivalent%20on%20all%20inputs%3F%20%7C%20%3F%20%7C%0A%0A%20%20%20%20Rows%204%20vs%205%20is%20the%20trap%20%E2%80%94%20bounded%20questions%20are%20decidable%20(just%20simulate)%3B%0A%20%20%20%20unbounded%20ones%20smuggle%20in%20halting.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20b1(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%221.%20P%20%E2%80%94%20...%5Cn2.%20...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22Your%20classifications%20with%20reasons%22%2C%0A%20%20%20%20%20%20%20%20rows%3D8%2C%0A%20%20%20%20%20%20%20%20full_width%3DTrue%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20part_c_header(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20C%20%E2%80%94%20Chinese%20Room%20argument%20mapper%0A%0A%20%20%20%20The%20SAC%20asks%20you%20to%20*describe*%20the%20argument%20and%20*mount%20a%20case%20for%20or%20against%20it*.%0A%20%20%20%20Build%20your%20case%20here.%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20c_side(mo)%3A%0A%20%20%20%20side%20%3D%20mo.ui.radio(%0A%20%20%20%20%20%20%20%20options%3D%5B%22FOR%20Searle%20(syntax%20is%20not%20sufficient%20for%20understanding)%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22AGAINST%20Searle%20(the%20argument%20fails)%22%5D%2C%0A%20%20%20%20%20%20%20%20label%3D%22Pick%20your%20side%22%2C%0A%20%20%20%20)%0A%20%20%20%20side%0A%20%20%20%20return%20(side%2C)%0A%0A%0A%40app.cell%0Adef%20c_map(mo%2C%20side)%3A%0A%20%20%20%20mo.stop(side.value%20is%20None%2C%20mo.md(%22*Pick%20a%20side%20first%20%E2%80%94%20fence-sitting%20scores%20description%20marks%20only.*%22))%0A%20%20%20%20_s1%20%3D%20mo.ui.text_area(label%3D%221.%20State%20the%20argument%20accurately%20(setup%20%2B%20conclusion%2C%203%E2%80%934%20sentences)%3A%22%2C%20rows%3D4%2C%20full_width%3DTrue)%0A%20%20%20%20_s2%20%3D%20mo.ui.text_area(label%3D%222.%20Your%20strongest%20point%20(if%20FOR%3A%20rebut%20the%20systems%20or%20robot%20reply%3B%20if%20AGAINST%3A%20press%20one%20reply%20hard)%3A%22%2C%20rows%3D4%2C%20full_width%3DTrue)%0A%20%20%20%20_s3%20%3D%20mo.ui.text_area(label%3D%223.%20The%20best%20objection%20to%20YOUR%20side%2C%20stated%20fairly%3A%22%2C%20rows%3D3%2C%20full_width%3DTrue)%0A%20%20%20%20_s4%20%3D%20mo.ui.text_area(label%3D%224.%20Your%20response%20to%20that%20objection%20%2B%20conclusion%3A%22%2C%20rows%3D3%2C%20full_width%3DTrue)%0A%20%20%20%20mo.vstack(%5Bmo.md(f%22**Building%20the%20case%3A%20%7Bside.value%7D**%22)%2C%20_s1%2C%20_s2%2C%20_s3%2C%20_s4%5D%2C%20gap%3D0.5)%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20c2(mo)%3A%0A%20%20%20%20_q%20%3D%20mo.ui.text_area(%0A%20%20%20%20%20%20%20%20placeholder%3D%22Answer...%22%2C%0A%20%20%20%20%20%20%20%20label%3D%22C2.%20Connect%20the%20pieces%3A%20does%20the%20Chinese%20Room%20argument%2C%20if%20sound%2C%20mean%20a%20machine%20%22%0A%20%20%20%20%20%20%20%20%22could%20never%20PASS%20the%20Turing%20Test%20%E2%80%94%20or%20something%20else%3F%20(Careful%3A%20behaviour%20vs%20understanding.)%22%2C%0A%20%20%20%20%20%20%20%20rows%3D3%2C%0A%20%20%20%20)%0A%20%20%20%20_q%0A%20%20%20%20return%0A%0A%0A%40app.cell%0Adef%20checklist(mo)%3A%0A%20%20%20%20mo.md(%22%22%22%0A%20%20%20%20---%0A%20%20%20%20%23%23%20Part%20D%20%E2%80%94%20SAT%20Final%20Submission%20checklist%20(due%20Fri%204%20Sep)%0A%0A%20%20%20%20-%20%5B%20%5D%20Improved%20design%20described%3B%20change%20from%20Memo%2001%20stated%20precisely%20(C8)%0A%20%20%20%20-%20%5B%20%5D%20Technique%20justified%20against%20at%20least%20one%20alternative%20(C9)%0A%20%20%20%20-%20%5B%20%5D%20Complexity%20analysis%20of%20the%20redesign%2C%20tools%20named%20(C9)%0A%20%20%20%20-%20%5B%20%5D%20Comparison%20to%20original%3A%20bounds%2C%20trade-offs%2C%20fitness-for-purpose%20conclusion%20(C10)%0A%20%20%20%20-%20%5B%20%5D%20A05%20%E2%80%94%20rush-hour%20constraint%3A%20per-update%20cost%20analysed%0A%20%20%20%20-%20%5B%20%5D%20A06%20%E2%80%94%20optimality%20audit%20experiment%20run%20and%20reported%0A%20%20%20%20-%20%5B%20%5D%20Workbook%20saved%20%C2%B7%20declaration%20signed%20%C2%B7%20seed%20unchanged%0A%20%20%20%20-%20%5B%20%5D%20In-class%20test%20Friday%204%20September%3A%20advanced%20design%20techniques%20(AOS2%E2%80%933)%0A%20%20%20%20%22%22%22)%0A%20%20%20%20return%0A%0A%0Aif%20__name__%20%3D%3D%20%22__main__%22%3A%0A%20%20%20%20app.run()%0A</marimo-code></head>
+  <body>
+    <div id="root"></div>
+    <script data-marimo="true">
+      Object.defineProperty(window, "__MARIMO_MOUNT_CONFIG__", {
+        value: Object.freeze({
+            "filename": "notebook.py",
+            "cwd": "",
+            "lspWorkspace": null,
+            "mode": "read",
+            "version": "0.23.16",
+            "serverToken": "unused",
+            "config": {"ai": {"custom_providers": {}, "enabled": true, "models": {"custom_models": [], "displayed_models": []}}, "completion": {"activate_on_typing": true, "auto_close_pairs": true, "copilot": false, "signature_hint_on_typing": false}, "diagnostics": {"sql_linter": true}, "display": {"cell_output": "below", "code_editor_font_size": 14, "dataframes": "rich", "default_table_max_columns": 50, "default_table_page_size": 10, "default_width": "medium", "reference_highlighting": true, "theme": "light"}, "formatting": {"line_length": 79}, "keymap": {"overrides": {}, "preset": "default"}, "language_servers": {"pylsp": {"enable_flake8": false, "enable_mypy": true, "enable_pydocstyle": false, "enable_pyflakes": false, "enable_pylint": false, "enable_ruff": true, "enabled": false}}, "mcp": {"mcpServers": {}, "presets": []}, "package_management": {"manager": "pip"}, "runtime": {"auto_instantiate": false, "auto_reload": "off", "default_csv_encoding": "utf-8", "default_sql_output": "auto", "on_cell_change": "autorun", "output_max_bytes": 8000000, "reactive_tests": true, "show_tracebacks": false, "std_stream_max_bytes": 1000000, "watcher_on_save": "lazy"}, "save": {"autosave": "off", "autosave_delay": 1000, "format_on_save": false}, "server": {"browser": "default", "follow_symlink": false}, "snippets": {"custom_paths": [], "include_default_snippets": true}},
+            "configOverrides": {},
+            "appConfig": {"sql_output": "auto", "width": "medium"},
+            "view": {"showAppCode": false},
+            "notebook": null,
+            "session": null,
+            "runtimeConfig": null,
+        }),
+        writable: false,
+        configurable: false,
+      });
+    </script>
+  </body>
+</html>
