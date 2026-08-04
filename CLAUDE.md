@@ -179,9 +179,13 @@ Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
   means decrypting with the staff password, splicing, and re-encrypting
   with the same salt and iteration count.
 
-The unit landing page lists them via `.ws-strip` / `.ws-link`
-(`.wl-num`, `.wl-title`, `.wl-marks`) in course.css, under a
-`.section-head` + `.section-sub`.
+On the unit landing page each worksheet is linked directly under its
+lesson: wrap the `.deck-card` and a `.dc-wslink` in a `.deck-item`
+(course.css). The wrapper is required because `.deck-card` is itself an
+`<a>` and a link cannot be nested inside one — cards without a wrapper
+are unaffected. course.css also has `.ws-strip` / `.ws-link` (`.wl-num`,
+`.wl-title`, `.wl-marks`) under a `.section-head` + `.section-sub` for a
+standalone all-worksheets list, if a unit wants one instead.
 
 ## PDFs
 

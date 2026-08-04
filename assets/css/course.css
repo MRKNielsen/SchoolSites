@@ -134,6 +134,29 @@ body.course-page {
   font-size: clamp(0.82rem, 1.3vw, 1rem); color: rgba(255,255,255,0.7);
 }
 
+/* Lesson + its attachments as one grid cell. Wrap a .deck-card and any
+   follow-on links in .deck-item — needed because .deck-card is itself an
+   <a>, so a second link cannot be nested inside it. */
+.deck-item { display: flex; flex-direction: column; gap: 0.6vh; }
+.deck-item .deck-card { flex: 1 1 auto; }
+.dc-wslink {
+  display: flex; align-items: baseline; gap: 0.5em;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px; padding: 0.9vh 1vw;
+  color: rgba(255,255,255,0.88); text-decoration: none;
+  font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+  transition: background .15s ease, border-color .15s ease;
+}
+.dc-wslink:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.36); }
+.dc-wslink .wl-ico { flex: 0 0 auto; opacity: 0.8; }
+.dc-wslink .wl-label { font-family: var(--font-display); font-weight: 700; }
+.dc-wslink .wl-marks {
+  margin-left: auto; flex: 0 0 auto;
+  font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+}
+
 /* Compact link strip — worksheets, handouts, anything one-per-lesson */
 .ws-strip {
   display: grid;
