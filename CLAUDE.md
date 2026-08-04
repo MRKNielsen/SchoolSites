@@ -143,9 +143,16 @@ the on-screen `.sheet` is a paper preview at 210×297 mm. No JS module —
 the only script is the inline `window.print()` on the toolbar button.
 Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
 
-- One `.sheet` per printed page. First sheet opens with `.ws-head`
-  (`.ws-tag`, `h1` with `.lnum`, `.ws-sub`, `.namebar`); later sheets use
-  the slimmer `.ws-runhead`. Both end with `.ws-foot`.
+- One `.sheet` holds the whole worksheet and flows across printed pages;
+  it opens with `.ws-head` (`.ws-tag`, `h1` with `.lnum`, `.ws-sub`,
+  `.namebar`) and closes with `.ws-foot`. Don't split a worksheet into
+  several `.sheet`s and don't add `.ws-runhead` (an optional hard page
+  break) without measuring — the bio worksheets fill 90%+ of each sheet
+  flowing, and a mid-part forced break dropped that to ~76% and added a
+  whole page to five of the eleven. Pagination is safe because
+  `break-inside: avoid` is set on questions, tables, sort columns and
+  callouts, and no single block exceeds a page (tallest is ~190 mm
+  against 273 mm of usable height).
 - `.namebar` auto-draws its rules — the `span::after` fills the
   remaining width, so don't type underscores.
 - Content: `section.part` + `.part-head` (`.part-label`, `.part-title`,

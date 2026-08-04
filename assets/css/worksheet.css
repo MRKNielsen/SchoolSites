@@ -124,8 +124,10 @@ body.worksheet-page {
 }
 .worksheet-page .namebar .marks-total::after { min-width: 12mm; }
 
-/* Continuation header. Always starts a new printed page (see @media print),
-   so it is also the deliberate page break in a flowing worksheet. */
+/* Optional hard page break with a continuation header. Only use where a
+   break genuinely belongs — it costs the rest of the current page, so
+   measure before adding one (a worksheet that flows fills 90%+ of each
+   sheet; a badly placed break drops that to ~76% and adds a page). */
 .worksheet-page .ws-runhead {
   display: flex; justify-content: space-between; align-items: baseline;
   border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, #fff);
