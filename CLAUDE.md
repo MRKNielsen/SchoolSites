@@ -46,7 +46,8 @@ Optional modules — link only when a deck uses them:
 
 Other page types: `assets/css/course.css` (unit landing),
 `assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
-(answer-key pages), `assets/css/site.css` (plain index pages).
+(answer-key pages), `assets/css/worksheet.css` (printable student
+worksheets), `assets/css/site.css` (plain index pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -134,6 +135,47 @@ band, `.timeline`/`.mile[data-date]` milestones, `#weeks` grid of
 `.links`. hub.js auto-highlights the current week, marks past/next
 milestones, and fills `.countdown[data-to]` elements.
 
+## Printable worksheets
+
+Use `assets/css/worksheet.css` with
+`<body class="worksheet-page theme-X">`. Print-first: `@page` is A4 and
+the on-screen `.sheet` is a paper preview at 210×297 mm. No JS module —
+the only script is the inline `window.print()` on the toolbar button.
+Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
+
+- One `.sheet` per printed page. First sheet opens with `.ws-head`
+  (`.ws-tag`, `h1` with `.lnum`, `.ws-sub`, `.namebar`); later sheets use
+  the slimmer `.ws-runhead`. Both end with `.ws-foot`.
+- `.namebar` auto-draws its rules — the `span::after` fills the
+  remaining width, so don't type underscores.
+- Content: `section.part` + `.part-head` (`.part-label`, `.part-title`,
+  `.marks`), `.q` with `.qn` + `.qbody`, `.sub-q` with `.sl`.
+  A `.part-label` beginning `!` drops the "Part " prefix (used by the
+  closing self-check block).
+- Writing space is `.lines` with `data-lines="1".."10"` (8 mm rule),
+  `.blank`/`.blank.sm`/`.blank.lg` inline, and `.drawbox`
+  (`data-h="sm|md|lg"`) for diagrams. Never hand-draw rules with
+  underscores or borders.
+- Question furniture: `.opts`/`.opt` multiple choice, `.tick` checkbox
+  list, `table.wtbl` with `td.fill` blank cells, `.sortcols[data-cols]`
+  of `.sortcol`, `.chips`/`.chip` word bank.
+- Callouts: `.infobox` (accent), `.fnbox` (First Nations — earth tone,
+  theme-independent like `.box.country` in decks), `.y8box` plus the
+  inline `.y8` marker for Year 8 extension. Each takes a `.lbl` first
+  child.
+- Marks totals in `.namebar .marks-total`, the toolbar hint and the unit
+  index `.wl-marks` must agree with the sum of the `.part-head` marks.
+- Answers go in the unit's `solutions.css` page, tagged
+  `<span class="tag ws">Worksheet</span>`, under a `.subhead` divider at
+  the end of that lesson's section. Note that bio-ecosystems'
+  `solutions.html` ships its answers as an encrypted blob — adding to it
+  means decrypting with the staff password, splicing, and re-encrypting
+  with the same salt and iteration count.
+
+The unit landing page lists them via `.ws-strip` / `.ws-link`
+(`.wl-num`, `.wl-title`, `.wl-marks`) in course.css, under a
+`.section-head` + `.section-sub`.
+
 ## PDFs
 
 Decision on file: embed with native `<object type="application/pdf">` +
@@ -145,8 +187,8 @@ to need it, full width, ~80vh, card-style border.)
 
 Ported already: year12-specialist (term-3 decks, hub, landing),
 year10-mathematics/10methods-primer (9 decks + hub), and year7-science
-bio-ecosystems (11 decks, landing, quiz, solutions — its unit-local
-deck.css/deck.js are gone).
+bio-ecosystems (11 decks, landing, quiz, solutions, 11 worksheets — its
+unit-local deck.css/deck.js are gone).
 
 Still on inline styles: year11-methods ch9/11. When touching one, port it
 to the shared assets rather than extending its inline styles.

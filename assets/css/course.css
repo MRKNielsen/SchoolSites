@@ -123,6 +123,43 @@ body.course-page {
   white-space: nowrap;
 }
 
+/* ---------- Secondary section on a course page ---------- */
+.course-page .section-head {
+  margin: 5vh 0 0.6vh;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.1rem, 2.1vw, 1.5rem); color: #fff;
+}
+.course-page .section-sub {
+  margin: 0 0 1.8vh; max-width: 70ch;
+  font-size: clamp(0.82rem, 1.3vw, 1rem); color: rgba(255,255,255,0.7);
+}
+
+/* Compact link strip — worksheets, handouts, anything one-per-lesson */
+.ws-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1vh 1vw;
+}
+.ws-link {
+  display: flex; align-items: baseline; gap: 0.6em;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px; padding: 1.1vh 1vw;
+  color: #fff; text-decoration: none;
+  transition: background .15s ease, border-color .15s ease;
+}
+.ws-link:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.36); }
+.ws-link .wl-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 0.95rem;
+  color: rgba(255,255,255,0.45); flex: 0 0 auto;
+}
+.ws-link .wl-title { font-size: clamp(0.8rem, 1.25vw, 0.95rem); line-height: 1.25; }
+.ws-link .wl-marks {
+  margin-left: auto; flex: 0 0 auto;
+  font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+  color: rgba(255,255,255,0.5);
+}
+
 .course-page footer {
   margin-top: 6vh;
   font-size: clamp(0.8rem, 1.2vw, 0.95rem);

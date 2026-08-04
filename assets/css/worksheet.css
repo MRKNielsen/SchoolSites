@@ -1,0 +1,424 @@
+/* ============================================================
+   worksheet.css — PRINTABLE STUDENT WORKSHEETS
+   A4 print-first page type. Peer of course.css, hub.css and
+   solutions.css. Screen view is a paper-on-desk preview of what
+   comes out of the printer.
+
+   Requires tokens.css first; theme with a body class:
+     <link rel="stylesheet" href="../../assets/css/tokens.css">
+     <link rel="stylesheet" href="../../assets/css/worksheet.css">
+     <body class="worksheet-page theme-science">
+
+   Structure:
+     .sheet            one printed A4 page (repeat for multi-page)
+       .ws-head          masthead: .ws-tag, h1, .ws-sub, .namebar
+       .ws-runhead       short running header on continuation sheets
+       section.part      .part-head (.part-label, .part-title, .marks)
+       .q                .qn numbered question, .marks, .sub-q
+       .lines            ruled writing space (data-lines="1".."10")
+       .halflines        ruled space in a two-up grid
+       .drawbox          blank box for diagrams (data-h="sm|md|lg")
+       .opts / .opt      multiple-choice options
+       .wtbl             fill-in table (th + empty td)
+       .sortcols         2–3 labelled columns to sort items into
+       .chips / .chip    word bank
+       .infobox          reference material (.lbl first child)
+       .fnbox            First Nations / Caring for Country (earth tone)
+       .y8               Year 8 extension marker + .y8box
+       .tick             checkbox list for success criteria
+       .ws-foot          footer rule with page marker
+
+   Colour comes only from tokens.css. Pedagogy and Country colours
+   are deliberately theme-independent, exactly as in deck.css.
+   ============================================================ */
+
+body.worksheet-page {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  /* desk behind the paper (screen only) — derived from tokens, not a new hex */
+  background: color-mix(in srgb, var(--c-slate-300) 28%, #fff);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  --rule: color-mix(in srgb, var(--ink) 26%, #fff);   /* writing lines */
+  --sheet-pad: 16mm;
+}
+.worksheet-page * { box-sizing: border-box; }
+.worksheet-page h1, .worksheet-page h2, .worksheet-page h3 {
+  font-family: var(--font-display); margin: 0;
+}
+.worksheet-page p { margin: 0 0 .6em; }
+.worksheet-page ul, .worksheet-page ol { margin: .3em 0 .7em 1.3em; padding: 0; }
+.worksheet-page li { margin-bottom: .3em; }
+
+/* ---------- Screen-only toolbar ---------- */
+.worksheet-page .ws-bar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; gap: .6em; align-items: center; flex-wrap: wrap;
+  padding: 10px max(16px, 3vw);
+  background: color-mix(in srgb, var(--accent-dark) 96%, #000);
+  color: #fff;
+}
+.worksheet-page .ws-bar a,
+.worksheet-page .ws-bar button {
+  font-family: var(--font-display); font-weight: 700; font-size: .84rem;
+  color: #fff; text-decoration: none; cursor: pointer;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+  border-radius: 100px; padding: .35em 1em;
+}
+.worksheet-page .ws-bar a:hover,
+.worksheet-page .ws-bar button:hover { background: rgba(255,255,255,.28); }
+.worksheet-page .ws-bar .spacer { margin-left: auto; }
+.worksheet-page .ws-bar .hint { font-size: .8rem; color: rgba(255,255,255,.7); }
+
+/* ---------- The sheet ---------- */
+.worksheet-page .sheet {
+  width: 210mm; min-height: 297mm;
+  margin: 8mm auto; padding: var(--sheet-pad);
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.14), 0 12px 34px rgba(0,0,0,.12);
+  display: flex; flex-direction: column;
+}
+.worksheet-page .sheet > .ws-foot { margin-top: auto; }
+
+/* ---------- Masthead ---------- */
+.worksheet-page .ws-head {
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 3mm; margin-bottom: 5mm;
+}
+.worksheet-page .ws-tag {
+  display: inline-block; margin-bottom: 2mm;
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  color: var(--accent-dark);
+  border-radius: 100px; padding: .2em .9em;
+  font-family: var(--font-display); font-size: .7rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+}
+.worksheet-page .ws-head h1 {
+  font-size: 1.5rem; font-weight: 800; line-height: 1.12;
+  color: var(--accent-dark); letter-spacing: -.01em;
+}
+.worksheet-page .ws-head h1 .lnum {
+  color: color-mix(in srgb, var(--accent) 45%, #fff);
+  margin-right: .35em;
+}
+.worksheet-page .ws-sub {
+  font-size: .88rem; color: var(--ink-soft); margin: 1.5mm 0 0; max-width: 62ch;
+}
+
+/* Name / class / date rule */
+.worksheet-page .namebar {
+  display: flex; gap: 6mm; flex-wrap: wrap;
+  margin-top: 4mm; font-size: .82rem; color: var(--ink-soft);
+}
+.worksheet-page .namebar span {
+  flex: 1 1 auto; display: flex; gap: .4em; align-items: flex-end; white-space: nowrap;
+}
+.worksheet-page .namebar span::after {
+  content: ""; flex: 1 1 auto; min-width: 22mm;
+  border-bottom: 1px solid var(--rule); margin-bottom: .18em;
+}
+.worksheet-page .namebar .marks-total {
+  flex: 0 0 auto; font-family: var(--font-display); font-weight: 700;
+  color: var(--accent-dark);
+}
+.worksheet-page .namebar .marks-total::after { min-width: 12mm; }
+
+/* Continuation header. Always starts a new printed page (see @media print),
+   so it is also the deliberate page break in a flowing worksheet. */
+.worksheet-page .ws-runhead {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 1px dashed color-mix(in srgb, var(--ink) 30%, #fff);
+  border-bottom: 1px solid var(--rule);
+  padding: 4mm 0 2mm; margin: 6mm 0 5mm;
+  font-family: var(--font-display); font-size: .8rem; color: var(--muted);
+}
+.worksheet-page .ws-runhead strong { color: var(--accent-dark); }
+
+/* ---------- Parts ---------- */
+.worksheet-page section.part { margin-bottom: 6mm; }
+.worksheet-page .part-head {
+  display: flex; align-items: baseline; gap: .6em;
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 1.6mm 3mm; margin-bottom: 3.5mm;
+}
+.worksheet-page .part-label {
+  font-family: var(--font-display); font-weight: 800; font-size: .75rem;
+  letter-spacing: .09em; text-transform: uppercase;
+  color: var(--accent);
+}
+.worksheet-page .part-title {
+  font-family: var(--font-display); font-weight: 700; font-size: 1rem;
+  color: var(--accent-dark);
+}
+.worksheet-page .part-head .marks { margin-left: auto; }
+.worksheet-page .part-instr {
+  font-size: .84rem; color: var(--ink-soft); font-style: italic; margin: -2mm 0 3mm;
+}
+
+/* ---------- Questions ---------- */
+.worksheet-page .q {
+  display: grid; grid-template-columns: 8mm 1fr;
+  gap: 0 1.5mm; margin-bottom: 3.5mm;
+  break-inside: avoid;
+}
+.worksheet-page .qn {
+  font-family: var(--font-display); font-weight: 800;
+  color: var(--accent); font-size: .95rem; padding-top: .05em;
+}
+.worksheet-page .q > .qbody { grid-column: 2; }
+.worksheet-page .q > .qbody > p:first-child { margin-top: 0; }
+.worksheet-page .sub-q {
+  margin: 1.5mm 0 1.5mm 0;
+}
+.worksheet-page .sub-q > .sl {
+  font-weight: 700; color: var(--accent-dark); margin-right: .3em;
+}
+.worksheet-page .marks {
+  font-family: var(--font-display); font-size: .7rem; font-weight: 700;
+  color: var(--accent); white-space: nowrap;
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border-radius: 100px; padding: .1em .6em;
+}
+.worksheet-page .qbody .marks { float: right; margin-left: .6em; }
+
+/* ---------- Writing space ---------- */
+.worksheet-page .lines,
+.worksheet-page .halflines {
+  --n: 3;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0, transparent calc(8mm - 1px),
+    var(--rule) calc(8mm - 1px), var(--rule) 8mm);
+  height: calc(var(--n) * 8mm);
+  margin: 1.5mm 0 2.5mm;
+  break-inside: avoid;
+}
+.worksheet-page .lines[data-lines="1"]  { --n: 1; }
+.worksheet-page .lines[data-lines="2"]  { --n: 2; }
+.worksheet-page .lines[data-lines="3"]  { --n: 3; }
+.worksheet-page .lines[data-lines="4"]  { --n: 4; }
+.worksheet-page .lines[data-lines="5"]  { --n: 5; }
+.worksheet-page .lines[data-lines="6"]  { --n: 6; }
+.worksheet-page .lines[data-lines="7"]  { --n: 7; }
+.worksheet-page .lines[data-lines="8"]  { --n: 8; }
+.worksheet-page .lines[data-lines="10"] { --n: 10; }
+
+/* Short inline blank, e.g. "Kingdom: ______" */
+.worksheet-page .blank {
+  display: inline-block; min-width: 32mm;
+  border-bottom: 1px solid var(--rule); margin: 0 .2em;
+}
+.worksheet-page .blank.sm { min-width: 16mm; }
+.worksheet-page .blank.lg { min-width: 55mm; }
+
+/* Blank drawing / diagram box */
+.worksheet-page .drawbox {
+  border: 1px dashed color-mix(in srgb, var(--ink) 32%, #fff);
+  border-radius: 6px; height: 40mm; margin: 2mm 0 3mm;
+  display: flex; align-items: flex-start; justify-content: flex-start;
+  padding: 2mm 3mm; break-inside: avoid;
+  font-size: .78rem; color: var(--muted); font-style: italic;
+}
+.worksheet-page .drawbox[data-h="sm"] { height: 26mm; }
+.worksheet-page .drawbox[data-h="lg"] { height: 62mm; }
+
+/* ---------- Multiple choice ---------- */
+.worksheet-page .opts {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1mm 4mm; margin: 1.5mm 0 2mm;
+}
+.worksheet-page .opts.one-col { grid-template-columns: 1fr; }
+.worksheet-page .opt {
+  display: flex; gap: .5em; align-items: baseline; font-size: .9rem;
+}
+.worksheet-page .opt::before {
+  content: ""; flex: 0 0 auto;
+  width: 3.6mm; height: 3.6mm; border: 1px solid var(--rule); border-radius: 50%;
+  transform: translateY(.5mm);
+}
+.worksheet-page .opt .ol {
+  font-family: var(--font-display); font-weight: 700; color: var(--accent-dark);
+}
+
+/* Checkbox / tick list (success criteria, self-check) */
+.worksheet-page .tick { list-style: none; margin-left: 0; }
+.worksheet-page .tick li {
+  display: flex; gap: .6em; align-items: baseline; font-size: .88rem;
+}
+.worksheet-page .tick li::before {
+  content: ""; flex: 0 0 auto;
+  width: 3.6mm; height: 3.6mm; border: 1px solid var(--rule); border-radius: 2px;
+  transform: translateY(.5mm);
+}
+
+/* ---------- Tables ---------- */
+.worksheet-page table.wtbl {
+  width: 100%; border-collapse: collapse; margin: 2mm 0 3mm;
+  font-size: .86rem; break-inside: avoid;
+}
+.worksheet-page table.wtbl th,
+.worksheet-page table.wtbl td {
+  border: 1px solid var(--rule); padding: 1.6mm 2mm;
+  text-align: left; vertical-align: top;
+}
+.worksheet-page table.wtbl th {
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700; font-size: .82rem;
+}
+.worksheet-page table.wtbl td.fill { height: 11mm; }
+.worksheet-page table.wtbl td.fill-lg { height: 18mm; }
+
+/* Sorting columns */
+.worksheet-page .sortcols {
+  display: grid; gap: 3mm; margin: 2mm 0 3mm; break-inside: avoid;
+}
+.worksheet-page .sortcols[data-cols="2"] { grid-template-columns: repeat(2, 1fr); }
+.worksheet-page .sortcols[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
+.worksheet-page .sortcol {
+  border: 1px solid var(--rule); border-radius: 6px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.worksheet-page .sortcol .sc-head {
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700; font-size: .82rem;
+  padding: 1.4mm 2mm; text-align: center;
+  border-bottom: 1px solid var(--rule);
+}
+.worksheet-page .sortcol .sc-head small {
+  display: block; font-weight: 400; font-size: .72rem; color: var(--muted);
+}
+.worksheet-page .sortcol .sc-body { --n: 5; padding: 1.5mm 2mm; }
+.worksheet-page .sortcol .sc-body .lines { margin: 0; }
+
+/* Word bank */
+.worksheet-page .chips {
+  display: flex; flex-wrap: wrap; gap: 1.5mm;
+  margin: 2mm 0 3mm; padding: 2mm 2.5mm;
+  border: 1px solid var(--rule); border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 4%, #fff);
+  break-inside: avoid;
+}
+.worksheet-page .chips .cl {
+  width: 100%; font-family: var(--font-display); font-weight: 700;
+  font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: .5mm;
+}
+.worksheet-page .chip {
+  font-size: .82rem; background: #fff; border: 1px solid var(--rule);
+  border-radius: 100px; padding: .18em .8em;
+}
+
+/* ---------- Callout boxes ---------- */
+.worksheet-page .infobox,
+.worksheet-page .fnbox,
+.worksheet-page .y8box {
+  border-radius: 8px; padding: 2.5mm 3mm; margin: 2mm 0 3.5mm;
+  font-size: .86rem; break-inside: avoid;
+}
+.worksheet-page .infobox {
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, #fff);
+  background: color-mix(in srgb, var(--accent) 7%, #fff);
+}
+.worksheet-page .fnbox {
+  border: 1px solid color-mix(in srgb, var(--country) 40%, #fff);
+  background: var(--country-bg);
+}
+.worksheet-page .y8box {
+  border: 1px solid color-mix(in srgb, var(--cas) 35%, #fff);
+  background: color-mix(in srgb, var(--cas) 7%, #fff);
+}
+.worksheet-page .infobox .lbl,
+.worksheet-page .fnbox .lbl,
+.worksheet-page .y8box .lbl {
+  display: block; font-family: var(--font-display); font-weight: 800;
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 1mm;
+}
+.worksheet-page .infobox .lbl { color: var(--accent); }
+.worksheet-page .fnbox   .lbl { color: var(--country); }
+.worksheet-page .y8box   .lbl { color: var(--cas); }
+.worksheet-page .infobox p:last-child,
+.worksheet-page .fnbox p:last-child,
+.worksheet-page .y8box p:last-child { margin-bottom: 0; }
+
+/* Year 8 extension marker on a part or question */
+.worksheet-page .y8 {
+  display: inline-block; font-family: var(--font-display); font-weight: 700;
+  font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
+  background: color-mix(in srgb, var(--cas) 14%, #fff); color: var(--cas);
+  border-radius: 5px; padding: .12em .55em; margin-right: .4em;
+  vertical-align: middle;
+}
+.worksheet-page .part-head .y8 { margin-left: .2em; }
+
+/* Booklet / deck cross-reference chip */
+.worksheet-page .ref {
+  font-family: var(--font-display); font-size: .7rem; font-weight: 600;
+  color: var(--muted); white-space: nowrap;
+}
+
+/* ---------- Two-up layout helper ---------- */
+.worksheet-page .cols2 {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4mm;
+  break-inside: avoid;
+}
+
+/* ---------- Footer ---------- */
+.worksheet-page .ws-foot {
+  border-top: 1px solid var(--rule);
+  padding-top: 2mm; margin-top: 5mm;
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: .72rem; color: var(--muted);
+}
+
+/* ---------- Screen: narrow viewports ---------- */
+@media screen and (max-width: 230mm) {
+  .worksheet-page { --sheet-pad: 10mm; }
+  .worksheet-page .sheet {
+    width: 100%; min-height: 0; margin: 4mm 0; box-shadow: none;
+  }
+  .worksheet-page .opts,
+  .worksheet-page .cols2,
+  .worksheet-page .sortcols[data-cols="3"] { grid-template-columns: 1fr; }
+  .worksheet-page .sortcols[data-cols="2"] { grid-template-columns: 1fr; }
+}
+
+/* ---------- Print ---------- */
+@page { size: A4; margin: 12mm; }
+
+@media print {
+  body.worksheet-page {
+    background: #fff;
+    --sheet-pad: 0;                 /* @page margin does the work */
+  }
+  .worksheet-page .ws-bar { display: none !important; }
+  .worksheet-page .sheet {
+    width: auto; min-height: 0; margin: 0; padding: 0;
+    box-shadow: none; break-after: page;
+  }
+  .worksheet-page .sheet:last-of-type { break-after: auto; }
+
+  /* A continuation header is a deliberate page break. */
+  .worksheet-page .ws-runhead { break-before: page; border-top: none; padding-top: 0; margin-top: 0; }
+
+  /* Never leave a heading stranded at the foot of a page. */
+  .worksheet-page .ws-head,
+  .worksheet-page .part-head,
+  .worksheet-page .part-instr { break-after: avoid; }
+
+  .worksheet-page .part-head,
+  .worksheet-page .q,
+  .worksheet-page .infobox,
+  .worksheet-page .fnbox,
+  .worksheet-page .y8box,
+  .worksheet-page table.wtbl,
+  .worksheet-page .sortcols,
+  .worksheet-page .drawbox,
+  .worksheet-page .lines { break-inside: avoid; }
+  .worksheet-page a { color: inherit; text-decoration: none; }
+}
