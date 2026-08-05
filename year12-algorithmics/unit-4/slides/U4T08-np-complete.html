@@ -88,7 +88,7 @@
   <h2>NP-hard versus NP-complete</h2>
   <table class="tbl" style="margin:0 auto;">
     <tr><th></th><th>In NP?</th><th>Everything in NP reduces to it?</th><th>Example</th></tr>
-    <tr><td><b>NP-complete</b></td><td>yes</td><td>yes</td><td>TSP-decision, graph colouring, SAT</td></tr>
+    <tr><td><b>NP-complete</b></td><td>yes</td><td>yes</td><td>TSP-decision, graph colouring, satisfiability</td></tr>
     <tr><td><b>NP-hard</b></td><td>not necessarily</td><td>yes</td><td>the Halting Problem; TSP-optimisation</td></tr>
     <tr><td><b>In NP, not complete</b></td><td>yes</td><td>not known</td><td>anything in P; factoring (believed)</td></tr>
   </table>
@@ -100,11 +100,74 @@
   </div>
 </section>
 
+<section class="slide" data-topic="T8 · Satisfiability" data-menu="Boolean satisfiability">
+  <h2>Boolean satisfiability — the problem at the root</h2>
+  <div class="box flag" style="margin-top:0;"><span class="lbl">Careful — the acronym clashes</span>
+    <p>In this topic <b>SAT</b> means <b>Boolean satisfiability</b>, a problem in logic. It has <em>nothing</em> to do with your School-Assessed Task. To keep them apart, these slides say <b>satisfiability</b> for the problem and spell out School-Assessed Task in full.</p>
+  </div>
+  <div class="box defn"><span class="lbl">The ingredients</span>
+    <p><b>Variable:</b> a symbol that is either true or false — \(x\), \(y\), \(z\).<br>
+    <b>Literal:</b> a variable or its negation — \(x\) or \(\lnot x\).<br>
+    <b>Clause:</b> literals joined by OR — \((x \lor \lnot y \lor z)\).<br>
+    <b>Formula:</b> clauses joined by AND — this shape is called <b>conjunctive normal form</b>.</p>
+  </div>
+  <div class="box defn"><span class="lbl">The decision problem</span>
+    <p><b>Satisfiability (SAT):</b> given a Boolean formula, is there an assignment of true/false to its variables that makes the whole formula <b>true</b>? Yes or no.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Satisfiability" data-menu="Worked: satisfiable?">
+  <h2>Worked example — satisfiable or not?</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Formula 1</span>
+        <p>\[(x \lor y) \land (\lnot x \lor z) \land (\lnot y \lor \lnot z)\]</p>
+      </div>
+      <ol class="steps" id="s-sat1">
+        <li><span class="stepno">1</span> Try \(x = \text{T}\). Clause 2 then needs \(z = \text{T}\).</li>
+        <li><span class="stepno">2</span> With \(z = \text{T}\), clause 3 needs \(\lnot y\), so \(y = \text{F}\).</li>
+        <li><span class="stepno">3</span> Check clause 1: \((\text{T} \lor \text{F}) = \text{T}\). All three hold.</li>
+        <li class="ans"><span class="stepno">✓</span> <b>Satisfiable</b>, e.g. \(x{=}\text{T}, y{=}\text{F}, z{=}\text{T}\).</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-sat1">Solve it</button>
+    </div>
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Formula 2</span>
+        <p>\[(x \lor y) \land (x \lor \lnot y) \land (\lnot x \lor y) \land (\lnot x \lor \lnot y)\]</p>
+      </div>
+      <ol class="steps" id="s-sat2">
+        <li><span class="stepno">1</span> Only two variables, so four assignments — check them all.</li>
+        <li><span class="stepno">2</span> \(x{=}\text{T},y{=}\text{T}\) fails clause 4. \(x{=}\text{T},y{=}\text{F}\) fails clause 3.</li>
+        <li><span class="stepno">3</span> \(x{=}\text{F},y{=}\text{T}\) fails clause 2. \(x{=}\text{F},y{=}\text{F}\) fails clause 1.</li>
+        <li class="ans"><span class="stepno">✓</span> <b>Unsatisfiable</b> — no assignment works.</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-sat2">Solve it</button>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Notice the asymmetry</span>
+    <p>To show a formula <b>is</b> satisfiable you exhibit one assignment, and anyone can check it in polynomial time — which is exactly why satisfiability is in NP. To show it is <b>not</b>, you must rule out all \(2^n\) assignments. Solving and checking are not the same job.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Satisfiability" data-menu="Why it's the root">
+  <h2>Why satisfiability is the root of everything</h2>
+  <ol class="steps" id="s-root">
+    <li><span class="stepno">1</span> <b>It is in NP.</b> Given a proposed assignment, substitute and evaluate each clause — linear in the size of the formula.</li>
+    <li><span class="stepno">2</span> <b>It is NP-hard.</b> Cook and Levin showed that the entire computation of <em>any</em> nondeterministic polynomial-time machine can be encoded as a Boolean formula that is satisfiable exactly when the machine accepts.</li>
+    <li><span class="stepno">3</span> <b>So every problem in NP reduces to it</b> — not by a clever problem-specific trick, but by a uniform construction from the definition of the class.</li>
+    <li class="ans"><span class="stepno">✓</span> That makes satisfiability the <b>seed</b>: the first problem shown NP-complete without relying on any earlier one.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-root">Build the argument</button>
+  <div class="box hint"><span class="lbl">A nuance worth knowing</span>
+    <p><b>2-satisfiability</b> — every clause limited to two literals — is in <b>P</b>. <b>3-satisfiability</b> is NP-complete. One literal per clause is the difference between easy and hard, which shows how sharp the boundary can be.</p>
+  </div>
+</section>
+
 <section class="slide" data-topic="T8 · History" data-menu="Cook–Levin">
   <h2>Where the first one came from</h2>
   <ol class="steps" id="s-hist">
-    <li><span class="stepno">1</span> <b>Cook and Levin, 1971.</b> Proved that <b>SAT</b> — is there an assignment of true/false making this Boolean formula true? — is NP-complete, directly from the definition of nondeterministic computation.</li>
-    <li><span class="stepno">2</span> <b>Karp, 1972.</b> Reduced SAT to 21 other problems, showing each was NP-complete too — including graph colouring, knapsack and Hamiltonian circuit.</li>
+    <li><span class="stepno">1</span> <b>Cook and Levin, 1971.</b> Proved that <b>Boolean satisfiability</b> is NP-complete, directly from the definition of nondeterministic computation — the first such proof, and the only one that could not lean on an earlier result.</li>
+    <li><span class="stepno">2</span> <b>Karp, 1972.</b> Reduced satisfiability to 21 other problems, showing each was NP-complete too — including graph colouring, knapsack and Hamiltonian circuit.</li>
     <li><span class="stepno">3</span> <b>Today.</b> Thousands are known. Each new proof is one reduction from a problem already on the list.</li>
     <li class="ans"><span class="stepno">✓</span> Only the first proof was hard. Every subsequent one stands on it.</li>
   </ol>
@@ -212,6 +275,11 @@
     <div class="qcard">
       <p class="q">Why is the Halting Problem NP-hard but not NP-complete?</p>
       <p class="a">It is NP-hard because every NP problem reduces to it. It is not NP-complete because it is not <em>in</em> NP — there is no polynomial-time check for a claimed answer, since the problem is undecidable and no algorithm decides it at all.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Define Boolean satisfiability, and explain why it is in NP.</p>
+      <p class="a">Given a Boolean formula built from variables joined by AND, OR and NOT, is there an assignment of true/false to the variables making the whole formula true? It is in <b>NP</b> because a proposed assignment can be verified in polynomial time — substitute the values and evaluate each clause. <em>(Not to be confused with the School-Assessed Task.)</em></p>
       <button class="reveal-btn">Show answer</button>
     </div>
     <div class="qcard">
