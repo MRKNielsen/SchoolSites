@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 2 — Θ, Ω, and Which Input</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 2 · Θ, Ω, and Which Input</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Θ, Ω, and Which Input</h1>
+  <p>Unit 4 AOS1 · Topic 2 of 6 — two independent questions people constantly merge</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T2 · Orientation" data-menu="Two questions">
+  <h2>Two questions, not one</h2>
+  <p class="lede">Almost every mistake in this topic comes from collapsing two separate choices into one.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Question 1 — <em>which bound?</em></th><th>Question 2 — <em>which input?</em></th></tr>
+    <tr><td>\(O\) — at most this</td><td>Best case — the friendliest input of size \(n\)</td></tr>
+    <tr><td>\(\Omega\) — at least this</td><td>Average case — over some distribution of inputs</td></tr>
+    <tr><td>\(\Theta\) — exactly this, up to constants</td><td>Worst case — the nastiest input of size \(n\)</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">They are independent</span>
+    <p>You can ask for an upper bound on the best case, or a lower bound on the worst case, or a tight bound on the average. Nine combinations, all meaningful. <b>\(O\) does not mean "worst case".</b></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · The three bounds" data-menu="Ω and Θ">
+  <h2>\(\Omega\) and \(\Theta\), formally</h2>
+  <div class="box defn"><span class="lbl">Omega — lower bound</span>
+    <p>\(f(n) = \Omega(g(n))\) if there exist \(c > 0\), \(n_0\) with \(f(n) \ge c\,g(n)\) for all \(n \ge n_0\).</p>
+  </div>
+  <div class="box defn"><span class="lbl">Theta — tight bound</span>
+    <p>\(f(n) = \Theta(g(n))\) if \(f(n) = O(g(n))\) <b>and</b> \(f(n) = \Omega(g(n))\).</p>
+  </div>
+  <ul class="small">
+    <li>\(\Theta\) is the strong statement: the growth is <em>pinned</em>, sandwiched between two multiples of \(g\).</li>
+    <li>If you can prove \(\Theta\), say \(\Theta\) — it carries strictly more information than \(O\).</li>
+    <li>\(3n^2 + 5n = \Theta(n^2)\), but \(3n^2 + 5n\) is only \(O(n^3)\), never \(\Theta(n^3)\).</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="T2 · The three bounds" data-menu="The sandwich">
+  <h2>The sandwich, drawn</h2>
+  <div class="cols">
+    <div>
+      <svg viewBox="0 0 260 190" style="width:96%; height:auto;">
+        <line x1="34" y1="162" x2="248" y2="162" stroke="#94a3b8" stroke-width="1.4"/>
+        <line x1="34" y1="12" x2="34" y2="162" stroke="#94a3b8" stroke-width="1.4"/>
+        <path d="M34 158 Q 130 100 248 22" fill="none" stroke="#0e7569" stroke-width="1.8" stroke-dasharray="6,4"/>
+        <path d="M34 160 Q 130 124 248 62" fill="none" stroke="#8b1f34" stroke-width="2.2"/>
+        <path d="M34 161 Q 130 142 248 96" fill="none" stroke="#b45309" stroke-width="1.8" stroke-dasharray="6,4"/>
+        <text x="186" y="26" font-size="9" fill="#0e7569">c₂·g(n) — upper</text>
+        <text x="196" y="58" font-size="9" fill="#8b1f34">f(n)</text>
+        <text x="182" y="110" font-size="9" fill="#b45309">c₁·g(n) — lower</text>
+        <line x1="96" y1="12" x2="96" y2="162" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="100" y="178" font-size="10" fill="#64748b">n₀</text>
+      </svg>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Beyond \(n_0\), \(f\) is trapped between \(c_1 g\) and \(c_2 g\).</li>
+        <li>Both multiples are of the <b>same</b> \(g\) — that is what makes the bound tight.</li>
+        <li>Note there are now <em>two</em> constants to exhibit, not one.</li>
+      </ul>
+      <div class="box hint"><span class="lbl">Sanity check</span>
+        <p>If you cannot draw a lower curve of the same shape underneath \(f\), you do not have \(\Theta\) — you have \(O\) and should say so.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Which input" data-menu="Best/avg/worst">
+  <h2>Best, average, worst — three questions about one algorithm</h2>
+  <p>Fix the input <em>size</em> at \(n\). There are still many inputs of that size, and the algorithm may do different amounts of work on each.</p>
+  <ul class="small">
+    <li><b>Best case:</b> the minimum work over all inputs of size \(n\). Usually of limited practical interest — it tells you what happens when you get lucky.</li>
+    <li><b>Worst case:</b> the maximum. This is a <em>guarantee</em>: the algorithm will never do worse.</li>
+    <li><b>Average case:</b> the mean over a stated distribution of inputs. The phrase "stated distribution" is doing real work — an average is meaningless without it.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">The subtle one</span>
+    <p>Average case is <b>not</b> "halfway between best and worst". For linear search on a random target that <em>is</em> present, the average is about \(n/2\) comparisons — which happens to be \(\Theta(n)\), the same class as the worst case.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Which input" data-menu="Why worst case">
+  <h2>Why we default to worst case</h2>
+  <ol class="steps" id="s-why">
+    <li><span class="stepno">1</span> <b>It is a guarantee.</b> "Never worse than this" is a promise you can build a system on. "Sometimes this good" is not.</li>
+    <li><span class="stepno">2</span> <b>It needs no assumptions.</b> Average case requires you to know the input distribution. In practice you rarely do, and real data is not random.</li>
+    <li><span class="stepno">3</span> <b>The worst case often happens.</b> Sorted or nearly-sorted data is extremely common — and it is exactly the worst case for naive quicksort.</li>
+    <li><span class="stepno">4</span> <b>Adversaries exist.</b> If an attacker chooses your input, the worst case is not unlucky; it is the design brief.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-why">Four reasons</button>
+  <div class="box key"><span class="lbl">But say which you mean</span>
+    <p>If a question does not specify, state your assumption: <em>"assuming worst case…"</em>. It costs one clause and protects the mark.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Worked" data-menu="Worked: linear search">
+  <h2>Worked example — linear search, all three cases</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Algorithm</span>
+        <p class="small"><code>Algorithm find(L, v):</code><br>
+        <code>&nbsp;&nbsp;For i &larr; 1 to n Do</code><br>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;If L[i] = v Do</code><br>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return i</code><br>
+        <code>&nbsp;&nbsp;Return NotFound</code></p>
+      </div>
+    </div>
+    <div>
+      <ol class="steps" id="s-linear">
+        <li><span class="stepno">1</span> <b>Best:</b> \(v\) sits at \(L[1]\). One comparison. \(\Theta(1)\).</li>
+        <li><span class="stepno">2</span> <b>Worst:</b> \(v\) is at \(L[n]\), or absent entirely. \(n\) comparisons. \(\Theta(n)\).</li>
+        <li><span class="stepno">3</span> <b>Average</b> (present, uniformly at random): \(\frac{1+2+\cdots+n}{n} = \frac{n+1}{2}\) comparisons — \(\Theta(n)\).</li>
+        <li class="ans"><span class="stepno">✓</span> Best differs in class; average and worst do not.</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-linear">Work all three</button>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Naming the witness</span>
+    <p>Notice each case came with a <b>specific input</b>. Exam questions frequently ask for exactly that — not just the bound, but an input that achieves it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Worked" data-menu="Worked: bubble sort">
+  <h2>Worked example — early-exit bubble sort</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">The variant</span>
+    <p class="small">Standard bubble sort, plus: if a full pass makes no swaps, stop immediately.</p>
+  </div>
+  <ol class="steps" id="s-bubble">
+    <li><span class="stepno">1</span> <b>Best case input:</b> already sorted ascending. The first pass makes no swaps, so the algorithm exits after \(n-1\) comparisons. \(\Theta(n)\).</li>
+    <li><span class="stepno">2</span> <b>Worst case input:</b> sorted <em>descending</em>. Every element must travel the full length; \(n-1\) passes of up to \(n-1\) comparisons. \(\Theta(n^2)\).</li>
+    <li><span class="stepno">3</span> <b>So:</b> best \(\Theta(n)\), worst \(\Theta(n^2)\). The early exit changed the best case and did nothing at all to the worst.</li>
+    <li class="ans"><span class="stepno">✓</span> Overall we may say the algorithm is \(O(n^2)\) and \(\Omega(n)\) — but <b>not</b> \(\Theta\) of anything, because the two ends differ.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-bubble">Step through</button>
+  <div class="box key"><span class="lbl">The insight worth carrying</span>
+    <p>An optimisation that improves the best case and leaves the worst case alone has not improved the <em>guarantee</em>. Marketing loves such optimisations.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Worked" data-menu="No single Θ">
+  <h2>When \(\Theta\) does not exist</h2>
+  <p>Early-exit bubble sort has no single \(\Theta\) across all inputs. This is not a failure of analysis — it is information.</p>
+  <ul class="small">
+    <li>You <em>can</em> write \(\Theta\) once you fix the case: worst case is \(\Theta(n^2)\); best case is \(\Theta(n)\). Both are precise.</li>
+    <li>What you cannot write is "bubble sort is \(\Theta(n^2)\)" unqualified, because the best case escapes that bound from below.</li>
+    <li>Merge sort, by contrast, does \(\Theta(n\log n)\) work on <em>every</em> input — so "merge sort is \(\Theta(n\log n)\)" is legitimate without qualification.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">A good habit</span>
+    <p>Write the case and the bound together: <em>"worst case \(\Theta(n^2)\)"</em>. It is four words and it is always unambiguous.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T2 · Exam focus" data-menu="Exam question">
+  <h2>State the case — and name an input that achieves it</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q8a–b</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (4 marks)</span>
+    <p class="small">An algorithm searches a list <code>List</code> of length \(n\) for a value <code>Value</code> by repeatedly splitting the list into a left part, a middle item and a right part. The split operation runs in time proportional to the length of the list it is given.</p>
+    <p class="small"><b>a.</b> State the worst case time complexity in terms of \(n\), and give an example of an input <code>Value</code> and <code>List</code>, with \(n \ge 5\), that produces this worst case. <em>(2 marks)</em></p>
+    <p class="small"><b>b.</b> State the best case time complexity, and describe the relationship between <code>Value</code> and the elements of <code>List</code> for that best case to occur. <em>(2 marks)</em></p>
+  </div>
+  <div class="box try"><span class="lbl">Note the verb</span>
+    <p>"State" gets you the bound. The second mark in each part is for the <b>input</b> — a concrete list, or a precise condition. Answers that stop at the bound score half.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam2">
+    <li><span class="stepno">1</span> <b>What does one split cost?</b> Proportional to the current list length — so \(O(k)\) on a list of length \(k\). It is <em>not</em> constant. That is the whole question.</li>
+    <li><span class="stepno">2</span> <b>Worst case shape:</b> the target is never the middle item, and the search keeps recursing until the list is exhausted — \(n\) splits, on lists of length \(n, n-1, \ldots\)</li>
+    <li><span class="stepno">3</span> <b>Sum the splits:</b> \(n + (n-1) + \cdots + 1 = \tfrac{n(n+1)}{2}\), so worst case \(\Theta(n^2)\).</li>
+    <li><span class="stepno">4</span> <b>Name a witness:</b> <code>List = [1,2,3,4,5]</code>, <code>Value = 99</code> — absent, so every split happens.</li>
+    <li><span class="stepno">5</span> <b>Best case:</b> the very first split puts <code>Value</code> in the middle position. One split, cost \(\Theta(n)\).</li>
+    <li class="ans"><span class="stepno">✓</span> Best \(\Theta(n)\) — not \(\Theta(1)\), because that single split still touches the whole list.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam2">Reveal the reasoning</button>
+</section>
+
+<section class="slide" data-topic="T2 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the trap in the best case</h2>
+  <div class="box flag"><span class="lbl">The tempting wrong answer</span>
+    <p>"Best case is \(\Theta(1)\) — we find it immediately."</p>
+  </div>
+  <ul class="small">
+    <li>Finding it immediately means <em>one</em> split, not <em>zero</em> work. And the split itself is linear in the list length.</li>
+    <li>So the floor on the best case is set by the cost of a single operation on the full input, \(\Theta(n)\).</li>
+    <li>General principle: <b>the best case can never be cheaper than the cheapest thing the algorithm must do at least once.</b> If the algorithm must read the whole input, no case is better than \(\Omega(n)\).</li>
+  </ul>
+  <div class="box try"><span class="lbl">Apply it</span>
+    <p>What is the best case for "find the maximum of an unsorted list"? <em>(\(\Theta(n)\) — you cannot know the maximum without looking at every element, no matter how lucky you are.)</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Exam focus" data-menu="Second question">
+  <h2>A second exam item — quicksort's worst case</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q14</p>
+  <div class="chooser frag">
+    <p class="ch-tag">Quicksort on a list already sorted in <em>descending</em> order hits its worst case… <span class="ch-clue">— when?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>only if the first item is the pivot each time</span></div>
+      <div class="opt"><b>B</b><span>only if the last item is the pivot each time</span></div>
+      <div class="opt correct"><b>C</b><span>if either the first or the last item is the pivot each time</span></div>
+      <div class="opt"><b>D</b><span>when the pivot is chosen at random</span></div>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Reasoning</span>
+    <p>On a fully sorted list (either direction), the first and last items are the extremes. Picking either as pivot puts <em>everything</em> on one side — partitions of size \(n-1\) and \(0\), giving \(n\) levels of recursion and \(\Theta(n^2)\). Random pivoting is what <em>avoids</em> it, so D is backwards.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Explain why "\(O\)" and "worst case" are not synonyms.</p>
+      <p class="a">\(O\) chooses a <em>type of bound</em> (an upper bound); best/average/worst chooses <em>which inputs</em> you are measuring. They vary independently — "the best case is \(O(1)\)" and "the worst case is \(\Omega(n^2)\)" are both perfectly ordinary statements.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">An algorithm is \(O(n^2)\) and \(\Omega(n)\). Can we say it is \(\Theta\) of anything?</p>
+      <p class="a">Not from this information. \(\Theta\) requires the <em>same</em> function to be both an upper and a lower bound. Here the two bounds differ, so either the analysis is not tight, or best and worst genuinely differ in class (as in early-exit bubble sort).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is average-case analysis less common in this course?</p>
+      <p class="a">It requires an explicit probability distribution over inputs, which is usually unknown and rarely uniform in practice. Worst case needs no such assumption and yields a guarantee, so it is the default — but you should still say which you are using.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give an algorithm whose best and worst cases are the same class, and one where they differ.</p>
+      <p class="a"><b>Same:</b> merge sort — \(\Theta(n\log n)\) on every input, since it always splits fully and merges fully. Also "find the maximum", \(\Theta(n)\) always. <b>Differ:</b> early-exit bubble sort (\(\Theta(n)\) vs \(\Theta(n^2)\)), or linear search (\(\Theta(1)\) vs \(\Theta(n)\)).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T2 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w01.html">Interactive workbook</a></b> — Part B counts operations empirically; feed it a sorted and a reverse-sorted list and watch best and worst separate.</li>
+    <li><b>Problem Set — Week 1, Section 2</b>: identifying witness inputs, and distinguishing bound from case.</li>
+    <li><b>Next topic:</b> reading a bound straight off iterative pseudocode — and the trap that costs more marks than any other.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Name the bound and the case together, and back the case with a specific input — "worst case \(\Theta(n^2)\), achieved when the list is reverse-sorted".</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Define \(\Theta\) in terms of \(O\) and \(\Omega\).</li>
+      <li>Give an input that makes early-exit bubble sort hit its worst case.</li>
+      <li>Why can't "find the maximum" have a best case better than \(\Theta(n)\)?</li>
+    </ol>
+    <p class="start-hint">Topic 3 — analysing iterative pseudocode.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 2 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

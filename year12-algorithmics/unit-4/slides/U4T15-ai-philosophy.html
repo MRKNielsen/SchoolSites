@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 15 — The Turing Test, the Chinese Room, and Strong AI</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 15 · Turing Test, Chinese Room, Strong AI</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>The Turing Test and the Chinese Room</h1>
+  <p>Unit 4 AOS3 · Topic 15 of 17 — can a machine think, and how would we tell?</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T15 · Conceptions" data-menu="Strong vs weak">
+  <h2>Two conceptions of artificial intelligence</h2>
+  <div class="box defn"><span class="lbl">Weak AI</span>
+    <p>Machines can <b>behave</b> intelligently — simulate reasoning well enough to perform tasks that require intelligence in humans. Makes no claim about inner life.</p>
+  </div>
+  <div class="box defn"><span class="lbl">Strong AI</span>
+    <p>An appropriately programmed machine would genuinely <b>have a mind</b> — real understanding, real mental states — not merely a simulation of them.</p>
+  </div>
+  <div class="box key"><span class="lbl">The distinction in one question</span>
+    <p>Weak AI asks <em>does it behave as if it understands?</em> Strong AI asks <em>does it actually understand?</em> Almost every dispute in this topic is about which question is being answered.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Worth noting</span>
+    <p>Weak AI is uncontroversial — chess engines and translators already do it. Strong AI is the contested claim, and the Chinese Room targets it specifically.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Turing Test" data-menu="The Turing Test">
+  <h2>The Turing Test (1950)</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>Three participants:</b> a human interrogator, a human respondent, and a machine.</li>
+        <li>The interrogator communicates with both by <b>text only</b>, so appearance and voice give nothing away.</li>
+        <li>The interrogator may ask anything, and must decide which respondent is the machine.</li>
+        <li><b>Pass condition:</b> the machine is judged human as often as the human is — the interrogator does no better than chance.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 230 160" style="width:96%; height:auto;">
+        <rect x="82" y="14" width="66" height="34" rx="6" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <text x="115" y="35" font-size="10" text-anchor="middle" fill="#0e7569">interrogator</text>
+        <line x1="98" y1="48" x2="52" y2="98" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4,3"/>
+        <line x1="132" y1="48" x2="178" y2="98" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4,3"/>
+        <rect x="16" y="98" width="72" height="34" rx="6" fill="#f4f6fa" stroke="#475569" stroke-width="1.5"/>
+        <text x="52" y="119" font-size="10" text-anchor="middle" fill="#334155">human</text>
+        <rect x="142" y="98" width="72" height="34" rx="6" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.5"/>
+        <text x="178" y="119" font-size="10" text-anchor="middle" fill="#8b1f34">machine</text>
+        <text x="115" y="152" font-size="9" text-anchor="middle" fill="#64748b">text-only channel</text>
+      </svg>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Turing's move</span>
+    <p>He replaced the unanswerable "can machines think?" with an <b>operational</b> question that can actually be run as an experiment. That substitution is his contribution — and also the thing critics attack.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Turing Test" data-menu="Limitations">
+  <h2>Limitations of the test</h2>
+  <ul class="small">
+    <li><b>It tests imitation, not intelligence.</b> Success requires convincingly resembling a human, including human errors and delays — a machine that answered arithmetic instantly and perfectly would fail.</li>
+    <li><b>It is behavioural only.</b> It cannot distinguish genuine understanding from a sufficiently good lookup table — which is exactly Searle's point.</li>
+    <li><b>It is anthropocentric.</b> A non-human intelligence would fail simply for being unlike us.</li>
+    <li><b>It is narrow.</b> Only linguistic behaviour is tested — no perception, embodiment or physical action.</li>
+    <li><b>It is gameable.</b> Deflection, humour and feigned ignorance have historically fooled judges without any understanding.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Answer shape</span>
+    <p>Asked for a limitation, name one and <b>say why it matters</b>: "it tests imitation rather than intelligence, so a system could pass by mimicking human error patterns without understanding anything."</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Chinese Room" data-menu="The Chinese Room">
+  <h2>Searle's Chinese Room (1980)</h2>
+  <ol class="steps" id="s-cr">
+    <li><span class="stepno">1</span> <b>The setup.</b> A man who speaks no Chinese sits in a room with a comprehensive rule book, written in English, for manipulating Chinese symbols.</li>
+    <li><span class="stepno">2</span> <b>The process.</b> Chinese messages are passed in. He looks up the symbols, follows the rules mechanically, and passes out the symbols the book specifies.</li>
+    <li><span class="stepno">3</span> <b>The result.</b> His replies are indistinguishable from a native speaker's. From outside, the room appears to understand Chinese.</li>
+    <li><span class="stepno">4</span> <b>The claim.</b> The man understands no Chinese whatsoever — he is shuffling symbols by shape.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>The conclusion.</b> A computer running a program is in exactly this position: manipulating symbols by their form, with no access to their meaning. So passing the Turing Test would not establish understanding, and strong AI fails.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-cr">Build the argument</button>
+  <div class="box key"><span class="lbl">The argument in one line</span>
+    <p><b>Syntax is not sufficient for semantics.</b> Manipulating symbols correctly is not the same as knowing what they mean.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Chinese Room" data-menu="Replies">
+  <h2>The standard replies</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Reply</th><th>The objection</th><th>Searle's response</th></tr>
+    <tr><td><b>Systems</b></td><td>the <em>man</em> doesn't understand, but the whole system — man, book, room — does</td><td>let him memorise the book and work outdoors; the system is now entirely inside him, and he still understands nothing</td></tr>
+    <tr><td><b>Robot</b></td><td>give it sensors and a body, grounding symbols in the world</td><td>added inputs are just more symbols; the man still processes them formally</td></tr>
+    <tr><td><b>Brain simulator</b></td><td>simulate neuron-by-neuron, so whatever brains do, it does</td><td>a simulation of a thing is not the thing — simulated rain does not make anyone wet</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Which one the exam wants</span>
+    <p>The <b>Systems Reply</b> is the one to know cold — it is the most common objection, and Searle's memorisation counter is the expected response.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Chinese Room" data-menu="Evaluating">
+  <h2>Evaluating the argument</h2>
+  <div class="cols">
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">For Searle</span>
+        <p class="small">The intuition is strong: mechanical symbol-shuffling by rules genuinely does not look like understanding. And it exposes that the Turing Test measures only behaviour.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Against Searle</span>
+        <p class="small">The intuition may simply be unreliable at this scale — a rule book adequate for fluent Chinese would be unimaginably vast. And the argument assumes understanding must reside in a <em>component</em>, which begs the question against the Systems Reply.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Answering "mount a case"</span>
+    <p>Take a side and defend it, but state the strongest objection to your own position and answer it. A response that ignores the other side is incomplete regardless of which side it takes.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T15 · Exam focus" data-menu="Exam question">
+  <h2>Explain how the argument is used</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q13c</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (2 marks)</span>
+    <p class="small">In the Chinese Room Argument, Searle describes a man in a room who has a book of instructions allowing him to reply to messages he receives written in Chinese.</p>
+    <p class="small">Explain how the Chinese Room Argument is used to argue against the possibility of strong AI.</p>
+  </div>
+  <div class="box try"><span class="lbl">Two marks, two moves</span>
+    <p>One mark for what happens <em>in the room</em>; one for the <em>inference to computers</em>. Describing the scenario alone will not do it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam15">
+    <li><span class="stepno">1</span> <b>What happens in the room.</b> The man produces fluent Chinese responses purely by applying formal rules to symbol shapes. To an outside observer the room appears to understand Chinese — yet the man understands none of it.</li>
+    <li><span class="stepno">2</span> <b>The inference.</b> A computer running a program is doing the same thing: manipulating symbols according to their form, with no access to meaning.</li>
+    <li><span class="stepno">3</span> <b>The conclusion.</b> Producing correct output is therefore not sufficient for understanding. Since strong AI claims a suitably programmed machine would genuinely understand, and program execution is just symbol manipulation, strong AI must be false.</li>
+    <li class="ans"><span class="stepno">✓</span> Compressed: <b>syntax alone does not yield semantics</b>, so behaviour indistinguishable from understanding is not understanding.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam15">Reveal the reasoning</button>
+</section>
+
+<section class="slide" data-topic="T15 · Exam focus" data-menu="Second question">
+  <h2>Is this system artificial intelligence?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q8c</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A produce company builds a system that inspects tomatoes and grades them by ripeness more accurately than its human graders. The company claims the system is evidence of artificial intelligence.</p>
+    <p class="small">Explain whether the system would be considered artificial intelligence, referring to <b>two different conceptions</b> of artificial intelligence.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small"><b>Under weak AI — yes.</b> Weak AI holds that a machine displays intelligence when it performs a task requiring intelligence in humans. Grading produce by appearance is such a task, and the system does it at least as well as people, so it qualifies.</p>
+    <p class="small"><b>Under strong AI — no.</b> Strong AI requires genuine understanding and mental states. The system classifies images statistically; it has no comprehension of what a tomato is or what ripeness means, and does nothing outside its narrow task. It would fail a Chinese Room challenge for the same reason the room does.</p>
+    <p class="small"><b>Conclusion:</b> whether the company's claim holds depends entirely on which conception is meant — and only the weaker one supports it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the template for "is it AI?" questions</h2>
+  <p>Questions of this shape recur every year. The structure of a full-mark answer is stable.</p>
+  <ol class="steps" id="s-template">
+    <li><span class="stepno">1</span> <b>Name the two conceptions</b> and define each in a clause — weak (behaves intelligently) and strong (genuinely understands).</li>
+    <li><span class="stepno">2</span> <b>Apply the first</b> to the specific system, citing what it actually does.</li>
+    <li><span class="stepno">3</span> <b>Apply the second</b>, and say what is missing — usually understanding, generality or intentionality.</li>
+    <li><span class="stepno">4</span> <b>Conclude conditionally:</b> "it is AI under the weak conception but not the strong one."</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-template">The four moves</button>
+  <div class="box flag"><span class="lbl">What loses marks</span>
+    <p>Answering "yes" or "no" flatly. The question asks you to refer to two conceptions, which signals that the answer differs between them — an unconditional answer misses the point being tested.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Describe the Turing Test setup and its pass condition.</p>
+      <p class="a">An interrogator communicates by <b>text only</b> with a human and a machine, asks whatever they like, and must identify which is which. The machine passes if the interrogator cannot reliably tell — judging it human about as often as the actual human.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">State the Systems Reply and Searle's response.</p>
+      <p class="a"><b>Systems Reply:</b> the man alone doesn't understand Chinese, but the whole system — man, rule book, room — does. <b>Searle:</b> let the man memorise the rule book and work outside; the entire system is now internal to him, and he still understands no Chinese.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Distinguish strong from weak AI in one sentence each.</p>
+      <p class="a"><b>Weak AI:</b> machines can behave intelligently and perform tasks requiring intelligence, with no claim about inner mental states. <b>Strong AI:</b> a suitably programmed machine would genuinely have a mind and real understanding, not a simulation of one.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give one limitation of the Turing Test and explain why it matters.</p>
+      <p class="a">It rewards <b>imitation</b> rather than intelligence: passing requires mimicking human traits including mistakes and slowness, so a system could succeed by deflection and feigned ignorance without understanding — while a genuinely intelligent non-human system might fail for being insufficiently human-like.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T15 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w08.html">Interactive workbook</a></b> — Part C is a Chinese Room argument mapper: state the argument, pick a side, and answer the strongest objection to it.</li>
+    <li><b>Problem Set — Week 5, Section 1</b>: Turing Test structure and limitations, the argument and its replies, and two "is this AI?" scenarios.</li>
+    <li><b>Next topic:</b> how machines actually learn — and what that does to the question of understanding.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>The Turing Test asks whether a machine behaves as if it understands; the Chinese Room asks whether behaving that way could ever be enough.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Weak or strong AI: which does the Chinese Room attack?</li>
+      <li>State the Systems Reply and Searle's answer to it.</li>
+      <li>Why is "yes, it's AI" an incomplete answer to an "is this AI?" question?</li>
+    </ol>
+    <p class="start-hint">Topic 16 — machine learning and neural networks.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 15 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

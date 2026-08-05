@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 1 — Growth Rates and Big-O</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 1 · Growth Rates and Big-O</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Growth Rates and Big-O</h1>
+  <p>Unit 4 AOS1 · Topic 1 of 6 — what we measure, and why we measure it that way</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T1 · Orientation" data-menu="Where this fits">
+  <h2>Where this fits</h2>
+  <p class="lede">AOS1 asks one question in six different ways: <em>how does the cost of this algorithm grow as the input grows?</em></p>
+  <ul>
+    <li><b>This topic</b> — the measuring instrument itself: operation counts, growth classes, the formal definition of \(O\).</li>
+    <li><b>Topic 2</b> — \(\Theta\), \(\Omega\), and which input you are talking about (best / average / worst).</li>
+    <li><b>Topic 3</b> — reading a bound off iterative pseudocode.</li>
+    <li><b>Topic 4</b> — the graph algorithms from Unit 3, now with justifications.</li>
+    <li><b>Topics 5–6</b> — recursion: call graphs, recurrences, the Master Theorem.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The habit to build</span>
+    <p>Every complexity claim you make this year needs three parts: <b>what you counted</b>, <b>what \(n\) means</b>, and <b>which input</b> you assumed. A bare "\(O(n^2)\)" earns nothing without them.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Why growth" data-menu="Why seconds fail">
+  <h2>Why we don't measure in seconds</h2>
+  <p>Suppose you time an algorithm and get 0.8&nbsp;seconds. What have you learned?</p>
+  <ul class="small">
+    <li>That it took 0.8&nbsp;s <em>on that machine</em>, with <em>that</em> CPU, <em>that</em> language, <em>that</em> compiler, under <em>that</em> background load, for <em>that one input</em>.</li>
+    <li>Change any of those and the number changes. None of that is a property of the <b>algorithm</b>.</li>
+    <li>Worse, it tells you nothing about the input you actually care about — the one ten times larger.</li>
+  </ul>
+  <div class="box key"><span class="lbl">What we want instead</span>
+    <p>A statement about the algorithm that survives changes of machine, language and input size — something of the form <em>"if the input doubles, the work multiplies by roughly …"</em></p>
+  </div>
+  <div class="box hint"><span class="lbl">Not useless, though</span>
+    <p>Timing is still how you <em>verify</em> an analysis. Predict the shape mathematically, then check the measurements match. That is exactly what your workbook does.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Why growth" data-menu="Counting operations">
+  <h2>What we count instead: elementary operations</h2>
+  <p>An <b>elementary operation</b> is one whose cost does not depend on \(n\): an arithmetic operation, a comparison, an assignment, an array index, a return.</p>
+  <div class="box defn"><span class="lbl">The model</span>
+    <p>Assume every elementary operation costs the same fixed amount of time. Then the running time is proportional to the <em>number</em> of elementary operations — a property of the algorithm alone.</p>
+  </div>
+  <div class="box flag"><span class="lbl">Where students lose marks</span>
+    <p>Assuming an operation is elementary when it isn't. <code>list.append(x)</code> is; <code>x in list</code> is <b>not</b> — it scans. Topic 3 is largely about spotting this, and it is the single most common trap in the exam.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Counting" data-menu="Worked: counting">
+  <h2>Worked example — count, don't guess</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Algorithm</span>
+        <p class="small"><code>sum &larr; 0</code><br>
+        <code>For i &larr; 1 to n Do</code><br>
+        <code>&nbsp;&nbsp;sum &larr; sum + i</code><br>
+        <code>Return sum</code></p>
+      </div>
+    </div>
+    <div>
+      <ol class="steps" id="s-count">
+        <li><span class="stepno">1</span> <b>Before the loop:</b> one assignment. Cost 1.</li>
+        <li><span class="stepno">2</span> <b>Loop control:</b> the counter is initialised once, then compared and incremented each pass — about \(2n + 1\) operations.</li>
+        <li><span class="stepno">3</span> <b>Loop body:</b> one addition and one assignment, \(n\) times — \(2n\).</li>
+        <li><span class="stepno">4</span> <b>After:</b> one return. Cost 1.</li>
+        <li><span class="stepno">5</span> <b>Total:</b> \(T(n) = 4n + 3\).</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-count">Count it step by step</button>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Now the important bit</span>
+    <p>Nobody cares about the 4 or the 3. Change language and they change. What survives is that \(T\) is <b>linear</b> in \(n\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Counting" data-menu="Dropping the detail">
+  <h2>Why we drop constants and lower-order terms</h2>
+  <p>Take \(T(n) = 4n + 3\) and \(U(n) = 100n\). Which is "faster"?</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>\(n\)</th><th>\(T(n) = 4n+3\)</th><th>\(U(n) = 100n\)</th><th>\(V(n) = n^2\)</th></tr>
+    <tr><td>10</td><td>43</td><td>1 000</td><td>100</td></tr>
+    <tr><td>100</td><td>403</td><td>10 000</td><td>10 000</td></tr>
+    <tr><td>1 000</td><td>4 003</td><td>100 000</td><td><b>1 000 000</b></td></tr>
+    <tr><td>10 000</td><td>40 003</td><td>1 000 000</td><td><b>100 000 000</b></td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>\(T\) and \(U\) differ by a constant factor of 25 — a fixed penalty, the same at every size. A faster machine erases it.</li>
+    <li>\(V\) is different <em>in kind</em>. Its lead over \(U\) grows without limit. No machine erases that.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The principle</span>
+    <p>Constant factors are engineering. Growth class is mathematics. Big-O deliberately throws away the first so it can talk about the second.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · The definition" data-menu="Big-O definition">
+  <h2>Big-O: the formal definition</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>\(f(n) = O(g(n))\) if there exist constants \(c > 0\) and \(n_0 \ge 0\) such that
+    \[ f(n) \le c \cdot g(n) \quad \text{for all } n \ge n_0. \]</p>
+  </div>
+  <ul class="small">
+    <li>Read it as: <em>beyond some point, \(f\) is no bigger than a fixed multiple of \(g\).</em></li>
+    <li><b>\(c\)</b> absorbs the constant factors you refuse to care about.</li>
+    <li><b>\(n_0\)</b> lets small inputs misbehave. Nothing is claimed about them.</li>
+    <li>It is an <b>upper bound</b>, and it need not be tight — \(n\) really is \(O(n^5)\), just uselessly so.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Notation warning</span>
+    <p>The "=" is traditional but misleading; \(O(g)\) is a <em>set</em> of functions. Some texts write \(f \in O(g)\). Either is accepted — but never write \(O(g) = f\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · The definition" data-menu="Reading c and n₀">
+  <h2>What \(c\) and \(n_0\) actually do</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>The dashed curve is \(c \cdot g(n)\) — the bound, scaled up by \(c\).</li>
+        <li>Left of \(n_0\) the solid curve \(f\) pokes above it. <b>Allowed.</b></li>
+        <li>Right of \(n_0\) it never does again. That is the whole claim.</li>
+        <li>You get to <em>choose</em> \(c\) and \(n_0\). To prove a bound, exhibit one working pair — you need not find the best one.</li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 260 190" style="width:96%; height:auto;">
+        <line x1="34" y1="160" x2="248" y2="160" stroke="#94a3b8" stroke-width="1.4"/>
+        <line x1="34" y1="14" x2="34" y2="160" stroke="#94a3b8" stroke-width="1.4"/>
+        <path d="M34 150 Q 120 140 250 6" fill="none" stroke="#8b1f34" stroke-width="2"/>
+        <path d="M34 128 Q 130 96 250 26" fill="none" stroke="#0e7569" stroke-width="2" stroke-dasharray="6,4"/>
+        <line x1="104" y1="14" x2="104" y2="160" stroke="#b45309" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <text x="108" y="176" font-size="10" fill="#b45309">n₀</text>
+        <text x="200" y="20" font-size="10" fill="#8b1f34">f(n)</text>
+        <text x="196" y="44" font-size="10" fill="#0e7569">c·g(n)</text>
+        <text x="52" y="120" font-size="9" fill="#64748b">f above</text>
+        <text x="150" y="130" font-size="9" fill="#64748b">f below, forever</text>
+        <text x="140" y="184" font-size="10" fill="#64748b">n</text>
+      </svg>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Say it in words</span>
+    <p>"Eventually, and up to a constant factor, \(f\) grows no faster than \(g\)." The two escape clauses — <em>eventually</em> and <em>up to a constant</em> — are exactly \(n_0\) and \(c\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · The definition" data-menu="Worked: prove a bound">
+  <h2>Worked example — proving \(3n^2 + 5n + 2 = O(n^2)\)</h2>
+  <p class="small">Exam questions rarely ask for this proof, but doing it once makes the definition stop feeling arbitrary.</p>
+  <ol class="steps" id="s-proof">
+    <li><span class="stepno">1</span> <b>Goal.</b> Find \(c\) and \(n_0\) with \(3n^2 + 5n + 2 \le c\,n^2\) for all \(n \ge n_0\).</li>
+    <li><span class="stepno">2</span> <b>Bound each term by a multiple of \(n^2\).</b> For \(n \ge 1\): \(5n \le 5n^2\) and \(2 \le 2n^2\).</li>
+    <li><span class="stepno">3</span> <b>Add them.</b> \(3n^2 + 5n + 2 \le 3n^2 + 5n^2 + 2n^2 = 10n^2\).</li>
+    <li><span class="stepno">4</span> <b>Read off the witnesses.</b> Take \(c = 10\), \(n_0 = 1\). Done.</li>
+    <li class="ans"><span class="stepno">✓</span> Any larger \(c\) also works. There is nothing special about 10 — which is the point.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-proof">Work through it</button>
+  <div class="box hint"><span class="lbl">The trick worth keeping</span>
+    <p>To bound a sum, bound every term by the <em>largest</em> term's growth class, then count the terms. It works every time for polynomials.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Growth classes" data-menu="The classes">
+  <h2>The classes you must know cold</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Class</th><th>Name</th><th>Doubling \(n\) does what?</th><th>Typical source</th></tr>
+    <tr><td>\(O(1)\)</td><td>constant</td><td>nothing</td><td>array index, dictionary lookup</td></tr>
+    <tr><td>\(O(\log n)\)</td><td>logarithmic</td><td>adds a fixed amount</td><td>halving each step (binary search)</td></tr>
+    <tr><td>\(O(n)\)</td><td>linear</td><td>doubles</td><td>one pass over the input</td></tr>
+    <tr><td>\(O(n \log n)\)</td><td>linearithmic</td><td>slightly more than doubles</td><td>merge sort, heap-based sorting</td></tr>
+    <tr><td>\(O(n^2)\)</td><td>quadratic</td><td>&times;4</td><td>nested loop over the same input</td></tr>
+    <tr><td>\(O(n^3)\)</td><td>cubic</td><td>&times;8</td><td>triple loop (Floyd–Warshall)</td></tr>
+    <tr><td>\(O(2^n)\)</td><td>exponential</td><td><em>squares</em> the work</td><td>all subsets</td></tr>
+    <tr><td>\(O(n!)\)</td><td>factorial</td><td>worse still</td><td>all orderings (brute-force TSP)</td></tr>
+  </table>
+  <p class="note">The "doubling" column is the one to memorise — it converts a bound into a sentence about the real world, which is what AOS1's consequence questions ask for.</p>
+</section>
+
+<section class="slide" data-topic="T1 · Growth classes" data-menu="Growth, drawn">
+  <h2>The same table, drawn</h2>
+  <div class="cols">
+    <div>
+      <svg viewBox="0 0 260 190" style="width:100%; height:auto;">
+        <line x1="30" y1="165" x2="250" y2="165" stroke="#94a3b8" stroke-width="1.3"/>
+        <line x1="30" y1="10" x2="30" y2="165" stroke="#94a3b8" stroke-width="1.3"/>
+        <path d="M30 160 L250 155" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+        <path d="M30 160 Q90 128 250 112" fill="none" stroke="#0e7569" stroke-width="1.8"/>
+        <path d="M30 160 L250 60" fill="none" stroke="#334155" stroke-width="1.8"/>
+        <path d="M30 160 Q160 150 250 18" fill="none" stroke="#b45309" stroke-width="1.8"/>
+        <path d="M30 160 Q205 158 226 12" fill="none" stroke="#8b1f34" stroke-width="1.8"/>
+        <text x="196" y="150" font-size="9" fill="#94a3b8">O(1)</text>
+        <text x="196" y="107" font-size="9" fill="#0e7569">O(log n)</text>
+        <text x="200" y="56" font-size="9" fill="#334155">O(n)</text>
+        <text x="206" y="30" font-size="9" fill="#b45309">O(n²)</text>
+        <text x="150" y="30" font-size="9" fill="#8b1f34">O(2ⁿ)</text>
+        <text x="132" y="182" font-size="10" fill="#64748b">input size n</text>
+      </svg>
+    </div>
+    <div>
+      <ul class="small">
+        <li>The picture is worth less than it looks. <b>Any</b> two of these curves cross somewhere — the drawing only tells you what happens <em>after</em> the crossing.</li>
+        <li>That is precisely what \(n_0\) is for.</li>
+        <li>Which is why "\(O(n^2)\) is slow" is a wrong sentence. \(O(n^2)\) with a tiny constant beats \(O(n\log n)\) with a huge one, right up until it doesn't.</li>
+      </ul>
+      <div class="box hint"><span class="lbl">Ask instead</span>
+        <p>"Slow <em>for what \(n\)</em>?" A quadratic algorithm on \(n = 50\) is instant. On \(n = 10^6\) it is a fortnight.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Growth classes" data-menu="10⁹ ops/second">
+  <h2>Why it matters: \(10^9\) operations per second</h2>
+  <p class="small">A modern machine does roughly a billion elementary operations a second. Here is what each class buys you.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>\(n\)</th><th>\(n\log_2 n\)</th><th>\(n^2\)</th><th>\(n^3\)</th><th>\(2^n\)</th></tr>
+    <tr><td>10</td><td>&lt; 1 µs</td><td>&lt; 1 µs</td><td>1 µs</td><td>1 µs</td></tr>
+    <tr><td>100</td><td>&lt; 1 µs</td><td>10 µs</td><td>1 ms</td><td>4×10<sup>13</sup> years</td></tr>
+    <tr><td>1 000</td><td>10 µs</td><td>1 ms</td><td>1 s</td><td>—</td></tr>
+    <tr><td>10<sup>6</sup></td><td>20 ms</td><td>≈ 17 min</td><td>31 700 years</td><td>—</td></tr>
+    <tr><td>10<sup>9</sup></td><td>30 s</td><td>31 700 years</td><td>—</td><td>—</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Read the table sideways</span>
+    <p>At \(n = 10^6\), the gap between \(n\log n\) and \(n^2\) is the gap between <b>a blink</b> and <b>a coffee break</b>. Between \(n^2\) and \(n^3\) it is the gap between a coffee break and <b>the whole of recorded history</b>. This is what "intractable" will mean in AOS2.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Arithmetic" data-menu="Big-O arithmetic">
+  <h2>Big-O arithmetic — the three working rules</h2>
+  <div class="box defn"><span class="lbl">Rule 1 · Constants vanish</span>
+    <p>\(O(c \cdot f) = O(f)\) for any constant \(c > 0\). &nbsp;So \(O(500n) = O(n)\).</p>
+  </div>
+  <div class="box defn"><span class="lbl">Rule 2 · Sums keep the winner</span>
+    <p>\(O(f + g) = O(\max(f, g))\). &nbsp;Sequential blocks of code: the slowest block wins. \(O(n^2 + n) = O(n^2)\).</p>
+  </div>
+  <div class="box defn"><span class="lbl">Rule 3 · Nesting multiplies</span>
+    <p>A loop running \(f(n)\) times whose body costs \(g(n)\) costs \(O(f \cdot g)\). &nbsp;This is the rule people forget when the "body" is a function call.</p>
+  </div>
+  <div class="box flag"><span class="lbl">Rule 2 has a condition</span>
+    <p>It works because the terms are added a <em>constant</em> number of times. Adding \(n\) terms each \(O(n)\) gives \(O(n^2)\), not \(O(n)\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Arithmetic" data-menu="Worked: combining">
+  <h2>Worked example — applying all three rules</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Simplify</span>
+    <p>\(T(n) = 7n^3 + 200n^2\log n + 5000n + 42\)</p>
+  </div>
+  <ol class="steps" id="s-simplify">
+    <li><span class="stepno">1</span> <b>Rule 1</b> on each term: the coefficients 7, 200, 5000, 42 all go. Left with \(n^3\), \(n^2\log n\), \(n\), \(1\).</li>
+    <li><span class="stepno">2</span> <b>Rank them.</b> Is \(n^3\) or \(n^2\log n\) bigger? Divide both by \(n^2\): compare \(n\) against \(\log n\). \(n\) wins for large \(n\).</li>
+    <li><span class="stepno">3</span> <b>Rule 2:</b> the maximum is \(n^3\).</li>
+    <li class="ans"><span class="stepno">✓</span> \(T(n) = O(n^3)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-simplify">Show the working</button>
+  <div class="box hint"><span class="lbl">Transferable move</span>
+    <p>To compare two terms, <b>divide both by their common factor</b> and compare what's left. It turns an intimidating comparison into an obvious one.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Arithmetic" data-menu="Dominance order">
+  <h2>The dominance ordering</h2>
+  <p>Every function below is dominated by everything to its right, for large enough \(n\):</p>
+  <p class="formula" style="display:block; text-align:center; font-size:19px; margin:18px 0;">
+    \(1 \prec \log n \prec \sqrt{n} \prec n \prec n\log n \prec n^2 \prec n^3 \prec 2^n \prec n!\)
+  </p>
+  <ul class="small">
+    <li>Any polynomial beats any logarithm. Any exponential beats any polynomial — including \(n^{100}\).</li>
+    <li>Log bases don't matter: \(\log_2 n\) and \(\log_{10} n\) differ by a constant factor, so Rule 1 erases the base.</li>
+    <li>Comparing \(n^a\) and \(n^b\)? Bigger exponent wins. Comparing \(a^n\) and \(b^n\)? Bigger base wins, and the gap is enormous.</li>
+  </ul>
+  <div class="box try"><span class="lbl">Quick check</span>
+    <p>Rank these: \(n^{1.5}\), \(n\log n\), \(100n\), \(2^{\sqrt{n}}\). &nbsp;<em>(Answer: \(100n \prec n\log n \prec n^{1.5} \prec 2^{\sqrt n}\) — the last is exponential in disguise.)</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Misconceptions" data-menu="Misconceptions">
+  <h2>Four sentences that lose marks</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Wrong</th><th>Why</th><th>Right</th></tr>
+    <tr><td>"The algorithm is \(O(n^2)\), so it takes \(n^2\) seconds."</td><td>\(O\) discards the constant and the units</td><td>"…so doubling \(n\) roughly quadruples the work"</td></tr>
+    <tr><td>"\(O(n^2)\) is slow."</td><td>meaningless without an \(n\)</td><td>"…slow once \(n\) reaches about \(10^5\)"</td></tr>
+    <tr><td>"Worst case is \(O(n)\), so best case is \(\Omega(n)\)."</td><td>confuses <em>which input</em> with <em>which bound</em></td><td>see Topic 2 — they are independent choices</td></tr>
+    <tr><td>"It's \(O(n)\) because there's one loop."</td><td>ignores the cost of the body</td><td>"…because the body is \(O(1)\) and it runs \(n\) times"</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">Read the mark allocation</span>
+    <p>When a question is worth 3 marks and asks you to <em>analyse</em> or <em>justify</em>, the bound itself is rarely more than one of them. The other marks are for the reasoning that produced it — so write the reasoning.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T1 · Exam focus" data-menu="Exam question">
+  <h2>Which family has the largest Big-O complexity?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q12</p>
+  <div class="chooser frag">
+    <p class="ch-tag">Choose one <span class="ch-clue">— which grows fastest as \(n \to \infty\)?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>\(O(50n^2 + 400000n)\)</span></div>
+      <div class="opt correct"><b>B</b><span>\(O(3n^{8})\)</span></div>
+      <div class="opt"><b>C</b><span>\(O(9000 \log_2 n)\)</span></div>
+      <div class="opt"><b>D</b><span>\(O(4000 \times (0.5)^{\,n})\)</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Before you look</span>
+    <p>Two of these are designed to catch you. Which two, and what is the catch in each?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam">
+    <li><span class="stepno">1</span> <b>Strip the constants</b> (Rule 1). A → \(n^2 + n\); B → \(n^8\); C → \(\log n\); D → \((0.5)^n\).</li>
+    <li><span class="stepno">2</span> <b>Simplify A</b> (Rule 2): \(\max(n^2, n) = n^2\). The 400000 is a decoy — it is huge, but constant.</li>
+    <li><span class="stepno">3</span> <b>Look hard at D.</b> Base \(0.5 &lt; 1\), so \((0.5)^n\) <em>shrinks</em> toward 0. It is bounded above, hence \(O(1)\) — the <b>smallest</b> option, not the largest.</li>
+    <li><span class="stepno">4</span> <b>Rank the survivors:</b> \(\log n \prec n^2 \prec n^8\).</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: B.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The two traps</span>
+    <p><b>A</b> punishes anyone who compares the big constant 400000 instead of the growth. <b>D</b> punishes anyone who sees an exponent and assumes "exponential = biggest" without checking the base.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — why a shrinking function is \(O(1)\)</h2>
+  <p>Option D is worth dwelling on, because the reasoning generalises.</p>
+  <ul class="small">
+    <li>\((0.5)^n\) takes values \(0.5, 0.25, 0.125, \ldots\) — always positive, never above \(0.5\).</li>
+    <li>Apply the definition with \(g(n) = 1\): is \((0.5)^n \le c \cdot 1\) for all \(n \ge n_0\)? Yes — take \(c = 1\), \(n_0 = 1\).</li>
+    <li>So \(4000 \times (0.5)^n = O(1)\). A bounded function is always \(O(1)\), whatever shape it has.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">The general lesson</span>
+    <p>\(a^n\) explodes when \(a > 1\) and collapses when \(a &lt; 1\). The exponent is not what makes a function exponential — <b>the base is</b>.</p>
+  </div>
+  <div class="box try"><span class="lbl">Push it further</span>
+    <p>Is \(n \times (0.5)^n\) also \(O(1)\)? <em>(Yes — the exponential decay beats the linear growth. Worth convincing yourself with a few values.)</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State the formal definition of \(f(n) = O(g(n))\), and explain the role of each constant.</p>
+      <p class="a">There exist \(c &gt; 0\) and \(n_0 \ge 0\) with \(f(n) \le c\,g(n)\) for all \(n \ge n_0\). <b>\(c\)</b> absorbs constant factors, so the claim is machine-independent; <b>\(n_0\)</b> restricts the claim to large inputs, so small-\(n\) behaviour cannot break it.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Simplify \(T(n) = 6n^2 + 12n\log n + 900\) and justify each step.</p>
+      <p class="a"><b>\(O(n^2)\)</b>. Rule 1 drops 6, 12, 900. Rule 2 keeps the maximum of \(n^2\), \(n\log n\), \(1\); dividing the first two by \(n\) compares \(n\) with \(\log n\), and \(n\) dominates. So \(n^2\) wins.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">An algorithm is \(O(n^3)\) and handles \(n = 500\) in 1 second. Estimate \(n = 5000\).</p>
+      <p class="a">\(n\) grows &times;10, so the work grows by about \(10^3 = 1000\) &rarr; roughly <b>1000 seconds ≈ 17 minutes</b>. Note the word <em>about</em>: Big-O supports an order-of-magnitude estimate, not a precise one.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">True or false: an \(O(n^2)\) algorithm is always slower than an \(O(n\log n)\) one.</p>
+      <p class="a"><b>False.</b> Big-O describes behaviour for large \(n\) only. With a small constant factor, the quadratic can win for small inputs — the crossover point is exactly what \(n_0\) acknowledges. It is also an <em>upper</em> bound, so an \(O(n^2)\) algorithm might in fact be \(O(n)\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T1 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w01.html">Interactive workbook</a></b> — growth-rate explorer and operation-counting experiments. Part A is the picture on the "growth, drawn" slide, but with the axes under your control.</li>
+    <li><b>Problem Set — Week 1, Section 1</b> (<code>U4PS-W1.pdf</code>): counting operations, applying the definition, ranking families.</li>
+    <li><b>Next topic:</b> \(\Theta\), \(\Omega\), and the question Big-O alone cannot answer — <em>which input are we talking about?</em></li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Big-O names the growth class, deliberately discarding constants — so it answers "what happens when the input gets big?" and refuses to answer "how many seconds?"</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Write the definition of \(O\) from memory, including both constants.</li>
+      <li>Rank \(n\log n\), \(\;n^{1.5}\), \(\;2^n\), \(\;1000n\).</li>
+      <li>One sentence: why doesn't Big-O measure seconds?</li>
+    </ol>
+    <p class="start-hint">Topic 2 — \(\Theta\), \(\Omega\), and best / average / worst case.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 1 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

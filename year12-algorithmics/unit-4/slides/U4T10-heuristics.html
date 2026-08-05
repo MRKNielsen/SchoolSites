@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 10 — Greedy Algorithms and Hill Climbing</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 10 · Greedy Algorithms and Hill Climbing</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Greedy Algorithms and Hill Climbing</h1>
+  <p>Unit 4 AOS2 · Topic 10 of 17 — trading the guarantee for speed, knowingly</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T10 · Heuristics" data-menu="What a heuristic is">
+  <h2>What a heuristic actually is</h2>
+  <div class="box defn"><span class="lbl">Heuristic</span>
+    <p>A method that finds a <b>good</b> solution quickly, with <b>no guarantee</b> that it is optimal.</p>
+  </div>
+  <ul class="small">
+    <li>The word covers both a <em>rule of thumb</em> for choosing (greedy) and a <em>strategy for searching</em> (hill climbing, annealing).</li>
+    <li>What is surrendered is the guarantee — not correctness. A heuristic returns a valid solution; it just may not be the best one.</li>
+    <li>What is gained is polynomial running time on problems where exactness costs exponential time.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Say what you gave up</span>
+    <p>Any answer describing a heuristic should name the trade explicitly: <em>fast and feasible, but optimality is not guaranteed</em>. That clause is usually a mark.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Heuristics" data-menu="When to reach for one">
+  <h2>When a heuristic is the right call</h2>
+  <ol class="steps" id="s-when">
+    <li><span class="stepno">1</span> <b>The problem is intractable</b> — the search space grows exponentially, so exhaustive search is out for realistic \(n\).</li>
+    <li><span class="stepno">2</span> <b>The solution space is huge but solutions are easy to evaluate</b> — you can score a candidate cheaply even though you cannot enumerate them all.</li>
+    <li><span class="stepno">3</span> <b>A good answer is worth having</b> — a 5% worse delivery route today beats a perfect one next century.</li>
+    <li><span class="stepno">4</span> <b>Neighbouring solutions are similar in quality</b> — small changes give small score changes, so local search can make progress.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-when">The four signals</button>
+  <div class="box flag"><span class="lbl">The counter-case</span>
+    <p>If the problem is in P, a heuristic is the wrong tool — you would be giving up the guarantee for nothing. Never propose a heuristic for shortest path.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Greedy" data-menu="Greedy">
+  <h2>Greedy — commit to the best local choice</h2>
+  <div class="box defn"><span class="lbl">The method</span>
+    <p>At each step, make the choice that looks best <b>right now</b>, and never reconsider it.</p>
+  </div>
+  <div class="box example"><span class="lbl">Greedy TSP — nearest neighbour</span>
+    <p class="small">Start at any city. Repeatedly travel to the <b>nearest unvisited</b> city. When all cities are visited, return to the start.</p>
+  </div>
+  <ul class="small">
+    <li>Fast: \(O(n^2)\) — at each of \(n\) steps, scan the remaining cities.</li>
+    <li>No backtracking, no reconsideration. One pass, one answer.</li>
+    <li>Typically lands within 25% of optimal on realistic instances, and can be much worse on adversarial ones.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="T10 · Greedy" data-menu="Why greedy fails">
+  <h2>Why greedy fails — and when it doesn't</h2>
+  <div class="cols">
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Fails</span>
+        <p class="small">TSP: taking the nearest city early can strand a distant one, forcing an expensive final leg. Change-making with {1,4,6}: greedy gives 6+1+1, optimum is 4+4.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">Provably optimal</span>
+        <p class="small">Prim's and Kruskal's for minimum spanning tree; Dijkstra for shortest path with non-negative weights. These <em>are</em> greedy — and they are exact.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The distinction that matters</span>
+    <p>Greedy is a <b>technique</b>, not automatically a heuristic. On problems with the right mathematical structure it provably yields the optimum; elsewhere it is a heuristic. Calling Dijkstra "a heuristic" is wrong.</p>
+  </div>
+  <div class="box hint"><span class="lbl">How to talk about it</span>
+    <p>"Greedy is optimal for MST because a locally cheapest safe edge is always part of some optimal tree; for TSP no such property holds, so greedy is only a heuristic there."</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Hill climbing" data-menu="Hill climbing">
+  <h2>Hill climbing — improve, repeat</h2>
+  <div class="box defn"><span class="lbl">The method</span>
+    <p>Start from a candidate solution. Generate a <b>neighbour</b> by making a small change. If the neighbour is better, move to it. Repeat until no neighbour improves.</p>
+  </div>
+  <ul class="small">
+    <li>Three things must be defined before you can run it: the <b>representation</b> of a solution, the <b>neighbourhood</b> (what counts as a small change), and the <b>objective function</b> (how to score).</li>
+    <li>For TSP: representation = an ordering of cities; neighbourhood = reverse a segment (2-opt); objective = total tour length.</li>
+    <li>Unlike greedy, hill climbing starts with a <em>complete</em> solution and improves it, rather than building one piece by piece.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Exam phrasing</span>
+    <p>If asked to "describe how to generate a new candidate solution", you are being asked for the <b>neighbourhood</b>. Name a concrete small change: <em>swap two cities in the tour</em>.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Hill climbing" data-menu="Local optima">
+  <h2>The local optimum problem</h2>
+  <div class="cols">
+    <div>
+      <svg viewBox="0 0 250 175" style="width:96%; height:auto;">
+        <line x1="24" y1="150" x2="240" y2="150" stroke="#94a3b8" stroke-width="1.3"/>
+        <path d="M24 140 Q 60 60 92 110 Q 120 150 160 40 Q 190 10 236 90" fill="none" stroke="#334155" stroke-width="2"/>
+        <circle cx="62" cy="88" r="6" fill="#b45309"/>
+        <text x="62" y="78" font-size="9" fill="#b45309" text-anchor="middle">local</text>
+        <circle cx="168" cy="30" r="6" fill="#0e7569"/>
+        <text x="168" y="20" font-size="9" fill="#0e7569" text-anchor="middle">global</text>
+        <text x="130" y="167" font-size="9" fill="#64748b" text-anchor="middle">solution space</text>
+      </svg>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Hill climbing only accepts improvements, so it stops at the first peak it reaches.</li>
+        <li>That peak may be a <b>local optimum</b> — better than everything nearby, worse than the best overall.</li>
+        <li>The algorithm cannot tell the difference. From inside a local optimum, every neighbour looks worse, which is exactly what a global optimum looks like too.</li>
+      </ul>
+      <div class="box flag"><span class="lbl">Two partial fixes</span>
+        <p><b>Random restarts</b> — run many times from different starts and keep the best. <b>Larger neighbourhoods</b> — more moves to escape by. Neither is a guarantee.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T10 · Exam focus" data-menu="Exam question">
+  <h2>Which description is hill climbing?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q11</p>
+  <div class="chooser frag">
+    <p class="ch-tag">A robot navigating back to its charging dock <span class="ch-clue">— which is hill climbing on a heuristic function?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>retraces the exact path it took on the way out</span></div>
+      <div class="opt"><b>B</b><span>computes an optimal path back using its map of everywhere it has been</span></div>
+      <div class="opt correct"><b>C</b><span>picks a random adjacent open position, and moves there <em>only if</em> it is closer to the dock; repeats</span></div>
+      <div class="opt"><b>D</b><span>picks a random adjacent position; always moves if closer, and <em>sometimes</em> moves if further, with that probability decreasing over time</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Before you look</span>
+    <p>Option D is also a real algorithm from this course. Which one — and what single word in it rules it out here?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam10">
+    <li><span class="stepno">1</span> <b>A is not a search at all</b> — retracing a known path uses stored information, no objective function, no candidate solutions.</li>
+    <li><span class="stepno">2</span> <b>B is an exact method.</b> "Computes an optimal path" means a shortest-path algorithm, not a heuristic — it guarantees the best answer.</li>
+    <li><span class="stepno">3</span> <b>C matches hill climbing exactly:</b> generate a neighbour (an adjacent position), evaluate the objective (distance to dock), and move <b>only if it improves</b>. That last clause is the definition.</li>
+    <li><span class="stepno">4</span> <b>D adds accepting worse moves with a decreasing probability</b> — that is <b>simulated annealing</b>, Topic 11. The giveaway word is "sometimes".</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: C.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam10">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The one-word discriminator</span>
+    <p>Hill climbing accepts <b>only</b> improvements. Simulated annealing <b>sometimes</b> accepts worsening moves. Every question distinguishing the two turns on that word.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Exam focus" data-menu="Second question">
+  <h2>Describe a greedy approach to TSP</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section B Q8b</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (2 marks)</span>
+    <p class="small">Describe a greedy approach to solving the travelling salesman problem.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">Begin at any city and mark it visited. Repeatedly move to the <b>nearest unvisited city</b> from the current one, marking each as visited, until all cities have been visited; then return to the starting city. The choice at each step is locally optimal — the closest available city — and is never reconsidered, which is what makes the approach greedy.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Two marks, two components</span>
+    <p>One for the <b>procedure</b>, one for identifying <b>what makes it greedy</b> — the locally-best, never-revisited choice. Describing the procedure alone typically earns one.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — greedy as a starting point</h2>
+  <p>The 2021 question continues by using the greedy tour as the <b>initial candidate</b> for simulated annealing. That pairing is deliberate and worth understanding.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Random start</th><th>Greedy start</th></tr>
+    <tr><td>Initial tour quality</td><td>very poor</td><td>already decent</td></tr>
+    <tr><td>Search time needed</td><td>long</td><td>much shorter</td></tr>
+    <tr><td>Risk</td><td>wanders for ages</td><td>may begin inside a deep local optimum</td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>A greedy construction gives local search a decent place to begin, so the improvement phase is not wasted climbing out of a terrible tour.</li>
+    <li>The risk is real though: a strong start can sit in a basin that small moves cannot escape — which is precisely the problem Topic 11 solves.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The standard pipeline</span>
+    <p><b>Construct greedily, then improve locally.</b> Two heuristics doing different jobs — one builds, one refines.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Define the three things you must specify before running hill climbing.</p>
+      <p class="a"><b>Representation</b> — how a candidate solution is encoded (e.g. an ordering of cities). <b>Neighbourhood</b> — what counts as a small change (e.g. reverse a segment). <b>Objective function</b> — how a candidate is scored (e.g. total tour length).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Is Dijkstra's algorithm a heuristic? Justify.</p>
+      <p class="a"><b>No.</b> It uses a greedy <em>technique</em> — always finalise the closest unvisited node — but for graphs with non-negative weights that choice is provably safe, so it returns the true shortest path every time. A heuristic is defined by giving up the guarantee, and Dijkstra gives up nothing.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why can hill climbing not detect that it is stuck in a local optimum?</p>
+      <p class="a">Its only information is the objective values of neighbouring solutions. At a local optimum every neighbour scores worse — which is exactly what a global optimum also looks like from the inside. Distinguishing them would require evaluating solutions outside the neighbourhood.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">State one advantage and one limitation of a heuristic for TSP.</p>
+      <p class="a"><b>Advantage:</b> runs in polynomial time (nearest neighbour is \(O(n^2)\)), so it handles instance sizes where exhaustive search is impossible. <b>Limitation:</b> no guarantee of optimality, and no way to know how far from optimal the answer is without solving the problem exactly.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T10 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w06.html">Interactive workbook</a></b> — race brute force, nearest neighbour and hill climbing on the same instance; the restarts experiment shows local optima directly.</li>
+    <li><b>Problem Set — Week 2, Section 4</b>: identifying representation/neighbourhood/objective, and greedy counterexamples.</li>
+    <li><b>Next topic:</b> simulated annealing — accepting a worse move on purpose.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Greedy commits to the best local choice and never looks back; hill climbing keeps improving until nothing nearby is better — and neither can tell a local optimum from a global one.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>What single word separates hill climbing from simulated annealing?</li>
+      <li>Give a problem where greedy is provably optimal, and one where it is not.</li>
+      <li>Name the three components you must define for a local search.</li>
+    </ol>
+    <p class="start-hint">Topic 11 — simulated annealing.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 10 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

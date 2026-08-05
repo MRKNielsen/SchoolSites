@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 3 — Analysing Iterative Pseudocode</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 3 · Analysing Iterative Pseudocode</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Analysing Iterative Pseudocode</h1>
+  <p>Unit 4 AOS1 · Topic 3 of 6 — reading a bound off the page, and the trap that costs the most marks</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T3 · Method" data-menu="The method">
+  <h2>The method — four questions, every time</h2>
+  <ol class="steps" id="s-method">
+    <li><span class="stepno">1</span> <b>What is \(n\)?</b> Name it. Length of a list? Number of nodes? If there are two sizes, name both.</li>
+    <li><span class="stepno">2</span> <b>How many times does each loop run?</b> In terms of \(n\) — not "a few", not "\(i\) times".</li>
+    <li><span class="stepno">3</span> <b>What does the body cost?</b> This is the step people skip. Look at <em>every</em> line, especially calls to other algorithms.</li>
+    <li><span class="stepno">4</span> <b>Combine.</b> Nesting multiplies, sequence takes the maximum.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-method">The four questions</button>
+  <div class="box key"><span class="lbl">Write it down in this order</span>
+    <p>An answer that names \(n\), states each loop's count, states the body cost, then multiplies, earns every method mark even if the final simplification slips.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Patterns" data-menu="Pattern 1 & 2">
+  <h2>Patterns 1 and 2 — single and nested loops</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Single loop</span>
+        <p class="small"><code>For i &larr; 1 to n Do</code><br><code>&nbsp;&nbsp;total &larr; total + L[i]</code></p>
+        <p class="small">Runs \(n\) times, body \(O(1)\) &rarr; <b>\(\Theta(n)\)</b>.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Nested, both to n</span>
+        <p class="small"><code>For i &larr; 1 to n Do</code><br><code>&nbsp;&nbsp;For j &larr; 1 to n Do</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;count &larr; count + 1</code></p>
+        <p class="small">\(n\) outer &times; \(n\) inner &times; \(O(1)\) &rarr; <b>\(\Theta(n^2)\)</b>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Why multiplication is right</span>
+    <p>The inner loop runs <em>in full</em> for each outer iteration. \(n\) repetitions of \(n\) units of work is \(n \times n\). Nesting depth \(d\) with each loop to \(n\) gives \(\Theta(n^d)\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Patterns" data-menu="Pattern 3">
+  <h2>Pattern 3 — the triangular loop</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Inner bound depends on the outer counter</span>
+    <p class="small"><code>For i &larr; 1 to n Do</code><br><code>&nbsp;&nbsp;For j &larr; i to n Do</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;count &larr; count + 1</code></p>
+  </div>
+  <ol class="steps" id="s-tri">
+    <li><span class="stepno">1</span> When \(i = 1\) the inner loop runs \(n\) times; \(i = 2\) gives \(n-1\); … ; \(i = n\) gives 1.</li>
+    <li><span class="stepno">2</span> Total \(= n + (n-1) + \cdots + 1 = \dfrac{n(n+1)}{2}\).</li>
+    <li><span class="stepno">3</span> Expand: \(\dfrac{n^2 + n}{2}\). Drop the constant and the lower term.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>\(\Theta(n^2)\)</b> — the same class as the full square, despite doing half the work.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-tri">Count it</button>
+  <div class="box flag"><span class="lbl">Do not write \(\Theta(n^2/2)\)</span>
+    <p>The \(\tfrac12\) is a constant factor. It is real, and it matters to a benchmark — but it is invisible to Big-O by construction.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Patterns" data-menu="Pattern 4">
+  <h2>Pattern 4 — halving loops are logarithmic</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Multiplicative counter</span>
+        <p class="small"><code>i &larr; n</code><br><code>While i &gt; 1 Do</code><br><code>&nbsp;&nbsp;i &larr; i / 2</code></p>
+      </div>
+      <ul class="small">
+        <li>Values of \(i\): \(n, \tfrac n2, \tfrac n4, \ldots, 1\).</li>
+        <li>How many halvings reach 1? The \(k\) with \(n/2^k = 1\), i.e. \(k = \log_2 n\).</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box key"><span class="lbl">The test</span>
+        <p>If the counter changes by <b>multiplication or division</b>, the loop is logarithmic. If it changes by <b>addition or subtraction</b>, it is linear.</p>
+      </div>
+      <div class="box hint"><span class="lbl">Doubling counts too</span>
+        <p><code>i &larr; 1; While i &lt; n Do i &larr; i * 2</code> is also \(\Theta(\log n)\) — same reasoning, run backwards.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Combine it</span>
+    <p>A loop to \(n\) containing a halving loop gives \(\Theta(n\log n)\) — the classic linearithmic shape.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · The trap" data-menu="The trap">
+  <h2>The trap: an innocent-looking call</h2>
+  <div class="box flag"><span class="lbl">This is the single most expensive mistake in AOS1</span>
+    <p>A loop body that calls another algorithm is <b>not</b> automatically \(O(1)\). You must analyse the call and multiply it in.</p>
+  </div>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Looks like</th><th>Actually costs</th><th>Because</th></tr>
+    <tr><td><code>L[i]</code></td><td>\(O(1)\)</td><td>array index is direct</td></tr>
+    <tr><td><code>D[key]</code></td><td>\(O(1)\)</td><td>dictionary hash lookup</td></tr>
+    <tr><td><code>Append x to L</code></td><td>\(O(1)\)</td><td>stated as constant in the exam</td></tr>
+    <tr><td><code>If x in L</code></td><td>\(O(|L|)\)</td><td><b>scans the list</b></td></tr>
+    <tr><td><code>isAdjacent(u,v)</code> via a list</td><td>\(O(\deg u)\)</td><td>walks the neighbour list</td></tr>
+    <tr><td><code>Sort(L)</code></td><td>\(O(|L|\log|L|)\)</td><td>it is a whole algorithm</td></tr>
+  </table>
+  <p class="note">Before multiplying, ask of every line: <em>does this touch a number of items that grows with \(n\)?</em></p>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T3 · Exam focus" data-menu="Exam question">
+  <h2>Analyse this implementation</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q9a</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A programmer stores a graph's node names in a list <code>nodes</code>, and for each node stores a list of its adjacent nodes in a dictionary <code>edges</code>, where <code>edges[u]</code> is the list of nodes adjacent to <code>u</code>.</p>
+    <p class="small"><code>Algorithm isAdjacent(nodes, edges, u, v):</code><br>
+    <code>&nbsp;&nbsp;Foreach value in edges[u] as neighbour Do</code><br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;If neighbour = v Do Return True</code><br>
+    <code>&nbsp;&nbsp;Return False</code></p>
+    <p class="small"><code>Algorithm closure(nodes, edges):</code><br>
+    <code>&nbsp;&nbsp;Foreach value in nodes as i Do</code><br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;Foreach value in nodes as j Do</code><br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Foreach value in nodes as k Do</code><br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If isAdjacent(nodes,edges,i,k) AND isAdjacent(nodes,edges,j,k) Do</code><br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Append i to edges[j]</code></p>
+    <p class="small">Appending is a constant time operation. Let \(n\) be the number of nodes. Analyse the time complexity as a function of \(n\) and hence determine the Big-O complexity.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam3">
+    <li><span class="stepno">1</span> <b>Name \(n\):</b> the number of nodes. Note <code>nodes</code> has length \(n\), and each <code>edges[u]</code> has length up to \(n-1\).</li>
+    <li><span class="stepno">2</span> <b>The loops:</b> three nested <code>Foreach</code>es over <code>nodes</code> — that is \(n \times n \times n = n^3\) iterations.</li>
+    <li><span class="stepno">3</span> <b>The body — the actual question.</b> It calls <code>isAdjacent</code> twice. Each call walks <code>edges[u]</code>, which can hold up to \(n-1\) entries. So the body is \(O(n)\), <b>not</b> \(O(1)\).</li>
+    <li><span class="stepno">4</span> <b>Multiply:</b> \(n^3\) iterations \(\times\) \(O(n)\) per iteration.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>\(O(n^4)\).</b> Anyone who assumed the body was constant wrote \(O(n^3)\) and lost the marks.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam3">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">Why this question is set</span>
+    <p>Floyd–Warshall <em>is</em> \(\Theta(n^3)\) — when adjacency is checked in \(O(1)\) with a matrix. The question hands you a correct algorithm with a bad data structure and asks whether you noticed.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Exam focus" data-menu="Follow-up parts">
+  <h2>The follow-up parts</h2>
+  <div class="box question" style="margin-top:0;"><span class="lbl">b. (1 mark)</span>
+    <p class="small">Describe a family of graphs with \(n\) nodes that would produce the worst case asymptotic running time.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small"><b>Complete graphs</b> (every node adjacent to every other). Then each <code>edges[u]</code> holds \(n-1\) entries, so every <code>isAdjacent</code> call scans the full list and the \(O(n)\) body cost is actually attained. On a sparse graph — say each node with a constant number of neighbours — the body would be \(O(1)\) and the whole thing \(O(n^3)\).</p>
+  </div>
+  <div class="box question"><span class="lbl">c. (1 mark)</span>
+    <p class="small">How could the implementation be changed to improve its asymptotic time complexity?</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">Store adjacency in an <b>adjacency matrix</b> (or a dictionary of sets), so <code>isAdjacent</code> becomes an \(O(1)\) lookup instead of an \(O(n)\) scan. The triple loop is unchanged, so the algorithm drops from \(O(n^4)\) to \(O(n^3)\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — same algorithm, different structure</h2>
+  <p>Part c is the lesson of this whole topic: complexity is a property of the <b>algorithm plus its data structures</b>, not the algorithm alone.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Operation</th><th>Adjacency list</th><th>Adjacency matrix</th></tr>
+    <tr><td>Is \(u\) adjacent to \(v\)?</td><td>\(O(\deg u)\)</td><td><b>\(O(1)\)</b></td></tr>
+    <tr><td>Visit all neighbours of \(u\)</td><td><b>\(O(\deg u)\)</b></td><td>\(O(n)\)</td></tr>
+    <tr><td>Space</td><td><b>\(O(|V| + |E|)\)</b></td><td>\(O(|V|^2)\)</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">There is no free lunch</span>
+    <p>The matrix wins the adjacency test and loses the neighbour walk and the space. Which structure is "better" depends entirely on which operation your algorithm performs most — which is a <b>C7 comparison</b> argument, and exactly what Memo 02 asks for.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Consolidation" data-menu="Practise the trap">
+  <h2>Practise spotting the trap</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q"><code>For i &larr; 1 to n Do</code> / <code>&nbsp;&nbsp;If L[i] in Seen Do …</code> / <code>&nbsp;&nbsp;Append L[i] to Seen</code> — complexity, with <code>Seen</code> a list?</p>
+      <p class="a"><b>\(O(n^2)\).</b> The loop runs \(n\) times, but <code>in Seen</code> scans a list that grows to length \(n\) — an \(O(n)\) body. Switch <code>Seen</code> to a set or dictionary and the membership test becomes \(O(1)\), giving \(O(n)\) overall.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q"><code>For i &larr; 1 to n Do</code> / <code>&nbsp;&nbsp;Sort(L)</code> — with \(|L| = n\).</p>
+      <p class="a"><b>\(O(n^2\log n)\).</b> \(n\) iterations, each doing an \(O(n\log n)\) sort. (And note the sort is pointless after the first pass — a complexity analysis often exposes redundant work.)</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Two sequential loops, one \(\Theta(n)\) and one \(\Theta(n^2)\). Total?</p>
+      <p class="a"><b>\(\Theta(n^2)\).</b> Sequence takes the maximum, not the product — the loops run one after the other, so the costs add, and \(n^2 + n = \Theta(n^2)\). Only <em>nesting</em> multiplies.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q"><code>For i &larr; 1 to n Do</code> / <code>&nbsp;&nbsp;j &larr; n</code> / <code>&nbsp;&nbsp;While j &gt; 1 Do j &larr; j / 3</code></p>
+      <p class="a"><b>\(\Theta(n\log n)\).</b> The outer loop is linear; the inner divides by 3 each pass, so it runs \(\log_3 n\) times. The base 3 is a constant factor on the logarithm, so it vanishes — \(\log_3 n = \Theta(\log n)\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w01.html">Interactive workbook</a></b> — Part B counts operations for nested and triangular loops; check your hand analysis against the counter.</li>
+    <li><b>Problem Set — Week 1, Section 3</b>: bounds from pseudocode, including three questions with a non-constant body.</li>
+    <li><b>Next topic:</b> the graph algorithms from Unit 3 — now with the justification attached to each bound.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Count the loops, then price the body — and never assume a function call is free.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>State the four questions of the method, in order.</li>
+      <li>Why is a triangular double loop still \(\Theta(n^2)\)?</li>
+      <li>Name two operations that look \(O(1)\) but are not.</li>
+    </ol>
+    <p class="start-hint">Topic 4 — graph algorithm complexity.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 3 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

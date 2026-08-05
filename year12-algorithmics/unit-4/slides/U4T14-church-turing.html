@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 14 — The Church–Turing Thesis</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 14 · The Church–Turing Thesis</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>The Church–Turing Thesis</h1>
+  <p>Unit 4 AOS3 · Topic 14 of 17 — what "computable" means, and what the limits do not say</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T14 · The thesis" data-menu="The thesis">
+  <h2>The thesis</h2>
+  <div class="box defn"><span class="lbl">Church–Turing thesis</span>
+    <p>Any function that is computable by an <b>effective procedure</b> — any algorithm at all, carried out by any means — is computable by a <b>Turing machine</b>.</p>
+  </div>
+  <ul class="small">
+    <li>It identifies an informal idea ("there is a step-by-step method") with a precise mathematical one ("a Turing machine exists").</li>
+    <li>Church reached the same conclusion via lambda calculus; Turing via his machines; Gödel via recursive functions. All three formalisms turned out to be <b>exactly equivalent</b>.</li>
+    <li>That convergence, from three unrelated starting points, is the main evidence for the thesis.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Its practical use</span>
+    <p>Because of the thesis, proving something impossible for Turing machines proves it impossible for <em>any</em> algorithm — in any language, on any hardware, now or in future.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · The thesis" data-menu="Why a thesis">
+  <h2>Why "thesis" and not "theorem"</h2>
+  <ol class="steps" id="s-thesis">
+    <li><span class="stepno">1</span> <b>A theorem is proved</b> from definitions. Both sides of the statement must be formally defined.</li>
+    <li><span class="stepno">2</span> <b>One side here is informal.</b> "Effective procedure" / "algorithm" is an intuitive notion, not a mathematical object.</li>
+    <li><span class="stepno">3</span> <b>So no proof is possible</b> — you cannot prove a statement half of which is not formally defined.</li>
+    <li><span class="stepno">4</span> <b>The evidence is empirical:</b> every model of computation ever proposed — lambda calculus, recursive functions, register machines, cellular automata, every programming language — computes exactly the same class of functions.</li>
+    <li class="ans"><span class="stepno">✓</span> Universally accepted; not proved, and not provable in its current form.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-thesis">Why it can't be a theorem</button>
+  <div class="box hint"><span class="lbl">How to answer this in the exam</span>
+    <p>Two components: <b>what it claims</b>, and <b>why the informality of "algorithm" prevents proof</b>. Answers that only restate the claim earn half.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · Consequences" data-menu="What it rules out">
+  <h2>What the limits rule out — and what they don't</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Claim</th><th>Verdict</th></tr>
+    <tr><td>No algorithm decides the Halting Problem for all inputs</td><td><b>true</b> — proved</td></tr>
+    <tr><td>A faster computer could decide it</td><td><b>false</b> — speed is irrelevant to existence</td></tr>
+    <tr><td>A quantum computer could decide it</td><td><b>false</b> — quantum machines compute the same class, sometimes faster</td></tr>
+    <tr><td>A cleverer programming language could decide it</td><td><b>false</b> — all Turing-complete languages are equivalent</td></tr>
+    <tr><td>Turing machines can only run simple algorithms</td><td><b>false</b> — they compute everything computable</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">The distinction to keep straight</span>
+    <p>Undecidability is about <b>existence</b>, not about resources. No amount of time, memory or hardware creates an algorithm that was proved not to exist.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · Consequences" data-menu="Computable vs feasible">
+  <h2>Three separate questions</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>Computable?</b> Does any algorithm exist? — Turing machines, decidability.</li>
+        <li><b>Feasible?</b> Does a polynomial-time algorithm exist? — P, NP, tractability.</li>
+        <li><b>Practical?</b> Does it run fast enough on <em>my</em> data, on <em>my</em> machine? — engineering.</li>
+      </ul>
+      <div class="box flag"><span class="lbl">They are answered in that order</span>
+        <p>A problem must be computable before feasibility means anything, and feasible before practicality is worth discussing.</p>
+      </div>
+    </div>
+    <div>
+      <svg viewBox="0 0 230 175" style="width:96%; height:auto;">
+        <ellipse cx="115" cy="92" rx="108" ry="76" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.6"/>
+        <ellipse cx="115" cy="102" rx="80" ry="56" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <ellipse cx="115" cy="112" rx="48" ry="34" fill="#f4f6fa" stroke="#475569" stroke-width="1.6"/>
+        <text x="115" y="30" font-size="10" text-anchor="middle" fill="#8b1f34" font-weight="bold">all problems</text>
+        <text x="115" y="60" font-size="10" text-anchor="middle" fill="#0e7569" font-weight="bold">decidable</text>
+        <text x="115" y="88" font-size="10" text-anchor="middle" fill="#334155" font-weight="bold">tractable (P)</text>
+        <text x="115" y="118" font-size="9" text-anchor="middle" fill="#64748b">sorting,</text>
+        <text x="115" y="130" font-size="9" text-anchor="middle" fill="#64748b">shortest path</text>
+        <text x="115" y="153" font-size="9" text-anchor="middle" fill="#0e7569">TSP, colouring</text>
+        <text x="115" y="168" font-size="9" text-anchor="middle" fill="#8b1f34">Halting Problem</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T14 · Exam focus" data-menu="Exam question">
+  <h2>Explain why the student is incorrect</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q13b</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (4 marks)</span>
+    <p class="small">Two students are discussing what they have learned.</p>
+    <p class="small"><em>Student 1: "Turing showed Hilbert's programme was impossible by proving there are some things Turing machines cannot do."</em></p>
+    <p class="small"><em>Student 2: "Yes — Turing showed that Turing machines can only run very simple algorithms, such as those that terminate in polynomial time."</em></p>
+    <p class="small">Explain why Student 2's statement is incorrect. Use the connection between Hilbert's programme and Turing's work to support your answer.</p>
+  </div>
+  <div class="box try"><span class="lbl">Two errors are packed in there</span>
+    <p>One about the <em>power</em> of Turing machines, one confusing <em>two different axes</em>. Find both before reading on.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam14">
+    <li><span class="stepno">1</span> <b>Error one — power.</b> Turing machines are not limited to simple algorithms. By the Church–Turing thesis they compute <em>everything</em> that is computable by any effective procedure; a universal Turing machine can simulate any other machine.</li>
+    <li><span class="stepno">2</span> <b>Error two — the wrong axis.</b> "Terminate in polynomial time" is a statement about <b>complexity</b>. Turing's result is about <b>computability</b> — whether an algorithm exists at all. Turing machines happily run exponential-time algorithms.</li>
+    <li><span class="stepno">3</span> <b>The Hilbert connection.</b> Hilbert asked for a definite procedure deciding the provability of any mathematical statement. To answer, Turing had to define "definite procedure" — hence the machine.</li>
+    <li><span class="stepno">4</span> <b>What Turing actually proved.</b> The Halting Problem is undecidable, so no such procedure exists. Hilbert's programme fails not because machines are weak, but because <em>some problems admit no algorithm at all</em>.</li>
+    <li class="ans"><span class="stepno">✓</span> The limitation is in the <b>problems</b>, not in the machine.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam14">Reveal the reasoning</button>
+</section>
+
+<section class="slide" data-topic="T14 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the sentence that fixes the misconception</h2>
+  <div class="box key"><span class="lbl">Say this</span>
+    <p><em>"Turing machines are not weak — they compute everything that is computable. What Turing proved is that some well-posed problems have no algorithm at all, and that limitation applies equally to every computer ever built."</em></p>
+  </div>
+  <ul class="small">
+    <li>The misconception is comforting: it suggests a better machine might do better. The thesis closes that door.</li>
+    <li>It also explains why the result has lasted. A theorem about 1936 hardware would be a curiosity; a theorem about <em>all possible algorithms</em> is permanent.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Where the 4 marks sit</span>
+    <p>Roughly: one for identifying the power error, one for the computability-vs-complexity confusion, one for stating Hilbert's question, one for what Turing proved and its implication.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State the Church–Turing thesis, and explain why it is a thesis rather than a theorem.</p>
+      <p class="a">Anything computable by an effective procedure is computable by a Turing machine. It cannot be a theorem because "effective procedure" is an <b>informal</b> notion — one side of the claim is not mathematically defined, so no proof is possible. Its support is the equivalence of every computational model ever proposed.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Would a quantum computer be able to solve the Halting Problem?</p>
+      <p class="a"><b>No.</b> Quantum computers compute the same class of functions as Turing machines; they may offer speed-ups for some problems, which is a <em>complexity</em> matter. Undecidability concerns whether an algorithm exists at all, and no change of hardware creates one.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Distinguish the three questions: computable, feasible, practical.</p>
+      <p class="a"><b>Computable</b> — does any algorithm exist (decidability)? <b>Feasible</b> — does a polynomial-time algorithm exist (tractability)? <b>Practical</b> — does it run fast enough on this data and hardware (engineering)? Each only makes sense once the previous is answered yes.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">How did Turing's work settle Hilbert's Entscheidungsproblem?</p>
+      <p class="a">Hilbert sought a definite procedure deciding provability for any mathematical statement. Turing formalised "definite procedure" as a Turing machine, then proved the Halting Problem undecidable. Since that problem can be encoded as a question about provability, no such procedure exists — answering Hilbert negatively.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T14 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w08.html">Interactive workbook</a></b> — Part B sorts problems into decidable and undecidable; the disagreements are the useful part.</li>
+    <li><b>Problem Set — Week 4, Section 3</b>: the thesis, computability versus complexity, and correcting flawed student statements.</li>
+    <li><b>Next topic:</b> from what machines <em>can</em> compute to whether they can <em>think</em>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>The Church–Turing thesis makes "no Turing machine can do this" mean "no algorithm can do this" — which is why undecidability is permanent, not a hardware problem.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Why can the Church–Turing thesis not be proved?</li>
+      <li>Someone claims a new language solves the Halting Problem. Respond.</li>
+      <li>Which axis is Turing's result on — computability or complexity?</li>
+    </ol>
+    <p class="start-hint">Topic 15 — the Turing Test, the Chinese Room, and strong vs weak AI.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 14 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

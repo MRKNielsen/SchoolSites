@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 8 — NP-completeness and Reductions</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 8 · NP-completeness and Reductions</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>NP-completeness and Reductions</h1>
+  <p>Unit 4 AOS2 · Topic 8 of 17 — why thousands of hard problems are one hard problem</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T8 · Reductions" data-menu="The idea">
+  <h2>Reduction — solving A by using B</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>Problem \(A\) <b>reduces</b> to problem \(B\) if any instance of \(A\) can be transformed, in polynomial time, into an instance of \(B\) whose answer gives the answer to \(A\). Written \(A \le_p B\).</p>
+  </div>
+  <div class="box example"><span class="lbl">Everyday example</span>
+    <p class="small">"Find the median of a list" reduces to "sort a list": sort it, then read the middle element. The transformation costs nothing extra, so any sorting algorithm gives you a median algorithm.</p>
+  </div>
+  <div class="box key"><span class="lbl">Read the direction carefully</span>
+    <p>\(A \le_p B\) means <b>\(B\) is at least as hard as \(A\)</b>. If you can solve \(B\) quickly, you get \(A\) quickly for free. The arrow points from the easier problem to the harder one.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Reductions" data-menu="Both directions">
+  <h2>What a reduction proves — in both directions</h2>
+  <div class="cols">
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">Upper bound direction</span>
+        <p class="small">\(A \le_p B\) and \(B\) is easy \(\Rightarrow\) \(A\) is easy.<br>
+        <em>Use it to inherit an algorithm.</em></p>
+      </div>
+    </div>
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Lower bound direction</span>
+        <p class="small">\(A \le_p B\) and \(A\) is hard \(\Rightarrow\) \(B\) is hard.<br>
+        <em>Use it to prove hardness.</em></p>
+      </div>
+    </div>
+  </div>
+  <ul class="small">
+    <li>The second is the contrapositive of the first, and it is the one used to build the NP-complete class.</li>
+    <li>To show a new problem \(B\) is hard, you reduce a <b>known</b> hard problem to it — <em>known hard \(\le_p\) new</em>. Students routinely do this backwards.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Memory hook</span>
+    <p>"To prove <em>my</em> problem is hard, I show it could solve a problem everyone already agrees is hard."</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · NP-complete" data-menu="Definition">
+  <h2>NP-complete, defined</h2>
+  <div class="box defn"><span class="lbl">A problem \(X\) is NP-complete if</span>
+    <p><b>(1)</b> \(X \in NP\) — a proposed solution can be checked in polynomial time; <b>and</b><br>
+    <b>(2)</b> \(X\) is <b>NP-hard</b> — every problem in NP reduces to \(X\) in polynomial time.</p>
+  </div>
+  <ul class="small">
+    <li>Condition 2 is extraordinary: it says \(X\) is universal for the whole class. Solve \(X\) quickly and you solve <em>everything</em> in NP quickly.</li>
+    <li>Which means: if any single NP-complete problem is in P, then P = NP.</li>
+    <li>Equally, if any single one is proved intractable, none of them is tractable.</li>
+  </ul>
+  <div class="box key"><span class="lbl">They stand or fall together</span>
+    <p>Thousands of NP-complete problems, from timetabling to protein folding, are all the same problem wearing different clothes. That is the content of NP-completeness.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · NP-complete" data-menu="NP-hard vs complete">
+  <h2>NP-hard versus NP-complete</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>In NP?</th><th>Everything in NP reduces to it?</th><th>Example</th></tr>
+    <tr><td><b>NP-complete</b></td><td>yes</td><td>yes</td><td>TSP-decision, graph colouring, SAT</td></tr>
+    <tr><td><b>NP-hard</b></td><td>not necessarily</td><td>yes</td><td>the Halting Problem; TSP-optimisation</td></tr>
+    <tr><td><b>In NP, not complete</b></td><td>yes</td><td>not known</td><td>anything in P; factoring (believed)</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">The distinction that gets tested</span>
+    <p>NP-hard is <b>"at least as hard as"</b> — it says nothing about membership. The Halting Problem is NP-hard and <em>not</em> in NP, because its solutions cannot be checked in polynomial time. Or at all.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Optimisation versions</span>
+    <p>"Find the shortest tour" is NP-hard but not NP-complete, because it is not a decision problem, so it cannot be in NP by definition.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · History" data-menu="Cook–Levin">
+  <h2>Where the first one came from</h2>
+  <ol class="steps" id="s-hist">
+    <li><span class="stepno">1</span> <b>Cook and Levin, 1971.</b> Proved that <b>SAT</b> — is there an assignment of true/false making this Boolean formula true? — is NP-complete, directly from the definition of nondeterministic computation.</li>
+    <li><span class="stepno">2</span> <b>Karp, 1972.</b> Reduced SAT to 21 other problems, showing each was NP-complete too — including graph colouring, knapsack and Hamiltonian circuit.</li>
+    <li><span class="stepno">3</span> <b>Today.</b> Thousands are known. Each new proof is one reduction from a problem already on the list.</li>
+    <li class="ans"><span class="stepno">✓</span> Only the first proof was hard. Every subsequent one stands on it.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-hist">The history</button>
+  <div class="box hint"><span class="lbl">Why this matters for your answers</span>
+    <p>Asked to show a problem is NP-complete, the expected structure is: <b>(1)</b> show it is in NP by describing the polynomial-time check; <b>(2)</b> name a known NP-complete problem and reduce it to yours.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Worked" data-menu="Worked reduction">
+  <h2>Worked example — a reduction you can write down</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Claim</span>
+    <p class="small">Hamiltonian Circuit \(\le_p\) TSP-decision. <em>(HC: does this graph contain a cycle visiting every node exactly once?)</em></p>
+  </div>
+  <ol class="steps" id="s-red">
+    <li><span class="stepno">1</span> <b>Transform the input.</b> Given a graph \(G\) with \(n\) nodes, build a complete weighted graph on the same nodes: weight 1 if the edge exists in \(G\), weight 2 if it does not.</li>
+    <li><span class="stepno">2</span> <b>Set the threshold.</b> Ask TSP-decision: is there a tour of total length \(\le n\)?</li>
+    <li><span class="stepno">3</span> <b>Argue both ways.</b> A tour of length \(\le n\) must use \(n\) edges each of weight 1, i.e. all real edges of \(G\) — a Hamiltonian circuit. Conversely a Hamiltonian circuit gives a tour of exactly \(n\).</li>
+    <li><span class="stepno">4</span> <b>Check the cost.</b> Building the new graph takes \(O(n^2)\) — polynomial. Reduction complete.</li>
+    <li class="ans"><span class="stepno">✓</span> So TSP-decision is at least as hard as Hamiltonian Circuit, which is known NP-complete.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-red">Work the reduction</button>
+</section>
+
+<section class="slide" data-topic="T8 · Worked" data-menu="Anatomy">
+  <h2>The anatomy of any reduction answer</h2>
+  <ul>
+    <li><b>The map.</b> How do you turn an instance of the known problem into an instance of yours?</li>
+    <li><b>The equivalence.</b> Yes-instances map to yes-instances, and no-instances to no-instances. Both directions, explicitly.</li>
+    <li><b>The cost.</b> The transformation must be polynomial — otherwise nothing is inherited.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">Where marks are lost</span>
+    <p>Describing the map and stopping. Without the equivalence argument, you have shown a transformation exists, not that it <em>preserves the answer</em> — which is the entire point.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Nothing exotic is expected</span>
+    <p>At VCE level you are asked to <em>explain what a reduction establishes</em> far more often than to construct one. Know the logic cold; the constructions are a bonus.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T8 · Exam focus" data-menu="Exam question">
+  <h2>Which problem is <em>not</em> NP-hard?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q20</p>
+  <div class="chooser frag">
+    <p class="ch-tag">Three of these are NP-hard <span class="ch-clue">— which one is not?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>the travelling salesman problem</span></div>
+      <div class="opt"><b>B</b><span>graph colouring</span></div>
+      <div class="opt correct"><b>C</b><span>finding a minimum spanning tree</span></div>
+      <div class="opt"><b>D</b><span>the 0/1 knapsack problem</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">The discriminator</span>
+    <p>Three of these have no known polynomial algorithm. One you learned to solve efficiently in Unit 3. Which, and with what algorithm?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam8">
+    <li><span class="stepno">1</span> <b>C is solvable in polynomial time</b> — Prim's or Kruskal's finds a minimum spanning tree in \(O(|E|\log|V|)\). So MST is in P.</li>
+    <li><span class="stepno">2</span> <b>Could a problem in P still be NP-hard?</b> Only if P = NP. Since that is not established, a P problem is not considered NP-hard.</li>
+    <li><span class="stepno">3</span> <b>Check the others:</b> TSP, graph colouring and 0/1 knapsack are all classic NP-hard problems with no known polynomial algorithm.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: C.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam8">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The trap in D</span>
+    <p>0/1 knapsack has a dynamic programming solution running in \(O(nW)\), which <em>looks</em> polynomial. It is not: \(W\) is a <b>value</b>, and writing it down takes only \(\log W\) bits, so \(O(nW)\) is exponential in the input <em>size</em>. This is called pseudo-polynomial, and Topic 9 returns to it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the pseudo-polynomial trap</h2>
+  <p>The knapsack case is worth unpacking, because it is the neatest example of why <em>input size</em> must be measured in bits.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Number of items \(n\)</th><th>Capacity \(W\)</th></tr>
+    <tr><td>How it is written down</td><td>\(n\) entries</td><td>about \(\log_2 W\) bits</td></tr>
+    <tr><td>So input size is</td><td>\(\Theta(n)\)</td><td>\(\Theta(\log W)\)</td></tr>
+    <tr><td>DP table cost \(O(nW)\) becomes</td><td colspan="2">\(O(n \cdot 2^{\log_2 W})\) — <b>exponential</b> in the size of \(W\)</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Concretely</span>
+    <p>Add one digit to the capacity and the input grows by a few bits — but the table gets ten times bigger. That is exponential behaviour, disguised.</p>
+  </div>
+  <div class="box key"><span class="lbl">Rule</span>
+    <p>Complexity is always measured against the number of <b>bits needed to write the input down</b>, never against the numeric value of a parameter.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State the two conditions for a problem to be NP-complete.</p>
+      <p class="a">(1) It is in <b>NP</b> — a proposed solution can be verified in polynomial time. (2) It is <b>NP-hard</b> — every problem in NP reduces to it in polynomial time. Condition 2 alone gives NP-hard; both together give NP-complete.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">What would follow from a polynomial-time algorithm for graph colouring?</p>
+      <p class="a">Graph colouring is NP-complete, so every problem in NP reduces to it in polynomial time. A fast colouring algorithm would therefore solve every NP problem in polynomial time, proving <b>P = NP</b> — and breaking most modern cryptography as a side effect.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is the Halting Problem NP-hard but not NP-complete?</p>
+      <p class="a">It is NP-hard because every NP problem reduces to it. It is not NP-complete because it is not <em>in</em> NP — there is no polynomial-time check for a claimed answer, since the problem is undecidable and no algorithm decides it at all.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">To prove a new problem \(X\) is NP-hard, which way does the reduction go?</p>
+      <p class="a"><b>Known NP-complete problem \(\le_p X\)</b> — reduce the known-hard problem <em>to</em> \(X\). This shows \(X\) is at least as hard. Doing it the other way (\(X \le_p\) known) only shows \(X\) is no harder, which proves nothing about hardness.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T8 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w06.html">Interactive workbook</a></b> — the TSP sandbox; brute force against the heuristics you meet in Topics 10–11.</li>
+    <li><b>Problem Set — Week 2, Section 2</b>: reduction direction, NP-hard vs NP-complete, and two pseudo-polynomial traps.</li>
+    <li><b>Next topic:</b> exact techniques — dynamic programming and backtracking, which make hard problems survivable without giving up optimality.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>A reduction transfers difficulty: to prove your problem is hard, show it could solve one everybody already knows is hard.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>If \(A \le_p B\), which of the two is at least as hard?</li>
+      <li>Name a problem that is NP-hard but not NP-complete, and say why.</li>
+      <li>Why isn't \(O(nW)\) knapsack a polynomial-time algorithm?</li>
+    </ol>
+    <p class="start-hint">Topic 9 — dynamic programming and backtracking.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 8 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

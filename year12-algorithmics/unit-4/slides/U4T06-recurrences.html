@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 6 — Recurrences and the Master Theorem</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 6 · Recurrences and the Master Theorem</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Recurrences and the Master Theorem</h1>
+  <p>Unit 4 AOS1 · Topic 6 of 6 — solving the equation, and knowing when you can't</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T6 · Orientation" data-menu="Two methods">
+  <h2>Two methods, and a rule for choosing</h2>
+  <p class="lede">Topic 5 produced equations. This topic turns them into bounds.</p>
+  <ul>
+    <li><b>Expansion (telescoping)</b> — substitute the recurrence into itself repeatedly, spot the pattern, sum it. Always works; slower.</li>
+    <li><b>The Master Theorem</b> — a lookup table for one specific family. Instant when it applies; useless when it doesn't.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The choosing rule</span>
+    <p>The Master Theorem applies to <b>divide-and-conquer</b> recurrences: \(T(n) = a\,T(n/b) + \ldots\), where the size is <em>divided</em>. If your recurrence <em>subtracts</em> — \(T(n-1)\), \(T(n-2)\) — you must expand.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Expansion" data-menu="Expansion method">
+  <h2>Solving by expansion</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Solve \(T(n) = T(n-1) + c\), with \(T(1) = c\)</span></div>
+  <ol class="steps" id="s-exp">
+    <li><span class="stepno">1</span> <b>Substitute once:</b> \(T(n) = [T(n-2) + c] + c = T(n-2) + 2c\).</li>
+    <li><span class="stepno">2</span> <b>Again:</b> \(T(n) = T(n-3) + 3c\).</li>
+    <li><span class="stepno">3</span> <b>Spot the pattern</b> after \(k\) steps: \(T(n) = T(n-k) + kc\).</li>
+    <li><span class="stepno">4</span> <b>Stop at the base case:</b> set \(n - k = 1\), so \(k = n-1\).</li>
+    <li><span class="stepno">5</span> <b>Substitute back:</b> \(T(n) = T(1) + (n-1)c = c + (n-1)c = nc\).</li>
+    <li class="ans"><span class="stepno">✓</span> \(T(n) = \Theta(n)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exp">Expand it</button>
+  <div class="box hint"><span class="lbl">The five moves, every time</span>
+    <p>Substitute · substitute again · generalise to \(k\) · choose \(k\) to reach the base case · substitute back. Write them as five lines and the marks follow.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Expansion" data-menu="Worked: harder">
+  <h2>Worked example — when each level costs \(O(n)\)</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Solve \(T(n) = T(n-2) + n\)</span>
+    <p class="small">This is the one the Master Theorem cannot touch — the size is reduced by subtraction.</p>
+  </div>
+  <ol class="steps" id="s-exp2">
+    <li><span class="stepno">1</span> <b>Expand:</b> \(T(n) = T(n-4) + (n-2) + n\), then \(T(n) = T(n-6) + (n-4) + (n-2) + n\).</li>
+    <li><span class="stepno">2</span> <b>Pattern:</b> the added terms are \(n, n-2, n-4, \ldots\) — an arithmetic sequence stepping down by 2.</li>
+    <li><span class="stepno">3</span> <b>How many terms?</b> We reach the base case after about \(n/2\) steps.</li>
+    <li><span class="stepno">4</span> <b>Sum them:</b> \(n + (n-2) + \cdots \approx \dfrac{n}{2} \times \dfrac{n}{2}\) on average — roughly \(\dfrac{n^2}{4}\).</li>
+    <li class="ans"><span class="stepno">✓</span> \(T(n) = \Theta(n^2)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exp2">Expand it</button>
+  <div class="box hint"><span class="lbl">Shortcut worth knowing</span>
+    <p>\(T(n) = T(n-k) + O(n)\) is always \(O(n^2)\): about \(n/k\) levels, each costing up to \(n\). The constant \(k\) only affects the hidden factor.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Master Theorem" data-menu="The theorem">
+  <h2>The Master Theorem</h2>
+  <div class="box defn"><span class="lbl">The form (as given on the exam formula sheet)</span>
+    <p>\[ T(n) = \begin{cases} a\,T\!\left(\dfrac{n}{b}\right) + k n^c & n > 1 \\[6pt] d & n \le 1 \end{cases} \]
+    <span class="small">with \(a > 0\), \(b > 1\), \(c \ge 0\), \(d \ge 0\), \(k > 0\).</span></p>
+  </div>
+  <div class="box key"><span class="lbl">The solution — compare \(\log_b a\) against \(c\)</span>
+    <p>\[ T(n) = \begin{cases} O(n^c) & \text{if } \log_b a < c \\[3pt] O(n^c \log n) & \text{if } \log_b a = c \\[3pt] O(n^{\log_b a}) & \text{if } \log_b a > c \end{cases} \]</p>
+  </div>
+  <p class="note">The sheet is supplied in the exam — you do not need to memorise it. You <b>do</b> need to identify \(a\), \(b\) and \(c\) correctly and compare in the right direction.</p>
+</section>
+
+<section class="slide" data-topic="T6 · Master Theorem" data-menu="What it means">
+  <h2>What the three cases actually say</h2>
+  <p>\(\log_b a\) measures how fast the <b>number of subproblems</b> grows. \(c\) measures how expensive the <b>work at each level</b> is. The theorem asks which one wins.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Case</th><th>Who dominates</th><th>Where the cost lives</th></tr>
+    <tr><td>\(\log_b a < c\)</td><td>the combining work</td><td>the <b>top</b> level — the root's \(n^c\) swamps everything below</td></tr>
+    <tr><td>\(\log_b a = c\)</td><td>a tie</td><td>spread <b>evenly</b> across all \(\log n\) levels — hence the extra \(\log n\)</td></tr>
+    <tr><td>\(\log_b a > c\)</td><td>the recursion</td><td>the <b>leaves</b> — there are so many base cases they dominate</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Merge sort is the tie</span>
+    <p>\(2T(n/2) + O(n)\): \(a = 2\), \(b = 2\), \(c = 1\), so \(\log_2 2 = 1 = c\). Every level costs \(n\), there are \(\log n\) levels — exactly the picture from Topic 5.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Master Theorem" data-menu="Worked: three cases">
+  <h2>Worked examples — one of each case</h2>
+  <ol class="steps" id="s-three">
+    <li><span class="stepno">1</span> <b>\(T(n) = 2T(n/2) + n\).</b> \(a=2, b=2, c=1\). \(\log_2 2 = 1 = c\) &rarr; tie &rarr; \(O(n\log n)\). <em>(Merge sort.)</em></li>
+    <li><span class="stepno">2</span> <b>\(T(n) = 4T(n/2) + n\).</b> \(a=4, b=2, c=1\). \(\log_2 4 = 2 > 1\) &rarr; leaves win &rarr; \(O(n^{2})\).</li>
+    <li><span class="stepno">3</span> <b>\(T(n) = 2T(n/2) + n^2\).</b> \(a=2, b=2, c=2\). \(\log_2 2 = 1 < 2\) &rarr; root wins &rarr; \(O(n^{2})\).</li>
+    <li><span class="stepno">4</span> <b>\(T(n) = T(n/2) + 1\).</b> \(a=1, b=2, c=0\). \(\log_2 1 = 0 = c\) &rarr; tie &rarr; \(O(\log n)\). <em>(Binary search.)</em></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-three">Show all four</button>
+  <div class="box flag"><span class="lbl">Watch \(c = 0\)</span>
+    <p>Constant work outside the recursion means \(kn^0 = k\), so \(c = 0\). Students often write \(c = 1\) here and get \(O(n)\) instead of \(O(\log n)\).</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T6 · Exam focus" data-menu="Exam question">
+  <h2>Apply the theorem</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q13</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question</span>
+    <p class="small">The recurrence \(T(n)\) gives the running time of an algorithm with respect to its input size \(n\):</p>
+    <p class="small">\[ T(n) = \begin{cases} 8\,T\!\left(\dfrac{n}{2}\right) + 5n^{2} & n > 1 \\[4pt] 300 & n \le 1 \end{cases} \]</p>
+  </div>
+  <div class="chooser frag">
+    <p class="ch-tag">What is the Big-O time complexity? <span class="ch-clue">— compare \(\log_b a\) with \(c\)</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>\(O(n^{2})\)</span></div>
+      <div class="opt"><b>B</b><span>\(O(n^{2}\log n)\)</span></div>
+      <div class="opt correct"><b>C</b><span>\(O(n^{3})\)</span></div>
+      <div class="opt"><b>D</b><span>\(O(n^{2}\log_2 8)\)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam6">
+    <li><span class="stepno">1</span> <b>Read off the parameters.</b> \(a = 8\) (eight subproblems), \(b = 2\) (size halved), and \(kn^c = 5n^2\) so \(c = 2\). The \(k = 5\) and \(d = 300\) do not affect the answer.</li>
+    <li><span class="stepno">2</span> <b>Compute \(\log_b a\):</b> \(\log_2 8 = 3\).</li>
+    <li><span class="stepno">3</span> <b>Compare:</b> \(3 > 2\), so \(\log_b a > c\) — the third case, dominated by the leaves.</li>
+    <li><span class="stepno">4</span> <b>Apply:</b> \(T(n) = O(n^{\log_b a}) = O(n^{3})\).</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: C.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam6">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The distractors</span>
+    <p><b>A</b> is what you get by reading \(c\) and stopping. <b>B</b> is the tie case — chosen by anyone who assumes every divide-and-conquer is \(n\log n\). <b>D</b> is a nonsense expression built from the right symbols, which catches pattern-matchers.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Exam focus" data-menu="Extended question">
+  <h2>The extended-response version</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q7b(ii) and Q7c(ii)</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">b(ii) — 2 marks</span>
+    <p class="small">Solve \(S(n) = 3S(n/3) + O(n)\), giving your answer in Big-O notation.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">\(a = 3\), \(b = 3\), \(c = 1\). Then \(\log_3 3 = 1 = c\), so the tie case applies and \(S(n) = O(n\log n)\).</p>
+  </div>
+  <div class="box question"><span class="lbl">c(ii) — 2 marks</span>
+    <p class="small">Deduce the worst-case complexity when \(T(n) = T(n-2) + O(n)\), and state it in Big-O notation.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">The Master Theorem does <b>not</b> apply — the size is reduced by subtraction, not division. Expanding: the recursion has about \(n/2\) levels and each level does \(O(n)\) work, so the total is \(O(n^2)\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the same machine, two orders of magnitude apart</h2>
+  <p>Those two parts describe <b>one</b> ball-sorting machine. The only difference is how evenly it splits.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Even three-way split</th><th>Everything in one bag</th></tr>
+    <tr><td>Recurrence</td><td>\(3S(n/3) + O(n)\)</td><td>\(T(n-2) + O(n)\)</td></tr>
+    <tr><td>Depth</td><td>\(\log_3 n\)</td><td>\(n/2\)</td></tr>
+    <tr><td>Solution</td><td>\(O(n\log n)\)</td><td>\(O(n^2)\)</td></tr>
+    <tr><td>\(n = 10^6\)</td><td>≈ 20 million steps</td><td>≈ \(10^{12}\) steps</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">This is quicksort's story too</span>
+    <p>Balanced partitions give \(\Theta(n\log n)\); maximally unbalanced ones give \(\Theta(n^2)\). Same algorithm, different input — which is why Topic 2 insisted you name the case.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Consolidation" data-menu="Decision procedure">
+  <h2>Your decision procedure</h2>
+  <ol class="steps" id="s-decide">
+    <li><span class="stepno">1</span> <b>Is the size divided or subtracted?</b> Divided &rarr; Master Theorem. Subtracted &rarr; expand.</li>
+    <li><span class="stepno">2</span> <b>If dividing:</b> read \(a\), \(b\), \(c\). Compute \(\log_b a\). Compare with \(c\). Apply the matching case.</li>
+    <li><span class="stepno">3</span> <b>If subtracting:</b> expand twice, generalise to \(k\), set \(n - k\) to the base case, sum the added terms.</li>
+    <li><span class="stepno">4</span> <b>Sanity check</b> against the shape table from Topic 5. Disagreement means arithmetic, not method.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-decide">The procedure</button>
+  <div class="box flag"><span class="lbl">State when the theorem doesn't apply</span>
+    <p>If a question gives you \(T(n-k)\), saying <em>"the Master Theorem does not apply here because the input is reduced by subtraction rather than division"</em> is itself worth a mark. Do not silently misuse it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Solve \(T(n) = 9T(n/3) + n^2\).</p>
+      <p class="a"><b>\(O(n^2\log n)\).</b> \(a=9\), \(b=3\), \(c=2\); \(\log_3 9 = 2 = c\), the tie case. A nice illustration that the tie doesn't only happen at \(n\log n\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Solve \(T(n) = 3T(n/4) + n\).</p>
+      <p class="a"><b>\(O(n)\).</b> \(a=3\), \(b=4\), \(c=1\); \(\log_4 3 \approx 0.79 < 1\), so the root dominates and the answer is \(O(n^c) = O(n)\). The recursion is cheap enough to disappear into the top-level work.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why can't the Master Theorem solve \(T(n) = 2T(n-1) + 1\)?</p>
+      <p class="a">It requires the form \(a\,T(n/b)\) — the input <em>divided</em> by a constant. Here it is reduced by subtraction, so no valid \(b\) exists. Expanding gives depth \(n\) with the work doubling each level: \(\Theta(2^n)\). <em>(This is Towers of Hanoi.)</em></p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">An algorithm splits into 2 halves and does \(O(1)\) combining. Solve it.</p>
+      <p class="a"><b>\(O(n)\).</b> \(T(n) = 2T(n/2) + O(1)\): \(a=2\), \(b=2\), \(c=0\); \(\log_2 2 = 1 > 0\), so the leaves dominate and \(T(n) = O(n^{\log_2 2}) = O(n)\). There are \(n\) leaves, and they are the whole cost.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T6 · Consolidation" data-menu="Take it away">
+  <h2>Take it away — and the AOS1 toolkit complete</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w03.html">Interactive workbook</a></b> — the recurrence explorer lets you set \(a\), \(b\), \(c\) and watch which case fires and where the cost sits.</li>
+    <li><b>Problem Set — Week 1, Section 6</b>: Master Theorem application, plus two that require expansion.</li>
+    <li><b>Next week:</b> what happens when no amount of clever analysis helps — tractability, P vs NP.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The six topics, in one line each</span>
+    <p class="small">1 · Big-O names the growth class. &nbsp;2 · Name the bound <em>and</em> the case. &nbsp;3 · Count loops, price the body. &nbsp;4 · Graphs have two size parameters. &nbsp;5 · Read the recurrence off the code. &nbsp;6 · Divide &rarr; Master Theorem; subtract &rarr; expand.</p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>State the three cases of the Master Theorem in terms of \(\log_b a\) and \(c\).</li>
+      <li>Solve \(T(n) = 2T(n/2) + n^3\).</li>
+      <li>Give a recurrence the Master Theorem cannot solve, and say why.</li>
+    </ol>
+    <p class="start-hint">Week 1 complete — problem set U4PS-W1 covers all six topics.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 6 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

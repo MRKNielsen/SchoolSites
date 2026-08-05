@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 12 — Turing Machines</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 12 · Turing Machines</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Turing Machines</h1>
+  <p>Unit 4 AOS3 · Topic 12 of 17 — the machine invented to answer a question about mathematics</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T12 · History" data-menu="Hilbert's question">
+  <h2>Where this came from</h2>
+  <ol class="steps" id="s-hist12">
+    <li><span class="stepno">1</span> <b>1900 — Hilbert's programme.</b> David Hilbert proposes that all of mathematics could be placed on a complete, consistent, mechanical footing.</li>
+    <li><span class="stepno">2</span> <b>1928 — the Entscheidungsproblem.</b> "Decision problem": is there a definite procedure that, given any mathematical statement, decides whether it is provable?</li>
+    <li><span class="stepno">3</span> <b>1931 — Gödel.</b> Any consistent system rich enough for arithmetic contains true statements it cannot prove. Hilbert's completeness goal fails.</li>
+    <li><span class="stepno">4</span> <b>1936 — Turing.</b> To answer the Entscheidungsproblem he must first define "definite procedure" precisely. He invents an abstract machine to do it — and then proves no such procedure exists.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-hist12">The chain of events</button>
+  <div class="box key"><span class="lbl">The point worth holding on to</span>
+    <p>The Turing machine was not designed to build computers. It was designed to make the phrase <em>"there is an algorithm for this"</em> mathematically precise, so that its <b>absence</b> could be proved.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · The machine" data-menu="Components">
+  <h2>The four components</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>Tape</b> — infinite in both directions, divided into cells, each holding one symbol from a finite alphabet (including a blank). This is the memory.</li>
+        <li><b>Head</b> — sits over one cell; can read it, write to it, and move one cell left or right.</li>
+        <li><b>State register</b> — holds the machine's current state, from a finite set.</li>
+        <li><b>Transition table</b> — for each (state, symbol read) pair, gives what to write, which way to move, and the next state. <b>This is the program.</b></li>
+      </ul>
+    </div>
+    <div>
+      <svg viewBox="0 0 240 150" style="width:96%; height:auto;">
+        <g fill="none" stroke="#cbd5e1" stroke-width="1.2">
+          <rect x="14" y="66" width="30" height="30"/><rect x="44" y="66" width="30" height="30"/>
+          <rect x="74" y="66" width="30" height="30"/><rect x="104" y="66" width="30" height="30"/>
+          <rect x="134" y="66" width="30" height="30"/><rect x="164" y="66" width="30" height="30"/>
+          <rect x="194" y="66" width="30" height="30"/>
+        </g>
+        <rect x="104" y="66" width="30" height="30" fill="none" stroke="#8b1f34" stroke-width="2.4"/>
+        <g font-size="13" text-anchor="middle" fill="#334155">
+          <text x="29" y="86">_</text><text x="59" y="86">1</text><text x="89" y="86">0</text>
+          <text x="119" y="86">1</text><text x="149" y="86">0</text><text x="179" y="86">1</text><text x="209" y="86">_</text>
+        </g>
+        <rect x="94" y="18" width="50" height="26" rx="5" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <text x="119" y="35" font-size="11" text-anchor="middle" fill="#0e7569">state A</text>
+        <line x1="119" y1="44" x2="119" y2="62" stroke="#0e7569" stroke-width="1.6"/>
+        <text x="119" y="118" font-size="10" text-anchor="middle" fill="#64748b">head reads the boxed cell</text>
+        <text x="119" y="134" font-size="10" text-anchor="middle" fill="#64748b">tape extends forever both ways</text>
+      </svg>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Mapping to a real computer</span>
+    <p>The tape is memory; the state register is the program counter and CPU state; <b>the transition table is the program</b>. That last correspondence is the one exam questions ask for.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · The machine" data-menu="Reading a table">
+  <h2>Reading a transition table</h2>
+  <p>Each row is a state; each column a symbol that might be read. The cell says: <em>write, move, go to state</em>.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>State</th><th>reads blank</th><th>reads 0</th><th>reads 1</th></tr>
+    <tr><td><b>A</b></td><td>1, left, halt</td><td>—</td><td>1, left, B</td></tr>
+    <tr><td><b>B</b></td><td>0, left, halt</td><td>0, left, B</td><td>1, left, A</td></tr>
+    <tr><td><b>halt</b></td><td colspan="3">machine stops</td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>"In state A, reading a 1: write 1, move left, enter state B."</li>
+    <li>A dash means <b>no transition defined</b> — that combination never arises, or the machine jams.</li>
+    <li>Everything the machine will ever do is in this table. There is no other program.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="T12 · Tracing" data-menu="Worked trace">
+  <h2>Worked example — tracing a machine</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Setup</span>
+    <p class="small">Using the table above. Tape reads <code>1 0 1 0 1</code>, head starts on the <b>rightmost</b> 1, state A.</p>
+  </div>
+  <ol class="steps" id="s-trace">
+    <li><span class="stepno">1</span> State A, reads <b>1</b> &rarr; write 1, move left, state B. &nbsp;Tape <code>1 0 1 0 1</code>, head on the 0.</li>
+    <li><span class="stepno">2</span> State B, reads <b>0</b> &rarr; write 0, move left, state B. &nbsp;Head on the middle 1.</li>
+    <li><span class="stepno">3</span> State B, reads <b>1</b> &rarr; write 1, move left, state A. &nbsp;Head on the second 0.</li>
+    <li><span class="stepno">4</span> State A, reads <b>0</b> &rarr; <b>no transition</b> — the machine jams.</li>
+    <li class="ans"><span class="stepno">✓</span> Tracing means keeping three things updated every step: <b>tape, head position, state</b>. Write all three in a table.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-trace">Trace it</button>
+  <div class="box hint"><span class="lbl">Exam technique</span>
+    <p>Draw a three-column table — step, tape (with the head marked), state — and fill a row per transition. Trying to hold it in your head is where errors come from.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Power" data-menu="Universality">
+  <h2>Why such a primitive machine matters</h2>
+  <ul class="small">
+    <li>It has no arithmetic, no variables, no arrays, no functions. It reads, writes, moves and changes state.</li>
+    <li>And yet: <b>anything any computer can compute, a Turing machine can compute.</b> It is slower — sometimes absurdly so — but not less capable.</li>
+    <li>A <b>universal Turing machine</b> takes the description of another machine on its tape and simulates it. That is a stored-program computer, described in 1936.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Why simplicity is the point</span>
+    <p>To prove something is impossible for <em>all</em> algorithms, you need a model simple enough to reason about mathematically and general enough to capture every algorithm. The Turing machine is deliberately both.</p>
+  </div>
+  <div class="box flag"><span class="lbl">A common misreading</span>
+    <p>"Turing machines can only run simple algorithms" is false. Simple <em>architecture</em>, unlimited <em>capability</em> — the two are unrelated.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T12 · Exam focus" data-menu="Exam question">
+  <h2>Which statement about Turing machines is correct?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q19</p>
+  <div class="chooser frag">
+    <p class="ch-tag">One of these is true <span class="ch-clue">— which?</span></p>
+    <div class="opts">
+      <div class="opt correct"><b>A</b><span>it is possible for a specific Turing machine to halt on all inputs</span></div>
+      <div class="opt"><b>B</b><span>no specific Turing machine halts on all inputs</span></div>
+      <div class="opt"><b>C</b><span>all Turing machines fail to halt on some input</span></div>
+      <div class="opt"><b>D</b><span>all Turing machines halt on at least one input</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">The move to make</span>
+    <p>Three of these are universal claims about <em>every</em> machine. A single counterexample kills each. Can you build a machine that always halts? One that never does?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam12">
+    <li><span class="stepno">1</span> <b>A is true.</b> Trivial example: a machine whose start state immediately transitions to halt whatever it reads. It halts on every input.</li>
+    <li><span class="stepno">2</span> <b>B is false</b> — contradicted directly by that same machine.</li>
+    <li><span class="stepno">3</span> <b>C is false</b> — same counterexample again. Plenty of machines halt on everything.</li>
+    <li><span class="stepno">4</span> <b>D is false.</b> A machine whose only transition is "write blank, move right, stay in the same state" runs forever on <em>every</em> input, halting on none.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: A.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam12">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The distinction being tested</span>
+    <p>The Halting Problem says <b>no single algorithm can decide, for every machine and input, whether it halts</b>. It emphatically does <em>not</em> say individual machines have unpredictable behaviour. Options B–D confuse the two.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Exam focus" data-menu="Second question">
+  <h2>Proving a computer is as powerful as a Turing machine</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section A Q17</p>
+  <div class="chooser frag">
+    <p class="ch-tag">To show a computer is <em>Turing-complete</em>, you would <span class="ch-clue">— do which?</span></p>
+    <div class="opts">
+      <div class="opt correct"><b>A</b><span>show the computer can emulate a Turing machine</span></div>
+      <div class="opt"><b>B</b><span>show a Turing machine can emulate the computer</span></div>
+      <div class="opt"><b>C</b><span>show the computer can solve NP-complete problems</span></div>
+      <div class="opt"><b>D</b><span>show the computer can solve problems in both P and NP-complete</span></div>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Reasoning</span>
+    <p>Turing-complete means "at least as powerful as a Turing machine". You establish that by showing the computer can do everything a Turing machine can — i.e. <b>emulate</b> it. Option B has the direction backwards; C and D are about tractability, an unrelated axis.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — two axes again</h2>
+  <p>Options C and D in that question are not merely wrong; they are wrong in an instructive way.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Computability</th><th>Complexity</th></tr>
+    <tr><td>Asks</td><td>can it be computed <em>at all</em>?</td><td>can it be computed <em>quickly</em>?</td></tr>
+    <tr><td>Model</td><td>Turing machine</td><td>polynomial time, P and NP</td></tr>
+    <tr><td>Key result</td><td>the Halting Problem is undecidable</td><td>P vs NP is open</td></tr>
+    <tr><td>Turing-completeness lives here</td><td><b>yes</b></td><td>no</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Why it matters</span>
+    <p>Turing-completeness says nothing about speed. A Turing machine is spectacularly slow and perfectly universal. Being able to solve NP-complete problems is a claim about <em>efficiency</em>, and belongs in the other column entirely.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Name the four components of a Turing machine, and say which corresponds to a program.</p>
+      <p class="a"><b>Tape</b> (infinite memory), <b>head</b> (reads, writes, moves one cell), <b>state register</b> (current state from a finite set), and <b>transition table</b>. The <b>transition table</b> is the program — it fully determines the machine's behaviour.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why did Turing invent this machine?</p>
+      <p class="a">To make "definite procedure" mathematically precise, so that Hilbert's Entscheidungsproblem could be settled. Proving that <em>no</em> algorithm solves a problem requires a formal definition of what an algorithm is — the machine supplies it.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">A student says Turing machines can only run very simple algorithms. Correct them.</p>
+      <p class="a">The machine's <em>architecture</em> is simple, but its <em>capability</em> is not limited: anything computable by any computer is computable by a Turing machine. A universal Turing machine can even simulate any other machine given its description. Simplicity of mechanism was chosen for provability, not to restrict power.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Trace: state B, head reads 0, using the table on the earlier slide. What happens?</p>
+      <p class="a">The cell for (B, 0) says <b>0, left, B</b> — write 0 (leaving the cell unchanged), move the head one place left, and remain in state B. This is a scanning loop: the machine walks left over 0s without altering them.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T12 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w07.html">Interactive workbook</a></b> — Part C is a Turing machine simulator. Enter the table from this deck, run it, and watch the head move; the challenge is to build a binary +1 machine.</li>
+    <li><b>Problem Set — Week 4, Section 1</b>: tracing tables, writing small machines, and the Hilbert–Gödel–Turing chronology.</li>
+    <li><b>Next topic:</b> the Halting Problem — the thing Turing built this machine to prove.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>A Turing machine is tape, head, state and transition table — a deliberately simple model that captures everything computable, invented so that impossibility could be proved.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Which component of a Turing machine is the program?</li>
+      <li>Build a machine that halts on every input. What is its table?</li>
+      <li>What does Turing-complete mean, and what does it <em>not</em> claim?</li>
+    </ol>
+    <p class="start-hint">Topic 13 — the Halting Problem and undecidability.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 12 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

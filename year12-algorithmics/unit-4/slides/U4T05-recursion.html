@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 5 — Call Graphs and Recursion</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 5 · Call Graphs and Recursion</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Call Graphs and Recursion</h1>
+  <p>Unit 4 AOS1 · Topic 5 of 6 — turning a recursive shape into an equation</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T5 · Call graphs" data-menu="Why a new tool">
+  <h2>Why loops-and-bodies isn't enough</h2>
+  <p class="lede">Topic 3's method assumed you could see how many times each loop runs. A recursive algorithm has no loop to look at.</p>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Where does the work go?</span>
+    <p class="small"><code>Algorithm F(n):</code><br><code>&nbsp;&nbsp;If n &le; 1 Do Return 1</code><br><code>&nbsp;&nbsp;Return F(n-1) + F(n-2)</code></p>
+  </div>
+  <ul class="small">
+    <li>Each call does \(O(1)\) of its own work — one comparison, one addition.</li>
+    <li>But it spawns two more calls, which each spawn two more…</li>
+    <li>The cost is not in any one call. It is in <b>how many calls happen</b>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The new question</span>
+    <p>For recursion, complexity analysis becomes: <em>how many calls are made, and what does each cost?</em> The call graph answers the first.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Call graphs" data-menu="What a call graph is">
+  <h2>A call graph shows who calls whom</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>One node per <b>invocation</b>, labelled with its argument.</li>
+        <li>An edge from a call to each call it makes.</li>
+        <li>The <b>depth</b> is how far the recursion nests before hitting a base case.</li>
+        <li>The <b>total number of nodes</b> is the number of calls — and hence, times the per-call cost, the running time.</li>
+      </ul>
+      <div class="box hint"><span class="lbl">Draw it small</span>
+        <p>Sketch \(n = 4\) or \(5\) by hand. The <em>shape</em> is visible at small \(n\), and the shape is what generalises.</p>
+      </div>
+    </div>
+    <div>
+      <svg viewBox="0 0 250 180" style="width:96%; height:auto;">
+        <g stroke="#94a3b8" stroke-width="1.1">
+          <line x1="125" y1="26" x2="72" y2="66"/><line x1="125" y1="26" x2="178" y2="66"/>
+          <line x1="72" y1="66" x2="40" y2="108"/><line x1="72" y1="66" x2="104" y2="108"/>
+          <line x1="178" y1="66" x2="150" y2="108"/><line x1="178" y1="66" x2="206" y2="108"/>
+          <line x1="40" y1="108" x2="22" y2="150"/><line x1="40" y1="108" x2="60" y2="150"/>
+        </g>
+        <g font-size="10" text-anchor="middle">
+          <circle cx="125" cy="26" r="13" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/><text x="125" y="30">F(5)</text>
+          <circle cx="72" cy="66" r="13" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/><text x="72" y="70">F(4)</text>
+          <circle cx="178" cy="66" r="13" fill="#f4f6fa" stroke="#475569" stroke-width="1.4"/><text x="178" y="70">F(3)</text>
+          <circle cx="40" cy="108" r="13" fill="#f4f6fa" stroke="#475569" stroke-width="1.4"/><text x="40" y="112">F(3)</text>
+          <circle cx="104" cy="108" r="13" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.4"/><text x="104" y="112">F(2)</text>
+          <circle cx="150" cy="108" r="13" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.4"/><text x="150" y="112">F(2)</text>
+          <circle cx="206" cy="108" r="13" fill="#f4f6fa" stroke="#475569" stroke-width="1.4"/><text x="206" y="112">F(1)</text>
+          <circle cx="22" cy="150" r="13" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.4"/><text x="22" y="154">F(2)</text>
+          <circle cx="60" cy="150" r="13" fill="#f4f6fa" stroke="#475569" stroke-width="1.4"/><text x="60" y="154">F(1)</text>
+        </g>
+      </svg>
+      <p class="note" style="text-align:center;">F(3) appears twice, F(2) three times — already.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Two shapes" data-menu="Branching">
+  <h2>Shape 1 — branching recursion explodes</h2>
+  <ul class="small">
+    <li>Naive Fibonacci makes <b>two</b> calls per invocation, each on a problem barely smaller than the original.</li>
+    <li>Level 0 has 1 call, level 1 has 2, level 2 has 4 … the tree roughly doubles each level.</li>
+    <li>Depth is about \(n\), so the number of calls is roughly \(2^n\) — precisely, \(\Theta(\phi^n)\) where \(\phi \approx 1.618\).</li>
+  </ul>
+  <div class="box flag"><span class="lbl">The reason it is catastrophic</span>
+    <p>Not the branching alone — the <b>repeated work</b>. \(F(3)\) is recomputed from scratch every time it appears. At \(n = 40\) that is over 100 million calls to compute 40 numbers.</p>
+  </div>
+  <div class="box key"><span class="lbl">The fix, named</span>
+    <p>Store each result the first time you compute it — <b>memoisation</b>. It collapses \(\Theta(\phi^n)\) to \(\Theta(n)\), because each of the \(n\) subproblems is now solved once. You will meet this again as dynamic programming in AOS2.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Two shapes" data-menu="Halving">
+  <h2>Shape 2 — halving recursion is friendly</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li>Merge sort makes two calls, but each on a problem of <b>half</b> the size.</li>
+        <li>Level 0: one problem of size \(n\). Level 1: two of size \(n/2\). Level 2: four of \(n/4\).</li>
+        <li><b>Work per level stays \(n\)</b> — the pieces get smaller exactly as fast as they get more numerous.</li>
+        <li>Number of levels: \(\log_2 n\), because that is how many halvings reach size 1.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Total</span>
+        <p class="small">\(n\) work per level \(\times\) \(\log_2 n\) levels \(= \Theta(n\log n)\).</p>
+      </div>
+      <div class="box hint"><span class="lbl">The contrast in one line</span>
+        <p>Fibonacci: \(n \to n-1\) and \(n-2\). Merge sort: \(n \to n/2\) twice. <b>Subtracting</b> gives depth \(n\); <b>dividing</b> gives depth \(\log n\). That difference is everything.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · From code to equation" data-menu="Writing a recurrence">
+  <h2>From code to equation</h2>
+  <div class="box defn"><span class="lbl">A recurrence relation</span>
+    <p>An equation defining \(T(n)\) — the cost on input size \(n\) — in terms of \(T\) of smaller sizes, plus the work done outside the recursive calls.</p>
+  </div>
+  <ol class="steps" id="s-recur">
+    <li><span class="stepno">1</span> <b>How many recursive calls?</b> That is the coefficient \(a\).</li>
+    <li><span class="stepno">2</span> <b>On what size?</b> \(n/b\) if divided, \(n-k\) if reduced.</li>
+    <li><span class="stepno">3</span> <b>What non-recursive work?</b> The splitting, combining, looping — call it \(f(n)\).</li>
+    <li><span class="stepno">4</span> <b>Assemble:</b> \(T(n) = a\,T(n/b) + f(n)\), plus a base case \(T(1) = O(1)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-recur">Four steps</button>
+  <div class="box flag"><span class="lbl">Never omit the base case</span>
+    <p>A recurrence without one defines nothing. Exam questions have asked directly for the missing base case of a described process.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · From code to equation" data-menu="Worked: merge sort">
+  <h2>Worked example — merge sort's recurrence</h2>
+  <div class="cols">
+    <div>
+      <div class="box example" style="margin-top:0;"><span class="lbl">Algorithm</span>
+        <p class="small"><code>Algorithm mergeSort(L):</code><br>
+        <code>&nbsp;&nbsp;If |L| &le; 1 Do Return L</code><br>
+        <code>&nbsp;&nbsp;split L into A, B at the midpoint</code><br>
+        <code>&nbsp;&nbsp;A &larr; mergeSort(A)</code><br>
+        <code>&nbsp;&nbsp;B &larr; mergeSort(B)</code><br>
+        <code>&nbsp;&nbsp;Return merge(A, B)</code></p>
+      </div>
+    </div>
+    <div>
+      <ol class="steps" id="s-ms">
+        <li><span class="stepno">1</span> <b>Calls:</b> two &rarr; \(a = 2\).</li>
+        <li><span class="stepno">2</span> <b>Size:</b> half each &rarr; \(b = 2\).</li>
+        <li><span class="stepno">3</span> <b>Other work:</b> the split is \(O(n)\) and <code>merge</code> compares each element once, \(O(n)\). So \(f(n) = O(n)\).</li>
+        <li><span class="stepno">4</span> <b>Base case:</b> \(|L| \le 1\), cost \(O(1)\).</li>
+        <li class="ans"><span class="stepno">✓</span> \(T(n) = 2T(n/2) + O(n)\), \(\;T(1) = O(1)\).</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-ms">Derive it</button>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Justifying \(f(n)\) is where marks live</span>
+    <p>"The merge is \(O(n)\) <em>because each of the \(n\) elements is placed into the output exactly once</em>." The clause after "because" is the mark.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T5 · Exam focus" data-menu="Exam question">
+  <h2>Explain why the recurrence takes this form</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q7b(i)</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (1 mark)</span>
+    <p class="small">A sorting machine organises a bag of \(n\) balls by diameter. It reads each ball's diameter in constant time and distributes the balls into three bags, then organises each bag by the same process.</p>
+    <p class="small">Assume that each time the machine distributes balls it produces three bags holding a similar number of balls. Let \(S(n)\) be the time complexity of organising a bag of \(n\) balls.</p>
+    <p class="small"><b>Explain why \(S(n) = 3S(n/3) + O(n)\) for \(n > 1\).</b></p>
+  </div>
+  <div class="box try"><span class="lbl">Before you read on</span>
+    <p>Three numbers appear in that equation. Account for each one separately — that is the structure of the answer.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam5">
+    <li><span class="stepno">1</span> <b>The 3 in front:</b> the machine produces three bags and organises <em>each</em> of them, so the recursive process happens three times.</li>
+    <li><span class="stepno">2</span> <b>The \(n/3\) inside:</b> we are told the three bags hold a similar number of balls, so each holds about \(n/3\) of them.</li>
+    <li><span class="stepno">3</span> <b>The \(O(n)\) term:</b> to distribute the balls, the machine reads every ball's diameter once. Each read is constant time and there are \(n\) balls, so distributing costs \(O(n)\) — and this work is outside the recursion.</li>
+    <li class="ans"><span class="stepno">✓</span> Adding the recursive cost to the distribution cost gives \(S(n) = 3S(n/3) + O(n)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam5">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The shape of a 1-mark "explain" answer</span>
+    <p>One sentence per component, each tying a number in the equation to a physical fact in the scenario. Restating the equation in words earns nothing.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Exam focus" data-menu="The contrast case">
+  <h2>The contrast — when the bags don't split evenly</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q7c(i)</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (1 mark)</span>
+    <p class="small">Now consider the case where every distribution puts <b>all</b> the balls into a single bag, apart from the two used as reference points. Let \(T(n)\) be the time complexity in this case.</p>
+    <p class="small">Explain why \(T(n) = T(n-2) + O(n)\) for \(n > 1\).</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">Only <b>one</b> bag needs organising, so there is a single recursive call — hence the coefficient 1. That bag holds all but the two reference balls, so its size is \(n - 2\), not \(n/3\). The distribution step still reads every ball once, so the non-recursive work remains \(O(n)\).</p>
+  </div>
+  <div class="box flag"><span class="lbl">Why this pairing is set</span>
+    <p>Same machine, same code — a different <em>input</em> produces a completely different recurrence. This is the best/worst-case distinction from Topic 2, now in recursive form.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — read the recurrence's shape</h2>
+  <p>Before solving anything, you can predict the answer from the form alone.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Form</th><th>Depth</th><th>Reason</th><th>Typical result</th></tr>
+    <tr><td>\(T(n/b) + \ldots\)</td><td>\(\log_b n\)</td><td>dividing shrinks fast</td><td>\(\log n\), \(n\), \(n\log n\)</td></tr>
+    <tr><td>\(T(n-k) + \ldots\)</td><td>\(n/k\)</td><td>subtracting shrinks slowly</td><td>\(n\), \(n^2\)</td></tr>
+    <tr><td>\(2T(n-1) + \ldots\)</td><td>\(n\)</td><td>branching <em>and</em> subtracting</td><td>\(2^n\)</td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>\(T(n) = T(n-2) + O(n)\): depth \(n/2\), each level costing up to \(O(n)\) &rarr; \(O(n^2)\).</li>
+    <li>\(S(n) = 3S(n/3) + O(n)\): depth \(\log_3 n\), \(O(n)\) work per level &rarr; \(O(n\log n)\).</li>
+  </ul>
+  <div class="box hint"><span class="lbl">A useful sanity check</span>
+    <p>If your solved answer disagrees with the shape prediction, you have made an arithmetic slip. Topic 6 makes both of these precise.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Write the recurrence for binary search on a sorted list of length \(n\).</p>
+      <p class="a"><b>\(T(n) = T(n/2) + O(1)\)</b>, with \(T(1) = O(1)\). One recursive call (we discard half and recurse on the other), on half the size, with constant work to compare against the midpoint.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is naive Fibonacci exponential when it only makes two calls, the same as merge sort?</p>
+      <p class="a">Because of how the size shrinks. Merge sort halves (\(n \to n/2\)), giving depth \(\log n\); Fibonacci subtracts (\(n \to n-1\)), giving depth \(n\). Two branches over depth \(n\) is \(2^n\) nodes; two branches over depth \(\log n\) is only \(n\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">What does memoisation change about the call graph?</p>
+      <p class="a">It collapses repeated subtrees. Each distinct argument is computed once and stored; later calls with the same argument return immediately. The graph goes from an exponentially large tree to one node per distinct subproblem — \(\Theta(n)\) for Fibonacci.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">An algorithm makes 4 recursive calls on inputs of size \(n/2\), with \(O(n^2)\) work outside. Recurrence?</p>
+      <p class="a"><b>\(T(n) = 4T(n/2) + O(n^2)\).</b> Read straight off: \(a = 4\) calls, \(b = 2\) division factor, \(f(n) = n^2\) non-recursive work. Topic 6 will show this one solves to \(\Theta(n^2\log n)\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T5 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w03.html">Interactive workbook</a></b> — the call-tree visualiser draws these graphs for any \(n\); watch Fibonacci explode and merge sort stay tame.</li>
+    <li><b>Problem Set — Week 1, Section 5</b>: writing recurrences from described processes, including two with uneven splits.</li>
+    <li><b>Next topic:</b> solving these equations — expansion, and the Master Theorem.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Read the recurrence off the code — how many calls, on what size, plus what other work — and justify each of the three parts separately.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Write \(T(n) = a\,T(n/b) + f(n)\) and say what each symbol means.</li>
+      <li>Why does dividing give depth \(\log n\) but subtracting give depth \(n\)?</li>
+      <li>What is the base case of your recurrence, and why must it be stated?</li>
+    </ol>
+    <p class="start-hint">Topic 6 — recurrences and the Master Theorem.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 5 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

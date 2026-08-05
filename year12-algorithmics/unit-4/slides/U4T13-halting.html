@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 13 — The Halting Problem and Undecidability</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 13 · The Halting Problem</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>The Halting Problem and Undecidability</h1>
+  <p>Unit 4 AOS3 · Topic 13 of 17 — a problem provably no algorithm can solve</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T13 · Definitions" data-menu="Decidable">
+  <h2>Decidable and undecidable</h2>
+  <div class="box defn"><span class="lbl">Decidable</span>
+    <p>A decision problem is <b>decidable</b> if there exists an algorithm that, for <b>every</b> instance, halts and returns the correct yes/no answer.</p>
+  </div>
+  <div class="box defn"><span class="lbl">Undecidable</span>
+    <p>A decision problem is <b>undecidable</b> if no such algorithm exists.</p>
+  </div>
+  <ul class="small">
+    <li>Note the two requirements on the algorithm: it must <b>always halt</b>, and it must be <b>always correct</b>. Failing either disqualifies it.</li>
+    <li>Undecidable is not "hard". It is not "we haven't found the algorithm yet". It is a proof that none can exist.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">The word that carries the meaning</span>
+    <p><b>Every.</b> Undecidability is about the absence of a single algorithm that works for all instances — not about individual instances being unsolvable.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Definitions" data-menu="The common error">
+  <h2>The error almost everyone makes</h2>
+  <div class="cols">
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Wrong</span>
+        <p class="small">"An undecidable problem is one where no instance can be solved."</p>
+      </div>
+    </div>
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">Right</span>
+        <p class="small">"An undecidable problem is one for which no single algorithm correctly decides <em>every</em> instance."</p>
+      </div>
+    </div>
+  </div>
+  <ul class="small">
+    <li>Plenty of individual halting questions are easy. <code>While True Do nothing</code> obviously never halts; <code>Return 1</code> obviously does.</li>
+    <li>Many instances are decidable by inspection, by analysis, or by simply running the program and watching it stop.</li>
+    <li>What cannot exist is a <b>uniform procedure</b> that settles all of them.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Say it this way</span>
+    <p><em>"There exist algorithms that solve many instances of an undecidable problem — what is impossible is one algorithm that solves them all."</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · The problem" data-menu="Stating it">
+  <h2>Stating the Halting Problem</h2>
+  <div class="box defn"><span class="lbl">The Halting Problem</span>
+    <p><b>Input:</b> a description of a program \(P\), and an input \(x\).<br>
+    <b>Question:</b> does \(P\) halt when run on \(x\)?<br>
+    <b>Turing's result (1936):</b> no algorithm decides this for all \((P, x)\).</p>
+  </div>
+  <ul class="small">
+    <li>It is a <b>decision problem</b> — the answer is yes or no.</li>
+    <li>The input is a <em>program</em>, which is just data. That self-reference is what makes the proof possible.</li>
+    <li>"Just run it and see" fails: if it hasn't stopped after an hour, you cannot tell whether it never will, or needs another minute.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Why not just wait longer</span>
+    <p>Waiting can confirm halting, but never confirm non-halting. A decision procedure must halt with an answer in both cases.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · The proof" data-menu="The proof">
+  <h2>The proof, in five moves</h2>
+  <ol class="steps" id="s-proof13">
+    <li><span class="stepno">1</span> <b>Assume</b> such an algorithm exists. Call it \(H(P, x)\): it always halts, returning "halts" or "loops".</li>
+    <li><span class="stepno">2</span> <b>Construct</b> a new program \(D\) taking one input \(P\): run \(H(P, P)\); if it says "halts", enter an infinite loop; if it says "loops", halt immediately.</li>
+    <li><span class="stepno">3</span> <b>Ask the fatal question:</b> what does \(D\) do when run on <em>itself</em> — \(D(D)\)?</li>
+    <li><span class="stepno">4</span> <b>Case analysis.</b> If \(D(D)\) halts, then \(H\) said "halts", so by construction \(D\) loops — contradiction. If \(D(D)\) loops, then \(H\) said "loops", so \(D\) halts — contradiction.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Conclusion:</b> both cases are impossible, so the assumption fails. No such \(H\) exists.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-proof13">Build the proof</button>
+  <div class="box key"><span class="lbl">The structure has a name</span>
+    <p>Proof by <b>contradiction</b>, using <b>self-reference</b> — feeding the program its own description. Diagonalisation, the same device Gödel used.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · The proof" data-menu="Why D exists">
+  <h2>Why \(D\) is a legitimate program</h2>
+  <p>The step students query is move 2 — surely \(D\) is a cheat?</p>
+  <ul class="small">
+    <li>\(D\) is built entirely from things we assumed available: a call to \(H\), an <code>if</code>, an infinite loop, and a halt. Nothing exotic.</li>
+    <li>Feeding a program its own description is unremarkable — a compiler compiles itself; a text editor edits its own source. Programs are data.</li>
+    <li>So if \(H\) existed, \(D\) would too. Since \(D\) cannot exist, neither can \(H\).</li>
+  </ul>
+  <div class="box hint"><span class="lbl">The everyday version</span>
+    <p>"This sentence is false." Not a linguistic trick — the same self-referential structure, which is why no consistent truth-value can be assigned.</p>
+  </div>
+  <div class="box flag"><span class="lbl">Common misstatement</span>
+    <p>The proof does <b>not</b> show that \(D\) is a badly-behaved program. It shows that the <em>assumption</em> that \(H\) exists is what produces the contradiction. \(H\) is the culprit.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Consequences" data-menu="Consequences">
+  <h2>What follows</h2>
+  <ul class="small">
+    <li><b>The Entscheidungsproblem is answered — negatively.</b> No mechanical procedure decides the provability of every mathematical statement.</li>
+    <li><b>Perfect program verification is impossible.</b> No tool can decide, for every program, whether it terminates, or whether it contains an infinite loop.</li>
+    <li><b>Many related problems inherit undecidability</b> by reduction: does this program ever output 5? Are these two programs equivalent? Does this code ever reach line 12?</li>
+    <li><b>But useful tools still exist.</b> Static analysers, type checkers and linters work on large classes of realistic programs — they simply cannot be complete and always-correct on all of them.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The honest summary</span>
+    <p>Undecidability rules out a <em>universal, always-correct</em> tool. It does not rule out tools that are correct when they answer and sometimes say "don't know".</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T13 · Exam focus" data-menu="Exam question">
+  <h2>Which statement is incorrect?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q17</p>
+  <div class="chooser frag">
+    <p class="ch-tag">One of these about undecidable problems is false <span class="ch-clue">— which?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>undecidable problems are decision problems</span></div>
+      <div class="opt correct"><b>B</b><span>no instance of an undecidable problem can ever be solved</span></div>
+      <div class="opt"><b>C</b><span>there exist algorithms that solve many instances of an undecidable problem</span></div>
+      <div class="opt"><b>D</b><span>there is no algorithm that correctly solves every instance of an undecidable problem</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Before you look</span>
+    <p>Options B and C directly contradict each other, so exactly one is false. Which one matches the definition?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam13">
+    <li><span class="stepno">1</span> <b>A is true</b> — decidability is defined for yes/no problems, so undecidable problems are by definition decision problems.</li>
+    <li><span class="stepno">2</span> <b>D is true</b> — that is precisely the definition of undecidable.</li>
+    <li><span class="stepno">3</span> <b>C is true</b> — many individual instances are easy. <code>While True Do nothing</code> plainly never halts, and we can say so.</li>
+    <li><span class="stepno">4</span> <b>B is false</b>, and is the misconception this whole topic exists to remove. Individual instances are frequently solvable; what fails is a <em>uniform</em> algorithm.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: B.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam13">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">C and D together are the definition</span>
+    <p>They are not in tension. <b>Many</b> instances are solvable (C); <b>not all</b> by one algorithm (D). Holding both at once is the understanding being tested.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Exam focus" data-menu="Second question">
+  <h2>Correct the student's explanation</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section B Q11a</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A student explains: <em>"An undecidable problem is one where there is no instance of the problem that can be solved."</em></p>
+    <p class="small">Discuss why this explanation is incorrect, and provide an improved explanation of what an undecidable problem is.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small"><b>Why it is incorrect:</b> it misplaces the quantifier. Undecidability is a claim about the non-existence of a general <em>algorithm</em>, not about the unsolvability of individual instances. Many instances of an undecidable problem can be solved — for the Halting Problem, we can readily see that <code>While True Do nothing</code> does not halt, and that a program with no loops does.</p>
+    <p class="small"><b>Improved explanation:</b> a problem is undecidable if there is no algorithm that, for every possible instance, halts and returns the correct answer. Individual instances may well be decidable by inspection or by special-case reasoning; what cannot exist is a single procedure that settles them all.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — the quantifier is the whole idea</h2>
+  <p>Both exam questions on this topic test the same thing: where the word "every" sits.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Statement</th><th>Meaning</th><th>True?</th></tr>
+    <tr><td>There is no algorithm that solves <b>every</b> instance</td><td>the definition of undecidable</td><td><b>yes</b></td></tr>
+    <tr><td>For <b>every</b> instance there is no algorithm that solves it</td><td>every instance individually unsolvable</td><td><b>no</b></td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>The two sentences use identical words. Swapping the order of "there is no algorithm" and "every instance" reverses the meaning completely.</li>
+    <li>The first says one thing about the collection. The second says something about each member.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">A phrase that keeps you safe</span>
+    <p>Begin every answer with <em>"there is no <b>single</b> algorithm that…"</em>. The word <b>single</b> forces the quantifier into the right place.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State the Halting Problem precisely: input, question, result.</p>
+      <p class="a"><b>Input:</b> a description of a program \(P\) and an input \(x\). <b>Question:</b> does \(P\) halt when run on \(x\)? <b>Result:</b> Turing proved (1936) that no algorithm decides this correctly for all pairs \((P, x)\) — the problem is undecidable.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Outline the proof in five moves.</p>
+      <p class="a">(1) <b>Assume</b> a decider \(H(P,x)\) exists. (2) <b>Construct</b> \(D(P)\): run \(H(P,P)\), loop if it says "halts", halt if it says "loops". (3) <b>Ask</b> what \(D(D)\) does. (4) <b>Both cases contradict</b>: halting implies looping and vice versa. (5) <b>Conclude</b> \(H\) cannot exist.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Is an undecidable problem also intractable? Is an intractable problem undecidable?</p>
+      <p class="a">Undecidable problems have no algorithm at all, so the question of speed does not arise — they sit outside the tractable/intractable distinction, which applies to decidable problems. Intractable problems are <b>decidable</b>: an algorithm exists, it is merely too slow. So neither implies the other.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why can't a debugger warn you about every infinite loop?</p>
+      <p class="a">Doing so would decide the Halting Problem, which is impossible. Real tools detect common loop patterns and report those, staying silent or saying "unknown" elsewhere — correct when they answer, but necessarily incomplete.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T13 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w08.html">Interactive workbook</a></b> — halting-style puzzles, plus Part A which asks you to reconstruct the five-move proof from scratch.</li>
+    <li><b>Problem Set — Week 4, Section 2</b>: quantifier precision, the proof structure, and distinguishing undecidable from intractable.</li>
+    <li><b>Next topic:</b> the Church–Turing thesis, and what the limits of computation really rule out.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Undecidable means no <b>single</b> algorithm decides every instance — not that individual instances are beyond us.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>State the Halting Problem in one sentence.</li>
+      <li>What contradiction does \(D(D)\) produce?</li>
+      <li>Give an instance of the Halting Problem you <em>can</em> solve, and explain why that isn't a contradiction.</li>
+    </ol>
+    <p class="start-hint">Topic 14 — the Church–Turing thesis.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 13 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

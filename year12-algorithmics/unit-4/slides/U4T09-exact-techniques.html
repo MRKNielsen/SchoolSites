@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 9 — Dynamic Programming and Backtracking</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 9 · Dynamic Programming and Backtracking</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Dynamic Programming and Backtracking</h1>
+  <p>Unit 4 AOS2 · Topic 9 of 17 — getting the exact answer, faster</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T9 · Orientation" data-menu="Two escapes">
+  <h2>Two escapes that keep the exact answer</h2>
+  <p class="lede">Topic 7 said hard problems need a change of plan. There are two kinds of plan.</p>
+  <ul>
+    <li><b>Exact techniques</b> — still guarantee the optimal answer, but avoid re-doing work or exploring hopeless branches. <em>This topic.</em></li>
+    <li><b>Heuristics</b> — give up the guarantee in exchange for speed. <em>Topics 10–11.</em></li>
+  </ul>
+  <div class="box key"><span class="lbl">Be precise about what is gained</span>
+    <p>Dynamic programming and backtracking often turn "impossible" into "feasible for realistic \(n\)". They do <b>not</b> make NP-complete problems tractable in the formal sense — the worst case is still exponential.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · DP" data-menu="DP idea">
+  <h2>Dynamic programming — never solve the same subproblem twice</h2>
+  <div class="box defn"><span class="lbl">The technique</span>
+    <p>Break the problem into overlapping subproblems, solve each <b>once</b>, store the result, and build larger answers from stored smaller ones.</p>
+  </div>
+  <ul class="small">
+    <li><b>Top-down (memoisation):</b> write the natural recursion, but check a cache before recomputing.</li>
+    <li><b>Bottom-up (tabulation):</b> fill a table from the smallest subproblem upward, so every value you need is already there.</li>
+    <li>Same results, same complexity. Bottom-up avoids deep recursion; top-down only computes what it actually needs.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">You have already seen this</span>
+    <p>Topic 5's memoised Fibonacci is dynamic programming: \(\Theta(\phi^n)\) collapses to \(\Theta(n)\) because each of the \(n\) subproblems is solved once.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · DP" data-menu="When DP applies">
+  <h2>When dynamic programming applies</h2>
+  <div class="box defn"><span class="lbl">Two required properties</span>
+    <p><b>Optimal substructure</b> — an optimal solution is built from optimal solutions to subproblems.<br>
+    <b>Overlapping subproblems</b> — the same subproblems recur many times.</p>
+  </div>
+  <ul class="small">
+    <li>Miss <b>overlapping</b> and there is nothing to cache — merge sort's subproblems are all distinct, so DP buys nothing.</li>
+    <li>Miss <b>optimal substructure</b> and the technique is invalid, not merely useless: combining optimal parts would not give an optimal whole.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">A counterexample worth knowing</span>
+    <p>Longest <em>simple</em> path in a graph has no optimal substructure — gluing two longest paths can revisit a node, breaking simplicity. DP does not apply.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · DP" data-menu="Worked: coins">
+  <h2>Worked example — making change</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">Problem</span>
+    <p class="small">Denominations {1, 4, 6}. Make 8 using the <b>fewest</b> coins.</p>
+  </div>
+  <ol class="steps" id="s-dp">
+    <li><span class="stepno">1</span> <b>Subproblem:</b> \(C(v)\) = fewest coins to make value \(v\). Base: \(C(0) = 0\).</li>
+    <li><span class="stepno">2</span> <b>Recurrence:</b> \(C(v) = 1 + \min\{\,C(v - d)\;:\; d \in \{1,4,6\},\, d \le v\,\}\).</li>
+    <li><span class="stepno">3</span> <b>Fill upward:</b> \(C(1){=}1,\; C(2){=}2,\; C(3){=}3,\; C(4){=}1,\; C(5){=}2,\; C(6){=}1,\; C(7){=}2\).</li>
+    <li><span class="stepno">4</span> <b>Then \(C(8)\):</b> \(1 + \min(C(7), C(4), C(2)) = 1 + \min(2, 1, 2) = 2\).</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Two coins: 4 + 4.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-dp">Fill the table</button>
+  <div class="box key"><span class="lbl">Why greedy fails here</span>
+    <p>Greedy takes the largest coin first: 6, then 1, then 1 — <b>three</b> coins. The denominations {1,4,6} are chosen precisely so greed is wrong. Topic 10 explores when greed <em>is</em> safe.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Backtracking" data-menu="Backtracking">
+  <h2>Backtracking — abandon a branch early</h2>
+  <div class="box defn"><span class="lbl">The technique</span>
+    <p>Build a candidate solution one decision at a time. Whenever a partial candidate cannot possibly be completed into a valid or better solution, <b>abandon it immediately</b> and step back.</p>
+  </div>
+  <ul class="small">
+    <li>The search space is a tree of partial decisions. Backtracking <b>prunes</b> whole subtrees without visiting them.</li>
+    <li>It remains an exhaustive search — every solution not pruned is still explored, so the answer is exact.</li>
+    <li>Worst case is unchanged: if nothing can be pruned, you visit everything.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">The everyday version</span>
+    <p>Sudoku. Enter a digit; if a row or column is now impossible, rub it out and try the next — rather than filling all 81 squares and only then checking.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Backtracking" data-menu="Worked: n-queens">
+  <h2>Worked example — placing queens</h2>
+  <div class="cols">
+    <div>
+      <ol class="steps" id="s-bt">
+        <li><span class="stepno">1</span> <b>Decisions:</b> one queen per column, choosing its row.</li>
+        <li><span class="stepno">2</span> <b>Brute force:</b> \(8^8 \approx 16.7\) million placements to check.</li>
+        <li><span class="stepno">3</span> <b>The pruning test:</b> after placing each queen, check it against those already placed. If it is attacked, abandon <em>every</em> arrangement extending this prefix.</li>
+        <li><span class="stepno">4</span> <b>Effect:</b> rejecting a bad queen in column 2 removes \(8^6\) arrangements — over a quarter of a million — at the cost of one test.</li>
+        <li class="ans"><span class="stepno">✓</span> Same exact answer, a tiny fraction of the work.</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-bt">Step through</button>
+    </div>
+    <div>
+      <svg viewBox="0 0 200 190" style="width:92%; height:auto;">
+        <g stroke="#94a3b8" stroke-width="1">
+          <line x1="100" y1="22" x2="45" y2="62"/><line x1="100" y1="22" x2="100" y2="62"/><line x1="100" y1="22" x2="155" y2="62"/>
+          <line x1="45" y1="62" x2="22" y2="106"/><line x1="45" y1="62" x2="66" y2="106"/>
+          <line x1="155" y1="62" x2="134" y2="106"/><line x1="155" y1="62" x2="178" y2="106"/>
+          <line x1="22" y1="106" x2="10" y2="150"/><line x1="22" y1="106" x2="36" y2="150"/>
+        </g>
+        <circle cx="100" cy="22" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="45" cy="62" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="100" cy="62" r="11" fill="#fbf1f3" stroke="#8b1f34" stroke-width="2"/>
+        <circle cx="155" cy="62" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="22" cy="106" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="66" cy="106" r="11" fill="#fbf1f3" stroke="#8b1f34" stroke-width="2"/>
+        <circle cx="134" cy="106" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="178" cy="106" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="10" cy="150" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <circle cx="36" cy="150" r="11" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.6"/>
+        <text x="100" y="180" font-size="9" fill="#8b1f34" text-anchor="middle">red = pruned, subtree never built</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Compare" data-menu="DP vs backtracking">
+  <h2>Comparing the two</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Dynamic programming</th><th>Backtracking</th></tr>
+    <tr><td>What it exploits</td><td>repeated subproblems</td><td>partial candidates that cannot succeed</td></tr>
+    <tr><td>The saving</td><td>compute each subproblem once</td><td>never visit a doomed subtree</td></tr>
+    <tr><td>Extra cost</td><td>memory for the table</td><td>the pruning test itself</td></tr>
+    <tr><td>Optimal answer?</td><td>yes</td><td>yes</td></tr>
+    <tr><td>Needs</td><td>optimal substructure + overlap</td><td>a cheap, sound feasibility test</td></tr>
+    <tr><td>Typical use</td><td>knapsack, change-making, edit distance</td><td>\(n\)-queens, Sudoku, constraint puzzles</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">"Sound" is doing work in that table</span>
+    <p>A pruning test must never discard a branch that <em>could</em> contain the optimum. An over-eager test turns an exact method into a heuristic without telling you.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T9 · Exam focus" data-menu="Exam question">
+  <h2>Why does backtracking miss nothing?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q6b</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A student uses a backtracking algorithm that abandons a branch whenever it reaches a partial arrangement that already violates a constraint. She observes that many complete arrangements are never generated at all, because the algorithm backtracks before reaching them.</p>
+    <p class="small">Explain why the algorithm still finds the optimal solution despite not generating those arrangements.</p>
+  </div>
+  <div class="box try"><span class="lbl">Frame your answer</span>
+    <p>The claim to establish is precise: the arrangements skipped were <em>guaranteed</em> not to be optimal. Why guaranteed?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam9">
+    <li><span class="stepno">1</span> <b>What the pruning test establishes.</b> When a partial arrangement violates a constraint, <em>every</em> completion of it inherits that violation — extending a candidate never removes a constraint already broken.</li>
+    <li><span class="stepno">2</span> <b>So the skipped arrangements are all invalid.</b> They were not merely unpromising; they could not have been solutions at all.</li>
+    <li><span class="stepno">3</span> <b>Therefore nothing optimal is lost.</b> The optimum lies among the valid arrangements, and every valid arrangement still lies on an unpruned branch.</li>
+    <li class="ans"><span class="stepno">✓</span> The search remains exhaustive <em>over the feasible region</em> — it simply declines to enumerate the infeasible part.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam9">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The sentence that earns the third mark</span>
+    <p><em>"Once a constraint is violated, no extension of that partial solution can satisfy it — so the entire subtree is infeasible and can be discarded without checking."</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — pruning is not always safe</h2>
+  <p>The argument above worked because the test was about <b>feasibility</b>. Pruning on <b>quality</b> needs more care.</p>
+  <div class="cols">
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">Sound</span>
+        <p class="small">"This partial tour already exceeds the best complete tour found so far." Edge weights are non-negative, so extending it can only make it longer. Safe to prune.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Unsound</span>
+        <p class="small">"This partial tour looks longer than average, so abandon it." A bad prefix can still lead to the best complete tour. Pruning here <b>can lose the optimum</b>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The dividing line</span>
+    <p>Prune only when you can prove <em>no completion of this prefix beats what we already have</em>. That proof is what separates branch-and-bound (exact) from a heuristic (not).</p>
+  </div>
+  <div class="box hint"><span class="lbl">Connects forward</span>
+    <p>Deliberately unsound pruning, done well, is exactly what Topics 10–11 are about — trading the guarantee for speed, <em>knowingly</em>.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State the two properties a problem needs for dynamic programming, and what goes wrong if each is missing.</p>
+      <p class="a"><b>Optimal substructure</b> — without it, combining optimal subsolutions gives a wrong answer, so the method is invalid. <b>Overlapping subproblems</b> — without it, nothing is ever reused, so caching adds memory cost for no speed gain (merge sort is the standard example).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">With coins {1, 4, 6}, why does greedy fail to make 8 optimally?</p>
+      <p class="a">Greedy takes 6 first, leaving 2, which needs two 1s — three coins total. The optimum is 4 + 4, two coins. Greedy commits to a locally best choice that rules out the globally best combination; DP considers all denominations at every value.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Does backtracking improve the worst-case complexity of an exponential problem?</p>
+      <p class="a"><b>No.</b> If nothing can be pruned, every branch is explored and the cost is the full exponential. Backtracking improves typical performance dramatically but leaves the worst case — and therefore the tractability classification — unchanged.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Distinguish memoisation from tabulation.</p>
+      <p class="a">Both store subproblem results. <b>Memoisation</b> is top-down: keep the natural recursion, consult a cache before recomputing, and only ever compute subproblems actually needed. <b>Tabulation</b> is bottom-up: fill a table from the smallest case, avoiding recursion depth but sometimes computing entries never used.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T9 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w06.html">Interactive workbook</a></b> — compare brute force against pruned search on the same instances and watch the node counts diverge.</li>
+    <li><b>Problem Set — Week 2, Section 3</b>: DP recurrences, greedy counterexamples, and sound vs unsound pruning.</li>
+    <li><b>Next topic:</b> heuristics — what you gain, and exactly what you give up.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Dynamic programming removes repeated work and backtracking removes doomed work — both keep the exact answer, and neither changes the worst case.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Write the change-making recurrence \(C(v)\).</li>
+      <li>Why can a pruned branch be discarded without checking it?</li>
+      <li>Give a pruning test that would be <em>unsound</em>, and say why.</li>
+    </ol>
+    <p class="start-hint">Topic 10 — greedy algorithms and hill climbing.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 9 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

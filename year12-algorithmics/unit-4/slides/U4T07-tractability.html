@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 7 — Tractability, P and NP</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 7 · Tractability, P and NP</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Tractability, P and NP</h1>
+  <p>Unit 4 AOS2 · Topic 7 of 17 — when better analysis stops helping</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T7 · Orientation" data-menu="A different question">
+  <h2>A different kind of question</h2>
+  <p class="lede">AOS1 asked <em>how fast is this algorithm?</em> AOS2 asks <em>how hard is this problem?</em></p>
+  <ul>
+    <li>An <b>algorithm</b> has a complexity. You can improve it by writing a better algorithm.</li>
+    <li>A <b>problem</b> has a difficulty. No amount of cleverness moves it — the difficulty is a property of the task itself.</li>
+    <li>This topic is about classifying problems, not algorithms.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Why it matters practically</span>
+    <p>If a problem is intractable, "just optimise the code" is not a plan. You must change the goal — accept an approximate answer, restrict the inputs, or solve a different problem. That is the whole of AOS2.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Tractability" data-menu="Tractable">
+  <h2>Tractable and intractable</h2>
+  <div class="box defn"><span class="lbl">Tractable</span>
+    <p>A problem is <b>tractable</b> if there exists an algorithm that solves it in <b>polynomial time</b> — \(O(n^k)\) for some constant \(k\).</p>
+  </div>
+  <div class="box defn"><span class="lbl">Intractable</span>
+    <p>A problem is <b>intractable</b> if no polynomial-time algorithm for it exists.</p>
+  </div>
+  <ul class="small">
+    <li>The line is drawn at polynomial versus super-polynomial, not at "fast" versus "slow". \(O(n^{100})\) is technically tractable and hopeless in practice.</li>
+    <li>The reason the line sits there: polynomials are closed under composition and addition, so "polynomial" survives being built into larger algorithms. Exponentials do not.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">Note the quantifier</span>
+    <p>"No polynomial algorithm <b>exists</b>" — not "we haven't found one". That is a claim about all possible algorithms, which is why proving intractability is hard.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Tractability" data-menu="Why exponential kills">
+  <h2>Why exponential growth ends the conversation</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>\(n\)</th><th>\(n^3\)</th><th>\(2^n\)</th><th>\(n!\)</th></tr>
+    <tr><td>10</td><td>1 000</td><td>1 024</td><td>3.6 million</td></tr>
+    <tr><td>20</td><td>8 000</td><td>1 million</td><td>2.4×10<sup>18</sup></td></tr>
+    <tr><td>50</td><td>125 000</td><td>10<sup>15</sup></td><td>3×10<sup>64</sup></td></tr>
+    <tr><td>100</td><td>1 million</td><td>10<sup>30</sup></td><td>9×10<sup>157</sup></td></tr>
+  </table>
+  <div class="box key"><span class="lbl">The argument that settles it</span>
+    <p>Buy a machine <b>1000&times; faster</b>. A cubic algorithm now handles 10&times; the input. An algorithm costing \(2^n\) handles about <b>10 more items</b>. Hardware scales polynomial algorithms; it does not scale exponential ones.</p>
+  </div>
+  <p class="note">At \(n = 100\), \(2^n\) exceeds the estimated number of atoms in the observable universe. This is not an engineering problem.</p>
+</section>
+
+<section class="slide" data-topic="T7 · P and NP" data-menu="Decision problems">
+  <h2>First, restrict to decision problems</h2>
+  <div class="box defn"><span class="lbl">Decision problem</span>
+    <p>A problem whose answer is <b>yes or no</b>.</p>
+  </div>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Optimisation version</th><th>Decision version</th></tr>
+    <tr><td>Find the shortest tour</td><td>Is there a tour of length \(\le k\)?</td></tr>
+    <tr><td>Maximise value packed in the knapsack</td><td>Can value \(\ge k\) be packed?</td></tr>
+    <tr><td>Find the fewest colours to colour the graph</td><td>Can the graph be coloured with \(k\) colours?</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Why bother</span>
+    <p>The classes P and NP are defined for decision problems. The two versions are closely tied: if you could answer the decision version quickly for every \(k\), you could find the optimum by asking repeatedly. So hardness transfers.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · P and NP" data-menu="P">
+  <h2>The class P</h2>
+  <div class="box defn"><span class="lbl">P</span>
+    <p>The set of decision problems that <b>can be solved</b> by an algorithm running in polynomial time.</p>
+  </div>
+  <ul class="small">
+    <li>"Is there a path from \(u\) to \(v\)?" — run BFS. In P.</li>
+    <li>"Is this number even?" — check the last digit. In P.</li>
+    <li>"Does this graph have a spanning tree of weight \(\le k\)?" — run Prim's and compare. In P.</li>
+  </ul>
+  <div class="box key"><span class="lbl">P is the formal version of "tractable"</span>
+    <p>When we say a problem is tractable, we mean it is in P. The two words are used almost interchangeably in this course.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · P and NP" data-menu="NP">
+  <h2>The class NP — the one everyone misstates</h2>
+  <div class="box defn"><span class="lbl">NP</span>
+    <p>The set of decision problems for which a proposed solution <b>can be checked</b> in polynomial time.</p>
+  </div>
+  <div class="box flag"><span class="lbl">NP does not stand for "non-polynomial"</span>
+    <p>It stands for <b>nondeterministic polynomial</b>. Writing "NP means it can't be done in polynomial time" is wrong and is penalised — not least because <b>every problem in P is also in NP</b>.</p>
+  </div>
+  <ul class="small">
+    <li><b>Solving vs checking.</b> Finding a tour shorter than 500 km might take forever; handed one, you add up the edges and compare. That check is polynomial, so the problem is in NP.</li>
+    <li>Think of it as: <em>if a friend hands you the answer, can you verify it quickly?</em></li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="T7 · P and NP" data-menu="The picture">
+  <h2>How the classes sit</h2>
+  <div class="cols">
+    <div>
+      <svg viewBox="0 0 250 175" style="width:96%; height:auto;">
+        <ellipse cx="125" cy="92" rx="118" ry="72" fill="#f0f7f6" stroke="#0e7569" stroke-width="1.8"/>
+        <ellipse cx="88" cy="100" rx="58" ry="42" fill="#f4f6fa" stroke="#475569" stroke-width="1.6"/>
+        <ellipse cx="186" cy="82" rx="42" ry="34" fill="#fbf1f3" stroke="#8b1f34" stroke-width="1.6"/>
+        <text x="125" y="30" font-size="12" text-anchor="middle" fill="#0e7569" font-weight="bold">NP</text>
+        <text x="88" y="104" font-size="12" text-anchor="middle" fill="#334155" font-weight="bold">P</text>
+        <text x="186" y="80" font-size="10" text-anchor="middle" fill="#8b1f34" font-weight="bold">NP-</text>
+        <text x="186" y="92" font-size="10" text-anchor="middle" fill="#8b1f34" font-weight="bold">complete</text>
+      </svg>
+      <p class="note" style="text-align:center;">Drawn assuming P ≠ NP — which nobody has proved.</p>
+    </div>
+    <div>
+      <ul class="small">
+        <li><b>P \(\subseteq\) NP.</b> If you can solve it quickly, you can check it quickly — solve it yourself and compare.</li>
+        <li><b>NP-complete</b> problems sit inside NP and are the hardest members of it.</li>
+        <li><b>NP-hard</b> problems are at least as hard as the NP-complete ones, but need not be in NP at all.</li>
+      </ul>
+      <div class="box hint"><span class="lbl">The open question</span>
+        <p>Is P = NP? If yes, the middle ellipse swallows everything and checking-quickly implies solving-quickly. Almost nobody expects that, but nobody has proved otherwise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T7 · Exam focus" data-menu="Exam question">
+  <h2>Which statement is incorrect?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section A Q19</p>
+  <div class="chooser frag">
+    <p class="ch-tag">One of these four is false <span class="ch-clue">— which?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>NP-complete problems are the hardest problems in NP</span></div>
+      <div class="opt"><b>B</b><span>Every problem in P is also in NP</span></div>
+      <div class="opt"><b>C</b><span>A proposed solution to a problem in NP can be checked in polynomial time</span></div>
+      <div class="opt correct"><b>D</b><span>Every problem in NP is NP-complete</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Think first</span>
+    <p>Three of these are definitions restated. One reverses a containment. Which direction is being flipped?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam7">
+    <li><span class="stepno">1</span> <b>A is true</b> — that is what NP-complete means: in NP, and at least as hard as everything else in NP.</li>
+    <li><span class="stepno">2</span> <b>B is true</b> — if you can solve it in polynomial time you can verify a claimed answer in polynomial time by solving it yourself.</li>
+    <li><span class="stepno">3</span> <b>C is true</b> — that is the definition of NP.</li>
+    <li><span class="stepno">4</span> <b>D is false.</b> NP-complete is a <em>subset</em> of NP, not all of it. Counterexample: "is there a path from \(u\) to \(v\)?" is in P, hence in NP, and is certainly not NP-complete.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: D.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam7">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The technique</span>
+    <p>For "which is incorrect" questions about classes, test each claim by finding a <b>counterexample</b>. One concrete problem that satisfies the claim's premise but not its conclusion settles it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Exam focus" data-menu="Second question">
+  <h2>Correct the student's definition</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section B Q11b</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A student defines intractable problems as follows:</p>
+    <p class="small"><em>"They are problems for which there is no way of checking a solution quickly, and so it is impossible to know whether they are decidable or not."</em></p>
+    <p class="small">Explain why this definition is incorrect, and provide an improved definition of intractable problems.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small"><b>Two errors.</b> First, it confuses <em>solving</em> with <em>checking</em> — many intractable problems (the NP-complete ones) have solutions that <em>can</em> be checked quickly; what is missing is a fast way to <em>find</em> one. Second, intractability and decidability are separate ideas: an intractable problem is still decidable — an algorithm exists, it is simply too slow to be useful.</p>
+    <p class="small"><b>Improved definition:</b> a problem is intractable if no algorithm exists that solves it in polynomial time in the size of its input.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — two axes, not one</h2>
+  <p>The student's error is worth dwelling on, because it is the single most common confusion in AOS2–3.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Decidable</th><th>Undecidable</th></tr>
+    <tr><td><b>Tractable</b></td><td>shortest path, sorting</td><td>— (impossible)</td></tr>
+    <tr><td><b>Intractable</b></td><td>TSP, graph colouring</td><td>the Halting Problem</td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li><b>Decidability</b> asks: does an algorithm exist <em>at all</em>?</li>
+    <li><b>Tractability</b> asks: does a <em>fast</em> one exist?</li>
+    <li>You only get to ask the second question once the answer to the first is yes.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">Say it precisely</span>
+    <p>"TSP is impossible to solve" is wrong — brute force solves it perfectly. It is <em>intractable</em>: solvable in principle, not in practice. Topic 13 handles genuine impossibility.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Define P and NP, and state the relationship between them.</p>
+      <p class="a"><b>P</b>: decision problems solvable in polynomial time. <b>NP</b>: decision problems whose proposed solutions are <em>verifiable</em> in polynomial time. \(P \subseteq NP\), because solving a problem yourself is one way of verifying an answer. Whether the containment is strict is the open P vs NP question.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is the tractable/intractable line drawn at polynomial time?</p>
+      <p class="a">Polynomials are closed under addition and composition, so combining polynomial-time components keeps the whole polynomial — the class is robust. And faster hardware multiplies the feasible input size for a polynomial algorithm, while adding only a constant to it for an exponential one.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give the decision version of "find the minimum number of colours to colour this graph".</p>
+      <p class="a">"Given a graph \(G\) and an integer \(k\), can \(G\) be properly coloured using at most \(k\) colours?" The answer is yes/no, and a proposed colouring can be verified in polynomial time by checking every edge — so the problem is in NP.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">A student writes "NP means non-polynomial". Correct them.</p>
+      <p class="a">NP stands for <b>nondeterministic polynomial</b>, and describes problems whose solutions can be <em>checked</em> in polynomial time. Since every problem in P is also in NP, "non-polynomial" would be self-contradictory — sorting is in NP and is certainly polynomial.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T7 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w05.html">Interactive workbook</a></b> — the crossover explorer and brute-force TSP timer; feel the factorial wall rather than reading about it.</li>
+    <li><b>Problem Set — Week 2, Section 1</b>: classifying problems, decision versions, and correcting flawed definitions.</li>
+    <li><b>Next topic:</b> NP-completeness and reductions — how we know these problems are all the same problem in disguise.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Tractable means a polynomial algorithm exists; NP means a proposed answer can be checked quickly — and checking quickly is not the same as solving quickly.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>What does the N and the P in "NP" actually stand for?</li>
+      <li>Why is every problem in P also in NP?</li>
+      <li>Is the Travelling Salesman Problem impossible to solve? Justify.</li>
+    </ol>
+    <p class="start-hint">Topic 8 — NP-completeness and reductions.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 7 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

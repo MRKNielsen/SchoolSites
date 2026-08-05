@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 4 — Graph Algorithm Complexity</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 4 · Graph Algorithm Complexity</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Graph Algorithm Complexity</h1>
+  <p>Unit 4 AOS1 · Topic 4 of 6 — the Unit 3 algorithms, now with their reasons attached</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T4 · Input size" data-menu="Two numbers">
+  <h2>Input size for graphs: two numbers, not one</h2>
+  <p class="lede">Every complexity claim so far had a single \(n\). Graphs break that.</p>
+  <ul>
+    <li>A graph has \(|V|\) nodes and \(|E|\) edges. Both can vary independently, so bounds are written in terms of both.</li>
+    <li><b>Sparse:</b> \(|E|\) is close to \(|V|\) — a road network, a family tree.</li>
+    <li><b>Dense:</b> \(|E|\) is close to \(|V|^2\) — a fully-connected distance matrix.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The range that matters</span>
+    <p>For a simple connected graph, \(|V| - 1 \le |E| \le \dfrac{|V|(|V|-1)}{2}\). So \(|E|\) can be as small as \(\Theta(|V|)\) or as large as \(\Theta(|V|^2)\) — a whole growth class of difference.</p>
+  </div>
+  <div class="box flag"><span class="lbl">Consequence</span>
+    <p>\(O(|V| + |E|)\) and \(O(|V| \times |E|)\) are wildly different claims. Collapsing both to "\(O(n)\)" throws away the entire question.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Input size" data-menu="Sum vs product">
+  <h2>\(|V| + |E|\) versus \(|V| \times |E|\)</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Graph</th><th>\(|V|\)</th><th>\(|E|\)</th><th>\(|V|+|E|\)</th><th>\(|V| \times |E|\)</th></tr>
+    <tr><td>sparse road network</td><td>1 000</td><td>3 000</td><td>4 000</td><td>3 000 000</td></tr>
+    <tr><td>dense distance matrix</td><td>1 000</td><td>499 500</td><td>500 500</td><td>499 500 000</td></tr>
+  </table>
+  <ul class="small" style="margin-top:14px;">
+    <li>A sum is dominated by its larger term — so \(O(|V|+|E|)\) means "one pass over the whole graph", which is the best you can hope for.</li>
+    <li>A product means "for every node, walk every edge" — a nested traversal, and usually a sign something can be improved.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Reading a bound out loud</span>
+    <p>\(O(|V| + |E|)\): <em>"touches each node and each edge a constant number of times."</em> If your description of an algorithm doesn't match that sentence, the bound is probably wrong.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · The algorithms" data-menu="BFS and DFS">
+  <h2>BFS and DFS: \(O(|V| + |E|)\)</h2>
+  <ol class="steps" id="s-bfs">
+    <li><span class="stepno">1</span> <b>Each node</b> is enqueued and dequeued at most once, because of the visited set — \(O(|V|)\) across the whole run.</li>
+    <li><span class="stepno">2</span> <b>When a node is dequeued</b>, we walk its adjacency list once.</li>
+    <li><span class="stepno">3</span> <b>Summing those walks</b> over all nodes counts each edge exactly twice in an undirected graph (once from each end) — \(O(|E|)\) in total, not \(O(|E|)\) each.</li>
+    <li class="ans"><span class="stepno">✓</span> Total \(O(|V| + |E|)\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-bfs">Build the argument</button>
+  <div class="box key"><span class="lbl">This is amortised reasoning</span>
+    <p>Step 3 is the move that matters. We did <b>not</b> say "each of \(|V|\) nodes walks up to \(|E|\) edges, so \(|V|\times|E|\)". We added the walks up and found the total is \(|E|\). Getting this wrong is the classic error.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · The algorithms" data-menu="The classic trap">
+  <h2>The classic trap: multiplying instead of amortising</h2>
+  <div class="cols">
+    <div>
+      <div class="box flag" style="margin-top:0;"><span class="lbl">Wrong</span>
+        <p class="small">"BFS visits \(|V|\) nodes, and at each node examines up to \(|E|\) edges, so it is \(O(|V| \times |E|)\)."</p>
+      </div>
+    </div>
+    <div>
+      <div class="box answer" style="margin-top:0;"><span class="lbl">Right</span>
+        <p class="small">"BFS visits each node once and each edge a constant number of times overall, so the total is \(O(|V| + |E|)\)."</p>
+      </div>
+    </div>
+  </div>
+  <ul class="small">
+    <li>The wrong version double-counts: it charges every node the <em>whole</em> edge set, when the edge sets partition.</li>
+    <li>\(\sum_{v} \deg(v) = 2|E|\) — the handshaking lemma. That single identity is the justification.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Spot the difference in your own writing</span>
+    <p>If you find yourself multiplying two input-size parameters, stop and ask whether the inner quantity <em>sums</em> to something smaller across the outer loop. Very often it does.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · The algorithms" data-menu="Dijkstra">
+  <h2>Dijkstra with a binary heap</h2>
+  <ol class="steps" id="s-dij">
+    <li><span class="stepno">1</span> <b>Each node</b> is extracted from the priority queue once. Each extraction costs \(O(\log |V|)\) — total \(O(|V|\log|V|)\).</li>
+    <li><span class="stepno">2</span> <b>Each edge</b> may trigger one decrease-key / insert, costing \(O(\log |V|)\) — total \(O(|E|\log|V|)\).</li>
+    <li><span class="stepno">3</span> <b>Add them:</b> \(O((|V| + |E|)\log|V|)\), usually written \(O(|E|\log|V|)\) for a connected graph where \(|E| \ge |V| - 1\).</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-dij">Build the argument</button>
+  <div class="box key"><span class="lbl">Where the log comes from</span>
+    <p>Entirely from the <b>data structure</b>. With an unsorted array instead of a heap, extract-min is \(O(|V|)\) and Dijkstra becomes \(O(|V|^2)\) — which is actually <em>faster</em> on dense graphs. Same algorithm, different structure, different bound.</p>
+  </div>
+  <div class="box flag"><span class="lbl">A property question</span>
+    <p>Dijkstra requires <b>non-negative</b> edge weights. With a negative edge it can finalise a node too early and return a wrong distance — a favourite exam question, and not a complexity issue at all.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · The algorithms" data-menu="Prim's & F-W">
+  <h2>Prim's, Floyd–Warshall, PageRank</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Algorithm</th><th>Bound</th><th>The one-line justification</th></tr>
+    <tr><td>Prim's (binary heap)</td><td>\(O(|E|\log|V|)\)</td><td>same skeleton as Dijkstra — extract each node once, relax each edge once</td></tr>
+    <tr><td>Kruskal's</td><td>\(O(|E|\log|E|)\)</td><td>dominated by sorting the edges</td></tr>
+    <tr><td>Floyd–Warshall</td><td>\(\Theta(|V|^3)\)</td><td>three nested loops over all nodes, \(O(1)\) body <em>with a matrix</em></td></tr>
+    <tr><td>PageRank</td><td>\(O(k(|V|+|E|))\)</td><td>\(k\) iterations, each a full pass over the graph</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Note the \(\Theta\) on Floyd–Warshall</span>
+    <p>Its loops run to completion regardless of the graph — no early exit, no data dependence. Best and worst case coincide, so \(\Theta\) is honest here where it would not be for BFS.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T4 · Exam focus" data-menu="Exam question">
+  <h2>Which bound, when there are two sizes?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section A Q18</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Setup</span>
+    <p class="small">A network is stored as a dictionary <code>links</code>, where each key is one of \(v\) nodes and each value is a list of that node's outgoing links. There are \(e\) links in total across the whole structure.</p>
+    <p class="small">An algorithm iterates over every node and, for each, counts how many of its outgoing links exceed a given weight.</p>
+  </div>
+  <div class="chooser frag">
+    <p class="ch-tag">The time complexity of this algorithm is <span class="ch-clue">— which one?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>\(O(v)\)</span></div>
+      <div class="opt"><b>B</b><span>\(O(e)\)</span></div>
+      <div class="opt correct"><b>C</b><span>\(O(v + e)\)</span></div>
+      <div class="opt"><b>D</b><span>\(O(v \times e)\)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam4">
+    <li><span class="stepno">1</span> <b>The outer work:</b> we touch each of the \(v\) nodes once — \(O(v)\) even before looking at any links.</li>
+    <li><span class="stepno">2</span> <b>The inner work:</b> for a single node we walk its own list. That is <em>not</em> \(e\) — it is that node's share of \(e\).</li>
+    <li><span class="stepno">3</span> <b>Sum the inner work:</b> across all nodes, the lists partition the link set, so the walks total exactly \(e\) steps.</li>
+    <li><span class="stepno">4</span> <b>Combine:</b> \(O(v) + O(e) = O(v + e)\).</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: C.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam4">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">Why each distractor is wrong</span>
+    <p><b>A</b> ignores the link-walking entirely. <b>B</b> forgets that we pay \(O(v)\) just to visit the nodes — which matters if many nodes have no links. <b>D</b> is the amortisation trap from two slides back: it charges every node the whole link set.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — when the answer really <em>is</em> a product</h2>
+  <p>Option D is not always wrong. It is wrong <em>here</em> because the inner lists partition. Change that and the product returns.</p>
+  <div class="box example" style="margin-top:0;"><span class="lbl">A genuine product</span>
+    <p class="small">"For each node \(u\), run a full BFS from \(u\)." Each BFS is \(O(v+e)\) and there are \(v\) of them &rarr; \(O(v(v+e))\). Here the inner work does <b>not</b> partition — every BFS re-traverses the whole graph.</p>
+  </div>
+  <div class="box key"><span class="lbl">The test to apply</span>
+    <p>Ask: <em>across the whole run, is each edge examined a constant number of times, or once per outer iteration?</em> Constant &rarr; add. Once per iteration &rarr; multiply.</p>
+  </div>
+  <div class="box try"><span class="lbl">Check it</span>
+    <p>Which is Floyd–Warshall? <em>(Neither, quite — it examines every node <b>triple</b>, so it is \(\Theta(|V|^3)\) regardless of \(|E|\). Some algorithms don't care about the edge count at all.)</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Consolidation" data-menu="Reference table">
+  <h2>The reference table — justify every row</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Algorithm</th><th>Complexity</th><th>Structure assumed</th></tr>
+    <tr><td>BFS / DFS</td><td>\(O(|V| + |E|)\)</td><td>adjacency list</td></tr>
+    <tr><td>Dijkstra</td><td>\(O(|E|\log|V|)\)</td><td>adjacency list + binary heap</td></tr>
+    <tr><td>Dijkstra</td><td>\(O(|V|^2)\)</td><td>adjacency matrix + array scan</td></tr>
+    <tr><td>Prim's</td><td>\(O(|E|\log|V|)\)</td><td>adjacency list + binary heap</td></tr>
+    <tr><td>Kruskal's</td><td>\(O(|E|\log|E|)\)</td><td>edge list + union-find</td></tr>
+    <tr><td>Floyd–Warshall</td><td>\(\Theta(|V|^3)\)</td><td>adjacency matrix</td></tr>
+    <tr><td>PageRank</td><td>\(O(k(|V|+|E|))\)</td><td>adjacency list, \(k\) iterations</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">Memorising this table is not enough</span>
+    <p>Note that Dijkstra appears <b>twice</b>. A bound without its assumed data structure is incomplete, and questions are written precisely to expose that.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Justify \(O(|V|+|E|)\) for BFS in two sentences.</p>
+      <p class="a">Each node is enqueued and dequeued at most once because of the visited set, contributing \(O(|V|)\). Each node's adjacency list is walked once when it is dequeued, and those lists together contain \(2|E|\) entries, contributing \(O(|E|)\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">On a dense graph, which Dijkstra implementation is faster and why?</p>
+      <p class="a">The <b>array</b> version, \(O(|V|^2)\). On a dense graph \(|E| \approx |V|^2\), so the heap version is \(O(|V|^2\log|V|)\) — a whole log factor worse. The heap only pays off when the graph is sparse.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is Floyd–Warshall \(\Theta\) rather than just \(O\)?</p>
+      <p class="a">Its three loops always run to completion — there is no early exit and no dependence on the graph's shape. Best and worst case are identical, so the bound is tight from both sides.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">An algorithm runs BFS from every node. Complexity, and why isn't it \(O(|V|+|E|)\)?</p>
+      <p class="a"><b>\(O(|V|(|V|+|E|))\).</b> The edge walks do not partition here — each of the \(|V|\) separate BFS runs traverses the entire graph independently, so the costs multiply rather than sum.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T4 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w02.html">Interactive workbook</a></b> — the sparse/dense slider shows \(|V|+|E|\) and \(|V|\times|E|\) diverging as you add nodes; the timing experiment checks the predictions.</li>
+    <li><b>Problem Set — Week 1, Section 4</b>: justifying each row of the reference table, and two structure-comparison questions.</li>
+    <li><b>Next topic:</b> recursion — call graphs, and how a recursive shape becomes an equation.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Graphs have two size parameters; add when the inner work partitions across the outer loop, multiply only when it genuinely repeats.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Why is BFS \(O(|V|+|E|)\) and not \(O(|V| \times |E|)\)?</li>
+      <li>State Dijkstra's complexity — and the data structure your answer assumes.</li>
+      <li>Give the range of \(|E|\) for a simple connected graph.</li>
+    </ol>
+    <p class="start-hint">Topic 5 — call graphs and recursion.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 4 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

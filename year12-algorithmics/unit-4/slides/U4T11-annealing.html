@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Topic 11 — Simulated Annealing</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Topic 11 · Simulated Annealing</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Simulated Annealing</h1>
+  <p>Unit 4 AOS2 · Topic 11 of 17 — going downhill on purpose</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="T11 · Motivation" data-menu="The problem">
+  <h2>The problem it solves</h2>
+  <p class="lede">Hill climbing stops at the first peak. To reach a higher one, you must first walk downhill — and hill climbing will never do that.</p>
+  <ul>
+    <li>The fix is structural: <b>sometimes accept a worse solution</b>, so the search can leave a local optimum.</li>
+    <li>But if you accept worse moves too freely, you never settle anywhere — the search becomes a random walk.</li>
+    <li>So the willingness to accept worse moves must <b>decrease over time</b>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The metaphor</span>
+    <p>Annealing in metallurgy: heat metal so its atoms move freely, then cool it slowly so they settle into a low-energy, well-ordered structure. Cool too fast and you freeze in defects.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · The algorithm" data-menu="The algorithm">
+  <h2>The algorithm</h2>
+  <div class="box example" style="margin-top:0;"><span class="lbl">High-level pseudocode</span>
+    <p class="small"><code>Generate initial candidate solution S</code><br>
+    <code>Set initial temperature T</code><br>
+    <code>Repeat until terminating condition:</code><br>
+    <code>&nbsp;&nbsp;Generate a neighbour S_new of S</code><br>
+    <code>&nbsp;&nbsp;If S_new is better Do S &larr; S_new</code><br>
+    <code>&nbsp;&nbsp;Else Do S &larr; S_new with probability p(ΔE, T)</code><br>
+    <code>&nbsp;&nbsp;Decrease T</code><br>
+    <code>Return best S seen</code></p>
+  </div>
+  <ul class="small">
+    <li>Everything from Topic 10 still applies: representation, neighbourhood, objective.</li>
+    <li>Two new parameters: the <b>temperature</b> \(T\) and the <b>cooling schedule</b> that reduces it.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="T11 · The algorithm" data-menu="Acceptance rule">
+  <h2>The acceptance rule</h2>
+  <div class="box defn"><span class="lbl">How a candidate is accepted</span>
+    <p>If the new candidate is <b>better</b>, accept it always.<br>
+    If it is <b>worse</b> by amount \(\Delta E\), accept it with probability \(p = e^{-\Delta E / T}\).</p>
+  </div>
+  <ul class="small">
+    <li><b>Bigger \(\Delta E\) &rarr; smaller \(p\).</b> Slightly worse moves are accepted readily; drastically worse ones almost never.</li>
+    <li><b>Higher \(T\) &rarr; larger \(p\).</b> Early on, the search roams freely; later, it becomes fussy.</li>
+    <li>As \(T \to 0\), \(p \to 0\) and the algorithm degenerates into ordinary hill climbing — which is exactly what you want at the end.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">You are not asked to compute it</span>
+    <p>The exam expects you to <em>explain</em> the rule — that acceptance depends on how much worse the candidate is <b>and</b> on the current temperature — not to evaluate exponentials.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · The algorithm" data-menu="Cooling schedule">
+  <h2>The cooling schedule</h2>
+  <div class="cols">
+    <div>
+      <ul class="small">
+        <li><b>Too fast:</b> the search freezes early, behaving like hill climbing, and gets stuck in whatever local optimum it happened to be near.</li>
+        <li><b>Too slow:</b> the search keeps accepting bad moves and wanders; it wastes time and may never converge within the budget.</li>
+        <li>A common schedule is geometric: \(T \leftarrow \alpha T\) with \(\alpha\) around 0.95 — a small constant fraction removed each step.</li>
+      </ul>
+      <div class="box key"><span class="lbl">The trade-off in one line</span>
+        <p>Cooling speed controls the balance between <b>exploration</b> (roaming widely) and <b>exploitation</b> (refining what you have).</p>
+      </div>
+    </div>
+    <div>
+      <svg viewBox="0 0 240 180" style="width:96%; height:auto;">
+        <line x1="30" y1="150" x2="230" y2="150" stroke="#94a3b8" stroke-width="1.3"/>
+        <line x1="30" y1="14" x2="30" y2="150" stroke="#94a3b8" stroke-width="1.3"/>
+        <path d="M30 24 Q 70 130 225 145" fill="none" stroke="#8b1f34" stroke-width="2"/>
+        <path d="M30 24 Q 150 60 225 132" fill="none" stroke="#0e7569" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="92" y="60" font-size="9" fill="#8b1f34">fast cooling</text>
+        <text x="140" y="96" font-size="9" fill="#0e7569">slow cooling</text>
+        <text x="130" y="168" font-size="10" fill="#64748b" text-anchor="middle">iterations</text>
+        <text x="16" y="86" font-size="10" fill="#64748b" text-anchor="middle" transform="rotate(-90 16 86)">T</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · The algorithm" data-menu="Terminating">
+  <h2>Terminating conditions</h2>
+  <p>The pseudocode says "repeat until a terminating condition is reached". Any of these is acceptable:</p>
+  <ul class="small">
+    <li>The temperature has fallen below a set threshold.</li>
+    <li>A fixed number of iterations has been performed.</li>
+    <li>No improvement has been found for a set number of consecutive iterations.</li>
+    <li>A time budget has expired, or a solution meeting a target quality has been found.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">What is not acceptable</span>
+    <p>"Until the optimal solution is found." You cannot recognise the optimum without solving the problem exactly — which is the thing you were avoiding.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Return the best, not the last</span>
+    <p>Because worse moves are sometimes accepted, the <em>final</em> solution may not be the best one visited. A correct implementation records the best-so-far separately and returns that.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="T11 · Exam focus" data-menu="Exam question">
+  <h2>Explain how a candidate is accepted</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section B Q8c(i)–(iii)</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question</span>
+    <p class="small">A simulated annealing algorithm is applied to the travelling salesman problem, using a greedy tour as its initial candidate.</p>
+    <p class="small"><b>i.</b> Explain how the algorithm would determine whether a new candidate solution is accepted. <em>(3 marks)</em></p>
+    <p class="small"><b>ii.</b> State a terminating condition that could be used. <em>(1 mark)</em></p>
+    <p class="small"><b>iii.</b> Describe one advantage and one limitation of using simulated annealing for TSP. <em>(2 marks)</em></p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam11">
+    <li><span class="stepno">1</span> <b>i — the improving case.</b> Compute the new tour's total length. If it is shorter than the current tour, accept it unconditionally.</li>
+    <li><span class="stepno">2</span> <b>i — the worsening case.</b> If it is longer, accept it with a probability that depends on <em>how much</em> longer it is and on the current temperature: small increases and high temperatures make acceptance likely.</li>
+    <li><span class="stepno">3</span> <b>i — the mechanism.</b> Compute that probability, draw a random number, and accept if the number falls below it. As temperature falls, such acceptances become rare.</li>
+    <li><span class="stepno">4</span> <b>ii.</b> "Stop when the temperature drops below a fixed threshold" — or a fixed iteration count, or no improvement for \(k\) iterations.</li>
+    <li><span class="stepno">5</span> <b>iii — advantage.</b> It can escape local optima that trap hill climbing, so it generally finds better tours; and it runs in reasonable time on instances where exact methods are infeasible.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>iii — limitation.</b> It gives no guarantee of optimality and no bound on how far off it is; results vary between runs, and it needs parameter tuning.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam11">Reveal the reasoning</button>
+</section>
+
+<section class="slide" data-topic="T11 · Exam focus" data-menu="Second question">
+  <h2>Diagnose the implementation</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q12c(ii)</p>
+  <div class="box question" style="margin-top:0;"><span class="lbl">Question (1 mark)</span>
+    <p class="small">A student has correctly implemented the simulated annealing algorithm, but finds that it only ever accepts candidate solutions that are improvements on the current solution.</p>
+    <p class="small">Describe how she could modify the <b>parameters</b> of the algorithm to correct this.</p>
+  </div>
+  <div class="box answer"><span class="lbl">Response</span>
+    <p class="small">The <b>initial temperature is too low</b> (or the cooling is too rapid), so the acceptance probability for a worsening move is effectively zero from the outset and the algorithm behaves as pure hill climbing. She should <b>raise the initial temperature</b>, and slow the cooling schedule, so that early in the search worse candidates are accepted with meaningful probability.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Note what the question rules out</span>
+    <p>It says the implementation is <em>correct</em> and asks about <b>parameters</b>. So "there's a bug in the acceptance test" is not the expected answer — the diagnosis must be about \(T\) and the schedule.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · Exam focus" data-menu="Elaboration">
+  <h2>Elaboration — reading the symptom backwards</h2>
+  <p>That question is a small piece of diagnostic reasoning, and the method generalises.</p>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th>Symptom</th><th>Likely parameter cause</th></tr>
+    <tr><td>Only improvements ever accepted</td><td>initial \(T\) too low, or cooling too fast</td></tr>
+    <tr><td>Never converges; result looks random</td><td>\(T\) too high, or cooling too slow</td></tr>
+    <tr><td>Result barely differs from the greedy start</td><td>too few iterations, or neighbourhood too small</td></tr>
+    <tr><td>Wildly different answer each run</td><td>expected — but excessive variance suggests \(T\) too high at the end</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">The underlying question</span>
+    <p>Every one of these asks the same thing: <em>is the search exploring too much or too little?</em> Temperature is the dial that sets the balance, and cooling is how fast the dial turns.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · Consolidation" data-menu="Comparison">
+  <h2>The three local-search methods, compared</h2>
+  <table class="tbl" style="margin:0 auto;">
+    <tr><th></th><th>Greedy construction</th><th>Hill climbing</th><th>Simulated annealing</th></tr>
+    <tr><td>Starts from</td><td>nothing</td><td>a complete solution</td><td>a complete solution</td></tr>
+    <tr><td>Accepts worse moves?</td><td>n/a</td><td>never</td><td>sometimes, with decreasing probability</td></tr>
+    <tr><td>Escapes local optima?</td><td>n/a</td><td>no</td><td>often</td></tr>
+    <tr><td>Deterministic?</td><td>yes</td><td>usually</td><td>no</td></tr>
+    <tr><td>Guarantee of optimality</td><td>none (except special problems)</td><td>none</td><td>none</td></tr>
+  </table>
+  <div class="box flag"><span class="lbl">The last row is the important one</span>
+    <p>Annealing is better than hill climbing in practice, but it is <b>not</b> exact. No number of clever moves converts a heuristic into a guarantee.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Why does simulated annealing accept worse solutions at all?</p>
+      <p class="a">To escape local optima. Reaching a better peak often requires first moving downhill, and an algorithm that only accepts improvements can never do so. Accepting worse moves lets the search cross a valley to a higher region.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">What happens as the temperature approaches zero, and why is that desirable?</p>
+      <p class="a">The probability of accepting a worsening move approaches zero, so the algorithm becomes ordinary hill climbing. That is desirable at the end: early exploration finds a promising region, and late exploitation refines the best solution within it rather than wandering away.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why must the algorithm return the best solution seen, not the current one?</p>
+      <p class="a">Because worsening moves are sometimes accepted, the current solution at termination may be worse than one visited earlier. Recording the best-so-far separately guarantees the returned answer is at least as good as everything examined.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give a valid terminating condition, and one that is not valid.</p>
+      <p class="a"><b>Valid:</b> temperature below a threshold; a fixed iteration count; no improvement for \(k\) iterations; a time budget. <b>Not valid:</b> "stop when the optimal solution is found" — recognising the optimum would require solving the problem exactly, which is what the heuristic exists to avoid.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T11 · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b><a href="../workbooks/u4w07.html">Interactive workbook</a></b> — the annealing visualiser; set fast and slow cooling from the same start and compare the objective traces.</li>
+    <li><b>Problem Set — Week 2, Section 5</b>: acceptance rule, parameter diagnosis, and advantage/limitation answers.</li>
+    <li><b>Next topic:</b> AOS3 begins — what a Turing machine is, and why it was invented.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Simulated annealing accepts worse solutions with a probability that falls as the temperature drops — exploring early, exploiting late, guaranteeing nothing.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>On what two quantities does the acceptance probability depend?</li>
+      <li>The algorithm only ever accepts improvements. What parameter is wrong?</li>
+      <li>Why is "stop at the optimum" not a valid terminating condition?</li>
+    </ol>
+    <p class="start-hint">Topic 12 — Turing machines.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Topic 11 — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
