@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem Set Solutions — VCE Algorithmics Unit 4</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/solutions.css">
+</head>
+<body class="solutions-page theme-algorithmics">
+
+<div class="hero">
+  <a href="index.html" class="back-btn">← Unit 4 hub</a>
+  <span class="unit-tag">Unit 4 · Problem sets</span>
+  <h1>Solutions</h1>
+  <p class="sub">Each set's solutions become available the day after that set is due.</p>
+  <div class="teacher-note">
+    Work the questions before you read these. The solutions carry the <em>reasoning</em>, not just the
+    answers — which is what the marks are for. If your answer reached the right result by a different
+    route, that is usually fine; check the method against the one shown.
+  </div>
+</div>
+
+<div class="toc">
+  <a href="#w1">Week 1</a>
+  <a href="#w2">Week 2</a>
+  <a href="#w4">Week 4</a>
+  <a href="#w56">Weeks 5–6</a>
+</div>
+
+<main>
+
+  <section class="lesson" id="w1">
+    <div class="lesson-head">
+      <span class="lesson-num">W1</span>
+      <span class="lesson-title">Formal Algorithm Analysis · Topics 1–6</span>
+    </div>
+    <div class="qa" data-release="2026-07-22" data-key="46d8d3dbe44d5e">
+      <div class="q"><span class="qref">Problem Set — Week 1</span> <span class="marks">due Tue 21 July</span></div>
+      <div class="a"><p class="sp">checking…</p></div>
+    </div>
+  </section>
+
+  <section class="lesson" id="w2">
+    <div class="lesson-head">
+      <span class="lesson-num">W2</span>
+      <span class="lesson-title">Intractability and Heuristics · Topics 7–11</span>
+    </div>
+    <div class="qa" data-release="2026-07-29" data-key="21deda0f09637c">
+      <div class="q"><span class="qref">Problem Set — Week 2</span> <span class="marks">due Tue 28 July</span></div>
+      <div class="a"><p class="sp">checking…</p></div>
+    </div>
+  </section>
+
+  <section class="lesson" id="w4">
+    <div class="lesson-head">
+      <span class="lesson-num">W4</span>
+      <span class="lesson-title">Computability · Topics 12–14</span>
+    </div>
+    <div class="qa" data-release="2026-08-12" data-key="d49f0f51526539">
+      <div class="q"><span class="qref">Problem Set — Week 4</span> <span class="marks">due Tue 11 August</span></div>
+      <div class="a"><p class="sp">checking…</p></div>
+    </div>
+  </section>
+
+  <section class="lesson" id="w56">
+    <div class="lesson-head">
+      <span class="lesson-num">W5–6</span>
+      <span class="lesson-title">Artificial Intelligence and Ethics · Topics 15–17</span>
+    </div>
+    <div class="qa" data-release="2026-08-26" data-key="ddc554a1655947">
+      <div class="q"><span class="qref">Problem Set — Weeks 5–6</span> <span class="marks">due Tue 25 August</span></div>
+      <div class="a"><p class="sp">checking…</p></div>
+    </div>
+  </section>
+
+  <p class="note">
+    These are the same solutions used for marking, so they include notes on where marks are commonly
+    lost. Reading them <em>instead of</em> attempting the questions is the one use that will not help you
+    in August.
+  </p>
+
+  <footer>Unit 4 · VCE Algorithmics (HESS) · Northcote High School</footer>
+</main>
+
+<script>
+(function () {
+  var MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+  var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  function fmt(d) {
+    return DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()];
+  }
+
+  document.querySelectorAll('.qa[data-release]').forEach(function (card) {
+    var parts   = card.dataset.release.split('-');
+    var release = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+    var body    = card.querySelector('.a');
+    var now     = new Date();
+
+    if (now >= release) {
+      var a = document.createElement('a');
+      a.href = 'problemsets/k-' + card.dataset.key + '.pdf';
+      a.textContent = 'Open solutions (PDF)';
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
+      body.innerHTML = '';
+      body.appendChild(a);
+    } else {
+      body.innerHTML = '<p class="sp">Locked — available from <strong>' +
+                       fmt(release) + '</strong>.</p>';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
