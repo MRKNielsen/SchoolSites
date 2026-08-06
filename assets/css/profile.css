@@ -1,0 +1,357 @@
+/* ============================================================
+   profile.css — SPECIES / CASE-STUDY PROFILE PAGES
+   A long-form reference page students read alongside a unit:
+   hero band, sticky section nav, and a stack of content sections
+   built from tables, fact panels and callouts.
+   Peer of course.css, hub.css and solutions.css.
+
+   Requires tokens.css first; theme with a body class:
+     <link rel="stylesheet" href="../../assets/css/tokens.css">
+     <link rel="stylesheet" href="../../assets/css/profile.css">
+     <body class="profile-page theme-science">
+
+   Components:
+     .hero (.back-btn, .unit-tag, h1, .binomial, .sub, .meta-row)
+     .toc sticky chip nav
+     section.pf (.pf-head with .pf-eyebrow + h2)
+     .cols / .cols.wide-left / .cols.thirds  — responsive columns
+     .panel (.panel-lbl)          — bordered fact panel
+     table.pf-tbl                 — striped data table
+     table.pf-tbl.ladder          — two-column classification ladder
+     .figure (> img + figcaption) — photo or chart with caption
+     .adapt list                  — icon-free feature list
+     .pill.biotic / .pill.abiotic — inline factor tags
+     .strategy (.st-num, .st-how, .ad-grid > .ad/.dis, .status)
+     .box.key / .box.defn / .box.country — callouts (mirrors deck.css)
+     .taglist > .t                — small label chips
+     footer
+   ============================================================ */
+
+body.profile-page {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--c-paper-cool);
+  color: var(--ink);
+  line-height: 1.6;
+}
+.profile-page *, .profile-page *::before, .profile-page *::after { box-sizing: border-box; }
+.profile-page h1, .profile-page h2, .profile-page h3, .profile-page h4,
+.profile-page p, .profile-page ul, .profile-page ol, .profile-page figure { margin: 0; }
+.profile-page ul, .profile-page ol { padding-left: 1.25em; }
+
+/* ---------- Hero band ---------- */
+.profile-page .hero {
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--accent-dark) 55%, #000) 0%,
+    var(--accent-dark) 55%, var(--accent) 100%);
+  color: #fff;
+  padding: 4vh 6vw 5vh;
+}
+.profile-page .back-btn {
+  display: inline-block; margin-bottom: 2.4vh;
+  font-family: var(--font-display); font-weight: 600; font-size: .92rem;
+  color: rgba(255,255,255,.9); text-decoration: none;
+  border: 1px solid rgba(255,255,255,.3); border-radius: 100px; padding: .4em 1.1em;
+}
+.profile-page .back-btn:hover { background: rgba(255,255,255,.15); }
+.profile-page .unit-tag {
+  display: inline-block; margin-bottom: 1.5vh;
+  background: color-mix(in srgb, var(--accent-warm) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-warm) 60%, transparent);
+  border-radius: 100px; padding: .3em 1em;
+  font-family: var(--font-display); font-size: .8rem; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: #ffe2b0;
+}
+.profile-page .hero h1 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.9rem, 4.5vw, 3.2rem); line-height: 1.05; letter-spacing: -.02em;
+}
+.profile-page .hero .binomial {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: clamp(1.05rem, 2vw, 1.5rem); color: rgba(255,255,255,.78); margin-top: .3vh;
+}
+.profile-page .hero .sub {
+  font-size: clamp(1rem, 1.6vw, 1.2rem); color: rgba(255,255,255,.85);
+  max-width: 60ch; margin-top: 1.6vh;
+}
+.profile-page .hero .meta-row {
+  display: flex; gap: .6em; flex-wrap: wrap; margin-top: 2.4vh;
+}
+.profile-page .hero .meta-row span {
+  font-family: var(--font-display); font-size: .78rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 100px; padding: .3em .9em; color: rgba(255,255,255,.92);
+}
+
+/* ---------- Sticky section nav ---------- */
+.profile-page .toc {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--c-paper-cool) 95%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--c-line-cool);
+  padding: 1.2vh 6vw; display: flex; gap: .5em; flex-wrap: wrap;
+}
+.profile-page .toc a {
+  font-family: var(--font-display); font-weight: 600; font-size: .78rem;
+  text-decoration: none; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, #fff);
+  border: 1px solid transparent; border-radius: 100px; padding: .3em .8em;
+}
+.profile-page .toc a:hover { border-color: var(--accent); }
+.profile-page .toc a.is-current {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+
+/* ---------- Layout ---------- */
+.profile-page main { max-width: 1040px; margin: 0 auto; padding: 4vh 6vw 8vh; }
+
+.profile-page section.pf { margin-bottom: 5.5vh; scroll-margin-top: 76px; }
+.profile-page .pf-head {
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: .6vh; margin-bottom: 2.4vh;
+}
+.profile-page .pf-eyebrow {
+  font-family: var(--font-display); font-weight: 700; font-size: .74rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--accent-warm);
+}
+.profile-page .pf-head h2 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(1.35rem, 2.8vw, 1.9rem); color: var(--accent-dark);
+  letter-spacing: -.01em; line-height: 1.15;
+}
+.profile-page section.pf > * + * { margin-top: 1.5vh; }
+.profile-page section.pf p { max-width: 78ch; }
+
+.profile-page h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.12rem; color: var(--accent-dark); margin-top: 2.6vh !important;
+}
+.profile-page h3 + * { margin-top: .8vh !important; }
+.profile-page li { margin-bottom: .3em; }
+.profile-page strong { color: var(--accent-dark); }
+.profile-page em.sci { font-style: italic; }
+
+/* Column blocks */
+.profile-page .cols { display: grid; gap: 1.6em; grid-template-columns: 1fr 1fr; }
+.profile-page .cols.wide-left { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+.profile-page .cols.thirds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 760px) {
+  .profile-page .cols,
+  .profile-page .cols.wide-left,
+  .profile-page .cols.thirds { grid-template-columns: 1fr; }
+}
+
+/* ---------- Fact panel ---------- */
+.profile-page .panel {
+  background: var(--card); border: 1px solid var(--c-line-cool);
+  border-radius: 14px; padding: 1.2em 1.3em; box-shadow: var(--shadow);
+}
+.profile-page .panel-lbl {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: .6em;
+}
+.profile-page .panel > * + * { margin-top: .7em; }
+.profile-page .panel .panel-lbl + * { margin-top: 0; }
+.profile-page .panel h4 {
+  font-family: var(--font-display); font-weight: 700; font-size: .78rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--accent-warm);
+  margin-top: 1em;
+}
+.profile-page .panel h4:first-of-type { margin-top: 0; }
+.profile-page .panel h4 + p { margin-top: .3em; }
+.profile-page .panel.flush { padding: 0; overflow: hidden; }
+.profile-page .panel.flush .panel-lbl { padding: 1em 1.3em 0; margin-bottom: .5em; }
+.profile-page .panel.flush > p { padding: 0 1.3em; }
+.profile-page .panel.flush table.pf-tbl { margin: 1em 0 0; border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0; }
+
+/* ---------- Tables ---------- */
+/* border-collapse:separate (not collapse) so the 12px radius actually
+   clips the header row — collapsed tables ignore border-radius. */
+.profile-page table.pf-tbl {
+  width: 100%; border-collapse: separate; border-spacing: 0; font-size: .93rem;
+  background: var(--card); border: 1px solid var(--c-line-cool);
+  border-radius: 12px; overflow: hidden;
+}
+.profile-page table.pf-tbl th,
+.profile-page table.pf-tbl td {
+  padding: .6em .8em; text-align: left; vertical-align: top;
+  border-bottom: 1px solid var(--c-line-cool);
+}
+.profile-page table.pf-tbl thead th {
+  background: var(--accent-dark); color: #fff;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: .82rem; letter-spacing: .03em;
+}
+.profile-page table.pf-tbl tbody tr:last-child td { border-bottom: 0; }
+.profile-page table.pf-tbl tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--accent) 5%, #fff);
+}
+.profile-page table.pf-tbl td:first-child { font-weight: 600; color: var(--accent-dark); }
+.profile-page table.pf-tbl td ul { margin: 0; padding-left: 1.1em; }
+.profile-page table.pf-tbl.plain td:first-child { font-weight: 400; color: inherit; }
+
+/* Classification ladder — narrow label column, italic leaf rows */
+.profile-page table.pf-tbl.ladder { font-size: .9rem; }
+.profile-page table.pf-tbl.ladder td:first-child { width: 40%; }
+.profile-page table.pf-tbl.ladder td.sci { font-style: italic; }
+
+/* Row headers on the status comparison */
+.profile-page table.pf-tbl tbody th {
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  font-family: var(--font-display); font-weight: 700;
+  color: var(--accent-dark); font-size: .88rem; white-space: nowrap;
+}
+
+/* ---------- Inline pills ---------- */
+.profile-page .pill {
+  display: inline-block; font-family: var(--font-display); font-weight: 700;
+  font-size: .72rem; letter-spacing: .05em; text-transform: uppercase;
+  border-radius: 100px; padding: .18em .7em; white-space: nowrap;
+}
+.profile-page .pill.biotic  { background: color-mix(in srgb, var(--pos) 15%, #fff); color: var(--pos); }
+.profile-page .pill.abiotic { background: color-mix(in srgb, var(--ido) 15%, #fff); color: var(--ido); }
+.profile-page .pill.up      { background: color-mix(in srgb, var(--pos) 15%, #fff); color: var(--pos); }
+.profile-page .pill.down    { background: var(--neg-soft); color: var(--neg); }
+
+.profile-page .taglist { display: flex; gap: .4em; flex-wrap: wrap; }
+.profile-page .taglist .t {
+  font-family: var(--font-display); font-weight: 700; font-size: .72rem;
+  letter-spacing: .05em; text-transform: uppercase;
+  background: color-mix(in srgb, var(--accent) 12%, #fff); color: var(--accent-dark);
+  border-radius: 6px; padding: .18em .6em;
+}
+
+/* ---------- Figures ---------- */
+.profile-page .figure { margin: 2vh 0; }
+.profile-page .figure img {
+  display: block; width: 100%; height: auto;
+  border-radius: 14px; border: 1px solid var(--c-line-cool);
+  background: var(--card);
+}
+.profile-page .figure figcaption {
+  font-size: .85rem; color: var(--muted); font-style: italic;
+  margin-top: .6em; max-width: 78ch;
+}
+.profile-page .figure.chart img { border-radius: 12px; padding: .4em; }
+
+/* ---------- Conservation strategies ---------- */
+.profile-page .strategy {
+  border: 1px solid var(--c-line-cool); border-radius: 14px;
+  background: var(--card); box-shadow: var(--shadow);
+  padding: 1.2em 1.3em; margin-top: 1.8vh !important;
+}
+.profile-page .strategy > h3 {
+  margin-top: 0 !important; display: flex; align-items: baseline; gap: .5em;
+  font-size: 1.15rem;
+}
+.profile-page .strategy .st-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.6rem;
+  line-height: 1; color: color-mix(in srgb, var(--accent) 38%, transparent);
+}
+.profile-page .strategy .st-how { margin-top: .6em; }
+.profile-page .strategy .st-how b { color: var(--accent-dark); }
+
+.profile-page .ad-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--c-line-cool); border-radius: 12px;
+  overflow: hidden; margin-top: 1em;
+}
+.profile-page .ad-grid > div { padding: .9em 1em; }
+.profile-page .ad-grid > div + div { border-left: 1px solid var(--c-line-cool); }
+.profile-page .ad-grid .lbl {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: .74rem; letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: .5em;
+}
+.profile-page .ad-grid .ad  { background: color-mix(in srgb, var(--pos) 7%, #fff); }
+.profile-page .ad-grid .ad .lbl { color: var(--pos); }
+.profile-page .ad-grid .dis { background: color-mix(in srgb, var(--neg) 6%, #fff); }
+.profile-page .ad-grid .dis .lbl { color: var(--neg); }
+.profile-page .ad-grid ul { margin: 0; padding-left: 1.15em; font-size: .93rem; }
+@media (max-width: 640px) {
+  .profile-page .ad-grid { grid-template-columns: 1fr; }
+  .profile-page .ad-grid > div + div { border-left: 0; border-top: 1px solid var(--c-line-cool); }
+}
+
+.profile-page .status {
+  border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  padding: .8em 1em; margin-top: 1em; font-size: .93rem;
+}
+.profile-page .status .lbl {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: .74rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent-dark); margin-bottom: .35em;
+}
+
+/* ---------- Callouts (mirrors the deck.css box system) ---------- */
+.profile-page .box {
+  border-left: 4px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  border-radius: 0 12px 12px 0; padding: 1em 1.2em;
+}
+.profile-page .box > .lbl {
+  display: block; font-family: var(--font-display); font-weight: 700;
+  font-size: .76rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent-dark); margin-bottom: .45em;
+}
+.profile-page .box > * + * { margin-top: .6em; }
+.profile-page .box > .lbl + * { margin-top: 0; }
+
+.profile-page .box.key {
+  border-left-color: var(--accent-warm);
+  background: color-mix(in srgb, var(--accent-warm) 12%, #fff);
+}
+.profile-page .box.key > .lbl { color: var(--warn); }
+
+.profile-page .box.defn {
+  border-left-color: var(--ido);
+  background: color-mix(in srgb, var(--ido) 8%, #fff);
+}
+.profile-page .box.defn > .lbl { color: var(--ido); }
+
+/* First Nations / Caring for Country — fixed earth tone, theme-independent */
+.profile-page .box.country {
+  border-left-color: var(--country);
+  background: var(--country-bg);
+}
+.profile-page .box.country > .lbl { color: var(--country); }
+
+/* Correct / incorrect examples */
+.profile-page .ok, .profile-page .no {
+  font-family: var(--font-display); font-weight: 700;
+}
+.profile-page .ok { color: var(--pos); }
+.profile-page .no { color: var(--neg); text-decoration: line-through; }
+
+/* ---------- Footer ---------- */
+.profile-page footer {
+  text-align: center; padding: 4vh 6vw;
+  color: var(--muted); font-size: .85rem; border-top: 1px solid var(--c-line-cool);
+}
+.profile-page footer a { color: var(--accent); }
+
+/* ---------- Print ---------- */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body.profile-page { background: #fff; }
+  .profile-page .toc, .profile-page .back-btn { display: none; }
+  .profile-page .hero {
+    background: none; color: var(--ink); padding: 0 0 8mm;
+    border-bottom: 3px solid var(--accent-dark);
+  }
+  .profile-page .hero h1 { color: var(--accent-dark); }
+  .profile-page .hero .binomial, .profile-page .hero .sub { color: var(--ink-soft); }
+  .profile-page .hero .unit-tag,
+  .profile-page .hero .meta-row span {
+    background: none; border-color: var(--line); color: var(--ink-soft);
+  }
+  .profile-page main { padding: 6mm 0 0; max-width: none; }
+  .profile-page section.pf { break-before: page; margin-bottom: 0; }
+  .profile-page section.pf:first-of-type { break-before: avoid; }
+  .profile-page .panel, .profile-page .strategy, .profile-page .box,
+  .profile-page .figure, .profile-page table.pf-tbl tr { break-inside: avoid; }
+  .profile-page .panel, .profile-page .strategy { box-shadow: none; }
+  .profile-page footer { display: none; }
+}

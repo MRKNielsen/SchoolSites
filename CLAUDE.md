@@ -47,7 +47,8 @@ Optional modules — link only when a deck uses them:
 Other page types: `assets/css/course.css` (unit landing),
 `assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
 (answer-key pages), `assets/css/worksheet.css` (printable student
-worksheets), `assets/css/site.css` (plain index pages).
+worksheets), `assets/css/profile.css` (species / case-study reference
+pages), `assets/css/site.css` (plain index pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -134,6 +135,42 @@ band, `.timeline`/`.mile[data-date]` milestones, `#weeks` grid of
 `.week[data-start]` cards, `.aos` chapter tags, `.milestone-chip`,
 `.links`. hub.js auto-highlights the current week, marks past/next
 milestones, and fills `.countdown[data-to]` elements.
+
+## Species / case-study profile pages
+
+Use `assets/css/profile.css` + `assets/js/profile.js` with
+`<body class="profile-page theme-X">`. A long-form reference page a
+student reads *alongside* a unit — not a deck and not a worksheet.
+Reference implementation:
+`year7-science/bio-ecosystems/species-bandicoot.html` (ported from the
+Eastern Barred Bandicoot species booklet docx).
+
+- Structure: `.hero` (`.back-btn`, `.unit-tag`, `h1`, `.binomial`,
+  `.sub`, `.meta-row` of chips) → sticky `.toc` chip nav → `<main>` of
+  `section.pf`, each opening with `.pf-head` (`.pf-eyebrow` + `h2`).
+  profile.js does one thing: marks the `.toc` chip for the section in
+  view `.is-current`. Nothing else is scripted.
+- Layout: `.cols`, `.cols.wide-left` (5:7), `.cols.thirds` — all collapse
+  to one column under 760 px.
+- Content components: `.panel` (+ `.panel-lbl`, `h4` subheads;
+  `.panel.flush` when the panel's body *is* a table), `table.pf-tbl`
+  (`.ladder` for a two-column classification ladder, `.plain` to drop the
+  bold first column), `.figure` > img + figcaption, `.pill`
+  (`.biotic`/`.abiotic`/`.up`/`.down`), `.taglist` > `.t`,
+  `.strategy` (`.st-num`, `.st-how`, `.ad-grid` of `.ad`/`.dis`,
+  `.status`), and `.ok`/`.no` for correct/incorrect examples.
+- Callouts mirror deck.css: `.box`, `.box.key`, `.box.defn`,
+  `.box.country`, each with a `<span class="lbl">` first child.
+  `.box.country` keeps the earth tone across every subject, same as in
+  decks and worksheets.
+- Prose spacing comes from the section defaults (`section.pf > * + *`,
+  `h3 + *`). Don't add per-section margins.
+- Charts are inline SVG with a `<style>` block referencing tokens
+  (`var(--accent)`, `var(--ink-soft)`) so they follow the theme — see the
+  population graph in the bandicoot profile. Don't ship a matplotlib PNG
+  where an SVG will do; photos stay as images under the unit's `img/`.
+- Print rules are in profile.css: hero flattens to ink-on-white, the toc
+  and back button are dropped, and each `section.pf` starts a new page.
 
 ## Printable worksheets
 
