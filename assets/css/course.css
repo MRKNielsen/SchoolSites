@@ -8,7 +8,10 @@
      .backlink · header (.unit-tag, h1, .sub, .meta-row,
      .acknowledgement) · .deck-grid of .deck-card
      (.dc-num/.dc-title/.dc-desc/.dc-quiz) · .deck-card.feature
-     full-width row cards (.fi icon, .fbody, .go) · footer
+     full-width row cards (.fi icon, .fbody, .go) ·
+     .section-head/.section-sub · .deck-item/.dc-wslink ·
+     .ws-strip/.ws-link ·
+     .pdf-frame/.pdf-fallback/.pdf-actions/.pdf-btn · footer
    ============================================================ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,6 +73,7 @@ body.course-page {
   font-size: clamp(0.8rem, 1.25vw, 0.95rem);
   color: rgba(255,255,255,0.8);
 }
+.acknowledgement a { color: #fff; text-decoration: underline; }
 
 /* ---------- Card grid ---------- */
 .deck-grid {
@@ -181,6 +185,58 @@ body.course-page {
   margin-left: auto; flex: 0 0 auto;
   font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
   color: rgba(255,255,255,0.5);
+}
+
+/* ---------- Embedded PDF ----------
+   Native <object type="application/pdf"> so the browser's own viewer
+   does the work (search, zoom, print) — no JS, no pdf.js payload.
+   Mobile Safari and most Android browsers refuse to render a PDF in an
+   <object>, so the element's fallback content is a real download card,
+   not an error message, and .pdf-actions is always visible beside it.
+
+     <div class="pdf-frame">
+       <object data="…​.pdf" type="application/pdf">
+         <div class="pdf-fallback">…<a class="pdf-btn" download>…</a></div>
+       </object>
+     </div>
+     <div class="pdf-actions"><a class="pdf-btn" …></a></div> */
+.pdf-frame {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.pdf-frame object,
+.pdf-frame embed {
+  display: block; width: 100%; height: 80vh; min-height: 460px; border: 0;
+}
+.pdf-fallback {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.4vh; height: 100%; padding: 6vh 2vw; text-align: center;
+  font-size: clamp(0.85rem, 1.3vw, 1rem); color: rgba(255,255,255,0.8);
+}
+.pdf-fallback strong { font-family: var(--font-display); color: #fff; }
+
+.pdf-actions {
+  display: flex; flex-wrap: wrap; gap: 0.8em;
+  margin-top: 1.6vh;
+}
+.pdf-btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 100px; padding: 0.6em 1.3em;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.82rem, 1.3vw, 0.95rem);
+  color: #fff; text-decoration: none;
+  transition: background .15s ease, border-color .15s ease;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.24); border-color: rgba(255,255,255,0.5); }
+
+/* Short viewports and phones: the embed is not worth 80vh of a small
+   screen, and on most phones it will not render at all. */
+@media (max-width: 700px), (max-height: 620px) {
+  .pdf-frame object, .pdf-frame embed { height: 60vh; min-height: 340px; }
 }
 
 .course-page footer {

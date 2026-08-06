@@ -1,0 +1,1411 @@
+% ============================================================
+%  Biodiversity & Ecosystems — Staged Research Portfolio
+%  Year 7  |  Victorian Curriculum F–10 Version 2.0
+%  11 stages — one per lesson  |  At The Level core + Above The Level extension
+%  Compile with: xelatex Bio_Research_Task_Yr7_8.tex  (twice)
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ── Fonts (XeLaTeX) ──────────────────────────────────────────────────────────
+\usepackage{fontspec}
+\setmainfont{Lato}[
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+\definecolor{ForestDark} {HTML}{0C2B1A}
+\definecolor{Forest}     {HTML}{1E7A4E}
+\definecolor{ForestLight}{HTML}{E3F5EC}
+\definecolor{ForestMid}  {HTML}{2A8F5A}
+\definecolor{EarthDark}  {HTML}{5E3A1A}
+\definecolor{Earth}      {HTML}{8B6340}
+\definecolor{EarthLight} {HTML}{F5EDE4}
+\definecolor{Teal}       {HTML}{18A999}
+\definecolor{TealLight}  {HTML}{D6F3F0}
+\definecolor{Amber}      {HTML}{F5A623}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{Coral}      {HTML}{FF6B5E}
+\definecolor{CoralLight} {HTML}{FFE9E6}
+\definecolor{Violet}     {HTML}{7C5CE0}
+\definecolor{VioletLight}{HTML}{EFE9FF}
+\definecolor{Ink}        {HTML}{16223A}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{Line}       {HTML}{DDE5F0}
+\definecolor{Paper}      {HTML}{FBFCFE}
+\definecolor{TableHead}  {HTML}{1E7A4E}
+\definecolor{RowAlt}     {HTML}{EEF8F2}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{Forest}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{Forest}Biodiversity \& Ecosystems — Research Portfolio}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{Forest}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% At The Level task box (forest green)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=ForestLight, colframe=Forest!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Above The Level extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=VioletLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% First Nations callout (earth brown)
+\newtcolorbox{fnbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=EarthLight, colframe=Earth!40,
+  fonttitle=\headingfont\bfseries, coltitle=EarthDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Info / context box (teal)
+\newtcolorbox{contextbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=TealLight, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries\small, coltitle=Teal!70!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Word bank (amber) — matches the CAT's "useful terms to include" panels
+\newtcolorbox{wordbank}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!55,
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% "Where to look" scaffold line — mirrors the CAT booklet
+\newcommand{\wheretolook}[1]{%
+  \par\vspace{2pt}\noindent
+  \colorbox{GoldLight}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+    \small\color{GoldDark}\headingfont\bfseries Where to look:\ %
+    \normalfont\color{DarkGrey}#1}}\par\vspace{4pt}}
+
+% CAT rehearsal question label
+\newcommand{\catq}[2]{%
+  \par\needspace{3\baselineskip}\noindent
+  {\headingfont\bfseries\color{GoldDark}#1}\hspace{6pt}#2\par}
+
+% CAT rehearsal part banner (amber) — mirrors the CAT's PART A/B/C dividers
+\newcommand{\catpart}[3]{%
+  \needspace{6\baselineskip}
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=GoldDark, colframe=GoldDark, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.2cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{Amber!45!GoldDark}\fontsize{40}{40}\selectfont #1}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\large Part #1: #2}\\[3pt]
+    {\itshape\color{white!78!GoldDark}\small #3}
+  \end{tcolorbox}%
+  \vspace{6pt}%
+}
+
+% Word bank line
+\newcommand{\wbank}[1]{%
+  \begin{wordbank}\small\color{DarkGrey}%
+  {\headingfont\bfseries\color{GoldDark}Word bank --- useful terms to include}\\[2pt]#1%
+  \end{wordbank}\vspace{3pt}}
+
+% Answer box (ruled writing space)
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt, height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Marks label (retired — this portfolio is not marked; kept as a no-op)
+\newcommand{\markscount}[1]{}
+
+% Stage divider banner
+\newcommand{\stagediv}[3]{%
+  \needspace{6\baselineskip}
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=ForestDark, colframe=ForestDark, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.2cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{Forest!35!ForestDark}\fontsize{42}{42}\selectfont #1}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\large Stage #1: #2}\\[3pt]
+    {\itshape\color{white!75!ForestDark}\small Lesson concept: #3}
+  \end{tcolorbox}%
+  \vspace{6pt}%
+}
+
+% At The Level task header inline
+\newcommand{\yr}[2]{\noindent{\headingfont\bfseries\small\color{Forest}%
+  \rule[0.2ex]{1.2em}{2pt}\hspace{4pt}#1}\hfill{\small\color{DarkGrey}#2}\\[2pt]}
+
+% Above The Level task header inline
+\newcommand{\yrviii}[2]{\noindent{\headingfont\bfseries\small\color{Violet}%
+  \rule[0.2ex]{1.2em}{2pt}\hspace{4pt}#1}\hfill{\small\color{DarkGrey}#2}\\[2pt]}
+
+% Rubric row fill command
+\newcolumntype{R}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+\begin{document}
+\thispagestyle{plain}
+
+% ── Cover Page ───────────────────────────────────────────────────────────────
+\begin{center}
+  \vspace*{0.5cm}
+  {\headingfont\bfseries\color{ForestDark}\fontsize{28}{32}\selectfont
+   Victorian Biodiversity\\Research Portfolio}\\[10pt]
+  {\headingfont\color{Forest}\Large Biodiversity \& Ecosystems Unit}\\[6pt]
+  {\color{DarkGrey}\large Year 7 \textbar{} Victorian Curriculum F--10 v2.0}\\[4pt]
+  {\color{MidGrey} 11 Stages}
+  \vspace{14pt}
+  \textcolor{Line}{\rule{\linewidth}{1.5pt}}
+\end{center}
+
+\bigskip
+
+% ── CAT Alignment Map ────────────────────────────────────────────────────────
+\section*{How this portfolio prepares you for the CAT}
+
+{\small The Common Assessment Task has seven parts, \textbf{A} to \textbf{G}. Every stage below feeds directly into one or more of them. If you find a CAT question hard, come back to the stage listed beside it.
+
+\medskip
+In the CAT you get a \textbf{Species Booklet} for your species. In this portfolio you get a \textbf{Species Profile} for the Eastern Barred Bandicoot, laid out in the same five sections --- \emph{Profile}, \emph{Ecology}, \emph{Food-web evidence}, \emph{Threats}, \emph{Conservation}. Learning where to find things in it is half the practice.}
+
+\medskip
+
+\noindent\begin{tabularx}{\linewidth}{@{}c>{\raggedright\arraybackslash}p{6.1cm}>{\RaggedRight\arraybackslash}X@{}}
+  \toprule
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Stage &
+  \headingfont\bfseries\color{white} Portfolio topic &
+  \headingfont\bfseries\color{white} Prepares you for \\
+  \midrule
+  1 & Living or Non-living? (MRS GREN)      & \textbf{A1} living / dead / non-living \textbullet{} \textbf{B2} respiration \\
+  \rowcolor{RowAlt}
+  2 & Classification                        & \textbf{A2} why we classify \textbullet{} \textbf{A4} classification table \\
+  3 & Scientific Names \& Six Kingdoms      & \textbf{A3} two-part naming and its rules \\
+  \rowcolor{RowAlt}
+  4 & Dichotomous Keys                      & \textbf{A5} identifying Specimen X and justifying it \\
+  5 & Australian Ecosystems \& Biodiversity & \textbf{D1--D3} biotic \& abiotic factors \textbullet{} \textbf{E1} why biodiversity matters \\
+  \rowcolor{RowAlt}
+  6 & Food Webs \& Energy Flow              & \textbf{B1--B4} photosynthesis, respiration, producer/consumer \textbullet{} \textbf{C1--C5} the whole food-web part \\
+  7 & Ecosystem Services                    & \textbf{E1} value of biodiversity \textbullet{} \textbf{E4} effect of losing a species \\
+  \rowcolor{RowAlt}
+  8 & Adaptations                           & \textbf{D3} how factors affect a species \textbullet{} \textbf{G} poster content \\
+  9 & Introduced Species                    & \textbf{E2} defining ``invasive'' \textbullet{} \textbf{E3} impact on the species \\
+  \rowcolor{RowAlt}
+  10 & Human Impacts on Ecosystems          & \textbf{D4} predicting flow-on effects of a change \\
+  11 & Conservation \& Action               & \textbf{F1--F3} weighing strategies and justifying a recommendation \\
+  \midrule
+  \rowcolor{GoldLight}
+%  \textbf{12} & \textbf{CAT Rehearsal (Parts A--G)} & \textbf{The whole task, in CAT format and conditions} \\
+  \bottomrule
+\end{tabularx}
+
+\medskip
+
+\begin{contextbox}{The part that matters most}
+Part \textbf{F} --- \emph{Conservation: Evaluate \& Recommend} --- is the key criterion of the CAT. It asks you to weigh three strategies against each other, recommend one, justify it with evidence, and admit one weakness of your own choice. Stage 11 and Stage 12 both rehearse exactly this move.
+\end{contextbox}
+
+\newpage
+
+% ── Class Species Page ────────────────────────────────────────────────────────
+\section*{Our Class Species}
+
+\begin{center}
+  {\headingfont\bfseries\color{ForestDark}\fontsize{24}{28}\selectfont Eastern Barred Bandicoot}\\[4pt]
+  {\itshape\color{Forest}\Large Perameles gunnii}\\[6pt]
+  {\color{DarkGrey}\small A grassland digger that came back from extinction in the wild}
+\end{center}
+
+\medskip
+
+\begin{contextbox}{Why the whole class studies the same species}
+Everyone in this class investigates the \textbf{Eastern Barred Bandicoot}. That means we can compare answers, argue about the same food web, and disagree about the same conservation strategies --- which is exactly what makes the thinking sharper.
+
+\medskip
+Your facts come from the \textbf{Species Profile} booklet, which is laid out in the same five sections as the Species Booklet you will be given in the CAT: \emph{Profile}, \emph{Ecology}, \emph{Food-web evidence}, \emph{Threats} and \emph{Conservation}. Keep it beside you.
+
+\medskip
+\textbf{The CAT uses a different species.} You will not be handed the bandicoot on the day. What transfers is the \emph{method} --- how to read a species booklet, build a web from a list of organisms, and weigh three strategies against a threat.
+\end{contextbox}
+
+\bigskip
+
+\noindent\begin{tabularx}{\linewidth}{|l|X|}
+  \hline
+  \rowcolor{ForestLight}
+  \headingfont\bfseries Common name & Eastern Barred Bandicoot (mainland) \\[6pt]
+  \hline
+  \headingfont\bfseries Scientific name & \emph{Perameles gunnii} \\[6pt]
+  \hline
+  \rowcolor{ForestLight}
+  \headingfont\bfseries Ecosystem & Native grassland and grassy woodland \\[6pt]
+  \hline
+  \headingfont\bfseries Victorian region & Volcanic plains of western Victoria; islands in Western Port \\[6pt]
+  \hline
+  \rowcolor{ForestLight}
+  \headingfont\bfseries Conservation status & Endangered --- reclassified from \emph{Extinct in the Wild} in 2021 \\[6pt]
+  \hline
+\end{tabularx}
+
+\bigskip
+
+\begin{yr7box}
+\yr{Before we start}{Fill this in from the Species Profile}
+
+\noindent Write \textbf{three} things about this animal that surprised you, and \textbf{one} question you want answered by the end of the unit.
+\answerbox{7cm}
+\end{yr7box}
+
+\bigskip
+\newpage
+\noindent\textbf{Attempt a scientific sketch of the Eastern Barred Bandicoot:}
+\answerbox{24.5cm}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 1
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{1}{Living or Non-living?}{MRS GREN — the seven life processes}
+
+\begin{contextbox}{Background}
+All living things carry out the seven life processes summarised by the acronym \textbf{MRS GREN}: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, and Nutrition. In this stage you will demonstrate, with specific evidence, that your chosen organism is alive.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 1}
+
+\wheretolook{Unit Booklet, Section 1 --- Living or Non-living? \textbullet{} \textbf{Species Profile: Ecology}}
+Complete the table below for the Eastern Barred Bandicoot. In the \textbf{Evidence} column, give a \emph{specific} example --- not just the name of the process (e.g.\ not ``moves'' but ``digs hundreds of small conical pits in a single night to reach worms in the soil'').
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{3.2cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Life process & \headingfont\bfseries\color{white} Specific evidence from the bandicoot \\
+  \hline
+  Movement &  \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Respiration &  \\[30pt]
+  \hline
+  Sensitivity &  \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Growth &  \\[30pt]
+  \hline
+  Reproduction &  \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Excretion &  \\[30pt]
+  \hline
+  Nutrition &  \\[30pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 1}
+Identify ONE life process that is most difficult to observe directly in the wild for the bandicoot. Explain why it is hard to observe, and describe how scientists might use technology or indirect evidence to detect it.
+\answerbox{16cm}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 2
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{2}{Classification}{The Linnaean system — seven levels of taxonomy}
+
+\begin{contextbox}{Background}
+Scientists classify all living things into a hierarchy of groups from broadest to most specific: Domain, Kingdom, Phylum, Class, Order, Family, Genus, Species. In this stage you will place the bandicoot within that system and explain what each level tells us about its evolutionary relationships.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 2}
+
+\wheretolook{Unit Booklet, Section 2 --- Linnaean Levels \textbullet{} \textbf{Species Profile: Profile} (Kingdom to Species) and \textbf{Names \& Classification} (Domain)}
+\textbf{Part A} --- Complete the Linnaean classification table for the bandicoot.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{2cm}|p{3cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Level &
+  \headingfont\bfseries\color{white} Name for the bandicoot &
+  \headingfont\bfseries\color{white} What this level means (in your own words) \\
+  \hline
+  Domain & & \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Kingdom & & \\[30pt]
+  \hline
+  Phylum & & \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Class & & \\[30pt]
+  \hline
+  Order & & \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Family & & \\[30pt]
+  \hline
+  Genus & & \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Species & & \\[30pt]
+  \hline
+\end{tabularx}
+\newpage
+\bigskip
+\wheretolook{\textbf{Species Profile: Related Species}}
+\textbf{Part B} --- Name ONE other organism that shares the same \emph{Order} as the bandicoot. State one physical or behavioural feature they share that reflects their common ancestry.
+\answerbox{5cm}
+\end{yr7box}
+
+\bigskip
+
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 2}
+\wheretolook{\textbf{Species Profile: Related Species}}
+Compare the bandicoot to another species in the same Order but a different Family --- the Species Profile names one. Identify TWO differences between them and explain what those differences tell us about how the two lineages have diverged over time.
+\answerbox{10cm}
+\end{yr8box}
+
+\bigskip\noindent{\headingfont\bfseries\small\color{GoldDark}Where I found this}
+{\small\color{DarkGrey}\ --- name the Species Profile section or Unit Booklet page for each answer above.}
+\answerbox{1.5cm}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 3
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{3}{Scientific Names \& The Six Kingdoms}{Binomial nomenclature and kingdom-level features}
+
+\begin{contextbox}{Background}
+Every species has a two-part Latin scientific name (binomial nomenclature) consisting of its Genus and species epithet. This universal system prevents confusion when scientists across the world discuss the same organism. All life is also grouped into one of six kingdoms, each with distinctive cellular and structural characteristics.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 3}
+
+\wheretolook{\textbf{Species Profile: Names \& Classification}}
+\textbf{Part A} --- Find the meaning and origin of the bandicoot's scientific name.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{4cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Component &
+  \headingfont\bfseries\color{white} Meaning / origin \\
+  \hline
+  Genus name & \\[30pt]
+  \hline
+  \rowcolor{RowAlt}
+  Species epithet & \\[30pt]
+  \hline
+  Why this name was chosen & \\[30pt]
+  \hline
+\end{tabularx}
+
+\bigskip
+\wheretolook{Unit Booklet, Section 3 --- The Six Kingdoms \textbullet{} \textbf{Species Profile: Profile}}
+\textbf{Part B} --- State which of the six kingdoms the bandicoot belongs to. Give TWO kingdom-level characteristics that apply to it.
+\answerbox{7cm}
+\end{yr7box}
+
+\bigskip
+
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 3}
+\wheretolook{\textbf{Species Profile: Names \& Classification} --- the ``When scientific names change'' box}
+Scientific names are sometimes revised after new evidence. Using the example in your Species Profile, explain what evidence caused the change, and why updating names matters --- not just for scientists, but for whether a species gets protected at all.
+\answerbox{14cm}
+\end{yr8box}
+
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 4
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{4}{Dichotomous Keys}{Identifying organisms using observable features}
+
+\begin{contextbox}{Background}
+A dichotomous key guides users through a series of either/or questions based on observable physical features, allowing them to identify an unknown organism. Keys must use precise, observable characteristics --- not size, colour, or behaviour unless these are constant across the species.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 4}
+
+\wheretolook{Unit Booklet, Section 4 --- Dichotomous Keys \textbullet{} \textbf{Species Profile: Related Species} --- use the three other animals listed there and their observable features}
+Design a \textbf{table-format} dichotomous key that distinguishes the bandicoot from the THREE other animals on the Related Species page.
+
+\smallskip
+\noindent\textbf{The four organisms in my key:}
+\begin{enumerate}[label=\arabic*., itemsep=2pt, topsep=4pt]
+  \item \underline{\hspace{9cm}} (Eastern Barred Bandicoot)
+  \item \underline{\hspace{9cm}}
+  \item \underline{\hspace{9cm}}
+  \item \underline{\hspace{9cm}}
+\end{enumerate}
+
+\medskip
+\noindent Complete the key below. Each step must lead either to an organism name (end) or to another step number. Use only \emph{observable structural features}.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|c|X|c|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Step &
+  \headingfont\bfseries\color{white} Feature / question &
+  \headingfont\bfseries\color{white} Go to / Result \\
+  \hline
+  1a & & \\[18pt]
+  \hline
+  \rowcolor{RowAlt}
+  1b & & \\[18pt]
+  \hline
+  2a & & \\[18pt]
+  \hline
+  \rowcolor{RowAlt}
+  2b & & \\[18pt]
+  \hline
+  3a & & \\[18pt]
+  \hline
+  \rowcolor{RowAlt}
+  3b & & \\[18pt]
+  \hline
+  4a & & \\[18pt]
+  \hline
+  \rowcolor{RowAlt}
+  4b & & \\[18pt]
+  \hline
+\end{tabularx}
+
+\newpage
+Now construct a tree for the above dichotomous key.
+\answerbox{10cm}
+\end{yr7box}
+
+\bigskip
+
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 4}
+Identify ONE limitation of your dichotomous key. Describe a specific situation --- what type of specimen, life stage, or condition --- that would cause the key to give a wrong or impossible result. Suggest how the key could be improved to address this limitation.
+\answerbox{7.5cm}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 5
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{5}{Australian Ecosystems \& Biodiversity}{Biotic and abiotic factors; species richness}
+
+\begin{contextbox}{Background}
+An ecosystem is a community of living organisms (biotic factors) interacting with each other and with the non-living environment (abiotic factors) in a specific area. Australia's ecosystems are among the world's most biodiverse, shaped by millions of years of geographic isolation.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 5}
+
+\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \textbullet{} \textbf{Species Profile: Ecology}, \textbf{Food-web evidence} and \textbf{Threats}}
+\textbf{Part A} --- Identify the ecosystem the bandicoot lives in and list key biotic and abiotic factors.
+
+\medskip
+\noindent\textbf{Ecosystem type:} \underline{\hspace{8cm}}
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|X|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Biotic factors (at least 4) &
+  \headingfont\bfseries\color{white} Abiotic factors (at least 4) \\
+  \hline
+  & \\[100pt]
+  \hline
+\end{tabularx}
+
+\medskip
+\textbf{Part B} --- Choose ONE abiotic factor and explain specifically how it shapes which organisms can survive in this ecosystem.
+\answerbox{8cm}
+\end{yr7box}
+
+\bigskip
+
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 5}
+\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems (choose a second ecosystem described there) \textbullet{} \textbf{Species Profile: The Grassland}}
+Compare the biodiversity of the bandicoot's grassland with ONE other Victorian ecosystem described in your Unit Booklet. Use \emph{species richness} as your primary measure. Explain what \emph{abiotic} differences between the two account for the difference --- and say whether the ecosystem with fewer species is therefore less worth protecting.
+\answerbox{19cm}
+\end{yr8box}
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 6
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{6}{Food Webs \& Energy Flow}{Trophic levels and energy transfer}
+
+\begin{contextbox}{Background}
+Energy enters most ecosystems through photosynthesis and flows from producers to consumers through feeding relationships. A food web shows the interconnected feeding relationships in an ecosystem. Only approximately 10\% of energy transfers between each trophic level.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 6}
+
+\wheretolook{Unit Booklet, Section 6 --- Food Webs \textbullet{} \textbf{Species Profile: Food-web evidence} --- the organism list is there; you work out the arrows}
+\textbf{Part A} --- Draw a food web for the bandicoot's grassland below. Include at least \textbf{8 organisms} with the bandicoot clearly labelled. Use arrows to show energy flow (arrow points from food source to consumer).
+
+\answerbox{14cm}
+\newpage
+\medskip
+\textbf{Part B} --- Identify which level consumer the Bandicoot is in your food web. 
+
+\answerbox{5.5cm}
+\end{yr7box}
+
+\bigskip
+
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 6}
+\textbf{Part A} ---Trace a complete energy pathway from a \emph{producer} to the bandicoot, naming each organism and trophic level.
+\answerbox{3.5cm}
+\textbf{Part B} ---Predict what would happen to TWO other species in your food web if the bandicoot were completely removed. Use the concept of a \emph{trophic cascade} to explain each effect. Specify whether the other species would increase or decrease in number and why.
+\answerbox{10cm}
+\end{yr8box}
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 7
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{7}{Ecosystem Services}{What ecosystems and species provide for people}
+
+\begin{contextbox}{Background}
+Ecosystem services are the direct and indirect benefits that ecosystems and the organisms within them provide to humans. They are grouped into four categories: \textbf{provisioning} (food, water, materials), \textbf{regulating} (climate, water purification, pollination), \textbf{cultural} (spiritual, recreational, educational), and \textbf{supporting} (soil formation, nutrient cycling, primary production).
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 7}
+
+\wheretolook{Unit Booklet, Section 7 --- Ecosystem Services \textbullet{} \textbf{Species Profile: The Grassland} and \textbf{Ecology}}
+Identify THREE ecosystem services provided by the bandicoot or its grassland. For each service: name it, classify it (provisioning / regulating / cultural / supporting), and give specific evidence of how it benefits people or other species.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{0.8cm}|p{4cm}|p{2.8cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} \# &
+  \headingfont\bfseries\color{white} Service name &
+  \headingfont\bfseries\color{white} Category &
+  \headingfont\bfseries\color{white} Specific evidence / explanation \\
+  \hline
+  1 & & & \\[68pt]
+  \hline
+  \rowcolor{RowAlt}
+  2 & & & \\[68pt]
+  \hline
+  3 & & & \\[68pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{fnbox}{Above The Level + First Nations Perspectives}
+\yrviii{ Perspectives }{Released: Lesson 7}
+\wheretolook{\textbf{Species Profile: First Nations Knowledge}}
+Using the Species Profile, describe ONE specific practice or relationship through which First Nations peoples have cared for these grasslands. Classify it as an ecosystem service, and explain how this knowledge informs land management in Victoria today.
+\answerbox{18cm}
+\end{fnbox}
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 8
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{8}{Adaptations}{Structural, behavioural, and physiological adaptations}
+
+\begin{contextbox}{Background}
+An adaptation is a feature that improves an organism's survival or reproductive success in its environment. Adaptations arise through natural selection over many generations. They are classified as \textbf{structural} (body form), \textbf{behavioural} (actions), or \textbf{physiological} (internal processes).
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 8}
+
+\wheretolook{Unit Booklet, Section 8 --- Adaptations \textbullet{} \textbf{Species Profile: Ecology} --- five adaptations are listed; you decide which type each one is}
+Choose THREE adaptations of the bandicoot --- one of each type. For each: name it, describe it precisely, and explain specifically how it increases survival or reproductive success in the bandicoot's environment.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|p{2.4cm}|p{3.8cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Type &
+  \headingfont\bfseries\color{white} Name \& description &
+  \headingfont\bfseries\color{white} How it increases survival / reproduction \\
+  \hline
+  Structural & & \\[78pt]
+  \hline
+  \rowcolor{RowAlt}
+  Behavioural & & \\[78pt]
+  \hline
+  Physiological & & \\[78pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 8}
+Choose ONE of the adaptations above. Explain, step by step, how natural selection would have led to this adaptation over many generations. Your answer must include: variation in the original population, the selection pressure, differential survival, and change over generations.
+\answerbox{21cm}
+\end{yr8box}
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 9
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{9}{Introduced Species}{Threats to native biodiversity from invasive species}
+
+\begin{contextbox}{Background}
+Introduced (invasive) species are organisms moved outside their natural range, often by human activity. In Australia, introduced species such as foxes, cats, rabbits, and cane toads have devastated native wildlife. They compete for resources, prey on native species, spread disease, and alter habitats.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 9}
+
+\wheretolook{Unit Booklet, Section 9 --- Introduced Species \textbullet{} \textbf{Species Profile: Threats}, \textbf{Timeline \& Status} and \textbf{Conservation}}
+Choose ONE introduced species that threatens the bandicoot or its ecosystem.
+
+\medskip
+\noindent\textbf{Introduced species:}
+\answerbox{1.5cm}
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries\raggedleft\arraybackslash}p{4cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Question &
+  \headingfont\bfseries\color{white} Your answer \\
+  \hline
+  How was this species introduced to Australia? (pathway, date/era, reason) & \\[80pt]
+  \hline
+  \rowcolor{RowAlt}
+  What specific ecological impact does it have on the bandicoot or native species in the ecosystem? &  \\[80pt]
+  \hline
+  What is ONE control method currently being used? Describe how it works. & \\[80pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 9}
+Evaluate the control method you described above. What evidence shows it is reducing the impact of the introduced species? What are its key limitations (ecological, economic, or practical)? Is there a better alternative? Use specific evidence.
+\answerbox{14.5cm}
+\end{yr8box}
+
+\bigskip\noindent{\headingfont\bfseries\small\color{GoldDark}Where I found this}
+{\small\color{DarkGrey}\ --- name the Species Profile section or Unit Booklet page for each answer above.}
+\answerbox{1.5cm}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 10
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{10}{Human Impacts on Ecosystems}{Habitat loss, pollution, climate change, and over-exploitation}
+
+\begin{contextbox}{Background}
+Human activities affect biodiversity through habitat destruction and fragmentation, pollution, over-exploitation of species, and climate change. These impacts reduce species richness, disrupt ecosystem services, and can push species toward extinction. Understanding the mechanisms of impact is the first step to reducing them.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 10}
+
+\wheretolook{Unit Booklet, Section 10 --- Human Impacts \textbullet{} \textbf{Species Profile: The Grassland}, \textbf{Threats} and \textbf{Timeline \& Status}}
+Identify TWO distinct human impacts affecting the bandicoot's grassland. For each: identify the type of impact, describe the mechanism of harm, and give specific evidence (a figure, a date or a documented case) of its effect on biodiversity or the bandicoot.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{1.5cm}|p{3cm}|p{4.5cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Impact &
+  \headingfont\bfseries\color{white} Type \quad (e.g.\ habitat loss) &
+  \headingfont\bfseries\color{white} Mechanism of harm &
+  \headingfont\bfseries\color{white} Specific evidence \\
+  \hline
+  1 & & & \\[160pt]
+  \hline
+  \rowcolor{RowAlt}
+  2 & & & \\[160pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 10}
+Of the two impacts you identified, decide which is more serious for long-term biodiversity in your ecosystem. Justify your choice using evidence. Then propose ONE realistic policy change (at the local, state, or national level) that could reduce this impact, and explain the evidence that supports it.
+\answerbox{15cm}
+\end{yr8box}
+
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  STAGE 11
+% ══════════════════════════════════════════════════════════════════════════════
+\stagediv{11}{Conservation \& Action}{Strategies to protect biodiversity}
+
+\begin{contextbox}{Background}
+Conservation strategies aim to protect and restore biodiversity. \textbf{In-situ conservation} protects species in their natural habitat (e.g.\ national parks, Indigenous Protected Areas). \textbf{Ex-situ conservation} protects species outside their natural habitat (e.g.\ zoos, seed banks, captive breeding programs). The most effective conservation integrates both approaches alongside community action.
+\end{contextbox}
+
+\bigskip
+
+\begin{yr7box}
+\yr{At The Level}{Released: Lesson 11}
+
+\wheretolook{\textbf{Species Profile: Timeline \& Status}}
+\textbf{Part A} --- Find the conservation status of the Eastern Barred Bandicoot. Be careful: the \emph{mainland} and \emph{Tasmanian} populations are listed separately, with different statuses. Give the mainland figures.
+
+\medskip
+\noindent\begin{tabular}{@{}ll@{}}
+  Conservation status: & \underline{\hspace{5cm}} \\[8pt]
+  Population trend: & \underline{\hspace{4cm}} {\small(increasing / decreasing / stable / unknown)}
+\end{tabular}
+
+\bigskip
+\wheretolook{Unit Booklet, Section 11 --- Conservation \& Action \textbullet{} \textbf{Species Profile: Conservation} and \textbf{Timeline \& Status}}
+\textbf{Part B} --- Choose ONE in-situ and ONE ex-situ conservation strategy in place for the bandicoot. Describe each and evaluate its effectiveness using specific evidence from the Species Profile.
+
+\medskip
+\noindent\begin{tabularx}{\linewidth}{|p{2.5cm}|p{4.5cm}|X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Type &
+  \headingfont\bfseries\color{white} Strategy description &
+  \headingfont\bfseries\color{white} Evidence of effectiveness / limitations \\
+  \hline
+  In-situ & & \\[112pt]
+  \hline
+  \rowcolor{RowAlt}
+  Ex-situ & & \\[112pt]
+  \hline
+\end{tabularx}
+\end{yr7box}
+
+\bigskip
+\newpage
+\begin{yr8box}
+\yrviii{Above The Level}{Released: Lesson 11}
+\wheretolook{\textbf{Species Profile: Conservation}, \textbf{The Grassland} and \textbf{First Nations Knowledge}}
+Design a realistic conservation action that students at your school or members of your local community could take to benefit the bandicoot or its ecosystem. Your response must address: \begin{enumerate}
+	\item what the action is and how it would be carried out; 
+	\item the ecological mechanism by which it helps the organism; 
+	\item one limitation of your proposed action; and 
+	\item  how its success could be measured.
+\end{enumerate}
+\answerbox{18cm}
+\end{yr8box}
+
+
+\newpage
+
+%% ══════════════════════════════════════════════════════════════════════════════
+%%  STAGE 12 — CAT REHEARSAL (Parts A–G)
+%% ══════════════════════════════════════════════════════════════════════════════
+%\newpage
+%\stagediv{12}{CAT Rehearsal}{The full Ecosystem Investigation, in CAT format}
+%
+%\begin{contextbox}{How this stage works}
+%This is a \textbf{dress rehearsal} for the Common Assessment Task. It has the same seven parts, in the same order, asking the same kinds of question --- but about the Eastern Barred Bandicoot instead of the species you will be given on the day.
+%
+%\medskip
+%Work from your \textbf{Species Profile} booklet, your \textbf{Unit Booklet}, and the material you gathered in Stages 1--11. Every question carries a \textbf{Where to look} line, exactly as the real task does --- and, exactly as in the CAT, some of them point you at the Species Profile rather than the Unit Booklet. Answer in full sentences and use the word banks.
+%
+%\medskip
+%\textbf{There are no marks.} Use the developmental rubric at the back to judge your own work, then compare it with your teacher's judgement.
+%\end{contextbox}
+%
+%\bigskip
+%
+%\noindent\begin{tabularx}{\linewidth}{|l|X|}
+%  \hline
+%  \rowcolor{GoldLight}
+%  \headingfont\bfseries Species & Eastern Barred Bandicoot (\emph{Perameles gunnii}) \\[6pt]
+%  \hline
+%  \headingfont\bfseries Date attempted & \\[10pt]
+%  \hline
+%\end{tabularx}
+%
+%% ── PART A ────────────────────────────────────────────────────────────────────
+%\catpart{A}{Classification}{Sorting and naming living things, and using a dichotomous key.}
+%
+%\begin{yr7box}
+%\catq{A1}{Explain the difference between something that is \textbf{living}, something that is \textbf{dead}, and something that is \textbf{non-living}. Give an example of each.}
+%\wheretolook{Unit Booklet, Section 1 --- Living or Non-living? \textbullet{} Portfolio Stage 1}
+%\wbank{living \textbullet{} dead \textbullet{} non-living \textbullet{} life processes \textbullet{} MRS GREN}
+%\answerbox{4cm}
+%
+%\medskip
+%\catq{A2}{Explain why scientists classify living things into groups.}
+%\wheretolook{Unit Booklet, Section 2 --- Classification: Linnaean Levels \textbullet{} Portfolio Stage 2}
+%\answerbox{3.2cm}
+%
+%\medskip
+%\catq{A3}{Explain why every species is given a two-part scientific name, and state the two rules for writing one correctly.}
+%\wheretolook{Unit Booklet, Section 3 --- Scientific Names \& the Six Kingdoms \textbullet{} Portfolio Stage 3}
+%\wbank{genus \textbullet{} species \textbullet{} capital letter \textbullet{} italics or underline}
+%\answerbox{3.8cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{A4}{Complete the classification table for the Eastern Barred Bandicoot --- from memory first, then check it against the Species Profile.}
+%\wheretolook{Unit Booklet, Section 2 --- Classification: Linnaean Levels \textbullet{} \textbf{Species Profile: Profile}}
+%
+%\medskip
+%\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{3.2cm}|X|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white} Level &
+%  \headingfont\bfseries\color{white} Eastern Barred Bandicoot \\
+%  \hline
+%  Kingdom & \\[8pt] \hline
+%  \rowcolor{RowAlt} Phylum & \\[8pt] \hline
+%  Class & \\[8pt] \hline
+%  \rowcolor{RowAlt} Order & \\[8pt] \hline
+%  Family & \\[8pt] \hline
+%  \rowcolor{RowAlt} Genus & \\[8pt] \hline
+%  Species & \\[8pt] \hline
+%\end{tabularx}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{A5}{Use the dichotomous key below to identify \textbf{Specimen X}. Write its name, then explain how you reached it and which features ruled out the other species.}
+%\wheretolook{Unit Booklet, Section 4 --- Dichotomous Keys \textbullet{} Portfolio Stage 4}
+%
+%\medskip
+%\noindent\begin{tabularx}{\linewidth}{|>{\bfseries\centering\arraybackslash}p{1.4cm}|X|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white} Step &
+%  \headingfont\bfseries\color{white} Choose the statement that fits $\rightarrow$ \\
+%  \hline
+%  1a & Body covered in feathers $\rightarrow$ go to step 2 \\ \hline
+%  \rowcolor{RowAlt} 1b & No feathers $\rightarrow$ go to step 3 \\ \hline
+%  2a & Small bird; long upright tail; breeding males have a bright blue head and throat $\rightarrow$ \textbf{Superb Fairy-wren} \\ \hline
+%  \rowcolor{RowAlt} 2b & Large bird; forward-facing yellow eyes and a hooked beak $\rightarrow$ \textbf{Powerful Owl} \\ \hline
+%  3a & Body covered in fur $\rightarrow$ go to step 4 \\ \hline
+%  \rowcolor{RowAlt} 3b & No fur; smooth moist skin, green with gold-brown blotches $\rightarrow$ \textbf{Growling Grass Frog} \\ \hline
+%  4a & Broad flattened tail, webbed feet and a soft leathery bill $\rightarrow$ \textbf{Platypus} \\ \hline
+%  \rowcolor{RowAlt} 4b & Long pointed snout, short rounded ears, and pale bars across the rump $\rightarrow$ \textbf{Eastern Barred Bandicoot} \\ \hline
+%\end{tabularx}
+%
+%\medskip
+%\begin{contextbox}{Specimen X}
+%Specimen X was recorded at dawn in a slow-moving Victorian river. It has dense dark brown fur that traps a layer of air, a broad flattened tail, webbed front feet, and a soft leathery bill. It was seen diving repeatedly and closing its eyes underwater.
+%\end{contextbox}
+%
+%\medskip
+%\noindent\textbf{Specimen X is:} \underline{\hspace{7cm}}
+%\answerbox{3.4cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr8box}
+%\yrviii{Above The Level}{}
+%Name one situation in which this key would fail --- a specimen, life stage or condition it cannot handle. Suggest one extra couplet that would fix it.
+%\answerbox{2.6cm}
+%\end{yr8box}
+%
+%% ── PART B ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{B}{Energy}{How energy enters living things and passes between them.}
+%
+%\begin{yr7box}
+%\catq{B1}{Describe the role of energy in photosynthesis. Name where the energy comes from and what it is used to make.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow \textbullet{} Portfolio Stage 6}
+%\wbank{sunlight \textbullet{} light energy \textbullet{} producer \textbullet{} food \textbullet{} glucose}
+%\answerbox{3.6cm}
+%
+%\medskip
+%\catq{B2}{Explain how respiration provides living things with a usable source of energy.}
+%\wheretolook{Unit Booklet, Section 1 --- Living or Non-living? \textbullet{} Section 6 --- Food Webs \& Energy Flow \textbullet{} Portfolio Stages 1 and 6}
+%\wbank{respiration \textbullet{} food \textbullet{} energy \textbullet{} oxygen \textbullet{} cells}
+%\answerbox{3.6cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{B3}{Explain how the bandicoot obtains its energy. Trace that energy back to its original source.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow \textbullet{} \textbf{Species Profile: Ecology}}
+%\answerbox{3.6cm}
+%
+%\medskip
+%\catq{B4}{Is the bandicoot a \textbf{producer} or a \textbf{consumer}? State which, and explain how you know using the definition.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow \textbullet{} \textbf{Species Profile: Profile}}
+%\answerbox{3cm}
+%\end{yr7box}
+%
+%% ── PART C ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{C}{Food Webs}{Modelling how energy and matter move through an ecosystem.}
+%
+%\begin{contextbox}{Before you start}
+%The pieces of your food web are the ``\emph{Organisms in the Eastern Barred Bandicoot ecosystem}'' list in your \textbf{Species Profile} --- exactly as the CAT will give you a list for its species. \textbf{You work out the arrows yourself.} Do not copy the web from Stage 6; redraw it here and decide the direction of every arrow again.
+%\end{contextbox}
+%
+%\begin{yr7box}
+%\catq{C1}{Construct a food web for the bandicoot's grassland. Include the bandicoot, at least one producer, and a decomposer. \textbf{Arrows point from the food to the feeder.}}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow \textbullet{} \textbf{Species Profile: Food-web evidence}}
+%\answerbox{9.5cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{C2}{From your food web, identify one example of each of the following.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow}
+%
+%\medskip
+%\noindent\begin{tabularx}{\linewidth}{|>{\bfseries}p{5.4cm}|X|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white} Role &
+%  \headingfont\bfseries\color{white} Organism from my web \\
+%  \hline
+%  Producer & \\[8pt] \hline
+%  \rowcolor{RowAlt} Primary consumer & \\[8pt] \hline
+%  Secondary consumer & \\[8pt] \hline
+%  \rowcolor{RowAlt} Decomposer or detritivore & \\[8pt] \hline
+%\end{tabularx}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{C3}{Explain what the arrows represent, and describe how \emph{energy flows} and how \emph{matter cycles} through your web.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow}
+%\wbank{energy \textbullet{} matter \textbullet{} heat \textbullet{} recycled \textbullet{} producer \textbullet{} decomposer \textbullet{} one direction}
+%\answerbox{4.2cm}
+%
+%\medskip
+%\catq{C4}{Explain why decomposers are important in the bandicoot's grassland.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow}
+%\answerbox{3.2cm}
+%
+%\medskip
+%\catq{C5}{Predict what would happen to this ecosystem if the bandicoot disappeared. Identify at least \textbf{two} other organisms that would be affected and explain how.}
+%\wheretolook{Unit Booklet, Section 6 --- Food Webs \& Energy Flow \textbullet{} \textbf{Species Profile: Food-web evidence}}
+%\answerbox{4.6cm}
+%\end{yr7box}
+%
+%% ── PART D ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{D}{Ecosystems}{How living and non-living factors shape an ecosystem.}
+%
+%\begin{yr7box}
+%\catq{D1}{Explain the difference between an \textbf{ecosystem} and a \textbf{food web}.}
+%\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \& Biodiversity \textbullet{} Section 6 --- Food Webs \textbullet{} Portfolio Stages 5 and 6}
+%\wbank{ecosystem \textbullet{} food web \textbullet{} community \textbullet{} biotic \textbullet{} abiotic}
+%\answerbox{3.8cm}
+%
+%\medskip
+%\catq{D2}{List three biotic factors and three abiotic factors in the bandicoot's grassland.}
+%\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \& Biodiversity \textbullet{} \textbf{Species Profile: Ecology and Threats}}
+%
+%\medskip
+%\noindent\begin{tabularx}{\linewidth}{|X|X|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white} Three biotic factors &
+%  \headingfont\bfseries\color{white} Three abiotic factors \\
+%  \hline
+%  \rule{0pt}{4.6em}\hfill & \\
+%  \hline
+%\end{tabularx}
+%
+%\medskip
+%\catq{D3}{Choose \textbf{one} biotic factor and \textbf{one} abiotic factor from your lists. Explain how each one affects the bandicoot.}
+%\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \& Biodiversity \textbullet{} \textbf{Species Profile: Threats}}
+%\answerbox{4.2cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{D4}{Predict how \textbf{ONE} of the following changes would affect the bandicoot and its grassland. Circle your choice and explain the flow-on effects.}
+%\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \& Biodiversity \textbullet{} Section 6 --- Food Webs \textbullet{} Portfolio Stage 10}
+%
+%\medskip
+%\begin{center}
+%\fbox{\parbox{0.86\linewidth}{\centering\headingfont\bfseries\color{GoldDark}Choose one\\[3pt]
+%\normalfont\color{Ink}\large drought \quad/\quad fire \quad/\quad a new introduced predator}}
+%\end{center}
+%\wbank{biotic \textbullet{} abiotic \textbullet{} population \textbullet{} food \textbullet{} shelter \textbullet{} flow-on effect}
+%\answerbox{6cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr8box}
+%\yrviii{Above The Level}{}
+%Trace your predicted change through \textbf{three} linked organisms as a \emph{trophic cascade}. For each, state whether its numbers rise or fall, and why.
+%\answerbox{3.4cm}
+%\end{yr8box}
+%
+%% ── PART E ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{E}{Biodiversity \& Introduced Species}{Why variety matters and how introduced species cause harm.}
+%
+%\begin{yr7box}
+%\catq{E1}{Explain why biodiversity is important in an ecosystem.}
+%\wheretolook{Unit Booklet, Section 5 --- Australian Ecosystems \& Biodiversity \textbullet{} Section 7 --- Ecosystem Services \textbullet{} Portfolio Stages 5 and 7}
+%\answerbox{3.8cm}
+%
+%\medskip
+%\catq{E2}{Define the term \textbf{invasive species}.}
+%\wheretolook{Unit Booklet, Section 9 --- Introduced Species \textbullet{} Portfolio Stage 9}
+%\wbank{introduced \textbullet{} native \textbullet{} spread \textbullet{} harm}
+%\answerbox{2.8cm}
+%
+%\medskip
+%\catq{E3}{Describe how one invasive species affects the bandicoot or its grassland. Use specific evidence from the Species Profile.}
+%\wheretolook{Unit Booklet, Section 9 --- Introduced Species \textbullet{} \textbf{Species Profile: Threats}}
+%\answerbox{4.2cm}
+%
+%\medskip
+%\catq{E4}{Explain how the loss of the bandicoot would affect the biodiversity of its grassland. Its role as an \emph{ecosystem engineer} matters here.}
+%\wheretolook{Unit Booklet, Section 7 --- Ecosystem Services \textbullet{} \textbf{Species Profile: Ecology}}
+%\answerbox{4.2cm}
+%\end{yr7box}
+%
+%% ── PART F ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{F}{Conservation --- Evaluate \& Recommend}{The key part: weigh the evidence and justify a decision.}
+%
+%\begin{contextbox}{This is the part that matters most}
+%Your \textbf{Species Profile} sets out \textbf{three real strategies} being used for the Eastern Barred Bandicoot --- predator-proof fenced reserves, guardian dogs on working farms, and translocation to fox-free islands. The CAT will give you three strategies for its species in exactly the same way. Decide which one gives the bandicoot the best chance of survival.
+%
+%\medskip
+%A strong answer does four things: compares all three, measures each against the species' \emph{biggest} threat, backs the recommendation with evidence, and admits one weakness of the chosen strategy and how it might be reduced.
+%\end{contextbox}
+%
+%\medskip
+%
+%\noindent\begin{tabularx}{\linewidth}{|l|X|}
+%  \hline
+%  \rowcolor{GoldLight}
+%  \headingfont\bfseries The bandicoot's biggest threat is & \\[12pt]
+%  \hline
+%\end{tabularx}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{F1}{Summarise the three strategies. For each, note its main advantage, its main disadvantage, and how well it deals with the biggest threat you named above.}
+%\wheretolook{Unit Booklet, Section 11 --- Conservation \& Action \textbullet{} \textbf{Species Profile: Conservation}}
+%
+%\medskip
+%\noindent\begin{tabularx}{\linewidth}{|p{3.4cm}|X|X|p{2.6cm}|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white} Strategy &
+%  \headingfont\bfseries\color{white} Main advantage &
+%  \headingfont\bfseries\color{white} Main disadvantage &
+%  \headingfont\bfseries\color{white} Deals with the main threat? \\
+%  \hline
+%  \textbf{1.}\rule{0pt}{3.6em} & & & \\
+%  \hline
+%  \rowcolor{RowAlt} \textbf{2.}\rule{0pt}{3.6em} & & & \\
+%  \hline
+%  \textbf{3.}\rule{0pt}{3.6em} & & & \\
+%  \hline
+%\end{tabularx}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr7box}
+%\catq{F2}{Which strategy do you recommend as the best for the bandicoot? State your choice clearly.}
+%\answerbox{2.2cm}
+%
+%\medskip
+%\catq{F3}{Justify your recommendation using evidence. Explain why it is better than the other two, then acknowledge \textbf{one weakness} of your chosen strategy and how that weakness might be reduced.}
+%\wheretolook{Unit Booklet, Section 11 --- Conservation \& Action \textbullet{} Portfolio Stage 11}
+%\answerbox{8.5cm}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\begin{yr8box}
+%\yrviii{Above The Level}{}
+%Conservation budgets are finite. If you could fund only \emph{one} of these three strategies for the next ten years, would your recommendation change? Explain what evidence you would need to be confident in that decision.
+%\answerbox{3.4cm}
+%\end{yr8box}
+%
+%% ── PART G ────────────────────────────────────────────────────────────────────
+%\newpage
+%\catpart{G}{Communicate --- National Park Poster}{Sharing your understanding with an audience.}
+%
+%\begin{contextbox}{The brief}
+%Create an \textbf{A3 poster} for visitors to a national park, persuading them to care about the Eastern Barred Bandicoot. Plan it on this page, then produce the final poster on A3 paper.
+%\end{contextbox}
+%
+%\begin{yr7box}
+%\noindent{\headingfont\bfseries\color{Forest}Your poster must include}
+%\begin{itemize}[itemsep=3pt, topsep=5pt, leftmargin=*]
+%  \item The species' \textbf{common and scientific name}
+%  \item Its \textbf{classification} and where it lives (\textbf{habitat})
+%  \item A \textbf{food web} showing its place in the ecosystem
+%  \item Why it is \textbf{threatened or endangered}
+%  \item \textbf{One conservation strategy} that is helping it
+%  \item A persuasive \textbf{call to action} for visitors
+%\end{itemize}
+%
+%\medskip
+%\noindent\textbf{Check each one off as you plan it:}
+%\medskip
+%
+%\noindent\begin{tabularx}{\linewidth}{|c|X|c|X|}
+%  \hline
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white}\small Done &
+%  \headingfont\bfseries\color{white} Element &
+%  \headingfont\bfseries\color{white}\small Done &
+%  \headingfont\bfseries\color{white} Element \\
+%  \hline
+%   & Names & & Why it is threatened \\ \hline
+%  \rowcolor{RowAlt} & Classification \& habitat & & Conservation strategy \\ \hline
+%   & Food web & & Call to action \\ \hline
+%\end{tabularx}
+%\end{yr7box}
+%
+%\bigskip
+%
+%\noindent{\headingfont\bfseries\color{ForestDark}Poster plan --- rough layout}
+%\answerbox{13cm}
+%
+%% ══════════════════════════════════════════════════════════════════════════════
+%%  DEVELOPMENTAL RUBRIC  (mirrors the Common Assessment Task)
+%% ══════════════════════════════════════════════════════════════════════════════
+%\newpage
+%\section*{Developmental Rubric}
+%
+%\begin{contextbox}{How to use this rubric}
+%This is the \textbf{same rubric} used for the Common Assessment Task. There are no marks --- instead, find the description that best matches your work.
+%
+%\medskip
+%\textbf{Use it twice.} First, after Stage 12, shade the cell you think your work sits in for each criterion. Then compare it with your teacher's judgement. Where the two differ, that is the most useful thing on this page --- read the cell \emph{above} yours and write down what it would take to get there.
+%\end{contextbox}
+%
+%\bigskip
+%
+%\noindent{\footnotesize\itshape Rehearsed by: the portfolio stage(s) listed beside each criterion.}
+%
+%\medskip
+%
+%\newcommand{\rubrichead}{%
+%  \rowcolor{TableHead}
+%  \headingfont\bfseries\color{white}\footnotesize Criterion &
+%  \headingfont\bfseries\color{white}\footnotesize Towards AT &
+%  \headingfont\bfseries\color{white}\footnotesize AT &
+%  \headingfont\bfseries\color{white}\footnotesize AT (secure) &
+%  \headingfont\bfseries\color{white}\footnotesize Above AT \\
+%  \hline}
+%
+%\footnotesize
+%\noindent\begin{tabularx}{\linewidth}{|>{\bfseries\RaggedRight\arraybackslash}p{2.5cm}|>{\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|}
+%  \hline
+%  \rubrichead
+%  Classification \& naming\newline{\normalfont\scriptsize Part A \textbullet{} Stages 2--4}
+%  & Recognises that living things can be grouped; begins the classification table with some gaps.
+%  & Completes the classification table and states why scientists classify and name organisms; uses the key with some support.
+%  & Accurately classifies the organism and explains why classification and two-part naming are used; uses the key correctly.
+%  & Explains classification and naming with precise terms and links them to identifying and relating organisms; applies the key to justify an identification. \\
+%  \hline
+%  \rowcolor{RowAlt}
+%  Energy\newline{\normalfont\scriptsize Part B \textbullet{} Stages 1, 6}
+%  & States that plants make food and that living things need energy.
+%  & Describes photosynthesis and respiration and identifies the organism as a producer or consumer.
+%  & Explains the role of energy in photosynthesis and how respiration releases it; classifies the organism with reasons.
+%  & Links photosynthesis and respiration, traces the organism's energy back to the Sun, and uses accurate terminology throughout. \\
+%  \hline
+%  Food webs\newline{\normalfont\scriptsize Part C \textbullet{} Stage 6}
+%  & Constructs a simple chain or partial web; arrow direction may be inconsistent.
+%  & Constructs a valid food web with correct arrows and identifies feeding roles.
+%  & Constructs an accurate web, distinguishes energy flow from matter cycling, and explains the role of decomposers.
+%  & Builds a detailed web and predicts the flow-on effects of removing the organism, reasoning across several interdependent organisms. \\
+%  \hline
+%  \rowcolor{RowAlt}
+%  Ecosystems\newline{\normalfont\scriptsize Part D \textbullet{} Stages 5, 8, 10}
+%  & Lists some living and non-living things in the ecosystem.
+%  & Distinguishes biotic and abiotic factors and states how one affects the organism.
+%  & Explains how biotic and abiotic factors interact and predicts the effect of a change on populations.
+%  & Distinguishes ecosystem from food web precisely and predicts detailed, logical flow-on effects of a change. \\
+%  \hline
+%  Biodiversity \& invasive species\newline{\normalfont\scriptsize Part E \textbullet{} Stages 7, 9}
+%  & States that biodiversity means variety and that some species cause harm.
+%  & Explains why biodiversity matters and defines an invasive species.
+%  & Describes how an invasive species affects the chosen organism and how its loss would affect biodiversity.
+%  & Connects biodiversity, invasive species and the organism's decline into a clear cause-and-effect explanation. \\
+%  \hline
+%  \rowcolor{GoldLight}
+%  Evaluating conservation\newline{\normalfont\scriptsize\bfseries Part F --- key criterion}\newline{\normalfont\scriptsize Stage 11}
+%  & Names a preferred strategy.
+%  & Chooses a strategy and gives a reason based on one advantage.
+%  & Weighs advantages and disadvantages and justifies a recommendation using evidence.
+%  & Compares all strategies against the organism's main threat, justifies a recommendation with evidence, and acknowledges and addresses a weakness. \\
+%  \hline
+%  Communicating science\newline{\normalfont\scriptsize Part G \textbullet{} all stages}
+%  & Produces a poster with some of the required elements.
+%  & Includes most required elements; information is mostly accurate.
+%  & Includes all required elements, accurate and clearly organised, with a persuasive call to action.
+%  & Communicates accurately and persuasively for the audience, integrating science and design effectively. \\
+%  \hline
+%\end{tabularx}
+%
+%\normalsize
+%\bigskip
+
+% ── Self-assessment & feedback ────────────────────────────────────────────────
+\section*{Where I am, and what would move me up}
+
+\noindent\begin{tabularx}{\linewidth}{|>{\bfseries\RaggedRight\arraybackslash}p{3.6cm}|>{\RaggedRight\arraybackslash}p{2.2cm}|>{\RaggedRight\arraybackslash}X|}
+  \hline
+  \rowcolor{TableHead}
+  \headingfont\bfseries\color{white} Criterion &
+  \headingfont\bfseries\color{white}\small My judgement &
+  \headingfont\bfseries\color{white} One thing that I could do better \\
+  \hline
+  Classification \& naming & & \\[22pt] \hline
+  Energy & & \\[22pt] \hline
+  Food webs & & \\[22pt] \hline
+  Ecosystems & & \\[22pt] \hline
+  Biodiversity \& invasive species & & \\[22pt] \hline
+  Evaluating conservation \newline{\normalfont\small(key criterion)} & & \\[22pt] \hline
+  Communicating science & & \\[22pt] \hline
+\end{tabularx}
+
+\bigskip
+
+\noindent\begin{tcolorbox}[colback=LightGrey, colframe=Line, arc=2.5mm, boxrule=0.5pt,
+  title={Teacher feedback},
+  fonttitle=\headingfont\bfseries\small, coltitle=DarkGrey]
+\vspace{12.5cm}
+\end{tcolorbox}
+
+\end{document}

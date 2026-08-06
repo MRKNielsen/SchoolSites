@@ -126,6 +126,11 @@ full-bleed subject-colour gradient, glassy `.deck-card` grid, `.feature`
 row cards. Reference implementation: `year12-specialist/index.html`
 (pattern generalised from year7-science bio-ecosystems).
 
+Once a unit has more than about four `.feature` cards, split them into
+`.section-head` + `.section-sub` groups with one `.deck-grid` each rather
+than one long row — see `year7-science/bio-ecosystems/index.html`, which
+groups Student resources / Staff only / Lessons.
+
 ## Course hub pages (term/unit overviews)
 
 Use `assets/css/hub.css` + `assets/js/hub.js` with
@@ -261,10 +266,35 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
 
 ## PDFs
 
-Decision on file: embed with native `<object type="application/pdf">` +
-fallback download link, styled by a `.pdf-frame` rule in site.css.
-(Not yet implemented — implement the .pdf-frame rule if you're the first
-to need it, full width, ~80vh, card-style border.)
+Implemented. Embed with a native `<object type="application/pdf">` so the
+browser's own viewer supplies search/zoom/print — no JS, no pdf.js.
+Components live in **course.css**, not site.css as the original note
+guessed: the pages that embed unit PDFs are course-pages. Lift them into
+a shared file if a plain site.css index page ever needs one.
+
+```html
+<div class="pdf-frame">
+  <object data="booklet/….pdf" type="application/pdf">
+    <div class="pdf-fallback">…<a class="pdf-btn" href="…">Open</a></div>
+  </object>
+</div>
+<div class="pdf-actions"><a class="pdf-btn" …>…</a></div>
+```
+
+- Full width, 80vh (60vh on phones and short viewports), card border.
+- Mobile Safari and most Android browsers refuse to render a PDF in an
+  `<object>`, so the fallback content is a real download card and
+  `.pdf-actions` sits outside the frame where it always shows. Don't
+  replace this with an `<iframe>` — the fallback stops working.
+- Reference implementation:
+  `year7-science/bio-ecosystems/research-portfolio.html` (the 27-page
+  Research Portfolio question booklet, built from
+  `booklet/Bio_Research_Portfolio_Yr7_8.tex` — the LaTeX stays the source
+  of truth, the PDF beside it is the build output).
+
+A unit's PDFs live in its own `booklet/` folder with the `.tex` beside
+them. `pdfs/` at the repo root is for standalone question booklets that
+belong to no unit.
 
 ## Legacy content
 
