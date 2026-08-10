@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T3W00 — Probability &amp; Statistics Primer</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+</head>
+<body class="deck-page theme-specialist">
+<div class="progress"></div>
+<div class="lessontag">T3W00 · Primer</div>
+<main class="deck">
+
+<!-- 1 · Title -->
+<section class="slide section-slide" data-menu="Title">
+  <h1>Probability &amp; Statistics Primer</h1>
+  <p>Everything Chapters 15–16 assume you already know — in one sitting</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · Read before T3W03</p>
+  <span class="chip">Four parts · ≈10 min each · keys 1–4 jump to a part · M for contents</span>
+</section>
+
+<!-- 2 · Why this deck exists -->
+<section class="slide" data-topic="T3W00 · Primer" data-menu="Why this deck exists">
+  <h2>Why this deck exists</h2>
+  <p>Chapters 15 and 16 don't start from scratch. They start from four ideas developed in Units 1&amp;2, and then move fast. If any of the four is shaky, the new work will feel like memorising formulas rather than understanding them.</p>
+  <table class="tbl">
+    <tr><th>Part</th><th>Assumed idea</th><th>Where Ch 15–16 uses it</th></tr>
+    <tr><td class="c"><b>1</b></td><td>Probability language</td><td>independence is the condition on every variance rule</td></tr>
+    <tr><td class="c"><b>2</b></td><td>Discrete random variables, \(E(X)\), \(\text{Var}(X)\)</td><td>15A–C is entirely about tracking these two numbers</td></tr>
+    <tr><td class="c"><b>3</b></td><td>The normal distribution and \(z\)-scores</td><td>15C onwards, and every confidence interval and test in Ch 16</td></tr>
+    <tr><td class="c"><b>4</b></td><td>The binomial distribution</td><td>15F, the normal approximation to the binomial</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">How to use it</span>
+    <p>This is a <b>refresher, not a course</b>. Skim it; stop where something is unfamiliar. Each part ends with a formula card you can photograph.</p>
+  </div>
+</section>
+
+<!-- ═══ PART 1 · PROBABILITY LANGUAGE ═══ -->
+
+<section class="slide section-slide" data-lesson="1" data-menu="Part 1 — Probability language">
+  <div class="kicker">Part 1</div>
+  <h1>The language of probability</h1>
+  <ul class="goals">
+    <li>Sample space, event, complement — the vocabulary the later chapters use without explaining.</li>
+    <li>Addition and multiplication rules.</li>
+    <li><b>Independence</b> — the single most important word in Chapter 15.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Part 1 · Probability language" data-menu="Vocabulary">
+  <h2>The words, precisely</h2>
+  <table class="tbl vocab">
+    <tr><th>Word</th><th>Notation</th><th>Meaning</th></tr>
+    <tr><td>Sample space</td><td>\(\varepsilon\)</td><td>every outcome that could happen. Probabilities across it total 1.</td></tr>
+    <tr><td>Event</td><td>\(A\)</td><td>a set of outcomes you care about, e.g. "the die shows an even number".</td></tr>
+    <tr><td>Complement</td><td>\(A'\)</td><td>everything <i>except</i> \(A\). \(P(A') = 1 - P(A)\).</td></tr>
+    <tr><td>Union</td><td>\(A \cup B\)</td><td>\(A\) <b>or</b> \(B\) (or both).</td></tr>
+    <tr><td>Intersection</td><td>\(A \cap B\)</td><td>\(A\) <b>and</b> \(B\) together.</td></tr>
+    <tr><td>Mutually exclusive</td><td>\(A \cap B = \varnothing\)</td><td>they cannot both happen. \(P(A \cap B) = 0\).</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Reading tip</span>
+    <p>In a worded problem, "or" almost always means \(\cup\) and "and" means \(\cap\). Translate the sentence before reaching for a formula.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 1 · Probability language" data-menu="The three rules">
+  <h2>The three rules you'll actually use</h2>
+  <p style="text-align:center; margin:6px 0 14px;">\[P(A \cup B) = P(A) + P(B) - P(A \cap B)\]</p>
+  <p style="text-align:center; margin:6px 0 14px;">\[P(A \mid B) = \dfrac{P(A \cap B)}{P(B)} \qquad\qquad P(A \cap B) = P(A \mid B)\,P(B)\]</p>
+  <ul>
+    <li>The addition rule subtracts the overlap so it isn't counted twice. If \(A\) and \(B\) are mutually exclusive the overlap is 0 and the rule simplifies.</li>
+    <li>\(P(A \mid B)\) reads "the probability of \(A\) <b>given</b> \(B\) has happened" — you have shrunk the sample space down to \(B\).</li>
+  </ul>
+  <div class="box example"><span class="lbl">Quick example</span>
+    <p>\(P(A) = 0.5\), \(P(B) = 0.4\), \(P(A \cap B) = 0.2\).</p>
+    <p>\(P(A \cup B) = 0.5 + 0.4 - 0.2 = 0.7\) and \(P(A \mid B) = \dfrac{0.2}{0.4} = 0.5\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 1 · Probability language" data-menu="Independence">
+  <h2>Independence — the word that carries Chapter 15</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>\(A\) and \(B\) are <b>independent</b> when knowing one happened tells you nothing about the other:</p>
+    <p style="text-align:center; margin-top:8px;">\(P(A \mid B) = P(A)\), equivalently \(P(A \cap B) = P(A)\,P(B)\).</p>
+  </div>
+  <p>In the example above \(P(A \mid B) = 0.5 = P(A)\), so those two events <i>are</i> independent.</p>
+  <div class="box key"><span class="lbl">Why it matters later</span>
+    <p>Every variance rule in Chapter 15 — \(\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)\) and everything built on it — is <b>only valid for independent variables</b>. The expectation rules need no such condition. When a question says "randomly selected", "chosen at random and independently", or "a random sample", it is granting you that permission.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Common confusion</span>
+    <p>Mutually exclusive is <b>not</b> the same as independent — in fact it's close to the opposite. If \(A\) and \(B\) can't both happen, then knowing \(A\) happened tells you \(B\) definitely didn't. That's maximal dependence.</p>
+  </div>
+</section>
+
+<!-- ═══ PART 2 · DISCRETE RANDOM VARIABLES ═══ -->
+
+<section class="slide section-slide" data-lesson="2" data-menu="Part 2 — Discrete random variables">
+  <div class="kicker">Part 2</div>
+  <h1>Discrete random variables, \(E(X)\) and \(\text{Var}(X)\)</h1>
+  <ul class="goals">
+    <li>What a random variable is, and what its distribution table shows.</li>
+    <li>\(E(X)\) — the long-run average.</li>
+    <li>\(\text{Var}(X)\) and \(\text{sd}(X)\) — the spread, and the formula you'll use every time.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Part 2 · Discrete random variables" data-menu="What a random variable is">
+  <h2>What a random variable is</h2>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>A <b>random variable</b> \(X\) attaches a number to each outcome of a random process. <b>Discrete</b> means the values are separate and countable — 0, 1, 2, … A <b>probability distribution</b> lists each value with its probability.</p>
+  </div>
+  <p>Toss two coins and let \(X\) be the number of heads:</p>
+  <table class="tbl">
+    <tr><th>\(x\)</th><td class="c">0</td><td class="c">1</td><td class="c">2</td></tr>
+    <tr><th>\(P(X = x)\)</th><td class="c">0.25</td><td class="c">0.5</td><td class="c">0.25</td></tr>
+  </table>
+  <ul>
+    <li>Every probability sits in \([0,1]\), and they must total exactly 1 — that's the check on any table.</li>
+    <li>Capital \(X\) is the variable; lower-case \(x\) is a particular value it might take. Ch 15–16 relies on that distinction constantly.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Part 2 · Discrete random variables" data-menu="Expected value">
+  <h2>Expected value: the balance point</h2>
+  <p style="text-align:center; margin:6px 0 16px;">\[E(X) = \mu = \sum x\,P(X = x)\]</p>
+  <ul>
+    <li>Multiply each value by its probability and add. It is a <b>weighted average</b>, not an ordinary one.</li>
+    <li>\(E(X)\) need not be a value \(X\) can take — the mean of one die roll is 3.5.</li>
+    <li>Read it as "the average over very many repetitions", not "what will happen".</li>
+  </ul>
+  <div class="box example"><span class="lbl">Quick example</span>
+    <p>Two coins, \(X\) = number of heads:</p>
+    <p>\(E(X) = 0(0.25) + 1(0.5) + 2(0.25) = 1\) head, as symmetry suggests.</p>
+  </div>
+  <div class="box key"><span class="lbl">Carry this forward</span>
+    <p>\(E\) is <b>linear</b>: it passes straight through sums and multiples. That single property is the whole of 15A–B on the expectation side.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 2 · Discrete random variables" data-menu="Variance and sd">
+  <h2>Variance and standard deviation: the spread</h2>
+  <p style="text-align:center; margin:6px 0 14px;">\[\text{Var}(X) = \sigma^2 = E(X^2) - \big[E(X)\big]^2 \qquad\qquad \text{sd}(X) = \sigma = \sqrt{\text{Var}(X)}\]</p>
+  <ul>
+    <li>\(E(X^2)\) means square each <i>value</i> and weight by its probability — \(\sum x^2 P(X=x)\). It is not \(\big[E(X)\big]^2\), and the gap between the two <i>is</i> the variance.</li>
+    <li>Variance is in squared units; the standard deviation brings you back to the units of the problem, which is why answers are usually quoted with \(\sigma\).</li>
+    <li>Variance is never negative. A negative answer means \(E(X^2)\) and \(\big[E(X)\big]^2\) were swapped.</li>
+  </ul>
+  <div class="box example"><span class="lbl">Quick example</span>
+    <p>Same two coins: \(E(X^2) = 0(0.25) + 1(0.5) + 4(0.25) = 1.5\).</p>
+    <p>\(\text{Var}(X) = 1.5 - 1^2 = 0.5\), so \(\sigma = \sqrt{0.5} \approx 0.707\) heads.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 2 · Discrete random variables" data-menu="Part 2 formula card">
+  <h2>Part 2 formula card</h2>
+  <div class="box key"><span class="lbl">Keep these</span>
+    <p style="text-align:center;">\[\sum P(X=x) = 1 \qquad E(X) = \sum x\,P(X=x) \qquad \text{Var}(X) = E(X^2) - \big[E(X)\big]^2\]</p>
+  </div>
+  <div class="box hint"><span class="lbl">The habit worth building</span>
+    <p>When a distribution table appears, compute \(E(X)\) and \(\text{Var}(X)\) <b>immediately</b>, before reading the rest of the question. Nearly every Ch 15 question needs both, and having them written down turns a multi-part problem into substitution.</p>
+  </div>
+</section>
+
+<!-- ═══ PART 3 · THE NORMAL DISTRIBUTION ═══ -->
+
+<section class="slide section-slide" data-lesson="3" data-menu="Part 3 — The normal distribution">
+  <div class="kicker">Part 3</div>
+  <h1>The normal distribution and \(z\)-scores</h1>
+  <ul class="goals">
+    <li>What \(X \sim N(\mu, \sigma^2)\) says, and the 68–95–99.7 rule.</li>
+    <li>Standardising: \(z = \dfrac{x - \mu}{\sigma}\).</li>
+    <li>Probabilities as areas — and finding them on CAS, forwards and backwards.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Part 3 · The normal distribution" data-menu="Shape and notation">
+  <h2>Shape and notation</h2>
+  <div class="cols">
+    <div>
+      <div class="box defn"><span class="lbl">Notation</span>
+        <p>\(X \sim N(\mu, \sigma^2)\) reads "\(X\) is normally distributed with mean \(\mu\) and <b>variance</b> \(\sigma^2\)".</p>
+      </div>
+      <ul>
+        <li>Symmetric, single peak at \(\mu\); \(\mu\) is simultaneously the mean, median and mode.</li>
+        <li>\(\mu\) slides the curve left and right; \(\sigma\) makes it narrow and tall or wide and flat.</li>
+        <li>Total area under the curve is 1, because it accounts for every possible outcome.</li>
+        <li>It is <b>continuous</b>, so \(P(X = 5) = 0\) — only intervals have probability. This also means \(P(X < 5)\) and \(P(X \le 5)\) are equal, unlike in the discrete case.</li>
+      </ul>
+      <div class="box hint"><span class="lbl">Watch the second slot</span>
+        <p>\(N(\mu, \sigma^2)\) carries the <b>variance</b>, but CAS asks for the <b>standard deviation</b>. \(N(100, 25)\) means \(\sigma = 5\), not 25.</p>
+      </div>
+    </div>
+    <div>
+      <div class="graph-card">
+      <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Normal curve with 68-95-99.7 regions marked">
+        <style>
+          .nc { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+          .ax { stroke: var(--ink-soft); stroke-width: 1.2; }
+          .tk { stroke: var(--ink-soft); stroke-width: 1; stroke-dasharray: 3 3; }
+          .lb { fill: var(--ink-soft); font: 11px 'Source Sans 3', sans-serif; text-anchor: middle; }
+          .b1 { fill: var(--accent); opacity: .30; }
+          .b2 { fill: var(--accent); opacity: .18; }
+          .b3 { fill: var(--accent); opacity: .09; }
+        </style>
+        <path class="b3" d="M40 190 C 70 190, 82 186, 96 165 C 112 140, 128 60, 160 60 C 192 60, 208 140, 224 165 C 238 186, 250 190, 280 190 Z"/>
+        <path class="b2" d="M80 190 C 92 182, 104 150, 120 110 C 134 76, 146 60, 160 60 C 174 60, 186 76, 200 110 C 216 150, 228 182, 240 190 Z"/>
+        <path class="b1" d="M120 190 L120 110 C 134 76, 146 60, 160 60 C 174 60, 186 76, 200 110 L200 190 Z"/>
+        <path class="nc" d="M40 190 C 70 190, 82 186, 96 165 C 112 140, 128 60, 160 60 C 192 60, 208 140, 224 165 C 238 186, 250 190, 280 190"/>
+        <line class="ax" x1="30" y1="190" x2="292" y2="190"/>
+        <line class="tk" x1="160" y1="60" x2="160" y2="190"/>
+        <text class="lb" x="160" y="206">μ</text>
+        <text class="lb" x="120" y="206">−σ</text>
+        <text class="lb" x="200" y="206">+σ</text>
+        <text class="lb" x="80" y="206">−2σ</text>
+        <text class="lb" x="240" y="206">+2σ</text>
+        <text class="lb" x="160" y="130">68%</text>
+        <text class="lb" x="160" y="226">95% within 2σ · 99.7% within 3σ</text>
+      </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 3 · The normal distribution" data-menu="Standardising">
+  <h2>Standardising: turning any normal into one normal</h2>
+  <p style="text-align:center; margin:6px 0 16px;">\[z = \dfrac{x - \mu}{\sigma} \qquad\qquad Z \sim N(0, 1)\]</p>
+  <ul>
+    <li>A \(z\)-score answers one question: <b>how many standard deviations from the mean is this value?</b> Negative means below the mean.</li>
+    <li>Standardising strips out the units, so scores from different distributions become comparable.</li>
+    <li>The transformation is itself a linear function of \(X\) — which is exactly why Chapter 15 opens with linear functions.</li>
+  </ul>
+  <div class="box example"><span class="lbl">Quick example</span>
+    <p>Heights are \(N(170, 8^2)\) cm. A person 182 cm tall has \(z = \dfrac{182 - 170}{8} = 1.5\) — one and a half standard deviations above average.</p>
+  </div>
+  <div class="box key"><span class="lbl">The three you should know cold</span>
+    <p>\(z = 1.645\) leaves 5% in one tail · \(z = 1.96\) leaves 2.5% in each tail (the 95% interval) · \(z = 2.576\) leaves 0.5% in each tail (99%). Chapter 16 uses these constantly.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 3 · The normal distribution" data-menu="Probabilities and CAS">
+  <h2>Probabilities are areas — and CAS finds them both ways</h2>
+  <div class="cols">
+    <div>
+      <div class="box cas"><span class="lbl">Forwards: value → probability</span>
+        <p><b>normCdf</b>(lower, upper, \(\mu\), \(\sigma\))</p>
+        <p>For "less than 60" use a lower bound of \(-10^{99}\); for "more than 60" an upper bound of \(10^{99}\).</p>
+      </div>
+      <div class="box cas"><span class="lbl">Backwards: probability → value</span>
+        <p><b>invNorm</b>(area, \(\mu\), \(\sigma\)) returns the \(x\) with that much area <b>to its left</b>.</p>
+        <p>For a top-10% cut-off, ask for area 0.9.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box hint"><span class="lbl">Sanity checks</span>
+        <ul>
+          <li>A probability must land in \([0,1]\). If not, a bound is wrong.</li>
+          <li>Above the mean, the answer is under 0.5; below it, over 0.5.</li>
+          <li>Sketch the curve and shade before computing — it catches almost every tail error.</li>
+        </ul>
+      </div>
+      <div class="box defn"><span class="lbl">Symmetry facts</span>
+        <p>\(P(Z &gt; a) = P(Z &lt; -a)\) and \(P(Z &gt; a) = 1 - P(Z &lt; a)\).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PART 4 · THE BINOMIAL DISTRIBUTION ═══ -->
+
+<section class="slide section-slide" data-lesson="4" data-menu="Part 4 — The binomial distribution">
+  <div class="kicker">Part 4</div>
+  <h1>The binomial distribution</h1>
+  <ul class="goals">
+    <li>The four conditions that make a situation binomial.</li>
+    <li>\(\Pr(X = x)\), and the mean and variance you'll quote from memory.</li>
+    <li>Why 15F approximates it with a normal.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Part 4 · The binomial distribution" data-menu="The four conditions">
+  <h2>When is a situation binomial?</h2>
+  <div class="box defn"><span class="lbl">All four must hold</span>
+    <ul>
+      <li><b>Fixed</b> number of trials, \(n\), decided before you start.</li>
+      <li>Each trial has exactly <b>two</b> outcomes — success or failure.</li>
+      <li>The probability of success, \(p\), is the <b>same</b> every trial.</li>
+      <li>Trials are <b>independent</b>.</li>
+    </ul>
+  </div>
+  <p>Write it as \(X \sim \text{Bi}(n, p)\), where \(X\) counts the successes.</p>
+  <div class="box example"><span class="lbl">Is it binomial?</span>
+    <ul>
+      <li><b>Yes</b> — 20 free throws at a fixed 70% success rate; \(X\) = number made.</li>
+      <li><b>No</b> — drawing 5 cards without replacement: \(p\) changes each draw, so the trials aren't independent.</li>
+      <li><b>No</b> — throwing until the first six: \(n\) isn't fixed.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 4 · The binomial distribution" data-menu="Binomial formulas">
+  <h2>The formulas</h2>
+  <p style="text-align:center; margin:6px 0 14px;">\[\Pr(X = x) = \binom{n}{x} p^{x}(1-p)^{n-x}, \qquad x = 0, 1, \ldots, n\]</p>
+  <p style="text-align:center; margin:6px 0 16px;">\[E(X) = np \qquad\qquad \text{Var}(X) = np(1-p) \qquad\qquad \text{sd}(X) = \sqrt{np(1-p)}\]</p>
+  <ul>
+    <li>\(\binom{n}{x}\) counts the orders in which \(x\) successes can occur; the rest is the probability of any one such order.</li>
+    <li>On CAS: <b>binomPdf</b>(\(n\), \(p\), \(x\)) for exactly \(x\); <b>binomCdf</b>(\(n\), \(p\), lower, upper) for a range.</li>
+    <li>\(E(X) = np\) is worth internalising — 20 throws at 70% averages 14 made.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">The usual slip</span>
+    <p>"At least 3" is \(\Pr(X \ge 3) = 1 - \Pr(X \le 2)\) — note the 2. Writing \(1 - \Pr(X \le 3)\) is the most common lost mark in the topic.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 4 · The binomial distribution" data-menu="Why 15F needs this">
+  <h2>Why Chapter 15 comes back to this</h2>
+  <p>A binomial with large \(n\) has so many possible values that its bar chart starts to trace out a normal curve. Section 15F makes that precise:</p>
+  <div class="box key"><span class="lbl">Looking ahead — 15F</span>
+    <p>For large \(n\), \(X \sim \text{Bi}(n,p)\) is approximately \(N\big(np,\; np(1-p)\big)\).</p>
+    <p>Both parameters come straight from the two formulas on the previous slide — which is the whole reason they're worth memorising now.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Also worth knowing</span>
+    <p>A binomial counts successes, so a <b>sample proportion</b> \(\hat{p} = X/n\) is a binomial divided by a constant — a linear function of a random variable. That is exactly the machinery of 15A, applied to real data.</p>
+  </div>
+</section>
+
+<!-- ═══ WRAP ═══ -->
+
+<section class="slide" data-topic="T3W00 · Primer" data-menu="One-page formula card">
+  <h2>One-page formula card</h2>
+  <div class="cols">
+    <div>
+      <div class="box key"><span class="lbl">Probability</span>
+        <p>\(P(A') = 1 - P(A)\)</p>
+        <p>\(P(A \cup B) = P(A) + P(B) - P(A \cap B)\)</p>
+        <p>\(P(A \mid B) = \dfrac{P(A \cap B)}{P(B)}\)</p>
+        <p>Independent: \(P(A \cap B) = P(A)P(B)\)</p>
+      </div>
+      <div class="box key"><span class="lbl">Discrete random variables</span>
+        <p>\(E(X) = \sum x\,P(X = x)\)</p>
+        <p>\(\text{Var}(X) = E(X^2) - \big[E(X)\big]^2\)</p>
+        <p>\(\text{sd}(X) = \sqrt{\text{Var}(X)}\)</p>
+      </div>
+    </div>
+    <div>
+      <div class="box key"><span class="lbl">Normal</span>
+        <p>\(X \sim N(\mu, \sigma^2)\), \(\;z = \dfrac{x - \mu}{\sigma}\)</p>
+        <p>68–95–99.7 within 1, 2, 3 sd</p>
+        <p>\(z = 1.645,\; 1.96,\; 2.576\)</p>
+        <p>normCdf forwards · invNorm backwards</p>
+      </div>
+      <div class="box key"><span class="lbl">Binomial</span>
+        <p>\(X \sim \text{Bi}(n, p)\)</p>
+        <p>\(\Pr(X = x) = \binom{n}{x}p^{x}(1-p)^{n-x}\)</p>
+        <p>\(E(X) = np\), \(\;\text{Var}(X) = np(1-p)\)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="T3W00 · Primer" data-menu="Where this feeds in">
+  <h2>Where each idea reappears</h2>
+  <table class="tbl">
+    <tr><th>From this primer</th><th>Becomes</th><th>Deck</th></tr>
+    <tr><td>\(E(X)\), \(\text{Var}(X)\)</td><td>\(E(aX+b)\), \(\text{Var}(aX+b) = a^2\text{Var}(X)\)</td><td>T3W03 · 15A</td></tr>
+    <tr><td>Independence</td><td>\(\text{Var}(aX+bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\)</td><td>T3W03 · 15B</td></tr>
+    <tr><td>\(N(\mu,\sigma^2)\) and \(z\)</td><td>combinations of normals stay normal</td><td>T3W03 · 15C</td></tr>
+    <tr><td>All of the above</td><td>the sample mean \(\bar{X}\) and the central limit theorem</td><td>T3W04 · 15D–E</td></tr>
+    <tr><td>\(\text{Bi}(n,p)\), \(np\), \(np(1-p)\)</td><td>normal approximation to the binomial</td><td>T3W04 · 15F</td></tr>
+    <tr><td>\(z = 1.96\), tail areas</td><td>confidence intervals, \(p\)-values, hypothesis tests</td><td>T3W05–06 · Ch 16</td></tr>
+  </table>
+  <div class="box try"><span class="lbl">Before T3W03</span>
+    <p>If Part 2 felt new, work through a couple of distribution-table questions from the Units 1&amp;2 text before the next lesson. Everything in Chapter 15 is built on top of \(E(X)\) and \(\text{Var}(X)\), so that hour pays for itself several times over.</p>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../" title="Back to course hub">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> next · <span class="key">&#8592;</span> back · <span class="key">1</span>–<span class="key">4</span> jump to a part · <span class="key">M</span> contents · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Primer — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
