@@ -294,17 +294,42 @@ a shared file if a plain site.css index page ever needs one.
   of truth, the PDF beside it is the build output).
 
 A unit's PDFs live in its own `booklet/` folder with the `.tex` beside
-them. `pdfs/` at the repo root is for standalone question booklets that
-belong to no unit.
+them, plus the `fonts/` the `.tex` loads by relative path (Lato +
+Poppins) so the booklet builds from a clean checkout. `pdfs/` at the
+repo root is for standalone question booklets that belong to no unit.
+
+Build a booklet with `xelatex` run **three times** (TOC, then
+`\LastPage`), from a scratch copy of `booklet/` — the `.aux`/`.log`/
+`.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
+
+`.bookref` chips must be derived from the booklet's `.toc` after a
+build, never hand-written. Space's original chips cited pages 38–71 of a
+22-page booklet — the numbers followed a synthetic `(N-1)*6+3` pattern —
+and their `QX.Y` references pointed at numbered questions the booklet
+never had (the only question labels in the `.tex` are five "Your turn"
+scaffolds). Match old subsections to new ones by **title**, not number.
 
 ## Legacy content
 
 Ported already: year12-specialist (term-3 decks, hub, landing),
 year10-mathematics/10methods-primer (9 decks + hub), year7-science
 bio-ecosystems (11 decks, landing, quiz, solutions, 11 worksheets — its
-unit-local deck.css/deck.js are gone), and year7-science/space (11 decks,
+unit-local deck.css/deck.js are gone), and year7-science/space (8 decks,
 landing, quiz, booklet — ported from the OneDrive `7 Science/Space`
-folder, same unit-local shape bio-ecosystems had).
+folder, same unit-local shape bio-ecosystems had, then consolidated from
+11 lessons to an 8-lesson 4-week program).
+
+Space's consolidation is the reference for compressing a unit. Lessons
+merge in pairs (old 2+3, 5+8, 6+10) chosen to sit inside one VC 2.0
+content description; nothing was deleted, so merged decks run 21–22
+slides and open each half with a `.section-slide` divider carrying that
+part's learning intentions. Each merged content slide keeps a
+`data-src-section` attribute recording the booklet section it came from
+— that's what makes the `.bookref` chips re-pointable afterwards. The
+booklet merges the same way: the second partner's `\section` becomes an
+unnumbered "Part B" heading so `\subsection` numbering just continues
+(2.1…2.5) rather than being demoted, which would have pushed a
+`\subsubsection` down to `\paragraph` and broken its styling.
 
 Still on inline styles: year11-methods ch9/11. When touching one, port it
 to the shared assets rather than extending its inline styles.
