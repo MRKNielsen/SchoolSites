@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrieval Quiz | Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<script src="questions.js"></script>
+</head>
+<body class="quizapp-page theme-space">
+
+<div class="page-header">
+  <a class="back-link" href="index.html">&#8592; Back to unit overview</a>
+  <h1>&#11088; Retrieval Quiz</h1>
+  <p class="sub">Space &mdash; 200 questions across all 11 lessons</p>
+</div>
+
+<!-- Setup -->
+<div id="setup">
+  <div class="setup-row">
+    <span class="setup-label">Topic</span>
+    <div class="chip-group" id="topic-chips">
+      <div class="chip active" data-decks="all">All topics</div>
+      <div class="chip" data-decks="1">1 &middot; Earth, Moon &amp; Sun</div>
+      <div class="chip" data-decks="2">2 &middot; Day, Night &amp; Seasons</div>
+      <div class="chip" data-decks="3">3 &middot; Moon &mdash; Phases &amp; Tides</div>
+      <div class="chip" data-decks="4">4 &middot; Our Solar System</div>
+      <div class="chip" data-decks="5">5 &middot; Stars &amp; Galaxies</div>
+      <div class="chip" data-decks="6">6 &middot; Space Exploration</div>
+      <div class="chip" data-decks="7">7 &middot; Gravity &amp; Orbits</div>
+      <div class="chip" data-decks="8">8 &middot; Light from Space</div>
+      <div class="chip" data-decks="9">9 &middot; First Nations Astronomy</div>
+      <div class="chip" data-decks="10">10 &middot; Space &amp; Sustainability</div>
+      <div class="chip" data-decks="11">11 &middot; The Search for Life</div>
+    </div>
+  </div>
+
+  <div class="setup-row">
+    <span class="setup-label">Number of questions</span>
+    <div class="chip-group" id="count-chips">
+      <div class="chip" data-count="5">5</div>
+      <div class="chip active" data-count="10">10</div>
+      <div class="chip" data-count="20">20</div>
+      <div class="chip" data-count="999">All</div>
+    </div>
+  </div>
+
+  <button class="start-btn" id="start-btn">&#11088; Start quiz</button>
+</div>
+
+<!-- Quiz -->
+<div id="quiz">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-counter" id="q-counter">Question 1 of 10</div>
+  <div class="q-card">
+    <div class="q-deck-tag" id="q-tag"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn">Next &#8594;</button>
+  </div>
+</div>
+
+<!-- Results -->
+<div id="results">
+  <div class="score-ring">
+    <div class="score-num" id="score-num">0</div>
+    <div class="score-denom" id="score-denom">out of 10</div>
+  </div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-sub" id="result-sub"></div>
+  <div class="result-btns">
+    <button class="btn-primary" id="retry-btn">&#8635; Try again</button>
+    <button class="btn-secondary" onclick="location.href='index.html'">&#8592; Unit overview</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const DECK_LABELS = {
+    1:'Earth, Moon & Sun',
+    2:'Day, Night & Seasons',
+    3:'The Moon — Phases & Tides',
+    4:'Our Solar System',
+    5:'Stars & Galaxies',
+    6:'Space Exploration',
+    7:'Gravity & Orbits',
+    8:'Light from Space',
+    9:'Aboriginal & Torres Strait Islander Astronomy',
+    10:'Space & Sustainability',
+    11:'The Search for Life'
+  };
+
+  let selectedDecks = 'all';
+  let selectedCount = 10;
+  let questions = [];
+  let current = 0;
+  let correct = 0;
+  let answered = false;
+
+  // ── Chip selection ──
+  document.querySelectorAll('#topic-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#topic-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      selectedDecks = c.dataset.decks;
+    });
+  });
+  document.querySelectorAll('#count-chips .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#count-chips .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      selectedCount = parseInt(c.dataset.count);
+    });
+  });
+
+  // ── Start ──
+  document.getElementById('start-btn').addEventListener('click', startQuiz);
+  document.getElementById('retry-btn').addEventListener('click', () => {
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('setup').style.display = 'block';
+  });
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function startQuiz() {
+    const pool = window.RETRIEVAL_QUESTIONS || [];
+    let filtered = selectedDecks === 'all'
+      ? pool
+      : pool.filter(q => q.deck === parseInt(selectedDecks));
+
+    if (filtered.length === 0) {
+      alert('No questions found for that selection.');
+      return;
+    }
+
+    questions = shuffle([...filtered]).slice(0, Math.min(selectedCount, filtered.length));
+    current = 0;
+    correct = 0;
+
+    document.getElementById('setup').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('quiz').style.display = 'block';
+    showQuestion();
+  }
+
+  function showQuestion() {
+    answered = false;
+    const q = questions[current];
+    const total = questions.length;
+
+    document.getElementById('q-counter').textContent = `Question ${current + 1} of ${total}`;
+    document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+    document.getElementById('q-tag').textContent = `Lesson ${q.deck} · ${DECK_LABELS[q.deck]}`;
+    document.getElementById('q-text').textContent = q.q;
+    document.getElementById('feedback').innerHTML = '';
+    document.getElementById('next-btn').style.display = 'none';
+
+    const optsEl = document.getElementById('opts');
+    optsEl.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = `${letters[i]}. ${opt}`;
+      btn.addEventListener('click', () => selectAnswer(i, q.ans));
+      optsEl.appendChild(btn);
+    });
+  }
+
+  function selectAnswer(chosen, correct_idx) {
+    if (answered) return;
+    answered = true;
+
+    const btns = document.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    btns[correct_idx].classList.add('correct');
+
+    const fb = document.getElementById('feedback');
+    if (chosen === correct_idx) {
+      correct++;
+      btns[chosen].classList.add('correct');
+      fb.innerHTML = '<span class="correct-label">&#10003; Correct!</span>';
+    } else {
+      btns[chosen].classList.add('wrong');
+      fb.innerHTML = `<span class="wrong-label">&#10007; Incorrect</span> — correct answer: <strong>${['A','B','C','D'][correct_idx]}</strong>`;
+    }
+
+    document.getElementById('next-btn').style.display = 'inline-block';
+  }
+
+  document.getElementById('next-btn').addEventListener('click', () => {
+    current++;
+    if (current < questions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  });
+
+  function showResults() {
+    document.getElementById('quiz').style.display = 'none';
+    const res = document.getElementById('results');
+    res.style.display = 'block';
+
+    const total = questions.length;
+    const pct = Math.round((correct / total) * 100);
+    document.getElementById('score-num').textContent = correct;
+    document.getElementById('score-denom').textContent = `out of ${total}`;
+
+    let msg, sub;
+    if (pct === 100) {
+      msg = '\u2b50 Perfect score!';
+      sub = 'Outstanding work — you nailed every question.';
+    } else if (pct >= 80) {
+      msg = 'Great work!';
+      sub = `${pct}% — solid understanding. Review any you missed.`;
+    } else if (pct >= 60) {
+      msg = 'Good effort';
+      sub = `${pct}% — revisit the topics where you slipped.`;
+    } else {
+      msg = 'Keep practising';
+      sub = `${pct}% — go back over the lesson slides and try again.`;
+    }
+    document.getElementById('result-msg').textContent = msg;
+    document.getElementById('result-sub').textContent = sub;
+
+    document.getElementById('progress-fill').style.width = '100%';
+  }
+})();
+</script>
+</body>
+</html>

@@ -57,8 +57,9 @@ exercises every component and has a theme switcher. Start new decks from
 ## Deck rules
 
 - `<body class="deck-page theme-X">` where X ∈ `theme-methods`,
-  `theme-specialist` (pink), `theme-primer`, `theme-science`, or omit for
-  the default chalk-blue.
+  `theme-specialist` (pink), `theme-primer`, `theme-science`,
+  `theme-space` (Year 7 Space — night indigo / starlight gold), or omit
+  for the default chalk-blue.
 - New subject → add a ~4-line theme block in tokens.css remapping only
   `--accent`, `--accent-dark`, `--accent-warm` (define new hexes as
   primitives in the same file first). Theme classes work on any page type
@@ -299,12 +300,30 @@ belong to no unit.
 ## Legacy content
 
 Ported already: year12-specialist (term-3 decks, hub, landing),
-year10-mathematics/10methods-primer (9 decks + hub), and year7-science
+year10-mathematics/10methods-primer (9 decks + hub), year7-science
 bio-ecosystems (11 decks, landing, quiz, solutions, 11 worksheets — its
-unit-local deck.css/deck.js are gone).
+unit-local deck.css/deck.js are gone), and year7-science/space (11 decks,
+landing, quiz, booklet — ported from the OneDrive `7 Science/Space`
+folder, same unit-local shape bio-ecosystems had).
 
 Still on inline styles: year11-methods ch9/11. When touching one, port it
 to the shared assets rather than extending its inline styles.
+
+Porting a unit-local deck set is mostly a rename job, and the vocabulary
+repeats across units: `.kicker`→`.eyebrow`, `h1.slide-title`→`h2`,
+`.body-text`/`.bullets`→ bare `<p>`/`<ul>`, `.callout`→`.box.key`,
+`.discuss`→`.box.question`, `.fn-callout`→`.box.country`,
+`.booklet-ref`→`.bookref`, `.diagram`→`.graph-card`, `.math`→`.formula`,
+and the `.worked`/`.we-steps` block → `.box.question` + `ol.steps` +
+`.reveal-btn`. Two things that bite: strip the inline `style=` spacing
+hacks *before* the class renames (otherwise `<ul class="bullets"
+style="…">` slips past an exact-match pattern), and don't promote a
+"Recap" slide to `.exit-slide` — that variant centres its content, which
+reads badly on a long summary list.
+
+Themed colours inside SVG diagrams can't use `var()` in a presentation
+attribute. Convert `fill="#hex"` to `style="fill:var(--accent)"` on the
+element rather than leaving the hex or trying `fill="var(--accent)"`.
 
 Note on SVG diagrams: convert *theme* colours in figures to tokens, but
 leave genuinely illustrative hues (a fox is orange, water is blue) as
