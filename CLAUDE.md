@@ -235,7 +235,14 @@ standalone all-worksheets list, if a unit wants one instead.
 Some pages are for teachers only and ship their content as an encrypted
 blob decrypted in the browser with the staff password: `solutions.html`
 (answer key) and `rubric.html` (the Ecosystem Investigation marking tool)
-in year7-science/bio-ecosystems. The shell links tokens.css +
+in year7-science/bio-ecosystems, plus `solutions.html` in
+year7-science/space.
+
+**Space's `solutions.html` is not yet encrypted** — it ships the shell
+with a placeholder `var BLOB = {salt:"", iv:"", iter:0, ct:""};`. Encrypt
+`solutions-payload.html` through `tools/staff-crypt.html` and paste the
+emitted line over the placeholder. Until then the page locks but cannot
+unlock. The shell links tokens.css +
 solutions.css and uses the shared `.lockscreen` component; the payload
 lives in a single `var BLOB = {salt, iv, iter, ct};` line
 (PBKDF2-SHA256 → AES-GCM).
@@ -301,6 +308,16 @@ repo root is for standalone question booklets that belong to no unit.
 Build a booklet with `xelatex` run **three times** (TOC, then
 `\LastPage`), from a scratch copy of `booklet/` — the `.aux`/`.log`/
 `.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
+
+Booklets have a question apparatus already defined in the preamble —
+`\question{n}{marks}{text}`, `\anslines{n}` (ruled writing lines),
+`\answerbox{height}`, `\markscount{n}`, and the `yr7box` (at the level)
+/ `yr8box` (above the level) containers. Use these rather than inventing
+new markup. Space's pattern: a `yr7box` headed "Check your
+understanding" at the end of each subsection, questions numbered
+`Q<lesson>.<n>` running continuously through the lesson, with the Year 8
+box kept last. Don't number the "Your turn" `scaffold` blocks — they
+drift out of sync when sections are reordered.
 
 `.bookref` chips must be derived from the booklet's `.toc` after a
 build, never hand-written. Space's original chips cited pages 38–71 of a

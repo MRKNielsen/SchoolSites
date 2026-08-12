@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solution Set &mdash; Space | Year 7 Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/solutions.css">
+</head>
+<body class="solutions-page theme-space">
+
+<div class="hero">
+  <a class="back-btn" href="index.html">&#8592; Back to unit</a>
+  <div class="unit-tag">Teacher Answer Key &middot; Confidential</div>
+  <h1>Solution Set &mdash; Space</h1>
+  <p class="sub">Model answers and marking guidance for every &ldquo;Check your understanding&rdquo; question in the Year 7/8 Space booklet &mdash; 94 questions across the eight lessons.</p>
+  <div class="meta-row">
+    <span>8 lessons</span><span>&middot;</span>
+    <span>94 questions</span><span>&middot;</span>
+    <span>198 marks</span><span>&middot;</span>
+    <span>Year 7 core (at the level)</span><span>&middot;</span>
+    <span>Victorian Curriculum F&ndash;10 v2.0</span>
+  </div>
+  <div class="teacher-note">
+    <strong>How to use:</strong> These are model responses, not the only acceptable wording &mdash; award marks for any answer demonstrating the same understanding. Questions sit in a &ldquo;Check your understanding&rdquo; box at the end of each subsection of the booklet, numbered Q<em>lesson</em>.<em>n</em>. The purple <strong>Year 8 Extension</strong> boxes in the booklet are above the level and are not answered here.
+  </div>
+</div>
+
+<div class="lockscreen" id="lock">
+  <div class="lock-icon">&#128273;</div>
+  <h2>Staff access only</h2>
+  <p>This solution set is password protected. Enter the staff password to view the answers.</p>
+  <form id="unlockForm">
+    <input id="pw" type="password" autocomplete="off" placeholder="Password" autofocus />
+    <button type="submit">Unlock</button>
+  </form>
+  <p class="err" id="err"></p>
+</div>
+<div id="content"></div>
+
+<footer>
+  Space &middot; Teacher Solution Set &middot; Year 7 Science &middot; Victorian Curriculum F&ndash;10 v2.0<br>
+  Generated to accompany <em>Space_Unit_Booklet_Yr7_8.pdf</em>. For staff use.
+</footer>
+
+<script>
+(function(){
+  // Replace this line with the BLOB emitted by tools/staff-crypt.html
+  // after encrypting solutions-payload.html with the staff password.
+  var BLOB = {salt:"", iv:"", iter:0, ct:""};
+  var b64 = function(s){var bin=atob(s);var a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;};
+  async function unlock(pw){
+    var enc=new TextEncoder();
+    var baseKey=await crypto.subtle.importKey("raw",enc.encode(pw),{name:"PBKDF2"},false,["deriveKey"]);
+    var key=await crypto.subtle.deriveKey(
+      {name:"PBKDF2",salt:b64(BLOB.salt),iterations:BLOB.iter,hash:"SHA-256"},
+      baseKey,{name:"AES-GCM",length:256},false,["decrypt"]);
+    var pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(BLOB.iv)},key,b64(BLOB.ct));
+    return new TextDecoder().decode(pt);
+  }
+  var form=document.getElementById("unlockForm");
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();
+    var err=document.getElementById("err");
+    err.textContent="";
+    try{
+      var html=await unlock(document.getElementById("pw").value);
+      document.getElementById("content").innerHTML=html;
+      document.getElementById("lock").style.display="none";
+      window.scrollTo(0,0);
+    }catch(ex){
+      err.textContent="Incorrect password. Try again.";
+      document.getElementById("pw").value="";
+      document.getElementById("pw").focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
