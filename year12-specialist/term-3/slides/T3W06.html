@@ -38,9 +38,9 @@
   <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
     <tr><td class="c"><b>1</b></td><td>16C</td><td>One-tail vs two-tail</td><td>choose \(H_1\) from wording; double the tail correctly</td></tr>
-    <tr><td class="c"><b>2</b></td><td>16D</td><td>Tests ↔ confidence intervals</td><td>connect a two-tail test to the matching CI</td></tr>
+    <tr><td class="c"><b>2</b></td><td>16C–D</td><td>Tests ↔ CIs, and \(|\bar{X} - \mu|\)</td><td>connect a two-tail test to the matching CI; write a two-tail \(p\)-value with absolute values</td></tr>
     <tr><td class="c"><b>3</b></td><td>16E</td><td>Type I and Type II errors</td><td>describe both errors in context</td></tr>
-    <tr><td class="c"><b>4</b></td><td>16E+</td><td>Error probabilities &amp; SAC 3 prep</td><td>compute \(P(\text{Type II})\); plan the revision week</td></tr>
+    <tr><td class="c"><b>4</b></td><td>16E</td><td>Error probabilities &amp; SAC 3 prep</td><td>compute \(P(\text{Type I})\) and \(P(\text{Type II})\); plan the revision week</td></tr>
   </table>
   <div class="box key"><span class="lbl">Key idea</span>
     <p>The tail structure comes from the <b>question</b>, not the data. Decide one-tail or two-tail from the wording <em>before</em> you look at \(\bar{x}\).</p>
@@ -108,7 +108,8 @@
   <ul class="small" style="margin-top:12px;">
     <li class="frag">\(H_0: \mu = 5\); \(H_1: \mu \neq 5\). Test statistic unchanged: \(z = -2\).</li>
     <li class="frag">\(p = 2\,P(Z \geq 2) \approx 2(0.0228) = 0.0455\).</li>
-    <li class="frag">Still \(&lt; 0.05\), so still reject — but only just. At \(\alpha = 0.02\) the one-tail test would reject and the two-tail wouldn't.</li>
+    <li class="frag">Still \(&lt; 0.05\), so still reject — but only just. At \(\alpha = 0.03\) the one-tail test would reject (\(0.0228 &lt; 0.03\)) and the two-tail would not (\(0.0455 &gt; 0.03\)).</li>
+    <li class="frag">A two-tail test is the more <b>conservative</b> choice: it demands a bigger gap between \(\bar{x}\) and \(\mu_0\) before it will reject. Only use one tail when there is a genuine theoretical reason to expect the change in that direction — and set the hypotheses before collecting the data, never after seeing which way \(\bar{x}\) fell.</li>
   </ul>
 </section>
 
@@ -133,17 +134,18 @@
 <!-- ═══ LESSON 2 ═══ -->
 
 <section class="slide section-slide" data-lesson="2">
-  <div class="kicker">Lesson 2 · 16D</div>
-  <h1>Tests and confidence intervals</h1>
+  <div class="kicker">Lesson 2 · 16C–16D</div>
+  <h1>Confidence intervals, and \(|\bar{X} - \mu|\)</h1>
   <ul class="goals">
     <li>A two-tail test at level \(\alpha\) rejects \(\mu_0\) exactly when \(\mu_0\) is outside the \((1-\alpha)\) CI.</li>
     <li>Use whichever view the question asks for — and check one with the other.</li>
+    <li>Write a two-tail \(p\)-value as an <b>absolute-value</b> probability, and read questions phrased as "differs by at least …".</li>
   </ul>
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Tests ↔ CIs">
   <h2>Two views of one computation</h2>
-  <div class="box defn"><span class="lbl">Fact (16D)</span>
+  <div class="box defn"><span class="lbl">Fact (16C)</span>
     <p>A two-tail test at the 5% level rejects \(H_0: \mu = \mu_0\) <b>exactly when</b> \(\mu_0\) falls outside the 95% confidence interval \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\).</p>
   </div>
   <div class="box example"><span class="lbl">Example 2</span>
@@ -170,6 +172,42 @@
     <li class="frag"><b>(a)</b> \(z = \dfrac{3}{2} = 1.5\); \(p = 2P(Z \geq 1.5) \approx 0.134 &gt; 0.05\) → do not reject.</li>
     <li class="frag"><b>(b)</b> CI \(= 103 \pm 3.92 = (99.08,\; 106.92)\), which <b>contains</b> 100 — same story, as it must.</li>
   </ul>
+</section>
+
+<section class="slide" data-topic="Lesson 2 · Absolute values (16D)">
+  <h2>Section 16D: the two-tail \(p\)-value, written with \(|\;\;|\)</h2>
+  <p>A two-tail test rejects when \(\bar{x}\) is far from \(\mu_0\) <b>in either direction</b> — that is, when the <b>distance</b> \(|\bar{x} - \mu|\) is large. Saying it that way collapses the two tails into one statement.</p>
+  <div class="box defn"><span class="lbl">Two-tail \(p\)-value, absolute-value form</span>
+    <p>\[p = \Pr\big(|\bar{X} - \mu| \ge |\bar{x} - \mu|\big) = \Pr\!\left(|Z| \ge \left|\frac{\bar{x} - \mu}{\sigma/\sqrt{n}}\right|\right)\]</p>
+  </div>
+  <div class="box key"><span class="lbl">Evaluating \(\Pr(|Z| \ge a)\)</span>
+    <p>The standard normal is symmetric about 0, so \(\Pr(Z \ge a) = \Pr(Z \le -a)\) and therefore</p>
+    <p>\[\Pr(|Z| \ge a) = \Pr(Z \le -a) + \Pr(Z \ge a) = 2\Pr(Z \le -a) \qquad\quad \Pr(|Z| \le a) = 1 - 2\Pr(Z \le -a)\]</p>
+    <p>For example \(\Pr(|Z| \ge 2) = 2 \times 0.02275 = 0.0455\) and \(\Pr(|Z| \ge 1) = 2 \times 0.15866 = 0.3173\).</p>
+  </div>
+  <div class="box hint"><span class="lbl">Standardise first</span>
+    <p>\(\Pr(|X - \mu| \ge d)\) is <b>not</b> \(\Pr(|Z| \ge d)\). Divide the distance by the relevant standard deviation first: \(\Pr(|X - \mu| \ge d) = \Pr\!\left(|Z| \ge \tfrac{d}{\sigma}\right)\) for a single value, and \(\Pr\!\left(|Z| \ge \tfrac{d}{\sigma/\sqrt{n}}\right)\) for a sample mean. Which one depends on whether the question says "a value of \(X\)" or "the mean of a sample of \(n\)".</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Lesson 2 · Absolute values (16D)">
+  <h2>Worked example: "differs by at least …"</h2>
+  <div class="box example"><span class="lbl">Example 3</span>
+    <p>The mass of a bag of sand is \(N(500,\, 12^2)\) g. A random sample of 16 bags is taken.</p>
+    <ul>
+      <li><b>(a)</b> Find the probability that the sample mean differs from 500 g by 5 g or more.</li>
+      <li><b>(b)</b> The sample mean turns out to be \(\bar{x} = 494.2\) g. Find the \(p\)-value for \(H_0: \mu = 500\) against \(H_1: \mu \ne 500\), and conclude at \(\alpha = 0.05\).</li>
+      <li><b>(c)</b> How large a difference \(|\bar{x} - 500|\) would have led to rejection at the 5% level?</li>
+    </ul>
+  </div>
+  <button class="reveal-btn">Reveal ▸</button>
+  <ol class="steps small">
+    <li>\(\text{sd}(\bar{X}) = \dfrac{12}{\sqrt{16}} = 3\) — this is the divisor throughout, not 12.</li>
+    <li><b>(a)</b> \(\Pr(|\bar{X} - 500| \ge 5) = \Pr\!\left(|Z| \ge \tfrac{5}{3}\right) = \Pr(|Z| \ge 1.667) = 2(0.0478) = 0.0956\).</li>
+    <li><b>(b)</b> \(|\bar{x} - \mu| = 5.8\), so \(p = \Pr\!\left(|Z| \ge \tfrac{5.8}{3}\right) = \Pr(|Z| \ge 1.933) = 2(0.0266) = 0.0532\).</li>
+    <li class="ans"><span class="result">\(p = 0.0532 &gt; 0.05\): do not reject \(H_0\).</span> There is insufficient evidence that the mean bag mass has changed from 500 g — despite a 5.8 g shortfall.</li>
+    <li><b>(c)</b> Reject when \(\dfrac{|\bar{x} - 500|}{3} \ge 1.96\), i.e. \(|\bar{x} - 500| \ge 5.88\) g — so \(\bar{x}\) outside \((494.12,\; 505.88)\). Which is the 95% CI relationship from the previous slide, seen from the other side.</li>
+  </ol>
 </section>
 
 <!-- ═══ LESSON 3 ═══ -->
@@ -200,7 +238,7 @@
 
 <section class="slide" data-topic="Lesson 3 · Errors">
   <h2>Errors in context</h2>
-  <div class="box example"><span class="lbl">Example 3</span>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>Testing whether a new drug reduces recovery time (\(H_0\): no change):</p>
     <ul style="margin-top:8px;">
       <li><b>Type I:</b> approving a drug that is actually no better — patients switch for nothing.</li>
@@ -233,10 +271,11 @@
 <!-- ═══ LESSON 4 ═══ -->
 
 <section class="slide section-slide" data-lesson="4">
-  <div class="kicker">Lesson 4 · 16E extension</div>
+  <div class="kicker">Lesson 4 · 16E</div>
   <h1>How likely is a miss? — and SAC 3 prep</h1>
   <ul class="goals">
     <li>Compute \(P(\text{Type II})\) for a given true mean.</li>
+    <li>Compute \(P(\text{Type I})\) when the critical value is stated rather than \(\alpha\).</li>
     <li>See how sample size crushes the miss rate.</li>
     <li>Set up the revision week for SAC 3.</li>
   </ul>
@@ -244,7 +283,7 @@
 
 <section class="slide" data-topic="Lesson 4 · Error probabilities">
   <h2>Extension: how likely is a miss?</h2>
-  <div class="box example"><span class="lbl">Example 4</span>
+  <div class="box example"><span class="lbl">Example 5</span>
     <p>Drug test again: \(H_0: \mu = 5\), \(H_1: \mu &lt; 5\), \(\sigma = 1\), \(n = 25\), \(\alpha = 0.05\). If the drug truly gives \(\mu = 4.5\), what is the probability of a Type II error?</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>
@@ -255,6 +294,28 @@
   </ul>
   <div class="box key"><span class="lbl">Reading</span>
     <p>Even a genuinely better drug is missed 20% of the time with \(n = 25\). Larger samples shrink this — which is why trials are big.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Lesson 4 · Error probabilities">
+  <h2>When the critical value is handed to you</h2>
+  <p>Some questions skip \(\alpha\) entirely and state the researcher's rule outright — "he will conclude the mean has increased if \(\bar{x} &gt; c\)". Then <b>both</b> error probabilities are ordinary normal calculations; only the assumed \(\mu\) changes between them.</p>
+  <div class="box example"><span class="lbl">Example 6</span>
+    <p>Assembly times are \(N(15,\, 5^2)\) minutes. A researcher takes a sample of \(n = 20\) and decides in advance to conclude that the mean has increased if \(\bar{x} &gt; 16.5\).</p>
+    <ul>
+      <li><b>(a)</b> Find \(P(\text{Type I error})\).</li>
+      <li><b>(b)</b> If the true mean is now 17.0 minutes, find \(P(\text{Type II error})\).</li>
+    </ul>
+  </div>
+  <button class="reveal-btn">Reveal ▸</button>
+  <ol class="steps small">
+    <li>\(\text{sd}(\bar{X}) = \dfrac{5}{\sqrt{20}} = 1.118\) in both parts — the sample size does not change.</li>
+    <li><b>(a)</b> Type I = reject when \(H_0\) is true, so assume \(\mu = 15\): \(P(\bar{X} &gt; 16.5 \mid \mu = 15) = P\!\left(Z &gt; \tfrac{1.5}{1.118}\right) = P(Z &gt; 1.342) = 0.0899\).</li>
+    <li><b>(b)</b> Type II = fail to reject when \(H_0\) is false, so assume \(\mu = 17\): \(P(\bar{X} \le 16.5 \mid \mu = 17) = P\!\left(Z \le \tfrac{-0.5}{1.118}\right) = P(Z \le -0.447) = 0.327\).</li>
+    <li class="ans"><span class="result">\(P(\text{Type I}) = 0.0899\), \(P(\text{Type II}) = 0.327\).</span> Here \(\alpha\) was not chosen at 5% — it fell out of the rule at about 9%.</li>
+  </ol>
+  <div class="box key"><span class="lbl">The one thing to get right</span>
+    <p>Same critical value, same \(\text{sd}(\bar{X})\), <b>different \(\mu\)</b>, and opposite inequality. Write down which \(\mu\) you are assuming before you standardise — that is the entire distinction between the two errors.</p>
   </div>
 </section>
 
@@ -287,8 +348,9 @@
   <h2>Chapter 16 summary</h2>
   <ul>
     <li>\(H_1\) direction comes from the question's wording; two-tail doubles the \(p\)-value.</li>
-    <li>Two-tail test at level \(\alpha\) ↔ \((1-\alpha)\) confidence interval.</li>
-    <li>Type I = false alarm, probability \(\alpha\); Type II = miss. Both described in context.</li>
+    <li>Two-tail test at level \(\alpha\) ↔ \((1-\alpha)\) confidence interval (16C).</li>
+    <li>Absolute-value form (16D): \(p = \Pr\big(|\bar{X} - \mu| \ge |\bar{x} - \mu|\big) = \Pr(|Z| \ge |z|) = 2\Pr(Z \le -|z|)\).</li>
+    <li>Type I = false alarm, probability \(\alpha\); Type II = miss. Both described in context, both computable from a critical value.</li>
     <li>All of Chapters 15–16 is now on the table: SAC 3 is Thu 27 Aug.</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>

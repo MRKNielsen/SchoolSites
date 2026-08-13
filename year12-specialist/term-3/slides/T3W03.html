@@ -37,9 +37,9 @@
   <h2>This week: four lessons</h2>
   <table class="tbl">
     <tr><th>Lesson</th><th>Section</th><th>Focus</th><th>By the end you can…</th></tr>
-    <tr><td class="c"><b>1</b></td><td>15A</td><td>One variable: \(aX + b\)</td><td>track mean and sd through scaling and shifting</td></tr>
-    <tr><td class="c"><b>2</b></td><td>15B</td><td>Two variables: \(aX + bY\)</td><td>combine independent variables; \(2X\) vs \(X_1+X_2\)</td></tr>
-    <tr><td class="c"><b>3</b></td><td>15C</td><td>Normal combinations</td><td>state the distribution, standardise, find probabilities</td></tr>
+    <tr><td class="c"><b>1</b></td><td>15A</td><td>One variable: \(aX + b\)</td><td>track mean and sd through scaling and shifting; build the distribution of \(Y\), discrete or continuous</td></tr>
+    <tr><td class="c"><b>2</b></td><td>15B</td><td>Two variables: \(aX + bY\)</td><td>build a sum's distribution from first principles; combine independent variables; \(2X\) vs \(X_1+X_2\)</td></tr>
+    <tr><td class="c"><b>3</b></td><td>15C</td><td>Normal combinations</td><td>state the distribution, standardise, find probabilities — and run it backwards for \(n\)</td></tr>
     <tr><td class="c"><b>4</b></td><td>15A–C</td><td>Mixed practice + SAC 3 outlook</td><td>solve full multi-part combination problems</td></tr>
   </table>
   <div class="box key"><span class="lbl">Key idea</span>
@@ -81,7 +81,8 @@
   <ul class="goals">
     <li>\(E(aX+b) = aE(X) + b\) — means follow the algebra.</li>
     <li>\(\text{Var}(aX+b) = a^2\text{Var}(X)\) — shifts vanish, scales square.</li>
-    <li>Apply to unit changes, taxes, fees and other linear stories.</li>
+    <li>Build the <b>distribution</b> of \(Y\), not just its mean and variance.</li>
+    <li>Do the same when \(X\) is <b>continuous</b>, with a density function.</li>
   </ul>
 </section>
 
@@ -103,8 +104,50 @@
 </section>
 
 <section class="slide" data-topic="Lesson 1 · Linear functions">
-  <h2>Worked example: a change of units</h2>
+  <h2>The <em>distribution</em> of \(Y = aX+b\), not just its mean</h2>
+  <p>When \(X\) is discrete, \(Y = aX + b\) is discrete too — and its distribution table is the original table with the \(x\)-row transformed. <b>The probabilities do not move.</b></p>
   <div class="box example"><span class="lbl">Example 2</span>
+    <p>A market stall sells \(X\) boxes an hour. Each box earns \$15 and the stall receives a fixed \$20 hourly subsidy, so hourly revenue is \(R = 15X + 20\).</p>
+    <table class="tbl">
+      <tr><th>\(x\)</th><td class="c">0</td><td class="c">1</td><td class="c">2</td><td class="c">3</td></tr>
+      <tr><th>\(P(X=x)\)</th><td class="c">0.1</td><td class="c">0.3</td><td class="c">0.4</td><td class="c">0.2</td></tr>
+    </table>
+    <p>Give the distribution of \(R\), and find \(P(R &gt; 40)\), \(E(R)\) and \(\text{sd}(R)\).</p>
+  </div>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
+  <ul class="small">
+    <li class="frag">Transform the values, keep the probabilities: \(r = 20,\ 35,\ 50,\ 65\) with \(P = 0.1,\ 0.3,\ 0.4,\ 0.2\).</li>
+    <li class="frag">\(P(R &gt; 40) = P(R = 50) + P(R = 65) = 0.4 + 0.2 = 0.6\). Read it straight off the new table.</li>
+    <li class="frag">\(E(X) = 1.7\), \(E(X^2) = 3.7\), \(\text{Var}(X) = 3.7 - 1.7^2 = 0.81\), \(\text{sd}(X) = 0.9\).</li>
+    <li class="frag">\(E(R) = 15(1.7) + 20 = \$45.50\); \(\text{sd}(R) = 15 \times 0.9 = \$13.50\); \(\text{Var}(R) = 225 \times 0.81 = 182.25\).</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Which does the question want?</span>
+    <p>"What is the probability distribution of \(R\)?" wants the <b>table</b>. "What is the probability that…?" is answered from the table, not from \(E\) and \(\text{Var}\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Lesson 1 · Linear functions">
+  <h2>When \(X\) is continuous: one extra step</h2>
+  <p>If \(X\) has density function \(f\), then probabilities are areas and \(Y = aX+b\) is continuous too. For \(a &gt; 0\), unwind the transformation <b>before</b> integrating:</p>
+  <p>\[\Pr(Y \le y) = \Pr(aX + b \le y) = \Pr\!\left(X \le \frac{y-b}{a}\right) = \int_{-\infty}^{\frac{y-b}{a}} f(x)\,dx\]</p>
+  <div class="box example"><span class="lbl">Example 3</span>
+    <p>\(f(x) = 2x\) for \(0 \le x \le 1\), and \(0\) elsewhere. Let \(Y = 5X + 2\). Find \(\Pr(X \le 0.6)\), \(\Pr(Y \le 4)\), and \(E(Y)\) and \(\text{Var}(Y)\).</p>
+  </div>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
+  <ul class="small">
+    <li class="frag">\(\Pr(X \le 0.6) = \int_0^{0.6} 2x\,dx = \big[x^2\big]_0^{0.6} = 0.36\).</li>
+    <li class="frag">\(\Pr(Y \le 4) = \Pr\!\left(X \le \tfrac{4-2}{5}\right) = \Pr(X \le 0.4) = 0.4^2 = 0.16\).</li>
+    <li class="frag">\(E(X) = \int_0^1 2x^2\,dx = \tfrac23\); \(E(X^2) = \int_0^1 2x^3\,dx = \tfrac12\); \(\text{Var}(X) = \tfrac12 - \tfrac49 = \tfrac{1}{18}\).</li>
+    <li class="frag">\(E(Y) = 5\left(\tfrac23\right) + 2 = \tfrac{16}{3} \approx 5.33\); \(\text{Var}(Y) = 25 \times \tfrac{1}{18} = \tfrac{25}{18} \approx 1.39\).</li>
+  </ul>
+  <div class="box key"><span class="lbl">The rules never changed</span>
+    <p>\(E(aX+b) = aE(X)+b\) and \(\text{Var}(aX+b) = a^2\text{Var}(X)\) hold for continuous \(X\) exactly as written. Only the way you <b>obtain</b> \(E(X)\) and \(\text{Var}(X)\) is different — an integral instead of a sum.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Lesson 1 · Linear functions">
+  <h2>Worked example: a change of units</h2>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>Daily maximum temperatures in January have mean \(25\,^{\circ}\)C and standard deviation \(2\,^{\circ}\)C. A US weather app reports \(F = 1.8C + 32\). Find the mean and standard deviation in \(^{\circ}\)F.</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>
@@ -140,10 +183,36 @@
   <div class="kicker">Lesson 2 · 15B</div>
   <h1>Linear combinations of independent variables</h1>
   <ul class="goals">
+    <li>Build the distribution of a sum from first principles, with a two-way table.</li>
     <li>\(E(aX+bY) = aE(X) + bE(Y)\) — always.</li>
     <li>\(\text{Var}(aX+bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\) — needs independence, and it always <b>adds</b>.</li>
     <li>The classic distinction: \(2X\) versus \(X_1 + X_2\).</li>
   </ul>
+</section>
+
+<section class="slide" data-topic="Lesson 2 · Linear combinations">
+  <h2>First principles: the distribution of a sum</h2>
+  <p>Before the shortcut formulas, know where they come from. For <b>independent</b> \(X_1, X_2\), every cell of a two-way table is a product of probabilities; collect the cells that give the same total.</p>
+  <div class="box example"><span class="lbl">Example 5</span>
+    <p>A spinner scores 1, 2 or 3 with probabilities 0.5, 0.3, 0.2. It is spun twice, independently. Find the distribution of \(S = X_1 + X_2\), then \(P(S \le 4)\), \(E(S)\) and \(\text{Var}(S)\).</p>
+  </div>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
+  <div class="frag">
+  <table class="tbl">
+    <tr><th>\(X_1 \backslash X_2\)</th><th class="c">1 &nbsp;(0.5)</th><th class="c">2 &nbsp;(0.3)</th><th class="c">3 &nbsp;(0.2)</th></tr>
+    <tr><th>1 &nbsp;(0.5)</th><td class="c">\(S=2\), 0.25</td><td class="c">\(S=3\), 0.15</td><td class="c">\(S=4\), 0.10</td></tr>
+    <tr><th>2 &nbsp;(0.3)</th><td class="c">\(S=3\), 0.15</td><td class="c">\(S=4\), 0.09</td><td class="c">\(S=5\), 0.06</td></tr>
+    <tr><th>3 &nbsp;(0.2)</th><td class="c">\(S=4\), 0.10</td><td class="c">\(S=5\), 0.06</td><td class="c">\(S=6\), 0.04</td></tr>
+  </table>
+  </div>
+  <ul class="small">
+    <li class="frag">Collecting: \(P(S) = 0.25,\ 0.30,\ 0.29,\ 0.12,\ 0.04\) for \(s = 2, 3, 4, 5, 6\) — and these total 1, which is the check.</li>
+    <li class="frag">\(P(S \le 4) = 0.25 + 0.30 + 0.29 = 0.84\). Only the table can answer this; the formulas cannot.</li>
+    <li class="frag">From the table \(E(S) = 3.4\) and \(\text{Var}(S) = 12.78 - 3.4^2 = 1.22\) — matching \(2\mu = 3.4\) and \(2\sigma^2 = 2(0.61) = 1.22\) from the shortcuts. ✓</li>
+  </ul>
+  <div class="box key"><span class="lbl">When you need the table</span>
+    <p>Any question asking for a <b>probability</b> about a sum of discrete variables — "more than three children in the combined group", \(P(X_1 - X_2 = 0)\), \(P(X_1 + 3X_2 = 6)\) — needs the two-way table. Questions asking only for \(E\), \(\text{Var}\) or \(\text{sd}\) take the shortcuts. Weighted sums like \(2X_1 + 3X_2\) use the same table with the weighted values in the cells.</p>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Linear combinations">
@@ -155,6 +224,9 @@
   </div>
   <div class="box key"><span class="lbl">Requirement</span>
     <p>The variance rule needs <b>independence</b>. The expectation rule doesn't — it always holds.</p>
+  </div>
+  <div class="box defn"><span class="lbl">Any number of variables, any distributions</span>
+    <p>\(E(a_1X_1 + \cdots + a_nX_n) = a_1\mu_1 + \cdots + a_n\mu_n\) and, for independent \(X_i\), \(\text{Var}(a_1X_1 + \cdots + a_nX_n) = a_1^2\sigma_1^2 + \cdots + a_n^2\sigma_n^2\). The \(X_i\) need <b>not</b> be identically distributed — "two bags of apples and three bags of bananas" is \(2A_1 + 3B_1\) only if the bags within a type are one item bought twice; two <i>separate</i> bags are \(A_1 + A_2\).</p>
   </div>
 </section>
 
@@ -196,13 +268,18 @@
     <ul style="margin-top:8px;">
       <li><b>(a)</b> Find the mean and variance of \(3X - 2Y\).</li>
       <li><b>(b)</b> Five independent items each have mean 12 kg, sd 2 kg. Compare the sd of the <b>total</b> \(X_1 + \cdots + X_5\) with the sd of \(5X\).</li>
+      <li><b>(c)</b> <i>Working backwards.</i> \(U\) has mean 2 and variance 3; \(V\) has mean 3 and variance 4; independent. Find \(a, b \in \mathbb{N}\) such that \(aU + bV\) has mean 17 and variance 84.</li>
     </ul>
   </div>
   <button class="reveal-btn" data-frag>Answers ▸</button>
   <ul class="small" style="margin-top:12px;">
     <li class="frag"><b>(a)</b> \(E = 3(50) - 2(20) = 110\); \(\text{Var} = 9(9) + 4(4) = 97\) — note both terms <b>added</b>, sd \(= \sqrt{97} \approx 9.85\).</li>
     <li class="frag"><b>(b)</b> Total: \(\text{Var} = 5(4) = 20\), sd \(= 2\sqrt{5} \approx 4.47\) kg. \(5X\): \(\text{Var} = 25(4) = 100\), sd \(= 10\) kg — more than double.</li>
+    <li class="frag"><b>(c)</b> \(2a + 3b = 17\) and \(3a^2 + 4b^2 = 84\). From the first, \(b = \tfrac{17-2a}{3}\); testing the natural-number options \(a = 1, 4, 7\) gives \(103, 84, 151\). So \(a = 4\), \(b = 3\).</li>
   </ul>
+  <div class="box hint"><span class="lbl">On part (c)</span>
+    <p>Two equations, but one is quadratic — so substitute and <b>test the integer candidates</b> rather than solving in general. The mean equation restricts \(a\) to a short list; that is the whole method.</p>
+  </div>
 </section>
 
 <!-- ═══ LESSON 3 · 15C ═══ -->
@@ -214,6 +291,7 @@
     <li>Independent normals combine to a <b>normal</b> — with mean and variance from the rules.</li>
     <li>The four-step workflow: name it → mean &amp; variance → state the distribution → standardise.</li>
     <li>Differences of normals: who-beats-whom problems.</li>
+    <li>Inverse problems: fix the probability, solve for \(n\).</li>
   </ul>
 </section>
 
@@ -222,7 +300,7 @@
   <div class="box defn"><span class="lbl">Fact</span>
     <p>If \(X\) and \(Y\) are independent normals, then \(aX + bY + c\) is also <b>normal</b> — mean and variance from the rules above.</p>
   </div>
-  <div class="box example"><span class="lbl">Example 3</span>
+  <div class="box example"><span class="lbl">Example 6</span>
     <p>Juice bottles: \(X \sim N(502,\, 2^2)\) mL. Find \(P(\text{four-pack total} &lt; 2000)\).</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>
@@ -238,7 +316,7 @@
 
 <section class="slide" data-topic="Lesson 3 · Normal combinations">
   <h2>Worked example: comparing two normals</h2>
-  <div class="box example"><span class="lbl">Example 4</span>
+  <div class="box example"><span class="lbl">Example 7</span>
     <p>Tom's swim times are \(N(62,\, 1.5^2)\) s; Sam's are \(N(60,\, 2^2)\) s, independently. Find the probability Tom beats Sam in a race.</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>
@@ -256,6 +334,25 @@
   <h2>Seeing it: the difference is wider than either</h2>
   <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">-8</text><line x1="156" y1="30" x2="156" y2="330" stroke="#e2e8f0"/><text x="156" y="352" font-size="16" fill="#475569" text-anchor="middle">-6</text><line x1="242" y1="30" x2="242" y2="330" stroke="#e2e8f0"/><text x="242" y="352" font-size="16" fill="#475569" text-anchor="middle">-4</text><line x1="328" y1="30" x2="328" y2="330" stroke="#e2e8f0"/><text x="328" y="352" font-size="16" fill="#475569" text-anchor="middle">-2</text><line x1="414" y1="30" x2="414" y2="330" stroke="#e2e8f0"/><text x="414" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="586" y1="30" x2="586" y2="330" stroke="#e2e8f0"/><text x="586" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="672" y1="30" x2="672" y2="330" stroke="#e2e8f0"/><text x="672" y="352" font-size="16" fill="#475569" text-anchor="middle">6</text><line x1="758" y1="30" x2="758" y2="330" stroke="#e2e8f0"/><text x="758" y="352" font-size="16" fill="#475569" text-anchor="middle">8</text><line x1="844" y1="30" x2="844" y2="330" stroke="#e2e8f0"/><text x="844" y="352" font-size="16" fill="#475569" text-anchor="middle">10</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">12</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,330.0 L70.0,329.9 L73.4,329.9 L76.9,329.9 L80.3,329.9 L83.8,329.8 L87.2,329.8 L90.6,329.8 L94.1,329.8 L97.5,329.7 L101.0,329.7 L104.4,329.7 L107.8,329.6 L111.3,329.6 L114.7,329.5 L118.2,329.5 L121.6,329.4 L125.0,329.4 L128.5,329.3 L131.9,329.2 L135.4,329.1 L138.8,329.0 L142.2,328.9 L145.7,328.8 L149.1,328.6 L152.6,328.5 L156.0,328.3 L159.4,328.2 L162.9,328.0 L166.3,327.7 L169.8,327.5 L173.2,327.3 L176.6,327.0 L180.1,326.7 L183.5,326.3 L187.0,326.0 L190.4,325.6 L193.8,325.2 L197.3,324.7 L200.7,324.2 L204.2,323.7 L207.6,323.1 L211.0,322.5 L214.5,321.8 L217.9,321.1 L221.4,320.3 L224.8,319.5 L228.2,318.6 L231.7,317.6 L235.1,316.6 L238.6,315.5 L242.0,314.3 L245.4,313.1 L248.9,311.8 L252.3,310.4 L255.8,308.9 L259.2,307.3 L262.6,305.6 L266.1,303.8 L269.5,302.0 L273.0,300.0 L276.4,297.9 L279.8,295.7 L283.3,293.4 L286.7,291.0 L290.2,288.4 L293.6,285.8 L297.0,283.0 L300.5,280.1 L303.9,277.1 L307.4,273.9 L310.8,270.7 L314.2,267.3 L317.7,263.7 L321.1,260.1 L324.6,256.3 L328.0,252.4 L331.4,248.3 L334.9,244.2 L338.3,239.9 L341.8,235.5 L345.2,231.0 L348.6,226.4 L352.1,221.6 L355.5,216.8 L359.0,211.9 L362.4,206.9 L365.8,201.8 L369.3,196.7 L372.7,191.5 L376.2,186.2 L379.6,180.9 L383.0,175.5 L386.5,170.1 L389.9,164.7 L393.4,159.3 L396.8,153.8 L400.2,148.4 L403.7,143.1 L407.1,137.7 L410.6,132.4 L414.0,127.2 L414.0,330.0 Z" fill="#9d144d" fill-opacity="0.22" stroke="none"/><path d="M70.0,329.9 L74.3,329.9 L78.6,329.9 L82.9,329.8 L87.2,329.8 L91.5,329.8 L95.8,329.8 L100.1,329.7 L104.4,329.7 L108.7,329.6 L113.0,329.6 L117.3,329.5 L121.6,329.4 L125.9,329.3 L130.2,329.2 L134.5,329.1 L138.8,329.0 L143.1,328.9 L147.4,328.7 L151.7,328.5 L156.0,328.3 L160.3,328.1 L164.6,327.9 L168.9,327.6 L173.2,327.3 L177.5,326.9 L181.8,326.5 L186.1,326.1 L190.4,325.6 L194.7,325.1 L199.0,324.5 L203.3,323.8 L207.6,323.1 L211.9,322.3 L216.2,321.4 L220.5,320.5 L224.8,319.5 L229.1,318.3 L233.4,317.1 L237.7,315.8 L242.0,314.3 L246.3,312.8 L250.6,311.1 L254.9,309.2 L259.2,307.3 L263.5,305.2 L267.8,302.9 L272.1,300.5 L276.4,297.9 L280.7,295.1 L285.0,292.2 L289.3,289.1 L293.6,285.8 L297.9,282.3 L302.2,278.6 L306.5,274.7 L310.8,270.7 L315.1,266.4 L319.4,261.9 L323.7,257.2 L328.0,252.4 L332.3,247.3 L336.6,242.0 L340.9,236.6 L345.2,231.0 L349.5,225.2 L353.8,219.2 L358.1,213.1 L362.4,206.9 L366.7,200.5 L371.0,194.1 L375.3,187.5 L379.6,180.9 L383.9,174.1 L388.2,167.4 L392.5,160.6 L396.8,153.8 L401.1,147.1 L405.4,140.4 L409.7,133.8 L414.0,127.2 L418.3,120.8 L422.6,114.5 L426.9,108.4 L431.2,102.5 L435.5,96.7 L439.8,91.3 L444.1,86.1 L448.4,81.1 L452.7,76.5 L457.0,72.2 L461.3,68.3 L465.6,64.7 L469.9,61.5 L474.2,58.7 L478.5,56.3 L482.8,54.3 L487.1,52.7 L491.4,51.6 L495.7,51.0 L500.0,50.7 L504.3,51.0 L508.6,51.6 L512.9,52.7 L517.2,54.3 L521.5,56.3 L525.8,58.7 L530.1,61.5 L534.4,64.7 L538.7,68.3 L543.0,72.2 L547.3,76.5 L551.6,81.1 L555.9,86.1 L560.2,91.3 L564.5,96.7 L568.8,102.5 L573.1,108.4 L577.4,114.5 L581.7,120.8 L586.0,127.2 L590.3,133.8 L594.6,140.4 L598.9,147.1 L603.2,153.8 L607.5,160.6 L611.8,167.4 L616.1,174.1 L620.4,180.9 L624.7,187.5 L629.0,194.1 L633.3,200.5 L637.6,206.9 L641.9,213.1 L646.2,219.2 L650.5,225.2 L654.8,231.0 L659.1,236.6 L663.4,242.0 L667.7,247.3 L672.0,252.4 L676.3,257.2 L680.6,261.9 L684.9,266.4 L689.2,270.7 L693.5,274.7 L697.8,278.6 L702.1,282.3 L706.4,285.8 L710.7,289.1 L715.0,292.2 L719.3,295.1 L723.6,297.9 L727.9,300.5 L732.2,302.9 L736.5,305.2 L740.8,307.3 L745.1,309.2 L749.4,311.1 L753.7,312.8 L758.0,314.3 L762.3,315.8 L766.6,317.1 L770.9,318.3 L775.2,319.5 L779.5,320.5 L783.8,321.4 L788.1,322.3 L792.4,323.1 L796.7,323.8 L801.0,324.5 L805.3,325.1 L809.6,325.6 L813.9,326.1 L818.2,326.5 L822.5,326.9 L826.8,327.3 L831.1,327.6 L835.4,327.9 L839.7,328.1 L844.0,328.3 L848.3,328.5 L852.6,328.7 L856.9,328.9 L861.2,329.0 L865.5,329.1 L869.8,329.2 L874.1,329.3 L878.4,329.4 L882.7,329.5 L887.0,329.6 L891.3,329.6 L895.6,329.7 L899.9,329.7 L904.2,329.8 L908.5,329.8 L912.8,329.8 L917.1,329.8 L921.4,329.9 L925.7,329.9 L930.0,329.9" fill="none" stroke="#d02670" stroke-width="3.5"/><line x1="414" y1="40" x2="414" y2="330" stroke="#9d144d" stroke-width="2" stroke-dasharray="6 5"/><line x1="500" y1="40" x2="500" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="508" y="56" font-size="17" fill="#475569">mean 2</text><text x="311" y="300" font-size="19" font-weight="700" fill="#9d144d" text-anchor="middle">P(D &lt; 0) &#8776; 0.212</text><text x="672" y="120" font-size="19" font-weight="700" fill="#d02670">D = T &#8722; S ~ N(2, 2.5&#178;)</text><text x="672" y="148" font-size="16" fill="#475569">sd(T) = 1.5,  sd(S) = 2,  sd(D) = &#8730;(1.5&#178;+2&#178;) = 2.5</text></svg>
   <p style="font-size:21px; margin-top:4px; text-align:center;">\(D = T - S\) has sd \(2.5\) — larger than Tom's \(1.5\) and Sam's \(2\). Subtracting <b>added</b> uncertainty. Tom wins on the shaded side \(D &lt; 0\).</p>
+</section>
+
+<section class="slide" data-topic="Lesson 3 · Normal combinations">
+  <h2>Running it backwards: "how many?"</h2>
+  <p>Some questions fix the probability and ask for \(n\). The distribution now depends on \(n\), so you cannot standardise once — you test values of \(n\) instead.</p>
+  <div class="box example"><span class="lbl">Example 8</span>
+    <p>Adult masses are \(N(75,\, 8^2)\) kg, independently. A lift is rated to 700 kg. What is the largest number of adults who may board if we want to be at least 99% sure the limit is not exceeded?</p>
+  </div>
+  <button class="reveal-btn">Reveal ▸</button>
+  <ol class="steps small">
+    <li>Name the total for a general \(n\): \(T_n = X_1 + \cdots + X_n \sim N\big(75n,\; 64n\big)\), so \(\text{sd}(T_n) = 8\sqrt{n}\).</li>
+    <li>Write the requirement: \(P(T_n \le 700) \ge 0.99\), i.e. \(\dfrac{700 - 75n}{8\sqrt{n}} \ge 2.326\).</li>
+    <li>Test \(n = 8\): mean 600, sd \(8\sqrt{8} = 22.63\), \(z = \dfrac{100}{22.63} = 4.42\) → \(P \approx 0.999995\). ✓</li>
+    <li>Test \(n = 9\): mean 675, sd 24, \(z = \dfrac{25}{24} = 1.04\) → \(P \approx 0.851\). ✗</li>
+    <li class="ans"><span class="result">A maximum of 8 adults.</span></li>
+  </ol>
+  <div class="box key"><span class="lbl">The habit</span>
+    <p>Both the mean (\(n\mu\)) and the sd (\(\sqrt{n}\,\sigma\)) move with \(n\), and they move at different rates — which is exactly why the answer isn't simply \(700/75\). Write \(T_n\) in terms of \(n\) first, then test integers around your estimate.</p>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Checkpoint">
@@ -288,7 +385,7 @@
 
 <section class="slide" data-topic="Lesson 4 · Mixed practice">
   <h2>Worked example: a full combination problem</h2>
-  <div class="box example"><span class="lbl">Example 5</span>
+  <div class="box example"><span class="lbl">Example 9</span>
     <p>A latte is one espresso shot \(X \sim N(30,\, 2^2)\) mL plus steamed milk \(M \sim N(180,\, 5^2)\) mL, independent. The cup holds 220 mL. Find the probability of overflow.</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>

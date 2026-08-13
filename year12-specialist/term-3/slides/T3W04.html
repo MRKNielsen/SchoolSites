@@ -28,7 +28,7 @@
 <section class="slide section-slide">
   <h1>The Sample Mean &amp; the Central Limit Theorem</h1>
   <p>Chapter 15 (D–F) · Week 5 — Why averages are better behaved than the things they average</p>
-  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 2 (Differential Equations): Mon 3 – Tue 4 Aug (Week 4) · 2 × 40 min · tech-free</p>
+  <p style="font-size:20px; margin-top:34px;">VCE Specialist Mathematics 3&amp;4 · Term 3, 2026 · SAC 3 (Probability &amp; Statistics): Thu 27 Aug, Week 7</p>
   <span class="chip">Four lessons · ≈20 min direct instruction each · keys 1–4 jump to a lesson</span>
 </section>
 
@@ -184,9 +184,10 @@
   <div class="kicker">Lesson 3 · 15E–15F</div>
   <h1>Simulation and the central limit theorem</h1>
   <ul class="goals">
-    <li>Watch the distribution of \(\bar{X}\) take shape by simulation.</li>
+    <li>Watch the distribution of \(\bar{X}\) take shape by simulation — with the CAS commands to do it.</li>
     <li>State the CLT precisely — what it claims, and what it doesn't.</li>
     <li>Know when the normal claim is exact vs approximate.</li>
+    <li>Apply the CLT when the population is given by a <b>density function</b>.</li>
   </ul>
 </section>
 
@@ -197,8 +198,28 @@
     <li>Draw a sample of size \(n\), record \(\bar{x}\). Repeat a few thousand times and histogram the results.</li>
     <li>What you see: the histogram of sample means is centred at \(\mu\), has spread \(\approx \sigma/\sqrt{n}\), and looks <b>more normal as \(n\) grows</b> — regardless of the population's shape.</li>
   </ul>
-  <div class="box try"><span class="lbl">Try it! (CAS / spreadsheet)</span>
-    <p>Simulate 1000 samples of size \(n = 2, 5, 30\) from rolls of a fair die (\(\mu = 3.5\), \(\sigma^2 = \tfrac{35}{12}\)). Histogram the means. At what \(n\) does the bell shape convince you?</p>
+  <div class="cols">
+    <div>
+      <div class="box cas"><span class="lbl">TI-Nspire — Lists &amp; Spreadsheet</span>
+        <p>Name column A <code>smeans</code>, then in its formula cell:</p>
+        <p><b>Normal population:</b> <code>=approx(seq(mean(randnorm(100,15,25)),k,1,500))</code> — 500 sample means, each from a sample of 25 drawn from \(N(100, 15^2)\).</p>
+        <p><b>Uniform 1–10:</b> <code>=approx(seq(mean(randInt(1,10,50)),k,1,500))</code></p>
+        <p><b>Binomial:</b> <code>=approx(seq(mean(randBin(20,0.3,50)),k,1,500))</code></p>
+        <p>Then plot column A on a Data &amp; Statistics page as a dotplot.</p>
+      </div>
+    </div>
+    <div>
+      <div class="box cas"><span class="lbl">Casio ClassPad — Spreadsheet</span>
+        <p>In cell A1 type one of:</p>
+        <p><code>=mean(randNorm(15,100,25))</code> &nbsp;(sd first, then mean, then \(n\))</p>
+        <p><code>=mean(randList(50,1,10))</code></p>
+        <p><code>=mean(randBin(20,0.3,50))</code></p>
+        <p>Tap the tick, re-tap A1, then <b>Edit ▸ Fill ▸ Fill Range</b> with range <code>A1:A500</code>. Select column A, then <b>Graph ▸ Histogram</b>.</p>
+      </div>
+      <div class="box try"><span class="lbl">Try it!</span>
+        <p>Run the uniform version for \(n = 2, 5\) and \(30\). At what \(n\) does the bell shape convince you? Compare the simulated sd with the predicted \(\sigma/\sqrt{n}\).</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -208,7 +229,7 @@
     <p>For a random sample of size \(n\) from <b>any</b> distribution with mean \(\mu\) and variance \(\sigma^2\), the distribution of \(\bar{X}\) is <b>approximately</b> \(N\!\left(\mu,\, \dfrac{\sigma^2}{n}\right)\) when \(n\) is large.</p>
   </div>
   <ul style="margin-top:14px;">
-    <li>Working guideline: \(n \geq 30\) is usually "large enough" (sooner if the population is roughly symmetric).</li>
+    <li>Working guideline: unless the population is very skewed, \(n\) between 25 and 30 is enough — and the approximation keeps improving as \(n\) grows.</li>
     <li>Normal population → \(\bar{X}\) exactly normal for <b>every</b> \(n\); CLT is only needed when the population isn't normal.</li>
     <li>This is what makes next week possible: inference about \(\mu\) without knowing the population's shape.</li>
   </ul>
@@ -218,6 +239,25 @@
   <h2>Seeing it: a skewed population, a normal-looking mean</h2>
   <svg viewBox="0 0 980 370" style="width:100%;max-width:920px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:Segoe UI,system-ui,sans-serif;}</style><line x1="70" y1="30" x2="70" y2="330" stroke="#e2e8f0"/><text x="70" y="352" font-size="16" fill="#475569" text-anchor="middle">0</text><line x1="285" y1="30" x2="285" y2="330" stroke="#e2e8f0"/><text x="285" y="352" font-size="16" fill="#475569" text-anchor="middle">1</text><line x1="500" y1="30" x2="500" y2="330" stroke="#e2e8f0"/><text x="500" y="352" font-size="16" fill="#475569" text-anchor="middle">2</text><line x1="715" y1="30" x2="715" y2="330" stroke="#e2e8f0"/><text x="715" y="352" font-size="16" fill="#475569" text-anchor="middle">3</text><line x1="930" y1="30" x2="930" y2="330" stroke="#e2e8f0"/><text x="930" y="352" font-size="16" fill="#475569" text-anchor="middle">4</text><line x1="70" y1="330" x2="930" y2="330" stroke="#475569" stroke-width="2"/><path d="M70.0,200.0 L74.3,202.6 L78.6,205.1 L82.9,207.6 L87.2,210.0 L91.5,212.4 L95.8,214.7 L100.1,217.0 L104.4,219.2 L108.7,221.4 L113.0,223.6 L117.3,225.7 L121.6,227.7 L125.9,229.8 L130.2,231.7 L134.5,233.7 L138.8,235.6 L143.1,237.5 L147.4,239.3 L151.7,241.1 L156.0,242.9 L160.3,244.6 L164.6,246.3 L168.9,247.9 L173.2,249.6 L177.5,251.2 L181.8,252.7 L186.1,254.2 L190.4,255.7 L194.7,257.2 L199.0,258.7 L203.3,260.1 L207.6,261.5 L211.9,262.8 L216.2,264.1 L220.5,265.4 L224.8,266.7 L229.1,268.0 L233.4,269.2 L237.7,270.4 L242.0,271.6 L246.3,272.7 L250.6,273.9 L254.9,275.0 L259.2,276.1 L263.5,277.1 L267.8,278.2 L272.1,279.2 L276.4,280.2 L280.7,281.2 L285.0,282.2 L289.3,283.1 L293.6,284.1 L297.9,285.0 L302.2,285.9 L306.5,286.7 L310.8,287.6 L315.1,288.4 L319.4,289.2 L323.7,290.1 L328.0,290.8 L332.3,291.6 L336.6,292.4 L340.9,293.1 L345.2,293.9 L349.5,294.6 L353.8,295.3 L358.1,296.0 L362.4,296.6 L366.7,297.3 L371.0,297.9 L375.3,298.6 L379.6,299.2 L383.9,299.8 L388.2,300.4 L392.5,301.0 L396.8,301.6 L401.1,302.1 L405.4,302.7 L409.7,303.2 L414.0,303.8 L418.3,304.3 L422.6,304.8 L426.9,305.3 L431.2,305.8 L435.5,306.3 L439.8,306.7 L444.1,307.2 L448.4,307.6 L452.7,308.1 L457.0,308.5 L461.3,308.9 L465.6,309.4 L469.9,309.8 L474.2,310.2 L478.5,310.6 L482.8,310.9 L487.1,311.3 L491.4,311.7 L495.7,312.1 L500.0,312.4 L504.3,312.8 L508.6,313.1 L512.9,313.4 L517.2,313.8 L521.5,314.1 L525.8,314.4 L530.1,314.7 L534.4,315.0 L538.7,315.3 L543.0,315.6 L547.3,315.9 L551.6,316.2 L555.9,316.4 L560.2,316.7 L564.5,317.0 L568.8,317.2 L573.1,317.5 L577.4,317.7 L581.7,318.0 L586.0,318.2 L590.3,318.4 L594.6,318.7 L598.9,318.9 L603.2,319.1 L607.5,319.3 L611.8,319.5 L616.1,319.7 L620.4,320.0 L624.7,320.1 L629.0,320.3 L633.3,320.5 L637.6,320.7 L641.9,320.9 L646.2,321.1 L650.5,321.3 L654.8,321.4 L659.1,321.6 L663.4,321.8 L667.7,321.9 L672.0,322.1 L676.3,322.3 L680.6,322.4 L684.9,322.6 L689.2,322.7 L693.5,322.8 L697.8,323.0 L702.1,323.1 L706.4,323.3 L710.7,323.4 L715.0,323.5 L719.3,323.7 L723.6,323.8 L727.9,323.9 L732.2,324.0 L736.5,324.1 L740.8,324.3 L745.1,324.4 L749.4,324.5 L753.7,324.6 L758.0,324.7 L762.3,324.8 L766.6,324.9 L770.9,325.0 L775.2,325.1 L779.5,325.2 L783.8,325.3 L788.1,325.4 L792.4,325.5 L796.7,325.6 L801.0,325.7 L805.3,325.7 L809.6,325.8 L813.9,325.9 L818.2,326.0 L822.5,326.1 L826.8,326.2 L831.1,326.2 L835.4,326.3 L839.7,326.4 L844.0,326.4 L848.3,326.5 L852.6,326.6 L856.9,326.7 L861.2,326.7 L865.5,326.8 L869.8,326.8 L874.1,326.9 L878.4,327.0 L882.7,327.0 L887.0,327.1 L891.3,327.1 L895.6,327.2 L899.9,327.3 L904.2,327.3 L908.5,327.4 L912.8,327.4 L917.1,327.5 L921.4,327.5 L925.7,327.6 L930.0,327.6" fill="none" stroke="#90A4AE" stroke-width="3.5"/><path d="M134.5,329.8 L136.0,329.8 L137.5,329.8 L139.0,329.7 L140.5,329.7 L142.0,329.6 L143.5,329.6 L145.0,329.5 L146.5,329.4 L148.0,329.4 L149.6,329.3 L151.1,329.2 L152.6,329.0 L154.1,328.9 L155.6,328.8 L157.1,328.6 L158.6,328.4 L160.1,328.2 L161.6,328.0 L163.1,327.7 L164.6,327.4 L166.1,327.1 L167.6,326.8 L169.1,326.4 L170.6,325.9 L172.1,325.5 L173.6,324.9 L175.1,324.3 L176.6,323.7 L178.1,323.0 L179.7,322.2 L181.2,321.4 L182.7,320.5 L184.2,319.5 L185.7,318.4 L187.2,317.3 L188.7,316.0 L190.2,314.6 L191.7,313.2 L193.2,311.6 L194.7,309.9 L196.2,308.0 L197.7,306.0 L199.2,303.9 L200.7,301.7 L202.2,299.3 L203.7,296.7 L205.2,294.0 L206.7,291.1 L208.2,288.0 L209.7,284.8 L211.3,281.4 L212.8,277.8 L214.3,274.0 L215.8,270.0 L217.3,265.9 L218.8,261.5 L220.3,257.0 L221.8,252.3 L223.3,247.4 L224.8,242.4 L226.3,237.1 L227.8,231.7 L229.3,226.1 L230.8,220.4 L232.3,214.6 L233.8,208.5 L235.3,202.4 L236.8,196.2 L238.3,189.8 L239.8,183.4 L241.4,176.9 L242.9,170.4 L244.4,163.8 L245.9,157.2 L247.4,150.6 L248.9,144.0 L250.4,137.4 L251.9,131.0 L253.4,124.6 L254.9,118.3 L256.4,112.1 L257.9,106.1 L259.4,100.3 L260.9,94.7 L262.4,89.2 L263.9,84.0 L265.4,79.1 L266.9,74.5 L268.4,70.1 L269.9,66.1 L271.5,62.4 L273.0,59.0 L274.5,56.0 L276.0,53.4 L277.5,51.1 L279.0,49.3 L280.5,47.8 L282.0,46.8 L283.5,46.1 L285.0,45.9 L286.5,46.1 L288.0,46.8 L289.5,47.8 L291.0,49.3 L292.5,51.1 L294.0,53.4 L295.5,56.0 L297.0,59.0 L298.5,62.4 L300.1,66.1 L301.6,70.1 L303.1,74.5 L304.6,79.1 L306.1,84.0 L307.6,89.2 L309.1,94.7 L310.6,100.3 L312.1,106.1 L313.6,112.1 L315.1,118.3 L316.6,124.6 L318.1,131.0 L319.6,137.4 L321.1,144.0 L322.6,150.6 L324.1,157.2 L325.6,163.8 L327.1,170.4 L328.6,176.9 L330.1,183.4 L331.7,189.8 L333.2,196.2 L334.7,202.4 L336.2,208.5 L337.7,214.6 L339.2,220.4 L340.7,226.1 L342.2,231.7 L343.7,237.1 L345.2,242.4 L346.7,247.4 L348.2,252.3 L349.7,257.0 L351.2,261.5 L352.7,265.9 L354.2,270.0 L355.7,274.0 L357.2,277.8 L358.7,281.4 L360.2,284.8 L361.8,288.0 L363.3,291.1 L364.8,294.0 L366.3,296.7 L367.8,299.3 L369.3,301.7 L370.8,303.9 L372.3,306.0 L373.8,308.0 L375.3,309.9 L376.8,311.6 L378.3,313.2 L379.8,314.6 L381.3,316.0 L382.8,317.3 L384.3,318.4 L385.8,319.5 L387.3,320.5 L388.8,321.4 L390.4,322.2 L391.9,323.0 L393.4,323.7 L394.9,324.3 L396.4,324.9 L397.9,325.5 L399.4,325.9 L400.9,326.4 L402.4,326.8 L403.9,327.1 L405.4,327.4 L406.9,327.7 L408.4,328.0 L409.9,328.2 L411.4,328.4 L412.9,328.6 L414.4,328.8 L415.9,328.9 L417.4,329.0 L418.9,329.2 L420.5,329.3 L422.0,329.4 L423.5,329.4 L425.0,329.5 L426.5,329.6 L428.0,329.6 L429.5,329.7 L431.0,329.7 L432.5,329.8 L434.0,329.8 L435.5,329.8" fill="none" stroke="#d02670" stroke-width="3.5"/><line x1="285" y1="36" x2="285" y2="330" stroke="#90A4AE" stroke-width="1.5" stroke-dasharray="6 5"/><text x="522" y="230" font-size="19" font-weight="700" fill="#90A4AE">population: skewed, mean 1</text><text x="339" y="70" font-size="19" font-weight="700" fill="#d02670">X&#772; for n = 30 &#8776; N(1, 1/30)</text></svg>
   <p style="font-size:21px; margin-top:4px; text-align:center;">Waiting times (skewed, mean 1, sd 1) — yet \(\bar{X}\) for \(n = 30\) is already close to \(N(1,\, 1/30)\). The population stays skewed; only \(\bar{X}\) turns normal.</p>
+</section>
+
+<section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
+  <h2>The standard CLT question: a population given by a density function</h2>
+  <p>The CLT needs only \(\mu\) and \(\sigma\) — so the usual exam setup hands you a <b>probability density function</b> and makes you extract them first. That first step is the whole difficulty.</p>
+  <div class="box example"><span class="lbl">Example 3</span>
+    <p>The length of a phone call, \(X\) minutes, has density \(f(x) = \dfrac{x}{8}\) for \(0 \le x \le 4\), and \(0\) elsewhere. Find the probability that the average length of 36 randomly chosen calls exceeds 3 minutes.</p>
+  </div>
+  <button class="reveal-btn">Reveal ▸</button>
+  <ol class="steps small">
+    <li>\(E(X) = \displaystyle\int_0^4 x \cdot \frac{x}{8}\,dx = \left[\frac{x^3}{24}\right]_0^4 = \frac{8}{3} \approx 2.667\).</li>
+    <li>\(E(X^2) = \displaystyle\int_0^4 x^2 \cdot \frac{x}{8}\,dx = \left[\frac{x^4}{32}\right]_0^4 = 8\), so \(\text{Var}(X) = 8 - \left(\tfrac83\right)^2 = \tfrac89\) and \(\sigma = \tfrac{2\sqrt2}{3} \approx 0.9428\).</li>
+    <li>The population is <b>not</b> normal, but \(n = 36\) is large — by the <b>central limit theorem</b>, \(\bar{X} \mathrel{\dot\sim} N\!\left(\tfrac83,\; \tfrac{\sigma^2}{36}\right)\) with \(\text{sd}(\bar{X}) = \tfrac{0.9428}{6} = 0.1571\).</li>
+    <li>\(P(\bar{X} &gt; 3) \approx P\!\left(Z &gt; \dfrac{3 - 2.667}{0.1571}\right) = P(Z &gt; 2.121) \approx 0.017\).</li>
+    <li class="ans"><span class="result">About 1.7% of such samples.</span> Compare a <b>single</b> call: \(P(X &gt; 3) = \int_3^4 \tfrac{x}{8}\,dx = 0.4375\).</li>
+  </ol>
+  <div class="box key"><span class="lbl">Two things markers look for</span>
+    <p>Show \(E(X)\) and \(E(X^2)\) as integrals, and <b>name the central limit theorem</b> when you assert normality — the population here is a straight line, nothing like a bell.</p>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Checkpoint">
@@ -255,7 +295,7 @@
     <li>\(X \sim \text{Bi}(n, p)\) is a sum of \(n\) independent 0/1 variables — so the CLT applies to it.</li>
     <li>For large \(n\): \(X \mathrel{\dot\sim} N\big(np,\; np(1-p)\big)\). Guideline: fine when \(np\) and \(n(1-p)\) are both \(&gt; 5\) or so.</li>
   </ul>
-  <div class="box example"><span class="lbl">Example 3</span>
+  <div class="box example"><span class="lbl">Example 4</span>
     <p>A fair coin is tossed 100 times. Estimate \(P(X \geq 60)\).</p>
   </div>
   <button class="reveal-btn" data-frag>Reveal ▸</button>
@@ -295,7 +335,7 @@
     <li>Everything in Chapter 16's inference rests on this week's distribution of \(\bar{X}\).</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>
-    <p>Problem Set 3 (Random Variables) covers Weeks 3–4. Next week we start using \(\bar{X}\) to make decisions: confidence intervals and hypothesis tests (Chapter 16).</p>
+    <p>Problem Set 3 (Random Variables) covers Chapter 15. Next week we start using \(\bar{X}\) to make decisions: confidence intervals and hypothesis tests (Chapter 16).</p>
   </div>
 </section>
 
