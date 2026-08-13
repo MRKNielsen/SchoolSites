@@ -3,12 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="mathjax-tex-svg.js" async></script>
 <title>Lesson 7 &#8212; Space Technology & Sustainability | Space</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/deck.css">
 <link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
 </head>
 <body class="deck-page theme-space">
 
@@ -53,7 +65,7 @@
   <section class="slide" data-src-section="6" data-menu="Entry task: Timeline ordering">
     <p class="eyebrow">Entry task &#183; Everyone can do this</p>
     <h2><span class="phase-tag wedo">We do</span> Sequence the space milestones</h2>
-    <p>In your booklet (p.&#160;36), cut out the space exploration event cards and arrange them in chronological order on the timeline strip. Then write what you think each event achieved.</p>
+    <p>In your booklet (p.&#160;26), cut out the space exploration event cards and arrange them in chronological order on the timeline strip. Then write what you think each event achieved.</p>
     <div class="graph-card">
       <svg viewBox="0 0 900 130" xmlns="http://www.w3.org/2000/svg">
         <!-- Timeline axis -->
@@ -91,7 +103,7 @@
 
   <!-- 5. SPACE RACE & ROBOTIC MISSIONS -->
   <section class="slide" data-src-section="6" data-menu="Space Race to robotic missions">
-    <p class="bookref">Booklet p.17 &#183; §7.1</p>
+    <p class="bookref">Booklet p.26 &#183; §7.1</p>
     <p class="eyebrow">Concept</p>
     <h2>From the Space Race to robotic exploration</h2>
     <div class="cols">
@@ -117,7 +129,7 @@
 
   <!-- 6. AUSTRALIA'S ROLE -->
   <section class="slide" data-src-section="6" data-menu="Australia&#39;s role in space science">
-    <p class="bookref">Booklet p.17 &#183; §7.2</p>
+    <p class="bookref">Booklet p.27 &#183; §7.2</p>
     <p class="eyebrow">Concept</p>
     <h2>Australia&#8217;s role in space exploration</h2>
     <div class="cols">
@@ -139,21 +151,21 @@
 
   <!-- 7. WORKED EXAMPLE -->
   <section class="slide" data-src-section="6" data-menu="Worked example: Evaluating space missions">
-    <p class="bookref">Booklet p.17 &#183; §7</p>
+    <p class="bookref">Booklet p.27 &#183; §7.2</p>
     <p class="eyebrow">Work through with the class</p>
     <h2><span class="phase-tag ido">I do</span> Worked example &#8212; evaluating a space mission</h2>
     <div class="box question"><span class="lbl">Structured evaluation</span><p>Evaluate whether sending humans to Mars is worth doing. Use evidence to argue both for and against, then reach a conclusion. (This is the type of extended response expected in the assessment task.)</p></div>
       <ol class="steps" id="n7d6w1">
         <li><span class="stepno">1</span> <strong>Benefits (For):</strong> Scientific returns (geology, life search, atmospheric data); technological spin-offs (medical, materials science, comms); potential long-term human survival on another planet; international collaboration and national prestige.</li>
         <li><span class="stepno">2</span> <strong>Risks/Costs (Against):</strong> Estimated cost US$450 billion+; radiation exposure during 6-month transit; unknown health effects of Martian gravity (38% of Earth); risk of contaminating Mars with Earth microbes (planetary protection); delay would mean 7-year missions due to orbital mechanics.</li>
-        <li class="ans"><span class="stepno">&#10003;</span> <span class="formula">Conclusion (example): The scientific and long-term survival benefits justify a crewed Mars mission if costs are shared internationally. Robotic missions should continue in parallel to reduce risk and cost. Strong planetary protection protocols are essential.</span></li>
+        <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Conclusion (example): The scientific and long-term survival benefits justify a crewed Mars mission if costs are shared internationally. Robotic missions should continue in parallel to reduce risk and cost. Strong planetary protection protocols are essential.</span></li>
       </ol>
       <button class="reveal-btn" data-target="#n7d6w1">Show working</button>
     </section>
 
   <!-- 8. YOUR TURN -->
   <section class="slide" data-src-section="6" data-menu="Your turn">
-    <p class="bookref">Booklet p.17 &#183; §7</p>
+    <p class="bookref">Booklet p.27 &#183; §7.2</p>
     <p class="eyebrow">Your turn</p>
     <h2><span class="phase-tag youdo">You do</span> Now you try</h2>
     <div class="box question"><span class="lbl">Mission design brief</span><p>You&#8217;ve been asked to design a mission to Jupiter&#8217;s moon Europa. In your booklet, complete the mission design template: state the scientific goal, whether it will be crewed or uncrewed and why, what instruments you would include, and one major challenge you would need to solve.</p></div>
@@ -162,12 +174,12 @@
         <li><span class="stepno">2</span> <strong>Crewed or uncrewed?</strong> Uncrewed &#8212; the radiation environment around Jupiter is deadly (Europa gets 540 rem/day; fatal human dose is ~500 rem total). An uncrewed penetrator probe can drill into the ice.</li>
         <li class="ans"><span class="stepno">&#10003;</span> <strong>Challenge:</strong> Communication delay (Jupiter is 4&#8211;48 light-minutes from Earth depending on orbital position) means the probe needs to operate autonomously. Ice shell could be 10&#8211;30 km thick. Solution: AI-controlled probe + nuclear (RTG) power source.</li>
       </ol>
-      <button class="reveal-btn" data-target="#n7d6w2">Show working</button>
+      <button class="reveal-btn" data-target="#n7d6w2">Show answers</button>
     </section>
 
   <!-- 9. FIRST NATIONS: PARKES & WAJARRI COUNTRY -->
   <section class="slide" data-src-section="6" data-menu="First Nations: SKA &amp; Wajarri Country">
-    <p class="bookref">Booklet p.17</p>
+    <p class="bookref">Booklet p.27 &#183; §7.2</p>
     <p class="eyebrow">First Nations perspectives</p>
     <h2>Wajarri Country and the Square Kilometre Array</h2>
     <div class="cols">
@@ -183,7 +195,7 @@
 
   <!-- 10. YEAR 8 EXTENSION 1: ROCKET PHYSICS -->
   <section class="slide" data-src-section="6" data-menu="Year 8: Rocket physics">
-    <p class="bookref">Booklet p.17 &#183; Year 8 extension</p>
+    <p class="bookref">Booklet p.26 &#183; Year 8 extension</p>
     <p class="eyebrow">Year 8 Extension</p>
     <h2>Rocket physics &#8212; Tsiolkovsky&#8217;s rocket equation</h2>
     <div class="cols">
@@ -203,7 +215,7 @@
 
   <!-- 11. YEAR 8 EXTENSION 2: FUTURE MISSIONS -->
   <section class="slide" data-src-section="6" data-menu="Year 8: Future missions">
-    <p class="bookref">Booklet p.17 &#183; Year 8 extension</p>
+    <p class="bookref">Booklet p.26 &#183; Year 8 extension</p>
     <p class="eyebrow">Year 8 Extension</p>
     <h2>Future missions &#8212; Artemis, Mars, and beyond</h2>
     <div class="cols">
@@ -238,7 +250,7 @@
   <section class="slide" data-src-section="10" data-menu="Entry task: Debris speed calculation">
     <p class="eyebrow">Entry task &#183; Everyone can do this</p>
     <h2><span class="phase-tag wedo">We do</span> Why orbital speed makes debris so dangerous</h2>
-    <p>In your booklet (p.&#160;60), calculate the kinetic energy of a 10 g bolt of space debris travelling at 7,800 m/s in LEO. Compare it to a 150 g cricket ball bowled at 45 m/s (160 km/h). Use KE = &#189; m v&#178;.</p>
+    <p>In your booklet (p.&#160;26), calculate the kinetic energy of a 10 g bolt of space debris travelling at 7,800 m/s in LEO. Compare it to a 150 g cricket ball bowled at 45 m/s (160 km/h). Use KE = &#189; m v&#178;.</p>
     <div class="graph-card">
       <svg viewBox="0 0 860 150" xmlns="http://www.w3.org/2000/svg">
         <rect x="0" y="0" width="860" height="150" fill="none"/>
@@ -268,7 +280,7 @@
 
   <!-- 5. SPACE DEBRIS & KESSLER -->
   <section class="slide" data-src-section="10" data-menu="Space debris &amp; Kessler syndrome">
-    <p class="bookref">Booklet p.18 &#183; §7.3</p>
+    <p class="bookref">Booklet p.28 &#183; §7.3</p>
     <p class="eyebrow">Concept</p>
     <h2>Space debris and Kessler syndrome</h2>
     <div class="cols">
@@ -290,7 +302,7 @@
 
   <!-- 6. EARTH OBSERVATION SATELLITES -->
   <section class="slide" data-src-section="10" data-menu="Earth observation satellites">
-    <p class="bookref">Booklet p.18 &#183; §7.4</p>
+    <p class="bookref">Booklet p.29 &#183; §7.5</p>
     <p class="eyebrow">Concept</p>
     <h2>How satellites help manage Earth</h2>
     <div class="cols">
@@ -312,21 +324,21 @@
 
   <!-- 7. WORKED EXAMPLE -->
   <section class="slide" data-src-section="10" data-menu="Worked example: Sustainability evaluation">
-    <p class="bookref">Booklet p.17 &#183; §7</p>
+    <p class="bookref">Booklet p.29 &#183; §7.5</p>
     <p class="eyebrow">Work through with the class</p>
     <h2><span class="phase-tag ido">I do</span> Worked example &#8212; evaluating space sustainability</h2>
     <div class="box question"><span class="lbl">Structured evidence-based evaluation</span><p>Evaluate whether current human use of orbital space is sustainable. Use evidence to support your argument, and suggest what changes would make it more sustainable.</p></div>
       <ol class="steps" id="n7d10w1">
         <li><span class="stepno">1</span> <strong>Evidence it is NOT sustainable:</strong> Debris accumulation is outpacing removal; recent anti-satellite missile tests (China 2007, India 2019, Russia 2021) created thousands of new debris fragments. Orbital shell capacity is finite. Kessler cascade risk in some LEO shells is rising.</li>
         <li><span class="stepno">2</span> <strong>Evidence it COULD be managed:</strong> Space agencies increasingly require deorbit plans; active debris removal technologies in development (e.g., ESA ClearSpace-1, JAXA ELSA-d magnetic capture); UN guidelines for sustainable use of outer space exist but are non-binding.</li>
-        <li class="ans"><span class="stepno">&#10003;</span> <span class="formula">Conclusion: Current use is not yet sustainable but could become so with binding international agreements, mandatory debris removal funding, and active remediation technology. The commons problem (no single owner of orbit) makes governance essential.</span></li>
+        <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Conclusion: Current use is not yet sustainable but could become so with binding international agreements, mandatory debris removal funding, and active remediation technology. The commons problem (no single owner of orbit) makes governance essential.</span></li>
       </ol>
       <button class="reveal-btn" data-target="#n7d10w1">Show working</button>
     </section>
 
   <!-- 8. YOUR TURN -->
   <section class="slide" data-src-section="10" data-menu="Your turn">
-    <p class="bookref">Booklet p.17 &#183; §7</p>
+    <p class="bookref">Booklet p.29 &#183; §7.5</p>
     <p class="eyebrow">Your turn</p>
     <h2><span class="phase-tag youdo">You do</span> Now you try</h2>
     <div class="box question"><span class="lbl">Design a debris management solution</span><p>You have been hired by the Australian Space Agency to design a system to address space debris in LEO. In your booklet, describe: (a) the mechanism your system uses; (b) one advantage; (c) one limitation; (d) how you would fund and govern it internationally.</p></div>
@@ -335,12 +347,12 @@
         <li><span class="stepno">2</span> <strong>Advantage:</strong> Physically removes large debris objects &#8212; the ones most likely to cause cascade collisions. <strong>Limitation:</strong> Each mission removes only 1&#8211;2 objects; at US$100M per mission, removing 20,000 tracked objects would cost trillions and take centuries at current rates.</li>
         <li class="ans"><span class="stepno">&#10003;</span> <strong>Governance model:</strong> A UN space debris levy &#8212; satellite operators pay per object launched; funds an international remediation agency. Non-binding guidelines have failed; economic incentives are more effective. This mirrors how carbon trading works for climate. Students: compare your solution with the example.</li>
       </ol>
-      <button class="reveal-btn" data-target="#n7d10w2">Show working</button>
+      <button class="reveal-btn" data-target="#n7d10w2">Show answers</button>
     </section>
 
   <!-- 9. FIRST NATIONS: SATELLITES & COUNTRY MANAGEMENT -->
   <section class="slide" data-src-section="10" data-menu="First Nations: Satellites &amp; Country">
-    <p class="bookref">Booklet p.17</p>
+    <p class="bookref">Booklet p.29 &#183; §7.5</p>
     <p class="eyebrow">First Nations perspectives</p>
     <h2>Satellite technology on Country</h2>
     <div class="cols">
@@ -362,7 +374,7 @@
 
   <!-- 10. YEAR 8 EXTENSION 1: ACTIVE DEBRIS REMOVAL -->
   <section class="slide" data-src-section="10" data-menu="Year 8: Active debris removal tech">
-    <p class="bookref">Booklet p.17 &#183; Year 8 extension</p>
+    <p class="bookref">Booklet p.26 &#183; Year 8 extension</p>
     <p class="eyebrow">Year 8 Extension</p>
     <h2>Active debris removal technologies</h2>
     <div class="cols">
@@ -383,7 +395,7 @@
 
   <!-- 11. YEAR 8 EXTENSION 2: ORBITAL CAPACITY -->
   <section class="slide" data-src-section="10" data-menu="Year 8: Orbital capacity &amp; governance">
-    <p class="bookref">Booklet p.17 &#183; Year 8 extension</p>
+    <p class="bookref">Booklet p.26 &#183; Year 8 extension</p>
     <p class="eyebrow">Year 8 Extension</p>
     <h2>Orbital capacity and international governance</h2>
     <div class="cols">

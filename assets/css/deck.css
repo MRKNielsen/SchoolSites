@@ -307,13 +307,42 @@ svg .frag { transition: opacity .4s ease; }
    Inside SVG, MathJax can't reach the text: use
    √<tspan text-decoration="overline">2</tspan>. */
 
-/* Inline formula chip */
+/* Inline formula chip — a boxed, standalone formula (e.g. F = ma stated
+   as a rule). NOT for lines of working: a column of these boxes reads as
+   a stack of unrelated chips rather than one calculation. Use .working. */
 .formula {
   display: inline-block; font-family: var(--font-math);
   background: color-mix(in srgb, var(--accent) 10%, #fff);
   border: 2px solid var(--accent); border-radius: var(--radius-sm);
   padding: 8px 18px; margin: 8px 8px 4px 0; font-size: 1.1em;
 }
+
+/* ---------- Centred working ----------
+   A calculation set out as successive lines, centred as a block but with
+   the lines left-aligned inside it, so they align on their = signs:
+
+     <ol class="steps working" id="w1">
+       <li>\(\text{time} = \dfrac{\text{distance}}{\text{speed}}\)</li>
+       <li>\(\phantom{\text{time}} = \dfrac{150{,}000{,}000}{300{,}000}\)</li>
+       <li class="ans">\(\phantom{\text{time}} = 500\text{ s}\)</li>
+     </ol>
+
+   width:fit-content shrink-wraps the block to its widest line and the
+   auto margins centre it, so every line shares one left edge. Alignment
+   itself comes from \phantom padding on the continuation lines — the
+   lines are typeset separately, so MathJax cannot align them for us.
+   Combining with .steps keeps the step-by-step reveal working. */
+.working { width: fit-content; max-width: 100%; margin: 14px auto; text-align: left; }
+.working li, .working p { margin: 6px 0; font-size: 1.15em; line-height: 1.5; }
+.working li.ans { font-weight: 700; }
+.working .lbl-step { color: var(--muted); font-size: .78em; letter-spacing: .04em;
+  text-transform: uppercase; display: block; margin-top: 12px; }
+
+/* Stated result — a short answer or conclusion in prose, not an equation.
+   Emphasis without the chrome of .formula, which is reserved for actual
+   formulas. Used heavily in worked-example answer steps. */
+.result { font-weight: 700; color: var(--accent-dark); }
+.steps li.ans .result { color: var(--neg); }
 
 /* Vocabulary table — word / say it / meaning */
 table.tbl.vocab td:first-child { font-weight: 700; color: var(--accent-dark); white-space: nowrap; }

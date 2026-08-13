@@ -12,8 +12,13 @@ Every slide deck links exactly these shared assets (adjust relative depth):
 ```html
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
 <script src="../../assets/js/deck.js" defer></script>
+<script src="../../assets/js/sitenav.js" defer></script>
 ```
+
+The last two lines are the site-wide nav drawer and go on **every** page
+type, not just decks — see "Site-wide navigation" below.
 
 Plus the fonts:
 
@@ -54,6 +59,65 @@ pages), `assets/css/site.css` (plain index pages).
 exercises every component and has a theme switcher. Start new decks from
 `styleguide/deck-template.html`.
 
+## Site-wide navigation
+
+`assets/css/sitenav.css` + `assets/js/sitenav.js` — a drawer that slides
+in from the left edge with the whole site in it. Present on every page
+type (decks, hubs, course landings, worksheets, quizzes, profiles,
+solutions, plain index pages) so a student on any page can reach any
+other without going back through the index.
+
+- **Two lines per page**, before `</head>`, at the page's relative depth:
+  the `sitenav.css` link and the `sitenav.js` script. tokens.css must be
+  linked too (sitenav.css reads its palette and fonts) — the plain
+  site.css index pages now link both.
+- **Opening**: a slim tab pinned to the left edge, or the `N` key.
+  Escape closes. There is no always-visible chrome, which is why decks
+  can carry it without cluttering a projected slide.
+- **Never edit `assets/js/sitemap.js`** — it is generated. After adding,
+  renaming, moving or deleting a page, run:
+
+  ```bash
+  node tools/build-sitemap.js     # rebuild the tree
+  node tools/add-sitenav.js       # dry run: which pages lack the tag
+  node tools/add-sitenav.js --write
+  ```
+
+  `add-sitenav.js` is idempotent, so re-running it only touches pages
+  that don't already link the drawer.
+- Labels come from each page's `<title>`, with the surrounding context
+  stripped ("Lesson 4 · Dichotomous Keys | Biodiversity & Ecosystems"
+  becomes "Lesson 4 · Dichotomous Keys", because the tree already says
+  which unit you're in). **A page with a vague `<title>` gets a vague nav
+  entry** — fix the title rather than hand-editing sitemap.js. Where a
+  title genuinely can't carry the label, add an entry to
+  `LABEL_OVERRIDES` / `UNIT_OVERRIDES` / `FILE_LABEL_RULES` in
+  `tools/build-sitemap.js`.
+- Files are bucketed into **Lessons / Worksheets / Workbooks /
+  Resources** by filename (`deck*.html`, `*_Slides.html` and anything in
+  `slides/` are lessons; `worksheet*.html` are worksheets). A new naming
+  convention needs a line in `GROUPS`.
+- **Paths are relative, never root-absolute.** The site is served from
+  `/SchoolSites/`, so `/year7-science/…` would 404. sitenav.js works the
+  root prefix out from its own `<script src>`, which is why the two tags
+  must carry the correct `../` depth.
+- **Keyboard**: the drawer's handler is registered in the *capture*
+  phase and stops propagation while open, so arrows and space don't also
+  advance the deck underneath. `M` still belongs to deck.js's slide-jump
+  menu, and `N` stands down while that menu is up. If you add another
+  global key anywhere, check it against both.
+- Excluded from the nav: the four bare-name legacy folders
+  (`algorithmics/`, `foundation/`, `methods/`, `specialist/` — pre-year-
+  prefix duplicates of their `year12-*` equivalents), `*-payload.html`,
+  and the marimo workbook exports, which are also skipped by the
+  injector since a re-export would overwrite the edit. Those lists live
+  at the top of both tools.
+- Every selector in sitenav.css is scoped under `.sn-*` / `#sitenav`, and
+  every property it needs is set explicitly rather than inherited —
+  necessary because four of the page stylesheets ship a
+  `* { margin:0; padding:0 }` reset and course.css sets `color:#fff` on
+  `<body>`. Keep it that way.
+
 ## Deck rules
 
 - `<body class="deck-page theme-X">` where X ∈ `theme-methods`,
@@ -88,7 +152,19 @@ exercises every component and has a theme switcher. Start new decks from
   `\(\sin 30^\circ = \dfrac{1}{2}\)` — not half MathJax, half CSS. Mixing
   the two inside one expression is what breaks layout (a MathJax radical
   dropped into a CSS `.fr` collapses the fraction bar), and side-by-side
-  CSS and MathJax fractions don't match.
+  CSS and MathJax fractions don't match. MathJax is the only maths engine
+  in this repo — don't add KaTeX alongside it.
+- Lines of working go in `.working`, not a column of `.formula` chips.
+  `.formula` is a *boxed* chip for a standalone stated rule; stacking
+  several reads as unrelated boxes rather than one calculation. Combine
+  with `.steps` (`<ol class="steps working">`) to keep the step reveal.
+  `.working` shrink-wraps and centres the block while leaving its lines
+  left-aligned; the `=` alignment itself comes from `\phantom{…}` padding
+  on continuation lines, because each line is typeset separately and
+  MathJax cannot align across them. `.lbl-step` labels a line.
+- `.result` is a short stated answer *in prose* — bold accent text, no
+  box. Use it where a "formula" chip was really carrying words ("Full
+  Moon", "radio telescope"), which is most of them in practice.
 - The CSS maths markup (`.m`, `.mu`, `.work`, `.bigeq`, `.eqbox`) is for
   light inline notation in prose. `.fr`/`.nu`/`.de` is now reserved for
   *styled word* fractions (e.g. colour-coded Opposite/Adjacent in
@@ -310,10 +386,32 @@ Build a booklet with `xelatex` run **three times** (TOC, then
 `.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
 
 Booklets have a question apparatus already defined in the preamble —
-`\question{n}{marks}{text}`, `\anslines{n}` (ruled writing lines),
+`\question{marks}{text}`, `\anslines{n}` (ruled writing lines),
 `\answerbox{height}`, `\markscount{n}`, and the `yr7box` (at the level)
 / `yr8box` (above the level) containers. Use these rather than inventing
-new markup. Space's pattern: a `yr7box` headed "Check your
+new markup.
+
+**Question numbers are automatic — never write one by hand.** `\question`
+steps a `qnum` counter that resets at each `\section`, printing
+`Q<section>.<n>`, so inserting, deleting or reordering content renumbers
+everything for free. (Space originally took the number as a literal
+first argument; adding a subsection then meant hand-renumbering the rest
+of the section *and* the answer key, which is exactly the failure this
+avoids.) Two consequences: the numbers exist only in the built PDF, not
+the `.tex`, so grepping the source for `Q1.9` finds nothing — extract
+from the PDF with `pdftotext` instead; and because `\question` uses
+`\refstepcounter`, a `\label` placed straight after one can be `\ref`'d.
+
+The answer key still hardcodes `Q<n>.<n>` references, so it can drift
+silently from an auto-numbered booklet. After changing question content,
+diff the built PDF against the key:
+
+```bash
+pdftotext -layout booklet/*.pdf - | grep -o 'Q[0-9]*\.[0-9]* ([0-9]* marks\?)'
+```
+
+and check every number and mark allocation still matches
+`solutions-payload.html`. Space's pattern: a `yr7box` headed "Check your
 understanding" at the end of each subsection, questions numbered
 `Q<lesson>.<n>` running continuously through the lesson, with the Year 8
 box kept last. Don't number the "Your turn" `scaffold` blocks — they
