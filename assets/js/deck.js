@@ -109,9 +109,17 @@
     if (tagEl) tagEl.textContent = slides[cur].dataset.topic || tagDefault;
   }
 
-  /* Touch swipe */
+  /* Touch swipe.
+     Dragging a range slider is a horizontal gesture too, so a swipe that
+     starts on a control must not also advance the slide — on a touchscreen
+     (interactive whiteboard, iPad) that made sliders look broken: the deck
+     jumped away mid-drag. Opt anything else out with [data-noswipe]. */
+  const NOSWIPE = "input, textarea, select, [data-noswipe]";
   let x0 = null;
-  document.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener("touchstart", e => {
+    const t = e.target;
+    x0 = (t && t.closest && t.closest(NOSWIPE)) ? null : e.touches[0].clientX;
+  }, { passive: true });
   document.addEventListener("touchend", e => {
     if (x0 === null) return;
     const dx = e.changedTouches[0].clientX - x0;

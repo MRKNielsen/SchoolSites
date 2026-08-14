@@ -166,6 +166,10 @@
     controls.appendChild(range);
     controls.appendChild(hemiWrap);
 
+    // deck.js reads this: a drag anywhere inside the widget is the student
+    // scrubbing the orbit, not a swipe to the next slide.
+    host.setAttribute('data-noswipe', '');
+
     host.appendChild(svg);
     host.appendChild(readout);
     host.appendChild(controls);
