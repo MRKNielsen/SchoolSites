@@ -44,6 +44,15 @@ Optional modules — link only when a deck uses them:
   containing `<div class="quiz-container"></div>` draws that many
   questions at random from earlier lessons and scores them. quiz.css also
   styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
+- `assets/css/orbit.css` + `assets/js/orbit.js` — the orbital phase
+  visualiser. Markup is one line, `<div class="orbitsim"></div>`; the JS
+  builds the SVG scene (Sun, Earth, orbiting Moon with its lit half
+  always facing the Sun) plus a phase disc, slider, play button and
+  hemisphere toggle. Attributes: `data-hemisphere="south|north"`
+  (default south — a waxing Moon is lit on the **left** in Melbourne),
+  `data-start="0..1"`, `data-labels="off"`. ~3.5 KB gzipped, no
+  dependencies. Colours come from tokens so it follows the theme;
+  controls are hidden in print. Live in `styleguide/deck-demo.html`.
 - Slide-jump menu — add `<button class="navbtn menubtn">` inside
   `.chrome` plus a `.slidemenu` overlay containing `.menugrid`, and give
   each slide a `data-menu="…"` title. deck.js builds the contents grid
@@ -171,10 +180,15 @@ other without going back through the index.
   trigonometry) — numeric fractions use `\dfrac`.
 - Square roots are typeset with MathJax: `\(\sqrt{2}\)`. Never build a
   radical from a bare √ plus a CSS overbar — the bar will not meet the
-  glyph. Copy `mathjax-tex-svg.js` into the deck's folder and add the
-  standard config block (see any specialist or primer deck); its
-  `pageReady` hook fires a `resize` so deck.js re-measures slide
-  overflow after typesetting. Inside SVG, MathJax can't reach the text,
+  glyph. **MathJax is vendored once**, at
+  `assets/vendor/mathjax/tex-svg.js` — link it at the deck's relative
+  depth, do *not* copy the 2 MB file into the unit folder. (It used to
+  be duplicated per folder; four identical copies meant a student who
+  had already opened a Specialist deck still re-downloaded the whole
+  thing for a primer deck.) Add the standard config block beside it —
+  every deck must include the `startup.pageReady` hook, which fires a
+  `resize` so deck.js re-measures slide overflow after typesetting.
+  Twenty decks were missing it and mis-measured maths-heavy slides. Inside SVG, MathJax can't reach the text,
   and an overline `<tspan>` there reads as a detached bar — write a plain
   `√2` in diagram labels. A bare √ is also fine when referring to the
   symbol itself in prose.
