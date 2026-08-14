@@ -7,10 +7,10 @@
    Components:
      .backlink · header (.unit-tag, h1, .sub, .meta-row,
      .acknowledgement) · .deck-grid of .deck-card
-     (.dc-num/.dc-title/.dc-desc/.dc-quiz) · .deck-card.feature
+     (.dc-num/.dc-title/.dc-desc/.dc-quiz/.dc-kind) · .deck-card.feature
      full-width row cards (.fi icon, .fbody, .go) ·
      .section-head/.section-sub · .deck-item/.dc-wslink ·
-     .ws-strip/.ws-link ·
+     .ws-strip/.ws-link · .yeartabs/.ytab/.ypanel/.band-label ·
      .pdf-frame/.pdf-fallback/.pdf-actions/.pdf-btn · footer
    ============================================================ */
 
@@ -111,6 +111,19 @@ body.course-page {
   color: rgba(255,255,255,0.65);
 }
 
+/* Resource-type chip on the right of a card — "Unit", "Hub", "PDF",
+   "HTML tool". Sits where .go would; use one or the other, not both. */
+.dc-kind {
+  margin-left: auto; flex: 0 0 auto; align-self: center;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.66rem, 1vw, 0.75rem);
+  letter-spacing: 0.09em; text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 100px; padding: 0.35em 1.1em;
+  white-space: nowrap;
+}
+
 /* Full-width feature row (quiz / booklet / hub links) */
 .deck-card.feature {
   grid-column: 1 / -1;
@@ -185,6 +198,55 @@ body.course-page {
   margin-left: auto; flex: 0 0 auto;
   font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
   color: rgba(255,255,255,0.5);
+}
+
+/* ---------- Year-level tab strip (site home) ----------
+   The root index is a course-page in the default chalk-blue theme; these
+   are its year picker. Panels are plain .deck-grid blocks toggled with
+   [hidden], so a no-JS visitor still sees the first year's subjects.
+
+     <div class="yeartabs" role="tablist">
+       <button class="ytab" role="tab" aria-controls="panel-7"
+               aria-selected="true"><span class="yt-num">7</span>Year</button>
+     </div>
+     <div class="ypanel" role="tabpanel" id="panel-7"> … </div>          */
+.yeartabs {
+  display: flex; flex-wrap: wrap; gap: 0.6em;
+  margin-bottom: 1.2vh;
+}
+.ytab {
+  display: inline-flex; align-items: baseline; gap: 0.5em;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 100px; padding: 0.55em 1.3em;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+}
+.ytab .yt-num {
+  font-size: clamp(1.05rem, 1.9vw, 1.35rem); font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1;
+}
+.ytab:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.45); }
+.ytab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.ytab[aria-selected="true"] {
+  background: #fff; border-color: #fff;
+  color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+.ypanel[hidden] { display: none; }
+.ypanel { padding-top: 0.6vh; }
+
+/* Eyebrow above a panel's cards ("Junior", "VCE Units 3 & 4") */
+.course-page .band-label {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.7rem, 1.05vw, 0.8rem);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin: 1.6vh 0 1.2vh;
 }
 
 /* ---------- Embedded PDF ----------

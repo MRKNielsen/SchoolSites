@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-12",
+ "generated": "2026-08-14",
  "tree": [
   {
    "t": "Home",
@@ -28,7 +28,8 @@ window.SITEMAP = {
        "h": "year7-mathematics/number-sense-games.html"
       }
      ],
-     "h": "year7-mathematics/index.html"
+     "h": "year7-mathematics/index.html",
+     "k": "maths"
     },
     {
      "t": "Science",
@@ -265,7 +266,8 @@ window.SITEMAP = {
        "k": "space"
       }
      ],
-     "h": "year7-science/index.html"
+     "h": "year7-science/index.html",
+     "k": "science"
     }
    ]
   },
@@ -281,7 +283,8 @@ window.SITEMAP = {
        "h": "year8-mathematics/sample-resource.html"
       }
      ],
-     "h": "year8-mathematics/index.html"
+     "h": "year8-mathematics/index.html",
+     "k": "maths"
     }
    ]
   },
@@ -297,7 +300,8 @@ window.SITEMAP = {
        "h": "year9-mathematics/sample-resource.html"
       }
      ],
-     "h": "year9-mathematics/index.html"
+     "h": "year9-mathematics/index.html",
+     "k": "maths"
     }
    ]
   },
@@ -313,7 +317,8 @@ window.SITEMAP = {
        "h": "year10-algorithmics/sample-resource.html"
       }
      ],
-     "h": "year10-algorithmics/index.html"
+     "h": "year10-algorithmics/index.html",
+     "k": "algorithmics"
     },
     {
      "t": "Mathematics",
@@ -382,7 +387,8 @@ window.SITEMAP = {
        "h": "year10-mathematics/sample-resource.html"
       }
      ],
-     "h": "year10-mathematics/index.html"
+     "h": "year10-mathematics/index.html",
+     "k": "maths"
     }
    ]
   },
@@ -398,7 +404,8 @@ window.SITEMAP = {
        "h": "year11-algorithmics/sample-resource.html"
       }
      ],
-     "h": "year11-algorithmics/index.html"
+     "h": "year11-algorithmics/index.html",
+     "k": "algorithmics"
     },
     {
      "t": "Foundation Mathematics",
@@ -408,7 +415,8 @@ window.SITEMAP = {
        "h": "year11-foundation/sample-resource.html"
       }
      ],
-     "h": "year11-foundation/index.html"
+     "h": "year11-foundation/index.html",
+     "k": "foundation"
     },
     {
      "t": "Mathematical Methods",
@@ -452,7 +460,8 @@ window.SITEMAP = {
           }
          ]
         }
-       ]
+       ],
+       "k": "methods"
       },
       {
        "t": "Chapter 11 · Discrete Probability Distributions",
@@ -473,10 +482,12 @@ window.SITEMAP = {
           }
          ]
         }
-       ]
+       ],
+       "k": "methods"
       }
      ],
-     "h": "year11-methods/index.html"
+     "h": "year11-methods/index.html",
+     "k": "methods"
     },
     {
      "t": "Specialist Mathematics",
@@ -486,7 +497,8 @@ window.SITEMAP = {
        "h": "year11-specialist/sample-resource.html"
       }
      ],
-     "h": "year11-specialist/index.html"
+     "h": "year11-specialist/index.html",
+     "k": "specialist"
     }
    ]
   },
@@ -708,7 +720,8 @@ window.SITEMAP = {
        "h": "year12-algorithmics/complexity-suite.html"
       }
      ],
-     "h": "year12-algorithmics/index.html"
+     "h": "year12-algorithmics/index.html",
+     "k": "algorithmics"
     },
     {
      "t": "Foundation Mathematics",
@@ -718,7 +731,8 @@ window.SITEMAP = {
        "h": "year12-foundation/telling-time.html"
       }
      ],
-     "h": "year12-foundation/index.html"
+     "h": "year12-foundation/index.html",
+     "k": "foundation"
     },
     {
      "t": "Mathematical Methods",
@@ -728,7 +742,8 @@ window.SITEMAP = {
        "h": "year12-methods/tangent-visualiser.html"
       }
      ],
-     "h": "year12-methods/index.html"
+     "h": "year12-methods/index.html",
+     "k": "methods"
     },
     {
      "t": "Specialist Mathematics",

@@ -193,8 +193,19 @@ other without going back through the index.
 
 ## Landing/index pages
 
-Link `assets/css/site.css` (which layers on tokens.css). Follow the
-existing card/list patterns in `index.html` and subject index pages.
+**Every index page is a course-page now** — the root landing page, all
+15 subject index pages and the two year11-methods chapter indexes were
+ported off site.css in Aug 2026. A new index page starts from
+`year7-science/index.html`, not from site.css.
+
+`assets/css/site.css` survives only for the four bare-name legacy
+folders and the standalone tool pages (`sample-resource.html`,
+`tangent-visualiser.html`, `number-sense-games.html`,
+`telling-time.html`, `complexity-suite.html`, `tools/staff-crypt.html`).
+It still carries its own `:root` palette because those pages don't link
+tokens.css — don't "fix" that until the tool pages are ported too. Note
+the consequence: a student clicking a tool from a themed index still
+lands on the old chalk-blue Inter look.
 
 ## Course landing pages (subject home, immersive)
 
@@ -207,6 +218,30 @@ Once a unit has more than about four `.feature` cards, split them into
 `.section-head` + `.section-sub` groups with one `.deck-grid` each rather
 than one long row — see `year7-science/bio-ecosystems/index.html`, which
 groups Student resources / Staff only / Lessons.
+
+Three components exist for index pages specifically:
+
+- `.dc-kind` — the resource-type chip on the right of a card ("Unit",
+  "Hub", "Chapter", "HTML tool"). It sits where `.go` would, so use one
+  or the other, never both. Subject index pages use `.feature` rows +
+  `.dc-kind`; a chapter index with many lessons reads better as plain
+  `.deck-card`s with `.dc-num` (`year11-methods/chapter-9`).
+- `.yeartabs`/`.ytab`/`.ypanel` — the root index year picker. Panels
+  toggle with `[hidden]`, and panel 7 ships un-hidden so a no-JS visitor
+  still sees something. The tab script lives inline on `index.html` and
+  mirrors the selection into a `#year-N` hash.
+- `.band-label` — eyebrow above a panel's cards ("Junior", "VCE Units
+  3 & 4").
+
+**A subject index carries its subject's theme class**, so the colour a
+student sees on the year-level card carries through to the unit. Every
+subject therefore needs a theme: `theme-foundation` (rust) and
+`theme-maths` (the Methods blue, for Years 7–10 Mathematics) were added
+for this. When you add a theme, also add a matching `.sn-t-<name>` dot
+colour in sitenav.css — `build-sitemap.js` reads the theme class off
+`<body>` into the tree's `k` field and the drawer paints a dot with it,
+so a theme with no `.sn-t-` rule silently falls back to the generic
+accent.
 
 ## Course hub pages (term/unit overviews)
 

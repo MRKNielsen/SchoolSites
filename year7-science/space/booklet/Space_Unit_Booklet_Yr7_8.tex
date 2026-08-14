@@ -197,10 +197,18 @@
 % ── Custom Commands ───────────────────────────────────────────────────────────
 
 % Answer box: \answerbox{height e.g. 3cm}
+% Drawing / working space: \answerbox{height}
+%
+% Deliberately NOT breakable — a fixed-height drawing box split across a
+% page break is useless, and it is nested inside scaffold/yr7box, which
+% are themselves breakable (tcolorbox does not support that combination).
+% \needspace instead pushes the whole box to the next page if it will not
+% fit. White rather than Paper so it matches the \anslines writing bands.
 \newcommand{\answerbox}[1]{%
+  \par\needspace{#1}%
   \begin{tcolorbox}[
-    enhanced, breakable, arc=2mm,
-    colback=Paper, colframe=Line,
+    enhanced, breakable=false, arc=2mm,
+    colback=white, colframe=Line,
     left=2mm, right=2mm, top=1mm, bottom=1mm,
     boxrule=1pt, height=#1
   ]
@@ -611,6 +619,20 @@ Earth \vocab{rotates} (spins on its axis) once every \textbf{24 hours}. The side
   \item Earth also \vocab{revolves} (orbits) around the Sun once every 365.25 days --- one year
 \end{itemize}
 
+\begin{scaffold}{Draw it: day and night}
+Draw a simple diagram showing \textbf{Earth and the Sun}. On your diagram:
+\begin{itemize}
+  \item shade the half of Earth where it is \textbf{night}, and label the half where it is \textbf{day}
+  \item draw an arrow showing the direction of the Sun's light
+  \item add a curved arrow showing which way Earth \textbf{rotates}
+\end{itemize}
+
+\answerbox{7cm}
+
+\medskip
+In one sentence, explain \textbf{why night happens}.
+\anslines{2}
+\end{scaffold}
 
 \begin{yr7box}
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
@@ -626,6 +648,45 @@ Earth \vocab{rotates} (spins on its axis) once every \textbf{24 hours}. The side
 \subsection{Why we have seasons}
 
 Seasons are caused by Earth's \vocab{axial tilt} of 23.5°, not by distance from the Sun. (Earth is actually closest to the Sun in January --- Australian summer.)
+
+% Axial tilt reference diagram. Mirrors the version on the deck 2 theory
+% slide: the angle is measured between the rotation axis and the
+% perpendicular to the orbital plane. Note the equator is drawn
+% perpendicular to the AXIS (-23.5°/156.5°), not to the vertical.
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \def\R{2.4}
+  \draw[MidGrey, dashed, line width=0.7pt] (-3.3,0) -- (4.5,0);
+  \node[Grey, font=\scriptsize, anchor=west] at (3.05,0.32) {orbital plane};
+  \foreach \y in {1.7,0.6,-0.6,-1.7}{
+    \draw[Gold, line width=0.9pt, -{Stealth[length=4pt]}] (-6.0,\y) -- (-3.3,\y);
+  }
+  \node[Gold, font=\bfseries\small, anchor=west] at (-6.0,2.3) {Sunlight};
+
+  \draw[MidGrey, dashed, line width=0.6pt] (0,-3.4) -- (0,3.4);
+  \node[MidGrey, font=\tiny, anchor=south east] at (-0.1,3.4) {perpendicular to orbit};
+
+  \fill[Space!30] (0,0) circle (\R);
+  \fill[Navy] (0,\R) arc (90:-90:\R) -- cycle;
+  \node[Ink, font=\bfseries\tiny] at (-1.3,0.9) {day};
+  \node[white, font=\bfseries\tiny] at (1.1,-1.3) {night};
+
+  \draw[white, dashed, line width=1pt] (-23.5:\R) -- (156.5:\R);
+  \node[Ink, font=\scriptsize, anchor=west] at (-23.5:\R) {\hspace{1mm}equator};
+
+  \draw[Ink, line width=1.4pt] (66.5:3.3) -- (246.5:3.3);
+  \fill[Ink] (66.5:3.3) circle (1.4pt);  \fill[Ink] (246.5:3.3) circle (1.4pt);
+  \node[Ink, font=\bfseries\small, anchor=south west] at (66.5:3.35) {N};
+  \node[Ink, font=\bfseries\small, anchor=north east] at (246.5:3.35) {S};
+  \node[Grey, font=\scriptsize, anchor=west] at (66.5:3.35) {\hspace{3.5mm}axis of rotation};
+
+  \draw[Gold, line width=1.1pt] (90:1.5) arc (90:66.5:1.5);
+  \node[fill=GoldLight, draw=Gold, rounded corners=2pt, inner sep=1.6pt,
+        text=GoldDark, font=\bfseries\scriptsize] at (78:2.0) {23.5\textdegree};
+
+  \node[Grey, font=\scriptsize] at (0,-3.8) {The axis always points the same way, all year round.};
+\end{tikzpicture}
+\end{center}
 
 \begin{infobox}{Why tilt causes seasons}
 When the Southern Hemisphere tilts toward the Sun (December):
@@ -749,6 +810,25 @@ The Moon's gravity pulls on Earth's oceans. This creates a \vocab{tidal bulge} o
 Many Aboriginal Australian groups have used the 29.5-day lunar cycle for ceremony, food harvesting, travel, and health practices. For Kulin Nation groups, the monthly cycle is embedded in governance and knowledge transmission. The same lunar cycle that determines tides was used to create a precise, multi-purpose calendar operating on Country long before European contact.
 \end{fnbox}
 
+% Working space for the "You do" question on deck 2 slide 18. Kept as an
+% unnumbered scaffold, matching the other "Your turn" blocks, so it does
+% not disturb the auto-numbered \question sequence.
+\begin{scaffold}{Your turn: eclipses and phases}
+A \textbf{lunar eclipse} is happening tonight. A \textbf{solar eclipse} happened two weeks ago.
+
+\medskip
+\textbf{(a)} What phase is the Moon in during the \textbf{lunar} eclipse?
+\anslines{1}
+
+\medskip
+\textbf{(b)} What phase was the Moon in during the \textbf{solar} eclipse?
+\anslines{1}
+
+\medskip
+\textbf{(c)} Explain why the two eclipses \textbf{cannot} happen on the same night. Refer to where the Moon has to be in each case.
+\anslines{5}
+\end{scaffold}
+
 \begin{yr8box}
 \textbf{Year 8 Extension: Eclipse geometry}
 
@@ -758,7 +838,7 @@ Eclipses don't happen every New or Full Moon because the Moon's orbit is tilted 
 \textbf{Why the Moon fits the Sun perfectly}: The Moon is 400$\times$ smaller than the Sun but 400$\times$ closer. Their angular diameters in our sky are almost identical --- making total solar eclipses possible. This is unique in our solar system.
 \end{yr8box}
 
-\newpage
+%\newpage
 % ============================================================
 
 \begin{yr7box}
@@ -771,6 +851,8 @@ Eclipses don't happen every New or Full Moon because the Moon's orbit is tilted 
 \anslines{4}
 
 \end{yr7box}
+
+\newpage
 
 \section{Our Solar System}
 % ============================================================
