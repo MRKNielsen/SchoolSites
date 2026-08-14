@@ -39,7 +39,7 @@
   <table class="tbl">
     <tr><th>Part</th><th>Assumed idea</th><th>Where Ch 15–16 uses it</th></tr>
     <tr><td class="c"><b>1</b></td><td>Probability language</td><td>independence is the condition on every variance rule</td></tr>
-    <tr><td class="c"><b>2</b></td><td>Discrete random variables, \(E(X)\), \(\text{Var}(X)\)</td><td>15A–C is entirely about tracking these two numbers</td></tr>
+    <tr><td class="c"><b>2</b></td><td>Random variables — discrete <i>and</i> continuous — \(E(X)\), \(\text{Var}(X)\)</td><td>15A–C is entirely about tracking these two numbers; 15A, 15B and 15F all set questions on density functions</td></tr>
     <tr><td class="c"><b>3</b></td><td>The normal distribution and \(z\)-scores</td><td>15C onwards, and every confidence interval and test in Ch 16</td></tr>
     <tr><td class="c"><b>4</b></td><td>The binomial distribution</td><td>15F, the normal approximation to the binomial</td></tr>
   </table>
@@ -107,13 +107,14 @@
 
 <!-- ═══ PART 2 · DISCRETE RANDOM VARIABLES ═══ -->
 
-<section class="slide section-slide" data-lesson="2" data-menu="Part 2 — Discrete random variables">
+<section class="slide section-slide" data-lesson="2" data-menu="Part 2 — Random variables">
   <div class="kicker">Part 2</div>
-  <h1>Discrete random variables, \(E(X)\) and \(\text{Var}(X)\)</h1>
+  <h1>Random variables, \(E(X)\) and \(\text{Var}(X)\)</h1>
   <ul class="goals">
     <li>What a random variable is, and what its distribution table shows.</li>
     <li>\(E(X)\) — the long-run average.</li>
     <li>\(\text{Var}(X)\) and \(\text{sd}(X)\) — the spread, and the formula you'll use every time.</li>
+    <li>The <b>continuous</b> case: probability density functions, and the same two numbers by integration.</li>
   </ul>
 </section>
 
@@ -164,10 +165,52 @@
   </div>
 </section>
 
-<section class="slide" data-topic="Part 2 · Discrete random variables" data-menu="Part 2 formula card">
+<section class="slide" data-topic="Part 2 · Continuous random variables" data-menu="Continuous: density functions">
+  <h2>Continuous random variables: the density function</h2>
+  <p>Not every random variable takes separate, countable values. A weight, a time, a length can take <b>any</b> value in an interval. Such an \(X\) is described not by a table but by a <b>probability density function</b> \(f\).</p>
+  <div class="box defn"><span class="lbl">Definition</span>
+    <p>\(f\) is a probability density function for \(X\) when</p>
+    <p>\(f(x) \ge 0\) for all \(x\), &nbsp;and&nbsp; \(\displaystyle\int_{-\infty}^{\infty} f(x)\,dx = 1\).</p>
+    <p>Probability is <b>area</b> under the curve: \(\displaystyle \Pr(a \le X \le b) = \int_a^b f(x)\,dx\).</p>
+  </div>
+  <ul>
+    <li>The two bullet points above are the discrete rules with \(\sum\) replaced by \(\int\) — nothing else changes.</li>
+    <li>\(\Pr(X = c) = 0\) for every single value \(c\), so \(&lt;\) and \(\le\) may be swapped freely. This is why the normal curve behaves the way Part 3 describes.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Where this bites</span>
+    <p>Sections 15A, 15B and 15F all set questions that open "\(X\) has probability density function \(f(x) = \ldots\)". Everything else in Chapter 15 then proceeds identically — but you have to get \(E(X)\) and \(\text{Var}(X)\) out of an integral first.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 2 · Continuous random variables" data-menu="Continuous: E(X) and Var(X)">
+  <h2>\(E(X)\) and \(\text{Var}(X)\) by integration</h2>
+  <p>\[E(X) = \int_{-\infty}^{\infty} x\,f(x)\,dx \qquad\quad E(X^2) = \int_{-\infty}^{\infty} x^2 f(x)\,dx \qquad\quad \text{Var}(X) = E(X^2) - \big[E(X)\big]^2\]</p>
+  <ul>
+    <li>Same three lines as the discrete case. \(\sum x\,P(X=x)\) becomes \(\int x f(x)\,dx\), and the variance formula is <b>unchanged</b>.</li>
+    <li>Integrate only over the interval where \(f\) is non-zero — elsewhere the integrand is 0.</li>
+  </ul>
+  <div class="box example"><span class="lbl">Worked example</span>
+    <p>\(f(x) = 1.5(1 - x^2)\) for \(0 \le x \le 1\), and \(0\) elsewhere. Find \(\Pr(X \le 0.5)\), \(E(X)\) and \(\text{sd}(X)\).</p>
+  </div>
+  <button class="reveal-btn" data-frag>Reveal ▸</button>
+  <ul class="small">
+    <li class="frag">Check it is a density: \(\int_0^1 1.5(1-x^2)\,dx = 1.5\left[x - \tfrac{x^3}{3}\right]_0^1 = 1.5 \times \tfrac{2}{3} = 1\) ✓</li>
+    <li class="frag">\(\Pr(X \le 0.5) = 1.5\left[x - \tfrac{x^3}{3}\right]_0^{0.5} = 1.5(0.5 - 0.0417) = 0.6875\).</li>
+    <li class="frag">\(E(X) = \int_0^1 1.5x(1-x^2)\,dx = 1.5\left(\tfrac12 - \tfrac14\right) = 0.375\).</li>
+    <li class="frag">\(E(X^2) = \int_0^1 1.5x^2(1-x^2)\,dx = 1.5\left(\tfrac13 - \tfrac15\right) = 0.2\), so \(\text{Var}(X) = 0.2 - 0.375^2 = 0.059375\) and \(\text{sd}(X) \approx 0.244\).</li>
+  </ul>
+  <div class="box cas"><span class="lbl">On CAS</span>
+    <p>Define \(f(x)\) once, then ask for \(\int f\), \(\int x f\) and \(\int x^2 f\). Three lines, no algebra by hand — and the same three lines every time.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Part 2 · Random variables" data-menu="Part 2 formula card">
   <h2>Part 2 formula card</h2>
-  <div class="box key"><span class="lbl">Keep these</span>
-    <p style="text-align:center;">\[\sum P(X=x) = 1 \qquad E(X) = \sum x\,P(X=x) \qquad \text{Var}(X) = E(X^2) - \big[E(X)\big]^2\]</p>
+  <div class="box key"><span class="lbl">Discrete</span>
+    <p>\[\sum P(X=x) = 1 \qquad E(X) = \sum x\,P(X=x) \qquad \text{Var}(X) = E(X^2) - \big[E(X)\big]^2\]</p>
+  </div>
+  <div class="box key"><span class="lbl">Continuous — same statements, \(\sum \to \int\)</span>
+    <p>\[\int f(x)\,dx = 1 \qquad E(X) = \int x\,f(x)\,dx \qquad \text{Var}(X) = E(X^2) - \big[E(X)\big]^2\]</p>
   </div>
   <div class="box hint"><span class="lbl">The habit worth building</span>
     <p>When a distribution table appears, compute \(E(X)\) and \(\text{Var}(X)\) <b>immediately</b>, before reading the rest of the question. Nearly every Ch 15 question needs both, and having them written down turns a multi-part problem into substitution.</p>
@@ -375,6 +418,7 @@
   <table class="tbl">
     <tr><th>From this primer</th><th>Becomes</th><th>Deck</th></tr>
     <tr><td>\(E(X)\), \(\text{Var}(X)\)</td><td>\(E(aX+b)\), \(\text{Var}(aX+b) = a^2\text{Var}(X)\)</td><td>T3W03 · 15A</td></tr>
+    <tr><td>Density functions, \(\int x f(x)\,dx\)</td><td>\(\Pr(Y \le y)\) for \(Y = aX+b\); \(\mu\) and \(\sigma\) for a CLT question</td><td>T3W03 · 15A–B, T3W04 · 15F</td></tr>
     <tr><td>Independence</td><td>\(\text{Var}(aX+bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\)</td><td>T3W03 · 15B</td></tr>
     <tr><td>\(N(\mu,\sigma^2)\) and \(z\)</td><td>combinations of normals stay normal</td><td>T3W03 · 15C</td></tr>
     <tr><td>All of the above</td><td>the sample mean \(\bar{X}\) and the central limit theorem</td><td>T3W04 · 15D–E</td></tr>
