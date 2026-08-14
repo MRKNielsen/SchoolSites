@@ -1,31 +1,32 @@
 #!/usr/bin/env python3
 """
-trace-mark.py — regenerate the smooth large-format logo from mark.svg.
+trace-mark.py — flatten the assembled artwork into ONE outline.
 
     pip install potracer cairosvg pillow numpy
     python3 tools/trace-mark.py
 
 Why this exists
 ---------------
-assets/icons/mark.svg is assembled from the Illustrator export plus a
-hand-added connector bridging the clef's broken stem. Those pieces meet
-at butt-joins: invisible at icon sizes, but at poster or print size the
-edges show small jogs where a straight patch meets a curved stroke.
+assets/icons/mark-source.svg is *assembled*: the Illustrator export
+(11 paths, carrying a translate) plus a hand-added connector bridging
+the clef's broken stem. That connector is a separate overlapping object
+— invisible only because every piece is the same opaque colour. Give
+the mark any opacity or a stroke and the overlap shows as a seam.
 
-This renders the mark at 4x, traces the union back to bezier outlines,
-and writes it out as ONE continuous path with no joins at all. The trace
-is verified against the source by intersection-over-union before it is
-written — anything below 0.995 is rejected rather than silently shipped.
+This renders the source at 4x, traces the union back to bezier
+outlines, and writes ONE continuous path with the connector baked in.
+The trace is verified against the source by intersection-over-union
+before anything is written — below 0.995 it aborts rather than
+silently shipping a drifted mark.
+
+Run this after ANY edit to mark-source.svg, then re-run
+tools/build-icons.js. mark.svg is generated; don't hand-edit it.
 
 Outputs (all in assets/icons/):
-    logo-mark-smooth.svg   traced outline, currentColor, transparent
+    mark.svg               single unified outline — source for the icon set
     logo-large.svg         mark on a rounded board tile
     logo-large-chalk.svg   chalk mark alone, for dark backgrounds
     logo-large-ink.svg     board-coloured mark alone, for light/print
-
-These are large-format assets ONLY. The favicon set still builds from
-mark.svg via tools/build-icons.js — the traced path is ~50% larger in
-bytes, which is the wrong trade for a file fetched on every page load.
 
 Note on potracer: it treats ZERO as foreground, so the bitmap is
 inverted before tracing. Passing it the obvious way round silently
@@ -47,7 +48,7 @@ BOARD, CHALK = '#24576f', '#f6f4ef'
 SUPERSAMPLE = 4
 MIN_IOU = 0.995
 
-src_path = os.path.join(ICONS, 'mark.svg')
+src_path = os.path.join(ICONS, 'mark-source.svg')
 src = open(src_path, encoding='utf-8').read()
 VB = int(re.search(r'viewBox="0 0 (\d+)', src).group(1))
 R = VB * SUPERSAMPLE
@@ -103,7 +104,7 @@ if iou < MIN_IOU:
 
 inner = re.sub(r'^[\s\S]*?<svg[^>]*>', '', smooth).replace('</svg>', '').strip()
 files = {
-    'logo-mark-smooth.svg': smooth,
+    'mark.svg': smooth,
     'logo-large.svg': ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">' % (VB, VB)
                        + '<rect width="%d" height="%d" rx="%.1f" fill="%s"/>' % (VB, VB, VB * 0.22, BOARD)
                        + inner.replace('currentColor', CHALK) + '</svg>\n'),

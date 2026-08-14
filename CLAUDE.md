@@ -133,10 +133,27 @@ One icon for the whole site, in `assets/icons/`, plus
 `site.webmanifest` at the repo root. The mark is a treble clef inside an
 electron-orbit atom, chalk on a chalk-blue board.
 
-- **`assets/icons/mark.svg` is the single source of truth** — the
-  linework alone, square viewBox, `fill="currentColor"`, no background.
-  Every other file in the folder is generated from it by
-  `tools/build-icons.js`. Don't hand-edit the generated files.
+**Two-stage build. Edit `mark-source.svg`, never `mark.svg`.**
+
+```bash
+python3 tools/trace-mark.py       # mark-source.svg -> mark.svg + logo-large*
+node tools/build-icons.js --png   # mark.svg -> the icon set
+```
+
+- **`assets/icons/mark-source.svg`** is the editable artwork: the
+  Illustrator paths (carrying a `translate()`) plus a hand-added
+  connector bridging the clef's broken stem. It is *assembled* — the
+  connector is a separate overlapping object.
+- **`assets/icons/mark.svg` is generated** — one unified outline, a
+  single `<path>` with the connector baked in, `fill="currentColor"`,
+  no background. Everything served is built from this. Don't hand-edit
+  it; your change will be overwritten on the next trace.
+- The two-stage split exists because overlapping objects are only
+  invisible while every piece is the same fully opaque colour. Render
+  `mark-source.svg` with per-path `fill-opacity` and the connector
+  doubles up into a visibly darker patch at each end of the stem. The
+  traced `mark.svg` has no overlaps at all, so it survives opacity,
+  strokes and boolean operations.
 - It came from an Illustrator export that had an outer ring, a coloured
   nucleus and pale-yellow linework on white. All three were removed or
   changed: the ring and nucleus were most of what turned to mush in a
@@ -145,12 +162,12 @@ electron-orbit atom, chalk on a chalk-blue board.
   16px before shipping it** — the mark is right at the edge of what
   reads in a tab, and adding detail back will push it over.
 - The clef's stem is broken in the original artwork — the coloured
-  nucleus used to sit over the join and hide it. mark.svg therefore ends
-  with a hand-added connector path bridging that gap. It sits in its own
-  untransformed `<g>`, so its coordinates are in plain viewBox space,
-  unlike the imported paths which carry a `translate()`. If the artwork
-  is ever re-exported from Illustrator, that connector has to be
-  re-added or the clef will read as two disconnected pieces.
+  nucleus used to sit over the join and hide it. `mark-source.svg`
+  therefore ends with a hand-added connector path bridging that gap. It
+  sits in its own untransformed `<g>`, so its coordinates are in plain
+  viewBox space, unlike the imported paths which carry a `translate()`.
+  If the artwork is ever re-exported from Illustrator, that connector
+  has to be re-added or the clef will read as two disconnected pieces.
 - **Never draw the mark with `<text>`.** An SVG favicon cannot load a
   webfont, so a type-based mark falls back to whatever serif the OS has
   and renders differently per machine. Everything is vector shapes.
@@ -181,19 +198,16 @@ titles or anything above about 256px:
 - `logo-large-chalk.svg` — chalk mark alone, for dark backgrounds
 - `logo-large-ink.svg` — board-coloured mark alone, for light and print
 
-They exist because mark.svg is *assembled* — Illustrator paths plus the
-hand-added stem connector — and those pieces meet at butt-joins. At icon
-sizes the joins are invisible; blown up they show small jogs where a
-straight patch meets a curved stroke. trace-mark.py renders the mark at
-4x, traces the union back to beziers, and emits one continuous outline
-with no joins. It checks the trace against the source by
-intersection-over-union and refuses to write below 0.995, so a bad trace
-fails loudly rather than shipping silently.
+These come out of the same trace that produces mark.svg, so they carry
+the same unified outline. trace-mark.py renders `mark-source.svg` at 4x,
+traces the union back to beziers, and checks the result against the
+source by intersection-over-union — below 0.995 it aborts rather than
+shipping a drifted mark.
 
-**Don't point the favicon at the traced file.** It's ~65% larger in
-bytes (24 KB vs 14.7 KB) for a difference nobody can see below 256px,
-and favicon.svg is fetched on every page. The icon set builds from
-mark.svg; the traced file is for large output only.
+The trace costs bytes: `favicon.svg` is 24 KB (11.4 KB gzipped) against
+14.7 KB for the old assembled version. That was accepted deliberately —
+a single clean outline is worth it for a file that is fetched once and
+then cached, and the assembled version had a latent seam.
 
 One trap if you touch trace-mark.py: potracer treats **zero** as
 foreground, so the bitmap is inverted before tracing. Passing it the
