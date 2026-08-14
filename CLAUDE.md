@@ -127,6 +127,92 @@ other without going back through the index.
   `* { margin:0; padding:0 }` reset and course.css sets `color:#fff` on
   `<body>`. Keep it that way.
 
+## Site icon / installed app
+
+One icon for the whole site, in `assets/icons/`, plus
+`site.webmanifest` at the repo root. The mark is a treble clef inside an
+electron-orbit atom, chalk on a chalk-blue board.
+
+- **`assets/icons/mark.svg` is the single source of truth** — the
+  linework alone, square viewBox, `fill="currentColor"`, no background.
+  Every other file in the folder is generated from it by
+  `tools/build-icons.js`. Don't hand-edit the generated files.
+- It came from an Illustrator export that had an outer ring, a coloured
+  nucleus and pale-yellow linework on white. All three were removed or
+  changed: the ring and nucleus were most of what turned to mush in a
+  browser tab, and yellow-on-white had too little contrast to survive
+  downsampling. What's left is deliberately sparse. **Test any change at
+  16px before shipping it** — the mark is right at the edge of what
+  reads in a tab, and adding detail back will push it over.
+- The clef's stem is broken in the original artwork — the coloured
+  nucleus used to sit over the join and hide it. mark.svg therefore ends
+  with a hand-added connector path bridging that gap. It sits in its own
+  untransformed `<g>`, so its coordinates are in plain viewBox space,
+  unlike the imported paths which carry a `translate()`. If the artwork
+  is ever re-exported from Illustrator, that connector has to be
+  re-added or the clef will read as two disconnected pieces.
+- **Never draw the mark with `<text>`.** An SVG favicon cannot load a
+  webfont, so a type-based mark falls back to whatever serif the OS has
+  and renders differently per machine. Everything is vector shapes.
+- **Colours are hardcoded, not tokens.** An icon file is fetched without
+  the stylesheet, so it can't read a CSS variable. Board `#24576f`,
+  chalk `#f6f4ef`. If those tokens change, update
+  `tools/build-icons.js`, `site.webmanifest` and the `THEME` constant in
+  `tools/add-favicon.js` together.
+- The rasteriser's density is **computed from the viewBox**, not
+  hardcoded: ImageMagick renders an SVG at `units / 72 * density` pixels,
+  so a fixed high density against a ~1000-unit viewBox asks for a
+  17000px bitmap and dies with "cache resources exhausted".
+- **Corner rounding differs by target on purpose.** `favicon.svg` keeps
+  its own `rx`; `apple-touch-icon.png` is square because iOS applies its
+  own mask (a pre-rounded source shows dark corners inside the
+  rounding); `icon-maskable-512.png` bleeds to every edge with the mark
+  scaled to the middle 66% so it survives any Android mask shape.
+- Regenerate with `node tools/build-icons.js --png` (needs ImageMagick).
+  The three SVG sources are written first and committed, so the set is
+  reproducible without the rasteriser.
+
+**Large-format versions** live beside the icons as `logo-large*.svg` and
+`logo-large-*-2048.png`, built by `python3 tools/trace-mark.py` (needs
+`potracer cairosvg pillow numpy`). Use these for print, posters, slide
+titles or anything above about 256px:
+
+- `logo-large.svg` — mark on a rounded board tile
+- `logo-large-chalk.svg` — chalk mark alone, for dark backgrounds
+- `logo-large-ink.svg` — board-coloured mark alone, for light and print
+
+They exist because mark.svg is *assembled* — Illustrator paths plus the
+hand-added stem connector — and those pieces meet at butt-joins. At icon
+sizes the joins are invisible; blown up they show small jogs where a
+straight patch meets a curved stroke. trace-mark.py renders the mark at
+4x, traces the union back to beziers, and emits one continuous outline
+with no joins. It checks the trace against the source by
+intersection-over-union and refuses to write below 0.995, so a bad trace
+fails loudly rather than shipping silently.
+
+**Don't point the favicon at the traced file.** It's ~65% larger in
+bytes (24 KB vs 14.7 KB) for a difference nobody can see below 256px,
+and favicon.svg is fetched on every page. The icon set builds from
+mark.svg; the traced file is for large output only.
+
+One trap if you touch trace-mark.py: potracer treats **zero** as
+foreground, so the bitmap is inverted before tracing. Passing it the
+obvious way round silently traces the background and yields a filled
+square with the mark knocked out of it.
+- Inject the tags into new pages with the same dry-run/`--write` pattern
+  as the nav drawer:
+
+  ```bash
+  node tools/add-favicon.js            # dry run
+  node tools/add-favicon.js --write
+  ```
+
+  Idempotent, uses the same skip lists as `add-sitenav.js`, and writes
+  paths at each page's relative depth — the site is served from
+  `/SchoolSites/`, so root-absolute icon paths would 404. Note browsers
+  also probe the *domain* root for `/favicon.ico`, which is outside this
+  repo; the explicit `<link>` tags are what actually do the work.
+
 ## Deck rules
 
 - `<body class="deck-page theme-X">` where X ∈ `theme-methods`,
