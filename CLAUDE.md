@@ -133,27 +133,31 @@ One icon for the whole site, in `assets/icons/`, plus
 `site.webmanifest` at the repo root. The mark is a treble clef inside an
 electron-orbit atom, chalk on a chalk-blue board.
 
-**Two-stage build. Edit `mark-source.svg`, never `mark.svg`.**
+**`assets/icons/mark.svg` is the source of truth**, and it is
+maintained by hand in Illustrator, not generated. One `<path>`,
+`fill-rule="evenodd"`, `fill="currentColor"`, square viewBox, no
+background. Everything else in `assets/icons/` is built from it:
 
 ```bash
-python3 tools/trace-mark.py       # mark-source.svg -> mark.svg + logo-large*
-node tools/build-icons.js --png   # mark.svg -> the icon set
+node tools/build-icons.js --png   # mark.svg -> icons + logo-large*
 ```
 
-- **`assets/icons/mark-source.svg`** is the editable artwork: the
-  Illustrator paths (carrying a `translate()`) plus a hand-added
-  connector bridging the clef's broken stem. It is *assembled* — the
-  connector is a separate overlapping object.
-- **`assets/icons/mark.svg` is generated** — one unified outline, a
-  single `<path>` with the connector baked in, `fill="currentColor"`,
-  no background. Everything served is built from this. Don't hand-edit
-  it; your change will be overwritten on the next trace.
-- The two-stage split exists because overlapping objects are only
-  invisible while every piece is the same fully opaque colour. Render
-  `mark-source.svg` with per-path `fill-opacity` and the connector
-  doubles up into a visibly darker patch at each end of the stem. The
-  traced `mark.svg` has no overlaps at all, so it survives opacity,
-  strokes and boolean operations.
+- **Edit the mark in Illustrator, flatten to a single compound path,
+  export, and replace mark.svg.** Then re-run build-icons.js. Do not
+  hand-edit `favicon.svg`, `icon-*.svg` or `logo-large*` — they are
+  generated and a rebuild silently overwrites them.
+- Why one path matters: overlapping objects are invisible only while
+  every piece is the same fully opaque colour. An assembled mark
+  rendered with per-path `fill-opacity` shows the overlaps as visibly
+  darker patches, and it breaks under strokes and boolean operations.
+- **`mark-source.svg` is the archived assembled original** — the raw
+  Illustrator export plus a hand-added connector bridging the clef's
+  broken stem. Nothing builds from it; it is kept only as the record of
+  where the artwork came from. The shipped mark supersedes it.
+- Illustrator's path fitting is dramatically better than an
+  auto-trace here: the same shape is ~2 KB of path data against ~24 KB
+  from potrace, for a sub-pixel difference. A tracing step existed
+  briefly and was removed once the Illustrator route proved better.
 - It came from an Illustrator export that had an outer ring, a coloured
   nucleus and pale-yellow linework on white. All three were removed or
   changed: the ring and nucleus were most of what turned to mush in a
@@ -189,30 +193,19 @@ node tools/build-icons.js --png   # mark.svg -> the icon set
   The three SVG sources are written first and committed, so the set is
   reproducible without the rasteriser.
 
-**Large-format versions** live beside the icons as `logo-large*.svg` and
-`logo-large-*-2048.png`, built by `python3 tools/trace-mark.py` (needs
-`potracer cairosvg pillow numpy`). Use these for print, posters, slide
-titles or anything above about 256px:
+**Large-format versions** come out of the same build, for print,
+posters, slide titles or anything above about 256px:
 
 - `logo-large.svg` — mark on a rounded board tile
 - `logo-large-chalk.svg` — chalk mark alone, for dark backgrounds
 - `logo-large-ink.svg` — board-coloured mark alone, for light and print
 
-These come out of the same trace that produces mark.svg, so they carry
-the same unified outline. trace-mark.py renders `mark-source.svg` at 4x,
-traces the union back to beziers, and checks the result against the
-source by intersection-over-union — below 0.995 it aborts rather than
-shipping a drifted mark.
+plus `logo-large-*-2048.png` rasters of each. Same geometry as the
+icons, just without the icon framing.
 
-The trace costs bytes: `favicon.svg` is 24 KB (11.4 KB gzipped) against
-14.7 KB for the old assembled version. That was accepted deliberately —
-a single clean outline is worth it for a file that is fetched once and
-then cached, and the assembled version had a latent seam.
-
-One trap if you touch trace-mark.py: potracer treats **zero** as
-foreground, so the bitmap is inverted before tracing. Passing it the
-obvious way round silently traces the background and yields a filled
-square with the mark knocked out of it.
+`favicon.svg` is ~2.2 KB. If a change to the artwork sends that past
+about 5 KB, the path wasn't flattened properly — check it's one compound
+path and not a stack of overlapping objects.
 - Inject the tags into new pages with the same dry-run/`--write` pattern
   as the nav drawer:
 
@@ -313,13 +306,19 @@ ported off site.css in Aug 2026. A new index page starts from
 `year7-science/index.html`, not from site.css.
 
 `assets/css/site.css` survives only for the four bare-name legacy
-folders and the standalone tool pages (`sample-resource.html`,
-`tangent-visualiser.html`, `number-sense-games.html`,
-`telling-time.html`, `complexity-suite.html`, `tools/staff-crypt.html`).
-It still carries its own `:root` palette because those pages don't link
-tokens.css — don't "fix" that until the tool pages are ported too. Note
-the consequence: a student clicking a tool from a themed index still
-lands on the old chalk-blue Inter look.
+folders and `tools/staff-crypt.html`. It still carries its own `:root`
+palette because those pages don't link tokens.css — leave that alone.
+
+The twelve placeholder tool pages it used to serve were **deleted** in
+Aug 2026, along with their index cards: seven `sample-resource.html`
+stubs plus `tangent-visualiser`, `slope-fields`, `complexity-suite`,
+`telling-time` and `number-sense-games`. Despite the specific names,
+every one was the same 2 KB shell reading "this is where your tool
+goes" — a card promising a tool that doesn't exist is worse than no
+card. An index left with nothing gets
+`<p class="section-sub">No resources published for this subject yet.</p>`
+in place of its `.deck-grid`; nine of the fourteen subject pages are in
+that state, which is the honest picture of what's published.
 
 ## Course landing pages (subject home, immersive)
 
@@ -341,9 +340,18 @@ Three components exist for index pages specifically:
   `.dc-kind`; a chapter index with many lessons reads better as plain
   `.deck-card`s with `.dc-num` (`year11-methods/chapter-9`).
 - `.yeartabs`/`.ytab`/`.ypanel` — the root index year picker. Panels
-  toggle with `[hidden]`, and panel 7 ships un-hidden so a no-JS visitor
-  still sees something. The tab script lives inline on `index.html` and
-  mirrors the selection into a `#year-N` hash.
+  toggle with `[hidden]`, and the first visible panel ships un-hidden so
+  a no-JS visitor still sees something. The tab script lives inline on
+  `index.html`, reads whatever tabs are present, and mirrors the
+  selection into a `#year-N` hash.
+  **Subjects with nothing published are commented out, not deleted** —
+  nine of them as of Aug 2026, which also empties the Year 8 and Year 9
+  tabs, so those tab buttons and panels are commented out too. Uncomment
+  a card (and its tab/panel if the whole year is hidden) when the
+  subject gets content. A header comment at the top of the tab strip
+  lists what's currently hidden; keep it in step. The folders and their
+  index pages still exist and are still listed in the nav drawer — the
+  root page is curated, the drawer is the full map.
 - `.band-label` — eyebrow above a panel's cards ("Junior", "VCE Units
   3 & 4").
 

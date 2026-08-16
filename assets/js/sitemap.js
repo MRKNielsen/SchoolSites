@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-14",
+ "generated": "2026-08-16",
  "tree": [
   {
    "t": "Home",
@@ -22,12 +22,7 @@ window.SITEMAP = {
    "c": [
     {
      "t": "Mathematics",
-     "c": [
-      {
-       "t": "Number Sense Games",
-       "h": "year7-mathematics/number-sense-games.html"
-      }
-     ],
+     "c": [],
      "h": "year7-mathematics/index.html",
      "k": "maths"
     },
@@ -277,12 +272,7 @@ window.SITEMAP = {
    "c": [
     {
      "t": "Mathematics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year8-mathematics/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year8-mathematics/index.html",
      "k": "maths"
     }
@@ -294,12 +284,7 @@ window.SITEMAP = {
    "c": [
     {
      "t": "Mathematics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year9-mathematics/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year9-mathematics/index.html",
      "k": "maths"
     }
@@ -311,12 +296,7 @@ window.SITEMAP = {
    "c": [
     {
      "t": "Algorithmics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year10-algorithmics/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year10-algorithmics/index.html",
      "k": "algorithmics"
     },
@@ -381,10 +361,6 @@ window.SITEMAP = {
         }
        ],
        "k": "primer"
-      },
-      {
-       "t": "Sample Resource",
-       "h": "year10-mathematics/sample-resource.html"
       }
      ],
      "h": "year10-mathematics/index.html",
@@ -398,23 +374,13 @@ window.SITEMAP = {
    "c": [
     {
      "t": "Algorithmics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year11-algorithmics/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year11-algorithmics/index.html",
      "k": "algorithmics"
     },
     {
      "t": "Foundation Mathematics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year11-foundation/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year11-foundation/index.html",
      "k": "foundation"
     },
@@ -491,12 +457,7 @@ window.SITEMAP = {
     },
     {
      "t": "Specialist Mathematics",
-     "c": [
-      {
-       "t": "Sample Resource",
-       "h": "year11-specialist/sample-resource.html"
-      }
-     ],
+     "c": [],
      "h": "year11-specialist/index.html",
      "k": "specialist"
     }
@@ -714,10 +675,6 @@ window.SITEMAP = {
         }
        ],
        "k": "algorithmics"
-      },
-      {
-       "t": "Complexity Suite",
-       "h": "year12-algorithmics/complexity-suite.html"
       }
      ],
      "h": "year12-algorithmics/index.html",
@@ -725,23 +682,13 @@ window.SITEMAP = {
     },
     {
      "t": "Foundation Mathematics",
-     "c": [
-      {
-       "t": "Telling the Time",
-       "h": "year12-foundation/telling-time.html"
-      }
-     ],
+     "c": [],
      "h": "year12-foundation/index.html",
      "k": "foundation"
     },
     {
      "t": "Mathematical Methods",
-     "c": [
-      {
-       "t": "Tangent Visualiser",
-       "h": "year12-methods/tangent-visualiser.html"
-      }
-     ],
+     "c": [],
      "h": "year12-methods/index.html",
      "k": "methods"
     },
@@ -816,10 +763,6 @@ window.SITEMAP = {
         }
        ],
        "k": "specialist"
-      },
-      {
-       "t": "Slope Field Explorer",
-       "h": "year12-specialist/slope-fields.html"
       }
      ],
      "h": "year12-specialist/index.html",

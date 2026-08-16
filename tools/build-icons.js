@@ -53,6 +53,12 @@ function build(opts) {
     INNER + '</g></svg>';
 }
 
+/* Mark alone, no board — for placing on an existing background. */
+function bare(fill) {
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + VB + ' ' + VB + '">' +
+    INNER.replace(new RegExp(CHALK, 'g'), fill) + '</svg>';
+}
+
 const files = {
   /* browser tab — keeps its own rounding, sits on the tab strip bare */
   'favicon.svg':       build({}),
@@ -60,7 +66,14 @@ const files = {
   'icon-square.svg':   build({ rx: 0 }),
   /* Android maskable — linework inside the safe circle (middle 80%),
      board colour bleeding to every edge so any mask shape works */
-  'icon-maskable.svg': build({ rx: 0, scale: 0.66 })
+  'icon-maskable.svg': build({ rx: 0, scale: 0.66 }),
+
+  /* Large-format, for print / posters / slide titles. Same geometry as
+     the icons — they all come from mark.svg — just without the icon
+     framing, and in the two single-colour variants a printer wants. */
+  'logo-large.svg':       build({}),
+  'logo-large-chalk.svg': bare(CHALK),
+  'logo-large-ink.svg':   bare(BOARD)
 };
 
 Object.keys(files).forEach(function (f) {
@@ -73,16 +86,23 @@ if (process.argv.indexOf('--png') === -1) {
   return;
 }
 
-/* Density has to be derived from the viewBox, not hardcoded. ImageMagick
-   rasterises an SVG at viewBox_units / 72 * density pixels, so a fixed
-   high density against a 1000-unit viewBox asks for a ~17000px bitmap
-   and dies with "cache resources exhausted". This targets ~1024px and
-   then downsamples, which is plenty for a 512 icon. */
-const DENSITY = (72 * 1024 / VB).toFixed(2);
+/* Density has to be derived from the viewBox AND the target, not
+   hardcoded. ImageMagick rasterises an SVG at viewBox_units / 72 *
+   density pixels, so a fixed high density against a 1000-unit viewBox
+   asks for a ~17000px bitmap and dies with "cache resources exhausted".
+   Render at 2x the target (capped at 4096) and downsample for clean
+   edges — never below the target, or the result is an upscale. */
+function density(px) { return (72 * px / VB).toFixed(2); }
 
 function raster(src, out, size) {
-  execFileSync('convert', ['-background', 'none', '-density', DENSITY,
-    path.join(OUT, src), '-resize', size + 'x' + size, path.join(OUT, out)]);
+  const render = Math.min(size * 2, 4096);
+  execFileSync('convert', [
+    '-background', 'none', '-density', density(render),
+    path.join(OUT, src),
+    '-resize', size + 'x' + size,
+    '-depth', '8', '-strip',            // 8-bit, no metadata
+    '-define', 'png:compression-level=9',
+    path.join(OUT, out)]);
   console.log('wrote assets/icons/' + out);
 }
 
@@ -93,7 +113,11 @@ raster('icon-maskable.svg', 'icon-maskable-512.png', 512);
 
 /* .ico carries 16/32/48 so old browsers and Windows pinned tiles get a
    sharp version at each, rather than downsampling one big bitmap. */
-execFileSync('convert', ['-background', 'none', '-density', DENSITY,
+execFileSync('convert', ['-background', 'none', '-density', density(256),
   path.join(OUT, 'favicon.svg'), '-define', 'icon:auto-resize=48,32,16',
   path.join(OUT, 'favicon.ico')]);
 console.log('wrote assets/icons/favicon.ico');
+
+['logo-large', 'logo-large-chalk', 'logo-large-ink'].forEach(function (n) {
+  raster(n + '.svg', n + '-2048.png', 2048);
+});

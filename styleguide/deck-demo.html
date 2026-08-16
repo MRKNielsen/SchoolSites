@@ -163,7 +163,7 @@
             <line x1="40" y1="190" x2="380" y2="190" stroke="var(--c-slate-500)" stroke-width="2"/>
             <line x1="40" y1="20" x2="40" y2="190" stroke="var(--c-slate-500)" stroke-width="2"/>
             <path d="M40,180 Q160,180 210,105 T380,30" fill="none" stroke="var(--accent)" stroke-width="3.5"/>
-            <path d="M40,150 L380,60" fill="none" stroke="var(--neg)" stroke-width="3" stroke-dasharray="none"/>
+            <line id="demo-tangent" x1="130" y1="60" x2="290" y2="150" stroke="var(--neg)" stroke-width="3"/>
             <circle cx="210" cy="105" r="6" fill="var(--accent-warm)"/>
           </svg>
           <div class="legend">
@@ -174,7 +174,7 @@
         </div>
         <div class="ctrl" style="margin-top:14px;">
           <label>Gradient <span class="m">m</span> <output>1.5</output></label>
-          <input type="range" min="-3" max="3" step="0.1" value="1.5" oninput="this.closest('.ctrl').querySelector('output').textContent=this.value">
+          <input id="demo-grad" type="range" min="-3" max="3" step="0.1" value="1.5">
         </div>
       </div>
       <div>
@@ -254,6 +254,27 @@
       document.querySelectorAll(".themebar button").forEach(b => b.classList.toggle("on", b === btn));
     });
   });
+
+  /* Demo-only: drive the tangent line from the gradient slider, so the
+     .ctrl component demonstrates a slider doing something rather than
+     just echoing its own value. Pivots about the marked point (210,105);
+     SVG y grows downward, hence the sign flip. 30px of rise per unit of
+     m keeps the whole range inside the 220-high viewBox. */
+  (function () {
+    const slider = document.getElementById("demo-grad");
+    const line   = document.getElementById("demo-tangent");
+    if (!slider || !line) return;
+    const out = slider.closest(".ctrl").querySelector("output");
+    const PX = 210, PY = 105, RUN = 80, RISE = 30;
+    function draw() {
+      const m = parseFloat(slider.value);
+      out.textContent = m.toFixed(1);
+      line.setAttribute("x1", PX - RUN); line.setAttribute("y1", PY + m * RISE);
+      line.setAttribute("x2", PX + RUN); line.setAttribute("y2", PY - m * RISE);
+    }
+    slider.addEventListener("input", draw);
+    draw();
+  })();
 </script>
 </body>
 </html>
