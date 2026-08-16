@@ -95,9 +95,10 @@
   <h2>\(\bar{X}\) as a linear combination</h2>
   <p style="text-align:center; margin:6px 0 14px;">\[\bar{X} = \frac{X_1 + X_2 + \cdots + X_n}{n} \qquad\Rightarrow\qquad E(\bar{X}) = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}, \qquad \text{sd}(\bar{X}) = \frac{\sigma}{\sqrt{n}}\]</p>
   <ul>
-    <li>This is last week's algebra: \(\text{Var}\left(\dfrac{1}{n}\sum X_i\right) = \dfrac{1}{n^2} \cdot n\sigma^2 = \dfrac{\sigma^2}{n}\).</li>
-    <li>If the population is <b>normal</b>, \(N(\mu, \sigma^2)\), then \(\bar{X}\) is <b>exactly</b> normal: \(\bar{X} \sim N\!\left(\mu, \dfrac{\sigma^2}{n}\right)\).</li>
-    <li>Quadrupling the sample size halves the standard deviation of \(\bar{X}\) — precision is bought at a square-root rate.</li>
+    <li><b>This is last week's algebra, applied once.</b> \(\text{Var}\!\left(\tfrac{1}{n}\sum X_i\right) = \tfrac{1}{n^2}\cdot n\sigma^2 = \tfrac{\sigma^2}{n}\). Follow the two steps: the coefficient \(\tfrac1n\) on each term gets squared, giving \(\tfrac{1}{n^2}\); and the \(n\) independent copies contribute \(n\sigma^2\) between them. The \(n\) and the \(n^2\) then cancel down to a single \(n\) in the denominator. Every surprising thing about the sample mean comes out of that one cancellation.</li>
+    <li><b>The mean does not shrink, only the spread does.</b> \(E(\bar{X}) = \tfrac1n \cdot n\mu = \mu\): averaging leaves the centre exactly where the population's was. So \(\bar{X}\) and \(X\) are aimed at the same place, and the only difference between them is how tightly they cluster around it. That is the entire reason samples are useful — a sample mean is a <i>better-behaved</i> version of the same quantity, not a different one.</li>
+    <li><b>If the population is normal, \(\bar{X}\) is <i>exactly</i> normal</b> — \(\bar{X} \sim N\!\left(\mu, \tfrac{\sigma^2}{n}\right)\) — because \(\bar{X}\) is a linear combination of independent normals, and last week established that such combinations stay normal. No approximation, no condition on \(n\); this holds for \(n = 2\) as surely as for \(n = 200\). The central limit theorem later in this deck is for the case where the population is <i>not</i> normal, and knowing which of the two you are relying on is a marked step in Chapter 16.</li>
+    <li><b>Precision is bought at a square-root rate.</b> \(\text{sd}(\bar{X}) = \sigma/\sqrt{n}\), so to halve it you must <i>quadruple</i> \(n\); to divide it by 10 you need a hundred times the data. This is the single most practically important fact in the topic: it explains why large studies are expensive, why doubling a sample is disappointing, and — in Chapter 16 — why halving the width of a confidence interval costs four times the sampling effort.</li>
   </ul>
 </section>
 
@@ -113,7 +114,9 @@
     <li class="frag">One person: \(P(X &gt; 105) = P\!\left(Z &gt; \dfrac{1}{3}\right) \approx 0.369\).</li>
   </ul>
   <div class="box key"><span class="lbl">Interpretation</span>
-    <p>An <b>average</b> of nine is much less likely to stray 5 points from the mean than a single individual is. Averages smooth out extremes.</p>
+    <p>An <b>average</b> of nine is much less likely to stray 5 points from the mean than a single individual is — 16% against 37%, better than a halving.</p>
+    <p>The reason is cancellation, exactly as in last week's \(2X\) versus \(X_1 + X_2\). For a single person to score above 105, that one person must be unusual. For the <i>average</i> of nine to exceed 105, the group as a whole must be unusual — and the high scorers have to outweigh the low ones rather than being offset by them. Individually unremarkable groups are common; collectively unremarkable groups that happen to average 5 points high are rare.</p>
+    <p>This is why the same numerical gap of 5 points is a routine event for one person and a notable one for a sample. Whenever a question asks you to "compare and comment", the comparison it wants is this: the same distance from \(\mu\) is measured against a smaller standard deviation, so it corresponds to a larger \(z\) and a smaller tail.</p>
   </div>
 </section>
 
@@ -164,6 +167,8 @@
   </ul>
   <div class="box key"><span class="lbl">Note</span>
     <p>Var of the total is \(n\sigma^2 = 1600\), <b>not</b> \((n\sigma)^2 = 25600\). Sixteen independent people, not one person weighed sixteen times.</p>
+    <p>This is last week's \(2X\) versus \(X_1 + X_2\) wearing different clothes, and the wrong route is seductive because \((n\sigma)^2\) comes from a rule that <i>is</i> correct — just for a different situation. Sixteen separate adults each contribute their own independent variation, so the variances add sixteen times over; sixteen copies of one adult's mass would scale a single variation by sixteen and square it. The lift is loaded by sixteen different people, so \(n\sigma^2\) is the right reading. Taking the wrong one gives \(\text{sd} = 160\) instead of \(40\) and turns a 2.3% overload risk into 31%.</p>
+    <p>The two routes shown above — via the total \(T\) and via the mean \(\bar{X}\) — are genuinely the same calculation, since \(T &gt; 1200\) and \(\bar{X} &gt; 75\) describe the identical event and produce the identical \(z\). Use whichever the question phrases itself in, and use the other as a check when you have time.</p>
   </div>
 </section>
 
@@ -201,9 +206,9 @@
 <section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
   <h2>Simulating \(\bar{X}\)</h2>
   <ul>
-    <li>Take a decidedly non-normal population — say rolls of a die, or a skewed waiting-time distribution.</li>
-    <li>Draw a sample of size \(n\), record \(\bar{x}\). Repeat a few thousand times and histogram the results.</li>
-    <li>What you see: the histogram of sample means is centred at \(\mu\), has spread \(\approx \sigma/\sqrt{n}\), and looks <b>more normal as \(n\) grows</b> — regardless of the population's shape.</li>
+    <li><b>Start from a decidedly non-normal population</b> — rolls of a die, or a skewed waiting-time distribution. The point of the exercise is lost if you begin with something already bell-shaped, because then the result is guaranteed by last week's work and the theorem is doing none of the lifting.</li>
+    <li><b>Draw a sample of size \(n\), record \(\bar{x}\), and repeat a few thousand times.</b> Each repetition contributes <i>one</i> dot to the histogram — not \(n\) dots. This is the step worth being slow about: you are building a distribution whose individual observations are themselves averages, which is why it is called a <i>sampling</i> distribution rather than simply a distribution.</li>
+    <li><b>What you see is the theorem in three parts.</b> The histogram sits centred at \(\mu\), no matter what \(n\) is; its spread is about \(\sigma/\sqrt{n}\), shrinking as \(n\) grows; and its <i>shape</i> approaches a normal curve as \(n\) grows, whatever shape the population had. The first two are exact results from 15D and hold for every \(n\); only the third is the central limit theorem, and only the third is an approximation.</li>
   </ul>
   <div class="cols">
     <div>
@@ -230,15 +235,71 @@
   </div>
 </section>
 
+<section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT" id="cltsim">
+  <h2>Live simulation: the population's shape stops mattering</h2>
+  <div class="parts">
+    <button class="ptab active" data-shape="uniform">Uniform (fair die)</button>
+    <button class="ptab" data-shape="skewed">Strongly skewed</button>
+    <button class="ptab" data-shape="bimodal">Two peaks</button>
+    <button class="ptab" data-shape="bell">Already bell-ish</button>
+  </div>
+  <div class="graph-card" data-noswipe>
+    <svg viewBox="0 0 960 252" style="width:100%;max-width:880px;display:block;margin:0 auto;"
+         xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Left: the population distribution. Right: a histogram of simulated sample means with the predicted normal curve overlaid.">
+      <text x="255" y="19" font-size="17" font-weight="700" text-anchor="middle" style="fill:var(--ink)">The population — P(X = x)</text>
+      <text x="740" y="19" font-size="17" font-weight="700" text-anchor="middle" style="fill:var(--ink)">The simulated sample means</text>
+      <g id="cs-pop"></g>
+      <g id="cs-mean"></g>
+      <line x1="60" y1="200" x2="450" y2="200" stroke-width="2" style="stroke:var(--ink-soft)"/>
+      <line x1="545" y1="200" x2="935" y2="200" stroke-width="2" style="stroke:var(--ink-soft)"/>
+      <g id="cs-axis"></g>
+      <text x="255" y="243" font-size="14" text-anchor="middle" style="fill:var(--muted)">value of X</text>
+      <text x="740" y="243" font-size="14" text-anchor="middle" style="fill:var(--muted)">value of the sample mean (same scale)</text>
+    </svg>
+    <div class="legend">
+      <span><span class="dot grey"></span> population</span>
+      <span><span class="dot accent"></span> simulated sample means</span>
+      <span><span class="pen neg"></span> predicted \(N(\mu,\, \sigma^2/n)\)</span>
+      <span><span class="dot neg"></span> the sample just drawn</span>
+    </div>
+  </div>
+  <div class="cols even">
+    <div>
+      <div class="ctrl" data-noswipe>
+        <label>Sample size <span class="m">n</span> <output id="cs-nout">5</output></label>
+        <input id="cs-n" type="range" min="1" max="50" step="1" value="5">
+      </div>
+      <div class="parts">
+        <button class="reveal-btn" id="cs-one">Draw 1 sample ▸</button>
+        <button class="reveal-btn" id="cs-many">Draw 200 ▸</button>
+        <button class="reveal-btn" id="cs-clear">Clear ↺</button>
+      </div>
+    </div>
+    <div>
+      <table class="tbl">
+        <tr><th></th><th class="c">predicted</th><th class="c">simulated</th></tr>
+        <tr><td>centre</td><td class="c">\(\mu = \) <span id="cs-mu"></span></td><td class="c">mean of \(\bar{x}\) = <span id="cs-obsm"></span></td></tr>
+        <tr><td>spread</td><td class="c">\(\dfrac{\sigma}{\sqrt{n}} = \) <span id="cs-se"></span></td><td class="c">sd of \(\bar{x}\) = <span id="cs-obss"></span></td></tr>
+        <tr><td>samples drawn</td><td class="c">—</td><td class="c"><span id="cs-count"></span></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Watch for three things</span>
+    <p>Switch shape with \(n\) held at 30: the right panel barely changes. Then drag \(n\) from 1 to 50: the right panel <b>stays centred at \(\mu\)</b>, <b>narrows like \(1/\sqrt{n}\)</b>, and <b>turns normal</b> — fastest for the bell-ish population, slowest for the skewed one, which is exactly what the "unless it is very skewed" caveat means.</p>
+  </div>
+</section>
+
 <section class="slide" data-topic="Lesson 3 · Simulation &amp; CLT">
   <h2>The central limit theorem</h2>
   <div class="box defn"><span class="lbl">Theorem (informal)</span>
     <p>For a random sample of size \(n\) from <b>any</b> distribution with mean \(\mu\) and variance \(\sigma^2\), the distribution of \(\bar{X}\) is <b>approximately</b> \(N\!\left(\mu,\, \dfrac{\sigma^2}{n}\right)\) when \(n\) is large.</p>
   </div>
   <ul style="margin-top:14px;">
-    <li>Working guideline: unless the population is very skewed, \(n\) between 25 and 30 is enough — and the approximation keeps improving as \(n\) grows.</li>
-    <li>Normal population → \(\bar{X}\) exactly normal for <b>every</b> \(n\); CLT is only needed when the population isn't normal.</li>
-    <li>This is what makes next week possible: inference about \(\mu\) without knowing the population's shape.</li>
+    <li><b>Notice what the theorem does <i>not</i> say.</b> It makes no claim about the population, which stays exactly as skewed or lumpy as it always was, and no claim about the individual values in your sample. The <i>only</i> thing that becomes normal is the distribution of the sample mean — a distribution of summaries, each one computed from a whole sample. Losing that distinction is what makes the theorem sound like magic instead of mathematics.</li>
+    <li><b>Working guideline: unless the population is very skewed, \(n\) between 25 and 30 is enough</b> — and the approximation keeps improving as \(n\) grows. The reason there is no single number is that "large enough" genuinely depends on shape: a population already roughly symmetric needs very little help, while a badly skewed one needs a larger sample before the skew averages out. The live simulation on the previous slide is worth returning to for exactly this comparison.</li>
+    <li><b>Normal population → \(\bar{X}\) exactly normal for every \(n\); the CLT is only needed when the population isn't normal.</b> Two different justifications for the same-looking statement, and Chapter 16 expects you to name the one you are using. If the question says "weights are normally distributed", cite that; if it gives you a density function or says nothing about shape and hands you \(n = 50\), cite the CLT. Citing the CLT for a normal population is not wrong so much as unnecessary — but citing normality for a population that was never claimed to be normal <i>is</i> wrong, and it is a marked error.</li>
+    <li><b>This is what makes next week possible.</b> Every confidence interval and every hypothesis test in Chapter 16 needs to know the distribution of \(\bar{X}\) in order to convert a sample mean into a probability. Without the CLT that would require knowing the population's shape, which in real problems nobody does. With it, \(\mu\) and \(\sigma\) suffice — which is why a single method covers examination marks, battery lifetimes and pollutant emissions alike.</li>
   </ul>
 </section>
 
@@ -299,8 +360,9 @@
 <section class="slide" data-topic="Lesson 4 · Normal ≈ binomial">
   <h2>Normal approximation to the binomial</h2>
   <ul>
-    <li>\(X \sim \text{Bi}(n, p)\) is a sum of \(n\) independent 0/1 variables — so the CLT applies to it.</li>
-    <li>For large \(n\): \(X \mathrel{\dot\sim} N\big(np,\; np(1-p)\big)\). Guideline: fine when \(np\) and \(n(1-p)\) are both \(&gt; 5\) or so.</li>
+    <li><b>A binomial <i>is</i> a sum, which is why the CLT reaches it.</b> Write \(X = Y_1 + Y_2 + \cdots + Y_n\), where each \(Y_i\) is 1 for a success and 0 for a failure. The trials are independent and identically distributed, so this is precisely the situation the theorem describes — and \(X/n\), the proportion of successes, is literally a sample mean of the \(Y_i\). Nothing new is being asserted here; the binomial simply turns out to have been a sum of independent variables all along.</li>
+    <li><b>For large \(n\): \(X \mathrel{\dot\sim} N\big(np,\; np(1-p)\big)\)</b> — matching the binomial's own mean and variance, since an approximation that got the centre or the spread wrong would be no use. Guideline: acceptable when \(np\) and \(n(1-p)\) are both above about 5.</li>
+    <li><b>That condition is really a condition about symmetry.</b> A binomial is skewed when \(p\) is near 0 or 1, and requiring <i>both</i> \(np\) and \(n(1-p)\) to be comfortably large is what rules out the cases where the distribution is squashed against an end and cannot resemble a symmetric bell. With \(n = 100\) and \(p = 0.02\), \(np = 2\) and the count is bunched at 0, 1, 2 — no normal curve fits that. Raise \(n\) far enough and even a small \(p\) eventually qualifies, which is the theorem's promise in action.</li>
   </ul>
   <div class="box example"><span class="lbl">Example 4</span>
     <p>A fair coin is tossed 100 times. Estimate \(P(X \geq 60)\).</p>
@@ -312,6 +374,8 @@
   </ul>
   <div class="box key"><span class="lbl">Sample proportion</span>
     <p>Dividing by \(n\): \(\hat{P} = X/n \mathrel{\dot\sim} N\big(p,\, \tfrac{p(1-p)}{n}\big)\) — the same fact in proportion form.</p>
+    <p>The parameters follow from 15A alone: dividing by the constant \(n\) divides the mean by \(n\), giving \(np/n = p\), and divides the variance by \(n^2\), giving \(np(1-p)/n^2 = p(1-p)/n\). Note the \(\tfrac{1}{n}\) again — a proportion, like any other average, becomes more precise at a square-root rate.</p>
+    <p>Whether a question is about a <b>count</b> or a <b>proportion</b> decides which of the two forms you want. "How many of the 100 people" is a count and uses \(N(np, np(1-p))\); "what percentage of the sample" is a proportion and uses \(N(p, p(1-p)/n)\). Both give the same answer if you convert consistently, so the safest habit is to work in whichever the question states and convert only at the end.</p>
   </div>
 </section>
 
@@ -336,10 +400,10 @@
 <section class="slide" data-topic="T3W04 · Sample Mean &amp; CLT">
   <h2>Week 5 summary</h2>
   <ul>
-    <li>\(\bar{X}\) is a random variable: \(E(\bar{X}) = \mu\), \(\text{sd}(\bar{X}) = \sigma/\sqrt{n}\).</li>
-    <li>Normal population → \(\bar{X}\) exactly normal; any population + large \(n\) → approximately normal (CLT).</li>
-    <li>Binomial with large \(n\) ≈ normal with matching mean and variance.</li>
-    <li>Everything in Chapter 16's inference rests on this week's distribution of \(\bar{X}\).</li>
+    <li><b>\(\bar{X}\) is a random variable, with a distribution of its own:</b> \(E(\bar{X}) = \mu\) and \(\text{sd}(\bar{X}) = \sigma/\sqrt{n}\). A different sample would have produced a different \(\bar{x}\), and it is that sample-to-sample variation the distribution describes. Same centre as the population, smaller spread — and the spread shrinks only at a square-root rate, so precision is genuinely expensive.</li>
+    <li><b>Two routes to normality, and you must name the one you used.</b> A normal population gives \(\bar{X}\) exactly normal for every \(n\), by last week's closure result. Any other population gives \(\bar{X}\) approximately normal provided \(n\) is large, by the central limit theorem. The distinction is a marked step in Chapter 16, and it is the first thing to settle when you read a question: does it tell me the population is normal, or does it only tell me \(n\) is big?</li>
+    <li><b>A binomial with large \(n\) is approximately normal with matching mean and variance</b>, because a binomial count is itself a sum of \(n\) independent trials. The guideline \(np &gt; 5\) and \(n(1-p) &gt; 5\) is really asking whether the distribution is symmetric enough for a bell to fit it.</li>
+    <li><b>Everything in Chapter 16 rests on this one distribution.</b> A confidence interval runs the logic of \(\bar{X} \sim N(\mu, \sigma^2/n)\) forwards to bracket an unknown \(\mu\); a hypothesis test runs it backwards to ask how surprising an observed \(\bar{x}\) would be if a proposed \(\mu\) were true. Both are this week's result rearranged — so if the distribution of \(\bar{X}\) is secure, next week is mostly notation.</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Problem Set 3 (Random Variables) covers Chapter 15. Next week we start using \(\bar{X}\) to make decisions: confidence intervals and hypothesis tests (Chapter 16).</p>
@@ -356,5 +420,236 @@
 </div>
 
 <script src="../../../assets/js/deck.js" defer></script>
+
+<!-- ── Slide-local: the CLT sampling simulation (#cltsim) ───────────────────
+     Draws samples from a chosen discrete population on {1,…,6} and histograms
+     the resulting sample means against the predicted N(mu, sigma^2/n).
+     Self-contained: no navigation logic, no styling — every colour comes from
+     a token, and every layout class is already in deck.css.               -->
+<script>
+(function () {
+  "use strict";
+  var slide = document.getElementById("cltsim");
+  if (!slide) return;
+
+  /* ---- populations: all on {1,…,6} so both panels share one x-scale ---- */
+  var SHAPES = {
+    uniform: [1, 1, 1, 1, 1, 1].map(function (v) { return v / 6; }),
+    skewed:  [0.50, 0.22, 0.13, 0.08, 0.05, 0.02],
+    bimodal: [0.35, 0.10, 0.05, 0.05, 0.10, 0.35],
+    bell:    [0.05, 0.15, 0.30, 0.30, 0.15, 0.05]
+  };
+  var VALUES = [1, 2, 3, 4, 5, 6];
+
+  /* ---- plot geometry (matches the viewBox laid out in the markup) ---- */
+  var X0 = 0.5, X1 = 6.5, YTOP = 48, YBASE = 200;
+  var PANEL = { pop: { l: 60, r: 450 }, mean: { l: 545, r: 935 } };
+  var SVGNS = "http://www.w3.org/2000/svg";
+
+  var gPop = document.getElementById("cs-pop");
+  var gMean = document.getElementById("cs-mean");
+  var gAxis = document.getElementById("cs-axis");
+  var nIn = document.getElementById("cs-n");
+  var nOut = document.getElementById("cs-nout");
+  var out = {
+    mu: document.getElementById("cs-mu"), se: document.getElementById("cs-se"),
+    obsm: document.getElementById("cs-obsm"), obss: document.getElementById("cs-obss"),
+    count: document.getElementById("cs-count")
+  };
+
+  var shape = "uniform", n = 5;
+  var means = [], sum = 0, sumsq = 0, lastSample = null;
+
+  /* ---- helpers ---- */
+  function el(tag, attrs, styleStr) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (styleStr) e.setAttribute("style", styleStr);
+    return e;
+  }
+  function sx(panel, v) {                       /* value → x pixel */
+    var p = PANEL[panel];
+    return p.l + (v - X0) / (X1 - X0) * (p.r - p.l);
+  }
+  function sy(v, vmax) {                        /* height → y pixel */
+    return YBASE - (v / vmax) * (YBASE - YTOP);
+  }
+  function stats(p) {
+    var m = 0, m2 = 0;
+    for (var i = 0; i < 6; i++) { m += VALUES[i] * p[i]; m2 += VALUES[i] * VALUES[i] * p[i]; }
+    return { mu: m, sd: Math.sqrt(m2 - m * m) };
+  }
+  function draw1(p) {                            /* one value from the population */
+    var u = Math.random(), c = 0;
+    for (var i = 0; i < 6; i++) { c += p[i]; if (u < c) return VALUES[i]; }
+    return 6;
+  }
+
+  /* ---- one-off: the shared x-axis ticks on both panels ---- */
+  (function axes() {
+    ["pop", "mean"].forEach(function (panel) {
+      VALUES.forEach(function (v) {
+        var x = sx(panel, v);
+        gAxis.appendChild(el("line", { x1: x, y1: YBASE, x2: x, y2: YBASE + 5, "stroke-width": 1.5 },
+          "stroke:var(--ink-soft)"));
+        var t = el("text", { x: x, y: YBASE + 20, "font-size": 15, "text-anchor": "middle" },
+          "fill:var(--muted)");
+        t.textContent = v;
+        gAxis.appendChild(t);
+      });
+    });
+  })();
+
+  /* ---- draw the population panel (only changes when the shape does) ---- */
+  function renderPop() {
+    var p = SHAPES[shape], s = stats(p);
+    var ymax = Math.max.apply(null, p) * 1.15;
+    while (gPop.firstChild) gPop.removeChild(gPop.firstChild);
+
+    var half = (sx("pop", 1.35) - sx("pop", 1)) ;
+    for (var i = 0; i < 6; i++) {
+      var y = sy(p[i], ymax);
+      gPop.appendChild(el("rect", {
+        x: sx("pop", VALUES[i]) - half, y: y, width: half * 2, height: YBASE - y, rx: 3
+      }, "fill:var(--ink-soft);fill-opacity:.55"));
+    }
+    gPop.appendChild(el("line", {
+      x1: sx("pop", s.mu), y1: YTOP - 4, x2: sx("pop", s.mu), y2: YBASE,
+      "stroke-width": 2, "stroke-dasharray": "6 5"
+    }, "stroke:var(--accent-warm)"));
+    var lab = el("text", {
+      x: sx("pop", s.mu), y: YTOP - 9, "font-size": 14, "font-weight": 700, "text-anchor": "middle"
+    }, "fill:var(--accent-warm)");
+    lab.textContent = "μ = " + s.mu.toFixed(2);
+    gPop.appendChild(lab);
+
+    /* the individual values of the sample just drawn, as dots on the axis:
+       two per row so a tall stack never bleeds into the neighbouring value */
+    if (lastSample) {
+      var tally = {};
+      lastSample.forEach(function (v) {
+        tally[v] = (tally[v] || 0) + 1;
+        gPop.appendChild(el("circle", {
+          cx: sx("pop", v) + (tally[v] % 2 ? 6 : -6),
+          cy: Math.max(YTOP + 4, YBASE - 8 - Math.floor((tally[v] - 1) / 2) * 10), r: 4
+        }, "fill:var(--neg)"));
+      });
+    }
+  }
+
+  /* ---- draw the sample-mean panel ---- */
+  function renderMean() {
+    var p = SHAPES[shape], s = stats(p);
+    var se = s.sd / Math.sqrt(n);
+    while (gMean.firstChild) gMean.removeChild(gMean.firstChild);
+
+    /* Bin width tracks the spacing of achievable means (1/n) until that gets
+       finer than 0.1, so small n shows the true discrete spikes rather than
+       an arbitrary comb — at n = 1 the panel reproduces the population. */
+    var exact = (1 / n) >= 0.1, bw = exact ? 1 / n : 0.1, bins = {};
+    means.forEach(function (m) {
+      var k = exact ? Math.round(m * n) : Math.floor((m - X0) / bw);
+      bins[k] = (bins[k] || 0) + 1;
+    });
+    function centre(k) { return exact ? k / n : X0 + (k + 0.5) * bw; }
+
+    var peak = 1 / (se * Math.sqrt(2 * Math.PI));
+    var hmax = 0;
+    for (var k in bins) hmax = Math.max(hmax, bins[k] / means.length / bw);
+    var ymax = Math.max(hmax, peak) * 1.12 || 1;
+
+    var half = (sx("mean", X0 + bw) - sx("mean", X0)) / 2;
+    for (var key in bins) {
+      var d = bins[key] / means.length / bw, y = sy(d, ymax);
+      gMean.appendChild(el("rect", {
+        x: sx("mean", centre(+key)) - half, y: y,
+        width: Math.max(1.5, half * 2 - 1), height: YBASE - y
+      }, "fill:var(--accent);fill-opacity:.75"));
+    }
+
+    /* the predicted normal curve */
+    var d = "", first = true;
+    for (var px = PANEL.mean.l; px <= PANEL.mean.r; px += 3) {
+      var v = X0 + (px - PANEL.mean.l) / (PANEL.mean.r - PANEL.mean.l) * (X1 - X0);
+      var z = (v - s.mu) / se;
+      var y2 = sy(Math.exp(-0.5 * z * z) / (se * Math.sqrt(2 * Math.PI)), ymax);
+      d += (first ? "M" : "L") + px.toFixed(1) + "," + y2.toFixed(1);
+      first = false;
+    }
+    gMean.appendChild(el("path", { d: d, fill: "none", "stroke-width": 3 }, "stroke:var(--neg)"));
+
+    gMean.appendChild(el("line", {
+      x1: sx("mean", s.mu), y1: YTOP - 4, x2: sx("mean", s.mu), y2: YBASE,
+      "stroke-width": 2, "stroke-dasharray": "6 5"
+    }, "stroke:var(--accent-warm)"));
+
+    /* mark where the sample just drawn landed */
+    if (lastSample) {
+      var lm = lastSample.reduce(function (a, b) { return a + b; }, 0) / lastSample.length;
+      gMean.appendChild(el("line", {
+        x1: sx("mean", lm), y1: YBASE - 34, x2: sx("mean", lm), y2: YBASE,
+        "stroke-width": 3
+      }, "stroke:var(--neg)"));
+      gMean.appendChild(el("circle", { cx: sx("mean", lm), cy: YBASE - 40, r: 5 }, "fill:var(--neg)"));
+    }
+
+    /* readouts */
+    out.mu.textContent = s.mu.toFixed(2);
+    out.se.textContent = se.toFixed(3);
+    out.count.textContent = means.length;
+    if (means.length > 1) {
+      var mbar = sum / means.length;
+      var sd = Math.sqrt(Math.max(0, (sumsq - means.length * mbar * mbar) / (means.length - 1)));
+      out.obsm.textContent = mbar.toFixed(2);
+      out.obss.textContent = sd.toFixed(3);
+    } else {
+      out.obsm.textContent = "—";
+      out.obss.textContent = "—";
+    }
+  }
+
+  function render() { renderPop(); renderMean(); }
+
+  /* ---- actions ---- */
+  function addSamples(count, keepLast) {
+    var p = SHAPES[shape];
+    for (var j = 0; j < count; j++) {
+      var s = [], t = 0;
+      for (var i = 0; i < n; i++) { var v = draw1(p); s.push(v); t += v; }
+      var m = t / n;
+      means.push(m); sum += m; sumsq += m * m;
+      if (keepLast) lastSample = s;
+    }
+    render();
+  }
+  function reset(prefill) {
+    means = []; sum = 0; sumsq = 0; lastSample = null;
+    if (prefill) addSamples(200, false); else render();
+  }
+
+  slide.querySelectorAll(".ptab[data-shape]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      shape = btn.dataset.shape;
+      /* deck.js also listens on .ptab and marks the previously-active tab
+         .done (a ✓, right for worked-example parts, wrong for a shape
+         selector). Its listener is registered after ours — deck.js is
+         deferred, this script is not — so clear the class once the whole
+         synchronous handler queue has run. */
+      setTimeout(function () {
+        slide.querySelectorAll(".ptab").forEach(function (t) { t.classList.remove("done"); });
+      }, 0);
+      reset(true);
+    });
+  });
+  nIn.addEventListener("input", function () {
+    n = +nIn.value; nOut.textContent = n; reset(true);
+  });
+  document.getElementById("cs-one").addEventListener("click", function () { addSamples(1, true); });
+  document.getElementById("cs-many").addEventListener("click", function () { lastSample = null; addSamples(200, false); });
+  document.getElementById("cs-clear").addEventListener("click", function () { reset(false); });
+
+  reset(true);
+})();
+</script>
 </body>
 </html>

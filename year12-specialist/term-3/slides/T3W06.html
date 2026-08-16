@@ -101,8 +101,9 @@
     <tr><td>"has the mean <b>changed</b>?"</td><td>\(\mu \neq \mu_0\)</td><td>\(2\,P(Z \geq |z|)\)</td></tr>
   </table>
   <ul style="margin-top:22px;">
-    <li>Two-tail: extreme in <b>either</b> direction counts as evidence against \(H_0\) — so the one-tail probability doubles.</li>
-    <li>Same data can reject in a one-tail test yet fail to reject in a two-tail test.</li>
+    <li><b>Two-tail: extreme in <i>either</i> direction counts as evidence against \(H_0\), so the one-tail probability doubles.</b> The \(p\)-value asks how likely a result "at least as extreme as ours" would be. Under a directional \(H_1\), only departures the predicted way count as extreme. Under "has it changed?", a departure of the same size the <i>other</i> way would have been just as damning — so that tail has to be counted too, and by symmetry it contributes an equal area.</li>
+    <li><b>Same data can reject one-tailed yet survive two-tailed.</b> Nothing about the sample changed; the standard of evidence did. Doubling the \(p\)-value can push it across \(\alpha\), which is why a two-tail test is described as more <b>conservative</b> — it demands a larger gap between \(\bar{x}\) and \(\mu_0\) before it will reject.</li>
+    <li><b>Decide the tail structure from the wording, before you look at \(\bar{x}\).</b> "Reduced", "improved", "overfills" are directional and give one tail; "changed", "differs", "still correct?" are not and give two. Choosing after seeing the data — noticing \(\bar{x}\) came out low and <i>then</i> testing for a decrease — halves your \(p\)-value by sleight of hand, and it is the reason the conventions are stated so firmly. One tail is legitimate only when theory told you the direction in advance.</li>
   </ul>
 </section>
 
@@ -144,9 +145,9 @@
   <div class="kicker">Lesson 2 · 16C–16D</div>
   <h1>Confidence intervals, and \(|\bar{X} - \mu|\)</h1>
   <ul class="goals">
-    <li>A two-tail test at level \(\alpha\) rejects \(\mu_0\) exactly when \(\mu_0\) is outside the \((1-\alpha)\) CI.</li>
-    <li>Use whichever view the question asks for — and check one with the other.</li>
-    <li>Write a two-tail \(p\)-value as an <b>absolute-value</b> probability, and read questions phrased as "differs by at least …".</li>
+    <li>A two-tail test at level \(\alpha\) rejects \(\mu_0\) exactly when \(\mu_0\) lies outside the \((1-\alpha)\) confidence interval.</li>
+    <li>Use whichever view the question asks for — and check one against the other.</li>
+    <li>Write a two-tail \(p\)-value as an <b>absolute-value</b> probability, and handle questions phrased as "differs by at least …".</li>
   </ul>
 </section>
 
@@ -154,6 +155,8 @@
   <h2>Two views of one computation</h2>
   <div class="box defn"><span class="lbl">Fact (16C)</span>
     <p>A two-tail test at the 5% level rejects \(H_0: \mu = \mu_0\) <b>exactly when</b> \(\mu_0\) falls outside the 95% confidence interval \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\).</p>
+    <p>The two procedures are the same inequality read from opposite ends. Rejecting means \(\left|\bar{x} - \mu_0\right| &gt; 1.96\,\sigma/\sqrt{n}\) — the sample mean sits more than \(1.96\) standard deviations from the hypothesised centre. The interval excludes \(\mu_0\) under exactly the same condition, since \(\mu_0\) is outside \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\) precisely when that same distance is exceeded. Both are the statement \(|a - b| &gt; c\), with the roles of \(\bar{x}\) and \(\mu_0\) swapped.</p>
+    <p>Two things follow. First, a confidence interval quietly tests <i>every</i> possible \(\mu_0\) at once: any value inside it would survive, any value outside would be rejected. Second, they can never disagree — so if your test rejects but your interval contains \(\mu_0\), you have made an arithmetic error, and this is the fastest check available on a two-tail question.</p>
   </div>
   <div class="box example"><span class="lbl">Example 2</span>
     <p>A process should run at \(\mu_0 = 100\) units/hr; \(\sigma = 14\). A sample of \(n = 49\) hours gives \(\bar{x} = 104.2\). Test "has the rate changed?" at 5%, and confirm via the CI.</p>
@@ -237,9 +240,10 @@
     <tr><td><b>Do not reject \(H_0\)</b></td><td class="c">correct ✓</td><td class="c" style="color:var(--red);"><b>Type II error</b></td></tr>
   </table>
   <ul style="margin-top:22px;">
-    <li><b>Type I</b>: a false alarm — concluding something changed when it didn't. \(P(\text{Type I}) = \alpha\), the significance level. We choose it.</li>
-    <li><b>Type II</b>: a miss — failing to detect a real change. Its probability depends on the true \(\mu\), \(n\) and \(\alpha\); we don't control it directly.</li>
-    <li>Trade-off: shrinking \(\alpha\) makes false alarms rarer but misses more likely. More data improves both.</li>
+    <li><b>Type I: a false alarm</b> — rejecting \(H_0\) when it was true, concluding something changed when nothing did. \(P(\text{Type I}) = \alpha\), and that equality is not a coincidence: \(\alpha\) is defined as the \(p\)-value threshold for rejection, and by construction the \(p\)-value of a true \(H_0\) falls below \(\alpha\) exactly \(\alpha\) of the time. So testing at 5% is a decision to accept a 5% false-alarm rate, made before any data is seen.</li>
+    <li><b>Type II: a miss</b> — failing to reject \(H_0\) when it was false, letting a real change go undetected. Its probability cannot be quoted as a single number, because "\(H_0\) is false" does not say <i>by how much</i>. A change of 0.5 units is far easier to miss than a change of 5, so a Type II probability only exists once the question supplies a specific true \(\mu\) — which is why every such exercise hands you one.</li>
+    <li><b>The trade-off, and the way out of it.</b> Lowering \(\alpha\) to 0.01 makes false alarms rarer, but it also raises the bar for rejection, so genuine effects slip through more often and Type II errors increase. Tightening one loosens the other, for a fixed sample. Increasing \(n\) is the only move that improves both at once: it shrinks \(\text{sd}(\bar{X})\), which separates the two distributions and leaves less overlap for either error to live in. That is the statistical case for a larger study, and Checkpoint 4 puts a number on it.</li>
+    <li><b>Which error is worse depends on the context, not the mathematics.</b> For a smoke alarm, a miss is catastrophic and a false alarm merely irritating, so you would set \(\alpha\) high. For a criminal conviction, the reverse. The mathematics fixes the trade-off; only the situation decides where on it you want to sit.</li>
   </ul>
 </section>
 
@@ -254,6 +258,7 @@
   </div>
   <div class="box key"><span class="lbl">Template sentence</span>
     <p>"Concluding that <em>[the change happened]</em> when in fact <em>[it didn't]</em>" — name the conclusion, name the truth, keep the units and the story.</p>
+    <p>Both halves are required, and that is what makes these questions marked rather than trivial. "A Type I error is rejecting a true null hypothesis" restates the definition without engaging with the scenario and earns little; the answer has to say what was concluded <i>about this drug</i>, and what was actually the case. Note the two halves always disagree — that disagreement is what makes it an error — and that a Type I error is impossible when \(H_0\) is false, just as a Type II error is impossible when \(H_0\) is true. Only one of the two can be on the table at any moment; you simply never know which.</p>
   </div>
 </section>
 
@@ -300,7 +305,9 @@
     <li class="frag">\(z = \dfrac{4.671 - 4.5}{0.2} = 0.855\), so \(P(\text{Type II}) = P(Z &gt; 0.855) \approx 0.20\).</li>
   </ul>
   <div class="box key"><span class="lbl">Reading</span>
-    <p>Even a genuinely better drug is missed 20% of the time with \(n = 25\). Larger samples shrink this — which is why trials are big.</p>
+    <p>Even a genuinely better drug — half a day faster, a real and useful improvement — is missed 20% of the time with \(n = 25\). One trial in five would conclude "insufficient evidence" and shelve a drug that works.</p>
+    <p>Worth being clear about the structure of the calculation, because it is what makes these questions feel harder than they are. There are <b>two different distributions</b> in play. The critical value \(4.671\) is found from the distribution under \(H_0\), centred at 5, because that is what defines the rejection rule. The probability of a miss is then computed from the distribution under the <i>true</i> mean, centred at 4.5, because that is the world we are now assuming we live in. Same \(\text{sd}(\bar{X}) = 0.2\), same cut-off, different centre — and forgetting to re-centre is the standard error here.</p>
+    <p>The practical moral is the one the next checkpoint quantifies: a study too small to detect the effect it is looking for wastes everyone's time, and the fix is sample size.</p>
   </div>
 </section>
 
@@ -354,11 +361,11 @@
 <section class="slide" data-topic="T3W06 · Inference II">
   <h2>Chapter 16 summary</h2>
   <ul>
-    <li>\(H_1\) direction comes from the question's wording; two-tail doubles the \(p\)-value.</li>
-    <li>Two-tail test at level \(\alpha\) ↔ \((1-\alpha)\) confidence interval (16C).</li>
-    <li>Absolute-value form (16D): \(p = \Pr\big(|\bar{X} - \mu| \ge |\bar{x} - \mu|\big) = \Pr(|Z| \ge |z|) = 2\Pr(Z \le -|z|)\).</li>
-    <li>Type I = false alarm, probability \(\alpha\); Type II = miss. Both described in context, both computable from a critical value.</li>
-    <li>All of Chapters 15–16 is now on the table: SAC 3 is Thu 27 Aug.</li>
+    <li><b>\(H_1\)'s direction comes from the question's wording, and two-tail doubles the \(p\)-value.</b> "Reduced" or "overfills" gives one tail; "changed" or "differs" gives two. Fix it before you look at \(\bar{x}\) — choosing after seeing the data halves your \(p\)-value illegitimately, and two tails is the conservative default whenever the wording does not commit.</li>
+    <li><b>A two-tail test at level \(\alpha\) agrees exactly with the \((1-\alpha)\) confidence interval (16C).</b> Both reduce to asking whether \(|\bar{x} - \mu_0|\) exceeds \(z\,\sigma/\sqrt{n}\), so they can never disagree — which makes each a free check on the other.</li>
+    <li><b>Absolute-value form (16D): \(p = \Pr\big(|\bar{X} - \mu| \ge |\bar{x} - \mu|\big) = \Pr(|Z| \ge |z|) = 2\Pr(Z \le -|z|)\).</b> This states in one line what "extreme in either direction" means: it is the <i>distance</i> from the hypothesised mean that counts, not the direction. Standardise before applying it — divide by \(\sigma\) for a single value of \(X\), by \(\sigma/\sqrt{n}\) for a sample mean.</li>
+    <li><b>Type I = false alarm, with probability \(\alpha\); Type II = miss, with a probability that depends on the true \(\mu\).</b> Describe both in context, naming the conclusion and the truth. Both are computable once a critical value is fixed — Type I from the \(H_0\) centre, Type II from the true centre.</li>
+    <li><b>All of Chapters 15–16 is now on the table</b>, and the two halves connect: Chapter 15 establishes the distribution of \(\bar{X}\), Chapter 16 does nothing but rearrange it — forwards to build an interval, backwards to test a claim. SAC 3 is Thu 27 Aug.</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Problem Set 4 (Hypothesis Testing) + the SAC 3 revision pack. Bring questions on Monday.</p>

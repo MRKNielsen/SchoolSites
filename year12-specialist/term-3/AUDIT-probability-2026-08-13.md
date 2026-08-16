@@ -222,12 +222,149 @@ gap.
 
 ---
 
-## E · Verification performed
+## E · Follow-up: live CLT simulation added to T3W04 Lesson 3
+
+§15E is *"Investigating the distribution of the sample mean **using simulation**"*, and the
+pass above had only added the CAS commands for it — the deck still asserted what a simulation
+would show rather than showing it. A live simulation now sits between the CAS-syntax slide and
+the formal statement of the theorem, so the theorem is stated *after* the class has watched it
+happen.
+
+**What it does.** Two panels on a shared x-scale: the population on the left, a histogram of
+simulated sample means on the right with the predicted \(N(\mu, \sigma^2/n)\) curve overlaid.
+Four population shapes on \(\{1,\dots,6\}\) — all four exact, so every number on screen can be
+checked by hand:
+
+| shape | \(\mu\) | \(\sigma\) |
+|-------|--------|-----------|
+| Uniform (fair die) | 3.5 | 1.7078 |
+| Strongly skewed | 2.02 | 1.3113 |
+| Two peaks | 3.5 | 2.2023 |
+| Already bell-ish | 3.5 | 1.2042 |
+
+Controls: shape tabs, an \(n\) slider (1–50), and *Draw 1 sample* / *Draw 200* / *Clear*.
+A readout table puts predicted \(\mu\) and \(\sigma/\sqrt{n}\) beside the simulated mean and sd
+of the \(\bar{x}\) values, so the CLT's two quantitative claims are checkable live rather than
+taken on trust.
+
+**Three design decisions worth recording:**
+
+- **Shared x-scale across both panels.** The narrowing of \(\bar{X}\) is then a direct visual
+  comparison against the population it came from, rather than two separately-scaled charts.
+- **Bin width tracks \(1/n\)** until that becomes finer than 0.1. Sample means from a discrete
+  population *are* discrete, and fixed bins turn that into a misleading comb. A consequence
+  worth using in class: at \(n = 1\) the right panel reproduces the left panel exactly.
+- **Draw 1 sample** marks the \(n\) individual values on the population panel and the single
+  \(\bar{x}\) they produce on the mean panel — the step students most often lose, since the
+  right-hand histogram is a distribution of *summaries*, not of observations.
+
+The skewed population is the one to dwell on: it is the only shape still visibly asymmetric at
+\(n = 5\), which is what the text's "unless the distribution is very skewed" caveat means.
+
+**Sizing.** The chart is deliberately modest: a `960 × 252` viewBox capped at `max-width: 880px`
+and centred, so it renders about `880 × 231` px rather than filling the slide width. That matches
+how the static figures in T3W03 are constrained, and it leaves the slide's tabs, controls,
+readout table and closing note comfortably above the fold on a 1080p projector — the chart is a
+demonstration inside the lesson, not the whole slide.
+
+**Implementation notes.** One slide-local `<script>` at the end of T3W04, after deck.js — no
+navigation logic, no new CSS, no new palette. Every colour is a token
+(`--accent`, `--accent-warm`, `--ink-soft`, `--neg`, `--muted`); every layout class already
+exists in deck.css (`.graph-card`, `.ctrl`, `.parts`, `.ptab`, `.legend`, `.tbl`, `.reveal-btn`).
+Two interactions with shared code were handled explicitly:
+
+- SVG text is written in words, not MathJax — MathJax cannot reach inside `<svg>`
+  (see CLAUDE.md). Symbols appear in the surrounding HTML instead.
+- deck.js also listens on `.ptab` and marks the outgoing tab `.done` (a ✓, correct for
+  worked-example parts, wrong for a shape selector). Its listener is registered *after* the
+  inline script's — deck.js is deferred, the inline script is not — so the class is cleared on
+  a zero-delay timeout, once the synchronous handler queue has drained.
+- The chart and controls carry `data-noswipe`, and deck.js's keyboard handler already ignores
+  `input` elements, so dragging the slider on a touchscreen or whiteboard cannot advance the
+  deck.
+
+**Verified** by loading the real page (with the real deck.js) in jsdom and driving it: no
+console errors; axis, bars and curve all render; every button and the slider behave; tab state
+ends with exactly one `.active` and no stray `.done`; arrow keys do not steal focus from the
+slider; and nothing — bar, curve, μ label or sample dot — falls outside its panel across all
+four shapes at \(n = 1, 2, 3, 5, 10, 11, 30, 50\), including the worst-case dot stack (skewed
+population, \(n = 50\), most values landing on \(x = 1\)). The simulated sd
+of \(\bar{x}\) matched \(\sigma/\sqrt{n}\) at every \(n\) tested (e.g. skewed population:
+0.398 vs 0.415 at \(n=10\), 0.230 vs 0.239 at \(n=30\), 0.175 vs 0.185 at \(n=50\)).
+
+T3W04 is now 22 slides.
+
+---
+
+## F · Follow-up: explanations expanded across all six decks
+
+The decks were written to be projected, so most points were single-clause assertions — correct,
+but stating *what* is true without saying *why*. Since these pages are also the version a
+student reads alone on the site, every explanatory bullet has been rewritten as a short bold
+lead followed by full reasoning.
+
+**The pattern used throughout**, so the decks still work on a screen at the back of a room:
+
+> **Variances add even when you subtract.** Mechanically this is the rule with \(b = -1\):
+> the coefficient is squared and the minus sign disappears. But it is the *right* answer, not
+> an accident of the algebra — uncertainty in \(Y\) makes \(X - Y\) uncertain in exactly the
+> way uncertainty in \(X\) does. Errors accumulate; they do not cancel…
+
+The eye still lands on the bold claim; the reasoning is there for anyone who stops.
+
+**What the expansions consistently cover** — each point now answers three questions rather
+than one: *what is true*, *why it is true*, and *why the wrong answer is tempting*. So the
+variance rules are traced back to the square in the definition of variance; the \(2X\) versus
+\(X_1 + X_2\) distinction is explained through cancellation rather than asserted; "do not
+reject" is separated from "accept" via the jury analogy the text itself uses; and the
+confidence-interval interpretation is grounded in *the interval is random, \(\mu\) is fixed*.
+Several additions quantify the cost of the standard error — taking the wrong variance route in
+the swimming example gives \(p \approx 0.065\) instead of \(0.212\), and the lift example
+gives a 31% overload risk instead of 2.3% — because a wrong answer that looks plausible is
+exactly the kind students do not catch.
+
+| deck | slides | words before | words after | growth |
+|------|-------:|-------------:|------------:|-------:|
+| T3W00 | 23 | 2 420 | 4 303 | +78% |
+| T3W03 | 25 | 2 723 | 3 863 | +42% |
+| T3W04 | 22 | 1 866 | 3 434 | +84% |
+| T3W05 | 25 | 2 564 | 3 608 | +41% |
+| T3W06 | 23 | 2 338 | 3 311 | +42% |
+| T3W07 | 15 | 1 108 | 1 647 | +49% |
+| **total** | **133** | **13 019** | **20 166** | **+55%** |
+
+**Left deliberately terse:** the learning-intention lists on section dividers, the week-map
+tables, the numbered reveal steps inside worked examples (prose there would break the pacing of
+the reveal), and the rapid-fire drill in T3W07. Those are scaffolding, not explanation.
+
+**Fit.** No slide splitting was needed. Estimating rendered height against the deck's own
+typography — 16.5 px body text at line-height 1.5, 90 vw content width, on a 1080p projector
+with about 918 px of usable height — the tallest slide in the set is the T3W04 simulation at
+roughly 908 px, and every other slide sits comfortably below. Note that `.frag` uses
+`visibility: hidden`, not `display: none`, so hidden reveal content occupies its space at all
+times and is included in those figures. Slides that do overflow are handled gracefully anyway
+by deck.css's scroll-and-fade, so the risk here is aesthetic rather than functional.
+
+**One typographic consequence worth a decision.** At 90 vw with no measure constraint, a
+full-width line of body text runs to roughly 200 characters on a 1080p display — well beyond
+the 45–75 that reads comfortably. This was already true of the decks before this pass; longer
+paragraphs simply make it visible. deck.css already contains the fix in miniature
+(`.lede { max-width: 66ch }`), but `.lede` also greys its text, so it is wrong for primary
+content. Adding a measure cap to `.slide > p` and `.slide > ul` in deck.css would improve every
+deck in the repo at once — including other educators' — so it is left as a proposal rather than
+done unilaterally.
+
+---
+
+## G · Verification performed
 
 - **Numeric.** Every figure in every slide added or edited was recomputed in Python
   (`scipy.stats.norm` for tail areas, `sympy` for the density-function integrals) and matched
   to the printed value. All 60+ checks pass, including the two-way spinner table enumerated
   from first principles and cross-checked against \(2\mu\) and \(2\sigma^2\).
+- **Interactive.** The T3W04 simulation was driven headlessly in jsdom against the real page
+  and the real deck.js — see section E for what was exercised and the predicted-vs-simulated
+  figures.
 - **Structural.** All six decks parse with balanced tags and no unclosed elements.
   Example numbering is sequential and gap-free in each deck after the insertions
   (T3W03: 1–9, T3W04: 1–4, T3W05: 1–6, T3W06: 1–6).

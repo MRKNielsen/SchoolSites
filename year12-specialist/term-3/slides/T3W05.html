@@ -95,9 +95,9 @@
   <h2>The 95% confidence interval</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[\left(\bar{x} - 1.96\,\frac{\sigma}{\sqrt{n}},\;\; \bar{x} + 1.96\,\frac{\sigma}{\sqrt{n}}\right)\]</p>
   <ul>
-    <li>Where does 1.96 come from? \(P(-1.96 &lt; Z &lt; 1.96) = 0.95\) for the standard normal.</li>
-    <li>If \(\sigma\) is unknown and \(n\) is large, use the sample standard deviation \(s\) in its place.</li>
-    <li>Other levels: 90% ↔ 1.645, 99% ↔ 2.576 — wider confidence costs a wider interval.</li>
+    <li><b>Where 1.96 comes from, and why the interval has this shape.</b> Start from \(\bar{X} \sim N(\mu, \sigma^2/n)\), so \(P\!\left(-1.96 &lt; \tfrac{\bar{X}-\mu}{\sigma/\sqrt{n}} &lt; 1.96\right) = 0.95\). Multiply through by \(\sigma/\sqrt{n}\) and rearrange to put \(\mu\) in the middle, and the statement becomes \(P\!\left(\bar{X} - 1.96\tfrac{\sigma}{\sqrt n} &lt; \mu &lt; \bar{X} + 1.96\tfrac{\sigma}{\sqrt n}\right) = 0.95\). The confidence interval is not a new idea — it is last week's distribution of \(\bar{X}\), with the algebra rearranged so the unknown sits alone.</li>
+    <li><b>Other levels: 90% ↔ 1.6449, 95% ↔ 1.9600, 99% ↔ 2.5758.</b> Each is the \(z\) that leaves the required area in the middle, so demanding more confidence forces you further into the tails and produces a wider interval. There is no way around that trade: for a fixed sample, certainty and precision are in direct competition, and the only way to buy both at once is more data.</li>
+    <li><b>If \(\sigma\) is unknown and \(n\) is large (say \(n \ge 30\)), the sample standard deviation \(s\) may stand in for it.</b> This is an approximation on top of an approximation — which is why these are always called <i>approximate</i> confidence intervals — and it is only reasonable when the sample is big enough that \(s\) is a dependable estimate of \(\sigma\). Note that when a question supplies \(\sigma\) <i>and</i> a data list, you use the given \(\sigma\) and take only \(\bar{x}\) from the data; your calculator will happily report \(s_x\), and it is not what the formula wants.</li>
   </ul>
   <div class="box example"><span class="lbl">Example 1</span>
     <p>\(n = 36\) batteries last \(\bar{x} = 25\) hours on average; \(\sigma = 6\) hours. Find the 95% CI for \(\mu\).</p>
@@ -111,12 +111,15 @@
 <section class="slide" data-topic="Lesson 1 · Confidence intervals">
   <h2>What "95% confident" actually means</h2>
   <ul>
-    <li>The interval is random; \(\mu\) is fixed. Before sampling, there is a 95% chance the interval we <b>will construct</b> captures \(\mu\).</li>
-    <li>Correct sentence: "If we repeated this sampling process many times, about 95% of the intervals produced would contain \(\mu\)."</li>
-    <li><b>Not</b> correct: "There is a 95% probability that \(\mu\) lies in \((23.04, 26.96)\)" — once computed, the interval either contains \(\mu\) or it doesn't.</li>
+    <li><b>The interval is random; \(\mu\) is fixed.</b> This inversion is the whole difficulty. \(\mu\) is a fixed number — the true mean battery life is whatever it is, and it is not wandering about. What varies from study to study is the <i>interval</i>, because it is built from \(\bar{x}\), which changes with the sample. So the 95% is a property of the <b>procedure</b>, not of any particular answer it produced.</li>
+    <li><b>Correct sentence:</b> "If we repeated this sampling process many times, about 95% of the intervals produced would contain \(\mu\)." Before you sample, there is a 95% chance that the interval you are <i>about to build</i> will capture \(\mu\) — a perfectly ordinary probability statement about a random thing that has not happened yet.</li>
+    <li><b>Not correct:</b> "There is a 95% probability that \(\mu\) lies in \((23.04, 26.96)\)." Once the numbers are computed, nothing random is left. \(\mu\) either is in that interval or it isn't; the probability is 0 or 1, we simply do not know which. It is like saying a coin already tossed and covered has a 50% chance of being heads — the uncertainty is now in your knowledge, not in the coin.</li>
+    <li><b>Why examiners are strict about this.</b> The two statements are one word apart and sound interchangeable, so the wording is the only evidence of whether the idea is understood. Say "of such intervals" or "if the process were repeated" and you are safe; say "the probability that \(\mu\) is between…" and you have made the claim the course spends a section warning against.</li>
   </ul>
   <div class="box key"><span class="lbl">Width levers</span>
-    <p>Width \(= 2z\dfrac{\sigma}{\sqrt{n}}\). To halve the width: quadruple \(n\), or accept lower confidence. Exam questions love "find \(n\) so the width is at most …".</p>
+    <p>Width \(= 2z\dfrac{\sigma}{\sqrt{n}}\), so there are exactly three things that can change it — and only two you control.</p>
+    <p><b>\(n\)</b> is the honest lever: more data narrows the interval without giving anything up, but only at a square-root rate, so halving the width costs four times the sampling. <b>\(z\)</b> is the cheap lever: accepting 90% confidence instead of 99% narrows the interval immediately, but you have bought precision by lowering your standard of certainty rather than by learning anything more. <b>\(\sigma\)</b> is not a lever at all — it is a property of the population, fixed before you arrived.</p>
+    <p>Exam questions love "find \(n\) so the width is at most …", and the next lesson is entirely about getting those right.</p>
   </div>
 </section>
 
@@ -279,9 +282,10 @@
   <div class="cols even">
     <div class="col">
       <ul>
-        <li><b>Null hypothesis</b> \(H_0: \mu = \mu_0\) — the status quo, "nothing has changed".</li>
-        <li><b>Alternative</b> \(H_1\) — what we suspect: \(\mu &lt; \mu_0\), \(\mu &gt; \mu_0\) or \(\mu \neq \mu_0\).</li>
-        <li>Strategy: assume \(H_0\), then measure how surprising the data would be.</li>
+        <li><b>Null hypothesis \(H_0: \mu = \mu_0\)</b> — the status quo, "nothing has changed". It always states a single specific value, because you cannot compute probabilities from a vague claim: the whole method needs one definite \(\mu\) to build a distribution around.</li>
+        <li><b>Alternative \(H_1\)</b> — what we suspect: \(\mu &lt; \mu_0\), \(\mu &gt; \mu_0\) or \(\mu \neq \mu_0\). This is the claim the researcher is actually interested in, and it is deliberately the one that has to <i>earn</i> its acceptance.</li>
+        <li><b>Strategy: assume \(H_0\), then measure how surprising the data would be.</b> The test is an argument by contradiction, softened into probability — suppose nothing has changed, work out how unlikely a result like ours would be under that supposition, and if the answer is "very", treat the supposition as untenable. It parallels a criminal trial: the accused is presumed innocent, and the evidence must be inconsistent enough with innocence to overturn it.</li>
+        <li><b>Which is why the hypotheses come before the data.</b> Choosing \(H_1\) after seeing which way \(\bar{x}\) fell guarantees you point the test in the flattering direction, and the \(p\)-value it returns no longer means what it claims to.</li>
       </ul>
     </div>
     <div class="col narrow">
@@ -291,7 +295,9 @@
     </div>
   </div>
   <div class="box key"><span class="lbl">Decision rule</span>
-    <p>Small \(p\)-value (below the significance level, usually \(\alpha = 0.05\)) → the data are too surprising for \(H_0\) → <b>reject \(H_0\)</b>. Otherwise: <b>do not reject</b> \(H_0\) — which is not the same as proving it true.</p>
+    <p>Small \(p\)-value (below the significance level, usually \(\alpha = 0.05\)) → the data are too surprising for \(H_0\) → <b>reject \(H_0\)</b>. Otherwise: <b>do not reject</b> \(H_0\).</p>
+    <p><b>"Do not reject" is not "accept".</b> Failing to reject means the evidence was not strong enough to rule \(H_0\) out — not that \(H_0\) has been shown true. A jury returning "not guilty" has not established innocence; it has found the case insufficient. In statistical terms, a small sample or a large \(\sigma\) can leave you unable to detect a real change, so a large \(p\)-value is consistent both with "nothing changed" and with "something changed but this test could not see it".</p>
+    <p>The wording matters on the page. "There is insufficient evidence to conclude that the mean has decreased" is right; "the mean has not decreased" and "\(H_0\) is true" are both wrong, and both are marked as such.</p>
   </div>
 </section>
 
@@ -376,11 +382,11 @@
 <section class="slide" data-topic="Lesson 4 · Full tests">
   <h2>The five-line setting-out</h2>
   <ol>
-    <li><b>Hypotheses:</b> \(H_0: \mu = \mu_0\); \(H_1\) with direction justified by the question's wording.</li>
-    <li><b>Distribution under \(H_0\):</b> \(\bar{X} \sim N(\mu_0,\, \sigma^2/n)\) — cite normal population or CLT.</li>
-    <li><b>Test statistic:</b> \(z = \dfrac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\) with the numbers shown.</li>
-    <li><b>p-value:</b> the correct tail probability, compared against \(\alpha\).</li>
-    <li><b>Conclusion in context:</b> reject / do not reject, then a sentence with units.</li>
+    <li><b>Hypotheses:</b> \(H_0: \mu = \mu_0\); \(H_1\) with its direction justified by the question's wording. Written first because everything downstream depends on them — and because writing them after the calculation invites you to choose the direction that flatters your data.</li>
+    <li><b>Distribution under \(H_0\):</b> \(\bar{X} \sim N(\mu_0,\, \sigma^2/n)\), citing either a normal population or the CLT. The phrase "under \(H_0\)" is doing real work: you are building the distribution the sample mean <i>would</i> have if the null were true, because that is the only world in which the probability can be computed.</li>
+    <li><b>Test statistic:</b> \(z = \dfrac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\), with the numbers substituted visibly. This measures how many standard deviations of \(\bar{X}\) your sample fell from the hypothesised centre — the denominator is \(\text{sd}(\bar{X})\), not \(\sigma\), and that is where a large fraction of lost marks live.</li>
+    <li><b>\(p\)-value:</b> the correct tail probability, compared against \(\alpha\). The tail structure comes from \(H_1\), decided in line 1, which is why the lines have to be done in order.</li>
+    <li><b>Conclusion in context:</b> reject or do not reject, then a sentence naming the actual quantity and its units. "Reject \(H_0\)" alone answers a question about symbols; the question was about recovery times, or grams of flour.</li>
   </ol>
   <div class="box key"><span class="lbl">Marker's-eye view</span>
     <p>Each line carries marks independently. A correct \(p\)-value after wrong hypotheses still loses the setup marks — write line 1 before touching the CAS.</p>
@@ -416,10 +422,10 @@
 <section class="slide" data-topic="T3W05 · Inference I">
   <h2>Week 6 summary</h2>
   <ul>
-    <li>95% CI: \(\bar{x} \pm 1.96\sigma/\sqrt{n}\); interpret via repeated sampling, and know the width levers.</li>
-    <li>Tests: state \(H_0\) and \(H_1\) before touching the data; compute \(z\); convert to a \(p\)-value.</li>
-    <li>\(p &lt; \alpha\) → reject \(H_0\); otherwise "do not reject" — never "accept".</li>
-    <li>Conclusions live in context: days, grams, hours — not just symbols.</li>
+    <li><b>95% CI: \(\bar{x} \pm 1.96\,\sigma/\sqrt{n}\).</b> It is the distribution of \(\bar{X}\) rearranged so the unknown \(\mu\) sits alone in the middle. Interpret it through repeated sampling — 95% of such intervals capture \(\mu\) — and remember that the margin of error is the half-width, so "within \(d\) of \(\mu\)" and "width \(d\)" ask for different sample sizes by a factor of four.</li>
+    <li><b>Tests: state \(H_0\) and \(H_1\) before touching the data</b>, then compute \(z = (\bar{x}-\mu_0)/(\sigma/\sqrt n)\) and convert it to a tail probability. The denominator is \(\text{sd}(\bar{X})\), not \(\sigma\) — that single distinction accounts for more lost marks than anything else in the chapter.</li>
+    <li><b>\(p &lt; \alpha\) → reject \(H_0\); otherwise "do not reject" — never "accept".</b> The \(p\)-value measures how surprising the data would be <i>if \(H_0\) were true</i>; it is not the probability that \(H_0\) is true. And where no \(\alpha\) is given, grade the evidence instead: insufficient, good, strong, very strong.</li>
+    <li><b>Conclusions live in context.</b> Days, grams, hours — not just symbols. The final sentence is a marked step in its own right, and it is the one most often left off when time runs short, so write it as you go rather than saving it for the end.</li>
   </ul>
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Still to come: one-tail vs two-tail tests and their link to confidence intervals (16C) later this week, then the absolute-value form of a two-tail \(p\)-value (16D) and Type I and II errors (16E) in Week 7. SAC 3 is Thu 27 Aug — the revision pack is on the course hub.</p>

@@ -174,11 +174,14 @@
 <section class="slide" data-topic="Lesson 3 · Mark-losers">
   <h2>The four classic mark-losers</h2>
   <ul>
-    <li><b>Variance vs sd:</b> combining sds directly. Always combine <b>variances</b>, square-root at the end.</li>
-    <li><b>\(2X\) vs \(X_1 + X_2\):</b> "twice one item" vs "two random items". Var \(4\sigma^2\) vs \(2\sigma^2\).</li>
-    <li><b>Tail choice:</b> decided by the question's wording, before seeing the data. "Changed" = two-tail.</li>
-    <li><b>Conclusion language:</b> "do not reject \(H_0\)" (never "accept \(H_0\)"), and always a final sentence in context with units.</li>
+    <li><b>Variance vs sd — combining standard deviations directly.</b> Variances add; standard deviations do not. Writing \(\text{sd}(X+Y) = \text{sd}(X) + \text{sd}(Y)\) gives \(1.5 + 2 = 3.5\) where the truth is \(\sqrt{1.5^2+2^2} = 2.5\), and nothing in the answer looks wrong. It is tempting because every other rule this term <i>is</i> additive, and because the question usually hands you standard deviations. <b>The fix is procedural:</b> square them the moment you write them down, do the whole calculation in variances, and take one square root at the very end.</li>
+    <li><b>\(2X\) vs \(X_1 + X_2\) — "twice one item" against "two random items".</b> Variances \(4\sigma^2\) and \(2\sigma^2\); the means are identical, so nothing in the mean will ever warn you. It is tempting because the arithmetic \(2 \times\) is right there in the wording. <b>The fix:</b> ask how many times something random actually happened. Two boxes chosen means two independent values; one box, doubled, means one.</li>
+    <li><b>Tail choice — decided by the wording, before you see the data.</b> "Changed" or "differs" is two-tail; "reduced", "increased", "overfills" is one. It is tempting to settle this after computing \(\bar{x}\), because by then the direction is obvious — but that is precisely what makes it illegitimate, and it halves the \(p\)-value. <b>The fix:</b> write \(H_0\) and \(H_1\) as line one, before touching the CAS.</li>
+    <li><b>Conclusion language.</b> "Do not reject \(H_0\)", never "accept \(H_0\)" — failing to find evidence is not the same as establishing the null, exactly as "not guilty" is not "innocent". Then a final sentence naming the actual quantity and its units. It is tempting to stop at the \(p\)-value, since that is where the mathematics ends. <b>The fix:</b> treat the sentence as part of the answer, not a flourish — it is separately marked, and it is the step most often lost when time runs short.</li>
   </ul>
+  <div class="box hint"><span class="lbl">What these four have in common</span>
+    <p>None of them is a hard calculation, and none of them produces an answer that looks wrong. Each is a decision made in the first ten seconds of a question — which quantity to combine, how many random draws there were, which tail, what the question actually asked — that then propagates silently through correct arithmetic to a wrong result. That is why the remedy in every case is a habit at the start rather than a check at the end.</p>
+  </div>
   <div class="box try"><span class="lbl">Self-test</span>
     <p>Can you write, from memory, the distribution of \(\bar{X}\) for a sample of \(n\) from \(N(\mu, \sigma^2)\) — and say what changes if the population isn't normal?</p>
   </div>
@@ -229,10 +232,11 @@
 <section class="slide" data-topic="T3W07 · SAC 3 Revision">
   <h2>Final checklist</h2>
   <ul>
-    <li>Can I state the distribution of any linear combination of independent normals, unprompted?</li>
-    <li>Do I check the wording for \(2X\) vs \(X_1 + X_2\) — and for the tail structure — before computing?</li>
-    <li>Does every test I write have all five lines: hypotheses, distribution, statistic, \(p\)-value, conclusion in context?</li>
-    <li>Is my bound reference organised so I can find the formula board in five seconds?</li>
+    <li><b>Can I state the distribution of any linear combination of independent normals, unprompted?</b> Given any \(aX + bY + c\), can you write down its mean, its variance and the fact that it is normal without being asked for each separately? That single sentence is the gateway to most of Chapter 15, and it is worth being able to produce it cold rather than reconstructing it each time.</li>
+    <li><b>Do I check the wording for \(2X\) vs \(X_1 + X_2\), and for the tail structure, <i>before</i> computing?</b> Both are decisions, not calculations, and both are invisible in the final answer once made wrongly. If your habit is to read the question once and start writing, these are the two things to slow down for.</li>
+    <li><b>Does every test I write have all five lines?</b> Hypotheses, distribution under \(H_0\), test statistic, \(p\)-value, conclusion in context. They are marked separately, so a correct \(p\)-value with no stated hypotheses still loses the setup marks — and a correct calculation with no closing sentence loses the interpretation mark, which is the cheapest one on the page.</li>
+    <li><b>Can I tell which justification of normality a question needs?</b> Population stated normal → exact, cite that. Population unknown or given by a density, with \(n\) large → approximate, cite the central limit theorem. Naming the wrong one is a marked error even when every number that follows is right.</li>
+    <li><b>Is my bound reference organised so I can find the formula board in five seconds?</b> Under time pressure the difference between knowing where something is and knowing roughly where something is costs several minutes across a paper. Tab it before the day, not on it.</li>
   </ul>
   <div class="box try"><span class="lbl">Tonight</span>
     <p>One full practice question from each pipeline stage, timed. Then sleep — a rested standardisation beats a crammed one.</p>

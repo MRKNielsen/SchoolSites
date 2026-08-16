@@ -88,8 +88,9 @@
   <p style="text-align:center; margin:6px 0 14px;">\[P(A \cup B) = P(A) + P(B) - P(A \cap B)\]</p>
   <p style="text-align:center; margin:6px 0 14px;">\[P(A \mid B) = \dfrac{P(A \cap B)}{P(B)} \qquad\qquad P(A \cap B) = P(A \mid B)\,P(B)\]</p>
   <ul>
-    <li>The addition rule subtracts the overlap so it isn't counted twice. If \(A\) and \(B\) are mutually exclusive the overlap is 0 and the rule simplifies.</li>
-    <li>\(P(A \mid B)\) reads "the probability of \(A\) <b>given</b> \(B\) has happened" — you have shrunk the sample space down to \(B\).</li>
+    <li><b>The addition rule subtracts the overlap so it isn't counted twice.</b> Add \(P(A)\) and \(P(B)\) and any outcome lying in <i>both</i> events has been included in each total — so it appears twice in the sum. Subtracting \(P(A \cap B)\) removes exactly that duplicate, no more and no less. When \(A\) and \(B\) are mutually exclusive there is no overlap to remove, \(P(A \cap B) = 0\), and the rule collapses to \(P(A) + P(B)\). That is why "or" questions feel easier when the events cannot happen together: the correction term vanishes.</li>
+    <li><b>\(P(A \mid B)\) shrinks the sample space down to \(B\).</b> Read it as "the probability of \(A\) <b>given</b> that \(B\) has happened". Once you know \(B\) occurred, every outcome outside \(B\) is off the table, so the denominator is no longer 1 but \(P(B)\), and the numerator counts only the part of \(A\) that survives inside \(B\) — the intersection. The formula is nothing more than that: a restricted numerator over a restricted denominator.</li>
+    <li><b>The multiplication rule is the same statement rearranged.</b> Multiply both sides of the conditional formula by \(P(B)\) and you get \(P(A \cap B) = P(A \mid B)\,P(B)\). This is exactly what you are doing when you multiply along the branches of a tree diagram — each step after the first is conditional on the steps that came before it, so the probabilities you multiply are conditional ones.</li>
   </ul>
   <div class="box example"><span class="lbl">Quick example</span>
     <p>\(P(A) = 0.5\), \(P(B) = 0.4\), \(P(A \cap B) = 0.2\).</p>
@@ -105,7 +106,9 @@
   </div>
   <p>In the example above \(P(A \mid B) = 0.5 = P(A)\), so those two events <i>are</i> independent.</p>
   <div class="box key"><span class="lbl">Why it matters later</span>
-    <p>Every variance rule in Chapter 15 — \(\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)\) and everything built on it — is <b>only valid for independent variables</b>. The expectation rules need no such condition. When a question says "randomly selected", "chosen at random and independently", or "a random sample", it is granting you that permission.</p>
+    <p>Every variance rule in Chapter 15 — \(\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)\) and everything built on it — is <b>only valid for independent variables</b>. The expectation rules need no such condition.</p>
+    <p>The reason is worth understanding rather than memorising. If two quantities tend to be large together, their high values coincide and their low values coincide, so the total swings further than either one does alone and the true variance of the sum <i>exceeds</i> \(\text{Var}(X) + \text{Var}(Y)\). If they tend to move in opposite directions, each one partly cancels the other and the total is steadier than the sum of variances predicts. Independence is precisely the case where neither happens, so the variances simply add. Means never have this problem: an average is unaffected by whether the quantities move together, which is why \(E(X+Y) = E(X) + E(Y)\) always holds.</p>
+    <p>When a question says "randomly selected", "chosen at random and independently", or "a random sample", it is granting you that permission — and you should say so in your working, because it is the condition that makes the next line legal.</p>
   </div>
   <div class="box hint"><span class="lbl">Common confusion</span>
     <p>Mutually exclusive is <b>not</b> the same as independent — in fact it's close to the opposite. If \(A\) and \(B\) can't both happen, then knowing \(A\) happened tells you \(B\) definitely didn't. That's maximal dependence.</p>
@@ -136,8 +139,8 @@
     <tr><th>\(P(X = x)\)</th><td class="c">0.25</td><td class="c">0.5</td><td class="c">0.25</td></tr>
   </table>
   <ul>
-    <li>Every probability sits in \([0,1]\), and they must total exactly 1 — that's the check on any table.</li>
-    <li>Capital \(X\) is the variable; lower-case \(x\) is a particular value it might take. Ch 15–16 relies on that distinction constantly.</li>
+    <li><b>Every probability sits in \([0,1]\), and they must total exactly 1.</b> This is the check to run on any table before you use it, and it is also how "find \(k\)" questions are solved: if a table contains an unknown, the condition that the probabilities sum to 1 is the equation that determines it. The total is 1 because the listed values are <i>every</i> value \(X\) can take, so one of them is certain to occur.</li>
+    <li><b>Capital \(X\) is the variable; lower-case \(x\) is a particular value it might take.</b> \(X\) is the whole random mechanism — the thing that has a distribution, a mean and a variance. \(x\) is one number that came out of it. Chapters 15–16 lean on this distinction constantly: \(\bar{X}\) is a random variable with its own distribution, while \(\bar{x}\) is the single number your sample produced. Confusing the two is what makes the phrase "the distribution of the sample mean" sound like nonsense, and getting it straight is most of what makes Chapter 16 click.</li>
   </ul>
 </section>
 
@@ -145,16 +148,17 @@
   <h2>Expected value: the balance point</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[E(X) = \mu = \sum x\,P(X = x)\]</p>
   <ul>
-    <li>Multiply each value by its probability and add. It is a <b>weighted average</b>, not an ordinary one.</li>
-    <li>\(E(X)\) need not be a value \(X\) can take — the mean of one die roll is 3.5.</li>
-    <li>Read it as "the average over very many repetitions", not "what will happen".</li>
+    <li><b>Multiply each value by its probability and add — it is a <i>weighted</i> average, not an ordinary one.</b> An ordinary average would treat every listed value as equally likely. The weighting by \(P(X = x)\) is what makes common values pull the answer towards themselves and rare values barely move it. If the values happen to be equally likely the weights are all equal and the formula does reduce to the ordinary average, which is the special case people are used to.</li>
+    <li><b>\(E(X)\) need not be a value \(X\) can take.</b> The mean of one die roll is 3.5, and no die shows 3.5. This is not a defect: \(E(X)\) is the balance point of the distribution, the place a ruler carrying those weights would balance, and a balance point need not sit on top of one of the weights.</li>
+    <li><b>Read it as "the average over very many repetitions", not "what will happen".</b> Expected value is a long-run statement. It says nothing about the next single outcome, which is why an expected value of 3.5 is entirely compatible with never once observing 3.5. Whenever an exam question asks you to "interpret" an expected value in context, this long-run phrasing is what earns the mark.</li>
   </ul>
   <div class="box example"><span class="lbl">Quick example</span>
     <p>Two coins, \(X\) = number of heads:</p>
     <p>\(E(X) = 0(0.25) + 1(0.5) + 2(0.25) = 1\) head, as symmetry suggests.</p>
   </div>
   <div class="box key"><span class="lbl">Carry this forward</span>
-    <p>\(E\) is <b>linear</b>: it passes straight through sums and multiples. That single property is the whole of 15A–B on the expectation side.</p>
+    <p>\(E\) is <b>linear</b>: it passes straight through sums and multiples, so \(E(aX + b) = aE(X) + b\) and \(E(X + Y) = E(X) + E(Y)\). That single property is the whole of 15A–B on the expectation side — every expectation result next week is this one fact applied to a longer expression.</p>
+    <p>It is worth noticing how cheaply this comes. \(E(X)\) is a sum, and sums can be split apart and have constants pulled out of them; that is all linearity is. Variance is <i>not</i> a plain sum — it involves squaring — which is exactly why the variance rules next week look so different and carry conditions that the expectation rules do not.</p>
   </div>
 </section>
 
@@ -162,9 +166,9 @@
   <h2>Variance and standard deviation: the spread</h2>
   <p style="text-align:center; margin:6px 0 14px;">\[\text{Var}(X) = \sigma^2 = E(X^2) - \big[E(X)\big]^2 \qquad\qquad \text{sd}(X) = \sigma = \sqrt{\text{Var}(X)}\]</p>
   <ul>
-    <li>\(E(X^2)\) means square each <i>value</i> and weight by its probability — \(\sum x^2 P(X=x)\). It is not \(\big[E(X)\big]^2\), and the gap between the two <i>is</i> the variance.</li>
-    <li>Variance is in squared units; the standard deviation brings you back to the units of the problem, which is why answers are usually quoted with \(\sigma\).</li>
-    <li>Variance is never negative. A negative answer means \(E(X^2)\) and \(\big[E(X)\big]^2\) were swapped.</li>
+    <li><b>\(E(X^2)\) means square each <i>value</i>, then weight by its probability</b> — \(\sum x^2 P(X=x)\). Square first, average second. \(\big[E(X)\big]^2\) does the opposite: average first, square second. These are different numbers, and the gap between them <i>is</i> the variance. Order of operations is the entire content of this formula, and reversing it is the single most common way to lose the mark.</li>
+    <li><b>Variance is in squared units; the standard deviation brings you back to the units of the problem.</b> If \(X\) is a mass in grams then \(\text{Var}(X)\) is in grams<i>-squared</i>, which is not a quantity anyone can picture. Taking the square root returns you to grams, which is why final answers are almost always quoted as \(\sigma\). The working, though, is nearly always done in variances — they are the things that combine cleanly — and you convert once at the end. That pattern recurs all term.</li>
+    <li><b>Variance is never negative</b>, because it measures a spread and \(E(X^2) \ge \big[E(X)\big]^2\) always. So a negative answer is not a hard question producing a strange result; it is a reliable signal that the two terms were subtracted the wrong way round. Check it every time — it costs a second and catches the error before it propagates through the rest of a multi-part question.</li>
   </ul>
   <div class="box example"><span class="lbl">Quick example</span>
     <p>Same two coins: \(E(X^2) = 0(0.25) + 1(0.5) + 4(0.25) = 1.5\).</p>
@@ -181,8 +185,9 @@
     <p>Probability is <b>area</b> under the curve: \(\displaystyle \Pr(a \le X \le b) = \int_a^b f(x)\,dx\).</p>
   </div>
   <ul>
-    <li>The two bullet points above are the discrete rules with \(\sum\) replaced by \(\int\) — nothing else changes.</li>
-    <li>\(\Pr(X = c) = 0\) for every single value \(c\), so \(&lt;\) and \(\le\) may be swapped freely. This is why the normal curve behaves the way Part 3 describes.</li>
+    <li><b>These are the discrete rules with \(\sum\) replaced by \(\int\) — nothing else changes.</b> "Probabilities are non-negative" becomes "\(f(x) \ge 0\)"; "the probabilities total 1" becomes "the total area is 1"; "add the probabilities of the outcomes you want" becomes "integrate over the interval you want". If you can see the discrete statement behind each continuous one, there is genuinely no new idea here, only new notation.</li>
+    <li><b>\(f(x)\) is a <i>density</i>, not a probability</b>, and it may exceed 1. A density of 3 on an interval of width \(0.1\) contributes only \(0.3\) of probability. This is why you can never read a probability off the vertical axis — probability is an <i>area</i>, so it always involves a width as well as a height. Nothing has probability until you integrate.</li>
+    <li><b>\(\Pr(X = c) = 0\) for every single value \(c\)</b>, because an interval of zero width encloses zero area. So \(&lt;\) and \(\le\) may be swapped freely without changing an answer — a licence you do <i>not</i> have in the discrete case, where \(\Pr(X \le 2)\) and \(\Pr(X &lt; 2)\) differ by the whole of \(\Pr(X = 2)\). This is also why the normal distribution in Part 3 only ever answers questions about ranges.</li>
   </ul>
   <div class="box hint"><span class="lbl">Where this bites</span>
     <p>Sections 15A, 15B and 15F all set questions that open "\(X\) has probability density function \(f(x) = \ldots\)". Everything else in Chapter 15 then proceeds identically — but you have to get \(E(X)\) and \(\text{Var}(X)\) out of an integral first.</p>
@@ -244,13 +249,14 @@
         <p>\(X \sim N(\mu, \sigma^2)\) reads "\(X\) is normally distributed with mean \(\mu\) and <b>variance</b> \(\sigma^2\)".</p>
       </div>
       <ul>
-        <li>Symmetric, single peak at \(\mu\); \(\mu\) is simultaneously the mean, median and mode.</li>
-        <li>\(\mu\) slides the curve left and right; \(\sigma\) makes it narrow and tall or wide and flat.</li>
-        <li>Total area under the curve is 1, because it accounts for every possible outcome.</li>
-        <li>It is <b>continuous</b>, so \(P(X = 5) = 0\) — only intervals have probability. This also means \(P(X < 5)\) and \(P(X \le 5)\) are equal, unlike in the discrete case.</li>
+        <li><b>Symmetric, single peak at \(\mu\).</b> Because it is symmetric about its peak, \(\mu\) is simultaneously the mean, the median and the mode — so half the area lies either side of \(\mu\), and \(P(X &gt; \mu) = 0.5\) exactly. That symmetry is what lets you convert \(P(Z &gt; a)\) into \(P(Z &lt; -a)\) whenever it is convenient, a move used constantly in Chapter 16.</li>
+        <li><b>\(\mu\) slides the curve; \(\sigma\) sets its width.</b> Changing \(\mu\) moves the whole shape left or right without altering it. Changing \(\sigma\) makes it narrow and tall or wide and flat — and it must trade height for width, because the total area is pinned at 1. A larger \(\sigma\) therefore does not just spread the curve; it necessarily lowers the peak.</li>
+        <li><b>Total area is 1</b>, because the curve accounts for every possible outcome. Every probability you ever compute from it is a fraction of that single unit of area, which is why no normal probability can exceed 1 and why "area to the left" plus "area to the right" is always exactly 1.</li>
+        <li><b>It is continuous</b>, so \(P(X = 5) = 0\) and only intervals carry probability. \(P(X &lt; 5)\) and \(P(X \le 5)\) are therefore equal — unlike the discrete case, where they differ by the whole of \(P(X = 5)\). Carrying a discrete habit into a normal question is harmless; carrying a normal habit into a binomial question is not.</li>
       </ul>
       <div class="box hint"><span class="lbl">Watch the second slot</span>
-        <p>\(N(\mu, \sigma^2)\) carries the <b>variance</b>, but CAS asks for the <b>standard deviation</b>. \(N(100, 25)\) means \(\sigma = 5\), not 25.</p>
+        <p>\(N(\mu, \sigma^2)\) carries the <b>variance</b>, but every CAS command asks for the <b>standard deviation</b>. So \(N(100, 25)\) means \(\sigma = 5\), not 25.</p>
+        <p>The notation is not being awkward for its own sake: variance is the quantity that combines additively in Chapter 15, so it is the natural thing to carry in the distribution's name. Get into the habit of writing the variance in the brackets and the standard deviation into the calculator, and of pausing at every \(N(\ ,\ )\) you meet to ask which one is on the page.</p>
       </div>
     </div>
     <div>
@@ -288,9 +294,9 @@
   <h2>Standardising: turning any normal into one normal</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[z = \dfrac{x - \mu}{\sigma} \qquad\qquad Z \sim N(0, 1)\]</p>
   <ul>
-    <li>A \(z\)-score answers one question: <b>how many standard deviations from the mean is this value?</b> Negative means below the mean.</li>
-    <li>Standardising strips out the units, so scores from different distributions become comparable.</li>
-    <li>The transformation is itself a linear function of \(X\) — which is exactly why Chapter 15 opens with linear functions.</li>
+    <li><b>A \(z\)-score answers one question: how many standard deviations from the mean is this value?</b> Read the formula that way and it stops being something to memorise — the numerator is the distance from the mean, and dividing by \(\sigma\) converts that distance into "number of standard deviations". A negative \(z\) simply means the value sits below the mean.</li>
+    <li><b>Standardising strips out the units, so different distributions become comparable.</b> A mass in grams and a time in seconds cannot be compared directly, but once each is expressed as "so many standard deviations from its own mean" they are on a common footing. It is also why one table of \(z\)-values serves every normal distribution there is: convert to \(z\), and there is only ever one curve to look things up on.</li>
+    <li><b>The transformation is itself a linear function of \(X\)</b> — namely \(Z = \tfrac{1}{\sigma}X - \tfrac{\mu}{\sigma}\), which is \(aX + b\) with \(a = 1/\sigma\) and \(b = -\mu/\sigma\). This is not a coincidence, and it is exactly why Chapter 15 opens with linear functions: applying next week's rules to that \(a\) and \(b\) gives \(E(Z) = 0\) and \(\text{Var}(Z) = 1\), which is the whole content of "\(Z \sim N(0,1)\)". Standardising is the first linear transformation you ever met; Chapter 15 just makes the machinery explicit.</li>
   </ul>
   <div class="box example"><span class="lbl">Quick example</span>
     <p>Heights are \(N(170, 8^2)\) cm. A person 182 cm tall has \(z = \dfrac{182 - 170}{8} = 1.5\) — one and a half standard deviations above average.</p>
@@ -316,13 +322,14 @@
     <div>
       <div class="box hint"><span class="lbl">Sanity checks</span>
         <ul>
-          <li>A probability must land in \([0,1]\). If not, a bound is wrong.</li>
-          <li>Above the mean, the answer is under 0.5; below it, over 0.5.</li>
-          <li>Sketch the curve and shade before computing — it catches almost every tail error.</li>
+          <li><b>A probability must land in \([0,1]\).</b> If it doesn't, a bound is wrong — usually a missing \(\pm 10^{99}\), which leaves the calculator integrating over the wrong interval entirely.</li>
+          <li><b>Above the mean, the answer is under 0.5; below it, over 0.5.</b> Half the area sits either side of \(\mu\), so this one comparison catches a reversed inequality instantly, before it costs you the rest of the question.</li>
+          <li><b>Sketch the curve and shade before computing.</b> Nearly every lost mark on normal probability is a tail error rather than an arithmetic one, and a five-second sketch makes the correct bounds obvious in a way that staring at the wording does not.</li>
         </ul>
       </div>
       <div class="box defn"><span class="lbl">Symmetry facts</span>
-        <p>\(P(Z &gt; a) = P(Z &lt; -a)\) and \(P(Z &gt; a) = 1 - P(Z &lt; a)\).</p>
+        <p>\(P(Z &gt; a) = P(Z &lt; -a)\) &nbsp;and&nbsp; \(P(Z &gt; a) = 1 - P(Z &lt; a)\).</p>
+        <p>The first holds because the curve is a mirror image about 0, so the upper tail beyond \(a\) has exactly the same area as the lower tail below \(-a\). The second holds because the two regions together are the whole curve, whose area is 1. Between them these let you rewrite any tail as any other, which is what makes a single \(z\)-table — or a single CAS call — enough for every question. Section 16D leans on the first one heavily.</p>
       </div>
     </div>
   </div>
@@ -344,11 +351,12 @@
   <h2>When is a situation binomial?</h2>
   <div class="box defn"><span class="lbl">All four must hold</span>
     <ul>
-      <li><b>Fixed</b> number of trials, \(n\), decided before you start.</li>
-      <li>Each trial has exactly <b>two</b> outcomes — success or failure.</li>
-      <li>The probability of success, \(p\), is the <b>same</b> every trial.</li>
-      <li>Trials are <b>independent</b>.</li>
+      <li><b>Fixed number of trials, \(n\), decided before you start.</b> If the experiment runs until something happens, \(n\) is itself random and the distribution is not binomial.</li>
+      <li><b>Each trial has exactly two outcomes</b> — success or failure. "Success" is just a label for the outcome you are counting; it need not be a good thing.</li>
+      <li><b>The probability of success, \(p\), is the same every trial.</b> Anything that changes the odds part-way through — fatigue, sampling without replacement, a machine drifting — breaks this.</li>
+      <li><b>Trials are independent.</b> The result of one must not shift the probabilities for the next.</li>
     </ul>
+    <p>The last two conditions are the ones that actually fail in practice, and they usually fail together: sampling without replacement changes \(p\) <i>because</i> earlier draws inform later ones.</p>
   </div>
   <p>Write it as \(X \sim \text{Bi}(n, p)\), where \(X\) counts the successes.</p>
   <div class="box example"><span class="lbl">Is it binomial?</span>
@@ -365,12 +373,13 @@
   <p style="text-align:center; margin:6px 0 14px;">\[\Pr(X = x) = \binom{n}{x} p^{x}(1-p)^{n-x}, \qquad x = 0, 1, \ldots, n\]</p>
   <p style="text-align:center; margin:6px 0 16px;">\[E(X) = np \qquad\qquad \text{Var}(X) = np(1-p) \qquad\qquad \text{sd}(X) = \sqrt{np(1-p)}\]</p>
   <ul>
-    <li>\(\binom{n}{x}\) counts the orders in which \(x\) successes can occur; the rest is the probability of any one such order.</li>
-    <li>On CAS: <b>binomPdf</b>(\(n\), \(p\), \(x\)) for exactly \(x\); <b>binomCdf</b>(\(n\), \(p\), lower, upper) for a range.</li>
-    <li>\(E(X) = np\) is worth internalising — 20 throws at 70% averages 14 made.</li>
+    <li><b>The formula is a count multiplied by a probability.</b> \(p^x(1-p)^{n-x}\) is the probability of <i>one particular</i> sequence with \(x\) successes — multiply along the trials, which is legal precisely because they are independent. Every such sequence has that same probability, whatever order the successes come in, and \(\binom{n}{x}\) counts how many orders there are. Multiply the two and you have the probability of \(x\) successes in any order.</li>
+    <li><b>On CAS:</b> <b>binomPdf</b>(\(n\), \(p\), \(x\)) for exactly \(x\), and <b>binomCdf</b>(\(n\), \(p\), lower, upper) for a range. Cdf is the one you want far more often, because most questions ask about "at least", "at most" or "between" rather than an exact count.</li>
+    <li><b>\(E(X) = np\) is worth internalising</b> — 20 throws at 70% averages 14 made, which is the answer common sense would give. It is also worth noticing that \(\text{Var}(X) = np(1-p)\) is largest when \(p = 0.5\) and shrinks towards 0 as \(p\) approaches 0 or 1: a near-certain event produces very little variability, because almost every trial comes out the same way.</li>
   </ul>
   <div class="box hint"><span class="lbl">The usual slip</span>
     <p>"At least 3" is \(\Pr(X \ge 3) = 1 - \Pr(X \le 2)\) — note the 2. Writing \(1 - \Pr(X \le 3)\) is the most common lost mark in the topic.</p>
+    <p>The reason is that \(X\) is <b>discrete</b>, so the complement of "3 or more" is "2 or fewer", not "3 or fewer" — the value 3 must land on exactly one side of the split. It is the same instinct that is <i>harmless</i> for the normal distribution, where \(\Pr(X = 3) = 0\) and the endpoint costs nothing, and that is exactly why it slips through: the habit is safe in one topic and wrong in the other. When you meet a "\(\ge\)" on a discrete variable, write the complement out in words before reaching for the calculator.</p>
   </div>
 </section>
 

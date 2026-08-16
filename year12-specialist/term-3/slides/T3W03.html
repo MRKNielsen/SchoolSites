@@ -97,8 +97,9 @@
   <h2>Scaling and shifting: \(Y = aX + b\)</h2>
   <p style="text-align:center; margin:6px 0 16px;">\[E(aX + b) = a\,E(X) + b \qquad\quad \text{Var}(aX + b) = a^2\,\text{Var}(X) \qquad\quad \text{sd}(aX+b) = |a|\,\text{sd}(X)\]</p>
   <ul>
-    <li>Shifting by \(b\) moves the centre but does nothing to the spread.</li>
-    <li>Scaling by \(a\) stretches the spread by \(|a|\) — so the variance stretches by \(a^2\).</li>
+    <li><b>Shifting by \(b\) moves the centre but does nothing to the spread.</b> Adding a constant slides every value along by the same amount, so the distances <i>between</i> values — which is all a spread measures — are completely unchanged. The mean moves because it is a location; the variance does not because it is not. This is why \(b\) appears in the expectation rule and is simply absent from the variance rule, rather than appearing there with a coefficient of zero.</li>
+    <li><b>Scaling by \(a\) stretches the spread by \(|a|\), so the variance stretches by \(a^2\).</b> If every value is doubled, every distance from the mean doubles too, so the standard deviation doubles. But variance is built from <i>squared</i> distances, so doubling the distances quadruples them. The \(a^2\) is not an arbitrary rule to remember — it is the square in the definition of variance showing through.</li>
+    <li><b>The absolute value in \(\text{sd}(aX+b) = |a|\,\text{sd}(X)\) matters.</b> A negative \(a\) reflects the distribution, reversing which side is which, but a spread cannot be negative — a reflected distribution is exactly as spread out as the original. The variance formula handles this automatically, since \(a^2\) is positive either way; it is only when you take the square root that you must remember the modulus. So \(\text{Var}(1 - 3X) = 9\,\text{Var}(X)\), not \(-9\,\text{Var}(X)\).</li>
   </ul>
   <div class="box example"><span class="lbl">Example 1</span>
     <p>\(X\) has distribution \(P(X=0)=0.3\), \(P(X=1)=0.4\), \(P(X=2)=0.3\). Find \(E(Y)\) and \(\text{Var}(Y)\) for \(Y = 3X + 2\).</p>
@@ -227,7 +228,9 @@
   <p style="text-align:center; margin:6px 0 16px;">\[E(aX + bY) = a\,E(X) + b\,E(Y)\]</p>
   <p style="text-align:center; margin:6px 0 16px;">\[\text{Var}(aX + bY) = a^2\,\text{Var}(X) + b^2\,\text{Var}(Y) \quad \text{(for independent } X, Y\text{)}\]</p>
   <div class="box defn"><span class="lbl">The subtraction trap</span>
-    <p>\(\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)\). Differences are just as variable as sums — the \((-1)^2\) kills the minus sign. Variances of independent variables never subtract.</p>
+    <p>\(\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y)\). Variances of independent variables <b>never</b> subtract.</p>
+    <p>Mechanically this is just the rule with \(b = -1\): the coefficient is squared, and \((-1)^2 = 1\), so the minus sign disappears before it can do any damage. But it is worth seeing why that is the <i>right</i> answer rather than an accident of the algebra. Uncertainty in \(Y\) makes \(X - Y\) uncertain in exactly the same way that uncertainty in \(X\) does — if you do not know \(Y\) well, you do not know \(X - Y\) well either, regardless of which way round the subtraction goes. Errors accumulate; they do not cancel. A difference of two independent quantities is therefore <i>more</i> variable than either one alone, never less.</p>
+    <p>The trap is that "subtract" is such a strong verbal cue. Every instinct says a difference should be smaller than the things it came from — and for the <i>means</i> it is. For the spread it is the opposite, and the two halves of the calculation genuinely go in different directions.</p>
   </div>
   <div class="box key"><span class="lbl">Requirement</span>
     <p>The variance rule needs <b>independence</b>. The expectation rule doesn't — it always holds.</p>
@@ -254,8 +257,9 @@
     </div>
   </div>
   <ul style="margin-top:18px;">
-    <li>Same mean, different spread: two independent draws partly cancel each other's fluctuations; doubling one draw doubles its error.</li>
-    <li>Exam wording: "the total weight of two randomly chosen boxes" is \(X_1 + X_2\); "twice the weight of a randomly chosen box" is \(2X\).</li>
+    <li><b>Same mean, different spread — and the reason is cancellation.</b> With \(X_1 + X_2\) you make two separate draws, so a high one can be offset by a low one; the fluctuations partly cancel and the total is relatively steadier. With \(2X\) there is only ever <i>one</i> draw, and whatever error it carries is doubled along with everything else — nothing is available to offset it. Two independent measurements contain more information than one measurement counted twice, and the variance is what registers that difference.</li>
+    <li><b>Read the story, not the arithmetic.</b> "The total weight of two randomly chosen boxes" is \(X_1 + X_2\): two boxes were selected, so two independent values exist. "Twice the weight of a randomly chosen box" is \(2X\): one box was selected and its weight was scaled. The test to apply is simply <i>how many times did something random actually happen?</i> — once, or twice? Both phrasings give a mean of \(2\mu\), so the mean will never reveal which reading you took; only the variance does, which is precisely why examiners like the distinction.</li>
+    <li><b>The general pattern is worth carrying.</b> \(\text{Var}(X_1 + \cdots + X_n) = n\sigma^2\) but \(\text{Var}(nX) = n^2\sigma^2\), so the gap between the two readings widens as \(n\) grows — at \(n = 5\) it is already a factor of five. The sum grows like \(n\), the multiple like \(n^2\).</li>
   </ul>
   <div class="box try"><span class="lbl">Discuss</span>
     <p>Generalise: \(\text{Var}(X_1 + \cdots + X_n) = n\sigma^2\), but \(\text{Var}(nX) = n^2\sigma^2\). Which grows faster, and why does that make sense?</p>
@@ -306,6 +310,8 @@
   <h2>Normality survives linear combination</h2>
   <div class="box defn"><span class="lbl">Fact</span>
     <p>If \(X\) and \(Y\) are independent normals, then \(aX + bY + c\) is also <b>normal</b> — mean and variance from the rules above.</p>
+    <p>This is a genuinely special property of the normal distribution, and it is what makes the whole chapter tractable. The mean and variance rules from 15A–B hold for <i>any</i> distributions, but on their own they only tell you two numbers about the combination — not enough to compute a probability, since two different distributions can share a mean and a variance. The normal family is closed under linear combination: combine normals and you get another normal, so those two numbers are the <b>complete</b> answer and probabilities follow immediately. Combine two uniform distributions, by contrast, and you get a triangular one, with no shortcut available.</p>
+    <p>The proof is beyond this course, but the consequence is the thing to hold onto: <b>with normals, mean and variance are all you ever need.</b></p>
   </div>
   <div class="box example"><span class="lbl">Example 6</span>
     <p>Juice bottles: \(X \sim N(502,\, 2^2)\) mL. Find \(P(\text{four-pack total} &lt; 2000)\).</p>
@@ -318,6 +324,7 @@
   </ul>
   <div class="box key"><span class="lbl">All four steps carry marks</span>
     <p>Name the combination → mean &amp; variance → state the distribution → standardise.</p>
+    <p>Each step exists because the next one is impossible without it. You cannot find a mean until you have decided <i>what</i> you are taking the mean of, which is why naming \(T\) explicitly comes first and is where the \(4X\) versus \(X_1 + \cdots + X_4\) decision gets made. You cannot state a distribution without its two parameters. And you cannot standardise without a stated distribution to standardise. Students who jump straight to a \(z\)-score usually get the right answer on easy questions and lose several marks on hard ones, because the examiner cannot see which combination was intended — and on a question where the intended reading is ambiguous, the naming line <i>is</i> the answer.</p>
   </div>
 </section>
 
@@ -333,7 +340,9 @@
     <li class="frag">\(P(D &lt; 0) = P\left(Z &lt; \dfrac{0 - 2}{2.5}\right) = P(Z &lt; -0.8) \approx 0.212\).</li>
   </ul>
   <div class="box key"><span class="lbl">Note the variance</span>
-    <p>Even though we subtracted the means, we <b>added</b> the variances: \(1.5^2 + 2^2\), not \(2^2 - 1.5^2\).</p>
+    <p>Even though we subtracted the means, we <b>added</b> the variances: \(1.5^2 + 2^2 = 6.25\), not \(2^2 - 1.5^2 = 1.75\).</p>
+    <p>Take the wrong route and you get \(\text{sd}(D) = 1.32\) instead of \(2.5\), and the final probability comes out near \(0.065\) rather than \(0.212\) — a difference big enough to change what you would conclude about the race, from "Tom occasionally wins" to "Tom almost never does". The error is invisible in the answer itself, which is why the habit of writing the variance line separately, in variances, before square-rooting once at the end, is worth building now.</p>
+    <p>Notice also what the answer says: \(D\) has sd \(2.5\), larger than either swimmer's own \(1.5\) or \(2\). The <i>gap</i> between two swimmers is less predictable than either swimmer is, because it inherits both of their uncertainties. That is the subtraction trap stated in the language of the problem.</p>
   </div>
 </section>
 
@@ -417,11 +426,14 @@
 <section class="slide" data-topic="T3W03 · Linear Combinations I">
   <h2>Week 5 summary</h2>
   <ul>
-    <li>\(E(aX+b) = aE(X)+b\); \(\text{Var}(aX+b) = a^2\text{Var}(X)\).</li>
-    <li>Independent \(X, Y\): \(\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\) — plus sign always.</li>
-    <li>\(2X\) and \(X_1 + X_2\) share a mean but not a variance. Read the story carefully.</li>
-    <li>Linear combinations of independent normals are normal — state the distribution before computing probabilities.</li>
+    <li><b>\(E(aX+b) = aE(X)+b\) and \(\text{Var}(aX+b) = a^2\text{Var}(X)\).</b> Means follow the algebra exactly; variances ignore the shift and square the scale. If you can say <i>why</i> — a shift moves everything equally so distances are untouched, and variance is built from squared distances — you will never have to recall which of \(a\) and \(b\) appears where.</li>
+    <li><b>For independent \(X, Y\): \(\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)\), with a plus sign always.</b> The coefficients are squared, so their signs cannot survive, and independent uncertainties accumulate rather than cancel. Independence is a genuine condition here, not decoration: it is what the words "randomly and independently chosen" in the question are there to give you.</li>
+    <li><b>\(2X\) and \(X_1 + X_2\) share a mean but not a variance.</b> \(4\sigma^2\) against \(2\sigma^2\). The mean will never tell you which reading is right, so the decision has to be made from the wording — count how many times something random actually happened — and it has to be made <i>before</i> the arithmetic starts.</li>
+    <li><b>Linear combinations of independent normals are normal.</b> That is what makes mean and variance sufficient, and it is why the four-step workflow ends in a standardisation. State the distribution explicitly before computing any probability: it is a marked step, and it is also the point at which an error in the previous two lines becomes visible.</li>
   </ul>
+  <div class="box key"><span class="lbl">One sentence to carry into next week</span>
+    <p>Everything above is about combining independent random variables. The sample mean \(\bar{X} = \tfrac{1}{n}(X_1 + \cdots + X_n)\) is nothing but a particular linear combination — \(n\) independent copies, each with coefficient \(\tfrac1n\) — so next week adds no new machinery at all. It applies this week's two rules to that one expression and reads off the consequences.</p>
+  </div>
   <div class="box try"><span class="lbl">Before next week</span>
     <p>Next week: the most important linear combination of all — the sample mean \(\bar{X}\), and the central limit theorem (15D–F).</p>
   </div>
