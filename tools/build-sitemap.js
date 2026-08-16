@@ -34,9 +34,11 @@ const SKIP_DIRS = new Set([
    doors to the same room. Delete a line here to surface one again. */
 const SKIP_TOP = new Set(["algorithmics", "foundation", "methods", "specialist"]);
 
-/* Individual pages left out: gated plaintext (gitignored anyway) and
-   fragments that are not standalone pages. */
-const SKIP_FILE = /(-payload\.html$)/;
+/* Individual pages left out: gated plaintext (gitignored anyway),
+   fragments that are not standalone pages, and 404.html — GitHub Pages
+   serves that one automatically and it is a destination you arrive at by
+   accident, not one to offer in a contents list. */
+const SKIP_FILE = /(-payload\.html$)|^404\.html$/;
 
 /* Third-party exports we link to but never inject into (marimo apps). */
 const OPAQUE_DIRS = new Set(["workbooks"]);

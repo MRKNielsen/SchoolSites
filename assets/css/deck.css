@@ -459,6 +459,31 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 .dot.accent { background: var(--accent); }
 .dot.grey { background: var(--c-slate-300); }
 
+/* Labels inside inline SVG figures. An SVG has no inherited font, so
+   without this every diagram label falls back to the UA serif — which
+   is why the Specialist Term 3 decks each carried an inline
+   <style>text{font-family:Segoe UI…}</style> inside every figure. One
+   rule here replaces all of them.
+   Two opt-outs, both necessary. MathJax's SVG output lives inside
+   <mjx-container> and brings its own metrics. And a CSS declaration
+   beats an SVG presentation attribute at any specificity, so without
+   :not([font-family]) this would silently override the deliberate
+   font-family="Bitter…" display labels in the bio-ecosystems figures.
+   Set the attribute on a <text> to keep it out of this rule. */
+.deck svg text:not([font-family]) { font-family: var(--font-body); }
+.deck mjx-container svg text { font-family: inherit; }
+
+/* Caption under a figure — centred, one notch below prose. Replaces the
+   per-slide style="font-size:21px; text-align:center" that sat under
+   every graph in the Specialist Term 3 decks. */
+.figcap { font-size: .92em; color: var(--muted); text-align: center; margin-top: 6px; }
+.section-slide .figcap { color: rgba(255,255,255,.75); }
+
+/* Course/assessment line at the foot of a title or section slide, set
+   clear of the heading above it. */
+.slide-foot { font-size: .9em; color: var(--muted); margin-top: 34px; }
+.section-slide .slide-foot { color: rgba(255,255,255,.72); }
+
 /* ---------- Figure with text wrapping around it ----------
    For the cases .cols can't express: prose that flows around a
    figure and then continues full width beneath it. .textflow

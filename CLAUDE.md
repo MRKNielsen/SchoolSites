@@ -5,6 +5,23 @@ landing pages) maintained by several educators, each working with Claude.
 **All new and migrated content must use the shared design system. Do not
 write per-page inline `<style>` blocks or invent new palettes.**
 
+## Required reading
+
+@ROADMAP.md
+
+The file imported above is mandatory and is loaded into every session. It
+carries the working rules (claim before starting, tick and date on
+landing), the per-session checklist, the copyright and student-data
+guardrails, and the list of decisions already settled. Follow it.
+
+Its companion **`ROADMAP-DETAIL.md`** holds the full inventory, the
+definition of done, and every outstanding job in effort order. It is
+*not* auto-imported — **open it with Read before picking up, finishing or
+adding any build-out work**, and edit it in place to record what landed.
+
+In short: this file says *how* to build, `ROADMAP.md` says *how we work*,
+and `ROADMAP-DETAIL.md` says *what is left*.
+
 ## Design system (mandatory)
 
 Every slide deck links exactly these shared assets (adjust relative depth):
@@ -93,7 +110,19 @@ other without going back through the index.
   ```
 
   `add-sitenav.js` is idempotent, so re-running it only touches pages
-  that don't already link the drawer.
+  that don't already link the drawer. Then check nothing broke:
+
+  ```bash
+  node tools/check-links.js       # exits 1 if it finds anything
+  ```
+
+  It resolves every `<a href>`, `<link>`, `<script src>`, `<img src>`,
+  `<object data>`, `<source>`, `<iframe>`, `<embed>`, poster and SVG
+  `<use>` against the filesystem and reports **MISSING**, **CASE**,
+  **ABSOLUTE** and **IGNORED**. CASE is the one to care about — the repo
+  is developed on Windows and served on Linux, so a wrong-case link
+  works locally and 404s live. `--all` includes the marimo workbook
+  exports, which have nine known-broken `manifest.json` links.
 - Labels come from each page's `<title>`, with the surrounding context
   stripped ("Lesson 4 · Dichotomous Keys | Biodiversity & Ecosystems"
   becomes "Lesson 4 · Dichotomous Keys", because the tree already says
@@ -109,7 +138,14 @@ other without going back through the index.
 - **Paths are relative, never root-absolute.** The site is served from
   `/SchoolSites/`, so `/year7-science/…` would 404. sitenav.js works the
   root prefix out from its own `<script src>`, which is why the two tags
-  must carry the correct `../` depth.
+  must carry the correct `../` depth. The single exception is
+  `404.html`, which GitHub Pages renders *at the bad URL* — at any
+  folder depth — so relative asset paths there would resolve against a
+  path that doesn't exist. It carries `<base href="/SchoolSites/">` and
+  is otherwise ordinary relative markup. If the site's served path ever
+  changes, that one line changes with it. `check-links.js` honours a
+  root-absolute `<base>`; `build-sitemap.js` keeps 404.html out of the
+  nav tree via `SKIP_FILE`.
 - **Keyboard**: the drawer's handler is registered in the *capture*
   phase and stops propagation while open, so arrows and space don't also
   advance the deck underneath. `M` still belongs to deck.js's slide-jump
@@ -248,7 +284,11 @@ path and not a stack of overlapping objects.
   does not follow the theme accent.
 - Bare `<p>` and `<ul>`/`<ol>` directly inside a slide get their spacing
   and indent from the prose defaults in deck.css — don't add per-slide
-  margin styles.
+  margin styles. A centred caption under a figure is `.figcap`; the
+  course/assessment line at the foot of a title or section slide is
+  `.slide-foot`. Both exist because the Specialist Term 3 decks were
+  carrying 27 `style="font-size:21px; text-align:center"` attributes
+  between them.
 - Gradual release tags: `<span class="phase-tag ido|wedo|youdo|cas">`.
 - Maths: **typeset whole expressions with MathJax**, e.g.
   `\(\sin 30^\circ = \dfrac{1}{2}\)` — not half MathJax, half CSS. Mixing
@@ -624,4 +664,17 @@ element rather than leaving the hex or trying `fill="var(--accent)"`.
 
 Note on SVG diagrams: convert *theme* colours in figures to tokens, but
 leave genuinely illustrative hues (a fox is orange, water is blue) as
-literal hex — those are content, not palette.
+literal hex — those are content, not palette. The line falls in an
+awkward place when the same hex does both jobs: in the Specialist Term 3
+figures `#90A4AE` drew both dashed guide lines (chrome → `--ink-faint`)
+and a second plotted curve (a data series that must stay distinguishable
+from the accent → left as hex). Judge per element, not per colour.
+
+Don't put a `<style>text{font-family:…}</style>` inside a figure. An SVG
+has no inherited font, so a diagram with no rule falls back to the UA
+serif — deck.css now handles that globally with
+`.deck svg text:not([font-family])`. The `:not()` matters: a CSS
+declaration beats an SVG presentation attribute at *any* specificity, so
+without it the rule would silently override deliberate
+`font-family="Bitter…"` display labels (there are 87 in bio-ecosystems).
+Set the attribute on a `<text>` to opt it out.

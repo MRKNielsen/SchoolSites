@@ -358,6 +358,22 @@ window.SITEMAP = {
            "k": "primer"
           }
          ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Quadratics, Chapters 5 & 7 — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-quadratics.html",
+           "k": "primer"
+          },
+          {
+           "t": "Chapter 6 Trigonometry — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-trigonometry.html",
+           "k": "primer"
+          }
+         ]
         }
        ],
        "k": "primer"
@@ -796,21 +812,6 @@ window.SITEMAP = {
        "t": "Staff blob tool (encrypt / decrypt)",
        "h": "tools/staff-crypt.html",
        "k": "science"
-      }
-     ]
-    },
-    {
-     "t": "Question booklets",
-     "c": [
-      {
-       "t": "Ch6 Trigonometry",
-       "h": "pdfs/Ch6_Trigonometry_Question_Booklet.pdf",
-       "p": 1
-      },
-      {
-       "t": "Quadratics Ch5 Ch7",
-       "h": "pdfs/Quadratics_Ch5_Ch7_Question_Booklet.pdf",
-       "p": 1
       }
      ]
     }
