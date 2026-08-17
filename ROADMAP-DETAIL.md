@@ -117,13 +117,22 @@ label on its own.
       relative to that. Excluded from the nav tree via `SKIP_FILE` in
       `build-sitemap.js`. **S** *(done 2026-08-16)*
 
-- [ ] **`10methods-primer/index.html` still has an inline `<style>`
-      block.** ~15 lines of `.chapter`/`.ch-head`/`.ch-meta`/`.ch-open`/
-      `.ch-links` rules — a hub with several week grids stacked, which
-      `hub.css` doesn't have a component for. Either lift them into
-      hub.css as a named "chapter group" component (other multi-chapter
-      units will want it) or accept it and note the decision. Found
-      while linking the primer's booklets. **S**
+- [x] **`10methods-primer/index.html` still has an inline `<style>`
+      block.** Lifted into hub.css as a named **chapter group**
+      component — `.chapter`, `.ch-head`, `.ch-meta`, `.ch-links`,
+      `.ch-open` — rather than accepted, because the multi-chapter shape
+      recurs (year11-methods ch9/11, and Specialist calculus will want it
+      if that lands as one unit with chapter sections). Two of the
+      lifted rules weren't chapter-specific at all and went into the
+      existing `ul.periods` block instead: `ul.periods a` (a period line
+      linking straight to its slide, white not UA blue) and
+      `ul.periods li b` (the lead-in section code or day, in the hub
+      amber). **That second one is a deliberate visual change to
+      `year12-algorithmics/unit-4/index.html`** — its `<b>Tue</b>` day
+      labels were previously unstyled and now match the primer's. The
+      three hub pages now carry no inline `<style>` between them;
+      `check-links.js` clean at 132 pages / 1683 refs. **S**
+      *(done 2026-08-16)*
 
 ### Tier 1 — Small fixes (under a session each)
 

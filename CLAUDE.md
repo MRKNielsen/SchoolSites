@@ -415,6 +415,16 @@ band, `.timeline`/`.mile[data-date]` milestones, `#weeks` grid of
 `.links`. hub.js auto-highlights the current week, marks past/next
 milestones, and fills `.countdown[data-to]` elements.
 
+A unit long enough to need **several week grids stacked** wraps each in a
+`.chapter` opening with a `.ch-head` (`h2` + `.ch-meta`, then a `.ch-open`
+pill on the right, or a `.ch-links` span when a chapter has more than one
+destination — e.g. a question booklet beside the deck). Reference
+implementation: `year10-mathematics/10methods-primer/index.html`, nine
+chapters across a full year. A hub with a single grid goes straight from
+`h2` to `.grid` and needs none of it. Period lines carry their own link
+and label styling (`ul.periods a`, `ul.periods li b` — the lead-in code
+or day, in the hub's amber), so don't restate those per page.
+
 ## Species / case-study profile pages
 
 Use `assets/css/profile.css` + `assets/js/profile.js` with
