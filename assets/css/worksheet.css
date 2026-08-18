@@ -424,3 +424,134 @@ body.worksheet-page {
   .worksheet-page .lines { break-inside: avoid; }
   .worksheet-page a { color: inherit; text-decoration: none; }
 }
+
+/* ============================================================
+   COLLATED BOOKLET  —  worksheets-all.html and its staff-gated
+   answer copy worksheets-all-solutions.html.
+
+   A booklet is just many .sheet blocks in one document. The print
+   rules above already break a page after every .sheet, so each
+   worksheet starts on a fresh sheet of paper with no extra
+   pagination markup — do not add .ws-runhead to a booklet.
+   ============================================================ */
+
+/* Contents table on the booklet cover */
+.worksheet-page table.wtbl.ws-toc td.n {
+  width: 10mm; text-align: center;
+  font-family: var(--font-display); font-weight: 700; color: var(--accent);
+}
+.worksheet-page table.wtbl.ws-toc td.mk {
+  width: 22mm; text-align: right; color: var(--ink-soft);
+}
+
+/* Staff-copy marker beside the worksheet title */
+.worksheet-page .staff-flag {
+  display: inline-block; margin-left: .5em; vertical-align: middle;
+  font-family: var(--font-display); font-weight: 800; font-size: .62rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  background: var(--neg-soft); color: var(--neg);
+  border-radius: 5px; padding: .16em .6em;
+}
+.worksheet-page .sheet.staff .ws-head { border-bottom-color: var(--neg); }
+
+/* ---------- Red answer overlay (staff copies only) ----------
+   .wsa holds a model answer written into the question's answer
+   space. The answer itself is in --font-hand so it reads as a
+   filled-in copy; marking guidance (.sp) stays in the body face
+   because it is read at speed while marking. Red comes from
+   --neg, the site's answer/emphasis colour — not a new hex. */
+.worksheet-page .wsa {
+  color: var(--neg); font-family: var(--font-hand);
+  font-size: 1.16rem; line-height: 1.3;
+  margin: 1mm 0 2.5mm; break-inside: avoid;
+}
+.worksheet-page .wsa > :first-child { margin-top: 0; }
+.worksheet-page .wsa p { margin: 0 0 .3em; }
+.worksheet-page .wsa p:last-child { margin-bottom: 0; }
+
+/* Marking guidance: allocation, common errors, discriminators */
+.worksheet-page .wsa .sp {
+  display: block; font-family: var(--font-body); font-style: italic;
+  font-size: .76rem; line-height: 1.4;
+  color: color-mix(in srgb, var(--neg) 72%, #000);
+  margin-top: 1.2mm;
+}
+
+/* Answer tables: body face, so a mark scheme stays scannable */
+.worksheet-page .wsa table.ans {
+  width: 100%; border-collapse: collapse; margin: 1mm 0 1.5mm;
+  font-family: var(--font-body); font-size: .76rem; break-inside: avoid;
+}
+.worksheet-page .wsa table.ans th,
+.worksheet-page .wsa table.ans td {
+  border: 1px solid color-mix(in srgb, var(--neg) 42%, #fff);
+  padding: 1mm 1.6mm; text-align: left; vertical-align: top;
+}
+.worksheet-page .wsa table.ans th {
+  background: var(--neg-soft);
+  font-family: var(--font-display); font-weight: 700;
+}
+
+/* Multiple-choice answer chips */
+.worksheet-page .wsa .mcq-grid {
+  display: flex; flex-wrap: wrap; gap: 2mm; margin: 1mm 0 1.5mm;
+}
+.worksheet-page .wsa .mcq {
+  display: flex; align-items: baseline; gap: .4em;
+  border: 1px solid color-mix(in srgb, var(--neg) 42%, #fff);
+  border-radius: 100px; padding: .05em .8em; background: var(--neg-soft);
+}
+.worksheet-page .wsa .mcq .num {
+  font-family: var(--font-body); font-size: .7rem; font-weight: 700;
+}
+.worksheet-page .wsa .mcq .let { font-size: 1.2rem; font-weight: 700; }
+
+/* Question-type tags carried over from the answer key */
+.worksheet-page .wsa .tag {
+  font-family: var(--font-body); font-size: .64rem; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  border-radius: 4px; padding: .1em .5em; margin-right: .3em;
+  background: var(--neg-soft); color: var(--neg);
+}
+
+@media print {
+  /* A footer must never be the only thing on a page. Without this the
+     last sheet of a worksheet could carry nothing but .ws-foot — three
+     of the eleven did so in the first collated build. */
+  .worksheet-page .ws-foot { break-before: avoid; }
+
+  /* The sheet is a flex column on screen so .ws-foot can be pushed to
+     the bottom of the paper preview. In print that auto margin fights
+     the fragmenter, so flow the sheet as a normal block instead. */
+  .worksheet-page .sheet { display: block; }
+  .worksheet-page .sheet > .ws-foot { margin-top: 5mm; }
+
+  /* Tighten the vertical rhythm on paper only — the screen preview keeps
+     its looser spacing. Reclaiming ~15 mm a worksheet is what pulls the
+     closing self-check block back onto the last page of content instead
+     of stranding it, and on its own it saved four sheets across the set. */
+  .worksheet-page .ws-head    { padding-bottom: 2.5mm; margin-bottom: 4mm; }
+  .worksheet-page section.part{ margin-bottom: 4.5mm; }
+  .worksheet-page .part-head  { margin-bottom: 3mm; padding: 1.2mm 3mm; }
+  .worksheet-page .part-instr { margin: -1.5mm 0 2.5mm; }
+  .worksheet-page .q          { margin-bottom: 3mm; }
+
+  /* Same idea applied to the gaps around answer furniture. Writing space
+     itself is untouched — the 8 mm rule pitch, line counts and box heights
+     are all as authored; only the margins around them come in. */
+  .worksheet-page .lines,
+  .worksheet-page .halflines  { margin: 1mm 0 1.5mm; }
+  .worksheet-page .sub-q      { margin: 1mm 0; }
+  .worksheet-page table.wtbl  { margin: 1.5mm 0 2mm; }
+  .worksheet-page .sortcols   { margin: 1.5mm 0 2mm; }
+  .worksheet-page .drawbox    { margin: 1.5mm 0 2mm; }
+  .worksheet-page .chips      { margin: 1.5mm 0 2mm; }
+  .worksheet-page .opts       { margin: 1mm 0 1.5mm; }
+  .worksheet-page .infobox,
+  .worksheet-page .fnbox,
+  .worksheet-page .y8box      { margin: 1.5mm 0 2.5mm; }
+
+  /* Keep the self-check list whole. Letting it split just moves the
+     stranding one item down instead of fixing it. */
+  .worksheet-page .tick { break-inside: avoid; }
+}
