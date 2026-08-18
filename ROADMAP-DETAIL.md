@@ -23,7 +23,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 
 | Subject | State | What's there |
 |---|---|---|
-| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
+| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
 | year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
@@ -39,7 +39,42 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-foundation | Stub | — |
 
 Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
-3 gated pages.
+4 gated pages.
+
+### Landed — collated worksheet booklets (18 Aug 2026)
+
+`year7-science/bio-ecosystems/worksheets-all.html` collates all 11
+worksheets into one printout, and `worksheets-all-solutions.html` is the
+same booklet with model answers and marking guidance filled in in red,
+staff-gated behind the usual encrypted blob. Both are plain
+`worksheet.css` pages — a booklet is just many `.sheet` blocks in one
+document, and the existing print rule already breaks a page after each
+one, so no new pagination markup was needed.
+
+Two things worth knowing before touching worksheet spacing again:
+
+- **The print rhythm in `worksheet.css` is tuned, not arbitrary.** A
+  block of print-only margin reductions (part, question, head, footer and
+  the gaps around lines/tables/boxes) takes the set from 39 printed pages
+  to 35, and the collated booklet from 42 to 36. Writing space itself is
+  untouched — the 8 mm rule pitch, `data-lines` counts and box heights are
+  all as authored. Loosening those margins puts the pages straight back.
+- **`.ws-foot` carries `break-before: avoid`** so a footer can never be
+  the only thing on a sheet; three worksheets did exactly that before.
+  `.tick` stays `break-inside: avoid` — letting the self-check list split
+  just strands one item instead of four.
+
+Worksheets 4 and 9 still run to 4 pages. Both are genuinely long (770 mm
+and 735 mm of content against 273 mm a page) and both fragment on a
+single unbreakable block — a dichotomous-key table and a four-row
+mechanism table. Shortening those questions is the only thing left that
+would help, which is a content decision, not a CSS one.
+
+The red overlay is generated, not hand-written: the answers are lifted
+from `solutions.html` by matching its `W<n> Q<m>` qrefs onto each
+worksheet's `.qn`, including the grouped multiple-choice blocks. If the
+answer key changes, the booklet has to be regenerated and re-encrypted —
+it does not update itself.
 
 ### Source material that exists but isn't ported
 
@@ -117,13 +152,22 @@ label on its own.
       relative to that. Excluded from the nav tree via `SKIP_FILE` in
       `build-sitemap.js`. **S** *(done 2026-08-16)*
 
-- [ ] **`10methods-primer/index.html` still has an inline `<style>`
-      block.** ~15 lines of `.chapter`/`.ch-head`/`.ch-meta`/`.ch-open`/
-      `.ch-links` rules — a hub with several week grids stacked, which
-      `hub.css` doesn't have a component for. Either lift them into
-      hub.css as a named "chapter group" component (other multi-chapter
-      units will want it) or accept it and note the decision. Found
-      while linking the primer's booklets. **S**
+- [x] **`10methods-primer/index.html` still has an inline `<style>`
+      block.** Lifted into hub.css as a named **chapter group**
+      component — `.chapter`, `.ch-head`, `.ch-meta`, `.ch-links`,
+      `.ch-open` — rather than accepted, because the multi-chapter shape
+      recurs (year11-methods ch9/11, and Specialist calculus will want it
+      if that lands as one unit with chapter sections). Two of the
+      lifted rules weren't chapter-specific at all and went into the
+      existing `ul.periods` block instead: `ul.periods a` (a period line
+      linking straight to its slide, white not UA blue) and
+      `ul.periods li b` (the lead-in section code or day, in the hub
+      amber). **That second one is a deliberate visual change to
+      `year12-algorithmics/unit-4/index.html`** — its `<b>Tue</b>` day
+      labels were previously unstyled and now match the primer's. The
+      three hub pages now carry no inline `<style>` between them;
+      `check-links.js` clean at 132 pages / 1683 refs. **S**
+      *(done 2026-08-16)*
 
 ### Tier 1 — Small fixes (under a session each)
 

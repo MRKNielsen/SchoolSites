@@ -19,7 +19,9 @@
 <link rel="stylesheet" href="../../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../../assets/css/deck.css">
 <link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<link rel="stylesheet" href="../../../assets/css/binomsim.css">
 <script src="../../../assets/js/sitenav.js" defer></script>
+<script src="../../../assets/js/binomsim.js" defer></script>
 <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
@@ -376,6 +378,19 @@
     <p>Dividing by \(n\): \(\hat{P} = X/n \mathrel{\dot\sim} N\big(p,\, \tfrac{p(1-p)}{n}\big)\) — the same fact in proportion form.</p>
     <p>The parameters follow from 15A alone: dividing by the constant \(n\) divides the mean by \(n\), giving \(np/n = p\), and divides the variance by \(n^2\), giving \(np(1-p)/n^2 = p(1-p)/n\). Note the \(\tfrac{1}{n}\) again — a proportion, like any other average, becomes more precise at a square-root rate.</p>
     <p>Whether a question is about a <b>count</b> or a <b>proportion</b> decides which of the two forms you want. "How many of the 100 people" is a count and uses \(N(np, np(1-p))\); "what percentage of the sample" is a proportion and uses \(N(p, p(1-p)/n)\). Both give the same answer if you convert consistently, so the safest habit is to work in whichever the question states and convert only at the end.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Lesson 4 · Normal ≈ binomial">
+  <h2>Seeing it: when does the bell actually fit?</h2>
+  <p>The bars are the <b>exact</b> \(\text{Bi}(n,p)\); the curve is the \(N\big(np,\, np(1-p)\big)\) that 15F offers in its place. The curve's parameters are the binomial's own mean and variance, so it can never sit in the wrong place — it can only ever fail on <b>shape</b>.</p>
+  <div class="binomsim" data-n="30" data-p="0.5" data-nmax="200"></div>
+  <div class="box try"><span class="lbl">Three things to try</span>
+    <ul style="margin-top:6px;">
+      <li>Hold \(p = 0.5\) and drag \(n\) from 1 upwards. The bars are symmetric from the start, so the fit is good almost immediately — symmetry, not size, is doing the work.</li>
+      <li>Now set \(p = 0.05\) and drag \(n\). At \(n = 30\), \(np = 1.5\): the bars are jammed against 0 and the curve runs off the left of the axis into <b>negative counts</b>, which is nonsense. Keep going — the fit only recovers once \(np\) passes about 5, near \(n = 100\).</li>
+      <li>Set \(p = 0.95\) instead. The same failure appears at the other end, which is why the guideline tests <b>both</b> \(np\) and \(n(1-p)\) rather than just \(n\).</li>
+    </ul>
   </div>
 </section>
 

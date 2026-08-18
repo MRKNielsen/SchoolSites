@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-16",
+ "generated": "2026-08-18",
  "tree": [
   {
    "t": "Home",
@@ -183,6 +183,16 @@ window.SITEMAP = {
           {
            "t": "Species Profile: Eastern Barred Bandicoot",
            "h": "year7-science/bio-ecosystems/species-bandicoot.html",
+           "k": "science"
+          },
+          {
+           "t": "Worksheet Booklet — Answers",
+           "h": "year7-science/bio-ecosystems/worksheets-all-solutions.html",
+           "k": "science"
+          },
+          {
+           "t": "Worksheet Booklet · All 11 Worksheets",
+           "h": "year7-science/bio-ecosystems/worksheets-all.html",
            "k": "science"
           }
          ]

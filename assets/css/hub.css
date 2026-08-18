@@ -6,6 +6,8 @@
      <body class="hub-page theme-specialist">
        <header class="hub-head"> … <div class="timeline"> … </header>
        <main> <div class="grid" id="weeks"> <div class="week" data-start="…">
+   For a long unit, wrap each grid in a .chapter with a .ch-head — see
+   "Chapter groups" below.
    Behaviour (current-week highlight, milestone states, countdown)
    comes from ../js/hub.js.
    ============================================================ */
@@ -96,6 +98,34 @@ body.hub-page {
 ul.periods { list-style: none; margin: .6rem 0 .2rem; }
 ul.periods li { font-size: .85rem; padding: .28rem 0 .28rem .9rem; position: relative; border-top: 1px dashed rgba(255,255,255,.25); color: rgba(255,255,255,.9); }
 ul.periods li::before { content: "\25B8"; position: absolute; left: 0; top: .28rem; font-size: .7rem; color: rgba(255,255,255,.5); }
+/* The lead-in label on a period line — a section code ("1A") or a day
+   ("Tue"). Amber is the hub's highlight colour, same as .week.current. */
+ul.periods li b { color: var(--c-amber-400); margin-right: .35em; }
+/* A period line may be a link straight to its slide. Inherit the list's
+   white rather than the UA blue; underline only on hover so a card of
+   twenty links doesn't read as a wall of rules. */
+ul.periods a { color: #fff; text-decoration: none; }
+ul.periods a:hover { text-decoration: underline; }
+
+/* ---------- Chapter groups ----------
+   A hub whose unit is long enough to need several week grids stacked
+   under their own headings (year10-mathematics/10methods-primer: nine
+   chapters across a full year). A hub with a single grid doesn't need
+   any of this — go straight from <h2> to .grid. */
+.chapter { margin-bottom: 2.6rem; }
+.ch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.ch-head h2 { margin: 0; font-size: 1.25rem; }   /* overrides .hub-page h2 above */
+.ch-meta { font-size: .8rem; color: rgba(255,255,255,.65); margin-top: .15rem; }
+/* Wrap in .ch-links when a chapter has more than one destination
+   (e.g. a question booklet beside the deck). */
+.ch-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+.ch-open {
+  font-size: .78rem; font-family: var(--font-display); font-weight: 700;
+  text-decoration: none; color: #fff; white-space: nowrap;
+  border: 1px solid rgba(255,255,255,.3); border-radius: 100px;
+  padding: .35rem .9rem; background: rgba(255,255,255,.10);
+}
+.ch-open:hover { background: rgba(255,255,255,.22); }
 
 .milestone-chip {
   display: inline-block; font-size: .7rem; font-weight: 700; color: #fff;

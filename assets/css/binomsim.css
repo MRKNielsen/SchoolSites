@@ -1,0 +1,78 @@
+/* ============================================================
+   binomsim.css — BINOMIAL → NORMAL VISUALISER (optional module)
+   Pairs with assets/js/binomsim.js. Link both only on decks that
+   use the component. Zero dependencies.
+
+     <div class="binomsim" data-n="30" data-p="0.5"></div>
+
+   binomsim.js builds the SVG, the sliders and the readout inside
+   that div, so the deck markup stays a single line. Every colour
+   comes from tokens.css, so the widget follows the deck's theme.
+
+   The teaching point: the bars are the EXACT binomial and the
+   curve is N(np, np(1-p)). Dragging p towards 0 or 1 pushes the
+   bars against an end where no symmetric bell can follow them —
+   which is what the np > 5 and n(1-p) > 5 guideline is really
+   testing. The verdict chip states that in words.
+   ============================================================ */
+
+.binomsim {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 1.4vh 1vw 1.2vh;
+}
+
+.binomsim svg { display: block; width: 100%; height: auto; }
+
+/* ---------- Scene ---------- */
+.bs-bar      { fill: var(--accent); fill-opacity: 0.55; }
+.bs-bar-edge { fill: none; stroke: var(--accent); stroke-width: 1; stroke-opacity: 0.7; }
+.bs-curve    { fill: none; stroke: var(--neg); stroke-width: 3; stroke-linejoin: round; }
+.bs-mean     { stroke: var(--accent-warm); stroke-width: 2; stroke-dasharray: 6 5; }
+.bs-axis     { stroke: var(--ink-soft); stroke-width: 2; }
+.bs-tick     { stroke: var(--ink-soft); stroke-width: 1.2; }
+
+.bs-ticklab {
+  font-family: var(--font-body); font-size: 14px;
+  fill: var(--muted); text-anchor: middle;
+}
+.bs-meanlab {
+  font-family: var(--font-body); font-size: 14px; font-weight: 700;
+  fill: var(--accent-warm); text-anchor: middle;
+}
+.bs-axislab {
+  font-family: var(--font-body); font-size: 14px;
+  fill: var(--muted); text-anchor: middle;
+}
+
+/* ---------- Controls ---------- */
+.bs-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .bs-controls { grid-template-columns: 1fr; } }
+
+/* ---------- Readout ---------- */
+.bs-readout {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 8px 18px;
+  font-family: var(--font-body); font-size: 15px; color: var(--ink);
+}
+.bs-readout b { font-variant-numeric: tabular-nums; }
+.bs-readout .bs-stat { white-space: nowrap; }
+
+.bs-verdict {
+  display: inline-block; padding: 3px 12px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; letter-spacing: .01em;
+  border: 1.5px solid currentColor;
+}
+.bs-verdict.ok   { color: var(--accent-dark); background: color-mix(in srgb, var(--accent) 12%, #fff); }
+.bs-verdict.edge { color: var(--accent-warm); background: color-mix(in srgb, var(--accent-warm) 14%, #fff); }
+.bs-verdict.bad  { color: var(--neg); background: var(--neg-soft); }
+
+/* Print: keep the figure, drop the interactive furniture. */
+@media print {
+  .binomsim { break-inside: avoid; }
+  .bs-controls { display: none; }
+}
