@@ -455,29 +455,68 @@ body.worksheet-page {
 .worksheet-page .sheet.staff .ws-head { border-bottom-color: var(--neg); }
 
 /* ---------- Red answer overlay (staff copies only) ----------
-   .wsa holds a model answer written into the question's answer
-   space. The answer itself is in --font-hand so it reads as a
-   filled-in copy; marking guidance (.sp) stays in the body face
-   because it is read at speed while marking. Red comes from
-   --neg, the site's answer/emphasis colour — not a new hex. */
-.worksheet-page .wsa {
-  color: var(--neg); font-family: var(--font-hand);
-  font-size: 1.16rem; line-height: 1.3;
-  margin: 1mm 0 2.5mm; break-inside: avoid;
-}
-.worksheet-page .wsa > :first-child { margin-top: 0; }
-.worksheet-page .wsa p { margin: 0 0 .3em; }
-.worksheet-page .wsa p:last-child { margin-bottom: 0; }
+   Answers are written into the worksheet's own answer furniture, so a
+   staff copy reads as a completed worksheet rather than a key beside
+   one: table cells and inline blanks are filled, ruled lines are
+   written on, the chosen multiple-choice option is ringed and tick
+   boxes are ticked. Red is --neg, the site's existing answer colour.
 
-/* Marking guidance: allocation, common errors, discriminators */
-.worksheet-page .wsa .sp {
+   Marking guidance is the one thing that stays outside the furniture —
+   a student never wrote it — so .wsa-note sits under the question in
+   the body face, because it is read at speed while marking. */
+
+/* Written-in answer: table cells, inline blanks, sort columns */
+.worksheet-page .wsa-in {
+  font-family: var(--font-hand); color: var(--neg);
+  font-size: 1.06rem; line-height: 1.15;
+}
+.worksheet-page .blank .wsa-in { padding: 0 .35em; }
+.worksheet-page table.wtbl td .wsa-in { display: block; }
+
+/* Writing on the rules. The block grows if the answer runs long, and
+   line-height matches the 8 mm rule pitch so each line sits on a rule
+   instead of drifting between them. */
+.worksheet-page .lines.filled,
+.worksheet-page .halflines.filled {
+  height: auto; min-height: calc(var(--n) * 8mm);
+  padding: 0 1.5mm;
+  font-family: var(--font-hand); color: var(--neg);
+  font-size: 1.06rem; line-height: 8mm;
+}
+.worksheet-page .lines.filled > *,
+.worksheet-page .lines.filled p { margin: 0; }
+
+/* The option the answer key chose */
+.worksheet-page .opt.chosen { color: var(--neg); font-weight: 600; }
+.worksheet-page .opt.chosen .ol { color: var(--neg); }
+.worksheet-page .opt.chosen::before {
+  border-color: var(--neg);
+  background: radial-gradient(var(--neg) 44%, transparent 46%);
+}
+
+/* Boxes the answer key says to tick */
+.worksheet-page .tick li.ticked { color: var(--neg); }
+.worksheet-page .tick li.ticked::before {
+  content: "\2713"; border-color: var(--neg); color: var(--neg);
+  font-size: 3mm; line-height: 3.3mm; text-align: center; font-weight: 700;
+}
+
+/* Marking guidance under the question */
+.worksheet-page .wsa-note {
   display: block; font-family: var(--font-body); font-style: italic;
   font-size: .76rem; line-height: 1.4;
   color: color-mix(in srgb, var(--neg) 72%, #000);
-  margin-top: 1.2mm;
+  margin: 1.2mm 0 0;
 }
 
-/* Answer tables: body face, so a mark scheme stays scannable */
+/* Fallback block, for any answer with no furniture to go in */
+.worksheet-page .wsa {
+  color: var(--neg); font-family: var(--font-hand);
+  font-size: 1.1rem; line-height: 1.3;
+  margin: 1mm 0 2.5mm; break-inside: avoid;
+}
+.worksheet-page .wsa p { margin: 0 0 .3em; }
+.worksheet-page .wsa p:last-child { margin-bottom: 0; }
 .worksheet-page .wsa table.ans {
   width: 100%; border-collapse: collapse; margin: 1mm 0 1.5mm;
   font-family: var(--font-body); font-size: .76rem; break-inside: avoid;
@@ -491,8 +530,6 @@ body.worksheet-page {
   background: var(--neg-soft);
   font-family: var(--font-display); font-weight: 700;
 }
-
-/* Multiple-choice answer chips */
 .worksheet-page .wsa .mcq-grid {
   display: flex; flex-wrap: wrap; gap: 2mm; margin: 1mm 0 1.5mm;
 }
@@ -505,14 +542,6 @@ body.worksheet-page {
   font-family: var(--font-body); font-size: .7rem; font-weight: 700;
 }
 .worksheet-page .wsa .mcq .let { font-size: 1.2rem; font-weight: 700; }
-
-/* Question-type tags carried over from the answer key */
-.worksheet-page .wsa .tag {
-  font-family: var(--font-body); font-size: .64rem; font-weight: 700;
-  letter-spacing: .04em; text-transform: uppercase;
-  border-radius: 4px; padding: .1em .5em; margin-right: .3em;
-  background: var(--neg-soft); color: var(--neg);
-}
 
 @media print {
   /* A footer must never be the only thing on a page. Without this the
