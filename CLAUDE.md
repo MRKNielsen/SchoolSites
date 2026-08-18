@@ -70,6 +70,21 @@ Optional modules — link only when a deck uses them:
   `data-start="0..1"`, `data-labels="off"`. ~3.5 KB gzipped, no
   dependencies. Colours come from tokens so it follows the theme;
   controls are hidden in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/binomsim.css` + `assets/js/binomsim.js` — the binomial →
+  normal visualiser for 15F. Markup is one line,
+  `<div class="binomsim"></div>`; the JS builds the SVG (exact
+  `Bi(n,p)` bars with the `N(np, np(1-p))` curve over them, mean line,
+  auto-thinning axis), two sliders and a readout that states `np`,
+  `n(1-p)` and a verdict on the `> 5` guideline. Attributes:
+  `data-n`, `data-p`, `data-nmax` (default 200), `data-controls="off"`
+  for a static figure. The window is ±4σ round the mean, clipped to
+  `[0, n]`, widening to the full support when that would leave fewer
+  than six bars. **The pmf is computed in log space via a Lanczos
+  log-gamma** — `n!` overflows a double at 171 and the naive recurrence
+  from `P(0) = (1-p)^n` underflows to zero for extreme `p`, so either
+  shortcut draws an empty chart at exactly the settings the widget
+  exists to demonstrate. Colours come from tokens; sliders are hidden
+  in print. Live in `styleguide/deck-demo.html`.
 - Slide-jump menu — add `<button class="navbtn menubtn">` inside
   `.chrome` plus a `.slidemenu` overlay containing `.menugrid`, and give
   each slide a `data-menu="…"` title. deck.js builds the contents grid
