@@ -61,6 +61,7 @@ const LABEL_OVERRIDES = {
   "styleguide/deck-demo.html": "Deck system demo",
   "styleguide/deck-template.html": "Deck starter template",
   "tools/staff-crypt.html": "Staff blob tool (encrypt / decrypt)",
+  "tools/page-builder.html": "Page builder (slides & worksheets)",
 };
 
 /* Unit folder names → the label used for the unit itself. Derived from

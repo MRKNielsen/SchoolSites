@@ -819,6 +819,10 @@ window.SITEMAP = {
      "t": "Staff tools",
      "c": [
       {
+       "t": "Page builder (slides & worksheets)",
+       "h": "tools/page-builder.html"
+      },
+      {
        "t": "Staff blob tool (encrypt / decrypt)",
        "h": "tools/staff-crypt.html",
        "k": "science"

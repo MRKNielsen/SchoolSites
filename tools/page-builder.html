@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page builder &mdash; decks &amp; worksheets</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<script>
+  /* The maths field renders with the same MathJax the decks use, so what a
+     teacher previews is exactly what the projector shows. skipHtmlTags keeps
+     it off the form inputs. */
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code','input'] }
+  };
+</script>
+<script src="../assets/vendor/mathjax/tex-svg.js" async></script>
+<style>
+/* Staff-only authoring tool, never linked from the site and never served to
+   students — like staff-crypt.html it carries a small local style block
+   rather than earning a page type in the design system.
+
+   IMPORTANT: deck.css cannot be loaded here. It is unscoped — it ships a
+   global `* { margin:0 }` reset, `body { overflow:hidden }` and absolutely
+   positioned `.slide`s — so linking it would destroy this page's own layout.
+   The preview is therefore an <iframe> holding a real deck/worksheet
+   document. That also means the preview is not an approximation: it is the
+   page, rendered by the stylesheet the projector will use. */
+body.builder-page{background:var(--paper);color:var(--ink);font-family:var(--font-body);
+  margin:0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+.bb-top{display:flex;gap:1em;align-items:center;flex-wrap:wrap;padding:.7em 1.2em;
+  background:var(--panel);border-bottom:1px solid var(--line)}
+.bb-top h1{font-family:var(--font-display);color:var(--accent-dark);font-size:1.05rem;margin:0 1em 0 0}
+.bb-top .grow{margin-left:auto}
+.bb-main{flex:1;display:grid;grid-template-columns:220px minmax(340px,1fr) minmax(380px,1.1fr);
+  min-height:0}
+.bb-pane{overflow:auto;padding:1em 1.1em;min-height:0}
+.bb-pane+.bb-pane{border-left:1px solid var(--line)}
+.bb-pane h2{font-family:var(--font-display);font-size:.72rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-faint);margin:0 0 .8em}
+
+/* outline */
+.ol-item{display:flex;gap:.5em;align-items:center;width:100%;text-align:left;
+  font:inherit;font-size:.87rem;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius-sm);padding:.5em .6em;margin-bottom:.4em;cursor:pointer}
+.ol-item:hover{border-color:var(--accent)}
+.ol-item.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff)}
+.ol-item .n{font-family:var(--font-display);font-weight:800;color:var(--accent);
+  font-size:.72rem;min-width:1.6em}
+.ol-item .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ol-item .mv{color:var(--ink-faint);font-size:.8rem;padding:0 .15em}
+
+label.f{display:block;margin-bottom:.85em}
+label.f>span{display:block;font-size:.68rem;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:.3em}
+label.f input,label.f textarea,label.f select{width:100%;font:inherit;font-size:.92rem;
+  padding:.5em .65em;box-sizing:border-box;border:1px solid var(--line-strong);
+  border-radius:var(--radius-sm);background:var(--panel);color:inherit}
+label.f textarea{resize:vertical;line-height:1.5;min-height:4.5em}
+label.f.inline{display:inline-block;width:auto;margin-right:.8em}
+label.f.inline input{width:6em}
+.row{display:flex;gap:.5em;flex-wrap:wrap;align-items:flex-end}
+.row>label.f{flex:1;min-width:8em}
+
+button.go{font-family:var(--font-display);font-weight:700;font-size:.88rem;
+  background:var(--accent);color:var(--c-white);border:none;border-radius:var(--radius-sm);
+  padding:.55em 1.1em;cursor:pointer}
+button.go:hover{background:var(--accent-dark)}
+button.go.ghost{background:var(--panel);color:var(--accent-dark);border:1px solid var(--line-strong)}
+button.go.ghost:hover{background:var(--paper)}
+button.go.sm{font-size:.78rem;padding:.35em .8em}
+button.go.danger{background:var(--panel);color:var(--neg);border:1px solid var(--line-strong)}
+
+.blk{border:1px solid var(--line);border-radius:var(--radius-sm);padding:.7em .8em;
+  margin-bottom:.7em;background:var(--panel)}
+.blk>.bh{display:flex;gap:.5em;align-items:center;margin-bottom:.6em}
+.blk>.bh .bt{font-family:var(--font-display);font-weight:700;font-size:.78rem;
+  color:var(--accent-dark);flex:1}
+.blk.opaque{background:var(--accent-warm-soft);border-color:var(--accent-warm)}
+.blk.opaque .bt{color:var(--warn)}
+.blk.opaque pre{font-family:var(--font-mono);font-size:.7rem;max-height:7em;overflow:auto;
+  margin:0;white-space:pre-wrap;color:var(--ink-soft)}
+
+.hint{color:var(--muted);font-size:.8rem;line-height:1.5;margin:.2em 0 1em}
+.msg{font-size:.85rem;min-height:1.3em;margin-top:.5em}
+.msg.ok{color:var(--pos)} .msg.bad{color:var(--neg)}
+
+/* preview */
+.pv-wrap{position:relative;border:1px solid var(--line-strong);border-radius:var(--radius-sm);
+  overflow:hidden;background:#fff}
+.pv-wrap iframe{display:block;border:0;width:1280px;height:800px;transform-origin:0 0}
+.pv-wrap.sheet iframe{width:840px;height:1160px}
+
+/* maths modal */
+.mdl{position:fixed;inset:0;background:rgba(22,38,61,.55);display:flex;
+  align-items:center;justify-content:center;padding:4vh 4vw;z-index:50}
+.mdl[hidden]{display:none}
+.mdl-card{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);
+  width:min(780px,100%);max-height:92vh;overflow:auto;padding:1.4em 1.6em}
+.mdl-card h2{font-family:var(--font-display);font-size:1.1rem;color:var(--accent-dark);margin:0 0 .1em}
+.pal{display:flex;flex-wrap:wrap;gap:.3em;margin:.3em 0 .9em}
+.pal .pg{width:100%;font-size:.64rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-faint);margin:.5em 0 .1em}
+.pal button{font-family:var(--font-math);font-size:.9rem;background:var(--panel);
+  border:1px solid var(--line-strong);border-radius:6px;padding:.25em .6em;cursor:pointer;
+  min-width:2.2em;color:var(--ink)}
+.pal button:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,#fff)}
+#mathIn{font-family:var(--font-mono);font-size:.85rem;min-height:5em}
+#mathPv{border:1px dashed var(--line-strong);border-radius:var(--radius-sm);
+  padding:1em;margin:.6em 0 .9em;min-height:4em;background:#fff;overflow-x:auto}
+#mathPv.bad{border-color:var(--neg);background:var(--neg-soft)}
+.mini{font-size:.78rem;color:var(--muted)}
+code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);
+  padding:.1em .35em;border-radius:4px}
+</style>
+</head>
+<body class="builder-page">
+
+<div class="bb-top">
+  <h1>Page builder</h1>
+  <label class="f inline" style="margin:0"><span>Type</span>
+    <select id="kind" style="width:9em">
+      <option value="deck">Deck slides</option>
+      <option value="worksheet">Worksheet</option>
+    </select></label>
+  <label class="f inline" style="margin:0"><span>Theme</span>
+    <select id="theme" style="width:11em"></select></label>
+  <label class="f inline" style="margin:0;width:16em"><span>Destination folder</span>
+    <input id="dest" value="year12-specialist/term-3" style="width:100%"></label>
+  <label class="f inline" style="margin:0;width:9em"><span>File name</span>
+    <input id="fname" value="deck1.html" style="width:100%"></label>
+  <span class="grow"></span>
+  <button class="go ghost sm" id="btnLoad">Load a page…</button>
+  <input type="file" id="fileIn" accept=".html" hidden>
+  <button class="go" id="btnExport">Download file</button>
+</div>
+
+<div class="bb-main">
+  <div class="bb-pane">
+    <h2>Outline</h2>
+    <div id="outline"></div>
+    <button class="go ghost sm" id="btnAdd" style="width:100%;margin-top:.5em">+ Add</button>
+    <select id="addType" style="width:100%;margin-top:.4em;font-size:.8rem;padding:.35em"></select>
+  </div>
+
+  <div class="bb-pane">
+    <h2>Edit</h2>
+    <div id="form"></div>
+  </div>
+
+  <div class="bb-pane">
+    <h2>Preview
+      <label class="mini" style="text-transform:none;letter-spacing:0;font-weight:400;margin-left:.6em">
+        <input type="checkbox" id="pvAll" checked style="width:auto;vertical-align:-1px"> Show all steps
+      </label>
+      <span class="mini" id="pvNote"></span></h2>
+    <div class="pv-wrap" id="pvWrap"><iframe id="pv" title="Live preview"></iframe></div>
+    <p class="hint" id="pvHint"></p>
+  </div>
+</div>
+
+<!-- ---------------------------------------------------------------- maths -->
+<div class="mdl" id="mathModal" hidden>
+  <div class="mdl-card">
+    <h2>Maths</h2>
+    <p class="hint">Typed as LaTeX and rendered by MathJax, the same as every
+      other expression on the site. Write the <strong>whole</strong> expression
+      here — never half in MathJax and half in the CSS fraction markup.</p>
+
+    <div class="row" style="margin-bottom:.6em">
+      <label class="f inline" style="margin:0"><span>Display</span>
+        <select id="mathMode" style="width:11em">
+          <option value="inline">Inline \( … \)</option>
+          <option value="block">Centred \[ … \]</option>
+        </select></label>
+    </div>
+
+    <div class="pal" id="pal"></div>
+
+    <label class="f"><span>LaTeX</span><textarea id="mathIn" spellcheck="false"></textarea></label>
+    <div id="mathPv"></div>
+    <div class="row">
+      <button class="go" id="mathOk">Insert</button>
+      <button class="go ghost" id="mathCancel">Cancel</button>
+      <span class="mini" id="mathMsg"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================================================================
+   Model
+   ================================================================ */
+var THEMES = ["theme-methods","theme-specialist","theme-primer","theme-algorithmics",
+              "theme-science","theme-space","theme-foundation","theme-maths"];
+
+var doc = {
+  kind: "deck",
+  theme: "theme-specialist",
+  title: "Lesson 1 — title",
+  lessontag: "Unit · Lesson 1",
+  unitTag: "Year 12 Specialist · Term 3",
+  sub: "One-line description of the lesson.",
+  homeText: "\u2302 Unit home",
+  homeHref: "index.html",
+  marks: 40,
+  items: []
+};
+var sel = 0;
+
+function uid(){ return "s" + Math.random().toString(36).slice(2,8); }
+
+/* ---- starter content so the preview is never empty ---- */
+function starterDeck(){
+  return [
+    {id:uid(), type:"title", menu:"Title", h1:"Lesson title",
+     eyebrow:"Subject · Unit", sub:"One-line description.",
+     pills:["Success criterion 1","Success criterion 2"]},
+    {id:uid(), type:"content", menu:"Worked example", eyebrow:"Topic · subtopic",
+     h2:"Worked example", layout:"cols", blocks:[
+       {id:uid(), type:"box", variant:"question", col:1, label:"Question", body:"Solve \\(2x+5=17\\)."},
+       {id:uid(), type:"steps", col:1, items:[
+          {t:"Subtract 5 from both sides", ans:false},
+          {t:"\\(2x=12\\)", ans:false},
+          {t:"\\(x=6\\)", ans:true}]},
+       {id:uid(), type:"box", variant:"key", col:2, label:"Key idea",
+        body:"Do the same thing to both sides to keep the equation balanced."}
+     ]}
+  ];
+}
+function starterSheet(){
+  return [
+    {id:uid(), type:"part", label:"Part A", ptitle:"Recall", marks:8,
+     instr:"Answer from memory first."},
+    {id:uid(), type:"question", marks:3, text:"Solve \\(3x-7=14\\).",
+     furniture:[{id:uid(), type:"lines", n:3}]}
+  ];
+}
+
+/* ================================================================
+   Escaping — teachers type plain text; LaTeX passes through
+   untouched because backslashes and braces are legal in HTML, and
+   an escaped < inside \( \) still reaches MathJax as <.
+   ================================================================ */
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function lines2p(s){
+  return String(s||"").split(/\n{2,}/).filter(function(t){return t.trim();})
+    .map(function(t){ return "<p>" + esc(t.trim()).replace(/\n/g,"<br>") + "</p>"; }).join("");
+}
+function lines2li(s){
+  return String(s||"").split("\n").filter(function(t){return t.trim();})
+    .map(function(t){ return "    <li>" + esc(t.trim()) + "</li>"; }).join("\n");
+}
+
+/* ================================================================
+   Deck rendering
+   ================================================================ */
+function renderBlock(b){
+  /* An imported block keeps its original markup until the teacher edits
+     it. Regenerating from the model would flatten inline markup — <br>,
+     <b>, .key spans, links — that the form has no field for. Editing the
+     block clears .raw and it is rebuilt from the fields instead. */
+  if (b.raw) return b.raw;
+  switch(b.type){
+    case "text":  return lines2p(b.body);
+    case "list":  return "<ul>\n" + lines2li(b.body) + "\n  </ul>";
+    case "box":
+      return '<div class="box ' + b.variant + (b.frag ? " frag" : "") + '">' +
+             (b.label ? '<span class="lbl">' + esc(b.label) + "</span>" : "") +
+             lines2p(b.body) + "</div>";
+    case "steps": {
+      var id = "steps-" + b.id;
+      var lis = (b.items||[]).map(function(it){
+        return '    <li' + (it.ans ? ' class="ans"' : "") + '><span class="stepno">' +
+               (it.ans ? "✓" : "•") + "</span> " + esc(it.t) + "</li>";
+      }).join("\n");
+      return '<ol class="steps" id="' + id + '">\n' + lis + "\n  </ol>\n" +
+             '  <button class="reveal-btn" data-target="#' + id + '">Show working</button>';
+    }
+    case "bigeq": return '<p class="bigeq">' + esc(b.body) + "</p>";
+    case "work": {
+      var rows = (b.rows||[]).map(function(r){
+        return '    <span class="wl">' + esc(r.l) + '</span><span class="wr">' + esc(r.r) + "</span>";
+      }).join("\n");
+      return '<div class="work">\n' + rows + "\n  </div>";
+    }
+    case "table": {
+      var out = ['<table class="tbl' + (b.filled ? " filled" : "") + '">'];
+      (b.rows||[]).forEach(function(r,i){
+        var cells = r.map(function(c){
+          return i === 0 ? "<th>" + esc(c) + "</th>" : "<td>" + esc(c) + "</td>";
+        }).join("");
+        out.push("    <tr>" + cells + "</tr>");
+      });
+      out.push("  </table>");
+      return out.join("\n");
+    }
+    case "opaque": return b.html;
+    default: return "";
+  }
+}
+
+function renderSlide(s){
+  if (s.raw) return s.raw;      /* untouched import — emit verbatim */
+  var a = [];
+  var cls = "slide";
+  if (s.type === "title")   cls += " title-slide";
+  if (s.type === "section") cls += " section-slide";
+  if (s.type === "quiz")    cls += " quiz-slide";
+  if (s.first) cls += " active";
+
+  var attrs = ' class="' + cls + '"';
+  if (s.menu) attrs += ' data-menu="' + esc(s.menu) + '"';
+  if (s.type === "quiz"){
+    attrs += ' data-quiz-before="' + (s.quizBefore||1) + '"' +
+             ' data-quiz-count="' + (s.quizCount||5) + '"';
+  }
+  if (s.srcSection) attrs += ' data-src-section="' + esc(s.srcSection) + '"';
+
+  a.push("<section" + attrs + ">");
+
+  if (s.type === "title"){
+    if (s.eyebrow) a.push('  <p class="eyebrow">' + esc(s.eyebrow) + "</p>");
+    a.push("  <h1>" + esc(s.h1) + "</h1>");
+    if (s.sub) a.push('  <p class="subtitle">' + esc(s.sub) + "</p>");
+    if ((s.pills||[]).length){
+      a.push('  <div class="head-meta">' +
+        s.pills.map(function(p){ return '<span class="pill">' + esc(p) + "</span>"; }).join("") +
+        "</div>");
+    }
+    if ((s.blocks||[]).length) s.blocks.forEach(function(b){ a.push("  " + renderBlock(b)); });
+    else a.push('  <p class="start-hint">Press <span class="key">→</span> to begin · ' +
+           '<span class="key">M</span> for the slide menu.</p>');
+  } else if (s.type === "section"){
+    if (s.eyebrow) a.push('  <p class="kicker">' + esc(s.eyebrow) + "</p>");
+    a.push("  <h1>" + esc(s.h1) + "</h1>");
+    if (s.sub) a.push("  <p>" + esc(s.sub) + "</p>");
+    (s.blocks||[]).forEach(function(b){ a.push("  " + renderBlock(b)); });
+  } else if (s.type === "quiz"){
+    if (s.eyebrow) a.push('  <p class="eyebrow">' + esc(s.eyebrow) + "</p>");
+    a.push("  <h2>" + esc(s.h2 || "Warm-up quiz") + "</h2>");
+    if (s.sub) a.push('  <p class="lede">' + esc(s.sub) + "</p>");
+    a.push('  <div class="quiz-container"></div>');
+  } else {
+    if (s.eyebrow) a.push('  <p class="eyebrow">' + esc(s.eyebrow) + "</p>");
+    if (s.h2) a.push("  <h2>" + esc(s.h2) + "</h2>");
+    var bs = s.blocks || [];
+    if (s.layout === "cols" || s.layout === "cols-even"){
+      var c1 = bs.filter(function(b){ return (b.col||1) === 1; });
+      var c2 = bs.filter(function(b){ return b.col === 2; });
+      a.push('  <div class="cols' + (s.layout === "cols-even" ? " even" : "") + '">');
+      a.push("    <div>");
+      c1.forEach(function(b){ a.push("      " + renderBlock(b)); });
+      a.push("    </div>");
+      a.push("    <div>");
+      c2.forEach(function(b){ a.push("      " + renderBlock(b)); });
+      a.push("    </div>");
+      a.push("  </div>");
+    } else {
+      bs.forEach(function(b){ a.push("  " + renderBlock(b)); });
+    }
+  }
+  a.push("</section>");
+  return a.join("\n");
+}
+
+/* ================================================================
+   Worksheet rendering
+   ================================================================ */
+function renderFurniture(f){
+  switch(f.type){
+    case "lines":   return '<div class="lines" data-lines="' + (f.n||3) + '"></div>';
+    case "drawbox": return '<div class="drawbox"' + (f.h ? ' data-h="' + f.h + '"' : "") + ">" +
+                           esc(f.caption||"") + "</div>";
+    case "blank":   return '<span class="blank' + (f.size ? " " + f.size : "") + '"></span>';
+    case "opts": {
+      var L = ["A","B","C","D"];
+      return '<div class="opts">\n' + (f.opts||[]).map(function(o,i){
+        return '        <div class="opt"><span class="ol">' + L[i] + ")</span>" + esc(o) + "</div>";
+      }).join("\n") + "\n      </div>";
+    }
+    case "table": {
+      var out = ['<table class="wtbl">',
+                 "        <thead><tr>" +
+                 (f.headers||[]).map(function(h){ return "<th>" + esc(h) + "</th>"; }).join("") +
+                 "</tr></thead>", "        <tbody>"];
+      (f.rows||[]).forEach(function(r){
+        out.push("          <tr>" + r.map(function(c){
+          return c ? "<td>" + esc(c) + "</td>" : '<td class="fill"></td>';
+        }).join("") + "</tr>");
+      });
+      out.push("        </tbody>", "      </table>");
+      return out.join("\n");
+    }
+    case "sortcols": {
+      var hs = f.headers || [];
+      return '<div class="sortcols" data-cols="' + hs.length + '">\n' + hs.map(function(h){
+        return '        <div class="sortcol"><div class="sc-head">' + esc(h) +
+               '</div><div class="sc-body"><div class="lines" data-lines="4"></div></div></div>';
+      }).join("\n") + "\n      </div>";
+    }
+    case "chips":
+      return '<div class="chips"><span class="cl">Word bank</span>' +
+        (f.items||[]).map(function(c){ return '<span class="chip">' + esc(c) + "</span>"; }).join("") +
+        "</div>";
+    case "opaque": return f.html;
+    default: return "";
+  }
+}
+
+function renderSheetItem(it, qn){
+  if (it.type === "part"){
+    return '  <section class="part">\n' +
+      '    <div class="part-head"><span class="part-label">' + esc(it.label) +
+      '</span><span class="part-title">' + esc(it.ptitle) + "</span>" +
+      (it.marks ? '<span class="marks">' + it.marks + " marks</span>" : "") + "</div>" +
+      (it.instr ? '\n    <p class="part-instr">' + esc(it.instr) + "</p>" : "");
+  }
+  if (it.type === "question"){
+    var f = (it.furniture||[]).map(function(x){ return "      " + renderFurniture(x); }).join("\n");
+    return '    <div class="q"><span class="qn">' + qn + "</span>\n" +
+      '      <div class="qbody">' +
+      (it.marks ? '<span class="marks">' + it.marks + "</span>" : "") +
+      esc(it.text) + (f ? "\n" + f : "") + "</div>\n    </div>";
+  }
+  if (it.type === "callout"){
+    return '    <div class="' + it.variant + '"><span class="lbl">' + esc(it.label) +
+           "</span>" + lines2p(it.body) + "</div>";
+  }
+  if (it.type === "tick"){
+    return '  <section class="part">\n' +
+      '    <div class="part-head"><span class="part-label">Check</span>' +
+      '<span class="part-title">' + esc(it.ptitle || "Self-check") + "</span></div>\n" +
+      "    <ul class=\"tick\">\n" + lines2li(it.body) + "\n    </ul>";
+  }
+  if (it.type === "opaque") return it.html;
+  return "";
+}
+
+function renderSheetBody(){
+  var out = [], qn = 0, open = false;
+  doc.items.forEach(function(it){
+    if (it.type === "part" || it.type === "tick"){
+      if (open) out.push("  </section>");
+      out.push(renderSheetItem(it, 0));
+      open = true;
+    } else {
+      if (it.type === "question") qn++;
+      out.push(renderSheetItem(it, qn));
+    }
+  });
+  if (open) out.push("  </section>");
+  return out.join("\n");
+}
+
+/* ================================================================
+   Whole-file export
+   ================================================================ */
+function depthPrefix(){
+  var d = document.getElementById("dest").value.trim().replace(/^\/+|\/+$/g,"");
+  var n = d ? d.split("/").length : 0;
+  return n ? new Array(n+1).join("../") : "./";
+}
+function usesMath(){
+  return JSON.stringify(doc).indexOf("\\\\(") >= 0 ||
+         JSON.stringify(doc).indexOf("\\\\[") >= 0;
+}
+function mathHead(up){
+  return '<script>\n' +
+    "  window.MathJax = {\n" +
+    "    tex: { inlineMath: [['\\\\(', '\\\\)']], displayMath: [['\\\\[', '\\\\]']] },\n" +
+    "    svg: { fontCache: 'global' },\n" +
+    "    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },\n" +
+    "    startup: { pageReady: () => MathJax.startup.defaultPageReady()\n" +
+    "      .then(() => window.dispatchEvent(new Event('resize'))) }\n" +
+    "  };\n" +
+    "<\/script>\n" +
+    '<script src="' + up + 'assets/vendor/mathjax/tex-svg.js" async><\/script>\n';
+}
+function commonHead(up){
+  return '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+   '<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800' +
+   '&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">\n' +
+   '<link rel="stylesheet" href="' + up + 'assets/css/tokens.css">\n';
+}
+function tailHead(up){
+  return '<link rel="stylesheet" href="' + up + 'assets/css/sitenav.css">\n' +
+   '<script src="' + up + 'assets/js/sitenav.js" defer><\/script>\n' +
+   '<link rel="icon" href="' + up + 'assets/icons/favicon.svg" type="image/svg+xml">\n' +
+   '<link rel="icon" href="' + up + 'assets/icons/favicon.ico" sizes="32x32">\n' +
+   '<link rel="apple-touch-icon" href="' + up + 'assets/icons/apple-touch-icon.png">\n' +
+   '<link rel="manifest" href="' + up + 'site.webmanifest">\n' +
+   '<meta name="theme-color" content="#24576f">\n';
+}
+
+function buildDeckFile(){
+  var up = depthPrefix();
+  var slides = doc.items.map(function(s,i){
+    s.first = (i === 0);
+    return renderSlide(s);
+  }).join("\n\n");
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
+   '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+   (usesMath() ? mathHead(up) : "") +
+   "<title>" + esc(doc.title) + "</title>\n" +
+   commonHead(up) +
+   '<link rel="stylesheet" href="' + up + 'assets/css/deck.css">\n' +
+   tailHead(up) +
+   "</head>\n" +
+   '<body class="deck-page ' + doc.theme + '">\n\n' +
+   '<div class="progress"></div>\n' +
+   '<div class="lessontag">' + esc(doc.lessontag) + "</div>\n" +
+   '<a class="homebtn" href="' + esc(doc.homeHref) + '">' + esc(doc.homeText) + "</a>\n\n" +
+   '<main class="deck">\n\n' + slides + "\n\n</main>\n\n" +
+   '<div class="keyhint"><span class="key">←</span> <span class="key">→</span> navigate · ' +
+   '<span class="key">M</span> menu · <span class="key">F</span> fullscreen</div>\n' +
+   '<div class="chrome">\n' +
+   '  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>\n' +
+   '  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>\n' +
+   '  <span class="counter"></span>\n' +
+   '  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>\n' +
+   "</div>\n" +
+   '<div class="slidemenu" hidden>\n' +
+   '  <button class="menuclose" aria-label="Close menu">×</button>\n' +
+   "  <h2>" + esc(doc.lessontag) + " — slide overview</h2>\n" +
+   '  <div class="menugrid"></div>\n' +
+   "</div>\n\n" +
+   '<script src="' + up + 'assets/js/deck.js" defer><\/script>\n' +
+   "</body>\n</html>\n";
+}
+
+function buildSheetFile(){
+  var up = depthPrefix();
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
+   '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+   (usesMath() ? mathHead(up) : "") +
+   "<title>" + esc(doc.title) + "</title>\n" +
+   commonHead(up) +
+   '<link rel="stylesheet" href="' + up + 'assets/css/worksheet.css">\n' +
+   tailHead(up) +
+   "</head>\n" +
+   '<body class="worksheet-page ' + doc.theme + '">\n\n' +
+   '<div class="ws-bar">\n  <a href="index.html">← Unit home</a>\n' +
+   '  <span class="spacer"></span>\n' +
+   '  <span class="hint">' + doc.marks + " marks</span>\n" +
+   '  <button type="button" onclick="window.print()">Print / Save as PDF</button>\n</div>\n\n' +
+   '<div class="sheet">\n' +
+   '  <div class="ws-head">\n' +
+   '    <div class="ws-tag">' + esc(doc.unitTag) + "</div>\n" +
+   "    <h1>" + esc(doc.title) + "</h1>\n" +
+   (doc.sub ? '    <p class="ws-sub">' + esc(doc.sub) + "</p>\n" : "") +
+   '    <div class="namebar"><span>Name</span><span>Class</span><span>Date</span>' +
+   '<span class="marks-total">/ ' + doc.marks + "</span></div>\n" +
+   "  </div>\n\n" + renderSheetBody() + "\n\n" +
+   '  <div class="ws-foot"><span>' + esc(doc.title) + "</span><span>" +
+   esc(doc.unitTag) + "</span></div>\n</div>\n\n</body>\n</html>\n";
+}
+
+function buildFile(){ return doc.kind === "deck" ? buildDeckFile() : buildSheetFile(); }
+
+/* ================================================================
+   Live preview — the iframe is created once with the real
+   stylesheets and MathJax, then only its body is swapped. Rebuilding
+   the whole document per keystroke would re-parse 2 MB of MathJax.
+   ================================================================ */
+var pv = document.getElementById("pv"), pvReady = false, showAll = true;
+
+function previewShell(){
+  var up = "../";                       /* tools/ → site root */
+  var css = doc.kind === "deck" ? "deck.css" : "worksheet.css";
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+   '<script>window.MathJax={tex:{inlineMath:[["\\\\(","\\\\)"]],' +
+   'displayMath:[["\\\\[","\\\\]"]]},svg:{fontCache:"global"},' +
+   'options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}};<\/script>' +
+   '<script src="' + up + 'assets/vendor/mathjax/tex-svg.js"><\/script>' +
+   '<link rel="preconnect" href="https://fonts.googleapis.com">' +
+   '<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800' +
+   '&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">' +
+   '<link rel="stylesheet" href="' + up + 'assets/css/tokens.css">' +
+   '<link rel="stylesheet" href="' + up + 'assets/css/' + css + '">' +
+   (doc.kind === "deck"
+     ? "<style>.slide{position:static!important;display:flex!important;height:100%}" +
+       ".deck{height:100%}body{overflow:auto}" +
+       /* deck.js is not loaded in the preview, so steps and fragments would
+          sit at opacity:0 forever and the reveal button would do nothing.
+          While authoring you want to see what you typed — this is the same
+          override deck.css itself applies for print. Untick 'Show all' to
+          step through them as they will run in class. */
+       "body.pv-all .steps li,body.pv-all .frag{opacity:1!important;" +
+       "visibility:visible!important;transform:none!important}</style>"
+     : "<style>body{background:#fff}.sheet{box-shadow:none;margin:0}</style>") +
+   "</head><body class=\"" + (doc.kind === "deck" ? "deck-page" : "worksheet-page") +
+   " " + doc.theme + (showAll ? " pv-all" : "") + "\"><div id=\"root\"></div></body></html>";
+}
+
+function mountPreview(){
+  pvReady = false;
+  pv.srcdoc = previewShell();
+  pv.onload = function(){ pvReady = true; paintPreview(); };
+  document.getElementById("pvWrap").className = "pv-wrap" + (doc.kind === "deck" ? "" : " sheet");
+  fitPreview();
+}
+
+function fitPreview(){
+  var wrap = document.getElementById("pvWrap");
+  var w = wrap.clientWidth || 420;
+  var iw = doc.kind === "deck" ? 1280 : 840;
+  var ih = doc.kind === "deck" ? 800 : 1160;
+  var k = w / iw;
+  pv.style.transform = "scale(" + k + ")";
+  wrap.style.height = (ih * k) + "px";
+}
+
+function paintPreview(){
+  if (!pvReady) return;
+  var d = pv.contentDocument;
+  var root = d && d.getElementById("root");
+  if (!root) return;
+  d.body.className = (doc.kind === "deck" ? "deck-page " : "worksheet-page ") + doc.theme +
+                     (showAll ? " pv-all" : "");
+  if (doc.kind === "deck"){
+    var s = doc.items[sel];
+    root.innerHTML = s ? '<main class="deck">' + renderSlide(s) + "</main>" : "";
+    var el = root.querySelector(".slide");
+    if (el) el.classList.add("active");
+    document.getElementById("pvHint").textContent =
+      "One slide at a time — pick another in the outline.";
+  } else {
+    root.innerHTML = '<div class="sheet"><div class="ws-head">' +
+      '<div class="ws-tag">' + esc(doc.unitTag) + "</div><h1>" + esc(doc.title) + "</h1>" +
+      '<div class="namebar"><span>Name</span><span>Class</span><span>Date</span>' +
+      '<span class="marks-total">/ ' + doc.marks + "</span></div></div>" +
+      renderSheetBody() + "</div>";
+    document.getElementById("pvHint").textContent = "The whole worksheet, as it will print.";
+  }
+  if (!showAll) wireStepsIn(d);
+  if (pv.contentWindow.MathJax && pv.contentWindow.MathJax.typesetPromise){
+    pv.contentWindow.MathJax.typesetPromise([root]).catch(function(){});
+  }
+}
+
+/* A small stand-in for deck.js's step reveal, so the preview behaves like
+   the real thing when 'Show all' is off. deck.js itself can't be loaded
+   here: it binds once at load and takes over the keyboard, and the preview
+   body is rebuilt on every keystroke. */
+function wireStepsIn(d){
+  Array.prototype.forEach.call(d.querySelectorAll(".reveal-btn"), function(btn){
+    var target = btn.dataset.target ? d.querySelector(btn.dataset.target)
+                                    : btn.closest(".slide").querySelector(".steps");
+    if (!target) return;
+    var items = Array.prototype.slice.call(target.querySelectorAll("li"));
+    var label = btn.textContent, shown = 0;
+    btn.addEventListener("click", function(){
+      if (shown < items.length){
+        items[shown].classList.add("shown"); shown++;
+        if (shown === items.length) btn.textContent = "Reset ↺";
+      } else {
+        items.forEach(function(li){ li.classList.remove("shown"); });
+        shown = 0; btn.textContent = label;
+      }
+    });
+  });
+}
+
+/* ================================================================
+   Maths modal
+   ================================================================ */
+var PALETTE = [
+  ["Structure",[
+    ["a\u2044b","\\dfrac{#}{#}"],["\u221a","\\sqrt{#}"],["\u207f\u221a","\\sqrt[#]{#}"],
+    ["x\u00b2","{#}^{2}"],["x\u207f","{#}^{#}"],["x\u2099","{#}_{#}"],
+    ["( )","\\left( # \\right)"],["| |","\\left| # \\right|"],
+    ["matrix","\\begin{bmatrix} # & # \\\\ # & # \\end{bmatrix}"],
+    ["cases","\\begin{cases} # & x<0 \\\\ # & x\\ge 0 \\end{cases}"],
+    ["text","\\text{#}"],["bold","\\mathbf{#}"]
+  ]],
+  ["Operators",[
+    ["\u00d7","\\times "],["\u00f7","\\div "],["\u00b1","\\pm "],["\u00b7","\\cdot "],
+    ["\u2264","\\le "],["\u2265","\\ge "],["\u2260","\\neq "],["\u2248","\\approx "],
+    ["\u2192","\\to "],["\u21d2","\\Rightarrow "],["\u221e","\\infty "],["\u2218","^{\\circ}"]
+  ]],
+  ["Functions",[
+    ["sin","\\sin "],["cos","\\cos "],["tan","\\tan "],["log","\\log_{#} "],
+    ["ln","\\ln "],["e\u02e3","e^{#}"],["\u2211","\\sum_{#}^{#}"],["\u222b","\\int_{#}^{#}"],
+    ["lim","\\lim_{# \\to #}"],["d/dx","\\dfrac{d}{dx}"]
+  ]],
+  ["Greek",[
+    ["\u03b1","\\alpha "],["\u03b2","\\beta "],["\u03b8","\\theta "],["\u03bc","\\mu "],
+    ["\u03c3","\\sigma "],["\u03c0","\\pi "],["\u03bb","\\lambda "],["\u0394","\\Delta "],
+    ["\u0398","\\Theta "],["\u03c6","\\phi "]
+  ]],
+  ["Stats",[
+    ["x\u0304","\\bar{x}"],["x\u0302","\\hat{x}"],["Pr","\\Pr(#)"],["~","\\sim "],
+    ["E(X)","\\mathrm{E}(X)"],["Var","\\mathrm{Var}(X)"],["\u2229","\\cap "],["\u222a","\\cup "]
+  ]]
+];
+
+var mathTarget = null;
+function buildPalette(){
+  var p = document.getElementById("pal"), html = "";
+  PALETTE.forEach(function(g){
+    html += '<div class="pg">' + g[0] + "</div>";
+    g[1].forEach(function(b){
+      html += '<button type="button" data-tex="' + b[1].replace(/"/g,"&quot;") +
+              '" title="' + b[1].replace(/"/g,"&quot;") + '">' + b[0] + "</button>";
+    });
+  });
+  p.innerHTML = html;
+  p.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-tex]");
+    if (b) insertTex(b.dataset.tex);
+  });
+}
+
+/* '#' marks a slot: the first becomes the selection, the rest stay as
+   placeholders the teacher tabs through. */
+function insertTex(tex){
+  var ta = document.getElementById("mathIn");
+  var s = ta.selectionStart, e = ta.selectionEnd;
+  var picked = ta.value.slice(s,e);
+  var out = tex, caret = -1;
+  if (out.indexOf("#") >= 0){
+    out = out.replace("#", picked || "\u25a1");
+    caret = s + out.indexOf(picked || "\u25a1");
+  }
+  out = out.replace(/#/g, "\u25a1");
+  ta.value = ta.value.slice(0,s) + out + ta.value.slice(e);
+  ta.focus();
+  if (caret >= 0 && !picked){
+    ta.setSelectionRange(caret, caret + 1);
+  } else {
+    ta.setSelectionRange(s + out.length, s + out.length);
+  }
+  renderMathPv();
+}
+
+var mathTimer = null;
+function renderMathPv(){
+  clearTimeout(mathTimer);
+  mathTimer = setTimeout(function(){
+    var box = document.getElementById("mathPv");
+    var mode = document.getElementById("mathMode").value;
+    var tex = document.getElementById("mathIn").value;
+    box.className = "";
+    box.textContent = "";
+    if (!tex.trim()) return;
+    var span = document.createElement("span");
+    span.textContent = mode === "block" ? "\\[" + tex + "\\]" : "\\(" + tex + "\\)";
+    box.appendChild(span);
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([box]).then(function(){
+        var err = box.querySelector('[data-mjx-error], .MathJax_Error, mjx-merror');
+        document.getElementById("mathMsg").textContent = err ? "Check the LaTeX." : "";
+        box.className = err ? "bad" : "";
+      }).catch(function(){ box.className = "bad"; });
+    }
+  }, 220);
+}
+
+function openMath(targetEl){
+  mathTarget = targetEl;
+  document.getElementById("mathIn").value = "";
+  document.getElementById("mathMsg").textContent = "";
+  document.getElementById("mathPv").textContent = "";
+  document.getElementById("mathModal").hidden = false;
+  document.getElementById("mathIn").focus();
+}
+function closeMath(){ document.getElementById("mathModal").hidden = true; mathTarget = null; }
+
+document.getElementById("mathIn").addEventListener("input", renderMathPv);
+document.getElementById("mathMode").addEventListener("change", renderMathPv);
+document.getElementById("mathCancel").addEventListener("click", closeMath);
+document.getElementById("mathOk").addEventListener("click", function(){
+  var tex = document.getElementById("mathIn").value.trim();
+  if (!tex || !mathTarget) return closeMath();
+  var mode = document.getElementById("mathMode").value;
+  var wrapped = mode === "block" ? "\\[" + tex + "\\]" : "\\(" + tex + "\\)";
+  var s = mathTarget.selectionStart == null ? mathTarget.value.length : mathTarget.selectionStart;
+  mathTarget.value = mathTarget.value.slice(0,s) + wrapped + mathTarget.value.slice(s);
+  mathTarget.dispatchEvent(new Event("input", {bubbles:true}));
+  closeMath();
+});
+
+/* ================================================================
+   Forms
+   ================================================================ */
+function field(label, val, oninput, opts){
+  opts = opts || {};
+  var wrap = document.createElement("label");
+  wrap.className = "f" + (opts.cls ? " " + opts.cls : "");
+  var sp = document.createElement("span"); sp.textContent = label; wrap.appendChild(sp);
+  var el = document.createElement(opts.tag || "input");
+  if (opts.tag === "textarea") el.rows = opts.rows || 3;
+  if (opts.type) el.type = opts.type;
+  el.value = val == null ? "" : val;
+  el.addEventListener("input", function(){ oninput(el.value); schedule(); });
+  wrap.appendChild(el);
+  if (opts.maths){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "go ghost sm"; b.textContent = "∑ maths";
+    b.style.marginTop = ".3em";
+    b.addEventListener("click", function(){ openMath(el); });
+    wrap.appendChild(b);
+  }
+  return wrap;
+}
+function select(label, val, options, onchange){
+  var wrap = document.createElement("label"); wrap.className = "f";
+  var sp = document.createElement("span"); sp.textContent = label; wrap.appendChild(sp);
+  var el = document.createElement("select");
+  options.forEach(function(o){
+    var op = document.createElement("option");
+    op.value = o[0]; op.textContent = o[1];
+    if (o[0] === val) op.selected = true;
+    el.appendChild(op);
+  });
+  el.addEventListener("change", function(){ onchange(el.value); dirty(); render(); });
+  wrap.appendChild(el);
+  return wrap;
+}
+
+/* Editing anything in the selected slide means it can no longer be
+   emitted verbatim. Its untouched blocks still emit their own .raw, so
+   only what actually changed gets regenerated. */
+function dirty(){
+  var it = doc.items[sel];
+  if (!it) return;
+  it.raw = null;
+  if (curBlock) curBlock.raw = null;
+}
+var curBlock = null;
+function btn(text, cls, fn){
+  var b = document.createElement("button");
+  b.className = "go " + cls; b.type = "button"; b.textContent = text;
+  b.addEventListener("click", fn);
+  return b;
+}
+
+function renderForm(){
+  var f = document.getElementById("form");
+  f.innerHTML = "";
+  var it = doc.items[sel];
+  if (!it){ f.innerHTML = '<p class="hint">Nothing selected.</p>'; return; }
+
+  if (doc.kind === "deck") renderSlideForm(f, it);
+  else renderSheetForm(f, it);
+
+  f.appendChild(document.createElement("hr"));
+  f.appendChild(btn("Delete this " + (doc.kind === "deck" ? "slide" : "item"), "danger sm",
+    function(){ doc.items.splice(sel,1); sel = Math.max(0, sel-1); render(); }));
+}
+
+function renderSlideForm(f, s){
+  f.appendChild(select("Slide type", s.type, [
+    ["title","Title slide"],["section","Section divider"],
+    ["content","Content"],["quiz","Retrieval quiz"]
+  ], function(v){ s.type = v; }));
+  f.appendChild(field("Menu label (slide menu)", s.menu, function(v){ s.menu = v; }));
+  f.appendChild(field("Eyebrow", s.eyebrow, function(v){ s.eyebrow = v; }));
+
+  if (s.type === "title" || s.type === "section"){
+    f.appendChild(field("Heading", s.h1, function(v){ s.h1 = v; }, {maths:true}));
+    f.appendChild(field("Sub-line", s.sub, function(v){ s.sub = v; }, {tag:"textarea", rows:2}));
+    if (s.type === "title"){
+      f.appendChild(field("Pills (one per line)", (s.pills||[]).join("\n"),
+        function(v){ s.pills = v.split("\n").filter(function(x){return x.trim();}); },
+        {tag:"textarea", rows:3}));
+    }
+    return;
+  }
+  if (s.type === "quiz"){
+    f.appendChild(field("Heading", s.h2, function(v){ s.h2 = v; }));
+    f.appendChild(field("Lede", s.sub, function(v){ s.sub = v; }, {tag:"textarea", rows:2}));
+    var r = document.createElement("div"); r.className = "row";
+    r.appendChild(field("Questions from lesson", s.quizBefore, function(v){ s.quizBefore = v; }, {type:"number"}));
+    r.appendChild(field("How many", s.quizCount, function(v){ s.quizCount = v; }, {type:"number"}));
+    f.appendChild(r);
+    var p = document.createElement("p"); p.className = "hint";
+    p.textContent = "Pulls from the unit's questions.js — the numbers must match a bank that exists.";
+    f.appendChild(p);
+    return;
+  }
+
+  f.appendChild(field("Heading", s.h2, function(v){ s.h2 = v; }, {maths:true}));
+  f.appendChild(select("Layout", s.layout || "single", [
+    ["single","Single column"],["cols","Two columns"],["cols-even","Two equal columns"]
+  ], function(v){ s.layout = v; }));
+
+  var h = document.createElement("h2"); h.textContent = "Blocks"; f.appendChild(h);
+  (s.blocks||[]).forEach(function(b, i){ f.appendChild(blockCard(s, b, i)); });
+
+  var add = document.createElement("select");
+  add.style.cssText = "width:100%;margin-top:.5em;font-size:.85rem;padding:.4em";
+  [["","+ Add a block…"],["text","Paragraph"],["list","Bullet list"],["box","Callout box"],
+   ["steps","Working steps"],["bigeq","Big equation (CSS)"],["work","Working grid (CSS)"],
+   ["table","Table"]].forEach(function(o){
+    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; add.appendChild(op);
+  });
+  add.addEventListener("change", function(){
+    if (!add.value) return;
+    s.blocks = s.blocks || [];
+    var nb = {id:uid(), type:add.value, col:1};
+    if (nb.type === "box"){ nb.variant = "key"; nb.label = "Key idea"; nb.body = ""; }
+    if (nb.type === "steps") nb.items = [{t:"", ans:false}];
+    if (nb.type === "work")  nb.rows  = [{l:"",r:""}];
+    if (nb.type === "table") nb.rows  = [["",""],["",""]];
+    s.blocks.push(nb); add.value = ""; render();
+  });
+  f.appendChild(add);
+}
+
+function blockCard(s, b, i){
+  var card = document.createElement("div");
+  card.addEventListener("input", function(){ curBlock = b; b.raw = null; }, true);
+  card.addEventListener("change", function(){ curBlock = b; b.raw = null; }, true);
+  card.className = "blk" + (b.type === "opaque" ? " opaque" : "");
+  var head = document.createElement("div"); head.className = "bh";
+  var t = document.createElement("span"); t.className = "bt";
+  t.textContent = ({text:"Paragraph",list:"Bullet list",box:"Callout box",steps:"Working steps",
+                    bigeq:"Big equation",work:"Working grid",table:"Table",
+                    opaque:"Custom block — left untouched"})[b.type] || b.type;
+  head.appendChild(t);
+  if (i > 0) head.appendChild(btn("↑","ghost sm",function(){
+    s.blocks.splice(i-1,0,s.blocks.splice(i,1)[0]); render(); }));
+  if (i < s.blocks.length-1) head.appendChild(btn("↓","ghost sm",function(){
+    s.blocks.splice(i+1,0,s.blocks.splice(i,1)[0]); render(); }));
+  head.appendChild(btn("✕","danger sm",function(){ s.blocks.splice(i,1); render(); }));
+  card.appendChild(head);
+
+  if (b.type === "opaque"){
+    var pre = document.createElement("pre");
+    pre.textContent = b.html.slice(0,400) + (b.html.length > 400 ? "\n…" : "");
+    card.appendChild(pre);
+    var n = document.createElement("p"); n.className = "hint";
+    n.textContent = "An SVG figure, widget or markup outside the component set. " +
+      "It is preserved exactly as written — edit it in the file itself.";
+    card.appendChild(n);
+    return card;
+  }
+
+  if (s.layout && s.layout !== "single"){
+    card.appendChild(select("Column", b.col || 1, [[1,"Left"],[2,"Right"]],
+      function(v){ b.col = Number(v); }));
+  }
+  if (b.type === "box"){
+    card.appendChild(select("Style", b.variant, [
+      ["key","Key idea"],["question","Question"],["try","Try this"],
+      ["answer","Answer"],["country","Caring for Country"]
+    ], function(v){ b.variant = v; }));
+    card.appendChild(field("Label", b.label, function(v){ b.label = v; }));
+    card.appendChild(field("Body", b.body, function(v){ b.body = v; }, {tag:"textarea", maths:true}));
+    var lab = document.createElement("label"); lab.className = "f";
+    var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!b.frag;
+    cb.style.width = "auto"; cb.addEventListener("change", function(){ b.frag = cb.checked; b.raw = null; dirty(); schedule(); });
+    lab.appendChild(cb);
+    lab.appendChild(document.createTextNode(" Reveal on click (data-frag)"));
+    card.appendChild(lab);
+  } else if (b.type === "steps"){
+    (b.items||[]).forEach(function(it, j){
+      var r = document.createElement("div"); r.className = "row";
+      r.appendChild(field("Step " + (j+1), it.t, function(v){ it.t = v; }, {maths:true}));
+      var l2 = document.createElement("label"); l2.className = "f inline";
+      var c2 = document.createElement("input"); c2.type = "checkbox"; c2.checked = !!it.ans;
+      c2.style.width = "auto";
+      c2.addEventListener("change", function(){ it.ans = c2.checked; b.raw = null; dirty(); schedule(); });
+      l2.appendChild(c2); l2.appendChild(document.createTextNode(" answer"));
+      r.appendChild(l2);
+      r.appendChild(btn("✕","danger sm",function(){ b.items.splice(j,1); render(); }));
+      card.appendChild(r);
+    });
+    card.appendChild(btn("+ step","ghost sm",function(){ b.items.push({t:"",ans:false}); render(); }));
+  } else if (b.type === "work"){
+    (b.rows||[]).forEach(function(r, j){
+      var row = document.createElement("div"); row.className = "row";
+      row.appendChild(field("Left", r.l, function(v){ r.l = v; }));
+      row.appendChild(field("Right", r.r, function(v){ r.r = v; }));
+      row.appendChild(btn("✕","danger sm",function(){ b.rows.splice(j,1); render(); }));
+      card.appendChild(row);
+    });
+    card.appendChild(btn("+ line","ghost sm",function(){ b.rows.push({l:"",r:""}); render(); }));
+  } else if (b.type === "table"){
+    card.appendChild(field("Rows (cells separated by |, first row is the header)",
+      (b.rows||[]).map(function(r){ return r.join(" | "); }).join("\n"),
+      function(v){ b.rows = v.split("\n").map(function(r){ return r.split("|").map(function(c){ return c.trim(); }); }); },
+      {tag:"textarea", rows:4}));
+  } else {
+    card.appendChild(field(b.type === "bigeq" ? "Equation" : "Text",
+      b.body, function(v){ b.body = v; },
+      {tag: b.type === "bigeq" ? "input" : "textarea", maths:true}));
+  }
+  return card;
+}
+
+function renderSheetForm(f, it){
+  if (it.type === "part"){
+    f.appendChild(field("Label", it.label, function(v){ it.label = v; }));
+    f.appendChild(field("Title", it.ptitle, function(v){ it.ptitle = v; }));
+    f.appendChild(field("Marks", it.marks, function(v){ it.marks = v; }, {type:"number"}));
+    f.appendChild(field("Instruction", it.instr, function(v){ it.instr = v; }, {tag:"textarea", rows:2}));
+    return;
+  }
+  if (it.type === "callout"){
+    f.appendChild(select("Style", it.variant, [
+      ["infobox","Information"],["fnbox","First Nations perspectives"],["y8box","Extension"]
+    ], function(v){ it.variant = v; }));
+    f.appendChild(field("Label", it.label, function(v){ it.label = v; }));
+    f.appendChild(field("Body", it.body, function(v){ it.body = v; }, {tag:"textarea", maths:true}));
+    return;
+  }
+  if (it.type === "tick"){
+    f.appendChild(field("Title", it.ptitle, function(v){ it.ptitle = v; }));
+    f.appendChild(field("Items (one per line)", it.body, function(v){ it.body = v; },
+      {tag:"textarea", rows:5}));
+    return;
+  }
+
+  f.appendChild(field("Marks", it.marks, function(v){ it.marks = v; }, {type:"number"}));
+  f.appendChild(field("Question", it.text, function(v){ it.text = v; }, {tag:"textarea", maths:true}));
+
+  var h = document.createElement("h2"); h.textContent = "Answer space"; f.appendChild(h);
+  (it.furniture||[]).forEach(function(x, i){ f.appendChild(furnCard(it, x, i)); });
+
+  var add = document.createElement("select");
+  add.style.cssText = "width:100%;margin-top:.5em;font-size:.85rem;padding:.4em";
+  [["","+ Add answer space…"],["lines","Ruled lines"],["table","Table to fill in"],
+   ["sortcols","Sorting columns"],["opts","Multiple choice"],["blank","Inline blank"],
+   ["drawbox","Drawing box"],["chips","Word bank"]].forEach(function(o){
+    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; add.appendChild(op);
+  });
+  add.addEventListener("change", function(){
+    if (!add.value) return;
+    it.furniture = it.furniture || [];
+    var n = {id:uid(), type:add.value};
+    if (n.type === "lines") n.n = 3;
+    if (n.type === "table"){ n.headers = ["Column A","Column B"]; n.rows = [["",""],["",""]]; }
+    if (n.type === "sortcols") n.headers = ["Group 1","Group 2"];
+    if (n.type === "opts") n.opts = ["","","",""];
+    if (n.type === "chips") n.items = [""];
+    it.furniture.push(n); add.value = ""; render();
+  });
+  f.appendChild(add);
+}
+
+function furnCard(it, x, i){
+  var card = document.createElement("div"); card.className = "blk";
+  var head = document.createElement("div"); head.className = "bh";
+  var t = document.createElement("span"); t.className = "bt";
+  t.textContent = ({lines:"Ruled lines",table:"Table",sortcols:"Sorting columns",
+                    opts:"Multiple choice",blank:"Inline blank",drawbox:"Drawing box",
+                    chips:"Word bank",opaque:"Custom"})[x.type] || x.type;
+  head.appendChild(t);
+  head.appendChild(btn("✕","danger sm",function(){ it.furniture.splice(i,1); render(); }));
+  card.appendChild(head);
+
+  if (x.type === "lines"){
+    card.appendChild(field("How many lines", x.n, function(v){ x.n = v; }, {type:"number"}));
+  } else if (x.type === "blank"){
+    card.appendChild(select("Width", x.size || "", [["","Medium"],["sm","Short"],["lg","Long"]],
+      function(v){ x.size = v; }));
+  } else if (x.type === "drawbox"){
+    card.appendChild(select("Height", x.h || "", [["","Medium"],["sm","Short"],["lg","Tall"]],
+      function(v){ x.h = v; }));
+    card.appendChild(field("Caption inside the box", x.caption, function(v){ x.caption = v; }));
+  } else if (x.type === "opts"){
+    (x.opts||[]).forEach(function(o, j){
+      card.appendChild(field("ABCD".charAt(j), o,
+        function(v){ x.opts[j] = v; }, {maths:true}));
+    });
+  } else if (x.type === "sortcols"){
+    card.appendChild(field("Column headings (one per line, 2 or 3)", (x.headers||[]).join("\n"),
+      function(v){ x.headers = v.split("\n").filter(function(h){return h.trim();}); },
+      {tag:"textarea", rows:3}));
+  } else if (x.type === "chips"){
+    card.appendChild(field("Words (one per line)", (x.items||[]).join("\n"),
+      function(v){ x.items = v.split("\n").filter(function(h){return h.trim();}); },
+      {tag:"textarea", rows:4}));
+  } else if (x.type === "table"){
+    card.appendChild(field("Headers (separated by |)", (x.headers||[]).join(" | "),
+      function(v){ x.headers = v.split("|").map(function(c){return c.trim();}); }));
+    card.appendChild(field("Rows — cells separated by |, leave a cell empty for a blank",
+      (x.rows||[]).map(function(r){ return r.join(" | "); }).join("\n"),
+      function(v){ x.rows = v.split("\n").map(function(r){ return r.split("|").map(function(c){ return c.trim(); }); }); },
+      {tag:"textarea", rows:4}));
+  }
+  return card;
+}
+
+/* ================================================================
+   Outline + wiring
+   ================================================================ */
+function outlineLabel(it, n){
+  if (doc.kind === "deck")
+    return (it.menu || it.h1 || it.h2 || it.type);
+  if (it.type === "part")     return it.label + " — " + (it.ptitle||"");
+  if (it.type === "question") return "Q" + n + " " + (it.text||"").slice(0,26);
+  if (it.type === "callout")  return "Callout";
+  if (it.type === "tick")     return "Self-check";
+  return it.type;
+}
+function renderOutline(){
+  var o = document.getElementById("outline");
+  o.innerHTML = "";
+  var qn = 0;
+  doc.items.forEach(function(it, i){
+    if (it.type === "question") qn++;
+    var d = document.createElement("div");
+    d.className = "ol-item" + (i === sel ? " on" : "");
+    d.innerHTML = '<span class="n">' + (i+1) + '</span><span class="t"></span>';
+    d.querySelector(".t").textContent = outlineLabel(it, qn);
+    d.addEventListener("click", function(){ sel = i; render(); });
+    if (i > 0){
+      var up = document.createElement("span"); up.className = "mv"; up.textContent = "↑";
+      up.addEventListener("click", function(e){
+        e.stopPropagation();
+        doc.items.splice(i-1,0,doc.items.splice(i,1)[0]); sel = i-1; render(); });
+      d.appendChild(up);
+    }
+    o.appendChild(d);
+  });
+}
+
+var timer = null;
+function schedule(){ clearTimeout(timer); timer = setTimeout(function(){ renderOutline(); paintPreview(); }, 200); }
+function render(){ renderOutline(); renderForm(); paintPreview(); }
+
+function fillAddTypes(){
+  var s = document.getElementById("addType");
+  s.innerHTML = "";
+  var opts = doc.kind === "deck"
+    ? [["content","Content slide"],["title","Title slide"],["section","Section divider"],["quiz","Retrieval quiz"]]
+    : [["question","Question"],["part","Part heading"],["callout","Callout box"],["tick","Self-check list"]];
+  opts.forEach(function(o){
+    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; s.appendChild(op);
+  });
+}
+
+document.getElementById("btnAdd").addEventListener("click", function(){
+  var t = document.getElementById("addType").value;
+  var n = {id:uid(), type:t};
+  if (doc.kind === "deck"){
+    n.menu = ""; n.blocks = []; n.layout = "single";
+    if (t === "title" || t === "section") n.h1 = "New slide";
+    else n.h2 = "New slide";
+  } else {
+    if (t === "part"){ n.label = "Part B"; n.ptitle = "Title"; n.marks = 0; }
+    if (t === "question"){ n.marks = 1; n.text = ""; n.furniture = [{id:uid(), type:"lines", n:3}]; }
+    if (t === "callout"){ n.variant = "infobox"; n.label = "Information"; n.body = ""; }
+    if (t === "tick"){ n.ptitle = "Self-check"; n.body = ""; }
+  }
+  doc.items.splice(sel+1, 0, n); sel = sel+1; render();
+});
+
+document.getElementById("kind").addEventListener("change", function(e){
+  doc.kind = e.target.value;
+  doc.items = doc.kind === "deck" ? starterDeck() : starterSheet();
+  doc.title = doc.kind === "deck" ? "Lesson 1 — title" : "Worksheet 1 — title";
+  document.getElementById("fname").value = doc.kind === "deck" ? "deck1.html" : "worksheet1.html";
+  sel = 0; fillAddTypes(); mountPreview(); render();
+});
+document.getElementById("pvAll").addEventListener("change", function(e){
+  showAll = e.target.checked;
+  paintPreview();
+});
+document.getElementById("theme").addEventListener("change", function(e){
+  doc.theme = e.target.value; paintPreview();
+});
+document.getElementById("btnExport").addEventListener("click", function(){
+  var blob = new Blob([buildFile()], {type:"text/html;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = document.getElementById("fname").value || "page.html";
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+});
+document.getElementById("btnLoad").addEventListener("click", function(){
+  document.getElementById("fileIn").click();
+});
+document.getElementById("fileIn").addEventListener("change", function(e){
+  var file = e.target.files[0];
+  if (!file) return;
+  var r = new FileReader();
+  r.onload = function(){ importPage(r.result); };
+  r.readAsText(file);
+});
+
+/* ---- import: parse a page back into the model ---------------- */
+function importPage(html){
+  var p = new DOMParser().parseFromString(html, "text/html");
+  var body = p.body;
+  var theme = (body.className.match(/theme-[a-z]+/) || ["theme-methods"])[0];
+  doc.theme = theme;
+  doc.title = (p.querySelector("title")||{}).textContent || doc.title;
+  var isDeck = body.classList.contains("deck-page");
+  doc.kind = isDeck ? "deck" : "worksheet";
+  document.getElementById("kind").value = doc.kind;
+  document.getElementById("theme").value = theme;
+  doc.items = [];
+
+  if (isDeck){
+    var tag = p.querySelector(".lessontag");
+    if (tag) doc.lessontag = tag.textContent.trim();
+    var hb = p.querySelector(".homebtn");
+    if (hb){ doc.homeText = hb.textContent.trim(); doc.homeHref = hb.getAttribute("href") || "index.html"; }
+    p.querySelectorAll("main.deck > section.slide").forEach(function(sec){
+      doc.items.push(importSlide(sec));
+    });
+  } else {
+    var h1 = p.querySelector(".ws-head h1"), tg = p.querySelector(".ws-tag");
+    if (h1) doc.title = h1.textContent.trim();
+    if (tg) doc.unitTag = tg.textContent.trim();
+    p.querySelectorAll(".sheet section.part").forEach(function(sec){
+      var ph = sec.querySelector(".part-head");
+      if (ph){
+        doc.items.push({id:uid(), type:"part",
+          label:(ph.querySelector(".part-label")||{}).textContent||"",
+          ptitle:(ph.querySelector(".part-title")||{}).textContent||"",
+          marks:parseInt((ph.querySelector(".marks")||{}).textContent||"0",10)||0,
+          instr:(sec.querySelector(".part-instr")||{}).textContent||""});
+      }
+      sec.querySelectorAll(".q").forEach(function(q){
+        doc.items.push({id:uid(), type:"question",
+          marks:parseInt((q.querySelector(".qbody > .marks")||{}).textContent||"0",10)||0,
+          text:(q.querySelector(".qbody")||{}).firstChild &&
+               q.querySelector(".qbody").textContent.trim().slice(0,400) || "",
+          furniture:[{id:uid(), type:"opaque",
+            html:Array.prototype.map.call(q.querySelectorAll(".qbody > *:not(.marks)"),
+              function(n){ return n.outerHTML; }).join("\n")}]});
+      });
+    });
+  }
+  if (!doc.items.length) doc.items = isDeck ? starterDeck() : starterSheet();
+  sel = 0; fillAddTypes(); mountPreview(); render();
+  flash("Loaded " + doc.items.length + " items. Anything outside the component set is kept as a custom block.");
+}
+
+var KNOWN = ["eyebrow","kicker","subtitle","head-meta","start-hint","cols","box",
+             "steps","reveal-btn","bigeq","work","tbl","quiz-container","lede"];
+
+function importSlide(sec){
+  var s = {id:uid(), raw:sec.outerHTML, menu:sec.dataset.menu||"", blocks:[], layout:"single"};
+  s.type = sec.classList.contains("title-slide") ? "title"
+         : sec.classList.contains("section-slide") ? "section"
+         : sec.classList.contains("quiz-slide") ? "quiz" : "content";
+  var eb = sec.querySelector(".eyebrow, .kicker");
+  if (eb) s.eyebrow = eb.textContent.trim();
+  var h1 = sec.querySelector("h1"), h2 = sec.querySelector("h2");
+  if (h1) s.h1 = h1.textContent.trim();
+  if (h2) s.h2 = h2.textContent.trim();
+  var sub = sec.querySelector(".subtitle, .lede");
+  if (sub) s.sub = sub.textContent.trim();
+  s.pills = Array.prototype.map.call(sec.querySelectorAll(".head-meta .pill"),
+    function(x){ return x.textContent.trim(); });
+  if (s.type === "quiz"){
+    s.quizBefore = sec.dataset.quizBefore || 1;
+    s.quizCount = sec.dataset.quizCount || 5;
+    return s;
+  }
+  if (s.type === "title" || s.type === "section"){
+    /* anything beyond the known title furniture is carried as-is, so a
+       hand-tuned start-hint or an extra list is not silently dropped */
+    Array.prototype.forEach.call(sec.children, function(el){
+      var c2 = el.classList;
+      if (el.tagName === "H1" || c2.contains("eyebrow") || c2.contains("kicker") ||
+          c2.contains("subtitle") || c2.contains("head-meta")) return;
+      if (el.tagName === "P" && el === sec.querySelector("p:not([class])")) return;
+      s.blocks.push({id:uid(), raw:el.outerHTML, type:"opaque", col:1, html:el.outerHTML});
+    });
+    return s;
+  }
+
+  var cols = sec.querySelector(".cols");
+  var scan = function(root, col){
+    Array.prototype.forEach.call(root.children, function(el){
+      var b = importBlock(el, col);
+      if (b) s.blocks.push(b);
+    });
+  };
+  if (cols){
+    s.layout = cols.classList.contains("even") ? "cols-even" : "cols";
+    var kids = cols.children;
+    if (kids[0]) scan(kids[0], 1);
+    if (kids[1]) scan(kids[1], 2);
+  } else {
+    scan(sec, 1);
+  }
+  return s;
+}
+
+function importBlock(el, col){
+  var c = el.classList;
+  var RAW = el.outerHTML;
+  if (el.tagName === "P" && (c.contains("eyebrow")||c.contains("kicker")||
+      c.contains("subtitle")||c.contains("start-hint"))) return null;
+  if (el.tagName === "H1" || el.tagName === "H2") return null;
+  if (c.contains("head-meta")) return null;
+
+  if (c.contains("box")){
+    var v = ["key","question","try","answer","country","flag"].filter(function(x){ return c.contains(x); })[0] || "key";
+    var lbl = el.querySelector(".lbl");
+    var body = Array.prototype.filter.call(el.childNodes, function(n){
+      return !(n.classList && n.classList.contains("lbl")); });
+    return {id:uid(), raw:RAW, type:"box", col:col, variant:v, frag:c.contains("frag"),
+            label: lbl ? lbl.textContent.trim() : "",
+            body: body.map(function(n){ return n.textContent; }).join("\n").trim()};
+  }
+  if (c.contains("steps")){
+    return {id:uid(), raw:RAW, type:"steps", col:col,
+      items: Array.prototype.map.call(el.querySelectorAll("li"), function(li){
+        var sn = li.querySelector(".stepno");
+        var t = li.textContent.replace(sn ? sn.textContent : "", "").trim();
+        return {t:t, ans: li.classList.contains("ans")};
+      })};
+  }
+  if (c.contains("bigeq")) return {id:uid(), raw:RAW, type:"bigeq", col:col, body:el.textContent.trim()};
+  if (c.contains("reveal-btn")) return null;      /* re-emitted with its steps */
+  if (el.tagName === "P")  return {id:uid(), raw:RAW, type:"text", col:col, body:el.textContent.trim()};
+  if (el.tagName === "UL" || el.tagName === "OL")
+    return {id:uid(), raw:RAW, type:"list", col:col,
+            body: Array.prototype.map.call(el.querySelectorAll("li"),
+              function(li){ return li.textContent.trim(); }).join("\n")};
+
+  /* Anything else — an SVG figure, a widget, markup outside the set —
+     is preserved byte-for-byte rather than guessed at. */
+  return {id:uid(), type:"opaque", col:col, html:el.outerHTML};
+}
+
+function flash(msg){
+  var n = document.getElementById("pvNote");
+  n.textContent = msg;
+  setTimeout(function(){ n.textContent = ""; }, 6000);
+}
+
+/* ---- boot ---- */
+(function init(){
+  var th = document.getElementById("theme");
+  THEMES.forEach(function(t){
+    var o = document.createElement("option");
+    o.value = t; o.textContent = t.replace("theme-","");
+    if (t === doc.theme) o.selected = true;
+    th.appendChild(o);
+  });
+  doc.items = starterDeck();
+  buildPalette();
+  fillAddTypes();
+  mountPreview();
+  render();
+  window.addEventListener("resize", fitPreview);
+})();
+})();
+</script>
+</body>
+</html>
