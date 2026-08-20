@@ -113,17 +113,91 @@
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Sums">
-  <h2>Worked example: a sum formula</h2>
-  <div class="box example"><span class="lbl">Example 1</span>
-    <p>Prove \(\displaystyle\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}\) for all \(n \geq 1\).</p>
+  <h2>Induction on sums — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p10a1">A · Sum of squares</button>
+    <button class="ptab" data-part="#p10a2">B · Sum of odd numbers</button>
+    <button class="ptab" data-part="#p10a3">C · Sum of cubes</button>
+    <button class="ptab" data-part="#p10a4">D · An arithmetic sum</button>
+    <button class="ptab" data-part="#p10a5">E · A sum of fractions</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag"><b>Base:</b> \(n=1\): LHS \(= 1\), RHS \(= \dfrac{1 \cdot 2 \cdot 3}{6} = 1\). ✓</li>
-    <li class="frag"><b>Hypothesis:</b> assume \(\displaystyle\sum_{k=1}^{m} k^2 = \frac{m(m+1)(2m+1)}{6}\) for some \(m \geq 1\).</li>
-    <li class="frag"><b>Step:</b> \(\displaystyle\sum_{k=1}^{m+1} k^2 = \frac{m(m+1)(2m+1)}{6} + (m+1)^2 = \frac{(m+1)\big(m(2m+1) + 6(m+1)\big)}{6}\) — factor \((m+1)\) out early.</li>
-    <li class="frag">\(m(2m+1) + 6(m+1) = 2m^2+7m+6 = (m+2)(2m+3)\) — exactly the formula with \(n = m+1\). Conclude by induction. ∎</li>
-  </ul>
+
+  <div class="partpanel shown" id="p10a1">
+    <div class="box example"><span class="lbl">Example 1A</span>
+      <p>Prove \(\displaystyle\sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}\) for all \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10a1">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n=1\): LHS \(= 1\), RHS \(= \dfrac{1 \cdot 2 \cdot 3}{6} = 1\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> assume \(\displaystyle\sum_{k=1}^{m} k^2 = \frac{m(m+1)(2m+1)}{6}\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \(\displaystyle\sum_{k=1}^{m+1} k^2 = \frac{m(m+1)(2m+1)}{6} + (m+1)^2 = \frac{(m+1)\big(m(2m+1) + 6(m+1)\big)}{6}\) — factor \((m+1)\) out early.</li>
+      <li class="ans"><span class="stepno">✓</span> \(m(2m+1) + 6(m+1) = 2m^2+7m+6 = (m+2)(2m+3)\) — exactly the formula with \(n = m+1\). Conclude by induction. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10a1">Show the proof</button>
+  </div>
+
+  <div class="partpanel" id="p10a2">
+    <div class="box example"><span class="lbl">Example 1B</span>
+      <p>Prove \(\displaystyle\sum_{k=1}^{n} (2k - 1) = n^2\) for all \(n \geq 1\) — the sum of the first \(n\) odd numbers.</p>
+    </div>
+    <ol class="steps" id="s10a2">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): LHS \(= 1\), RHS \(= 1^2 = 1\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> assume \(\displaystyle\sum_{k=1}^{m} (2k-1) = m^2\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> the \((m+1)\)-th term is \(2(m+1) - 1 = 2m + 1\), so \(\displaystyle\sum_{k=1}^{m+1}(2k-1) = m^2 + 2m + 1\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(m^2 + 2m + 1 = (m+1)^2\) — the formula at \(n = m+1\). By induction it holds for all \(n \geq 1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10a2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Get the next term right</span>
+      <p>The commonest slip in a sum induction is adding the wrong thing. The \((m+1)\)-th term is the general term with \(k\) replaced by \(m+1\) — write that substitution down rather than guessing the pattern.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10a3">
+    <div class="box example"><span class="lbl">Example 1C</span>
+      <p>Prove \(\displaystyle\sum_{k=1}^{n} k^3 = \left[\frac{n(n+1)}{2}\right]^2\) for all \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10a3">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): LHS \(= 1\), RHS \(= \left[\tfrac{1\cdot2}{2}\right]^2 = 1\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\sum_{k=1}^{m} k^3 = \dfrac{m^2(m+1)^2}{4}\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \(\displaystyle\sum_{k=1}^{m+1} k^3 = \dfrac{m^2(m+1)^2}{4} + (m+1)^3 = \dfrac{(m+1)^2\big(m^2 + 4(m+1)\big)}{4}\) — take out \((m+1)^2\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(m^2 + 4m + 4 = (m+2)^2\), so the sum is \(\dfrac{(m+1)^2(m+2)^2}{4} = \left[\dfrac{(m+1)(m+2)}{2}\right]^2\) — the formula at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10a3">Show the proof</button>
+    <div class="box key"><span class="lbl">Factor before you expand</span>
+      <p>Multiplying everything out gives a quartic and a much harder factorisation. Pulling \((m+1)^2\) out first leaves a quadratic that factorises on sight. In every sum induction, take out the largest common factor before touching the brackets.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10a4">
+    <div class="box example"><span class="lbl">Example 1D</span>
+      <p>Prove \(\displaystyle\sum_{k=1}^{n} (3k - 2) = \frac{n(3n-1)}{2}\) for all \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10a4">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): LHS \(= 1\), RHS \(= \dfrac{1 \cdot 2}{2} = 1\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\sum_{k=1}^{m}(3k-2) = \dfrac{m(3m-1)}{2}\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> next term is \(3(m+1) - 2 = 3m+1\), so the new sum is \(\dfrac{m(3m-1)}{2} + (3m+1) = \dfrac{3m^2 - m + 6m + 2}{2} = \dfrac{3m^2 + 5m + 2}{2}\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(3m^2 + 5m + 2 = (m+1)(3m+2)\), and \(3m + 2 = 3(m+1) - 1\). So the sum is \(\dfrac{(m+1)\big(3(m+1)-1\big)}{2}\) — the formula at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10a4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Aim at the target</span>
+      <p>Do not stop at \(\tfrac{(m+1)(3m+2)}{2}\) and hope the marker sees it. Rewrite \(3m+2\) as \(3(m+1)-1\) so the expression is <em>visibly</em> the formula with \(n\) replaced by \(m+1\). That last cosmetic line is where the mark is.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10a5">
+    <div class="box example"><span class="lbl">Example 1E</span>
+      <p>Prove \(\displaystyle\sum_{k=1}^{n} \frac{1}{k(k+1)} = \frac{n}{n+1}\) for all \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10a5">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): LHS \(= \dfrac{1}{1 \cdot 2} = \tfrac12\), RHS \(= \tfrac12\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\sum_{k=1}^{m}\dfrac{1}{k(k+1)} = \dfrac{m}{m+1}\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> add the next term: \(\dfrac{m}{m+1} + \dfrac{1}{(m+1)(m+2)} = \dfrac{m(m+2) + 1}{(m+1)(m+2)}\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(m(m+2) + 1 = m^2 + 2m + 1 = (m+1)^2\), so the sum is \(\dfrac{(m+1)^2}{(m+1)(m+2)} = \dfrac{m+1}{m+2}\) — the formula at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10a5">Show the proof</button>
+    <div class="box key"><span class="lbl">Two proofs of one fact</span>
+      <p>Last week's telescoping argument (T3W09, Example 4A) <b>discovered</b> \(\tfrac{n}{n+1}\) without knowing it in advance; induction can only <b>confirm</b> a formula you already have. If a question hands you the answer, induction is usually the intended route.</p>
+    </div>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Checkpoint">
@@ -151,18 +225,94 @@
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Divisibility">
-  <h2>Worked example: divisibility</h2>
-  <div class="box example"><span class="lbl">Example 2</span>
-    <p>Prove that \(11^n - 6\) is divisible by 5 for all integers \(n \geq 1\).</p>
+  <h2>Induction on divisibility — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p10b1">A · The standard pivot</button>
+    <button class="ptab" data-part="#p10b2">B · A hidden square</button>
+    <button class="ptab" data-part="#p10b3">C · Two powers at once</button>
+    <button class="ptab" data-part="#p10b4">D · A polynomial</button>
+    <button class="ptab" data-part="#p10b5">E · A polynomial with a twist</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag"><b>Base:</b> \(n = 1\): \(11 - 6 = 5\). ✓</li>
-    <li class="frag"><b>Hypothesis:</b> \(11^m - 6 = 5j\) for some integer \(j\) — solve for the power: \(11^m = 5j + 6\).</li>
-    <li class="frag"><b>Step:</b> \(11^{m+1} - 6 = 11 \cdot 11^m - 6 = 11(5j + 6) - 6 = 55j + 60 = 5(11j + 12)\) — divisible by 5. ∎</li>
-  </ul>
-  <div class="box key"><span class="lbl">The move</span>
-    <p>Divisibility inductions all pivot the same way: solve the hypothesis for the power, substitute, and factor the base out of what remains.</p>
+
+  <div class="partpanel shown" id="p10b1">
+    <div class="box example"><span class="lbl">Example 2A</span>
+      <p>Prove that \(11^n - 6\) is divisible by 5 for all integers \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10b1">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): \(11 - 6 = 5\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(11^m - 6 = 5j\) for some integer \(j\) — solve for the power: \(11^m = 5j + 6\).</li>
+      <li class="ans"><span class="stepno">✓</span> <b>Step:</b> \(11^{m+1} - 6 = 11 \cdot 11^m - 6 = 11(5j + 6) - 6 = 55j + 60 = 5(11j + 12)\) — divisible by 5. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10b1">Show the proof</button>
+    <div class="box key"><span class="lbl">The move</span>
+      <p>Divisibility inductions all pivot the same way: solve the hypothesis for the power, substitute, and factor the base out of what remains.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10b2">
+    <div class="box example"><span class="lbl">Example 2B</span>
+      <p>Prove that \(3^{2n} - 1\) is divisible by 8 for all integers \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10b2">
+      <li><span class="stepno">1</span> <b>Read the exponent.</b> \(3^{2n} = (3^2)^n = 9^n\), so the claim is that \(9^n - 1\) is divisible by 8. Rewriting first makes the step routine.</li>
+      <li><span class="stepno">2</span> <b>Base:</b> \(n = 1\): \(9 - 1 = 8\). ✓</li>
+      <li><span class="stepno">3</span> <b>Hypothesis:</b> \(9^m - 1 = 8j\), so \(9^m = 8j + 1\).</li>
+      <li class="ans"><span class="stepno">✓</span> <b>Step:</b> \(9^{m+1} - 1 = 9(8j+1) - 1 = 72j + 8 = 8(9j + 1)\) — divisible by 8. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10b2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Tidy the exponent first</span>
+      <p>Going from \(3^{2m}\) to \(3^{2(m+1)}\) means multiplying by \(3^2\), not by 3 — a very common slip. Collapsing to \(9^n\) at the start removes the trap entirely.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10b3">
+    <div class="box example"><span class="lbl">Example 2C</span>
+      <p>Prove that \(3^{2n+1} + 2^{2n+1}\) is divisible by 5 for all integers \(n \geq 0\).</p>
+    </div>
+    <ol class="steps" id="s10b3">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 0\): \(3 + 2 = 5\). ✓ &nbsp;(Check \(n=1\) too if you like: \(27 + 8 = 35\).)</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(3^{2m+1} + 2^{2m+1} = 5j\) for some integer \(j\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> each exponent rises by 2, so \(3^{2m+3} + 2^{2m+3} = 9 \cdot 3^{2m+1} + 4 \cdot 2^{2m+1}\). The multipliers differ — you cannot factor directly.</li>
+      <li><span class="stepno">4</span> <b>The trick:</b> write \(9 = 4 + 5\), so the expression is \(4\big(3^{2m+1} + 2^{2m+1}\big) + 5 \cdot 3^{2m+1}\).</li>
+      <li class="ans"><span class="stepno">✓</span> That is \(4(5j) + 5 \cdot 3^{2m+1} = 5\big(4j + 3^{2m+1}\big)\) — divisible by 5. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10b3">Show the proof</button>
+    <div class="box key"><span class="lbl">When two powers appear</span>
+      <p>Split the larger multiplier as <em>(the smaller one) + (the divisor)</em>. That manufactures a copy of the inductive hypothesis, and whatever is left over already carries the divisor as a factor. This is the standard manoeuvre for any \(a^n + b^n\) divisibility claim.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10b4">
+    <div class="box example"><span class="lbl">Example 2D</span>
+      <p>Prove that \(n^3 - n\) is divisible by 3 for all integers \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10b4">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): \(1 - 1 = 0 = 3 \times 0\). ✓ &nbsp;(Zero <em>is</em> divisible by 3 — say so rather than skipping to \(n=2\).)</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(m^3 - m = 3j\) for some integer \(j\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \((m+1)^3 - (m+1) = m^3 + 3m^2 + 3m + 1 - m - 1 = \big(m^3 - m\big) + 3m^2 + 3m\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(= 3j + 3(m^2 + m) = 3\big(j + m^2 + m\big)\) — divisible by 3. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10b4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Polynomials are easier than powers</span>
+      <p>Expand \((m+1)^3\), then <b>look for the hypothesis inside the expansion</b> and bracket it off. Everything left over should carry the divisor visibly. No pivoting needed.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10b5">
+    <div class="box example"><span class="lbl">Example 2E</span>
+      <p>Prove that \(n^3 + 5n\) is divisible by 6 for all integers \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10b5">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): \(1 + 5 = 6\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(m^3 + 5m = 6j\) for some integer \(j\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \((m+1)^3 + 5(m+1) = m^3 + 3m^2 + 3m + 1 + 5m + 5 = \big(m^3 + 5m\big) + 3m^2 + 3m + 6\).</li>
+      <li><span class="stepno">4</span> \(= 6j + 3\big(m^2 + m\big) + 6\). The leftover is a multiple of 3, but we need a multiple of <b>6</b> — one more observation is required.</li>
+      <li class="ans"><span class="stepno">✓</span> \(m^2 + m = m(m+1)\) is a product of consecutive integers, hence even: \(m(m+1) = 2t\). So the total is \(6j + 6t + 6 = 6(j + t + 1)\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10b5">Show the proof</button>
+    <div class="box key"><span class="lbl">When the leftover is not enough</span>
+      <p>Getting \(3(m^2+m)\) and stopping is a half-proof. A composite divisor often needs a second fact — here that \(m(m+1)\) is even, which is Example 1B from T3W08. Divisibility by 6 always means checking 2 <em>and</em> 3.</p>
+    </div>
   </div>
 </section>
 
@@ -192,30 +342,136 @@
 </section>
 
 <section class="slide" data-topic="Lesson 4 · Products and inequalities">
-  <h2>Worked example: a product</h2>
-  <div class="box example"><span class="lbl">Example 3</span>
-    <p>Prove \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k}\right) = \frac{1}{n}\) for all \(n \geq 2\).</p>
+  <h2>Induction on products — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p10c1">A · A shrinking product</button>
+    <button class="ptab" data-part="#p10c2">B · A growing product</button>
+    <button class="ptab" data-part="#p10c3">C · Difference of squares</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag"><b>Base:</b> \(n = 2\): LHS \(= 1 - \tfrac12 = \tfrac12\) = RHS. ✓</li>
-    <li class="frag"><b>Step:</b> \(\displaystyle\prod_{k=2}^{m+1}\left(1 - \frac{1}{k}\right) = \frac{1}{m}\left(1 - \frac{1}{m+1}\right) = \frac{1}{m} \cdot \frac{m}{m+1} = \frac{1}{m+1}\). ∎</li>
-    <li class="frag">Telescoping (last week) <b>finds</b> the formula; induction <b>proves</b> it. Two tools, one truth.</li>
-  </ul>
+
+  <div class="partpanel shown" id="p10c1">
+    <div class="box example"><span class="lbl">Example 3A</span>
+      <p>Prove \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k}\right) = \frac{1}{n}\) for all \(n \geq 2\).</p>
+    </div>
+    <ol class="steps" id="s10c1">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 2\): LHS \(= 1 - \tfrac12 = \tfrac12\) = RHS. ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\prod_{k=2}^{m}\left(1 - \frac1k\right) = \frac1m\) for some \(m \geq 2\).</li>
+      <li class="ans"><span class="stepno">✓</span> <b>Step:</b> \(\displaystyle\prod_{k=2}^{m+1}\left(1 - \frac{1}{k}\right) = \frac{1}{m}\left(1 - \frac{1}{m+1}\right) = \frac{1}{m} \cdot \frac{m}{m+1} = \frac{1}{m+1}\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10c1">Show the proof</button>
+    <div class="box key"><span class="lbl">Two tools, one truth</span>
+      <p>Telescoping (T3W09, Example 5C) <b>finds</b> the formula; induction <b>proves</b> it.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10c2">
+    <div class="box example"><span class="lbl">Example 3B</span>
+      <p>Prove \(\displaystyle\prod_{k=1}^{n} \left(1 + \frac{1}{k}\right) = n + 1\) for all \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10c2">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): LHS \(= 1 + 1 = 2\), RHS \(= 1 + 1 = 2\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\prod_{k=1}^{m}\left(1 + \frac1k\right) = m + 1\) for some \(m \geq 1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> multiply in the next factor: \((m+1)\left(1 + \dfrac{1}{m+1}\right) = (m+1)\cdot\dfrac{m+2}{m+1}\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(= m + 2 = (m+1) + 1\) — the formula at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10c2">Show the proof</button>
+    <div class="box hint"><span class="lbl">The product move</span>
+      <p>Sums add the next term; products <b>multiply</b> the next factor. Otherwise the framework is identical — base, hypothesis, step, conclusion.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10c3">
+    <div class="box example"><span class="lbl">Example 3C</span>
+      <p>Prove \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k^2}\right) = \frac{n+1}{2n}\) for all \(n \geq 2\).</p>
+    </div>
+    <ol class="steps" id="s10c3">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 2\): LHS \(= 1 - \tfrac14 = \tfrac34\), RHS \(= \dfrac{3}{4}\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\prod_{k=2}^{m}\left(1 - \frac{1}{k^2}\right) = \frac{m+1}{2m}\) for some \(m \geq 2\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> the next factor is \(1 - \dfrac{1}{(m+1)^2} = \dfrac{(m+1)^2 - 1}{(m+1)^2} = \dfrac{m(m+2)}{(m+1)^2}\).</li>
+      <li><span class="stepno">4</span> Multiply: \(\dfrac{m+1}{2m} \cdot \dfrac{m(m+2)}{(m+1)^2} = \dfrac{m+2}{2(m+1)}\) — the \(m\) and one \((m+1)\) cancel.</li>
+      <li class="ans"><span class="stepno">✓</span> That is \(\dfrac{(m+1)+1}{2(m+1)}\) — the formula at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10c3">Show the proof</button>
+    <div class="box key"><span class="lbl">Factor the new term before multiplying</span>
+      <p>Writing \(1 - \tfrac{1}{(m+1)^2}\) as \(\tfrac{m(m+2)}{(m+1)^2}\) first is what makes the cancellation visible. Multiplying out and hoping is how these proofs stall.</p>
+    </div>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 4 · Products and inequalities">
-  <h2>Worked example: an inequality</h2>
-  <div class="box example"><span class="lbl">Example 4</span>
-    <p>Prove that \(2^n &gt; n^2\) for all integers \(n \geq 5\).</p>
+  <h2>Induction on inequalities — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p10d1">A · Powers beat squares</button>
+    <button class="ptab" data-part="#p10d2">B · Factorials beat powers</button>
+    <button class="ptab" data-part="#p10d3">C · Bernoulli</button>
+    <button class="ptab" data-part="#p10d4">D · A bounded sum</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag"><b>Base:</b> \(n = 5\): \(32 &gt; 25\). ✓</li>
-    <li class="frag"><b>Hypothesis:</b> \(2^m &gt; m^2\) for some \(m \geq 5\). <b>Step:</b> \(2^{m+1} = 2 \cdot 2^m &gt; 2m^2\).</li>
-    <li class="frag">Enough to show \(2m^2 \geq (m+1)^2\): difference \(= m^2 - 2m - 1 = (m-1)^2 - 2 &gt; 0\) for \(m \geq 5\). ∎</li>
-    <li class="frag">Pattern: hypothesis gives the first bound; a small side-inequality (proved honestly, using \(m \geq n_0\)) closes the gap.</li>
-  </ul>
+
+  <div class="partpanel shown" id="p10d1">
+    <div class="box example"><span class="lbl">Example 4A</span>
+      <p>Prove that \(2^n &gt; n^2\) for all integers \(n \geq 5\).</p>
+    </div>
+    <ol class="steps" id="s10d1">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 5\): \(32 &gt; 25\). ✓ &nbsp;(Start at 5, not 1 — the claim is false at \(n = 3\) and \(n = 4\).)</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(2^m &gt; m^2\) for some \(m \geq 5\). <b>Step:</b> \(2^{m+1} = 2 \cdot 2^m &gt; 2m^2\).</li>
+      <li><span class="stepno">3</span> Enough to show \(2m^2 \geq (m+1)^2\): difference \(= m^2 - 2m - 1 = (m-1)^2 - 2 &gt; 0\) for \(m \geq 5\).</li>
+      <li class="ans"><span class="stepno">✓</span> Chaining: \(2^{m+1} &gt; 2m^2 \geq (m+1)^2\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10d1">Show the proof</button>
+    <div class="box key"><span class="lbl">The shape of every inequality induction</span>
+      <p>The hypothesis gives the first bound; a small <b>side-inequality</b> — proved honestly, using \(m \geq n_0\) — closes the gap to the target.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10d2">
+    <div class="box example"><span class="lbl">Example 4B</span>
+      <p>Prove that \(n! &gt; 2^n\) for all integers \(n \geq 4\).</p>
+    </div>
+    <ol class="steps" id="s10d2">
+      <li><span class="stepno">1</span> <b>Find the right base.</b> \(3! = 6 &lt; 8 = 2^3\), so the claim fails at \(n = 3\). At \(n = 4\): \(24 &gt; 16\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(m! &gt; 2^m\) for some \(m \geq 4\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \((m+1)! = (m+1) \cdot m! &gt; (m+1) \cdot 2^m\), using the hypothesis and \(m + 1 &gt; 0\).</li>
+      <li class="ans"><span class="stepno">✓</span> Side-inequality: \(m \geq 4\) gives \(m + 1 \geq 5 &gt; 2\), so \((m+1)\cdot 2^m &gt; 2 \cdot 2^m = 2^{m+1}\). Chaining, \((m+1)! &gt; 2^{m+1}\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10d2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Test before you assume</span>
+      <p>Never take the stated starting value on trust. Evaluating both sides at \(n = 1, 2, 3, 4\) tells you where the claim actually begins — and an induction anchored at the wrong base proves nothing.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10d3">
+    <div class="box example"><span class="lbl">Example 4C</span>
+      <p>Prove <b>Bernoulli's inequality</b>: \((1 + x)^n \geq 1 + nx\) for every real \(x \geq -1\) and every integer \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s10d3">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 1\): both sides equal \(1 + x\), and \(\geq\) allows equality. ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \((1+x)^m \geq 1 + mx\) for some \(m \geq 1\), with \(x\) fixed and \(x \geq -1\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> multiply both sides by \((1+x)\). This preserves the inequality <b>because \(x \geq -1\) makes \(1 + x \geq 0\)</b> — the only place the hypothesis on \(x\) is used, and the crux of the proof.</li>
+      <li><span class="stepno">4</span> \((1+x)^{m+1} \geq (1 + mx)(1 + x) = 1 + (m+1)x + mx^2\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(mx^2 \geq 0\), so \((1+x)^{m+1} \geq 1 + (m+1)x\) — the claim at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10d3">Show the proof</button>
+    <div class="box key"><span class="lbl">Multiplying an inequality</span>
+      <p>You may multiply both sides by a quantity only once you know its sign. Multiplying by a negative reverses the inequality — which is exactly why \(x \geq -1\) is stated, and why dropping it makes the theorem false.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p10d4">
+    <div class="box example"><span class="lbl">Example 4D</span>
+      <p>Prove that \(\displaystyle\sum_{k=1}^{n} \frac{1}{k^2} &lt; 2 - \frac{1}{n}\) for all integers \(n \geq 2\).</p>
+    </div>
+    <ol class="steps" id="s10d4">
+      <li><span class="stepno">1</span> <b>Base:</b> \(n = 2\): LHS \(= 1 + \tfrac14 = \tfrac54\), RHS \(= 2 - \tfrac12 = \tfrac32\). And \(\tfrac54 &lt; \tfrac32\). ✓</li>
+      <li><span class="stepno">2</span> <b>Hypothesis:</b> \(\displaystyle\sum_{k=1}^{m}\frac{1}{k^2} &lt; 2 - \frac1m\) for some \(m \geq 2\).</li>
+      <li><span class="stepno">3</span> <b>Step:</b> \(\displaystyle\sum_{k=1}^{m+1}\frac{1}{k^2} &lt; 2 - \frac1m + \frac{1}{(m+1)^2}\).</li>
+      <li><span class="stepno">4</span> Side-inequality: we need \(-\dfrac1m + \dfrac{1}{(m+1)^2} \leq -\dfrac{1}{m+1}\), i.e. \(\dfrac{1}{(m+1)^2} + \dfrac{1}{m+1} \leq \dfrac1m\). Multiplying by \(m(m+1)^2 &gt; 0\) turns this into \(m + m(m+1) \leq (m+1)^2\), that is \(m^2 + 2m \leq m^2 + 2m + 1\) — true.</li>
+      <li class="ans"><span class="stepno">✓</span> So the sum is \(&lt; 2 - \dfrac{1}{m+1}\), the claim at \(n = m+1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s10d4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Why prove a bound at all</span>
+      <p>No closed form for \(\sum 1/k^2\) is available at this level, yet induction still pins it down: the sum stays below 2 forever. Proving an <b>inequality</b> is often possible where proving an <b>identity</b> is not.</p>
+    </div>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 4 · Mark-losers">

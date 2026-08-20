@@ -67,18 +67,92 @@
 </section>
 
 <section class="slide" data-topic="Lesson 1 · Difference method">
-  <h2>Worked example: the difference method</h2>
-  <div class="box example"><span class="lbl">Example 1</span>
-    <p>Prove that \(a^2 + b^2 \geq 2ab\) for all real \(a, b\), and hence derive the AM–GM inequality \(\dfrac{x+y}{2} \geq \sqrt{xy}\) for \(x, y \geq 0\).</p>
+  <h2>The difference method — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p9a1">A · AM–GM</button>
+    <button class="ptab" data-part="#p9a2">B · A ratio pair</button>
+    <button class="ptab" data-part="#p9a3">C · Sum of three squares</button>
+    <button class="ptab" data-part="#p9a4">D · A product of brackets</button>
+    <button class="ptab" data-part="#p9a5">E · Reciprocals</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Difference: \(a^2 + b^2 - 2ab = (a - b)^2 \geq 0\), with equality iff \(a = b\). ∎</li>
-    <li class="frag">Now put \(a = \sqrt{x}\), \(b = \sqrt{y}\) (legal since \(x, y \geq 0\)): \(x + y \geq 2\sqrt{xy}\).</li>
-    <li class="frag">Divide by 2: \(\dfrac{x+y}{2} \geq \sqrt{xy}\), equality iff \(x = y\). ∎</li>
-  </ul>
-  <div class="box key"><span class="lbl">Direction of writing</span>
-    <p>Scratch work may run backwards from the target; the <b>written proof</b> must run forwards from known facts. Assuming the conclusion scores poorly.</p>
+
+  <div class="partpanel shown" id="p9a1">
+    <div class="box example"><span class="lbl">Example 1A</span>
+      <p>Prove that \(a^2 + b^2 \geq 2ab\) for all real \(a, b\), and hence derive the AM–GM inequality \(\dfrac{x+y}{2} \geq \sqrt{xy}\) for \(x, y \geq 0\).</p>
+    </div>
+    <ol class="steps" id="s9a1">
+      <li><span class="stepno">1</span> Difference: \(a^2 + b^2 - 2ab = (a - b)^2 \geq 0\), with equality iff \(a = b\).</li>
+      <li><span class="stepno">2</span> Now put \(a = \sqrt{x}\), \(b = \sqrt{y}\) (legal since \(x, y \geq 0\)): \(x + y \geq 2\sqrt{xy}\).</li>
+      <li class="ans"><span class="stepno">✓</span> Divide by 2: \(\dfrac{x+y}{2} \geq \sqrt{xy}\), equality iff \(x = y\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9a1">Show the proof</button>
+    <div class="box key"><span class="lbl">Direction of writing</span>
+      <p>Scratch work may run backwards from the target; the <b>written proof</b> must run forwards from known facts. Assuming the conclusion scores poorly.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9a2">
+    <div class="box example"><span class="lbl">Example 1B</span>
+      <p>Prove that \(\dfrac{a}{b} + \dfrac{b}{a} \geq 2\) for all \(a, b &gt; 0\), and state when equality holds.</p>
+    </div>
+    <ol class="steps" id="s9a2">
+      <li><span class="stepno">1</span> Difference over a common denominator: \(\dfrac{a}{b} + \dfrac{b}{a} - 2 = \dfrac{a^2 + b^2 - 2ab}{ab}\).</li>
+      <li><span class="stepno">2</span> The numerator is \((a-b)^2 \geq 0\); the denominator \(ab &gt; 0\) because both \(a\) and \(b\) are positive.</li>
+      <li><span class="stepno">3</span> A non-negative number over a positive number is non-negative, so the difference is \(\geq 0\).</li>
+      <li class="ans"><span class="stepno">✓</span> Hence \(\dfrac{a}{b} + \dfrac{b}{a} \geq 2\), with equality iff \((a-b)^2 = 0\), i.e. \(a = b\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9a2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Where the hypothesis went</span>
+      <p>\(a, b &gt; 0\) was used once, on the sign of \(ab\) — and it is essential. At \(a = 1, b = -1\) the expression equals \(-2\).</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9a3">
+    <div class="box example"><span class="lbl">Example 1C</span>
+      <p>Prove that \(a^2 + b^2 + 1 \geq ab + a + b\) for all real \(a, b\).</p>
+    </div>
+    <ol class="steps" id="s9a3">
+      <li><span class="stepno">1</span> The difference \(a^2 + b^2 + 1 - ab - a - b\) is not a single square. <b>Double it</b> — the standard move when cross terms appear.</li>
+      <li><span class="stepno">2</span> \(2(a^2 + b^2 + 1) - 2(ab + a + b) = 2a^2 + 2b^2 + 2 - 2ab - 2a - 2b\).</li>
+      <li><span class="stepno">3</span> Regroup into three squares: \(= (a - b)^2 + (a - 1)^2 + (b - 1)^2\). Expanding confirms the identity.</li>
+      <li class="ans"><span class="stepno">✓</span> A sum of squares is \(\geq 0\), so twice the difference is \(\geq 0\), so the difference is. Equality needs all three squares zero: \(a = b = 1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9a3">Show the proof</button>
+    <div class="box key"><span class="lbl">Why doubling works</span>
+      <p>Each cross term \(-2ab\) needs an \(a^2\) and a \(b^2\) to pair with. With three cross terms and only one copy of each square to go round, doubling supplies the missing halves. Same trick as Checkpoint 1's \(a^2+b^2+c^2 \geq ab+bc+ca\).</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9a4">
+    <div class="box example"><span class="lbl">Example 1D</span>
+      <p>Prove that \((a+b)(b+c)(c+a) \geq 8abc\) for all \(a, b, c &gt; 0\).</p>
+    </div>
+    <ol class="steps" id="s9a4">
+      <li><span class="stepno">1</span> Expanding is a trap — 8 terms and no obvious grouping. Instead apply <b>Example 1A</b> to each bracket separately.</li>
+      <li><span class="stepno">2</span> AM–GM gives \(a + b \geq 2\sqrt{ab}\), \(\;b + c \geq 2\sqrt{bc}\), \(\;c + a \geq 2\sqrt{ca}\). All six quantities are positive.</li>
+      <li><span class="stepno">3</span> Multiplying inequalities is legitimate <b>because every side is positive</b>: \((a+b)(b+c)(c+a) \geq 8\sqrt{ab}\sqrt{bc}\sqrt{ca}\).</li>
+      <li class="ans"><span class="stepno">✓</span> And \(\sqrt{ab}\sqrt{bc}\sqrt{ca} = \sqrt{a^2b^2c^2} = abc\). So the product is \(\geq 8abc\), with equality iff \(a = b = c\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9a4">Show the proof</button>
+    <div class="box hint"><span class="lbl">The condition that matters</span>
+      <p>You may only multiply inequalities together when all the terms are positive. \(-3 &gt; -5\) and \(-3 &gt; -5\), but \(9 &lt; 25\). State the positivity — it is a mark.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9a5">
+    <div class="box example"><span class="lbl">Example 1E</span>
+      <p>Prove that \(\dfrac{1}{x} + \dfrac{1}{y} \geq \dfrac{4}{x+y}\) for all \(x, y &gt; 0\).</p>
+    </div>
+    <ol class="steps" id="s9a5">
+      <li><span class="stepno">1</span> Combine the left side: \(\dfrac{1}{x} + \dfrac{1}{y} = \dfrac{x+y}{xy}\).</li>
+      <li><span class="stepno">2</span> Difference: \(\dfrac{x+y}{xy} - \dfrac{4}{x+y} = \dfrac{(x+y)^2 - 4xy}{xy(x+y)}\).</li>
+      <li><span class="stepno">3</span> The numerator is \(x^2 + 2xy + y^2 - 4xy = (x - y)^2 \geq 0\); the denominator \(xy(x+y) &gt; 0\) since \(x, y &gt; 0\).</li>
+      <li class="ans"><span class="stepno">✓</span> So the difference is \(\geq 0\), giving the result, with equality iff \(x = y\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9a5">Show the proof</button>
+    <div class="box key"><span class="lbl">Worth recognising</span>
+      <p>Rearranged, this says \(\dfrac{x+y}{2} \geq \dfrac{2}{\frac1x + \frac1y}\) — the arithmetic mean is at least the <b>harmonic</b> mean. With Example 1A giving AM \(\geq\) GM, you have now proved that the arithmetic mean dominates both of the other classical means. (The remaining link, GM \(\geq\) HM, follows by applying Example 1A to \(\tfrac1x\) and \(\tfrac1y\) — worth trying.)</p>
+    </div>
   </div>
 </section>
 
@@ -111,34 +185,91 @@
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Fractions and surds">
-  <h2>Worked example: \(x + \dfrac{1}{x} \geq 2\)</h2>
-  <div class="box example"><span class="lbl">Example 2</span>
-    <p>Prove that \(x + \dfrac{1}{x} \geq 2\) for all \(x &gt; 0\), with equality only at \(x = 1\).</p>
+  <h2>Fractions and surds — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p9b1">A · x + 1/x</button>
+    <button class="ptab" data-part="#p9b2">B · Taming surds</button>
+    <button class="ptab" data-part="#p9b3">C · A bracket product</button>
+    <button class="ptab" data-part="#p9b4">D · Splitting a root</button>
+    <button class="ptab" data-part="#p9b5">E · A difference of roots</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Difference: \(x + \dfrac{1}{x} - 2 = \dfrac{x^2 - 2x + 1}{x} = \dfrac{(x-1)^2}{x}\).</li>
-    <li class="frag">For \(x &gt; 0\): numerator \(\geq 0\), denominator \(&gt; 0\), so the difference is \(\geq 0\). ∎</li>
-    <li class="frag">Equality iff \((x-1)^2 = 0\), i.e. \(x = 1\).</li>
-  </ul>
-  <div class="box key"><span class="lbl">Hypotheses earn their keep</span>
-    <p>Where did \(x &gt; 0\) get used? The denominator's sign. If a given condition never appears in your proof, suspect the proof.</p>
-  </div>
-</section>
 
-<section class="slide" data-topic="Lesson 2 · Fractions and surds">
-  <h2>Worked example: taming surds</h2>
-  <div class="box example"><span class="lbl">Example 3</span>
-    <p>Prove that \(\sqrt{n+1} - \sqrt{n} &lt; \dfrac{1}{2\sqrt{n}}\) for all integers \(n \geq 1\).</p>
+  <div class="partpanel shown" id="p9b1">
+    <div class="box example"><span class="lbl">Example 2A</span>
+      <p>Prove that \(x + \dfrac{1}{x} \geq 2\) for all \(x &gt; 0\), with equality only at \(x = 1\).</p>
+    </div>
+    <ol class="steps" id="s9b1">
+      <li><span class="stepno">1</span> Difference: \(x + \dfrac{1}{x} - 2 = \dfrac{x^2 - 2x + 1}{x} = \dfrac{(x-1)^2}{x}\).</li>
+      <li><span class="stepno">2</span> For \(x &gt; 0\): numerator \(\geq 0\), denominator \(&gt; 0\), so the difference is \(\geq 0\).</li>
+      <li class="ans"><span class="stepno">✓</span> Equality iff \((x-1)^2 = 0\), i.e. \(x = 1\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9b1">Show the proof</button>
+    <div class="box key"><span class="lbl">Hypotheses earn their keep</span>
+      <p>Where did \(x &gt; 0\) get used? The denominator's sign. If a given condition never appears in your proof, suspect the proof.</p>
+    </div>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Rationalise: \(\sqrt{n+1} - \sqrt{n} = \dfrac{(\sqrt{n+1} - \sqrt{n})(\sqrt{n+1} + \sqrt{n})}{\sqrt{n+1} + \sqrt{n}} = \dfrac{1}{\sqrt{n+1} + \sqrt{n}}\).</li>
-    <li class="frag">Since \(\sqrt{n+1} &gt; \sqrt{n}\), the denominator satisfies \(\sqrt{n+1} + \sqrt{n} &gt; 2\sqrt{n}\).</li>
-    <li class="frag">Bigger denominator, smaller fraction: \(\dfrac{1}{\sqrt{n+1} + \sqrt{n}} &lt; \dfrac{1}{2\sqrt{n}}\). ∎</li>
-  </ul>
-  <div class="box key"><span class="lbl">Tool worth naming</span>
-    <p>Multiplying by the conjugate turns a difference of surds into a single fraction you can bound. This trick reappears in exam proofs constantly.</p>
+
+  <div class="partpanel" id="p9b2">
+    <div class="box example"><span class="lbl">Example 2B</span>
+      <p>Prove that \(\sqrt{n+1} - \sqrt{n} &lt; \dfrac{1}{2\sqrt{n}}\) for all integers \(n \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s9b2">
+      <li><span class="stepno">1</span> Rationalise: \(\sqrt{n+1} - \sqrt{n} = \dfrac{(\sqrt{n+1} - \sqrt{n})(\sqrt{n+1} + \sqrt{n})}{\sqrt{n+1} + \sqrt{n}} = \dfrac{1}{\sqrt{n+1} + \sqrt{n}}\).</li>
+      <li><span class="stepno">2</span> Since \(\sqrt{n+1} &gt; \sqrt{n}\), the denominator satisfies \(\sqrt{n+1} + \sqrt{n} &gt; 2\sqrt{n}\).</li>
+      <li class="ans"><span class="stepno">✓</span> Bigger denominator, smaller fraction: \(\dfrac{1}{\sqrt{n+1} + \sqrt{n}} &lt; \dfrac{1}{2\sqrt{n}}\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9b2">Show the proof</button>
+    <div class="box key"><span class="lbl">Tool worth naming</span>
+      <p>Multiplying by the conjugate turns a difference of surds into a single fraction you can bound. This trick reappears in exam proofs constantly.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9b3">
+    <div class="box example"><span class="lbl">Example 2C</span>
+      <p>Prove that \((a + b)\left(\dfrac{1}{a} + \dfrac{1}{b}\right) \geq 4\) for all \(a, b &gt; 0\).</p>
+    </div>
+    <ol class="steps" id="s9b3">
+      <li><span class="stepno">1</span> <b>Expand first</b> — the structure only becomes visible afterwards.</li>
+      <li><span class="stepno">2</span> \((a+b)\left(\dfrac{1}{a} + \dfrac{1}{b}\right) = 1 + \dfrac{a}{b} + \dfrac{b}{a} + 1 = 2 + \dfrac{a}{b} + \dfrac{b}{a}\).</li>
+      <li><span class="stepno">3</span> By <b>Example 1B</b>, \(\dfrac{a}{b} + \dfrac{b}{a} \geq 2\) for positive \(a, b\).</li>
+      <li class="ans"><span class="stepno">✓</span> So the expression is \(\geq 2 + 2 = 4\), with equality iff \(a = b\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9b3">Show the proof</button>
+    <div class="box hint"><span class="lbl">Same fact, third disguise</span>
+      <p>This is Example 1E rearranged, and Example 1B in a wrapper. Recognising that three exam questions are one theorem is worth more than three memorised proofs.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9b4">
+    <div class="box example"><span class="lbl">Example 2D</span>
+      <p>Prove that \(\sqrt{a} + \sqrt{b} &gt; \sqrt{a + b}\) for all \(a, b &gt; 0\).</p>
+    </div>
+    <ol class="steps" id="s9b4">
+      <li><span class="stepno">1</span> Both sides are positive, so squaring is reversible and comparing squares settles it.</li>
+      <li><span class="stepno">2</span> \(\left(\sqrt{a} + \sqrt{b}\right)^2 = a + 2\sqrt{ab} + b\), and \(\left(\sqrt{a+b}\right)^2 = a + b\).</li>
+      <li><span class="stepno">3</span> Difference of squares: \(\left(a + 2\sqrt{ab} + b\right) - (a+b) = 2\sqrt{ab} &gt; 0\), since \(a, b &gt; 0\).</li>
+      <li class="ans"><span class="stepno">✓</span> The left square exceeds the right square, and both bases are positive, so \(\sqrt{a} + \sqrt{b} &gt; \sqrt{a+b}\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9b4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Say why squaring is safe</span>
+      <p>\(u^2 &gt; v^2\) implies \(u &gt; v\) only when \(u, v \geq 0\) — otherwise \((-3)^2 &gt; 2^2\) would give \(-3 &gt; 2\). One sentence establishing positivity turns a suspect step into a sound one.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9b5">
+    <div class="box example"><span class="lbl">Example 2E</span>
+      <p>Prove that \(\sqrt{a} - \sqrt{b} &lt; \sqrt{a - b}\) for all reals \(a &gt; b &gt; 0\).</p>
+    </div>
+    <ol class="steps" id="s9b5">
+      <li><span class="stepno">1</span> Both sides are positive: \(a &gt; b\) gives \(\sqrt a &gt; \sqrt b\) on the left and \(a - b &gt; 0\) on the right. So compare squares.</li>
+      <li><span class="stepno">2</span> \(\left(\sqrt{a} - \sqrt{b}\right)^2 = a - 2\sqrt{ab} + b\) and \(\left(\sqrt{a-b}\right)^2 = a - b\).</li>
+      <li><span class="stepno">3</span> Their difference: \((a - b) - \left(a - 2\sqrt{ab} + b\right) = 2\sqrt{ab} - 2b = 2\sqrt{b}\left(\sqrt{a} - \sqrt{b}\right)\).</li>
+      <li class="ans"><span class="stepno">✓</span> That is positive, since \(b &gt; 0\) and \(\sqrt a &gt; \sqrt b\). So the right square is larger, and with both bases positive the inequality follows. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9b5">Show the proof</button>
+    <div class="box key"><span class="lbl">Read it as a fact about roots</span>
+      <p>The square-root function grows ever more slowly, so a gap of \(a - b\) high up the curve produces a <em>smaller</em> rise than the same gap starting at 0. This is the same phenomenon Example 2B measured precisely.</p>
+    </div>
   </div>
 </section>
 
@@ -168,18 +299,75 @@
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Telescoping">
-  <h2>Worked example: a sum that collapses</h2>
-  <div class="box example"><span class="lbl">Example 4</span>
-    <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \frac{1}{k(k+1)}\), and its limit as \(n \to \infty\).</p>
+  <h2>Telescoping sums — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p9c1">A · Partial fractions</button>
+    <button class="ptab" data-part="#p9c2">B · Odd denominators</button>
+    <button class="ptab" data-part="#p9c3">C · Factorials</button>
+    <button class="ptab" data-part="#p9c4">D · Logarithms</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Partial fractions: \(\dfrac{1}{k(k+1)} = \dfrac{1}{k} - \dfrac{1}{k+1}\).</li>
-    <li class="frag">Write out a few terms: \(\left(1 - \tfrac12\right) + \left(\tfrac12 - \tfrac13\right) + \cdots + \left(\tfrac1n - \tfrac{1}{n+1}\right)\) — the interior cancels in pairs.</li>
-    <li class="frag">Survivors: \(1 - \dfrac{1}{n+1} = \dfrac{n}{n+1} \to 1\) as \(n \to \infty\).</li>
-  </ul>
-  <div class="box key"><span class="lbl">Recognising a telescope</span>
-    <p>If the general term splits as \(f(k) - f(k+1)\) (or \(f(k+1) - f(k)\)), the sum collapses to boundary terms. Partial fractions is the usual splitter.</p>
+
+  <div class="partpanel shown" id="p9c1">
+    <div class="box example"><span class="lbl">Example 4A</span>
+      <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \frac{1}{k(k+1)}\), and its limit as \(n \to \infty\).</p>
+    </div>
+    <ol class="steps" id="s9c1">
+      <li><span class="stepno">1</span> Partial fractions: \(\dfrac{1}{k(k+1)} = \dfrac{1}{k} - \dfrac{1}{k+1}\).</li>
+      <li><span class="stepno">2</span> Write out a few terms: \(\left(1 - \tfrac12\right) + \left(\tfrac12 - \tfrac13\right) + \cdots + \left(\tfrac1n - \tfrac{1}{n+1}\right)\) — the interior cancels in pairs.</li>
+      <li class="ans"><span class="stepno">✓</span> Survivors: \(1 - \dfrac{1}{n+1} = \dfrac{n}{n+1} \to 1\) as \(n \to \infty\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9c1">Show the working</button>
+    <div class="box key"><span class="lbl">Recognising a telescope</span>
+      <p>If the general term splits as \(f(k) - f(k+1)\) (or \(f(k+1) - f(k)\)), the sum collapses to boundary terms. Partial fractions is the usual splitter.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9c2">
+    <div class="box example"><span class="lbl">Example 4B</span>
+      <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \frac{1}{(2k-1)(2k+1)}\), and its limit as \(n \to \infty\).</p>
+    </div>
+    <ol class="steps" id="s9c2">
+      <li><span class="stepno">1</span> Partial fractions: \(\dfrac{1}{(2k-1)(2k+1)} = \dfrac{1}{2}\left(\dfrac{1}{2k-1} - \dfrac{1}{2k+1}\right)\). <b>Keep the \(\tfrac12\) outside the sum.</b></li>
+      <li><span class="stepno">2</span> The bracket at \(k\) ends on \(\dfrac{1}{2k+1}\) and the bracket at \(k+1\) starts on \(\dfrac{1}{2k+1}\) — consecutive brackets still cancel, even though the denominators skip the evens.</li>
+      <li><span class="stepno">3</span> Survivors: \(\dfrac12\left(\dfrac11 - \dfrac{1}{2n+1}\right)\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(= \dfrac{1}{2} \cdot \dfrac{2n}{2n+1} = \dfrac{n}{2n+1} \to \dfrac12\). Check \(n = 1\): \(\tfrac13\) from both. ✓ ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9c2">Show the working</button>
+    <div class="box hint"><span class="lbl">Always test at n = 1</span>
+      <p>Substituting \(n = 1\) into your closed form and comparing with the first term catches nearly every algebra slip, and it costs one line.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9c3">
+    <div class="box example"><span class="lbl">Example 4C</span>
+      <p>Prove that \(\displaystyle\sum_{k=1}^{n} k \cdot k! = (n+1)! - 1\).</p>
+    </div>
+    <ol class="steps" id="s9c3">
+      <li><span class="stepno">1</span> <b>Find the split.</b> Partial fractions is useless here; instead notice \((k+1)! = (k+1)\cdot k! = k \cdot k! + k!\).</li>
+      <li><span class="stepno">2</span> Rearranged, that gives exactly the term: \(k \cdot k! = (k+1)! - k!\) — of the form \(f(k+1) - f(k)\) with \(f(k) = k!\).</li>
+      <li><span class="stepno">3</span> Sum: \((2! - 1!) + (3! - 2!) + \cdots + \big((n+1)! - n!\big)\) — the interior cancels.</li>
+      <li class="ans"><span class="stepno">✓</span> Survivors: \((n+1)! - 1! = (n+1)! - 1\). Check \(n = 3\): \(1 + 4 + 18 = 23 = 4! - 1\). ✓ ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9c3">Show the working</button>
+    <div class="box key"><span class="lbl">Telescoping is bigger than partial fractions</span>
+      <p>The technique needs only that the term be a <b>difference of consecutive values of some function</b>. Fractions are the common case, not the definition — factorials, logs and surds telescope just as happily.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9c4">
+    <div class="box example"><span class="lbl">Example 4D</span>
+      <p>Evaluate \(\displaystyle\sum_{k=1}^{n} \ln\!\left(1 + \frac{1}{k}\right)\). Does it converge as \(n \to \infty\)?</p>
+    </div>
+    <ol class="steps" id="s9c4">
+      <li><span class="stepno">1</span> Write the argument as a single fraction: \(1 + \dfrac1k = \dfrac{k+1}{k}\).</li>
+      <li><span class="stepno">2</span> The log law splits it: \(\ln\dfrac{k+1}{k} = \ln(k+1) - \ln k\) — a difference of consecutive values of \(f(k) = \ln k\).</li>
+      <li><span class="stepno">3</span> Sum: \((\ln 2 - \ln 1) + (\ln 3 - \ln 2) + \cdots + \big(\ln(n+1) - \ln n\big) = \ln(n+1) - \ln 1 = \ln(n+1)\).</li>
+      <li class="ans"><span class="stepno">✓</span> So the sum is \(\ln(n+1)\), which \(\to \infty\). The series <b>diverges</b>, even though its terms shrink to 0. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9c4">Show the working</button>
+    <div class="box hint"><span class="lbl">A warning worth keeping</span>
+      <p>Terms tending to zero does <b>not</b> guarantee a series converges — this one is a clean counterexample you can prove in four lines. Telescoping gives you the exact partial sum, which is far stronger evidence than watching the terms shrink.</p>
+    </div>
   </div>
 </section>
 
@@ -190,17 +378,56 @@
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Telescoping">
-  <h2>Products telescope too</h2>
-  <div class="box example"><span class="lbl">Example 5</span>
-    <p>Evaluate \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k^2}\right)\), and its limit as \(n \to \infty\).</p>
+  <h2>Telescoping products — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p9d1">A · Difference of squares</button>
+    <button class="ptab" data-part="#p9d2">B · A growing product</button>
+    <button class="ptab" data-part="#p9d3">C · A shrinking product</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Factor: \(1 - \dfrac{1}{k^2} = \dfrac{(k-1)(k+1)}{k^2}\), so each numerator meets a matching denominator along the product.</li>
-    <li class="frag">Survivors: \(\dfrac{1}{2} \cdot \dfrac{n+1}{n} = \dfrac{n+1}{2n} \to \tfrac12\) as \(n \to \infty\).</li>
-  </ul>
-  <div class="box key"><span class="lbl">Same principle</span>
-    <p>Sums cancel by subtraction; products cancel by division. Either way, only the boundary survives.</p>
+
+  <div class="partpanel shown" id="p9d1">
+    <div class="box example"><span class="lbl">Example 5A</span>
+      <p>Evaluate \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k^2}\right)\), and its limit as \(n \to \infty\).</p>
+    </div>
+    <ol class="steps" id="s9d1">
+      <li><span class="stepno">1</span> Factor: \(1 - \dfrac{1}{k^2} = \dfrac{k^2-1}{k^2} = \dfrac{(k-1)(k+1)}{k^2}\), so each numerator meets a matching denominator along the product.</li>
+      <li><span class="stepno">2</span> Separate the two families: \(\displaystyle\prod_{k=2}^{n}\dfrac{k-1}{k} \cdot \prod_{k=2}^{n}\dfrac{k+1}{k} = \dfrac{1}{n} \cdot \dfrac{n+1}{2}\).</li>
+      <li class="ans"><span class="stepno">✓</span> Survivors: \(\dfrac{n+1}{2n} \to \tfrac12\) as \(n \to \infty\). Check \(n = 2\): \(1 - \tfrac14 = \tfrac34\) and \(\tfrac{3}{4}\). ✓ ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9d1">Show the working</button>
+    <div class="box key"><span class="lbl">Same principle</span>
+      <p>Sums cancel by subtraction; products cancel by division. Either way, only the boundary survives.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9d2">
+    <div class="box example"><span class="lbl">Example 5B</span>
+      <p>Evaluate \(\displaystyle\prod_{k=1}^{n} \left(1 + \frac{1}{k}\right)\).</p>
+    </div>
+    <ol class="steps" id="s9d2">
+      <li><span class="stepno">1</span> Each factor is \(1 + \dfrac1k = \dfrac{k+1}{k}\).</li>
+      <li><span class="stepno">2</span> Write the product out: \(\dfrac{2}{1} \cdot \dfrac{3}{2} \cdot \dfrac{4}{3} \cdots \dfrac{n+1}{n}\) — every numerator cancels the next denominator.</li>
+      <li class="ans"><span class="stepno">✓</span> Survivors: \(\dfrac{n+1}{1} = n+1\). This grows without bound, so unlike Example 5A the product diverges. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9d2">Show the working</button>
+    <div class="box hint"><span class="lbl">Compare with 4D</span>
+      <p>Taking logs turns this product into the sum of Example 4D: \(\ln\big(\prod(1+\tfrac1k)\big) = \sum \ln(1+\tfrac1k) = \ln(n+1)\). The same telescope, seen through a logarithm.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p9d3">
+    <div class="box example"><span class="lbl">Example 5C</span>
+      <p>Evaluate \(\displaystyle\prod_{k=2}^{n} \left(1 - \frac{1}{k}\right)\).</p>
+    </div>
+    <ol class="steps" id="s9d3">
+      <li><span class="stepno">1</span> Each factor is \(1 - \dfrac1k = \dfrac{k-1}{k}\).</li>
+      <li><span class="stepno">2</span> Write it out: \(\dfrac{1}{2} \cdot \dfrac{2}{3} \cdot \dfrac{3}{4} \cdots \dfrac{n-1}{n}\) — this time each <em>denominator</em> cancels the next numerator.</li>
+      <li class="ans"><span class="stepno">✓</span> Survivors: \(\dfrac{1}{n} \to 0\). Check \(n = 3\): \(\tfrac12 \cdot \tfrac23 = \tfrac13\). ✓ ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s9d3">Show the working</button>
+    <div class="box key"><span class="lbl">Two tools, one truth</span>
+      <p>Telescoping <b>finds</b> this formula. Next week you will <b>prove</b> the same result by induction (T3W10, Example 3A) — worth comparing the two write-ups side by side, because they answer different questions: "what is it?" and "why is it always that?".</p>
+    </div>
   </div>
 </section>
 
