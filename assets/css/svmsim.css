@@ -1,0 +1,101 @@
+/* ============================================================
+   svmsim.css — SVM "WIDEST STREET" VISUALISER (optional module)
+   Pairs with assets/js/svmsim.js. Link both only on decks that
+   use the component. Zero dependencies.
+
+     <div class="svmsim"></div>
+
+   svmsim.js builds the SVG, the sliders, the readout and the
+   snap button inside that div, so the deck markup stays a
+   single line. Every colour comes from tokens.css, so the
+   widget follows the deck's theme.
+
+   The teaching point: the boundary is not chosen to "look
+   right" — it is chosen to make the street as WIDE as
+   possible. Rotating changes how much room there is between
+   the classes; widening eventually collides with a training
+   point, and the points it collides with are the support
+   vectors. The widest street over all angles is the SVM.
+
+   Note the street is always drawn CENTRED between the classes
+   for the current angle. That is deliberate: an off-centre
+   boundary is never optimal, so letting the student slide it
+   sideways would only add a degree of freedom with one correct
+   answer. Angle and width are the two that carry the idea.
+   ============================================================ */
+
+.svmsim {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 1.4vh 1vw 1.2vh;
+  /* Half-width by default: at full slide width the figure dominates
+     the slide and pushes the callout below the fold. Override with a
+     wider max-width on a page that gives it a column of its own. */
+  max-width: 520px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.svmsim svg { display: block; width: 100%; height: auto; }
+
+/* ---------- Scene ---------- */
+.sv-frame    { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.sv-road     { fill: var(--ink-soft); fill-opacity: 0.12; }
+.sv-road.bad { fill: var(--neg); fill-opacity: 0.14; }
+.sv-edge     { stroke: var(--ink-soft); stroke-width: 1.6; stroke-dasharray: 7 5; fill: none; }
+.sv-edge.bad { stroke: var(--neg); }
+.sv-line     { stroke: var(--ink); stroke-width: 3; fill: none; stroke-linecap: round; }
+.sv-line.bad { stroke: var(--neg); }
+
+.sv-a  { fill: var(--accent); }
+.sv-b  { fill: var(--accent-warm); }
+.sv-sv { fill: none; stroke: var(--neg); stroke-width: 2.6; }
+.sv-hit { fill: none; stroke: var(--neg); stroke-width: 2.6; }
+
+.sv-axlab {
+  font-family: var(--font-body); font-size: 18px;
+  fill: var(--muted); text-anchor: middle;
+}
+.sv-keylab {
+  font-family: var(--font-body); font-size: 18px; font-weight: 600;
+}
+
+/* ---------- Controls ---------- */
+.sv-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: end; }
+.sv-controls .sv-snap { grid-column: 1 / -1; }
+@media (max-width: 560px) { .sv-controls { grid-template-columns: 1fr; } }
+
+.sv-snap {
+  border: 1.5px solid var(--accent); background: var(--card); color: var(--accent-dark);
+  padding: 10px 16px; border-radius: 999px; font-family: inherit;
+  font-size: 14.5px; font-weight: 700; cursor: pointer; white-space: nowrap;
+}
+.sv-snap:hover { background: color-mix(in srgb, var(--accent) 12%, #fff); }
+
+/* ---------- Readout ---------- */
+.sv-readout {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 8px 18px;
+  font-family: var(--font-body); font-size: 15px; color: var(--ink);
+}
+.sv-readout b { font-variant-numeric: tabular-nums; }
+.sv-readout .sv-stat { white-space: nowrap; }
+
+.sv-verdict {
+  display: inline-block; padding: 3px 12px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; letter-spacing: .01em;
+  border: 1.5px solid currentColor;
+}
+.sv-verdict.ok   { color: var(--accent-dark); background: color-mix(in srgb, var(--accent) 12%, #fff); }
+.sv-verdict.best { color: var(--accent-warm); background: color-mix(in srgb, var(--accent-warm) 14%, #fff); }
+.sv-verdict.bad  { color: var(--neg); background: var(--neg-soft); }
+
+/* Print: keep the figure, drop the interactive furniture. */
+@media print {
+  .svmsim { break-inside: avoid; }
+  .sv-controls { display: none; }
+}
