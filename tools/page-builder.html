@@ -95,7 +95,46 @@ button.go.danger{background:var(--panel);color:var(--neg);border:1px solid var(-
 .blk.opaque pre{font-family:var(--font-mono);font-size:.7rem;max-height:7em;overflow:auto;
   margin:0;white-space:pre-wrap;color:var(--ink-soft)}
 
+/* ---- block picker ----------------------------------------------------
+   The component vocabulary is now long enough that scanning a dropdown is
+   slower than typing three letters of what you want, so every "add"
+   control opens this searchable list instead of a <select>. */
+.pk{position:fixed;inset:0;background:rgba(22,38,61,.55);display:flex;
+  align-items:flex-start;justify-content:center;padding:8vh 4vw;z-index:60}
+.pk[hidden]{display:none}
+.pk-card{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);
+  width:min(560px,100%);max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.pk-card h2{font-family:var(--font-display);font-size:1rem;color:var(--accent-dark);
+  margin:0;padding:.9em 1.2em .1em;text-transform:none;letter-spacing:0}
+.pk-q{margin:.6em 1.2em .7em;width:calc(100% - 2.4em);font:inherit;font-size:.95rem;
+  padding:.55em .7em;box-sizing:border-box;border:1px solid var(--line-strong);
+  border-radius:var(--radius-sm);background:var(--paper);color:inherit}
+.pk-list{overflow:auto;padding:0 .7em 1em;flex:1}
+.pk-g{font-size:.64rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-faint);padding:.7em .6em .25em}
+.pk-i{display:block;width:100%;text-align:left;font:inherit;background:none;border:none;
+  border-radius:var(--radius-sm);padding:.45em .6em;cursor:pointer}
+.pk-i .nm{font-weight:700;font-size:.89rem;color:var(--ink)}
+.pk-i .ds{display:block;font-size:.77rem;color:var(--muted);line-height:1.35}
+.pk-i.on,.pk-i:hover{background:color-mix(in srgb,var(--accent) 12%,#fff)}
+.pk-none{color:var(--muted);font-size:.85rem;padding:1em .6em}
+.pk-foot{font-size:.72rem;color:var(--ink-faint);padding:0 1.4em 1em}
+
+/* ---- grid editor (tables) ---- */
+.gr{overflow:auto;margin-bottom:.5em}
+.gr table{border-collapse:collapse;font-size:.82rem}
+.gr td,.gr th{padding:1px}
+.gr input{font:inherit;font-size:.82rem;padding:.3em .4em;width:8.5em;box-sizing:border-box;
+  border:1px solid var(--line);border-radius:4px;background:var(--paper);color:inherit}
+.gr thead input{font-weight:700}
+.mini-b{font:inherit;font-size:.7rem;line-height:1;padding:.28em .45em;cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);border-radius:4px;color:var(--ink-faint)}
+.mini-b.on{background:var(--accent);color:var(--c-white);border-color:var(--accent)}
+.mini-b:hover{border-color:var(--accent)}
+
 .hint{color:var(--muted);font-size:.8rem;line-height:1.5;margin:.2em 0 1em}
+.hint code{white-space:nowrap}
+.errline{color:var(--neg);font-size:.8rem;min-height:1.1em;margin:-.4em 0 .6em}
 .msg{font-size:.85rem;min-height:1.3em;margin-top:.5em}
 .msg.ok{color:var(--pos)} .msg.bad{color:var(--neg)}
 
@@ -154,8 +193,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);
   <div class="bb-pane">
     <h2>Outline</h2>
     <div id="outline"></div>
-    <button class="go ghost sm" id="btnAdd" style="width:100%;margin-top:.5em">+ Add</button>
-    <select id="addType" style="width:100%;margin-top:.4em;font-size:.8rem;padding:.35em"></select>
+    <button class="go ghost sm" id="btnAdd" style="width:100%;margin-top:.5em">+ Add a slide…</button>
   </div>
 
   <div class="bb-pane">
@@ -171,6 +209,16 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);
       <span class="mini" id="pvNote"></span></h2>
     <div class="pv-wrap" id="pvWrap"><iframe id="pv" title="Live preview"></iframe></div>
     <p class="hint" id="pvHint"></p>
+  </div>
+</div>
+
+<!-- --------------------------------------------------------------- picker -->
+<div class="pk" id="pick" hidden>
+  <div class="pk-card">
+    <h2 id="pickTitle">Add</h2>
+    <input class="pk-q" id="pickQ" type="text" placeholder="Search — try “graph”, “flow”, “answer”, “table”…" autocomplete="off" spellcheck="false">
+    <div class="pk-list" id="pickList"></div>
+    <p class="pk-foot">↑ ↓ to move · Enter to add · Esc to close</p>
   </div>
 </div>
 
@@ -274,8 +322,625 @@ function lines2li(s){
 }
 
 /* ================================================================
+   Figures — flow charts and function graphs
+   ----------------------------------------------------------------
+   Both emit plain inline SVG with no script and no library, per the
+   site's zero-dependency rule. Colours are CSS custom properties, so a
+   figure re-themes with the deck it sits in, and text carries no
+   font-family so deck.css's `.deck svg text:not([font-family])` rule
+   can give it the body font (the <svg> element carries it as well, for
+   worksheets, which have no equivalent rule).
+
+   Each figure keeps its authoring model in a data-pb attribute on the
+   wrapper. That is what makes them re-editable: without it an imported
+   figure would come back as an opaque block, like any other SVG.
+   ================================================================ */
+function attrJson(o){
+  return JSON.stringify(o).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+         .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function svgEsc(s){
+  return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+/* Rough text metrics — good enough to wrap a label inside a box. */
+function textW(s, size){ return String(s).length * size * 0.56; }
+function wrapText(s, maxW, size, maxLines){
+  var words = String(s||"").split(/\s+/).filter(Boolean), lines = [], cur = "";
+  words.forEach(function(w){
+    var t = cur ? cur + " " + w : w;
+    if (textW(t,size) <= maxW || !cur) cur = t;
+    else { lines.push(cur); cur = w; }
+  });
+  if (cur) lines.push(cur);
+  if (maxLines && lines.length > maxLines){
+    lines = lines.slice(0, maxLines);
+    lines[maxLines-1] = lines[maxLines-1].replace(/.{0,2}$/,"…");
+  }
+  return lines.length ? lines : [""];
+}
+
+/* ---------------------------------------------------------------- flow */
+/* One node per line:
+     (text)   terminator      /text/  input or output
+     <text>   preparation     ?text   decision
+     anything else            process
+   A decision may carry branches:  ?Is it boiling? |Yes |No> Turn up the heat
+   — the bare |label names the arrow going down, and |label> text draws a
+   box to the right that rejoins the flow underneath.                    */
+function parseFlow(src){
+  var nodes = [];
+  String(src||"").split("\n").forEach(function(raw){
+    var line = raw.trim();
+    if (!line || line.charAt(0) === "#") return;
+    var n = {shape:"process", text:line, down:"", branch:null};
+    if (line.charAt(0) === "?"){
+      n.shape = "decision";
+      var parts = line.slice(1).split("|");
+      n.text = parts.shift().trim();
+      parts.forEach(function(p){
+        var gt = p.indexOf(">");
+        if (gt >= 0) n.branch = {label:p.slice(0,gt).trim(), text:p.slice(gt+1).trim()};
+        else n.down = p.trim();
+      });
+      if (n.branch && !n.down) n.down = "Yes";
+    } else if (/^\(.*\)$/.test(line)){ n.shape = "term"; n.text = line.slice(1,-1).trim(); }
+    else if (/^\/.*\/$/.test(line)){ n.shape = "io"; n.text = line.slice(1,-1).trim(); }
+    else if (/^<.*>$/.test(line)){ n.shape = "prep"; n.text = line.slice(1,-1).trim(); }
+    nodes.push(n);
+  });
+  return nodes;
+}
+
+function flowSvg(b){
+  var nodes = parseFlow(b.src);
+  if (!nodes.length) return "";
+  var FS = 15, BW = 230, GAP = 44, PAD = 14;
+  var hasBranch = nodes.some(function(n){ return n.branch; });
+  var cx = BW/2 + PAD;
+  var W = hasBranch ? cx + BW + 64 + BW/2 + PAD : BW + PAD*2;
+
+  /* lay out first so the viewBox height is exact */
+  var y = PAD, laid = [];
+  nodes.forEach(function(n){
+    var inner = n.shape === "decision" ? BW - 60 : BW - 28;
+    var lines = wrapText(n.text, inner, FS, 3);
+    var h = Math.max(n.shape === "decision" ? 76 : 44, lines.length * 21 + 22);
+    laid.push({n:n, y:y, h:h, lines:lines});
+    y += h + GAP;
+  });
+  var H = y - GAP + PAD;
+
+  var out = [], defs =
+    '<marker id="fa-' + b.id + '" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="8" ' +
+    'markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 z" fill="var(--ink-soft)"/></marker>';
+  var arrow = ' fill="none" stroke="var(--ink-soft)" stroke-width="1.6" marker-end="url(#fa-' + b.id + ')"';
+
+  function label(x, ly, t, anchor){
+    if (!t) return;
+    out.push('<text x="' + x + '" y="' + ly + '" text-anchor="' + (anchor||"middle") +
+      '" font-size="12.5" fill="var(--muted)">' + svgEsc(t) + "</text>");
+  }
+  function textLines(x, top, h, lines, weight){
+    var start = top + h/2 - (lines.length-1)*10.5;
+    lines.forEach(function(t,i){
+      out.push('<text x="' + x + '" y="' + (start + i*21) + '" text-anchor="middle" ' +
+        'dominant-baseline="central" font-size="' + FS + '"' +
+        (weight ? ' font-weight="700"' : "") + ' fill="var(--ink)">' + svgEsc(t) + "</text>");
+    });
+  }
+
+  laid.forEach(function(L, i){
+    var n = L.n, top = L.y, h = L.h, half = BW/2;
+    var fill = 'fill="var(--card)" stroke="var(--line-strong)" stroke-width="1.6"';
+    if (n.shape === "term"){
+      out.push('<rect x="' + (cx-half) + '" y="' + top + '" width="' + BW + '" height="' + h +
+        '" rx="' + (h/2) + '" ' + 'fill="color-mix(in srgb,var(--accent) 14%,#fff)" ' +
+        'stroke="var(--accent)" stroke-width="1.8"/>');
+    } else if (n.shape === "decision"){
+      out.push('<path d="M' + cx + " " + top + "L" + (cx+half) + " " + (top+h/2) +
+        "L" + cx + " " + (top+h) + "L" + (cx-half) + " " + (top+h/2) + 'z" ' +
+        'fill="color-mix(in srgb,var(--accent-warm) 13%,#fff)" stroke="var(--accent-warm)" stroke-width="1.8"/>');
+    } else if (n.shape === "io"){
+      var sk = 16;
+      out.push('<path d="M' + (cx-half+sk) + " " + top + "H" + (cx+half) + "L" + (cx+half-sk) +
+        " " + (top+h) + "H" + (cx-half) + 'z" ' + fill + "/>");
+    } else if (n.shape === "prep"){
+      var c = 18;
+      out.push('<path d="M' + (cx-half+c) + " " + top + "H" + (cx+half-c) + "L" + (cx+half) + " " +
+        (top+h/2) + "L" + (cx+half-c) + " " + (top+h) + "H" + (cx-half+c) + "L" + (cx-half) + " " +
+        (top+h/2) + 'z" ' + fill + "/>");
+    } else {
+      out.push('<rect x="' + (cx-half) + '" y="' + top + '" width="' + BW + '" height="' + h +
+        '" rx="6" ' + fill + "/>");
+    }
+    textLines(cx, top, h, L.lines, n.shape === "term");
+
+    var last = (i === laid.length - 1);
+    if (!last){
+      out.push('<path d="M' + cx + " " + (top+h) + "V" + (laid[i+1].y - 3) + '"' + arrow + "/>");
+      if (n.shape === "decision" && n.down) label(cx + 8, top + h + 16, n.down, "start");
+    }
+    if (n.branch){
+      /* the branch box sits a clear 64px to the right of the diamond's
+         right vertex, which is what leaves room for the arrow label */
+      var bx = cx + BW + 64, bh = 44;
+      var blines = wrapText(n.branch.text, BW - 28, FS, 2);
+      bh = Math.max(44, blines.length * 21 + 22);
+      var btop = top + h/2 - bh/2;
+      out.push('<path d="M' + (cx+half) + " " + (top+h/2) + "H" + (bx - half - 3) + '"' + arrow + "/>");
+      label((cx + half + bx - half)/2, top + h/2 - 7, n.branch.label);
+      out.push('<rect x="' + (bx-half) + '" y="' + btop + '" width="' + BW + '" height="' + bh +
+        '" rx="6" ' + fill + "/>");
+      textLines(bx, btop, bh, blines);
+      if (!last){
+        var join = laid[i+1].y - 13;
+        out.push('<path d="M' + bx + " " + (btop+bh) + "V" + join + "H" + cx + "V" +
+          (laid[i+1].y - 3) + '"' + arrow + "/>");
+      }
+    }
+  });
+
+  return '<svg viewBox="0 0 ' + W + " " + Math.round(H) + '" width="' + W +
+    '" role="img" font-family="var(--font-body)" aria-label="' +
+    svgEsc(b.alt || "Flow chart") + '"><defs>' + defs + "</defs>\n" +
+    out.join("\n") + "\n</svg>";
+}
+
+/* ================================================================
+   Expression parser
+   ----------------------------------------------------------------
+   A small recursive-descent parser rather than eval(): teachers type
+   into this field, the result is written into a page, and eval would
+   put whatever is typed into the page's own scope. It compiles to a
+   closure tree once and is then called ~800 times per curve.
+   ================================================================ */
+var MFN = {
+  sin:Math.sin, cos:Math.cos, tan:Math.tan, asin:Math.asin, acos:Math.acos,
+  atan:Math.atan, sinh:Math.sinh, cosh:Math.cosh, tanh:Math.tanh,
+  sqrt:Math.sqrt, cbrt:Math.cbrt, abs:Math.abs, exp:Math.exp,
+  ln:Math.log, log:function(v){ return Math.log(v)/Math.LN10; },
+  log10:function(v){ return Math.log(v)/Math.LN10; },
+  log2:function(v){ return Math.log(v)/Math.LN2; },
+  floor:Math.floor, ceil:Math.ceil, round:Math.round, sign:Math.sign
+};
+var MCONST = { pi:Math.PI, e:Math.E };
+
+function lex(src){
+  var t = [], i = 0, s = String(src||"").replace(/−/g,"-").replace(/×/g,"*").replace(/÷/g,"/");
+  while (i < s.length){
+    var c = s.charAt(i);
+    if (/\s/.test(c)){ i++; continue; }
+    if (/[0-9.]/.test(c)){
+      var m = /^[0-9]*\.?[0-9]+(e[-+]?[0-9]+)?/i.exec(s.slice(i));
+      if (!m) throw new Error("Bad number");
+      t.push({k:"num", v:parseFloat(m[0])}); i += m[0].length; continue;
+    }
+    if (/[a-z_]/i.test(c)){
+      var w = /^[a-z_][a-z_0-9]*/i.exec(s.slice(i))[0];
+      t.push({k:"id", v:w.toLowerCase()}); i += w.length; continue;
+    }
+    if ("+-*/^(),".indexOf(c) >= 0){ t.push({k:c}); i++; continue; }
+    throw new Error("Unexpected “" + c + "”");
+  }
+  return t;
+}
+
+function compileExpr(src){
+  var t = lex(src), p = 0;
+  function peek(){ return t[p]; }
+  function eat(k){ if (t[p] && t[p].k === k){ p++; return true; } return false; }
+
+  function primary(){
+    var tk = t[p];
+    if (!tk) throw new Error("Expression ends early");
+    if (tk.k === "num"){ p++; var v = tk.v; return function(){ return v; }; }
+    if (tk.k === "("){ p++; var e = expr(); if (!eat(")")) throw new Error("Missing )"); return e; }
+    if (tk.k === "-"){ p++; var a = unary(); return function(x){ return -a(x); }; }
+    if (tk.k === "+"){ p++; return unary(); }
+    if (tk.k === "id"){
+      p++;
+      var name = tk.v;
+      if (MFN[name]){
+        var args = [];
+        if (eat("(")){
+          if (!eat(")")){
+            do { args.push(expr()); } while (eat(","));
+            if (!eat(")")) throw new Error("Missing ) after " + name);
+          }
+        } else { args.push(unary()); }          /* sin x */
+        var fn = MFN[name], a0 = args[0];
+        return function(x){ return fn(a0(x)); };
+      }
+      if (MCONST[name] != null){ var k = MCONST[name]; return function(){ return k; }; }
+      if (name === "x" || name === "t") return function(x){ return x; };
+      throw new Error("Unknown name “" + name + "”");
+    }
+    throw new Error("Unexpected symbol");
+  }
+  /* implicit multiplication: 2x, 3sin(x), 2(x+1), (x+1)(x-1) */
+  function implicit(left){
+    while (t[p] && (t[p].k === "num" || t[p].k === "id" || t[p].k === "(")){
+      var r = power();
+      var l = left;
+      left = function(x){ return l(x) * r(x); };
+    }
+    return left;
+  }
+  function power(){
+    var base = primary();
+    if (eat("^")){ var ex = unary(); var b = base; return function(x){ return Math.pow(b(x), ex(x)); }; }
+    return base;
+  }
+  function unary(){
+    if (eat("-")){ var a = unary(); return function(x){ return -a(x); }; }
+    if (eat("+")) return unary();
+    return implicit(power());
+  }
+  function term(){
+    var l = unary();
+    for(;;){
+      if (eat("*")){ var r1 = unary(), l1 = l; l = function(x){ return l1(x) * r1(x); }; }
+      else if (eat("/")){ var r2 = unary(), l2 = l; l = function(x){ return l2(x) / r2(x); }; }
+      else return l;
+    }
+  }
+  function expr(){
+    var l = term();
+    for(;;){
+      if (eat("+")){ var r1 = term(), l1 = l; l = function(x){ return l1(x) + r1(x); }; }
+      else if (eat("-")){ var r2 = term(), l2 = l; l = function(x){ return l2(x) - r2(x); }; }
+      else return l;
+    }
+  }
+  var f = expr();
+  if (p < t.length) throw new Error("Could not read the whole expression");
+  return f;
+}
+
+/* ---------------------------------------------------------------- graph */
+var PENS = {accent:"var(--accent)", neg:"var(--neg)", warm:"var(--accent-warm)",
+            pos:"var(--pos)", ink:"var(--ink)"};
+
+function niceStep(range, target){
+  var raw = range / (target || 8);
+  var mag = Math.pow(10, Math.floor(Math.log(raw)/Math.LN10));
+  var n = raw / mag;
+  var step = n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10;
+  return step * mag;
+}
+function fmtNum(v, step){
+  if (Math.abs(v) < 1e-9) return "0";
+  var dp = Math.max(0, Math.min(4, Math.ceil(-Math.log(step)/Math.LN10) + 0));
+  var s = v.toFixed(dp);
+  return s.replace(/\.0+$/,"").replace(/(\.[0-9]*[1-9])0+$/,"$1").replace(/^-0$/,"0");
+}
+
+function sampleFn(f, x0, x1, n){
+  var pts = [], dx = (x1-x0)/n;
+  for (var i = 0; i <= n; i++){
+    var x = x0 + i*dx, y;
+    try { y = f(x); } catch(e){ y = NaN; }
+    pts.push({x:x, y:(typeof y === "number" && isFinite(y)) ? y : NaN});
+  }
+  return pts;
+}
+
+/* Bisection on a sign change — used for both roots and turning points
+   (the latter by bisecting the numerical derivative). */
+function bisect(g, a, bb){
+  var fa = g(a);
+  for (var i = 0; i < 60; i++){
+    var m = (a+bb)/2, fm = g(m);
+    if (!isFinite(fm)) return m;
+    if ((fa < 0) === (fm < 0)){ a = m; fa = fm; } else bb = m;
+  }
+  return (a+bb)/2;
+}
+
+function graphFeatures(f, pts, x0, x1, want, viewRange){
+  var res = {roots:[], turns:[], vasym:[], hasym:null, yint:null};
+  var i, span = x1 - x0, dxs = span / (pts.length-1);
+
+  /* vertical asymptotes: a sign-flipping blow-up between two samples */
+  for (i = 1; i < pts.length; i++){
+    var p0 = pts[i-1], p1 = pts[i];
+    if (isNaN(p0.y) || isNaN(p1.y)){
+      if (!isNaN(p0.y) && Math.abs(p0.y) > 50) res.vasym.push(p1.x);
+      continue;
+    }
+    if ((p0.y < 0) !== (p1.y < 0)){
+      /* A sign change is a root if the curve passes through zero and an
+         asymptote if it flies off the top and reappears at the bottom.
+         Judging that against the visible y-range rather than a fixed
+         number is what makes tan(x) work as well as 1/x. */
+      var big = Math.max(Math.abs(p0.y), Math.abs(p1.y));
+      if (big > (viewRange || 10) * 4 || Math.abs(p1.y - p0.y) > 1e4){
+        res.vasym.push(bisect(function(x){ return 1/f(x); }, p0.x, p1.x));
+      } else if (want.roots){
+        var r = bisect(f, p0.x, p1.x);
+        if (Math.abs(f(r)) < 1e-6) res.roots.push(r);
+      }
+    } else if (want.roots && (p0.y === 0 || p1.y === 0)){
+      if (p0.y === 0) res.roots.push(p0.x);
+    }
+  }
+  /* dedupe asymptotes that the sampling found twice */
+  res.vasym = res.vasym.filter(function(v,idx,arr){
+    return isFinite(v) && arr.findIndex(function(w){ return Math.abs(w-v) < dxs*2; }) === idx;
+  });
+
+  if (want.turns){
+    var d = function(x){ var h = Math.max(1e-7, Math.abs(x)*1e-7 + span*1e-7);
+                         return (f(x+h) - f(x-h)) / (2*h); };
+    var prev = NaN;
+    for (i = 0; i < pts.length; i++){
+      var x = pts[i].x, dv;
+      try { dv = d(x); } catch(e){ dv = NaN; }
+      if (isFinite(prev) && isFinite(dv) && (prev < 0) !== (dv < 0)){
+        var xa = pts[i-1].x, xb = x;
+        var near = res.vasym.some(function(v){ return v > xa - dxs && v < xb + dxs; });
+        if (!near && Math.abs(f(xb) - f(xa)) < Math.abs(span)*1e6){
+          var tx = bisect(d, xa, xb), ty = f(tx);
+          if (isFinite(ty)) res.turns.push({x:tx, y:ty, min:(prev < 0)});
+        }
+      }
+      prev = dv;
+    }
+    res.turns = res.turns.filter(function(t,idx,arr){
+      return arr.findIndex(function(w){ return Math.abs(w.x - t.x) < dxs*2; }) === idx;
+    });
+  }
+
+  if (want.yint && x0 <= 0 && x1 >= 0){
+    var y0 = NaN; try { y0 = f(0); } catch(e){}
+    if (isFinite(y0)) res.yint = y0;
+  }
+  if (want.asym){
+    /* horizontal asymptote: both tails settle on the same value */
+    var far = Math.max(Math.abs(x0), Math.abs(x1)) * 40 + 100;
+    var L = NaN, R = NaN;
+    try { L = f(-far); R = f(far); } catch(e){}
+    if (isFinite(L) && isFinite(R) && Math.abs(L-R) < 1e-4 * (1+Math.abs(L))){
+      var chk = f(far*2);
+      if (isFinite(chk) && Math.abs(chk-R) < 1e-4 * (1+Math.abs(R))) res.hasym = R;
+    }
+  }
+  return res;
+}
+
+function graphSvg(b){
+  var W = 640, H = Math.round(W * (b.aspect || 0.66));
+  var L = 44, R = 16, T = 16, B = 34;
+  var iw = W - L - R, ih = H - T - B;
+  var x0 = num(b.xmin,-5), x1 = num(b.xmax,5);
+  if (!(x1 > x0)){ x1 = x0 + 10; }
+
+  var curves = [], err = "";
+  (b.funcs||[]).forEach(function(fd){
+    if (!fd.expr || !fd.expr.trim()) return;
+    try {
+      var f = compileExpr(fd.expr);
+      curves.push({d:fd, f:f, pts:sampleFn(f, x0, x1, 800)});
+    } catch(e){ err = fd.expr + " — " + e.message; }
+  });
+  b.err = err;
+  if (!curves.length){
+    return '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" font-family="var(--font-body)">' +
+      '<text x="' + W/2 + '" y="' + H/2 + '" text-anchor="middle" font-size="16" fill="var(--muted)">' +
+      svgEsc(err || "Type a rule, e.g. x^2 - 4x + 3") + "</text></svg>";
+  }
+
+  /* y range: auto uses a trimmed spread so one asymptote can't flatten
+     the whole curve into the axis. */
+  var y0, y1;
+  if (b.yauto === false){ y0 = num(b.ymin,-5); y1 = num(b.ymax,5); }
+  else {
+    var ys = [];
+    curves.forEach(function(c){ c.pts.forEach(function(p){ if (!isNaN(p.y)) ys.push(p.y); }); });
+    ys.sort(function(a,b2){ return a-b2; });
+    if (!ys.length){ y0 = -5; y1 = 5; }
+    else {
+      var lo = ys[Math.floor(ys.length*0.03)], hi = ys[Math.floor(ys.length*0.97)];
+      if (!(hi > lo)){ lo = ys[0] - 1; hi = ys[ys.length-1] + 1; }
+      var padY = (hi-lo)*0.16;
+      y0 = lo - padY; y1 = hi + padY;
+      if (y0 > 0 && y0 < (y1-y0)*0.6) y0 = 0;
+      if (y1 < 0 && -y1 < (y1-y0)*0.6) y1 = 0;
+    }
+  }
+  if (!(y1 > y0)){ y1 = y0 + 10; }
+
+  var sx = function(x){ return L + (x - x0) / (x1 - x0) * iw; };
+  var sy = function(y){ return T + (y1 - y) / (y1 - y0) * ih; };
+  var out = [];
+
+  var stepX = niceStep(x1-x0, 9), stepY = niceStep(y1-y0, 7);
+  if (b.grid !== false){
+    var g = [];
+    for (var gx = Math.ceil(x0/stepX)*stepX; gx <= x1+1e-9; gx += stepX)
+      g.push("M" + sx(gx).toFixed(1) + " " + T + "V" + (T+ih));
+    for (var gy = Math.ceil(y0/stepY)*stepY; gy <= y1+1e-9; gy += stepY)
+      g.push("M" + L + " " + sy(gy).toFixed(1) + "H" + (L+iw));
+    out.push('<path d="' + g.join("") + '" stroke="var(--line)" stroke-width="1" fill="none" opacity=".75"/>');
+  }
+
+  /* axes sit on the origin when it is in view, otherwise on the frame */
+  var ax = (y0 <= 0 && y1 >= 0) ? sy(0) : (y0 > 0 ? T+ih : T);
+  var ay = (x0 <= 0 && x1 >= 0) ? sx(0) : (x0 > 0 ? L : L+iw);
+  out.push('<path d="M' + L + " " + ax.toFixed(1) + "H" + (L+iw) + '" stroke="var(--ink-soft)" stroke-width="1.6"/>');
+  out.push('<path d="M' + ay.toFixed(1) + " " + T + "V" + (T+ih) + '" stroke="var(--ink-soft)" stroke-width="1.6"/>');
+
+  if (b.ticks !== false){
+    for (var tx = Math.ceil(x0/stepX)*stepX; tx <= x1+1e-9; tx += stepX){
+      if (Math.abs(tx) < stepX*1e-6) continue;
+      out.push('<text x="' + sx(tx).toFixed(1) + '" y="' + (ax+16) +
+        '" text-anchor="middle" font-size="12.5" fill="var(--muted)">' + fmtNum(tx, stepX) + "</text>");
+    }
+    for (var ty = Math.ceil(y0/stepY)*stepY; ty <= y1+1e-9; ty += stepY){
+      if (Math.abs(ty) < stepY*1e-6) continue;
+      out.push('<text x="' + (ay-7) + '" y="' + (sy(ty)+4).toFixed(1) +
+        '" text-anchor="end" font-size="12.5" fill="var(--muted)">' + fmtNum(ty, stepY) + "</text>");
+    }
+  }
+  out.push('<text x="' + (L+iw) + '" y="' + (ax-8) + '" text-anchor="end" font-size="14" ' +
+    'font-style="italic" fill="var(--ink-soft)">' + svgEsc(b.xlabel || "x") + "</text>");
+  out.push('<text x="' + (ay+8) + '" y="' + (T+11) + '" font-size="14" font-style="italic" ' +
+    'fill="var(--ink-soft)">' + svgEsc(b.ylabel || "y") + "</text>");
+
+  var marks = [];
+  var want = {roots:!!b.mRoots, turns:!!b.mTurn, yint:!!b.mYint, asym:!!b.mAsym};
+
+  curves.forEach(function(c){
+    /* Break the polyline wherever the function leaves the view or jumps —
+       otherwise an asymptote is drawn as a near-vertical line joining the
+       two branches, which is the classic wrong-looking graph. */
+    var segs = [], cur = [], prev = null;
+    var yPad = (y1-y0)*1.5;
+    c.pts.forEach(function(p){
+      var ok = !isNaN(p.y) && p.y > y0 - yPad && p.y < y1 + yPad;
+      var jump = prev && Math.abs(p.y - prev.y) > (y1-y0)*0.9 &&
+                 Math.abs(p.y - prev.y) / Math.max(1e-9,(x1-x0)/800) > (y1-y0)*40;
+      if (!ok || jump){ if (cur.length > 1) segs.push(cur); cur = []; }
+      if (ok) cur.push(p);
+      prev = isNaN(p.y) ? null : p;
+    });
+    if (cur.length > 1) segs.push(cur);
+    var d = segs.map(function(s){
+      return "M" + s.map(function(p){ return sx(p.x).toFixed(1) + " " + sy(p.y).toFixed(1); }).join("L");
+    }).join(" ");
+    out.push('<path d="' + d + '" fill="none" stroke="' + (PENS[c.d.pen] || PENS.accent) +
+      '" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>');
+
+    if (want.roots || want.turns || want.yint || want.asym){
+      var fe = graphFeatures(c.f, c.pts, x0, x1, want, y1 - y0);
+      fe.vasym.forEach(function(v){
+        if (!b.mAsym) return;
+        out.push('<path d="M' + sx(v).toFixed(1) + " " + T + "V" + (T+ih) +
+          '" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="6 5" fill="none"/>');
+        marks.push({x:sx(v), y:T+13, t:(b.xlabel||"x") + " = " + fmtNum(v, stepX/50), anchor:"start", dx:5, plain:true});
+      });
+      if (b.mAsym && fe.hasym != null && fe.hasym > y0 && fe.hasym < y1){
+        out.push('<path d="M' + L + " " + sy(fe.hasym).toFixed(1) + "H" + (L+iw) +
+          '" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="6 5" fill="none"/>');
+        marks.push({x:L+iw-6, y:sy(fe.hasym)-8, t:(b.ylabel||"y") + " = " + fmtNum(fe.hasym, stepY/50),
+                    anchor:"end", dx:0, plain:true});
+      }
+      fe.roots.forEach(function(r){
+        if (r < x0 || r > x1 || y0 > 0 || y1 < 0) return;   /* no visible x-axis */
+        /* clear of the axis numbers, which sit at ax+16 — and flipped
+           above the axis when there is no room underneath */
+        var ly = ax + 34;
+        if (ly > T + ih + B - 6) ly = ax - 14;
+        marks.push({dot:[sx(r), sy(0)], x:sx(r), y:ly, t:"(" + fmtNum(r, stepX/20) + ", 0)"});
+      });
+      if (fe.yint != null && fe.yint >= y0 && fe.yint <= y1)
+        marks.push({dot:[sx(0), sy(fe.yint)], x:sx(0)+9, y:sy(fe.yint)-9,
+                    t:"(0, " + fmtNum(fe.yint, stepY/20) + ")", anchor:"start"});
+      fe.turns.forEach(function(t2){
+        if (t2.x < x0 || t2.x > x1 || t2.y < y0 || t2.y > y1) return;
+        marks.push({dot:[sx(t2.x), sy(t2.y)], x:sx(t2.x), y:sy(t2.y) + (t2.min ? 24 : -12),
+                    t:"(" + fmtNum(t2.x, stepX/20) + ", " + fmtNum(t2.y, stepY/20) + ")"});
+      });
+    }
+    (b.points||[]).forEach(function(pt){
+      if (pt.fn !== undefined && pt.fn !== c.d.i) return;
+      var px = num(pt.x, NaN);
+      if (isNaN(px)) return;
+      var py = pt.y === "" || pt.y == null ? c.f(px) : num(pt.y, NaN);
+      if (!isFinite(py)) return;
+      marks.push({dot:[sx(px), sy(py)], x:sx(px)+9, y:sy(py)-9, anchor:"start",
+                  t:pt.label || ("(" + fmtNum(px, stepX/20) + ", " + fmtNum(py, stepY/20) + ")")});
+    });
+  });
+
+  /* A point can be found twice — the origin is both a root and the
+     y-intercept of y = sin x — so the same label is not written over
+     itself. Keyed on the marker position, not the text position. */
+  var seen = [];
+  marks = marks.filter(function(m){
+    if (!m.dot) return true;
+    var dup = seen.some(function(d){
+      return d.t === m.t && Math.abs(d.x - m.dot[0]) < 6 && Math.abs(d.y - m.dot[1]) < 6;
+    });
+    if (dup) return false;
+    seen.push({t:m.t, x:m.dot[0], y:m.dot[1]});
+    return true;
+  });
+
+  var placed = [];
+  marks.forEach(function(m){
+    if (m.dot) out.push('<circle cx="' + m.dot[0].toFixed(1) + '" cy="' + m.dot[1].toFixed(1) +
+      '" r="4.5" fill="var(--neg)" stroke="#fff" stroke-width="1.6"/>');
+    var lx = m.x + (m.dx || 0), ly = m.y, anchor = m.anchor || "middle";
+    var w = textW(m.t, 13);
+    /* keep the label inside the frame … */
+    if (anchor === "middle" && lx - w/2 < L){ lx = L; anchor = "start"; }
+    else if (anchor === "middle" && lx + w/2 > L+iw){ lx = L+iw; anchor = "end"; }
+    else if (anchor === "start" && lx + w > L+iw){ lx = L+iw; anchor = "end"; }
+    /* … and off the label before it, which happens wherever roots crowd
+       together (2sin 3x has six of them in three units of x) */
+    for (var g = 0; g < 4; g++){
+      var clash = placed.some(function(p){
+        return Math.abs(p.y - ly) < 13 && Math.abs(p.x - lx) < (p.w + w)/2 + 6;
+      });
+      if (!clash) break;
+      ly += 15;
+    }
+    if (ly > H - 4) ly = H - 4;
+    if (ly < 12) ly = 12;
+    placed.push({x:lx, y:ly, w:w});
+    out.push('<text x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) +
+      '" text-anchor="' + anchor + '" font-size="13" fill="' +
+      (m.plain ? "var(--muted)" : "var(--ink)") + '">' + svgEsc(m.t) + "</text>");
+  });
+
+  return '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" role="img" ' +
+    'font-family="var(--font-body)" aria-label="' + svgEsc(b.alt || "Graph") + '">\n' +
+    out.join("\n") + "\n</svg>";
+}
+
+function num(v, dflt){
+  if (v === "" || v == null) return dflt;
+  var n = parseFloat(v);
+  return isFinite(n) ? n : dflt;
+}
+
+function figureWrap(kind, b, inner){
+  var legend = "";
+  if (kind === "graph" && b.legend){
+    var items = (b.funcs||[]).filter(function(f){ return f.expr && f.expr.trim(); })
+      .map(function(f){
+        return '<span><span class="pen ' + (f.pen||"accent") + '"></span> ' +
+               esc(f.label || ("y = " + f.expr)) + "</span>";
+      }).join("");
+    if (items) legend = '\n    <div class="legend">' + items + "</div>";
+  }
+  var model = {};
+  Object.keys(b).forEach(function(k){ if (k !== "raw" && k !== "err") model[k] = b[k]; });
+  return '<div class="graph-card" data-pb="' + kind + '" data-pb-model="' + attrJson(model) + '">\n    ' +
+    inner + legend + "\n  </div>" +
+    (b.caption ? '\n  <p class="figcap" data-pb-cap="1">' + esc(b.caption) + "</p>" : "");
+}
+
+/* ================================================================
    Deck rendering
    ================================================================ */
+function renderTable(b){
+  var cls = "tbl" + (b.variant ? " " + b.variant : "");
+  var align = b.align || [];
+  var out = ['<table class="' + cls + '">'];
+  (b.rows||[]).forEach(function(r,i){
+    var head = (b.header !== false) && i === 0;
+    var cells = r.map(function(c,j){
+      var a = align[j] === "c" ? ' class="c"' : "";
+      return head ? "<th" + a + ">" + esc(c) + "</th>" : "<td" + a + ">" + esc(c) + "</td>";
+    }).join("");
+    out.push("    <tr>" + cells + "</tr>");
+  });
+  out.push("  </table>");
+  return out.join("\n");
+}
+
 function renderBlock(b){
   /* An imported block keeps its original markup until the teacher edits
      it. Regenerating from the model would flatten inline markup — <br>,
@@ -305,17 +970,30 @@ function renderBlock(b){
       }).join("\n");
       return '<div class="work">\n' + rows + "\n  </div>";
     }
-    case "table": {
-      var out = ['<table class="tbl' + (b.filled ? " filled" : "") + '">'];
-      (b.rows||[]).forEach(function(r,i){
-        var cells = r.map(function(c){
-          return i === 0 ? "<th>" + esc(c) + "</th>" : "<td>" + esc(c) + "</td>";
-        }).join("");
-        out.push("    <tr>" + cells + "</tr>");
-      });
-      out.push("  </table>");
-      return out.join("\n");
+    case "table": return renderTable(b);
+    case "flow":  return figureWrap("flow", b, flowSvg(b));
+    case "graph": return figureWrap("graph", b, graphSvg(b));
+    case "qcard":
+      return '<div class="qcard' + (b.frag ? " frag" : "") + '">\n' +
+             '    <p class="q">' + esc(b.q) + "</p>\n" +
+             '    <div class="a">' + lines2p(b.a) + "</div>\n" +
+             '    <button class="reveal-btn">' + esc(b.btn || "Show answer") + "</button>\n  </div>";
+    case "code": {
+      /* one <span> per line; *word* → keyword, // … → comment */
+      var ls = String(b.body||"").split("\n").map(function(l){
+        var t = esc(l).replace(/\*([^*]+)\*/g,"<b>$1</b>")
+                      .replace(/(\/\/.*)$/,"<i>$1</i>");
+        return "<span>" + (t || " ") + "</span>";
+      }).join("");
+      return '<pre class="code">' + ls + "</pre>";
     }
+    case "formula": return '<div class="formula">' + esc(b.body) + "</div>";
+    case "note":    return '<p class="note">' + esc(b.body) + "</p>";
+    case "figcap":  return '<p class="figcap">' + esc(b.body) + "</p>";
+    case "teacher":
+      return '<details class="teacher">\n    <summary>' + esc(b.label || "Teacher notes") +
+             '</summary>\n    <div class="inner-d">\n    <ul>\n' + lines2li(b.body) +
+             "\n    </ul>\n    </div>\n  </details>";
     case "opaque": return b.html;
     default: return "";
   }
@@ -803,6 +1481,160 @@ document.getElementById("mathOk").addEventListener("click", function(){
 });
 
 /* ================================================================
+   Catalogue + searchable picker
+   ----------------------------------------------------------------
+   Every "add" control opens the same list. Each entry carries search
+   keys as well as a name, so a teacher who thinks "parabola" or
+   "flowchart" or "hidden answer" finds the block without knowing what
+   the design system calls it.
+   ================================================================ */
+var CAT = {
+  slide: [
+    ["content","Content slide","Layout","Heading plus blocks, one or two columns.","body normal standard"],
+    ["title","Title slide","Layout","Opening slide — heading, subtitle, success-criteria pills.","first opening cover start"],
+    ["section","Section divider","Layout","Full-bleed dark slide that breaks the lesson into parts.","break chapter part heading"],
+    ["quiz","Retrieval quiz","Layout","Pulls questions from the unit's questions.js bank.","starter warm-up recall test"]
+  ],
+  block: [
+    ["text","Paragraph","Text","Plain prose. A blank line starts a new paragraph.","words prose sentence p"],
+    ["list","Bullet list","Text","One bullet per line.","bullets points ul dot points"],
+    ["note","Aside note","Text","Small italic reminder line under the main content.","reminder italic small aside"],
+    ["box","Callout box","Text","Coloured box — key idea, question, try this, answer, definition.","key idea definition hint warning try answer highlight"],
+    ["teacher","Teacher notes","Text","Collapsible notes for you only — hidden when the deck prints.","hidden staff prompts script notes"],
+
+    ["table","Table","Data & figures","Rows and columns, with a header row and a choice of styles.","grid rows columns data vocab values"],
+    ["graph","Function graph","Data & figures","Plots a rule and marks intercepts, turning points and asymptotes.","plot curve parabola axes cartesian sketch function coordinates"],
+    ["flow","Flow chart","Data & figures","Boxes and arrows — process, decision, start and stop.","flowchart diagram process algorithm decision steps arrows"],
+
+    ["steps","Working steps","Worked examples","Numbered steps revealed one click at a time.","reveal working solution method show"],
+    ["qcard","Q&A card","Worked examples","A question with the answer hidden behind a button.","question answer hidden reveal card check"],
+    ["code","Pseudocode","Worked examples","Line-numbered code block; *word* is a keyword, // a comment.","algorithm program pseudo listing python"],
+
+    ["bigeq","Big equation (CSS)","Maths","One centred equation line, no MathJax.","equation formula centred display"],
+    ["work","Working grid (CSS)","Maths","Two-column grid that lines calculations up on the = sign.","calculation align equals lines"],
+    ["formula","Formula chip","Maths","A boxed, stated rule such as F = ma.","rule boxed equation law"],
+
+    ["figcap","Figure caption","Data & figures","Centred caption under a figure.","caption label under figure"]
+  ],
+  sheetItem: [
+    ["question","Question","Worksheet","A numbered question with marks and answer space.","q numbered marks item"],
+    ["part","Part heading","Worksheet","Starts a new part — Part A, Part B…","section heading part divider"],
+    ["callout","Callout box","Worksheet","Information, First Nations perspectives, or extension box.","info box extension note"],
+    ["tick","Self-check list","Worksheet","Tick-box list students work through at the end.","checklist tickbox success criteria"]
+  ],
+  furniture: [
+    ["lines","Ruled lines","Answer space","Ruled writing lines — pick how many.","write lines ruled answer space"],
+    ["table","Table to fill in","Answer space","Table with blank cells for students to complete.","grid complete fill blank"],
+    ["sortcols","Sorting columns","Answer space","Two or three headed columns to sort items into.","categorise groups classify columns"],
+    ["opts","Multiple choice","Answer space","A B C D options.","mcq abcd choice select"],
+    ["blank","Inline blank","Answer space","A short blank line inside the question text.","gap fill cloze underline"],
+    ["drawbox","Drawing box","Answer space","An empty box for a diagram or graph.","sketch diagram draw space"],
+    ["chips","Word bank","Answer space","A row of words to choose from.","vocabulary words bank glossary"]
+  ]
+};
+
+var pickState = {items:[], idx:0, cb:null};
+function openPicker(title, list, cb){
+  pickState.items = list; pickState.idx = 0; pickState.cb = cb;
+  document.getElementById("pickTitle").textContent = title;
+  var q = document.getElementById("pickQ");
+  q.value = "";
+  document.getElementById("pick").hidden = false;
+  drawPicker();
+  q.focus();
+}
+function closePicker(){ document.getElementById("pick").hidden = true; pickState.cb = null; }
+
+/* Ranked, not merely filtered. A plain substring test puts "Paragraph"
+   above "Function graph" when you type "graph", which is the opposite of
+   what you meant — so a match at the start of a word in the name beats a
+   match buried in the middle of one, and both beat a keyword or a word
+   from the description. */
+function scoreEntry(e, t){
+  var name = e[1].toLowerCase(), keys = (e[4] + " " + e[0] + " " + e[2]).toLowerCase(),
+      desc = e[3].toLowerCase();
+  if (name.indexOf(t) === 0) return 100;
+  if (new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(name)) return 70;
+  if (name.indexOf(t) >= 0) return 40;
+  if (new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(keys)) return 30;
+  if (keys.indexOf(t) >= 0) return 18;
+  if (desc.indexOf(t) >= 0) return 8;
+  return 0;
+}
+function filterCat(list, q){
+  var terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!terms.length) return list.slice();
+  var scored = [];
+  list.forEach(function(e, i){
+    var total = 0;
+    for (var k = 0; k < terms.length; k++){
+      var s = scoreEntry(e, terms[k]);
+      if (!s) return;                    /* every word must match something */
+      total += s;
+    }
+    scored.push({e:e, s:total, i:i});
+  });
+  scored.sort(function(a,b){ return b.s - a.s || a.i - b.i; });
+  return scored.map(function(x){ return x.e; });
+}
+function drawPicker(){
+  var q = document.getElementById("pickQ").value;
+  var res = filterCat(pickState.items, q);
+  pickState.shown = res;
+  if (pickState.idx >= res.length) pickState.idx = Math.max(0, res.length-1);
+  var box = document.getElementById("pickList");
+  box.innerHTML = "";
+  if (!res.length){
+    box.innerHTML = '<p class="pk-none">Nothing matches “' + esc(q) + '”.</p>';
+    return;
+  }
+  var lastG = null;
+  res.forEach(function(e, i){
+    if (e[2] !== lastG && !q){
+      var g = document.createElement("div"); g.className = "pk-g"; g.textContent = e[2];
+      box.appendChild(g); lastG = e[2];
+    }
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "pk-i" + (i === pickState.idx ? " on" : "");
+    b.innerHTML = '<span class="nm"></span><span class="ds"></span>';
+    b.querySelector(".nm").textContent = e[1];
+    b.querySelector(".ds").textContent = e[3];
+    b.addEventListener("click", function(){ choosePick(i); });
+    b.addEventListener("mousemove", function(){
+      if (pickState.idx === i) return;
+      pickState.idx = i;
+      Array.prototype.forEach.call(box.querySelectorAll(".pk-i"), function(el,j){
+        el.classList.toggle("on", j === i);
+      });
+    });
+    box.appendChild(b);
+  });
+}
+function choosePick(i){
+  var e = (pickState.shown||[])[i];
+  var cb = pickState.cb;
+  if (!e || !cb) return;
+  closePicker();
+  cb(e[0]);
+}
+document.getElementById("pickQ").addEventListener("input", function(){ pickState.idx = 0; drawPicker(); });
+document.getElementById("pickQ").addEventListener("keydown", function(e){
+  var n = (pickState.shown||[]).length;
+  if (e.key === "ArrowDown"){ e.preventDefault(); pickState.idx = Math.min(n-1, pickState.idx+1); drawPicker(); scrollPick(); }
+  else if (e.key === "ArrowUp"){ e.preventDefault(); pickState.idx = Math.max(0, pickState.idx-1); drawPicker(); scrollPick(); }
+  else if (e.key === "Enter"){ e.preventDefault(); choosePick(pickState.idx); }
+  else if (e.key === "Escape"){ e.preventDefault(); closePicker(); }
+});
+function scrollPick(){
+  var on = document.querySelector("#pickList .pk-i.on");
+  if (on && on.scrollIntoView) on.scrollIntoView({block:"nearest"});
+}
+document.getElementById("pick").addEventListener("click", function(e){
+  if (e.target.id === "pick") closePicker();
+});
+
+/* ================================================================
    Forms
    ================================================================ */
 function field(label, val, oninput, opts){
@@ -814,7 +1646,10 @@ function field(label, val, oninput, opts){
   if (opts.tag === "textarea") el.rows = opts.rows || 3;
   if (opts.type) el.type = opts.type;
   el.value = val == null ? "" : val;
-  el.addEventListener("input", function(){ oninput(el.value); schedule(); });
+  /* dirty() as well as the value: without it an edit to an imported
+     slide would clear the block's .raw but leave the slide's, and the
+     slide would still be emitted verbatim. */
+  el.addEventListener("input", function(){ oninput(el.value); dirty(); schedule(); });
   wrap.appendChild(el);
   if (opts.maths){
     var b = document.createElement("button");
@@ -910,24 +1745,41 @@ function renderSlideForm(f, s){
   var h = document.createElement("h2"); h.textContent = "Blocks"; f.appendChild(h);
   (s.blocks||[]).forEach(function(b, i){ f.appendChild(blockCard(s, b, i)); });
 
-  var add = document.createElement("select");
-  add.style.cssText = "width:100%;margin-top:.5em;font-size:.85rem;padding:.4em";
-  [["","+ Add a block…"],["text","Paragraph"],["list","Bullet list"],["box","Callout box"],
-   ["steps","Working steps"],["bigeq","Big equation (CSS)"],["work","Working grid (CSS)"],
-   ["table","Table"]].forEach(function(o){
-    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; add.appendChild(op);
+  var add = btn("+ Add a block…", "ghost sm", function(){
+    openPicker("Add a block", CAT.block, function(type){
+      s.blocks = s.blocks || [];
+      s.blocks.push(newBlock(type));
+      render();
+    });
   });
-  add.addEventListener("change", function(){
-    if (!add.value) return;
-    s.blocks = s.blocks || [];
-    var nb = {id:uid(), type:add.value, col:1};
-    if (nb.type === "box"){ nb.variant = "key"; nb.label = "Key idea"; nb.body = ""; }
-    if (nb.type === "steps") nb.items = [{t:"", ans:false}];
-    if (nb.type === "work")  nb.rows  = [{l:"",r:""}];
-    if (nb.type === "table") nb.rows  = [["",""],["",""]];
-    s.blocks.push(nb); add.value = ""; render();
-  });
+  add.style.cssText = "width:100%;margin-top:.5em";
   f.appendChild(add);
+}
+
+/* Defaults for a freshly added block — enough content that the preview
+   shows something recognisable rather than an empty frame. */
+function newBlock(type){
+  var b = {id:uid(), type:type, col:1};
+  switch(type){
+    case "box":     b.variant = "key"; b.label = "Key idea"; b.body = ""; break;
+    case "steps":   b.items = [{t:"", ans:false}]; break;
+    case "work":    b.rows  = [{l:"",r:""}]; break;
+    case "table":   b.rows  = [["",""],["",""]]; b.header = true; b.align = []; b.variant = ""; break;
+    case "qcard":   b.q = ""; b.a = ""; b.btn = "Show answer"; break;
+    case "teacher": b.label = "Teacher notes"; b.body = ""; break;
+    case "flow":
+      b.src = "(Start)\nMeasure the mass\n?Is it over 50 g? |Yes |No> Add another weight\n(Stop)";
+      b.caption = "";
+      break;
+    case "graph":
+      b.funcs = [{expr:"x^2 - 4x + 3", pen:"accent", label:""}];
+      b.xmin = -1; b.xmax = 5; b.yauto = true; b.ymin = -5; b.ymax = 5;
+      b.grid = true; b.ticks = true; b.legend = false;
+      b.mRoots = true; b.mYint = true; b.mTurn = true; b.mAsym = false;
+      b.xlabel = "x"; b.ylabel = "y"; b.points = []; b.caption = ""; b.aspect = 0.66;
+      break;
+  }
+  return b;
 }
 
 function blockCard(s, b, i){
@@ -939,6 +1791,9 @@ function blockCard(s, b, i){
   var t = document.createElement("span"); t.className = "bt";
   t.textContent = ({text:"Paragraph",list:"Bullet list",box:"Callout box",steps:"Working steps",
                     bigeq:"Big equation",work:"Working grid",table:"Table",
+                    flow:"Flow chart",graph:"Function graph",qcard:"Q&A card",
+                    code:"Pseudocode",formula:"Formula chip",note:"Aside note",
+                    figcap:"Figure caption",teacher:"Teacher notes",
                     opaque:"Custom block — left untouched"})[b.type] || b.type;
   head.appendChild(t);
   if (i > 0) head.appendChild(btn("↑","ghost sm",function(){
@@ -1000,16 +1855,238 @@ function blockCard(s, b, i){
     });
     card.appendChild(btn("+ line","ghost sm",function(){ b.rows.push({l:"",r:""}); render(); }));
   } else if (b.type === "table"){
-    card.appendChild(field("Rows (cells separated by |, first row is the header)",
-      (b.rows||[]).map(function(r){ return r.join(" | "); }).join("\n"),
-      function(v){ b.rows = v.split("\n").map(function(r){ return r.split("|").map(function(c){ return c.trim(); }); }); },
+    tableEditor(card, b);
+  } else if (b.type === "flow"){
+    flowEditor(card, b);
+  } else if (b.type === "graph"){
+    graphEditor(card, b);
+  } else if (b.type === "qcard"){
+    card.appendChild(field("Question", b.q, function(v){ b.q = v; }, {tag:"textarea", rows:2, maths:true}));
+    card.appendChild(field("Answer (hidden until clicked)", b.a, function(v){ b.a = v; },
+      {tag:"textarea", rows:3, maths:true}));
+    card.appendChild(field("Button label", b.btn, function(v){ b.btn = v; }));
+  } else if (b.type === "teacher"){
+    card.appendChild(field("Summary line", b.label, function(v){ b.label = v; }));
+    card.appendChild(field("Notes (one per line)", b.body, function(v){ b.body = v; },
       {tag:"textarea", rows:4}));
+    var tn = document.createElement("p"); tn.className = "hint";
+    tn.textContent = "Collapsed on the slide and dropped from the printed copy.";
+    card.appendChild(tn);
+  } else if (b.type === "code"){
+    card.appendChild(field("Pseudocode", b.body, function(v){ b.body = v; },
+      {tag:"textarea", rows:7}));
+    var cn = document.createElement("p"); cn.className = "hint";
+    cn.innerHTML = "One line per line, numbered automatically. " +
+      "<code>*word*</code> sets a keyword in bold; anything after <code>//</code> is a comment.";
+    card.appendChild(cn);
   } else {
-    card.appendChild(field(b.type === "bigeq" ? "Equation" : "Text",
+    var LBL = {bigeq:"Equation", formula:"Formula", note:"Note", figcap:"Caption",
+               list:"Items (one per line)"};
+    var oneLine = b.type === "bigeq" || b.type === "formula" || b.type === "figcap";
+    card.appendChild(field(LBL[b.type] || "Text",
       b.body, function(v){ b.body = v; },
-      {tag: b.type === "bigeq" ? "input" : "textarea", maths:true}));
+      {tag: oneLine ? "input" : "textarea", maths:true}));
   }
   return card;
+}
+
+/* ---- shared little controls ---- */
+function check(label, val, onchange){
+  var l = document.createElement("label"); l.className = "f";
+  var c = document.createElement("input"); c.type = "checkbox"; c.checked = !!val;
+  c.style.width = "auto";
+  c.addEventListener("change", function(){ onchange(c.checked); dirty(); schedule(); });
+  l.appendChild(c); l.appendChild(document.createTextNode(" " + label));
+  return l;
+}
+function hint(html){
+  var p = document.createElement("p"); p.className = "hint"; p.innerHTML = html; return p;
+}
+
+/* ---- table -------------------------------------------------------- */
+function tableEditor(card, b){
+  b.rows = b.rows && b.rows.length ? b.rows : [["",""],["",""]];
+  b.align = b.align || [];
+  card.appendChild(select("Style", b.variant || "", [
+    ["","Plain"],["filled","Filled header"],["vocab","Vocabulary (word · say it · meaning)"],
+    ["exact","Reference grid (compact, centred)"]
+  ], function(v){ b.variant = v; }));
+  card.appendChild(check("First row is a header", b.header !== false,
+    function(v){ b.header = v; }));
+
+  var cols = b.rows.reduce(function(m,r){ return Math.max(m, r.length); }, 1);
+  b.rows.forEach(function(r){ while (r.length < cols) r.push(""); });
+
+  var wrap = document.createElement("div"); wrap.className = "gr";
+  var tbl = document.createElement("table");
+  var thead = document.createElement("thead");
+  var hr = document.createElement("tr");
+  for (var j = 0; j < cols; j++){
+    (function(j){
+      var th = document.createElement("th");
+      var c = document.createElement("button");
+      c.type = "button"; c.className = "mini-b" + (b.align[j] === "c" ? " on" : "");
+      c.textContent = "centre"; c.title = "Centre this column";
+      c.addEventListener("click", function(){
+        b.align[j] = b.align[j] === "c" ? "" : "c"; dirty(); render();
+      });
+      th.appendChild(c);
+      if (cols > 1){
+        var x = document.createElement("button");
+        x.type = "button"; x.className = "mini-b"; x.textContent = "✕"; x.title = "Delete column";
+        x.style.marginLeft = "2px";
+        x.addEventListener("click", function(){
+          b.rows.forEach(function(r){ r.splice(j,1); });
+          b.align.splice(j,1); dirty(); render();
+        });
+        th.appendChild(x);
+      }
+      hr.appendChild(th);
+    })(j);
+  }
+  hr.appendChild(document.createElement("th"));
+  thead.appendChild(hr); tbl.appendChild(thead);
+
+  var tb = document.createElement("tbody");
+  b.rows.forEach(function(r, i){
+    var tr = document.createElement("tr");
+    r.forEach(function(cell, j){
+      var td = document.createElement("td");
+      var inp = document.createElement("input");
+      inp.value = cell == null ? "" : cell;
+      if (i === 0 && b.header !== false) inp.style.fontWeight = "700";
+      inp.addEventListener("input", function(){ r[j] = inp.value; dirty(); schedule(); });
+      td.appendChild(inp); tr.appendChild(td);
+    });
+    var td2 = document.createElement("td");
+    if (b.rows.length > 1){
+      var x = document.createElement("button");
+      x.type = "button"; x.className = "mini-b"; x.textContent = "✕"; x.title = "Delete row";
+      x.addEventListener("click", function(){ b.rows.splice(i,1); dirty(); render(); });
+      td2.appendChild(x);
+    }
+    tr.appendChild(td2); tb.appendChild(tr);
+  });
+  tbl.appendChild(tb); wrap.appendChild(tbl); card.appendChild(wrap);
+
+  var row = document.createElement("div"); row.className = "row";
+  row.appendChild(btn("+ row","ghost sm",function(){
+    b.rows.push(new Array(cols).join(",").split(",")); dirty(); render(); }));
+  row.appendChild(btn("+ column","ghost sm",function(){
+    b.rows.forEach(function(r){ r.push(""); }); dirty(); render(); }));
+  card.appendChild(row);
+
+  var det = document.createElement("details");
+  det.style.marginTop = ".5em";
+  var sum = document.createElement("summary");
+  sum.textContent = "Paste rows"; sum.style.cssText = "font-size:.78rem;cursor:pointer;color:var(--ink-faint)";
+  det.appendChild(sum);
+  det.appendChild(field("One row per line, cells separated by |",
+    b.rows.map(function(r){ return r.join(" | "); }).join("\n"),
+    function(v){
+      b.rows = v.split("\n").filter(function(l){ return l.trim(); })
+        .map(function(r){ return r.split("|").map(function(c){ return c.trim(); }); });
+      dirty();
+    }, {tag:"textarea", rows:4}));
+  det.appendChild(btn("Apply","ghost sm",function(){ render(); }));
+  card.appendChild(det);
+}
+
+/* ---- flow chart --------------------------------------------------- */
+function flowEditor(card, b){
+  card.appendChild(field("Chart", b.src, function(v){ b.src = v; }, {tag:"textarea", rows:8}));
+  card.appendChild(hint(
+    "One box per line, top to bottom.<br>" +
+    "<code>(Start)</code> start or stop · <code>/Read the value/</code> input or output · " +
+    "<code>&lt;Set up&nbsp;&gt;</code> preparation · anything else is a process box.<br>" +
+    "<code>?Is it over 50 g?</code> is a decision. Add branches after it: " +
+    "<code>?Is it over 50 g? |Yes |No&gt; Add a weight</code> — the bare label names the arrow " +
+    "going down, and the one with <code>&gt;</code> draws a box to the right that rejoins below."));
+  card.appendChild(field("Caption (optional)", b.caption, function(v){ b.caption = v; }));
+  card.appendChild(field("Description for screen readers", b.alt, function(v){ b.alt = v; }));
+}
+
+/* ---- function graph ------------------------------------------------ */
+function graphEditor(card, b){
+  b.funcs = b.funcs && b.funcs.length ? b.funcs : [{expr:"", pen:"accent", label:""}];
+  /* The error line is written by the field handlers rather than by the
+     renderer, so a typo is reported as it is typed — the form itself is
+     only rebuilt on structural changes. */
+  var e = document.createElement("p"); e.className = "errline";
+  function updErr(){
+    var msgs = [];
+    b.funcs.forEach(function(fd){
+      if (!fd.expr || !fd.expr.trim()) return;
+      try { compileExpr(fd.expr); } catch(ex){ msgs.push(fd.expr + " — " + ex.message); }
+    });
+    e.textContent = msgs.join(" · ");
+  }
+  b.funcs.forEach(function(fd, i){
+    var r = document.createElement("div"); r.className = "row";
+    r.appendChild(field(i === 0 ? "Rule  y =" : "and  y =", fd.expr,
+      function(v){ fd.expr = v; updErr(); }));
+    r.appendChild(select("Pen", fd.pen || "accent", [
+      ["accent","Theme"],["neg","Red"],["warm","Amber"],["pos","Green"],["ink","Ink"]
+    ], function(v){ fd.pen = v; }));
+    if (b.funcs.length > 1)
+      r.appendChild(btn("✕","danger sm",function(){ b.funcs.splice(i,1); dirty(); render(); }));
+    card.appendChild(r);
+    if (b.legend)
+      card.appendChild(field("Legend label", fd.label, function(v){ fd.label = v; }));
+  });
+  updErr();
+  card.appendChild(e);
+  if (b.funcs.length < 4)
+    card.appendChild(btn("+ another rule","ghost sm",function(){
+      b.funcs.push({expr:"", pen:["accent","neg","warm","pos"][b.funcs.length] || "ink", label:""});
+      dirty(); render(); }));
+  card.appendChild(hint(
+    "Written the way you would type it into a calculator: <code>x^2 - 4x + 3</code>, " +
+    "<code>2sin(x)</code>, <code>1/(x-2)</code>, <code>sqrt(x)</code>, <code>e^x</code>, " +
+    "<code>ln(x)</code>, <code>pi</code>. Implied multiplication is fine."));
+
+  var xr = document.createElement("div"); xr.className = "row";
+  xr.appendChild(field("x from", b.xmin, function(v){ b.xmin = v; }, {type:"number"}));
+  xr.appendChild(field("to", b.xmax, function(v){ b.xmax = v; }, {type:"number"}));
+  card.appendChild(xr);
+  card.appendChild(check("Fit the y-axis to the curve", b.yauto !== false, function(v){ b.yauto = v; render(); }));
+  if (b.yauto === false){
+    var yr = document.createElement("div"); yr.className = "row";
+    yr.appendChild(field("y from", b.ymin, function(v){ b.ymin = v; }, {type:"number"}));
+    yr.appendChild(field("to", b.ymax, function(v){ b.ymax = v; }, {type:"number"}));
+    card.appendChild(yr);
+  }
+
+  var mh = document.createElement("h2"); mh.textContent = "Mark on the graph"; card.appendChild(mh);
+  card.appendChild(check("x-intercepts", b.mRoots, function(v){ b.mRoots = v; }));
+  card.appendChild(check("y-intercept", b.mYint, function(v){ b.mYint = v; }));
+  card.appendChild(check("Turning points", b.mTurn, function(v){ b.mTurn = v; }));
+  card.appendChild(check("Asymptotes", b.mAsym, function(v){ b.mAsym = v; }));
+  card.appendChild(field("Extra points — one per line: x, label   or   x, y, label",
+    (b.points||[]).map(function(p){
+      return [p.x, (p.y === "" || p.y == null) ? null : p.y, p.label]
+        .filter(function(v){ return v != null && v !== ""; }).join(", ");
+    }).join("\n"),
+    function(v){
+      b.points = v.split("\n").filter(function(l){ return l.trim(); }).map(function(l){
+        var parts = l.split(",").map(function(s){ return s.trim(); });
+        var x = parts.shift();
+        var y = "";
+        if (parts.length && isFinite(parseFloat(parts[0])) && /^-?[0-9.]+$/.test(parts[0]))
+          y = parts.shift();
+        return {x:x, y:y, label:parts.join(", ")};
+      });
+    }, {tag:"textarea", rows:3}));
+
+  var oh = document.createElement("h2"); oh.textContent = "Appearance"; card.appendChild(oh);
+  card.appendChild(check("Grid lines", b.grid !== false, function(v){ b.grid = v; }));
+  card.appendChild(check("Number the axes", b.ticks !== false, function(v){ b.ticks = v; }));
+  card.appendChild(check("Legend under the graph", b.legend, function(v){ b.legend = v; render(); }));
+  var al = document.createElement("div"); al.className = "row";
+  al.appendChild(field("x-axis label", b.xlabel, function(v){ b.xlabel = v; }));
+  al.appendChild(field("y-axis label", b.ylabel, function(v){ b.ylabel = v; }));
+  card.appendChild(al);
+  card.appendChild(field("Caption (optional)", b.caption, function(v){ b.caption = v; }));
 }
 
 function renderSheetForm(f, it){
@@ -1041,24 +2118,19 @@ function renderSheetForm(f, it){
   var h = document.createElement("h2"); h.textContent = "Answer space"; f.appendChild(h);
   (it.furniture||[]).forEach(function(x, i){ f.appendChild(furnCard(it, x, i)); });
 
-  var add = document.createElement("select");
-  add.style.cssText = "width:100%;margin-top:.5em;font-size:.85rem;padding:.4em";
-  [["","+ Add answer space…"],["lines","Ruled lines"],["table","Table to fill in"],
-   ["sortcols","Sorting columns"],["opts","Multiple choice"],["blank","Inline blank"],
-   ["drawbox","Drawing box"],["chips","Word bank"]].forEach(function(o){
-    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; add.appendChild(op);
+  var add = btn("+ Add answer space…", "ghost sm", function(){
+    openPicker("Add answer space", CAT.furniture, function(type){
+      it.furniture = it.furniture || [];
+      var n = {id:uid(), type:type};
+      if (n.type === "lines") n.n = 3;
+      if (n.type === "table"){ n.headers = ["Column A","Column B"]; n.rows = [["",""],["",""]]; }
+      if (n.type === "sortcols") n.headers = ["Group 1","Group 2"];
+      if (n.type === "opts") n.opts = ["","","",""];
+      if (n.type === "chips") n.items = [""];
+      it.furniture.push(n); render();
+    });
   });
-  add.addEventListener("change", function(){
-    if (!add.value) return;
-    it.furniture = it.furniture || [];
-    var n = {id:uid(), type:add.value};
-    if (n.type === "lines") n.n = 3;
-    if (n.type === "table"){ n.headers = ["Column A","Column B"]; n.rows = [["",""],["",""]]; }
-    if (n.type === "sortcols") n.headers = ["Group 1","Group 2"];
-    if (n.type === "opts") n.opts = ["","","",""];
-    if (n.type === "chips") n.items = [""];
-    it.furniture.push(n); add.value = ""; render();
-  });
+  add.style.cssText = "width:100%;margin-top:.5em";
   f.appendChild(add);
 }
 
@@ -1145,30 +2217,27 @@ function schedule(){ clearTimeout(timer); timer = setTimeout(function(){ renderO
 function render(){ renderOutline(); renderForm(); paintPreview(); }
 
 function fillAddTypes(){
-  var s = document.getElementById("addType");
-  s.innerHTML = "";
-  var opts = doc.kind === "deck"
-    ? [["content","Content slide"],["title","Title slide"],["section","Section divider"],["quiz","Retrieval quiz"]]
-    : [["question","Question"],["part","Part heading"],["callout","Callout box"],["tick","Self-check list"]];
-  opts.forEach(function(o){
-    var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; s.appendChild(op);
-  });
+  document.getElementById("btnAdd").textContent =
+    doc.kind === "deck" ? "+ Add a slide…" : "+ Add an item…";
 }
 
 document.getElementById("btnAdd").addEventListener("click", function(){
-  var t = document.getElementById("addType").value;
-  var n = {id:uid(), type:t};
-  if (doc.kind === "deck"){
-    n.menu = ""; n.blocks = []; n.layout = "single";
-    if (t === "title" || t === "section") n.h1 = "New slide";
-    else n.h2 = "New slide";
-  } else {
-    if (t === "part"){ n.label = "Part B"; n.ptitle = "Title"; n.marks = 0; }
-    if (t === "question"){ n.marks = 1; n.text = ""; n.furniture = [{id:uid(), type:"lines", n:3}]; }
-    if (t === "callout"){ n.variant = "infobox"; n.label = "Information"; n.body = ""; }
-    if (t === "tick"){ n.ptitle = "Self-check"; n.body = ""; }
-  }
-  doc.items.splice(sel+1, 0, n); sel = sel+1; render();
+  var isDeck = doc.kind === "deck";
+  openPicker(isDeck ? "Add a slide" : "Add an item",
+    isDeck ? CAT.slide : CAT.sheetItem, function(t){
+    var n = {id:uid(), type:t};
+    if (isDeck){
+      n.menu = ""; n.blocks = []; n.layout = "single";
+      if (t === "title" || t === "section") n.h1 = "New slide";
+      else n.h2 = "New slide";
+    } else {
+      if (t === "part"){ n.label = "Part B"; n.ptitle = "Title"; n.marks = 0; }
+      if (t === "question"){ n.marks = 1; n.text = ""; n.furniture = [{id:uid(), type:"lines", n:3}]; }
+      if (t === "callout"){ n.variant = "infobox"; n.label = "Information"; n.body = ""; }
+      if (t === "tick"){ n.ptitle = "Self-check"; n.body = ""; }
+    }
+    doc.items.splice(sel+1, 0, n); sel = sel+1; render();
+  });
 });
 
 document.getElementById("kind").addEventListener("change", function(e){
@@ -1332,6 +2401,56 @@ function importBlock(el, col){
         return {t:t, ans: li.classList.contains("ans")};
       })};
   }
+  /* A figure this tool built carries its own authoring model, so it comes
+     back editable instead of landing in the opaque bucket. */
+  if (el.dataset && el.dataset.pb && el.dataset.pbModel){
+    try {
+      var m = JSON.parse(el.dataset.pbModel);
+      m.id = m.id || uid(); m.type = el.dataset.pb; m.col = col;
+      /* deliberately no .raw: the figure is fully described by its model
+         and regenerating it also re-emits the caption, which lives
+         outside the card as a sibling <p class="figcap"> */
+      m.raw = null;
+      return m;
+    } catch(e){ /* fall through to opaque */ }
+  }
+  if (el.tagName === "TABLE" && c.contains("tbl")){
+    var variant = ["filled","vocab","exact"].filter(function(x){ return c.contains(x); })[0] || "";
+    var rows = [], align = [], hasHead = false;
+    Array.prototype.forEach.call(el.querySelectorAll("tr"), function(tr, ri){
+      var cells = Array.prototype.map.call(tr.children, function(cell, ci){
+        if (cell.tagName === "TH") hasHead = hasHead || ri === 0;
+        if (ri === 0 && cell.classList.contains("c")) align[ci] = "c";
+        return cell.textContent.trim();
+      });
+      rows.push(cells);
+    });
+    return {id:uid(), raw:RAW, type:"table", col:col, variant:variant,
+            header:hasHead, align:align, rows:rows};
+  }
+  if (el.tagName === "PRE" && c.contains("code")){
+    return {id:uid(), raw:RAW, type:"code", col:col,
+      body: Array.prototype.map.call(el.querySelectorAll("span"), function(sp){
+        return sp.textContent.replace(/\s+$/,"");
+      }).join("\n")};
+  }
+  if (c.contains("qcard")){
+    return {id:uid(), raw:RAW, type:"qcard", col:col, frag:c.contains("frag"),
+      q:(el.querySelector(".q")||{textContent:""}).textContent.trim(),
+      a:(el.querySelector(".a")||{textContent:""}).textContent.trim(),
+      btn:(el.querySelector(".reveal-btn")||{textContent:"Show answer"}).textContent.trim()};
+  }
+  if (el.tagName === "DETAILS" && c.contains("teacher")){
+    return {id:uid(), raw:RAW, type:"teacher", col:col,
+      label:(el.querySelector("summary")||{textContent:""}).textContent.trim(),
+      body: Array.prototype.map.call(el.querySelectorAll("li"),
+        function(li){ return li.textContent.trim(); }).join("\n")};
+  }
+  if (c.contains("formula")) return {id:uid(), raw:RAW, type:"formula", col:col, body:el.textContent.trim()};
+  if (c.contains("note"))    return {id:uid(), raw:RAW, type:"note", col:col, body:el.textContent.trim()};
+  /* a caption belonging to a figure above is re-emitted by that figure */
+  if (c.contains("figcap") && el.dataset && el.dataset.pbCap) return null;
+  if (c.contains("figcap"))  return {id:uid(), raw:RAW, type:"figcap", col:col, body:el.textContent.trim()};
   if (c.contains("bigeq")) return {id:uid(), raw:RAW, type:"bigeq", col:col, body:el.textContent.trim()};
   if (c.contains("reveal-btn")) return null;      /* re-emitted with its steps */
   if (el.tagName === "P")  return {id:uid(), raw:RAW, type:"text", col:col, body:el.textContent.trim()};
