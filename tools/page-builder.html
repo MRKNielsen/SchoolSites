@@ -1164,16 +1164,22 @@ function usesMath(){
   return JSON.stringify(doc).indexOf("\\\\(") >= 0 ||
          JSON.stringify(doc).indexOf("\\\\[") >= 0;
 }
-function mathHead(up){
-  return '<script>\n' +
-    "  window.MathJax = {\n" +
+function usesQuiz(){
+  return doc.kind === "deck" && doc.items.some(function(s){
+    return s.type === "quiz" || (s.raw && s.raw.indexOf("quiz-slide") >= 0);
+  });
+}
+function mathConfig(){
+  return "  window.MathJax = {\n" +
     "    tex: { inlineMath: [['\\\\(', '\\\\)']], displayMath: [['\\\\[', '\\\\]']] },\n" +
     "    svg: { fontCache: 'global' },\n" +
     "    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },\n" +
     "    startup: { pageReady: () => MathJax.startup.defaultPageReady()\n" +
     "      .then(() => window.dispatchEvent(new Event('resize'))) }\n" +
-    "  };\n" +
-    "<\/script>\n" +
+    "  };\n";
+}
+function mathHead(up){
+  return "<script>\n" + mathConfig() + "<\/script>\n" +
     '<script src="' + up + 'assets/vendor/mathjax/tex-svg.js" async><\/script>\n';
 }
 function commonHead(up){
@@ -1192,7 +1198,30 @@ function tailHead(up){
    '<meta name="theme-color" content="#24576f">\n';
 }
 
-function buildDeckFile(){
+/* head is passed in so the same body can be wrapped either in links to
+   the shared stylesheets or in the inlined copies of them */
+function deckHead(up){
+  return (usesMath() ? mathHead(up) : "") +
+   "<title>" + esc(doc.title) + "</title>\n" +
+   commonHead(up) +
+   '<link rel="stylesheet" href="' + up + 'assets/css/deck.css">\n' +
+   (usesQuiz() ? '<link rel="stylesheet" href="' + up + 'assets/css/quiz.css">\n' : "") +
+   tailHead(up);
+}
+function sheetHead(up){
+  return (usesMath() ? mathHead(up) : "") +
+   "<title>" + esc(doc.title) + "</title>\n" +
+   commonHead(up) +
+   '<link rel="stylesheet" href="' + up + 'assets/css/worksheet.css">\n' +
+   tailHead(up);
+}
+function deckTail(up){
+  return (usesQuiz() ? '<script src="questions.js" defer><\/script>\n' : "") +
+   '<script src="' + up + 'assets/js/deck.js" defer><\/script>\n' +
+   (usesQuiz() ? '<script src="' + up + 'assets/js/quiz.js" defer><\/script>\n' : "");
+}
+
+function buildDeckFile(head, tail){
   var up = depthPrefix();
   var slides = doc.items.map(function(s,i){
     s.first = (i === 0);
@@ -1200,11 +1229,7 @@ function buildDeckFile(){
   }).join("\n\n");
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
    '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-   (usesMath() ? mathHead(up) : "") +
-   "<title>" + esc(doc.title) + "</title>\n" +
-   commonHead(up) +
-   '<link rel="stylesheet" href="' + up + 'assets/css/deck.css">\n' +
-   tailHead(up) +
+   (head == null ? deckHead(up) : head) +
    "</head>\n" +
    '<body class="deck-page ' + doc.theme + '">\n\n' +
    '<div class="progress"></div>\n' +
@@ -1224,19 +1249,15 @@ function buildDeckFile(){
    "  <h2>" + esc(doc.lessontag) + " — slide overview</h2>\n" +
    '  <div class="menugrid"></div>\n' +
    "</div>\n\n" +
-   '<script src="' + up + 'assets/js/deck.js" defer><\/script>\n' +
+   (tail == null ? deckTail(up) : tail) +
    "</body>\n</html>\n";
 }
 
-function buildSheetFile(){
+function buildSheetFile(head){
   var up = depthPrefix();
   return '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
    '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-   (usesMath() ? mathHead(up) : "") +
-   "<title>" + esc(doc.title) + "</title>\n" +
-   commonHead(up) +
-   '<link rel="stylesheet" href="' + up + 'assets/css/worksheet.css">\n' +
-   tailHead(up) +
+   (head == null ? sheetHead(up) : head) +
    "</head>\n" +
    '<body class="worksheet-page ' + doc.theme + '">\n\n' +
    '<div class="ws-bar">\n  <a href="index.html">← Unit home</a>\n' +
@@ -1256,6 +1277,165 @@ function buildSheetFile(){
 }
 
 function buildFile(){ return doc.kind === "deck" ? buildDeckFile() : buildSheetFile(); }
+
+/* ================================================================
+   Self-contained export
+   ----------------------------------------------------------------
+   The downloaded file carries every dependency inside it: the
+   stylesheets, deck.js/sitenav.js/quiz.js, the sitemap, MathJax when
+   the page needs it, and the two web fonts as base64 woff2. It opens
+   from anywhere — a Downloads folder, a USB stick, a school laptop
+   with no internet — and still looks and behaves exactly like the
+   live page.
+
+   The trade-off to know about: a page built this way no longer picks
+   up later edits to tokens.css or deck.css, because it is carrying its
+   own copy. Set SELF_CONTAINED to false for the old behaviour of
+   linking to ../assets, which is what keeps the design system a single
+   source of truth for pages committed to the repo.
+
+   Everything is fetched relative to this tool, so it needs to be
+   served over http(s) — opened from file:// the browser blocks the
+   reads and the export falls back to the linked version with a note.
+   ================================================================ */
+var SELF_CONTAINED = true;
+
+var assetCache = {};
+function fetchText(url){
+  if (assetCache[url]) return assetCache[url];
+  assetCache[url] = fetch(url, {cache:"force-cache"}).then(function(r){
+    if (!r.ok) throw new Error(r.status + " " + url);
+    return r.text();
+  });
+  return assetCache[url];
+}
+function fetchDataUri(url, mime){
+  if (assetCache["b:"+url]) return assetCache["b:"+url];
+  assetCache["b:"+url] = fetch(url, {cache:"force-cache"}).then(function(r){
+    if (!r.ok) throw new Error(r.status + " " + url);
+    return r.arrayBuffer();
+  }).then(function(buf){
+    var bytes = new Uint8Array(buf), s = "", CH = 8192;
+    for (var i = 0; i < bytes.length; i += CH)
+      s += String.fromCharCode.apply(null, bytes.subarray(i, i+CH));
+    return "data:" + mime + ";base64," + btoa(s);
+  });
+  return assetCache["b:"+url];
+}
+
+/* An inlined stylesheet must not contain a style end-tag, and inlined
+   script must not contain a script end-tag — either would close the tag
+   early. MathJax's bundle does contain such strings.
+   (Note the escaping in this very file: an unescaped end-tag inside a
+   comment closes the block just as readily as one inside code.) */
+function safeStyle(css){ return String(css).replace(/<\/style/gi, "<\\/style"); }
+function safeScript(js){ return String(js).replace(/<\/script/gi, "<\\/script"); }
+
+var FONT_CSS_URL = "https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800" +
+  "&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap";
+
+/* Google serves one @font-face per family per unicode subset. Only the
+   latin ones are kept — the rest are Cyrillic, Greek and Vietnamese
+   that these pages will never render, and they would triple the file. */
+function inlineFonts(){
+  return fetchText(FONT_CSS_URL).then(function(css){
+    var blocks = css.split(/(?=\/\* [a-z-]+ \*\/)/);
+    var keep = blocks.filter(function(b){
+      var m = /^\/\* ([a-z-]+) \*\//.exec(b.trim());
+      return !m || m[1] === "latin" || m[1] === "latin-ext";
+    });
+    var text = keep.join("\n");
+    var urls = [];
+    /* any absolute url(), not fonts.gstatic.com specifically — Google has
+       moved the file host before and the CSS is the authority on it */
+    text.replace(/url\((https?:\/\/[^)"']+)\)/g, function(_, u){
+      if (urls.indexOf(u) < 0) urls.push(u); return _;
+    });
+    return Promise.all(urls.map(function(u){
+      return fetchDataUri(u, "font/woff2").then(function(d){ return [u, d]; });
+    })).then(function(pairs){
+      pairs.forEach(function(p){ text = text.split(p[0]).join(p[1]); });
+      return text;
+    });
+  });
+}
+
+/* sitenav.js works out where the repo root is from its own <script
+   src>. Inlined, there is no src to read, so the one line that computes
+   it is rewritten to the literal depth this page will sit at. If that
+   line ever changes shape the substitution is detected and reported
+   rather than silently shipping a dead nav drawer. */
+var ROOT_LINE = /var ROOT = self \?[^\n]*;/;
+function inlineSitenav(up){
+  return Promise.all([
+    fetchText("../assets/js/sitemap.js"),
+    fetchText("../assets/js/sitenav.js")
+  ]).then(function(r){
+    var nav = r[1];
+    if (!ROOT_LINE.test(nav)) throw new Error("sitenav.js root detection changed");
+    nav = nav.replace(ROOT_LINE, "var ROOT = " + JSON.stringify(up) + ";");
+    /* sitemap.js first: sitenav uses window.SITEMAP when it is already
+       there and only fetches the file when it is not */
+    return r[0] + "\n" + nav;
+  });
+}
+
+function styleTag(css){ return "<style>\n" + safeStyle(css) + "\n</style>\n"; }
+function scriptTag(js){ return "<script>\n" + safeScript(js) + "\n<\/script>\n"; }
+
+function buildSelfContained(say){
+  var up = depthPrefix();
+  var deck = doc.kind === "deck";
+  var css = ["../assets/css/tokens.css",
+             "../assets/css/" + (deck ? "deck.css" : "worksheet.css"),
+             "../assets/css/sitenav.css"];
+  if (deck && usesQuiz()) css.splice(2, 0, "../assets/css/quiz.css");
+
+  say("Collecting stylesheets…");
+  var jobs = {
+    css: Promise.all(css.map(fetchText)),
+    fonts: inlineFonts().catch(function(){ return null; }),   /* optional */
+    nav: inlineSitenav(up),
+    icon: fetchDataUri("../assets/icons/favicon.svg", "image/svg+xml").catch(function(){ return null; })
+  };
+  if (deck) jobs.deck = fetchText("../assets/js/deck.js");
+  if (deck && usesQuiz()){
+    jobs.quiz = fetchText("../assets/js/quiz.js");
+    /* the question bank lives beside the deck, not in assets */
+    var qsrc = "../" + document.getElementById("dest").value.trim()
+                 .replace(/^\/+|\/+$/g,"") + "/questions.js";
+    jobs.bank = fetchText(qsrc).catch(function(){ return null; });
+  }
+  if (usesMath()){
+    say("Collecting MathJax (2 MB)…");
+    jobs.math = fetchText("../assets/vendor/mathjax/tex-svg.js");
+  }
+
+  var keys = Object.keys(jobs);
+  return Promise.all(keys.map(function(k){ return jobs[k]; })).then(function(vals){
+    var got = {};
+    keys.forEach(function(k,i){ got[k] = vals[i]; });
+    say("Assembling…");
+
+    var head = "<title>" + esc(doc.title) + "</title>\n";
+    if (got.math) head += scriptTag(mathConfig()) + scriptTag(got.math);
+    if (got.fonts) head += styleTag(got.fonts);
+    else head += '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+                 '<link href="' + FONT_CSS_URL + '" rel="stylesheet">\n';
+    head += styleTag(got.css.join("\n\n"));
+    head += scriptTag(got.nav);
+    if (got.icon) head += '<link rel="icon" href="' + got.icon + '" type="image/svg+xml">\n';
+    head += '<meta name="theme-color" content="#24576f">\n';
+
+    if (!deck) return buildSheetFile(head);
+    var tail = (got.bank ? scriptTag(got.bank) : "") + scriptTag(got.deck) +
+               (got.quiz ? scriptTag(got.quiz) : "");
+    var warn = (usesQuiz() && !got.bank)
+      ? "\n<!-- No questions.js was found beside this deck, so the retrieval " +
+        "quiz has no question bank to draw on. -->\n" : "";
+    return buildDeckFile(head, warn + tail);
+  });
+}
 
 /* ================================================================
    Live preview — the iframe is created once with the real
@@ -2254,13 +2434,37 @@ document.getElementById("pvAll").addEventListener("change", function(e){
 document.getElementById("theme").addEventListener("change", function(e){
   doc.theme = e.target.value; paintPreview();
 });
-document.getElementById("btnExport").addEventListener("click", function(){
-  var blob = new Blob([buildFile()], {type:"text/html;charset=utf-8"});
+function saveFile(text){
+  var blob = new Blob([text], {type:"text/html;charset=utf-8"});
   var a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = document.getElementById("fname").value || "page.html";
   a.click();
   setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+  return text.length;
+}
+function kb(n){
+  return n > 900000 ? (n/1048576).toFixed(1) + " MB" : Math.round(n/1024) + " KB";
+}
+document.getElementById("btnExport").addEventListener("click", function(){
+  var btn = this, label = btn.textContent;
+  if (!SELF_CONTAINED){ flash("Saved " + kb(saveFile(buildFile())) + "."); return; }
+  btn.disabled = true;
+  var say = function(m){ btn.textContent = m; };
+  say("Collecting…");
+  buildSelfContained(say).then(function(html){
+    flash("Saved " + kb(saveFile(html)) + " — everything is inside the file.");
+  }).catch(function(e){
+    /* Opened from file://, or an asset has moved. Rather than hand over
+       a half-built page, fall back to the version that links to
+       ../assets and say plainly what happened. */
+    saveFile(buildFile());
+    flash("Could not read the site assets (" + e.message + "). Saved the linked " +
+          "version instead — it works inside the repo, but not on its own. " +
+          "This needs the tool to be open over http, not from a file:// path.", true);
+  }).then(function(){
+    btn.disabled = false; btn.textContent = label;
+  });
 });
 document.getElementById("btnLoad").addEventListener("click", function(){
   document.getElementById("fileIn").click();
@@ -2464,10 +2668,15 @@ function importBlock(el, col){
   return {id:uid(), type:"opaque", col:col, html:el.outerHTML};
 }
 
-function flash(msg){
+var flashTimer = null;
+/* `stay` is for the export fallback: a message that says the download is
+   not what you asked for should not disappear before it is read. */
+function flash(msg, stay){
   var n = document.getElementById("pvNote");
+  clearTimeout(flashTimer);
   n.textContent = msg;
-  setTimeout(function(){ n.textContent = ""; }, 6000);
+  n.style.color = stay ? "var(--neg)" : "";
+  if (!stay) flashTimer = setTimeout(function(){ n.textContent = ""; }, 6000);
 }
 
 /* ---- boot ---- */
