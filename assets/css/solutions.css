@@ -12,7 +12,8 @@
      .hero (.back-btn, .unit-tag, h1, .sub, .meta-row, .teacher-note)
      .toc sticky chip nav · section.lesson (.lesson-head, .lesson-num,
      .lesson-title) · .qa card (.q with .qref/.marks, .a) ·
-     table.ans · .tag (.y8/.entry/.fn) · .note · .calc ·
+     table.ans · .tag (.y8/.entry/.fn) · .note · .calc
+     (pre.calc for a diagram or trace that keeps its own spacing) ·
      .mcq-grid of .mcq · .lockscreen · footer
 
    NOTE: some solution pages ship their answer body as an encrypted
@@ -197,6 +198,14 @@ body.solutions-page {
   background: color-mix(in srgb, var(--accent) 4%, #fff);
   border: 1px solid var(--c-line-cool); border-radius: 8px;
   padding: .7em .9em; margin: .6em 0; font-size: .9rem;
+}
+/* A tree, food-web trace or any block whose meaning is carried by its own
+   line breaks and column alignment. <pre class="calc"> — the element keeps
+   the whitespace, .calc supplies the box. It scrolls rather than wraps, so
+   a diagram wider than the phone can never push the page sideways. */
+.solutions-page pre.calc {
+  white-space: pre; overflow-x: auto;
+  font-size: .8rem; line-height: 1.5;
 }
 
 /* Multiple-choice answer grid */

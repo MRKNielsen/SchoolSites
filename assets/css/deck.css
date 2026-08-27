@@ -155,6 +155,13 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .subtitle { font-size: 19px; color: var(--muted); margin-bottom: 6px; }
 .pill { font-size: 14px; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 13px; }
 .head-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+/* Above-level marker on a title slide's .head-meta. Filled rather than
+   outlined so it reads first among the pills. */
+.pill-ext {
+  color: #fff; background: var(--accent-dark); border-color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase; font-size: 12.5px;
+}
 
 /* Booklet/textbook page reference — small chip in the flow, usually
    right after the .eyebrow. Kept in-flow (not fixed) so it can't
@@ -436,6 +443,11 @@ table.tbl th { border-bottom: 3px solid var(--accent-dark); color: var(--accent-
 table.tbl td { padding: 6px 12px; border-bottom: 1px solid var(--line); }
 table.tbl td.c, table.tbl th.c { text-align: center; }
 table.tbl.filled th { background: var(--accent-dark); color: #fff; border-bottom: none; }
+/* Colour key dot for a table row that pairs with a figure — e.g. the
+   planet-size table and its to-scale diagram, where the dot is how a
+   student links a row to a circle. */
+.pdot { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+  margin-right: 8px; vertical-align: baseline; border: 1px solid rgba(0,0,0,.15); }
 
 /* Reference grid (e.g. exact trig values): compact, centred, row labels
    picked out, and roomier rows since cells hold stacked fractions. */
@@ -447,6 +459,20 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 /* ---------- Graphs & figures ---------- */
 .graph-card { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 12px 12px 6px; box-shadow: var(--shadow); }
 .graph-card svg { width: 100%; height: auto; display: block; }
+/* Squarish figures can overpower a column at full width. .narrow holds the
+   card to 80%, .narrower to 65%, .half to 50%. Prefer these over a
+   per-slide inline max-width.
+   All three are percentages of the containing column, which is itself
+   sized in px — so the figure keeps scaling with browser zoom and with
+   the slide, rather than being pinned to a fixed pixel size. */
+.graph-card.narrow  { max-width: 80%; margin-inline: auto; }
+.graph-card.narrower{ max-width: 65%; margin-inline: auto; }
+.graph-card.half    { max-width: 50%; margin-inline: auto; }
+/* Below tablet width a halved figure gets too small to read — let the
+   narrower variants relax back toward full width. */
+@media (max-width: 900px) {
+  .graph-card.narrow, .graph-card.narrower, .graph-card.half { max-width: 100%; }
+}
 .legend { display: flex; gap: 16px; padding: 8px 4px 2px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .pen { width: 22px; height: 0; border-top: 3px solid; border-radius: 2px; display: inline-block; }

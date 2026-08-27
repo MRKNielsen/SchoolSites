@@ -23,7 +23,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 
 | Subject | State | What's there |
 |---|---|---|
-| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
+| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric + portfolio answer key, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet, gated solutions) |
 | year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
@@ -39,7 +39,56 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-foundation | Stub | — |
 
 Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
-4 gated pages.
+6 gated pages.
+
+### Landed — unit planner page type (27 Aug 2026)
+
+`assets/css/planner.css` — a new staff page type for unit planning documents:
+one wide table, a week per row, `@page` A4 landscape with the column headings
+repeated on every printed page. First use is
+`year7-science/bio-ecosystems/planner.html`, a 7-week plan of the 11 lessons
+in the faculty's existing column format (focus · learning intentions and
+success criteria · core activities · support and extension · optional
+activities · assessment), linked from a new *Planning* section on the unit
+index. The same content also exists as a Word file for the faculty planning
+folder — that copy lives outside the repo, in
+`7 Science/Bio/Bio_Ecosystems_Unit_Planner_Yr7.docx`, and is **not** kept in
+sync automatically. Whichever copy changes, change the other by hand.
+
+Other units can reuse the page type as-is: copy `planner.html`, swap the rows.
+
+### Landed — research portfolio answer key (25 Aug 2026)
+
+`year7-science/bio-ecosystems/portfolio-solutions.html` — model answers and
+marking criteria for all 11 stages of the Research Portfolio, plus the front
+matter and the closing self-check. Linked from the unit index's *Staff only*
+group and from a new *Staff only* section on `research-portfolio.html`.
+
+Three things worth knowing before editing it:
+
+- **The portfolio is unmarked and always was.** `\markscount` is a no-op in
+  `Bio_Research_Portfolio_Yr7_8.tex` and the closing page asks students to
+  judge themselves against the seven CAT criteria. So the key gives *model
+  responses and criteria*, not a mark scheme, and there is no marks tally to
+  keep in step — the check that matters is that the eleven stage titles still
+  match the built PDF.
+- **Every fact in it is traceable to `species-bandicoot.html`.** That is the
+  point: the portfolio is a research task answered from the species profile,
+  so an answer the profile can't support is a wrong answer even if it's true.
+  Each stage's `.sh-meta` line links the profile section the answer lives in.
+  If the profile changes, the key has to move with it.
+- **It ships with a placeholder blob** — `{v:2, iv:"", ct:"", keys:[]}` — so
+  the page locks but cannot yet unlock. Encrypt `portfolio-solutions-payload.html`
+  through `tools/staff-crypt.html` and paste the emitted line over it. Staff
+  password only unless a student password is deliberately added: unlike the
+  worksheet answers, this key is written to the teacher (what to send back,
+  which error to expect) and it answers a task students are meant to research
+  themselves.
+
+One new shared component: `pre.calc` in `solutions.css` — the existing `.calc`
+box with the element's own whitespace kept and `overflow-x: auto`, for a tree
+or food-web trace whose meaning is its alignment. It scrolls rather than
+wraps, so a diagram wider than a phone can't push the page sideways.
 
 ### Landed — collated worksheet booklets (18 Aug 2026)
 
@@ -171,12 +220,11 @@ label on its own.
 
 ### Tier 1 — Small fixes (under a session each)
 
-- [ ] **Encrypt `year7-science/space/solutions.html`.** It ships
-      `var BLOB = {salt:"", iv:"", iter:0, ct:""}` — the page locks but
-      can never unlock, which is worse than not shipping it. The
-      plaintext `solutions-payload.html` is right there (and correctly
-      gitignored). Run it through `tools/staff-crypt.html`, paste the
-      emitted line over the placeholder. **S**
+- [x] **Encrypt `year7-science/space/solutions.html`.** Already done and
+      the item had gone stale — the page now carries a real v2 blob with
+      both a staff and a student wrapper, and unlocks. Confirmed by
+      parsing the blob, not by reading this file. **S**
+      *(found already landed 2026-08-25)*
 - [x] **Detheme the SVG figures in `year12-specialist/term-3/slides/`.**
       All eleven decks, not just T3W01–05: 576 elements rethemed, 21
       per-figure `<style>` blocks removed, 27 `style="font-size:…"`

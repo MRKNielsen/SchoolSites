@@ -94,7 +94,9 @@ Other page types: `assets/css/course.css` (unit landing),
 `assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
 (answer-key pages), `assets/css/worksheet.css` (printable student
 worksheets), `assets/css/profile.css` (species / case-study reference
-pages), `assets/css/site.css` (plain index pages).
+pages), `assets/css/planner.css` (staff unit-planning documents — one
+wide table, prints A4 landscape), `assets/css/site.css` (plain index
+pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -531,16 +533,20 @@ standalone all-worksheets list, if a unit wants one instead.
 ## Staff-gated pages
 
 Some pages are for teachers only and ship their content as an encrypted
-blob decrypted in the browser with the staff password: `solutions.html`
-(answer key) and `rubric.html` (the Ecosystem Investigation marking tool)
-in year7-science/bio-ecosystems, plus `solutions.html` in
-year7-science/space.
+blob decrypted in the browser with the staff password. In
+year7-science/bio-ecosystems: `solutions.html` (answer key),
+`worksheets-all-solutions.html` (the collated worksheet booklet with
+answers), `portfolio-solutions.html` (the Research Portfolio key) and
+`rubric.html` (the Ecosystem Investigation marking tool). In
+year7-science/space: `solutions.html`.
 
-**Space's `solutions.html` is not yet encrypted** — it ships the shell
-with a placeholder `var BLOB = {salt:"", iv:"", iter:0, ct:""};`. Encrypt
-`solutions-payload.html` through `tools/staff-crypt.html` and paste the
-emitted line over the placeholder. Until then the page locks but cannot
-unlock. The shell links tokens.css +
+**`portfolio-solutions.html` is not yet encrypted** — it ships the shell
+with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
+locks but cannot unlock. Encrypt `portfolio-solutions-payload.html`
+through `tools/staff-crypt.html` and paste the emitted line over the
+placeholder. Staff password only unless a student one is deliberately
+added — that key answers a task students are meant to research
+themselves. The shell links tokens.css +
 solutions.css and uses the shared `.lockscreen` component; the payload
 lives in a single `var BLOB = {salt, iv, iter, ct};` line
 (PBKDF2-SHA256 → AES-GCM).

@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-18",
+ "generated": "2026-08-27",
  "tree": [
   {
    "t": "Home",
@@ -161,6 +161,16 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
+           "t": "Unit Planner",
+           "h": "year7-science/bio-ecosystems/planner.html",
+           "k": "science"
+          },
+          {
+           "t": "Research Portfolio Answers",
+           "h": "year7-science/bio-ecosystems/portfolio-solutions.html",
+           "k": "science"
+          },
+          {
            "t": "Retrieval Quiz",
            "h": "year7-science/bio-ecosystems/quiz.html",
            "k": "science"
@@ -215,38 +225,43 @@ window.SITEMAP = {
            "k": "space"
           },
           {
-           "t": "Lesson 2 — Predictable Patterns in the Sky",
+           "t": "Lesson 2 — Day, Night & Seasons",
            "h": "year7-science/space/deck2.html",
            "k": "space"
           },
           {
-           "t": "Lesson 3 — Our Solar System",
+           "t": "Lesson 3 — The Moon — Phases & Tides",
            "h": "year7-science/space/deck3.html",
            "k": "space"
           },
           {
-           "t": "Lesson 4 — Gravity & Orbits",
+           "t": "Lesson 4 — Our Solar System",
            "h": "year7-science/space/deck4.html",
            "k": "space"
           },
           {
-           "t": "Lesson 5 — Stars, Galaxies & Starlight",
+           "t": "Lesson 5 — Space Technology & Sustainability",
            "h": "year7-science/space/deck5.html",
            "k": "space"
           },
           {
-           "t": "Lesson 6 — Aboriginal & Torres Strait Islander Astronomy",
+           "t": "Lesson 6 — The Search for Life",
            "h": "year7-science/space/deck6.html",
            "k": "space"
           },
           {
-           "t": "Lesson 7 — Space Technology & Sustainability",
+           "t": "Lesson 7 — Aboriginal & Torres Strait Islander Astronomy",
            "h": "year7-science/space/deck7.html",
            "k": "space"
           },
           {
-           "t": "Lesson 8 — The Search for Life",
+           "t": "Lesson 8 — Gravity & Orbits",
            "h": "year7-science/space/deck8.html",
+           "k": "space"
+          },
+          {
+           "t": "Lesson 9 — Stars, Galaxies & Starlight",
+           "h": "year7-science/space/deck9.html",
            "k": "space"
           }
          ]

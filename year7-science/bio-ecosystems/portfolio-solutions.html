@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Portfolio Answers | Biodiversity &amp; Ecosystems</title>
+<meta name="description" content="Model answers and marking criteria for the eleven stages of the Victorian Biodiversity Research Portfolio, built on the Eastern Barred Bandicoot species profile. Staff access.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/solutions.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="solutions-page theme-science">
+
+<div class="hero">
+  <a class="back-btn" href="research-portfolio.html">&#8592; Back to the portfolio</a>
+  <div class="unit-tag">Teacher Answer Key &middot; Confidential</div>
+  <h1>Research Portfolio &mdash; Model Answers</h1>
+  <p class="sub">Model responses and marking criteria for all eleven stages of the Victorian Biodiversity Research Portfolio, plus the front matter and the closing self-check. Every answer is sourced from the Eastern Barred Bandicoot species profile and the unit booklet &mdash; the two documents students are meant to be working from.</p>
+  <div class="meta-row">
+    <span>11 stages</span><span>&middot;</span>
+    <span>At The Level + Above The Level</span><span>&middot;</span>
+    <span>Unmarked &mdash; criteria, not a mark scheme</span><span>&middot;</span>
+    <span>Mapped to CAT Parts A&ndash;G</span><span>&middot;</span>
+    <span>Victorian Curriculum F&ndash;10 v2.0</span>
+  </div>
+  <div class="teacher-note">
+    <strong>How to use:</strong> The portfolio carries no marks &mdash; students judge their own work against the CAT criteria on the closing page. These are model responses and the criteria that separate a complete answer from a thin one, not the only acceptable wording. Several stages are open by design (the sketch, the conservation action, the self-check); those give criteria rather than an answer. <span class="tag y8">Yr 8</span> marks the Above The Level extensions and <span class="tag fn">First Nations</span> the Stage 7 perspectives task.
+  </div>
+</div>
+
+<div class="lockscreen" id="lock">
+  <div class="lock-icon">&#128273;</div>
+  <h2>Staff access only</h2>
+  <p>This solution set is password protected. Enter the staff password to view the answers.</p>
+  <form id="unlockForm">
+    <input id="pw" type="password" autocomplete="off" placeholder="Password" autofocus />
+    <button type="submit">Unlock</button>
+  </form>
+  <p class="err" id="err"></p>
+</div>
+<div id="content"></div>
+
+<footer>
+  Research Portfolio &middot; Teacher Answer Key &middot; Year 7 Science &middot; Victorian Curriculum F&ndash;10 v2.0<br>
+  Generated to accompany <em>Bio_Research_Portfolio_Yr7_8.pdf</em> and the Eastern Barred Bandicoot species profile. For staff use.
+</footer>
+
+<script>
+(function(){
+  // Replace this line with the BLOB emitted by tools/staff-crypt.html
+  // after encrypting portfolio-solutions-payload.html.
+  var BLOB = {"v": 2, "iv": "", "ct": "", "keys": []};
+  var b64 = function(s){var bin=atob(s);var a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;};
+  /* The payload is encrypted once under a random content key; that key is
+     wrapped separately under each password the page accepts. Try each
+     wrapper, and the first that opens tells us both the content key and
+     which audience just unlocked. */
+  async function derive(pw, salt, iter){
+    var baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw),
+      {name:"PBKDF2"}, false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      {name:"PBKDF2", salt:b64(salt), iterations:iter, hash:"SHA-256"},
+      baseKey, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+  }
+  async function unlock(pw){
+    for (var i = 0; i < BLOB.keys.length; i++){
+      var k = BLOB.keys[i], raw;
+      try {
+        raw = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(k.iv)},
+                                          await derive(pw, k.salt, k.iter), b64(k.ct));
+      } catch (e) { continue; }
+      var ckey = await crypto.subtle.importKey("raw", raw, {name:"AES-GCM"},
+                                               false, ["decrypt"]);
+      var pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(BLOB.iv)},
+                                           ckey, b64(BLOB.ct));
+      return { role: k.role, html: new TextDecoder().decode(pt) };
+    }
+    throw new Error("bad password");
+  }
+
+  /* Unlocked with the student password: this is a revision resource, not a
+     confidential teacher document, so drop the staff framing. The content
+     is identical — only the labelling changes. */
+  function softenForStudents(){
+    var tag = document.querySelector(".unit-tag");
+    if (tag) tag.textContent = "Answer key";
+    var note = document.querySelector(".teacher-note strong");
+    if (note && /How to use/i.test(note.textContent)) return;
+  }
+
+  var form=document.getElementById("unlockForm");
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();
+    var err=document.getElementById("err");
+    err.textContent="";
+    try{
+      var res=await unlock(document.getElementById("pw").value);
+      var html=res.html;
+      document.body.dataset.role=res.role;
+      if(res.role==="student") softenForStudents();
+      document.getElementById("content").innerHTML=html;
+      document.getElementById("lock").style.display="none";
+      window.scrollTo(0,0);
+    }catch(ex){
+      err.textContent="Incorrect password. Try again.";
+      document.getElementById("pw").value="";
+      document.getElementById("pw").focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
