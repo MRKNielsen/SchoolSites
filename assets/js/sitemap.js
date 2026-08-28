@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-27",
+ "generated": "2026-08-28",
  "tree": [
   {
    "t": "Home",
@@ -235,17 +235,17 @@ window.SITEMAP = {
            "k": "space"
           },
           {
-           "t": "Lesson 4 — Our Solar System",
+           "t": "Lesson 4 — Reading the Rocks",
            "h": "year7-science/space/deck4.html",
            "k": "space"
           },
           {
-           "t": "Lesson 5 — Space Technology & Sustainability",
+           "t": "Lesson 5 — Our Solar System",
            "h": "year7-science/space/deck5.html",
            "k": "space"
           },
           {
-           "t": "Lesson 6 — The Search for Life",
+           "t": "Lesson 6 — Space Technology & Sustainability",
            "h": "year7-science/space/deck6.html",
            "k": "space"
           },
@@ -255,13 +255,18 @@ window.SITEMAP = {
            "k": "space"
           },
           {
-           "t": "Lesson 8 — Gravity & Orbits",
+           "t": "Lesson 8 — The Search for Life",
            "h": "year7-science/space/deck8.html",
            "k": "space"
           },
           {
-           "t": "Lesson 9 — Stars, Galaxies & Starlight",
+           "t": "Lesson 9 — Gravity & Orbits",
            "h": "year7-science/space/deck9.html",
+           "k": "space"
+          },
+          {
+           "t": "Lesson 10 — Stars, Galaxies & Starlight",
+           "h": "year7-science/space/deck10.html",
            "k": "space"
           }
          ]

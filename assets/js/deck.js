@@ -9,7 +9,9 @@
    - .reveal-btn → shows .steps li in sequence (data-target="#id")
    - .qcard answer toggles (button.reveal-btn inside .qcard, or data-answer)
    - .ptab / .partpanel part-by-part worked examples
-   - "R" key reveals next step on current slide
+   - Forward nav (→ / space / next) reveals the next hidden step,
+     fragment or answer on the slide before advancing
+   - "R" key does the same reveal without any chance of advancing
    ============================================================ */
 (function () {
   "use strict";
@@ -51,11 +53,48 @@
     markMenu();
   }
 
-  /* Frag reveals: forward nav reveals remaining .frag fragments on the
-     current slide before advancing; backward nav un-reveals first. */
+  /* ---- Reveals ------------------------------------------------------
+     Everything still hidden on a slide - .steps items, .frag fragments
+     and .qcard answers - is revealed one piece at a time, in document
+     order, by the right arrow / space / "next" button, before the deck
+     moves on. Buttons and keys share one source of truth (the DOM), so
+     a step revealed by the arrow still leaves its button on the right
+     label. Backward nav un-reveals fragments only: steps and answers
+     stay up, so backing out of a worked example is a single press. */
+
+  const HIDDEN = ".steps > li:not(.shown), .frag:not(.on), [data-answer-for]:not(.shown)";
+  const stepBtns = new Map();   /* <ul|ol class="steps">  -> { btn, label } */
+  const ansBtns = new Map();    /* answer element         -> { btn, label } */
+
   function syncFragBtns(s) {
     const left = s.querySelector(".frag:not(.on)");
     s.querySelectorAll(".reveal-btn[data-frag]").forEach(b => b.classList.toggle("done", !left));
+  }
+  function syncStepBtn(list) {
+    const rec = list && stepBtns.get(list);
+    if (!rec) return;
+    const done = list.querySelector(":scope > li") && !list.querySelector(":scope > li:not(.shown)");
+    rec.btn.textContent = done ? "Reset \u21ba" : rec.label;
+  }
+  function syncAnsBtn(a) {
+    const rec = ansBtns.get(a);
+    if (rec) rec.btn.textContent = a.classList.contains("shown") ? "Hide \u2715" : rec.label;
+  }
+
+  /* A reveal sitting in a part-panel that isn't on screen must not eat
+     an arrow press - the room would see nothing happen. */
+  function onScreen(el) {
+    const p = el.closest(".partpanel");
+    return !p || p.classList.contains("shown");
+  }
+  /* Reveal the next hidden thing on this slide; false when none is left. */
+  function revealNext(s) {
+    const el = Array.from(s.querySelectorAll(HIDDEN)).find(onScreen);
+    if (!el) return false;
+    if (el.matches(".steps > li")) { el.classList.add("shown"); syncStepBtn(el.parentElement); }
+    else if (el.classList.contains("frag")) { el.classList.add("on"); syncFragBtns(s); }
+    else { el.classList.add("shown"); syncAnsBtn(el); }
+    return true;
   }
   function revealNextFrag(s) {
     const f = s.querySelector(".frag:not(.on)");
@@ -67,7 +106,7 @@
     if (on.length) { on[on.length - 1].classList.remove("on"); syncFragBtns(s); return true; }
     return false;
   }
-  function next() { if (!revealNextFrag(slides[cur])) go(cur + 1); updateFade(); }
+  function next() { if (!revealNext(slides[cur])) go(cur + 1); updateFade(); }
   function prev() { if (!unrevealLastFrag(slides[cur])) go(cur - 1); updateFade(); }
 
   /* Buttons: <button data-nav="prev|next|first|last"> */
@@ -127,25 +166,20 @@
     x0 = null;
   }, { passive: true });
 
-  /* Step reveals: <button class="reveal-btn" data-target="#steps1">Show working</button> */
+  /* Step reveals: <button class="reveal-btn" data-target="#steps1">Show working</button>
+     (data-steps="steps1" is the legacy spelling and is accepted too).
+     State lives in the DOM so the arrow keys and the button agree. */
   function wireSteps(btn) {
-    const target = btn.dataset.target
-      ? document.querySelector(btn.dataset.target)
-      : btn.closest(".slide").querySelector(".steps");
-    if (!target) return;
-    const items = Array.from(target.querySelectorAll("li"));
-    const label = btn.textContent;
-    let shown = 0;
+    const list = btn.dataset.target ? document.querySelector(btn.dataset.target)
+      : btn.dataset.steps ? document.getElementById(btn.dataset.steps)
+      : btn.closest(".slide") && btn.closest(".slide").querySelector(".steps");
+    if (!list) return;
+    stepBtns.set(list, { btn: btn, label: btn.textContent });
     btn.addEventListener("click", () => {
-      if (shown < items.length) {
-        items[shown].classList.add("shown");
-        shown++;
-        if (shown === items.length) btn.textContent = "Reset ↺";
-      } else {
-        items.forEach(li => li.classList.remove("shown"));
-        shown = 0;
-        btn.textContent = label;
-      }
+      const li = list.querySelector(":scope > li:not(.shown)");
+      if (li) li.classList.add("shown");
+      else list.querySelectorAll(":scope > li").forEach(x => x.classList.remove("shown"));
+      syncStepBtn(list);
     });
   }
 
@@ -156,11 +190,9 @@
       ? document.querySelector(btn.dataset.answer)
       : btn.closest(".qcard") && btn.closest(".qcard").querySelector(".a");
     if (!a) return;
-    const orig = btn.textContent;
-    btn.addEventListener("click", () => {
-      const open = a.classList.toggle("shown");
-      btn.textContent = open ? "Hide ✕" : orig;
-    });
+    a.setAttribute("data-answer-for", "");   /* marks it for arrow-key reveal */
+    ansBtns.set(a, { btn: btn, label: btn.textContent });
+    btn.addEventListener("click", () => { a.classList.toggle("shown"); syncAnsBtn(a); });
   }
 
   document.querySelectorAll(".reveal-btn").forEach(btn => {
@@ -169,12 +201,6 @@
     else if (btn.dataset.answer || btn.closest(".qcard")) wireAnswer(btn);
     else wireSteps(btn);
   });
-
-  /* "R" key: reveal next unshown step / frag on the current slide */
-  function revealNext(slide) {
-    const next = slide.querySelector(".steps li:not(.shown), .frag:not(.on)");
-    if (next) next.classList.add(next.classList.contains("frag") ? "on" : "shown");
-  }
 
   /* Part tabs: <button class="ptab" data-part="#p1"> + <div class="partpanel" id="p1"> */
   document.querySelectorAll(".ptab").forEach(tab => {

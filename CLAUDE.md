@@ -344,6 +344,15 @@ path and not a stack of overlapping objects.
   symbol itself in prose.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
+  **Forward nav (→ / space / next) reveals the next hidden thing on the
+  slide before advancing** — a `.steps` line, a `.frag`, or a `.qcard`
+  answer, in document order — so a worked example can be walked through
+  from the presenter remote without touching a button. Reveals inside a
+  `.partpanel` that isn't on screen are skipped, so an arrow press never
+  looks like a no-op. Buttons and keys read the same DOM state, so the
+  two can be mixed freely; `R` reveals without any chance of advancing.
+  Backward nav un-reveals fragments only — steps and answers stay up, so
+  `←` backs out of a long worked example in one press.
   `.frag` reveals on forward navigation and works on SVG groups too, so
   a `<g class="frag">` is a diagram layer. `<g class="vanish">` fades out
   once a later `.frag` appears. Where a diagram layer must pair with
