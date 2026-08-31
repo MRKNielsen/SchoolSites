@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-28",
+ "generated": "2026-08-31",
  "tree": [
   {
    "t": "Home",
@@ -275,6 +275,11 @@ window.SITEMAP = {
          "t": "Resources",
          "g": 1,
          "c": [
+          {
+           "t": "Unit Planner",
+           "h": "year7-science/space/planner.html",
+           "k": "space"
+          },
           {
            "t": "Retrieval Quiz",
            "h": "year7-science/space/quiz.html",

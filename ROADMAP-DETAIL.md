@@ -55,7 +55,14 @@ folder — that copy lives outside the repo, in
 `7 Science/Bio/Bio_Ecosystems_Unit_Planner_Yr7.docx`, and is **not** kept in
 sync automatically. Whichever copy changes, change the other by hand.
 
-Other units can reuse the page type as-is: copy `planner.html`, swap the rows.
+**Second use, 31 Aug 2026** — `year7-science/space/planner.html`, themed
+`theme-space`. Four rows matching the week grouping the Space index already
+declares (Week 4 is the above-level extension block), so the planner and the
+index can never disagree. Word twin at
+`7 Science/Space/Space_Unit_Planner_Yr7.docx`.
+
+Other units can reuse the page type as-is: copy a `planner.html`, swap the rows
+and the `theme-*` body class.
 
 ### Landed — research portfolio answer key (25 Aug 2026)
 
