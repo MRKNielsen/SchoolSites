@@ -59,7 +59,11 @@ Optional modules — link only when a deck uses them:
   `window.RETRIEVAL_QUESTIONS = [{deck, q, opts, ans}]`; a slide marked
   `class="slide quiz-slide" data-quiz-before="9" data-quiz-count="5"`
   containing `<div class="quiz-container"></div>` draws that many
-  questions at random from earlier lessons and scores them. quiz.css also
+  questions at random from earlier lessons and scores them. Add
+  `data-quiz-exclude="4"` (comma-separated deck numbers) where a unit has
+  an **optional** lesson inside an otherwise sequential run — without it a
+  class that skipped that lesson gets cold-called on content it never saw.
+  Year 7 Space uses it for Lesson 4. quiz.css also
   styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
 - `assets/css/orbit.css` + `assets/js/orbit.js` — the orbital phase
   visualiser. Markup is one line, `<div class="orbitsim"></div>`; the JS
@@ -621,6 +625,26 @@ repo root is for standalone question booklets that belong to no unit.
 Build a booklet with `xelatex` run **three times** (TOC, then
 `\LastPage`), from a scratch copy of `booklet/` — the `.aux`/`.log`/
 `.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
+
+**Single-lesson handouts are generated, never hand-copied.**
+
+```bash
+node tools/build-lesson-print.js          # list the sections
+node tools/build-lesson-print.js 1        # write Space_Lesson1_Print.tex
+node tools/build-lesson-print.js --all
+```
+
+It slices the master `.tex` — preamble verbatim, a compact cover in
+place of the titlepage and TOC, then the chosen `\section` block — and
+never modifies the master. A hand-made second `.tex` would drift the
+first time a question was corrected, with nothing to signal it; this
+keeps one source of truth. The emitted file carries a "GENERATED —
+do not edit" header, and is safe to commit alongside its PDF.
+
+The one subtlety: it emits `\setcounter{section}{N-1}` before the body,
+because `\question` numbers off `\thesection`. Without it Lesson 3's
+handout would print Q1.1… instead of Q3.1… and could not be marked
+against the existing answer key.
 
 Booklets have a question apparatus already defined in the preamble —
 `\question{marks}{text}`, `\anslines{n}` (ruled writing lines),

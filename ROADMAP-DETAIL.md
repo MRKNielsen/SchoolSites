@@ -41,6 +41,30 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — Space resequence: Lesson 3 to week 2, Lesson 4 optional (31 Aug 2026)
+
+Kodie's call. Week 1 is now Lessons 1–2, week 2 is Lessons 3–5, and **Lesson 4
+(Reading the Rocks) is an optional lesson** — badged on the unit index
+(`.deck-card.is-ext` + `Optional · Specimens`), pilled on its own title slide,
+and marked `optional` on the quiz page's topic chip.
+
+Consequences that had to move with it:
+
+- **The written assessment no longer covers §3.** It is drawn from §1, §2, §4,
+  §5 and §6. You cannot assess content a class may not have been taught.
+- **`quiz.js` gained `data-quiz-exclude`** — a comma-separated list of deck
+  numbers to drop from the spaced-retrieval pool, applied after
+  `data-quiz-before`. Decks 5–10 in Space carry `data-quiz-exclude="4"`, so a
+  class that skipped Lesson 4 is never cold-called on rhythmites. The
+  attribute is optional and absent markup behaves exactly as before.
+- Index quiz chips reworded to match ("Quiz: Lessons 1–3, 5–6").
+
+**Not done, deliberately:** the booklet still has §3 in sequence and unlabelled.
+Adding an "optional" divider means a `.tex` edit and three `xelatex` passes, and
+the answer key hardcodes `QN.M` question numbers — so it belongs in the same
+pass as the outstanding booklet rebuild, not bolted on here. §3 keeps its
+position, so nothing renumbered.
+
 ### Landed — unit planner page type (27 Aug 2026)
 
 `assets/css/planner.css` — a new staff page type for unit planning documents:

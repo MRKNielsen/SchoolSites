@@ -11,9 +11,14 @@
    Slide markup:
      <section class="slide quiz-slide"
               data-quiz-before="9"     <!-- only questions from decks < 9 -->
+              data-quiz-exclude="4"    <!-- optional: comma-separated decks to leave out -->
               data-quiz-count="5">     <!-- how many to draw (default 5) -->
        <div class="quiz-container"></div>
      </section>
+
+   data-quiz-exclude is for a lesson the class may not have been taught —
+   an optional lesson inside an otherwise sequential unit. Without it a
+   class that skipped that lesson gets cold-called on content it never saw.
 
    Renders `count` questions drawn at random from the eligible pool,
    gives instant per-question feedback, and shows a tally once all
@@ -37,8 +42,11 @@
     const bank = window.RETRIEVAL_QUESTIONS || [];
     const before = parseInt(slide.dataset.quizBefore, 10);
     const count = parseInt(slide.dataset.quizCount, 10) || 5;
+    const skip = (slide.dataset.quizExclude || "")
+      .split(",").map(n => parseInt(n, 10)).filter(n => !isNaN(n));
 
-    const pool = isNaN(before) ? bank : bank.filter(q => q.deck < before);
+    let pool = isNaN(before) ? bank : bank.filter(q => q.deck < before);
+    if (skip.length) pool = pool.filter(q => skip.indexOf(q.deck) === -1);
     if (pool.length < 2) {
       container.innerHTML = '<p class="quiz-none">This is the first lesson — no prior content to review yet. ' +
                             "Focus on today's learning intentions.</p>";
