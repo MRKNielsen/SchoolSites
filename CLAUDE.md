@@ -678,7 +678,22 @@ understanding" at the end of each subsection, questions numbered
 box kept last. Don't number the "Your turn" `scaffold` blocks — they
 drift out of sync when sections are reordered.
 
-`.bookref` chips must be derived from the booklet's `.toc` after a
+**Every `\section` and `\subsection` in the Space booklet carries a
+`\label{sec:N}` / `\label{sub:N.M}`**, and the cover's contents table
+`\pageref`s them. That serves two purposes: the contents table can never
+list a stale page, and a reference sweep reads exact page numbers out of
+the `.aux` —
+
+```bash
+grep -o '\\newlabel{su\?[bc]:[0-9.]*}{{[^}]*}{[0-9]*}' booklet/*.aux
+```
+
+— rather than scraping headings out of `pdftotext` output, which breaks
+on whitespace and on any heading that wraps. Add the same labels to any
+booklet that needs a sweep. Note the `.toc` file only exists when
+`\tableofcontents` is present; the `.aux` is always written.
+
+`.bookref` chips must be derived from the booklet's labels after a
 build, never hand-written. Space's original chips cited pages 38–71 of a
 22-page booklet — the numbers followed a synthetic `(N-1)*6+3` pattern —
 and their `QX.Y` references pointed at numbered questions the booklet

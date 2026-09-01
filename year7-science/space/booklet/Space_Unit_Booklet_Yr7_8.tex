@@ -343,76 +343,87 @@
 % ============================================================
 
 % ---- TITLE PAGE --------------------------------------------
-\begin{titlepage}
-\vspace*{3cm}
-\begin{center}
-  {\headingfont\fontsize{11pt}{13pt}\selectfont\color{Gold}
-    NORTHCOTE HIGH SCHOOL\ \textbullet\ YEAR 7/8 SCIENCE\ \textbullet\ VICTORIAN CURRICULUM 2.0}
+\thispagestyle{plain}
 
-  \vspace{1.4cm}
-  {\headingfont\fontsize{42pt}{46pt}\selectfont\bfseries Space}
+% ==========================================================================
+%  COVER PAGE
+%  Same shape as the Biodiversity & Ecosystems booklet: rounded banner block,
+%  student details, Acknowledgement, colour legend, contents table. The two
+%  booklets sit side by side in a student's folder, so they should read as a set.
+%
+%  The contents table uses \pageref against a \label on each \section — never
+%  hand-typed page numbers. The previous cover was still listing the original
+%  11-lesson ordering months after the unit was consolidated to 10, which is
+%  exactly what hand-typed numbers do.
+% ==========================================================================
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=Navy, colframe=Navy,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Gold}\footnotesize\MakeUppercase{Unit Booklet \textbullet\ Years 7 and 8}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{40}{44}\selectfont Space}\\[8pt]
+    {\large\color{white!85!Navy}\itshape The Earth--Moon--Sun system \textbullet\ The solar system\\[2pt] Space technology \textbullet\ First Nations astronomy}\\[14pt]
+    {\headingfont\color{white!72!Navy}\normalsize
+      Victorian Curriculum F--10 Version 2.0 \textbar{}
+      Earth and space sciences \textbar{} Science as a Human Endeavour}
+  \end{center}
+\end{tcolorbox}
 
-  \vspace{0.8cm}
-  {\headingfont\fontsize{18pt}{22pt}\selectfont\color{SpaceMid}
-    Student Workbook}
+\vspace{10pt}
 
-  \vspace{2.2cm}
-  \textcolor{Gold}{\rule{10cm}{1.5pt}}
+\begin{tabular}{@{}p{2.2cm} p{6cm} p{2.2cm} p{3.4cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{5.8cm}} & \textbf{Class:}      & \underline{\hspace{3.2cm}} \\[8pt]
+  \textbf{Teacher:} & \underline{\hspace{5.8cm}} & \textbf{Year level:} & \underline{\hspace{3.2cm}} \\
+\end{tabular}
 
-  \vspace{1.6cm}
-  % Ten sections, one per lesson — keep this list in step with the
-  % \section headings below and with the unit index. It was still
-  % advertising the original 11-lesson ordering long after the unit was
-  % consolidated, which is exactly the sort of thing nobody re-reads.
-  {\fontsize{12pt}{16pt}\selectfont\color{SpaceMid}
-    Ten sections --- one for each lesson:}
+\vspace{10pt}
 
-  \vspace{0.6cm}
-  {\fontsize{11pt}{15.5pt}\selectfont\color{Navy}
-    \textbf{1}\ Earth, Moon \& Sun \quad\textbullet\quad \textbf{2}\ Day, Night \& Seasons\\[0.32em]
-    \textbf{3}\ The Moon --- Phases \& Tides \quad\textbullet\quad \textbf{4}\ Reading the Rocks\\[0.32em]
-    \textbf{5}\ Our Solar System \quad\textbullet\quad \textbf{6}\ Space Technology \& Sustainability\\[0.32em]
-    \textbf{7}\ Aboriginal \& Torres Strait Islander Astronomy}
+\begin{fnbox}{Acknowledgement of Country}
+This booklet was created on the unceded Country of the Wurundjeri-Woiwurrung people of the Kulin Nation. We acknowledge Elders past, present, and emerging. Aboriginal and Torres Strait Islander peoples have read, recorded and navigated by this sky for tens of thousands of years --- the oldest continuous astronomical tradition on Earth --- and that knowledge appears throughout this unit as living science, not history.
+\end{fnbox}
 
-  \vspace{0.5cm}
-  {\fontsize{9.5pt}{12pt}\selectfont\color{SpaceMid}
-    \textit{Section 4 is optional --- your teacher will tell you if your class is doing it.}}
+\vspace{8pt}
 
-  \vspace{0.9cm}
-  {\fontsize{10.5pt}{14pt}\selectfont\color{Violet}
-    \textbf{Above level --- extension}\\[0.32em]
-    \textbf{8}\ The Search for Life \quad\textbullet\quad \textbf{9}\ Gravity \& Orbits
-    \quad\textbullet\quad \textbf{10}\ Stars, Galaxies \& Starlight}
+\begin{infobox}{How to use this booklet}
+Sections run in the order the lessons are taught --- Section~N goes with Lesson~N. Work through them in order; each one builds on the last.
 
-  \vspace{1.6cm}
-  \textcolor{Gold}{\rule{10cm}{1.5pt}}
+\medskip
+\begin{tabular}{@{}ll@{}}
+  \textcolor{Space}{\rule{10pt}{10pt}}\ \textbf{Blue boxes}   & Year 7 core content and questions \\
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Violet boxes} & Above level --- Year 8 extension \\
+  \textcolor{GoldDark}{\rule{10pt}{10pt}}\ \textbf{Gold boxes} & Entry tasks, scaffolds and worked examples \\
+  \textcolor{Earth}{\rule{10pt}{10pt}}\ \textbf{Brown boxes}  & First Nations perspectives \\
+\end{tabular}
+\end{infobox}
 
-  \vspace{1.6cm}
-  {\fontsize{11pt}{14pt}\selectfont\color{SpaceMid}
-    Name: \underline{\hspace{7cm}}\ \ \ Class: \underline{\hspace{3cm}}}
+\vspace{8pt}
 
-  \vspace{0.6cm}
-  {\fontsize{10pt}{13pt}\selectfont\color{white!60!Navy}
-    \textit{We acknowledge the Wurundjeri-Woiwurrung people of the Kulin Nation\\
-    as the Traditional Custodians of the Country on which we learn.}}
-\end{center}
-\end{titlepage}
-
-\nopagecolor
-\newpage
-% Contents lists sections and subsections only. The \subsubsection level
-% is all diagram/figure headings ("Diagram: Label the layers of ..."),
-% which belong on the page, not in the contents.
-%\setcounter{tocdepth}{2}
-%\tableofcontents
+\begingroup\hypersetup{linkcolor=Ink}
+\begin{tabular}{@{}C{0.7cm} L{8.4cm} L{2.4cm} C{1.6cm}@{}}
+  \thead{\#} & \thead{Section} & \thead{} & \thead{Page} \\
+  \talt 1  & Earth, Moon \& Sun --- Scale and Structure      &                                               & p.\ \pageref{sec:1} \\
+        2  & Day, Night \& Seasons                           &                                               & p.\ \pageref{sec:2} \\
+  \talt 3  & The Moon --- Phases \& Tides                    &                                               & p.\ \pageref{sec:3} \\
+        4  & Reading the Rocks & \textcolor{GoldDark}{\small\itshape optional} & p.\ \pageref{sec:4} \\
+  \talt 5  & Our Solar System                                &                                               & p.\ \pageref{sec:5} \\
+        6  & Space Technology \& Sustainability              &                                               & p.\ \pageref{sec:6} \\
+  \talt 7  & Aboriginal \& Torres Strait Islander Astronomy  &                                               & p.\ \pageref{sec:7} \\
+        8  & The Search for Life --- Astrobiology            & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:8} \\
+  \talt 9  & Gravity \& Orbits                               & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:9} \\
+        10 & Stars, Galaxies \& Starlight                    & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:10} \\
+\end{tabular}
+\endgroup
 
 \newpage
 % ============================================================
-\section{Earth, Moon and Sun --- Scale and Structure}
+\section{Earth, Moon and Sun --- Scale and Structure}\label{sec:1}
 % ============================================================
 \vc{Science Understanding}{Physical sciences: Earth and space sciences; scale and relative size of Earth, Moon and Sun}
 
-\subsection{The scale of Earth, Moon and Sun}
+\subsection{The scale of Earth, Moon and Sun}\label{sub:1.1}
 
 The three most important objects in our immediate cosmic environment differ enormously in size. Understanding their relative sizes is foundational to everything else in this unit.
 
@@ -450,7 +461,7 @@ If Earth were the size of a tennis ball (6.7 cm across), the Moon would be a mar
 
 \end{yr7box}
 \newpage
-\subsection{Structure of Earth}
+\subsection{Structure of Earth}\label{sub:1.2}
 
 Earth has four main layers:
 \begin{itemize}
@@ -510,7 +521,7 @@ Earth has four main layers:
 
 
 \newpage
-\subsection{The Moon}
+\subsection{The Moon}\label{sub:1.3}
 
 The Moon is Earth's only natural \vocab{satellite}. It produces no light of its own --- everything we see is reflected sunlight.
 
@@ -550,7 +561,7 @@ Two kinds of terrain are visible with the naked eye. The number of craters on a 
 
 
 
-\subsection{Structure of the Sun}
+\subsection{Structure of the Sun}\label{sub:1.4}
 
 The Sun is a \vocab{main sequence star} --- it converts hydrogen into helium through \vocab{nuclear fusion} in its core.
 
@@ -692,10 +703,10 @@ A flash of light leaves the Moon. How long before we see it? (Moon is 384,400 km
 
 \newpage
 % ============================================================
-\section{Day, Night and Seasons}
+\section{Day, Night and Seasons}\label{sec:2}
 % ============================================================
 \vc{Science Understanding}{Earth and space sciences: Earth's rotation and revolution; axial tilt and seasons}
-\subsection{Why we have day and night}
+\subsection{Why we have day and night}\label{sub:2.1}
 
 Earth \vocab{rotates} (spins on its axis) once every \textbf{24 hours}. The side facing the Sun experiences day; the opposite side experiences night.
 
@@ -727,7 +738,7 @@ Copy the simple diagram showing \textbf{Earth and the Sun}. On your diagram:
 
 \end{yr7box}
 
-\subsection{Why we have seasons}
+\subsection{Why we have seasons}\label{sub:2.2}
 
 Seasons are caused by Earth's \vocab{axial tilt} of 23.5°, not by distance from the Sun. (Earth is actually closest to the Sun in January --- Australian summer.)
 
@@ -796,7 +807,7 @@ When the Southern Hemisphere tilts away (June): rays hit at a shallower angle, d
 \end{yr7box}
 
 
-\subsection{Solstices and equinoxes}
+\subsection{Solstices and equinoxes}\label{sub:2.3}
 
 \begin{center}
 \begin{tabular}{lll}
@@ -839,11 +850,11 @@ Apply your knowledge — attempt all three, then we’ll reveal answers:
 
 \newpage
 % ============================================================
-\section{The Moon --- Phases and Tides}
+\section{The Moon --- Phases and Tides}\label{sec:3}
 % ============================================================
 \vc{Science Understanding}{Earth and space sciences: Moon phases and tidal patterns; gravitational effects}
 
-\subsection{Why the Moon appears to change shape}
+\subsection{Why the Moon appears to change shape}\label{sub:3.1}
 
 The Moon does not produce light --- it \vocab{reflects sunlight}. At all times, the half facing the Sun is lit. As the Moon orbits Earth over \textbf{29.5 days}, we see different fractions of the lit half from Earth --- these are the \vocab{phases}.
 \subsubsection{The eight phases (in order)}
@@ -881,7 +892,7 @@ Earth's shadow does \textbf{NOT} cause phases. A \vocab{lunar eclipse} (Earth's 
 
 \end{yr7box}
 \newpage
-\subsection{Tides}
+\subsection{Tides}\label{sub:3.2}
 
 The Moon's gravity pulls on Earth's oceans. This creates a \vocab{tidal bulge} on the Moon-facing side, and a second bulge on the opposite side.
 
@@ -971,7 +982,7 @@ There is a \textbf{full Moon} on 5 March.
 
 \newpage
 % ============================================================
-\section{Reading the Rocks --- Tides in Stone and the Acraman Impact}
+\section{Reading the Rocks --- Tides in Stone and the Acraman Impact}\label{sec:4}
 % ============================================================
 \vc{Science as a Human Endeavour}{Science knowledge is used to inform decisions and is developed through the work of individual scientists; Earth and space sciences: predictable phenomena}
 
@@ -983,7 +994,7 @@ single morning that changed the planet. \textbf{We hold samples of both}, so
 this section is written to be worked through with the specimens in front of
 you.
 
-\subsection{Tides written in stone}
+\subsection{Tides written in stone}\label{sub:4.1}
 
 \begin{scaffold}{Entry task: what could you count in a rock?}
 The photograph on the poster shows a slab of rock made of hundreds of thin,
@@ -1089,7 +1100,7 @@ lunar rock chemistry that matches Earth's mantle almost exactly).
 
 \end{yr7box}
 
-\subsection{The Acraman impact}
+\subsection{The Acraman impact}\label{sub:4.2}
 
 \begin{scaffold}{Entry task: what would be left behind?}
 An asteroid 5 km across hits South Australia. 580 million years of erosion
@@ -1232,11 +1243,11 @@ of Australia. \textit{Geological Society of America Special Paper} 293,
 
 \newpage
 % ============================================================
-\section{Our Solar System}
+\section{Our Solar System}\label{sec:5}
 % ============================================================
 \vc{Science Understanding}{Earth and space sciences: Structure and scale of the solar system; classification of planets}
 
-\subsection{The eight planets}
+\subsection{The eight planets}\label{sub:5.1}
 
 \begin{scaffold}{Entry task: order the planets}
 Write the eight planets into the table in order from the Sun, then tick which
@@ -1317,7 +1328,7 @@ Mnemonic: \textbf{M}y \textbf{V}ery \textbf{E}xcited \textbf{M}other \textbf{J}u
 
 \end{yr7box}
 
-\subsection{Other solar system objects}
+\subsection{Other solar system objects}\label{sub:5.2}
 
 \begin{itemize}
   \item \vocab{Asteroid belt}: between Mars and Jupiter; rocky/metallic objects; gravitational influence of Jupiter prevented these from forming a planet
@@ -1354,7 +1365,7 @@ Mnemonic: \textbf{M}y \textbf{V}ery \textbf{E}xcited \textbf{M}other \textbf{J}u
 
 \newpage
 % ============================================================
-\section{Space Technology and Sustainability}
+\section{Space Technology and Sustainability}\label{sec:6}
 % ============================================================
 \needspace{5\baselineskip}
 \vspace{0.8em}
@@ -1366,7 +1377,7 @@ Mnemonic: \textbf{M}y \textbf{V}ery \textbf{E}xcited \textbf{M}other \textbf{J}u
 
 \vc{Science Understanding}{Science as a Human Endeavour: Space exploration technologies; Australian contributions}
 
-\subsection{Key milestones in space exploration}
+\subsection{Key milestones in space exploration}\label{sub:6.1}
 
 \begin{scaffold}{Entry task: sequence the space milestones}
 Write the eight events into the timeline in chronological order, then say what
@@ -1428,7 +1439,7 @@ launched
 
 \end{yr7box}
 
-\subsection{Australia's contributions to space science}
+\subsection{Australia's contributions to space science}\label{sub:6.2}
 
 \begin{itemize}
   \item \textbf{Parkes Radio Telescope} (``The Dish'') --- received and relayed live TV of the Apollo 11 Moon landing to 600 million viewers worldwide (1969)
@@ -1475,7 +1486,7 @@ Choose one of the following and evaluate it as a scientific mission. State: (a) 
 
 \vc{Science Understanding}{Science as a Human Endeavour: Sustainability of space use; Earth observation technologies}
 
-\subsection{Space debris}
+\subsection{Space debris}\label{sub:6.3}
 
 \begin{scaffold}{Entry task: why orbital speed makes debris so dangerous}
 Kinetic energy is $E_k = \tfrac{1}{2}mv^2$, with mass in kilograms and speed in
@@ -1516,7 +1527,7 @@ At orbital speeds ($\approx$7.8 km/s in LEO), even a 1 cm fragment has the kinet
 
 \end{yr7box}
 
-\subsection{Kessler syndrome}
+\subsection{Kessler syndrome}\label{sub:6.4}
 
 \vocab{Kessler syndrome} (Donald Kessler, NASA, 1978): if orbital density exceeds a critical threshold, one collision generates debris that causes more collisions in a cascade --- potentially making certain orbital shells permanently unusable. Evidence suggests the Iridium 33/Cosmos 2251 collision (2009) created $>$2,000 tracked fragments.
 
@@ -1533,7 +1544,7 @@ At orbital speeds ($\approx$7.8 km/s in LEO), even a 1 cm fragment has the kinet
 \end{yr7box}
 \newpage
 
-\subsection{Earth observation satellites}
+\subsection{Earth observation satellites}\label{sub:6.5}
 
 \begin{itemize}
   \item \vocab{Weather satellites}: Himawari and GOES provide real-time storm tracking; forecasts beyond 24 h depend entirely on satellite data
@@ -1585,7 +1596,7 @@ Active debris removal (ADR) technologies in development include robotic arm capt
 
 \newpage
 % ============================================================
-\section{Aboriginal and Torres Strait Islander Astronomy}
+\section{Aboriginal and Torres Strait Islander Astronomy}\label{sec:7}
 % ============================================================
 \vc{Science Understanding}{Science as a Human Endeavour: Indigenous knowledge systems; dark constellations; ecological calendars}
 
@@ -1593,7 +1604,7 @@ Active debris removal (ADR) technologies in development include robotic arm capt
 Aboriginal and Torres Strait Islander peoples have practised systematic astronomy for at least 65,000 years --- making these the oldest continuing astronomical traditions on Earth. This is not historical knowledge. It is a living, ongoing science embedded in ceremony, ecology, governance, and art.
 \end{fnbox}
 
-\subsection{Dark constellations}
+\subsection{Dark constellations}\label{sub:7.1}
 
 Western constellation traditions connect \textit{stars} into figures. Aboriginal traditions also identify figures formed by the \vocab{dark dust lanes} of the Milky Way --- regions of interstellar dust that block the light of stars behind them.
 
@@ -1628,7 +1639,7 @@ Western constellation traditions connect \textit{stars} into figures. Aboriginal
 
 \end{yr7box}
 
-\subsection{The Boorong star catalogue}
+\subsection{The Boorong star catalogue}\label{sub:7.2}
 
 The Boorong people (Wergaia, north-western Victoria) have one of the best-documented Aboriginal astronomical knowledge systems. With the assistance of Elder William Barak, surveyor William Stanbridge documented 47 named celestial objects in 1857:
 
@@ -1657,7 +1668,7 @@ The Boorong people (Wergaia, north-western Victoria) have one of the best-docume
 
 \end{yr7box}
 
-\subsection{The sky as ecological calendar}
+\subsection{The sky as ecological calendar}\label{sub:7.3}
 
 \begin{fnbox}{Wurundjeri sky knowledge in practice}
 On Wurundjeri Country, the rising of the Pleiades (Seven Sisters, \textit{Nurrumbunguttias}) marks the transition between seasons and signals specific ecological activities. The six-season Kulin calendar integrates the position and orientation of stars, the Milky Way, and the Moon to create a precise framework for land management that has been maintained across hundreds of generations.
@@ -1721,14 +1732,14 @@ teacher sets them as extension.
 
 \newpage
 % ============================================================
-\section[The Search for Life --- Astrobiology \textnormal{(above level)}]{The Search for Life --- Astrobiology}
+\section[The Search for Life --- Astrobiology \textnormal{(above level)}]{The Search for Life --- Astrobiology}\label{sec:8}
 % ============================================================
 \extension{This section sits \textbf{above} the Year 7 level. The core unit
 is complete without it --- work through it if you have finished the earlier
 sections, or if your teacher sets it as extension.}
 \vc{Science Understanding}{Biological sciences: Conditions for life; Earth and space sciences: Habitable zones; exoplanets}
 
-\subsection{Requirements for life as we know it}
+\subsection{Requirements for life as we know it}\label{sub:8.1}
 
 \begin{scaffold}{Entry task: what does life actually need?}
 Sort the eight conditions into the two columns, then rank the four you think
@@ -1780,7 +1791,7 @@ Life on Earth requires:
 
 \end{yr7box}
 
-\subsection{The habitable zone}
+\subsection{The habitable zone}\label{sub:8.2}
 
 The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from a star where liquid water can exist on a planet's surface. Earth is well within the Sun's habitable zone. Mars is on the outer edge.
 
@@ -1800,7 +1811,7 @@ The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from 
 
 \end{yr7box}
 \newpage
-\subsection{Promising targets in our solar system}
+\subsection{Promising targets in our solar system}\label{sub:8.3}
 
 \begin{itemize}
   \item \vocab{Mars}: ancient river channels, delta deposits, and lake beds confirm liquid water billions of years ago. Possible present-day liquid brines under the southern polar ice cap. Perseverance rover collecting samples for return to Earth
@@ -1823,7 +1834,7 @@ The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from 
 
 \end{yr7box}
 \newpage
-\subsection{Extremophiles}
+\subsection{Extremophiles}\label{sub:8.4}
 
 \vocab{Extremophiles} are organisms that thrive in conditions once thought impossible for life:
 \begin{itemize}
@@ -1846,7 +1857,7 @@ Their existence vastly expands the range of environments where we search for lif
 
 \end{yr7box}
 
-\subsection{Exoplanets and biosignatures}
+\subsection{Exoplanets and biosignatures}\label{sub:8.5}
 
 More than 5,500 exoplanets confirmed (2024). Detection methods:
 \begin{itemize}
@@ -1900,14 +1911,14 @@ Given the size and age of the universe, intelligent life should be detectable --
 
 \newpage
 % ============================================================
-\section[Gravity and Orbits \textnormal{(above level)}]{Gravity and Orbits}
+\section[Gravity and Orbits \textnormal{(above level)}]{Gravity and Orbits}\label{sec:9}
 % ============================================================
 \extension{This section sits \textbf{above} the Year 7 level. The core unit
 is complete without it --- work through it if you have finished the earlier
 sections, or if your teacher sets it as extension.}
 \vc{Science Understanding}{Physical sciences: Gravitational force; orbital motion; Newton's law of universal gravitation}
 
-\subsection{Newton's law of universal gravitation}
+\subsection{Newton's law of universal gravitation}\label{sub:9.1}
 
 Every object with mass attracts every other object with mass:
 
@@ -1941,7 +1952,7 @@ Where: $F$ = gravitational force (N), $G$ = gravitational constant ($6.67 \times
 
 \end{yr7box}
 \newpage
-\subsection{Orbital motion}
+\subsection{Orbital motion}\label{sub:9.2}
 
 \begin{scaffold}{Entry task: Newton's cannonball}
 A cannon sits on top of an impossibly tall mountain and fires horizontally.
@@ -2050,7 +2061,7 @@ The Moon's low escape velocity explains why it has no atmosphere: gas molecules 
 
 \newpage
 % ============================================================
-\section[Stars, Galaxies and Starlight \textnormal{(above level)}]{Stars, Galaxies and Starlight}
+\section[Stars, Galaxies and Starlight \textnormal{(above level)}]{Stars, Galaxies and Starlight}\label{sec:10}
 % ============================================================
 \extension{This section sits \textbf{above} the Year 7 level. The core unit
 is complete without it --- work through it if you have finished the earlier
@@ -2065,7 +2076,7 @@ sections, or if your teacher sets it as extension.}
 
 \vc{Science Understanding}{Earth and space sciences: Properties of stars; galaxies; scale of the universe}
 
-\subsection{Light-years and stellar distances}
+\subsection{Light-years and stellar distances}\label{sub:10.1}
 
 \begin{scaffold}{Entry task: which unit fits which distance?}
 Complete the table. For each distance, choose the unit that gives a sensible
@@ -2117,7 +2128,7 @@ When we observe a star 100 light-years away, we see it as it was 100 years ago -
 
 \end{yr7box}
 
-\subsection{Star types and the OBAFGKM sequence}
+\subsection{Star types and the OBAFGKM sequence}\label{sub:10.2}
 
 Stars are classified by surface temperature and colour:
 
@@ -2149,7 +2160,7 @@ M & Red         & $<$3,700 K & Proxima Centauri \\
 
 \end{yr7box}
 
-\subsection{Stellar life cycle (sun-like star)}
+\subsection{Stellar life cycle (sun-like star)}\label{sub:10.3}
 
 \begin{center}
 \begin{tikzpicture}[node distance=1.4cm, >=Stealth]
@@ -2200,7 +2211,7 @@ The H--R diagram plots stellar luminosity (vertical axis) against surface temper
 
 \vc{Science Understanding}{Physical sciences: Electromagnetic radiation; wave properties; telescopes as scientific instruments}
 
-\subsection{The electromagnetic spectrum}
+\subsection{The electromagnetic spectrum}\label{sub:10.4}
 
 \begin{scaffold}{Entry task: order the electromagnetic spectrum}
 Write the seven regions into the strip in order, longest wavelength on the
@@ -2257,7 +2268,7 @@ Gamma ray    & $<$0.01 nm & Highest & Supernovae, gamma-ray bursts \\
 
 \end{yr7box}
 
-\subsection{Telescopes}
+\subsection{Telescopes}\label{sub:10.5}
 
 \begin{itemize}
   \item \vocab{Refracting telescopes}: glass lenses bend light to a focus. Limited to small instruments
@@ -2278,7 +2289,7 @@ Gamma ray    & $<$0.01 nm & Highest & Supernovae, gamma-ray bursts \\
 
 \end{yr7box}
 
-\subsection{Spectroscopy --- reading starlight}
+\subsection{Spectroscopy --- reading starlight}\label{sub:10.6}
 
 When starlight passes through a prism or diffraction grating, \vocab{absorption lines} appear --- dark lines at specific wavelengths absorbed by elements in the star's outer atmosphere. Each element has a unique spectral fingerprint. From absorption spectra, astronomers determine:
 \begin{itemize}

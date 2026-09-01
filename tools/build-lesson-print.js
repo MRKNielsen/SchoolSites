@@ -52,10 +52,14 @@ function readMaster() {
 }
 
 /* Pull the title out of \section{Foo} or \section[short]{Foo}, and drop the
-   "(above level)" marker the TOC entries carry. */
+   "(above level)" marker the TOC entries carry.
+   Each \section also carries a trailing \label{sec:N} (the cover's contents
+   table \pageref's it). Strip that first — a greedy match to the last brace
+   otherwise swallows the label and leaves a stray "}" in the title. */
 function sectionTitle(line) {
-  const m = line.match(/^\\section(?:\[[^\]]*\])?\{(.*)\}\s*$/);
-  let t = m ? m[1] : line;
+  const bare = line.replace(/\\label\{[^}]*\}\s*$/, '');
+  const m = bare.match(/^\\section(?:\[[^\]]*\])?\{(.*)\}\s*$/);
+  let t = m ? m[1] : bare;
   return t.replace(/\\textnormal\s*\{\(above level\)\}/g, '').trim();
 }
 
