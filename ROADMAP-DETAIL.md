@@ -41,6 +41,23 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — pracs stripped from both unit planners (1 Sep 2026)
+
+Kodie's call: no practical or equipment-dependent activities in either
+`planner.html`, or their Word twins. Removed the leaf-starch practical and its
+write-up from Bio week 3, the quadrat survey, the classifying-plants prac, the
+adaptation dice game, the sorting cards, the eutrophication demo; and from
+Space the globe-and-torch and ball-and-lamp modelling, the shadow-stick
+tracking, the solar-system scale model, the diffraction-grating spectroscope,
+the night-sky viewing evening, and the specimen-handling framing of Lesson 4
+(which now runs from the deck's photographs and the Elatina data table). Both
+planners carry a note saying so.
+
+**Scope: the planners only.** The decks, booklets and unit indexes still
+describe these activities — Lesson 4's specimens are still in `deck4.html` and
+on the Space index, and Bio §6 still carries its practical. If the pracs are
+gone for good rather than "for now", those pages need the same pass.
+
 ### Landed — Space resequence: Lesson 3 to week 2, Lesson 4 optional (31 Aug 2026)
 
 Kodie's call. Week 1 is now Lessons 1–2, week 2 is Lessons 3–5, and **Lesson 4
