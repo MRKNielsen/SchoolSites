@@ -23,7 +23,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 
 | Subject | State | What's there |
 |---|---|---|
-| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric + portfolio answer key, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet, gated solutions) |
+| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric + portfolio answer key, booklet, research portfolio, bandicoot profile) · `space` (10 decks, 10 worksheets + collated booklet, quiz, planner, booklet + single-lesson print, gated solutions) |
 | year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
@@ -38,8 +38,37 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-methods | Stub | — |
 | year12-foundation | Stub | — |
 
-Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
+Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
+
+### Landed — Space worksheets (2 Sep 2026)
+
+Ten `worksheet.css` sheets for `year7-science/space`, one per lesson, 337
+marks in total, plus `worksheets-all.html` collating them. Each is linked
+under its lesson on the unit index via `.deck-item` + `.dc-wslink`, and the
+answers went into the existing gated `solutions.html` rather than a second
+gated page — a `.subhead` tagged `<span class="tag ws">Worksheet</span>` at
+the end of each lesson's section.
+
+Three things worth carrying forward:
+
+- **Worksheet answers are referenced `W<sheet>.<q>`, not `Q<n>.<n>`.** The
+  booklet's numbers are auto-generated and the reference sweep greps for
+  that exact shape, so a worksheet answer numbered Q1.1 would be read as a
+  booklet question and reported as drift.
+- **The sheets were generated from a content table, not hand-written.** The
+  marks total appears in three places per sheet (`.namebar`, the toolbar
+  hint, the per-part `.marks`) and CLAUDE.md asks for them to agree; the
+  cheapest way to guarantee that is to never type the number. Verified
+  across all ten, and against the index `.wl-marks` and the answer key.
+- **Only worksheet 7 carries a Country part.** All the unit's First Nations
+  content sits in Lesson 7 by design — it was deliberately gathered there.
+  Bio puts a Country question on every sheet because its content is spread
+  that way; copying that pattern into Space would have meant inventing
+  connections lesson by lesson.
+
+`.drawbox[data-h="md"]` was documented but had no rule, working only by
+falling through to the base height — now stated explicitly.
 
 ### Landed — pracs stripped from both unit planners (1 Sep 2026)
 

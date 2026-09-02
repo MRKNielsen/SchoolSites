@@ -300,6 +300,15 @@ path and not a stack of overlapping objects.
   `.chooser`/`.opts`/`.opt.correct` "pick the one that fits" cards,
   `.textflow`/`.figure-right` for prose wrapping a figure. `.key` on its
   own is a *keyboard cap* — a key-idea callout is `.box.key`.
+- **`.bookref` icons are opt-in modifiers, not baked into the chip.**
+  `.bookref.book` prefixes 📚, `.bookref.sheet` prefixes 📝, and
+  `.bookref.stack` drops the chip onto its own line beneath what it
+  annotates. Never type the emoji into the markup — bio-ecosystems used
+  to, in 108 chips, and Space then had none. The icon has to be a
+  modifier rather than a blanket `::before` because year12-algorithmics
+  uses a bare `.bookref` for "Adapted from VCAA Algorithmics (HESS)
+  Written Examination…" provenance lines, where a book glyph would be
+  wrong; those 29 stay bare deliberately.
 - `.box.country` is the First Nations / Caring for Country callout. Like
   the pedagogy colours it keeps one earth tone across every subject and
   does not follow the theme accent.

@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-09-01",
+ "generated": "2026-09-02",
  "tree": [
   {
    "t": "Home",
@@ -272,6 +272,62 @@ window.SITEMAP = {
          ]
         },
         {
+         "t": "Worksheets",
+         "g": 1,
+         "c": [
+          {
+           "t": "Worksheet 1 · Earth, Moon & Sun",
+           "h": "year7-science/space/worksheet1.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 2 · Day, Night & Seasons",
+           "h": "year7-science/space/worksheet2.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 3 · The Moon — Phases & Tides",
+           "h": "year7-science/space/worksheet3.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 4 · Reading the Rocks",
+           "h": "year7-science/space/worksheet4.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 5 · Our Solar System",
+           "h": "year7-science/space/worksheet5.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 6 · Space Technology & Sustainability",
+           "h": "year7-science/space/worksheet6.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 7 · Aboriginal & Torres Strait Islander Astronomy",
+           "h": "year7-science/space/worksheet7.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 8 · The Search for Life",
+           "h": "year7-science/space/worksheet8.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 9 · Gravity & Orbits",
+           "h": "year7-science/space/worksheet9.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 10 · Stars, Galaxies & Starlight",
+           "h": "year7-science/space/worksheet10.html",
+           "k": "space"
+          }
+         ]
+        },
+        {
          "t": "Resources",
          "g": 1,
          "c": [
@@ -288,6 +344,11 @@ window.SITEMAP = {
           {
            "t": "Solution Set",
            "h": "year7-science/space/solutions.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet Booklet · All 10 Worksheets",
+           "h": "year7-science/space/worksheets-all.html",
            "k": "space"
           }
          ]

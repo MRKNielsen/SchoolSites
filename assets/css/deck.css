@@ -187,6 +187,19 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff);
   border-radius: 999px; padding: 3px 12px;
 }
+/* Leading icon for a .bookref. Opt-in, because what the chip points at
+   varies: bio-ecosystems and Space cite a booklet page, bio also cites a
+   worksheet, and year12-algorithmics uses a bare .bookref for "Adapted
+   from VCAA…" exam provenance — where a book glyph would be plain wrong.
+   So the icon is a modifier, not a blanket ::before on .bookref.
+   Written as a CSS escape rather than a pasted glyph so the stylesheet
+   stays ASCII and the codepoint is unambiguous. */
+.bookref.book::before  { content: "\1F4DA"; margin-right: .45em; }
+.bookref.sheet::before { content: "\1F4DD"; margin-right: .45em; }
+/* A chip that sits on its own line under the thing it annotates, rather
+   than inline above it — replaces the repeated
+   style="display:block;margin-top:6px" in bio-ecosystems decks 8–11. */
+.bookref.stack { display: block; margin-top: 6px; }
 
 /* ---------- Prose defaults inside slides ----------
    The global reset zeroes all margins/padding, which is right for
