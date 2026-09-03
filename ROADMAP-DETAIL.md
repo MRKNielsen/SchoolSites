@@ -41,6 +41,30 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — seasons visualiser (2 Sep 2026)
+
+`assets/css/seasonsim.css` + `assets/js/seasonsim.js`, a third optional
+module in the `orbit.js` / `binomsim.js` mould: one line of markup,
+`<div class="seasonsim"></div>`, zero dependencies, colours from tokens,
+controls hidden in print. Live on Space deck 2 slide 6 (full width, under
+the existing two columns) and in `styleguide/deck-demo.html`.
+
+Two things about it are load-bearing and should not be "tidied":
+
+- **The close-up holds the axis at a fixed screen angle** and swings the
+  lit half around it. Rotating Earth instead, so the Sun stays on the
+  left, is easier to write and teaches the exact opposite of the
+  mechanism — the whole point is that nothing about Earth changes.
+- **The orbit is a circle.** Eccentricity is 0.017. A visibly elliptical
+  orbit with the Sun in the middle is what produces "it's summer because
+  we're closer", and deck 2 slide 7 had to be redrawn for exactly that.
+
+Verified by running the module under a small DOM shim rather than
+re-deriving its maths: polar night at the December solstice, midnight sun
+in June, terminator through both poles at both equinoxes, sub-solar
+latitude 23.4°S/N at the solstices, and the axis attributes byte-identical
+at every point in the year.
+
 ### Landed — Space worksheets (2 Sep 2026)
 
 Ten `worksheet.css` sheets for `year7-science/space`, one per lesson, 337

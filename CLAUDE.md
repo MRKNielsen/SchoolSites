@@ -74,6 +74,23 @@ Optional modules — link only when a deck uses them:
   `data-start="0..1"`, `data-labels="off"`. ~3.5 KB gzipped, no
   dependencies. Colours come from tokens so it follows the theme;
   controls are hidden in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/seasonsim.css` + `assets/js/seasonsim.js` — the seasons
+  visualiser. Markup is one line, `<div class="seasonsim"></div>`; the JS
+  builds the SVG (Sun, Earth on a circular orbit, and a close-up of Earth
+  with its lit half, equator and tropics), a readout naming the season,
+  date and sub-solar latitude, plus play/scrub/hemisphere controls.
+  Attributes: `data-hemisphere="south|north"` (default south — names the
+  Australian season), `data-start="0..1"` measured **from the December
+  solstice**, `data-labels="off"`. Colours come from tokens; controls are
+  hidden in print. Live in `styleguide/deck-demo.html`.
+  **Two things about it are deliberate and should not be "simplified".**
+  The close-up holds the axis at a *fixed screen angle* and swings the lit
+  half around it — rotating Earth instead so the Sun stays on the left is
+  easier to write and teaches the exact opposite of the mechanism. And the
+  orbit is a **circle**: eccentricity is 0.017, so a circle is very nearly
+  right, and a visibly elliptical orbit with the Sun in the middle is what
+  produces "it's summer because we're closer". Space deck 2 slide 7 was
+  drawn that way and had to be redrawn for precisely that reason.
 - `assets/css/binomsim.css` + `assets/js/binomsim.js` — the binomial →
   normal visualiser for 15F. Markup is one line,
   `<div class="binomsim"></div>`; the JS builds the SVG (exact

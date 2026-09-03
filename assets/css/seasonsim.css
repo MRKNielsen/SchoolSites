@@ -1,0 +1,100 @@
+/* ============================================================
+   seasonsim.css — SEASONS VISUALISER (optional module)
+   Pairs with assets/js/seasonsim.js. Link both only on decks that
+   use the component. Zero dependencies.
+
+     <div class="seasonsim"></div>
+
+   seasonsim.js builds the SVG and controls inside that div, so the
+   deck markup stays a single line. Every colour comes from
+   tokens.css, so the widget follows the deck's theme accent.
+   ============================================================ */
+
+.seasonsim {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vh;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 1.4vh 1vw 1.2vh;
+}
+
+.seasonsim svg { display: block; width: 100%; height: auto; }
+
+/* ---------- Scene ---------- */
+.ss-sun       { fill: var(--accent-warm); }
+.ss-sun-halo  { fill: var(--accent-warm); opacity: 0.16; }
+.ss-orbit     { fill: none; stroke: var(--line-strong); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.ss-station   { fill: var(--ink-faint); }
+
+.ss-mini-dark { fill: var(--ink-soft); opacity: 0.42; }
+.ss-mini-lit  { fill: var(--accent); }
+.ss-mini-ring { fill: none; stroke: var(--ink-faint); stroke-width: 1; opacity: 0.7; }
+.ss-mini-axis { stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 2 2; }
+
+/* ---------- Close-up ---------- */
+.ss-earth-dark { fill: var(--ink); opacity: 0.30; }
+.ss-earth-lit  { fill: var(--accent); opacity: 0.85; }
+.ss-earth-ring { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.ss-ray        { stroke: var(--accent-warm); stroke-width: 1.6; opacity: 0.75; }
+.ss-ray-head   { fill: var(--accent-warm); opacity: 0.75; }
+.ss-axis       { stroke: var(--ink); stroke-width: 2; }
+.ss-pole       { fill: var(--ink); }
+.ss-pole-lbl   { font-family: var(--font-display); font-size: 12px; font-weight: 700; fill: var(--ink); }
+.ss-equator    { stroke: #fff; stroke-width: 1.6; stroke-dasharray: 5 4; opacity: 0.85; }
+.ss-tropic     { stroke: #fff; stroke-width: 1; stroke-dasharray: 2 4; opacity: 0.6; }
+
+.ss-label      { font-family: var(--font-body); font-size: 11px; font-weight: 600; fill: var(--ink-soft); }
+.ss-label.is-key { fill: var(--accent); font-weight: 700; }
+
+/* ---------- Readout ---------- */
+.ss-readout {
+  display: flex; align-items: baseline; justify-content: center;
+  gap: 0.6em; flex-wrap: wrap; text-align: center;
+  font-family: var(--font-display);
+}
+.ss-season {
+  font-weight: 800; font-size: clamp(1rem, 1.9vw, 1.35rem);
+  color: var(--accent);
+}
+.ss-date { font-size: clamp(0.78rem, 1.2vw, 0.92rem); color: var(--ink-soft); font-weight: 600; }
+.ss-date.is-marker { color: var(--accent-warm); }
+.ss-tiltnote {
+  flex: 1 0 100%;
+  font-family: var(--font-body); font-weight: 600;
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem); color: var(--ink-soft);
+}
+
+/* ---------- Controls ---------- */
+.ss-controls { display: flex; align-items: center; gap: 0.7em; }
+.ss-controls input[type="range"] { flex: 1 1 auto; min-width: 0; accent-color: var(--accent); }
+
+.ss-btn {
+  flex: 0 0 auto;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  color: var(--accent); background: transparent;
+  border: 1px solid var(--accent); border-radius: 100px;
+  padding: 0.35em 0.95em; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.ss-btn:hover { background: var(--accent); color: #fff; }
+.ss-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ss-hemi {
+  font-family: var(--font-body); font-size: clamp(0.7rem, 1.05vw, 0.8rem);
+  color: var(--ink-soft); display: flex; align-items: center; gap: 0.4em;
+  white-space: nowrap;
+}
+
+/* Auto-play is opt-out for anyone who asked the OS for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .seasonsim .ss-btn.ss-play { display: none; }
+}
+
+/* Printing a deck or worksheet: keep the diagram, drop the chrome. */
+@media print {
+  .seasonsim { border-color: #999; break-inside: avoid; }
+  .ss-controls { display: none; }
+}
