@@ -590,6 +590,16 @@ solutions.css and uses the shared `.lockscreen` component; the payload
 lives in a single `var BLOB = {salt, iv, iter, ct};` line
 (PBKDF2-SHA256 → AES-GCM).
 
+- **Run `node tools/check-gated.js` before pushing.** Editing a payload
+  changes nothing on the site until the blob is re-encrypted, and that is
+  a *silent* failure — the payload is right, the deployed page is valid
+  HTML, and nothing complains. The Space answer key sat five days stale
+  across two whole-booklet renumberings this way: the site served an
+  8-section key while the booklet had moved to 10, so every answer past
+  §2 was attached to the wrong question number. The check compares each
+  payload's mtime against its gated page, flags a placeholder (empty
+  `ct`) blob, and diffs the payload's `QN.M` set against the built
+  booklet PDF. Exits 1 if anything is off.
 - **`tools/staff-crypt.html`** does the encrypting and decrypting —
   open it locally, it never sends the password anywhere. Editing a gated
   page means: decrypt → edit the payload → re-encrypt → paste the new
