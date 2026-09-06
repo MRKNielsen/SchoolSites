@@ -155,6 +155,27 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .subtitle { font-size: 19px; color: var(--muted); margin-bottom: 6px; }
 .pill { font-size: 14px; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 13px; }
 .head-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+/* Photograph inside a slide column, with its credit line beneath. Replaces
+   the inline width / border-radius / max-height that was repeated on every
+   <img> in the Year 7 decks. .tall for a portrait specimen shot; .grid4 lays
+   a set of specimen photos out two-up. */
+.photo { display: block; width: 100%; border-radius: 8px; object-fit: cover; max-height: 30vh; }
+.photo.tall { max-height: 46vh; }
+.photo.contain { object-fit: contain; background: var(--card); }
+.credit { font-size: 0.72em; color: var(--muted); margin-top: 4px; }
+.photogrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.photogrid figure { margin: 0; }
+.photogrid .photo { max-height: 20vh; }
+.photogrid figcaption { font-size: 0.74em; color: var(--ink-soft); margin-top: 3px; }
+@media (max-width: 900px) { .photogrid { grid-template-columns: 1fr; } }
+
+/* Above-level marker on a title slide's .head-meta. Filled rather than
+   outlined so it reads first among the pills. */
+.pill-ext {
+  color: #fff; background: var(--accent-dark); border-color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase; font-size: 12.5px;
+}
 
 /* Booklet/textbook page reference — small chip in the flow, usually
    right after the .eyebrow. Kept in-flow (not fixed) so it can't
@@ -166,6 +187,19 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff);
   border-radius: 999px; padding: 3px 12px;
 }
+/* Leading icon for a .bookref. Opt-in, because what the chip points at
+   varies: bio-ecosystems and Space cite a booklet page, bio also cites a
+   worksheet, and year12-algorithmics uses a bare .bookref for "Adapted
+   from VCAA…" exam provenance — where a book glyph would be plain wrong.
+   So the icon is a modifier, not a blanket ::before on .bookref.
+   Written as a CSS escape rather than a pasted glyph so the stylesheet
+   stays ASCII and the codepoint is unambiguous. */
+.bookref.book::before  { content: "\1F4DA"; margin-right: .45em; }
+.bookref.sheet::before { content: "\1F4DD"; margin-right: .45em; }
+/* A chip that sits on its own line under the thing it annotates, rather
+   than inline above it — replaces the repeated
+   style="display:block;margin-top:6px" in bio-ecosystems decks 8–11. */
+.bookref.stack { display: block; margin-top: 6px; }
 
 /* ---------- Prose defaults inside slides ----------
    The global reset zeroes all margins/padding, which is right for
@@ -184,9 +218,16 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 /* ---------- Layout ---------- */
 .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: start; }
 .cols.even { grid-template-columns: 1fr 1fr; }
+/* Mirror of the default split, for the case where the figure sits left and
+   the explanation right — a photo needs less width than the prose beside it. */
+.cols.wide-right { grid-template-columns: 1fr 1.15fr; }
+/* 70/30, for a wide diagram that needs the room with a narrow rail of
+   definitions beside it. Anything much past 70/30 leaves the text column
+   too narrow to set a line in. */
+.cols.figure-wide { grid-template-columns: 7fr 3fr; }
 @media (max-width: 900px) {
   .slide { padding: 5vh 5vw max(5vh, 76px); }
-  .cols, .cols.even { grid-template-columns: 1fr; gap: 18px; }
+  .cols, .cols.even, .cols.wide-right, .cols.figure-wide { grid-template-columns: 1fr; gap: 18px; }
 }
 
 /* ---------- Special slides ---------- */
@@ -436,6 +477,11 @@ table.tbl th { border-bottom: 3px solid var(--accent-dark); color: var(--accent-
 table.tbl td { padding: 6px 12px; border-bottom: 1px solid var(--line); }
 table.tbl td.c, table.tbl th.c { text-align: center; }
 table.tbl.filled th { background: var(--accent-dark); color: #fff; border-bottom: none; }
+/* Colour key dot for a table row that pairs with a figure — e.g. the
+   planet-size table and its to-scale diagram, where the dot is how a
+   student links a row to a circle. */
+.pdot { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+  margin-right: 8px; vertical-align: baseline; border: 1px solid rgba(0,0,0,.15); }
 
 /* Reference grid (e.g. exact trig values): compact, centred, row labels
    picked out, and roomier rows since cells hold stacked fractions. */
@@ -447,6 +493,20 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 /* ---------- Graphs & figures ---------- */
 .graph-card { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 12px 12px 6px; box-shadow: var(--shadow); }
 .graph-card svg { width: 100%; height: auto; display: block; }
+/* Squarish figures can overpower a column at full width. .narrow holds the
+   card to 80%, .narrower to 65%, .half to 50%. Prefer these over a
+   per-slide inline max-width.
+   All three are percentages of the containing column, which is itself
+   sized in px — so the figure keeps scaling with browser zoom and with
+   the slide, rather than being pinned to a fixed pixel size. */
+.graph-card.narrow  { max-width: 80%; margin-inline: auto; }
+.graph-card.narrower{ max-width: 65%; margin-inline: auto; }
+.graph-card.half    { max-width: 50%; margin-inline: auto; }
+/* Below tablet width a halved figure gets too small to read — let the
+   narrower variants relax back toward full width. */
+@media (max-width: 900px) {
+  .graph-card.narrow, .graph-card.narrower, .graph-card.half { max-width: 100%; }
+}
 .legend { display: flex; gap: 16px; padding: 8px 4px 2px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .pen { width: 22px; height: 0; border-top: 3px solid; border-radius: 2px; display: inline-block; }

@@ -23,7 +23,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 
 | Subject | State | What's there |
 |---|---|---|
-| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
+| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric + portfolio answer key, booklet, research portfolio, bandicoot profile) · `space` (10 decks, 10 worksheets + collated booklet, quiz, planner, booklet + single-lesson print, gated solutions) |
 | year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
@@ -38,8 +38,158 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-methods | Stub | — |
 | year12-foundation | Stub | — |
 
-Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
-4 gated pages.
+Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
+6 gated pages.
+
+### Landed — seasons visualiser (2 Sep 2026)
+
+`assets/css/seasonsim.css` + `assets/js/seasonsim.js`, a third optional
+module in the `orbit.js` / `binomsim.js` mould: one line of markup,
+`<div class="seasonsim"></div>`, zero dependencies, colours from tokens,
+controls hidden in print. Live on Space deck 2 slide 6 (full width, under
+the existing two columns) and in `styleguide/deck-demo.html`.
+
+Two things about it are load-bearing and should not be "tidied":
+
+- **The close-up holds the axis at a fixed screen angle** and swings the
+  lit half around it. Rotating Earth instead, so the Sun stays on the
+  left, is easier to write and teaches the exact opposite of the
+  mechanism — the whole point is that nothing about Earth changes.
+- **The orbit is a circle.** Eccentricity is 0.017. A visibly elliptical
+  orbit with the Sun in the middle is what produces "it's summer because
+  we're closer", and deck 2 slide 7 had to be redrawn for exactly that.
+
+Verified by running the module under a small DOM shim rather than
+re-deriving its maths: polar night at the December solstice, midnight sun
+in June, terminator through both poles at both equinoxes, sub-solar
+latitude 23.4°S/N at the solstices, and the axis attributes byte-identical
+at every point in the year.
+
+### Landed — Space worksheets (2 Sep 2026)
+
+Ten `worksheet.css` sheets for `year7-science/space`, one per lesson, 337
+marks in total, plus `worksheets-all.html` collating them. Each is linked
+under its lesson on the unit index via `.deck-item` + `.dc-wslink`, and the
+answers went into the existing gated `solutions.html` rather than a second
+gated page — a `.subhead` tagged `<span class="tag ws">Worksheet</span>` at
+the end of each lesson's section.
+
+Three things worth carrying forward:
+
+- **Worksheet answers are referenced `W<sheet>.<q>`, not `Q<n>.<n>`.** The
+  booklet's numbers are auto-generated and the reference sweep greps for
+  that exact shape, so a worksheet answer numbered Q1.1 would be read as a
+  booklet question and reported as drift.
+- **The sheets were generated from a content table, not hand-written.** The
+  marks total appears in three places per sheet (`.namebar`, the toolbar
+  hint, the per-part `.marks`) and CLAUDE.md asks for them to agree; the
+  cheapest way to guarantee that is to never type the number. Verified
+  across all ten, and against the index `.wl-marks` and the answer key.
+- **Only worksheet 7 carries a Country part.** All the unit's First Nations
+  content sits in Lesson 7 by design — it was deliberately gathered there.
+  Bio puts a Country question on every sheet because its content is spread
+  that way; copying that pattern into Space would have meant inventing
+  connections lesson by lesson.
+
+`.drawbox[data-h="md"]` was documented but had no rule, working only by
+falling through to the base height — now stated explicitly.
+
+### Landed — pracs stripped from both unit planners (1 Sep 2026)
+
+Kodie's call: no practical or equipment-dependent activities in either
+`planner.html`, or their Word twins. Removed the leaf-starch practical and its
+write-up from Bio week 3, the quadrat survey, the classifying-plants prac, the
+adaptation dice game, the sorting cards, the eutrophication demo; and from
+Space the globe-and-torch and ball-and-lamp modelling, the shadow-stick
+tracking, the solar-system scale model, the diffraction-grating spectroscope,
+the night-sky viewing evening, and the specimen-handling framing of Lesson 4
+(which now runs from the deck's photographs and the Elatina data table). Both
+planners carry a note saying so.
+
+**Scope: the planners only.** The decks, booklets and unit indexes still
+describe these activities — Lesson 4's specimens are still in `deck4.html` and
+on the Space index, and Bio §6 still carries its practical. If the pracs are
+gone for good rather than "for now", those pages need the same pass.
+
+### Landed — Space resequence: Lesson 3 to week 2, Lesson 4 optional (31 Aug 2026)
+
+Kodie's call. Week 1 is now Lessons 1–2, week 2 is Lessons 3–5, and **Lesson 4
+(Reading the Rocks) is an optional lesson** — badged on the unit index
+(`.deck-card.is-ext` + `Optional · Specimens`), pilled on its own title slide,
+and marked `optional` on the quiz page's topic chip.
+
+Consequences that had to move with it:
+
+- **The written assessment no longer covers §3.** It is drawn from §1, §2, §4,
+  §5 and §6. You cannot assess content a class may not have been taught.
+- **`quiz.js` gained `data-quiz-exclude`** — a comma-separated list of deck
+  numbers to drop from the spaced-retrieval pool, applied after
+  `data-quiz-before`. Decks 5–10 in Space carry `data-quiz-exclude="4"`, so a
+  class that skipped Lesson 4 is never cold-called on rhythmites. The
+  attribute is optional and absent markup behaves exactly as before.
+- Index quiz chips reworded to match ("Quiz: Lessons 1–3, 5–6").
+
+**Not done, deliberately:** the booklet still has §3 in sequence and unlabelled.
+Adding an "optional" divider means a `.tex` edit and three `xelatex` passes, and
+the answer key hardcodes `QN.M` question numbers — so it belongs in the same
+pass as the outstanding booklet rebuild, not bolted on here. §3 keeps its
+position, so nothing renumbered.
+
+### Landed — unit planner page type (27 Aug 2026)
+
+`assets/css/planner.css` — a new staff page type for unit planning documents:
+one wide table, a week per row, `@page` A4 landscape with the column headings
+repeated on every printed page. First use is
+`year7-science/bio-ecosystems/planner.html`, a 7-week plan of the 11 lessons
+in the faculty's existing column format (focus · learning intentions and
+success criteria · core activities · support and extension · optional
+activities · assessment), linked from a new *Planning* section on the unit
+index. The same content also exists as a Word file for the faculty planning
+folder — that copy lives outside the repo, in
+`7 Science/Bio/Bio_Ecosystems_Unit_Planner_Yr7.docx`, and is **not** kept in
+sync automatically. Whichever copy changes, change the other by hand.
+
+**Second use, 31 Aug 2026** — `year7-science/space/planner.html`, themed
+`theme-space`. Four rows matching the week grouping the Space index already
+declares (Week 4 is the above-level extension block), so the planner and the
+index can never disagree. Word twin at
+`7 Science/Space/Space_Unit_Planner_Yr7.docx`.
+
+Other units can reuse the page type as-is: copy a `planner.html`, swap the rows
+and the `theme-*` body class.
+
+### Landed — research portfolio answer key (25 Aug 2026)
+
+`year7-science/bio-ecosystems/portfolio-solutions.html` — model answers and
+marking criteria for all 11 stages of the Research Portfolio, plus the front
+matter and the closing self-check. Linked from the unit index's *Staff only*
+group and from a new *Staff only* section on `research-portfolio.html`.
+
+Three things worth knowing before editing it:
+
+- **The portfolio is unmarked and always was.** `\markscount` is a no-op in
+  `Bio_Research_Portfolio_Yr7_8.tex` and the closing page asks students to
+  judge themselves against the seven CAT criteria. So the key gives *model
+  responses and criteria*, not a mark scheme, and there is no marks tally to
+  keep in step — the check that matters is that the eleven stage titles still
+  match the built PDF.
+- **Every fact in it is traceable to `species-bandicoot.html`.** That is the
+  point: the portfolio is a research task answered from the species profile,
+  so an answer the profile can't support is a wrong answer even if it's true.
+  Each stage's `.sh-meta` line links the profile section the answer lives in.
+  If the profile changes, the key has to move with it.
+- **It ships with a placeholder blob** — `{v:2, iv:"", ct:"", keys:[]}` — so
+  the page locks but cannot yet unlock. Encrypt `portfolio-solutions-payload.html`
+  through `tools/staff-crypt.html` and paste the emitted line over it. Staff
+  password only unless a student password is deliberately added: unlike the
+  worksheet answers, this key is written to the teacher (what to send back,
+  which error to expect) and it answers a task students are meant to research
+  themselves.
+
+One new shared component: `pre.calc` in `solutions.css` — the existing `.calc`
+box with the element's own whitespace kept and `overflow-x: auto`, for a tree
+or food-web trace whose meaning is its alignment. It scrolls rather than
+wraps, so a diagram wider than a phone can't push the page sideways.
 
 ### Landed — collated worksheet booklets (18 Aug 2026)
 
@@ -171,12 +321,11 @@ label on its own.
 
 ### Tier 1 — Small fixes (under a session each)
 
-- [ ] **Encrypt `year7-science/space/solutions.html`.** It ships
-      `var BLOB = {salt:"", iv:"", iter:0, ct:""}` — the page locks but
-      can never unlock, which is worse than not shipping it. The
-      plaintext `solutions-payload.html` is right there (and correctly
-      gitignored). Run it through `tools/staff-crypt.html`, paste the
-      emitted line over the placeholder. **S**
+- [x] **Encrypt `year7-science/space/solutions.html`.** Already done and
+      the item had gone stale — the page now carries a real v2 blob with
+      both a staff and a student wrapper, and unlocks. Confirmed by
+      parsing the blob, not by reading this file. **S**
+      *(found already landed 2026-08-25)*
 - [x] **Detheme the SVG figures in `year12-specialist/term-3/slides/`.**
       All eleven decks, not just T3W01–05: 576 elements rethemed, 21
       per-figure `<style>` blocks removed, 27 `style="font-size:…"`

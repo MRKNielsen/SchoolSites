@@ -59,7 +59,11 @@ Optional modules — link only when a deck uses them:
   `window.RETRIEVAL_QUESTIONS = [{deck, q, opts, ans}]`; a slide marked
   `class="slide quiz-slide" data-quiz-before="9" data-quiz-count="5"`
   containing `<div class="quiz-container"></div>` draws that many
-  questions at random from earlier lessons and scores them. quiz.css also
+  questions at random from earlier lessons and scores them. Add
+  `data-quiz-exclude="4"` (comma-separated deck numbers) where a unit has
+  an **optional** lesson inside an otherwise sequential run — without it a
+  class that skipped that lesson gets cold-called on content it never saw.
+  Year 7 Space uses it for Lesson 4. quiz.css also
   styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
 - `assets/css/orbit.css` + `assets/js/orbit.js` — the orbital phase
   visualiser. Markup is one line, `<div class="orbitsim"></div>`; the JS
@@ -70,6 +74,23 @@ Optional modules — link only when a deck uses them:
   `data-start="0..1"`, `data-labels="off"`. ~3.5 KB gzipped, no
   dependencies. Colours come from tokens so it follows the theme;
   controls are hidden in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/seasonsim.css` + `assets/js/seasonsim.js` — the seasons
+  visualiser. Markup is one line, `<div class="seasonsim"></div>`; the JS
+  builds the SVG (Sun, Earth on a circular orbit, and a close-up of Earth
+  with its lit half, equator and tropics), a readout naming the season,
+  date and sub-solar latitude, plus play/scrub/hemisphere controls.
+  Attributes: `data-hemisphere="south|north"` (default south — names the
+  Australian season), `data-start="0..1"` measured **from the December
+  solstice**, `data-labels="off"`. Colours come from tokens; controls are
+  hidden in print. Live in `styleguide/deck-demo.html`.
+  **Two things about it are deliberate and should not be "simplified".**
+  The close-up holds the axis at a *fixed screen angle* and swings the lit
+  half around it — rotating Earth instead so the Sun stays on the left is
+  easier to write and teaches the exact opposite of the mechanism. And the
+  orbit is a **circle**: eccentricity is 0.017, so a circle is very nearly
+  right, and a visibly elliptical orbit with the Sun in the middle is what
+  produces "it's summer because we're closer". Space deck 2 slide 7 was
+  drawn that way and had to be redrawn for precisely that reason.
 - `assets/css/binomsim.css` + `assets/js/binomsim.js` — the binomial →
   normal visualiser for 15F. Markup is one line,
   `<div class="binomsim"></div>`; the JS builds the SVG (exact
@@ -94,7 +115,9 @@ Other page types: `assets/css/course.css` (unit landing),
 `assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
 (answer-key pages), `assets/css/worksheet.css` (printable student
 worksheets), `assets/css/profile.css` (species / case-study reference
-pages), `assets/css/site.css` (plain index pages).
+pages), `assets/css/planner.css` (staff unit-planning documents — one
+wide table, prints A4 landscape), `assets/css/site.css` (plain index
+pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -294,6 +317,15 @@ path and not a stack of overlapping objects.
   `.chooser`/`.opts`/`.opt.correct` "pick the one that fits" cards,
   `.textflow`/`.figure-right` for prose wrapping a figure. `.key` on its
   own is a *keyboard cap* — a key-idea callout is `.box.key`.
+- **`.bookref` icons are opt-in modifiers, not baked into the chip.**
+  `.bookref.book` prefixes 📚, `.bookref.sheet` prefixes 📝, and
+  `.bookref.stack` drops the chip onto its own line beneath what it
+  annotates. Never type the emoji into the markup — bio-ecosystems used
+  to, in 108 chips, and Space then had none. The icon has to be a
+  modifier rather than a blanket `::before` because year12-algorithmics
+  uses a bare `.bookref` for "Adapted from VCAA Algorithmics (HESS)
+  Written Examination…" provenance lines, where a book glyph would be
+  wrong; those 29 stay bare deliberately.
 - `.box.country` is the First Nations / Caring for Country callout. Like
   the pedagogy colours it keeps one earth tone across every subject and
   does not follow the theme accent.
@@ -342,6 +374,15 @@ path and not a stack of overlapping objects.
   symbol itself in prose.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
+  **Forward nav (→ / space / next) reveals the next hidden thing on the
+  slide before advancing** — a `.steps` line, a `.frag`, or a `.qcard`
+  answer, in document order — so a worked example can be walked through
+  from the presenter remote without touching a button. Reveals inside a
+  `.partpanel` that isn't on screen are skipped, so an arrow press never
+  looks like a no-op. Buttons and keys read the same DOM state, so the
+  two can be mixed freely; `R` reveals without any chance of advancing.
+  Backward nav un-reveals fragments only — steps and answers stay up, so
+  `←` backs out of a long worked example in one press.
   `.frag` reveals on forward navigation and works on SVG groups too, so
   a `<g class="frag">` is a diagram layer. `<g class="vanish">` fades out
   once a later `.frag` appears. Where a diagram layer must pair with
@@ -531,20 +572,34 @@ standalone all-worksheets list, if a unit wants one instead.
 ## Staff-gated pages
 
 Some pages are for teachers only and ship their content as an encrypted
-blob decrypted in the browser with the staff password: `solutions.html`
-(answer key) and `rubric.html` (the Ecosystem Investigation marking tool)
-in year7-science/bio-ecosystems, plus `solutions.html` in
-year7-science/space.
+blob decrypted in the browser with the staff password. In
+year7-science/bio-ecosystems: `solutions.html` (answer key),
+`worksheets-all-solutions.html` (the collated worksheet booklet with
+answers), `portfolio-solutions.html` (the Research Portfolio key) and
+`rubric.html` (the Ecosystem Investigation marking tool). In
+year7-science/space: `solutions.html`.
 
-**Space's `solutions.html` is not yet encrypted** — it ships the shell
-with a placeholder `var BLOB = {salt:"", iv:"", iter:0, ct:""};`. Encrypt
-`solutions-payload.html` through `tools/staff-crypt.html` and paste the
-emitted line over the placeholder. Until then the page locks but cannot
-unlock. The shell links tokens.css +
+**`portfolio-solutions.html` is not yet encrypted** — it ships the shell
+with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
+locks but cannot unlock. Encrypt `portfolio-solutions-payload.html`
+through `tools/staff-crypt.html` and paste the emitted line over the
+placeholder. Staff password only unless a student one is deliberately
+added — that key answers a task students are meant to research
+themselves. The shell links tokens.css +
 solutions.css and uses the shared `.lockscreen` component; the payload
 lives in a single `var BLOB = {salt, iv, iter, ct};` line
 (PBKDF2-SHA256 → AES-GCM).
 
+- **Run `node tools/check-gated.js` before pushing.** Editing a payload
+  changes nothing on the site until the blob is re-encrypted, and that is
+  a *silent* failure — the payload is right, the deployed page is valid
+  HTML, and nothing complains. The Space answer key sat five days stale
+  across two whole-booklet renumberings this way: the site served an
+  8-section key while the booklet had moved to 10, so every answer past
+  §2 was attached to the wrong question number. The check compares each
+  payload's mtime against its gated page, flags a placeholder (empty
+  `ct`) blob, and diffs the payload's `QN.M` set against the built
+  booklet PDF. Exits 1 if anything is off.
 - **`tools/staff-crypt.html`** does the encrypting and decrypting —
   open it locally, it never sends the password anywhere. Editing a gated
   page means: decrypt → edit the payload → re-encrypt → paste the new
@@ -607,6 +662,26 @@ Build a booklet with `xelatex` run **three times** (TOC, then
 `\LastPage`), from a scratch copy of `booklet/` — the `.aux`/`.log`/
 `.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
 
+**Single-lesson handouts are generated, never hand-copied.**
+
+```bash
+node tools/build-lesson-print.js          # list the sections
+node tools/build-lesson-print.js 1        # write Space_Lesson1_Print.tex
+node tools/build-lesson-print.js --all
+```
+
+It slices the master `.tex` — preamble verbatim, a compact cover in
+place of the titlepage and TOC, then the chosen `\section` block — and
+never modifies the master. A hand-made second `.tex` would drift the
+first time a question was corrected, with nothing to signal it; this
+keeps one source of truth. The emitted file carries a "GENERATED —
+do not edit" header, and is safe to commit alongside its PDF.
+
+The one subtlety: it emits `\setcounter{section}{N-1}` before the body,
+because `\question` numbers off `\thesection`. Without it Lesson 3's
+handout would print Q1.1… instead of Q3.1… and could not be marked
+against the existing answer key.
+
 Booklets have a question apparatus already defined in the preamble —
 `\question{marks}{text}`, `\anslines{n}` (ruled writing lines),
 `\answerbox{height}`, `\markscount{n}`, and the `yr7box` (at the level)
@@ -639,7 +714,22 @@ understanding" at the end of each subsection, questions numbered
 box kept last. Don't number the "Your turn" `scaffold` blocks — they
 drift out of sync when sections are reordered.
 
-`.bookref` chips must be derived from the booklet's `.toc` after a
+**Every `\section` and `\subsection` in the Space booklet carries a
+`\label{sec:N}` / `\label{sub:N.M}`**, and the cover's contents table
+`\pageref`s them. That serves two purposes: the contents table can never
+list a stale page, and a reference sweep reads exact page numbers out of
+the `.aux` —
+
+```bash
+grep -o '\\newlabel{su\?[bc]:[0-9.]*}{{[^}]*}{[0-9]*}' booklet/*.aux
+```
+
+— rather than scraping headings out of `pdftotext` output, which breaks
+on whitespace and on any heading that wraps. Add the same labels to any
+booklet that needs a sweep. Note the `.toc` file only exists when
+`\tableofcontents` is present; the `.aux` is always written.
+
+`.bookref` chips must be derived from the booklet's labels after a
 build, never hand-written. Space's original chips cited pages 38–71 of a
 22-page booklet — the numbers followed a synthetic `(N-1)*6+3` pattern —
 and their `QX.Y` references pointed at numbered questions the booklet

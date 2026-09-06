@@ -43,12 +43,13 @@
 \usepackage{ragged2e}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{float}
 
 % ── Colour Palette ───────────────────────────────────────────────────────────
 % Primary: Space / Navy (unit identity)
 \definecolor{Navy}       {HTML}{0B1A3E}
 \definecolor{Space}      {HTML}{1B3378}
-\definecolor{SpaceLight} {HTML}{E4E9F7}
+\definecolor{SpaceLight} {HTML}{d8dce6}
 \definecolor{SpaceMid}   {HTML}{2E4FAF}
 % Gold accent
 \definecolor{Gold}       {HTML}{D4A017}
@@ -194,6 +195,28 @@
   left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
 }
 
+% Above-level banner for a whole section. Sits straight under the
+% \section heading of a section that runs past the Year 7 level, and
+% reuses the violet of yr8box so "violet = above the level" holds
+% throughout the booklet. Not breakable — it is two or three lines.
+\newtcolorbox{extbox}{
+  breakable=false, arc=2.5mm, boxrule=0.9pt,
+  colback=VioletLight, colframe=Violet!65,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Fill-in table rows. Entry-task tables are written in, so their rows need
+% far more height than a reference table's. Wrap the tabular in
+% \begin{fillin}...\end{fillin} rather than setting \arraystretch by hand,
+% so every entry task in the booklet writes on the same size line.
+\newenvironment{fillin}[1][2.6]{\begingroup\renewcommand{\arraystretch}{#1}}{\endgroup}
+
+\newcommand{\extension}[1]{%
+  \begin{extbox}
+  {\headingfont\bfseries\color{Violet}Above level --- extension.}\ #1
+  \end{extbox}
+  \medskip
+}
+
 % ── Custom Commands ───────────────────────────────────────────────────────────
 
 % Answer box: \answerbox{height e.g. 3cm}
@@ -279,93 +302,128 @@
 % Victorian Curriculum reference
 \newcommand{\vc}[2]{\small\textcolor{DarkGrey}{\textit{VC 2.0: #1 --- #2}}}
 
+\definecolor{moonshadow}{HTML}{2E3350} % --accent      (unlit)
+\definecolor{moonlit}{HTML}{DCE6F5}    % --c-line-cool (lit)
+\definecolor{moonink}{HTML}{1B1F2A}    % --ink
+\definecolor{moonsoft}{HTML}{6B7280}   % --ink-soft
+
+\newcommand{\moonR}{0.55}   % disc radius (cm)
+\newcommand{\moonGap}{1.71} % centre spacing (cm) — SVG's 112/36 ratio
+
+% {index}{mirror: 1=waxing, -1=waning}{terminator x-radius / R}{label}
+\newcommand{\moonphase}[4]{%
+	\begin{scope}[shift={(#1*\moonGap,0)}]
+		\fill[moonshadow] (0,0) circle[radius=\moonR cm];
+		\begin{scope}[xscale=#2]
+			\fill[moonlit] (0,\moonR)
+			arc[start angle=90,  end angle=-90, radius=\moonR cm]
+			arc[start angle=-90, end angle=90,  x radius=#3*\moonR cm,
+			y radius=\moonR cm] -- cycle;
+		\end{scope}
+		\draw[moonshadow, line width=0.4pt] (0,0) circle[radius=\moonR cm];
+		\node[moonink, font=\scriptsize, align=center, anchor=north]
+		at (0,-\moonR-0.14) {#4};
+\end{scope}}
+
+\usetikzlibrary{arrows.meta}
+
+\definecolor{tideaccent}{HTML}{2E3350}   % --accent
+\definecolor{tidewarm}{HTML}{C86A2E}     % --accent-warm
+\definecolor{tidewarmsoft}{HTML}{FBE7D2} % --accent-warm-soft
+\definecolor{tidecool}{HTML}{DCE6F5}     % --c-line-cool
+\definecolor{tidefaint}{HTML}{9AA3B2}    % --ink-faint
+\definecolor{tidesoft}{HTML}{6B7280}     % --ink-soft
+
+% Coordinates below are the SVG's own (0,0)-(380,200) grid.
+% 0.021cm per SVG unit  ->  the figure is 8 cm wide; change it to rescale.
+\newcommand{\tideunit}{0.021cm}
 
 % ============================================================
 \begin{document}
 % ============================================================
 
 % ---- TITLE PAGE --------------------------------------------
-\begin{titlepage}
-\pagecolor{Navy}
-\color{white}
-\vspace*{3cm}
-\begin{center}
-  {\headingfont\fontsize{11pt}{13pt}\selectfont\color{Gold}
-    NORTHCOTE HIGH SCHOOL\ \textbullet\ YEAR 7/8 SCIENCE\ \textbullet\ VICTORIAN CURRICULUM 2.0}
+\thispagestyle{plain}
 
-  \vspace{1.4cm}
-  {\headingfont\fontsize{42pt}{46pt}\selectfont\bfseries Space}
+% ==========================================================================
+%  COVER PAGE
+%  Same shape as the Biodiversity & Ecosystems booklet: rounded banner block,
+%  student details, Acknowledgement, colour legend, contents table. The two
+%  booklets sit side by side in a student's folder, so they should read as a set.
+%
+%  The contents table uses \pageref against a \label on each \section — never
+%  hand-typed page numbers. The previous cover was still listing the original
+%  11-lesson ordering months after the unit was consolidated to 10, which is
+%  exactly what hand-typed numbers do.
+% ==========================================================================
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=Navy, colframe=Navy,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Gold}\footnotesize\MakeUppercase{Unit Booklet \textbullet\ Years 7 and 8}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{40}{44}\selectfont Space}\\[8pt]
+    {\large\color{white!85!Navy}\itshape The Earth--Moon--Sun system \textbullet\ The solar system\\[2pt] Space technology \textbullet\ First Nations astronomy}\\[14pt]
+    {\headingfont\color{white!72!Navy}\normalsize
+      Victorian Curriculum F--10 Version 2.0 \textbar{}
+      Earth and space sciences \textbar{} Science as a Human Endeavour}
+  \end{center}
+\end{tcolorbox}
 
-  \vspace{0.8cm}
-  {\headingfont\fontsize{18pt}{22pt}\selectfont\color{SpaceLight}
-    Student Workbook}
+\vspace{10pt}
 
-  \vspace{2.2cm}
-  \textcolor{Gold}{\rule{10cm}{1.5pt}}
+\begin{tabular}{@{}p{2.2cm} p{6cm} p{2.2cm} p{3.4cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{5.8cm}} & \textbf{Class:}      & \underline{\hspace{3.2cm}} \\[8pt]
+  \textbf{Teacher:} & \underline{\hspace{5.8cm}} & \textbf{Year level:} & \underline{\hspace{3.2cm}} \\
+\end{tabular}
 
-  \vspace{1.8cm}
-  {\fontsize{12pt}{16pt}\selectfont\color{SpaceLight}
-    Covering 11 lessons across Sections 1--11:}
+\vspace{10pt}
 
-  \vspace{0.6cm}
-  {\fontsize{11pt}{15pt}\selectfont\color{white!85!Navy}
-    Earth, Moon \& Sun \textbullet\ Day, Night \& Seasons \textbullet\ Moon Phases \& Tides\\[0.3em]
-    Our Solar System \textbullet\ Stars \& Galaxies \textbullet\ Space Exploration\\[0.3em]
-    Gravity \& Orbits \textbullet\ Light \& Telescopes \textbullet\ Aboriginal Astronomy\\[0.3em]
-    Space \& Sustainability \textbullet\ The Search for Life}
-
-  \vspace{2.4cm}
-  \textcolor{Gold}{\rule{10cm}{1.5pt}}
-
-  \vspace{1.6cm}
-  {\fontsize{11pt}{14pt}\selectfont\color{SpaceLight}
-    Name: \underline{\hspace{7cm}}\ \ \ Class: \underline{\hspace{3cm}}}
-
-  \vspace{0.6cm}
-  {\fontsize{10pt}{13pt}\selectfont\color{white!60!Navy}
-    \textit{We acknowledge the Wurundjeri-Woiwurrung people of the Kulin Nation\\
-    as the Traditional Custodians of the Country on which we learn.}}
-\end{center}
-\end{titlepage}
-
-\nopagecolor
-\newpage
-
-% ---- ACKNOWLEDGEMENT OF COUNTRY ----------------------------
 \begin{fnbox}{Acknowledgement of Country}
-We acknowledge the Wurundjeri-Woiwurrung people of the Kulin Nation as the Traditional Custodians of the Country on which Northcote High School stands. We pay our respects to Elders past, present, and emerging. Aboriginal and Torres Strait Islander astronomical knowledge --- developed over tens of thousands of years --- is woven throughout this unit as living, ongoing science, not as a historical artefact.
-
-\medskip
-\textit{Throughout this booklet, the} \textcolor{Earth}{\textbf{earth-coloured boxes}} \textit{highlight First Nations perspectives and knowledge. These are integral to the science we study, not supplementary.}
+This booklet was created on the unceded Country of the Wurundjeri-Woiwurrung people of the Kulin Nation. We acknowledge Elders past, present, and emerging. Aboriginal and Torres Strait Islander peoples have read, recorded and navigated by this sky for tens of thousands of years --- the oldest continuous astronomical tradition on Earth --- and that knowledge appears throughout this unit as living science, not history.
 \end{fnbox}
 
-\vspace{0.5em}
+\vspace{8pt}
 
 \begin{infobox}{How to use this booklet}
-\begin{itemize}
-  \item This booklet accompanies all 8 lessons of the Space unit
-  \item Work through each section during class; complete starred questions ($\star$) for homework
-  \item \textbf{Year 7} students complete all unshaded sections
-  \item \textbf{Year 8} students also complete the \textcolor{Violet}{\textbf{purple Year 8 Extension}} boxes in each section
-  \item Diagrams and tables with blank spaces are for you to complete during the lesson
-  \item Vocabulary terms are shown in \vocab{bold blue} --- add them to your glossary
-\end{itemize}
+Sections run in the order the lessons are taught --- Section~N goes with Lesson~N. Work through them in order; each one builds on the last.
+
+\medskip
+\begin{tabular}{@{}ll@{}}
+  \textcolor{Space}{\rule{10pt}{10pt}}\ \textbf{Blue boxes}   & Year 7 core content and questions \\
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Violet boxes} & Above level --- Year 8 extension \\
+  \textcolor{GoldDark}{\rule{10pt}{10pt}}\ \textbf{Gold boxes} & Entry tasks, scaffolds and worked examples \\
+  \textcolor{Earth}{\rule{10pt}{10pt}}\ \textbf{Brown boxes}  & First Nations perspectives \\
+\end{tabular}
 \end{infobox}
-\newpage
-% Contents lists sections and subsections only. The \subsubsection level
-% is all diagram/figure headings ("Diagram: Label the layers of ..."),
-% which belong on the page, not in the contents.
-\setcounter{tocdepth}{2}
-\tableofcontents
-\newpage
+
+\vspace{8pt}
+
+\begingroup\hypersetup{linkcolor=Ink}
+\begin{tabular}{@{}C{0.7cm} L{8.4cm} L{2.4cm} C{1.6cm}@{}}
+  \thead{\#} & \thead{Section} & \thead{} & \thead{Page} \\
+  \talt 1  & Earth, Moon \& Sun --- Scale and Structure      &                                               & p.\ \pageref{sec:1} \\
+        2  & Day, Night \& Seasons                           &                                               & p.\ \pageref{sec:2} \\
+  \talt 3  & The Moon --- Phases \& Tides                    &                                               & p.\ \pageref{sec:3} \\
+        4  & Reading the Rocks & \textcolor{GoldDark}{\small\itshape optional} & p.\ \pageref{sec:4} \\
+  \talt 5  & Our Solar System                                &                                               & p.\ \pageref{sec:5} \\
+        6  & Space Technology \& Sustainability              &                                               & p.\ \pageref{sec:6} \\
+  \talt 7  & Aboriginal \& Torres Strait Islander Astronomy  &                                               & p.\ \pageref{sec:7} \\
+        8  & The Search for Life --- Astrobiology            & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:8} \\
+  \talt 9  & Gravity \& Orbits                               & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:9} \\
+        10 & Stars, Galaxies \& Starlight                    & \textcolor{Violet}{\small\itshape above level}& p.\ \pageref{sec:10} \\
+\end{tabular}
+\endgroup
 
 \newpage
 % ============================================================
-\section{Earth, Moon and Sun --- Scale and Structure}
+\section{Earth, Moon and Sun --- Scale and Structure}\label{sec:1}
 % ============================================================
 \vc{Science Understanding}{Physical sciences: Earth and space sciences; scale and relative size of Earth, Moon and Sun}
 
-\subsection{The scale of Earth, Moon and Sun}
+\subsection{The scale of Earth, Moon and Sun}\label{sub:1.1}
 
 The three most important objects in our immediate cosmic environment differ enormously in size. Understanding their relative sizes is foundational to everything else in this unit.
 
@@ -403,7 +461,7 @@ If Earth were the size of a tennis ball (6.7 cm across), the Moon would be a mar
 
 \end{yr7box}
 \newpage
-\subsection{Structure of Earth}
+\subsection{Structure of Earth}\label{sub:1.2}
 
 Earth has four main layers:
 \begin{itemize}
@@ -460,8 +518,10 @@ Earth has four main layers:
 \anslines{3}
 
 \end{yr7box}
+
+
 \newpage
-\subsection{The Moon}
+\subsection{The Moon}\label{sub:1.3}
 
 The Moon is Earth's only natural \vocab{satellite}. It produces no light of its own --- everything we see is reflected sunlight.
 
@@ -501,7 +561,7 @@ Two kinds of terrain are visible with the naked eye. The number of craters on a 
 
 
 
-\subsection{Structure of the Sun}
+\subsection{Structure of the Sun}\label{sub:1.4}
 
 The Sun is a \vocab{main sequence star} --- it converts hydrogen into helium through \vocab{nuclear fusion} in its core.
 
@@ -572,16 +632,16 @@ A flash of light leaves the Moon. How long before we see it? (Moon is 384,400 km
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 9 marks}
 
 \question{2}{Define nuclear fusion as it occurs in the Sun.}
-\anslines{2}
-
-\question{2}{State the temperature of the Sun's core and of its photosphere.}
-\anslines{2}
-
-\question{3}{Jupiter is 5.20 AU from the Sun. Sunlight reaches Earth (1 AU) in 500 seconds. Calculate how long sunlight takes to reach Jupiter, in minutes and seconds.}
 \anslines{4}
 
-\end{yr7box}
+\question{2}{State the temperature of the Sun's core and of its photosphere.}
+\anslines{4}
 
+\question{3}{Jupiter is 5.20 AU from the Sun. Sunlight reaches Earth (1 AU) in 500 seconds. Calculate how long sunlight takes to reach Jupiter, in minutes and seconds.}
+\anslines{8}
+
+\end{yr7box}
+\newpage
 \begin{yr8box}
 	\textbf{Year 8 Extension: How the Moon formed --- the Giant Impact Hypothesis}
 	
@@ -597,19 +657,56 @@ A flash of light leaves the Moon. How long before we see it? (Moon is 384,400 km
 	\medskip
 	\textbf{Why it matters}: the Moon's mass stabilises Earth's axial tilt at about 23.5°. Without it, the tilt could wander between 0° and 85° over millions of years, making stable long-term climates --- and possibly complex life --- far less likely.
 \end{yr8box}
+
+\begin{yr8box}
+	\textbf{Year 8 Extension: Earth's magnetosphere and space weather}
+	
+	The liquid iron in Earth's \textbf{outer core} is constantly moving, and moving
+	metal generates a magnetic field --- the \vocab{dynamo effect}. That field does
+	not stop at the surface. It reaches tens of thousands of kilometres out into
+	space, forming the \vocab{magnetosphere}: an invisible shield around the whole
+	planet.
+	
+	\smallskip
+	It has something to shield us from.
+	
+	\begin{itemize}
+		\item \vocab{Solar wind} --- a constant stream of charged particles blowing
+		outward from the Sun at 400--800 km/s. It never stops.
+		\item \vocab{Coronal mass ejections} (CMEs) --- huge bursts of plasma thrown
+		off the Sun, which can reach Earth in one to three days.
+		\item \vocab{Auroras} --- the magnetosphere funnels charged particles toward
+		the poles, where they collide with atmospheric gases and make them glow.
+		This is the \textit{aurora australis} in the south and the
+		\textit{aurora borealis} in the north. An aurora is what the shield
+		looks like while it is working.
+	\end{itemize}
+	
+	\smallskip
+	\vocab{Space weather} is the name for these events, and it has consequences on
+	the ground. On 13 March 1989 a geomagnetic storm induced currents in Quebec's
+	power transmission lines large enough to collapse the entire provincial grid in
+	under 90 seconds, leaving about six million people without electricity for nine
+	hours. Modern GPS, satellites and radio communication are all vulnerable.
+	
+	\medskip
+	\noindent\textbf{Extension challenge.}\; Mars has no global magnetic field, and
+	most of its atmosphere has been stripped away by the solar wind over billions of
+	years. Earth has both a field and an atmosphere. What does the comparison suggest
+	the magnetic field is doing --- and what might happen if Earth's field weakened
+	a great deal?
+	\anslines{8}
+\end{yr8box}
+
 \newpage
-\section{Predictable Patterns in the Sky}
 % ============================================================
-\needspace{5\baselineskip}
-\vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part A --- Day, Night and Seasons}
-\vspace{0.2em}
 
-\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
-\vspace{0.6em}
-
+\newpage
+% ============================================================
+\section{Day, Night and Seasons}\label{sec:2}
+% ============================================================
 \vc{Science Understanding}{Earth and space sciences: Earth's rotation and revolution; axial tilt and seasons}
-\subsection{Why we have day and night}
+\subsection{Why we have day and night}\label{sub:2.1}
 
 Earth \vocab{rotates} (spins on its axis) once every \textbf{24 hours}. The side facing the Sun experiences day; the opposite side experiences night.
 
@@ -620,18 +717,14 @@ Earth \vocab{rotates} (spins on its axis) once every \textbf{24 hours}. The side
 \end{itemize}
 
 \begin{scaffold}{Draw it: day and night}
-Draw a simple diagram showing \textbf{Earth and the Sun}. On your diagram:
+Copy the simple diagram showing \textbf{Earth and the Sun}. On your diagram:
 \begin{itemize}
   \item shade the half of Earth where it is \textbf{night}, and label the half where it is \textbf{day}
   \item draw an arrow showing the direction of the Sun's light
   \item add a curved arrow showing which way Earth \textbf{rotates}
 \end{itemize}
 
-\answerbox{7cm}
-
-\medskip
-In one sentence, explain \textbf{why night happens}.
-\anslines{2}
+\answerbox{5cm}
 \end{scaffold}
 
 \begin{yr7box}
@@ -644,8 +737,8 @@ In one sentence, explain \textbf{why night happens}.
 \anslines{3}
 
 \end{yr7box}
-
-\subsection{Why we have seasons}
+\newpage
+\subsection{Why we have seasons}\label{sub:2.2}
 
 Seasons are caused by Earth's \vocab{axial tilt} of 23.5°, not by distance from the Sun. (Earth is actually closest to the Sun in January --- Australian summer.)
 
@@ -705,15 +798,16 @@ When the Southern Hemisphere tilts away (June): rays hit at a shallower angle, d
 \question{1}{State the size of Earth's axial tilt.}
 \anslines{1}
 
-\question{2}{Describe two effects of the Southern Hemisphere being tilted toward the Sun in December.}
-\anslines{3}
+\question{2}{State two effects of the Southern Hemisphere being tilted toward the Sun in December.}
+\anslines{2}
 
 \question{3}{Earth is actually closest to the Sun in January. Explain why this is \textit{not} the cause of Australian summer.}
 \anslines{4}
 
 \end{yr7box}
 
-\subsection{Solstices and equinoxes}
+
+\subsection{Solstices and equinoxes}\label{sub:2.3}
 
 \begin{center}
 \begin{tabular}{lll}
@@ -728,24 +822,17 @@ September equinox & 22--23 September& Equal day/night worldwide; spring begins i
 \end{tabular}
 \end{center}
 
-\begin{fnbox}{Wurundjeri six-season calendar}
-The Wurundjeri-Woiwurrung people recognise \textbf{six seasons} on Kulin Nation Country, each defined by ecological signals and celestial indicators rather than fixed calendar dates. The transitions are marked by changes in animal behaviour, plant flowering, rainfall patterns, and the position of stars and the Milky Way. This is a more ecologically precise calendar than the European four-season model for this Country.
 
-\medskip
-\begin{tabular}{ll}
-\textit{Iuk} (eel season) & Autumn rains, eels run \\
-\textit{Waring} & Winter cold, least food \\
-\textit{Guling} & Orchids bloom, first warmth \\
-\textit{Poorneet} & Tadpole season, frogs call \\
-\textit{Buath Gurru} & Grasshoppers swarm \\
-\textit{Kangaroo Apple season} & Fruit ripens, late summer \\
-\end{tabular}
-\end{fnbox}
 
 \begin{scaffold}{Your turn}
-Explain why Australia has summer in December while countries in the Northern Hemisphere have winter at the same time. Use the concept of axial tilt in your answer.
+Apply your knowledge — attempt all three, then we’ll reveal answers:
 
-\vspace{3.5cm}
+\textbf{Q1:} It is March 21 (equinox) in Melbourne. Is it day or night at the North Pole right now?
+\anslines{2}
+\textbf{Q2:} A student in Brazil says “We’re having summer right now.” What month is it most likely to be?
+\anslines{2}
+\textbf{Q3:} Earth is actually slightly closer to the Sun in January than in July. Why is it still winter in Scandinavia in January?
+\anslines{2}
 \end{scaffold}
 
 
@@ -760,26 +847,35 @@ Explain why Australia has summer in December while countries in the Northern Hem
 
 \end{yr7box}
 
-\needspace{5\baselineskip}
-\vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part B --- The Moon --- Phases and Tides}
-\vspace{0.2em}
 
-\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
-\vspace{0.6em}
-
+\newpage
+% ============================================================
+\section{The Moon --- Phases and Tides}\label{sec:3}
+% ============================================================
 \vc{Science Understanding}{Earth and space sciences: Moon phases and tidal patterns; gravitational effects}
 
-\subsection{Why the Moon appears to change shape}
+\subsection{Why the Moon appears to change shape}\label{sub:3.1}
 
 The Moon does not produce light --- it \vocab{reflects sunlight}. At all times, the half facing the Sun is lit. As the Moon orbits Earth over \textbf{29.5 days}, we see different fractions of the lit half from Earth --- these are the \vocab{phases}.
+\subsubsection{The eight phases (in order)}
+\begin{center}
+	\begin{tikzpicture}[x=1cm, y=1cm]
+	\moonphase{0}{ 1}{ 1.000}{New}
+	\moonphase{1}{ 1}{ 0.500}{Waxing\\crescent}
+	\moonphase{2}{ 1}{ 0.000}{First\\quarter}
+	\moonphase{3}{ 1}{-0.278}{Waxing\\gibbous}
+	\moonphase{4}{ 1}{-1.000}{Full}
+	\moonphase{5}{-1}{-0.278}{Waning\\gibbous}
+	\moonphase{6}{-1}{ 0.000}{Third\\quarter}
+	\moonphase{7}{-1}{ 0.500}{Waning\\crescent}
+	\node[moonsoft, font=\small] at (3.5*\moonGap,-1.68)
+	{$\leftarrow$ 29.5 days --- one complete lunar cycle $\rightarrow$};
+\end{tikzpicture}
+\end{center}
 
 \begin{infobox}{Common misconception}
 Earth's shadow does \textbf{NOT} cause phases. A \vocab{lunar eclipse} (Earth's shadow on the Moon) is a separate, less frequent event. Phases are caused by our changing view of the Moon's lit half.
 \end{infobox}
-
-\subsubsection{The eight phases (in order)}
-New Moon $\rightarrow$ Waxing crescent $\rightarrow$ First quarter $\rightarrow$ Waxing gibbous $\rightarrow$ Full Moon $\rightarrow$ Waning gibbous $\rightarrow$ Third quarter $\rightarrow$ Waning crescent $\rightarrow$ New Moon
 
 
 \begin{yr7box}
@@ -795,8 +891,8 @@ New Moon $\rightarrow$ Waxing crescent $\rightarrow$ First quarter $\rightarrow$
 \anslines{3}
 
 \end{yr7box}
-
-\subsection{Tides}
+\newpage
+\subsection{Tides}\label{sub:3.2}
 
 The Moon's gravity pulls on Earth's oceans. This creates a \vocab{tidal bulge} on the Moon-facing side, and a second bulge on the opposite side.
 
@@ -805,42 +901,62 @@ The Moon's gravity pulls on Earth's oceans. This creates a \vocab{tidal bulge} o
   \item \vocab{Neap tides}: Moon at right angles to the Sun--Earth line (quarter phases). Pulls partially cancel --- moderate tidal range
   \item ``Spring'' refers to the Old English word for ``to leap,'' not the season
 \end{itemize}
+\begin{center}
+	\begin{tikzpicture}[x=\tideunit, y=-\tideunit,   % y flipped: SVG coords
+	every node/.style={inner sep=0pt},
+	arr/.style={line width=1pt,
+		-{Stealth[length=6pt, width=5pt]}}]
+	
+	\node[font=\bfseries\small, text=tideaccent] at (190,16)
+	{Spring tide (aligned)};
+	
+	% Sun
+	\filldraw[fill=tidewarmsoft, draw=tidewarm, line width=1.2pt]
+	(30,100) circle[radius=22];
+	\node[font=\bfseries\scriptsize, text=tidewarm] at (30,100) {Sun};
+	
+	% Earth: tidal-bulge envelope, then the solid planet
+	\filldraw[fill=tidecool, draw=tideaccent, line width=1.2pt]
+	(190,100) ellipse[x radius=48, y radius=30];
+	\fill[tideaccent] (190,100) circle[radius=20];
+	
+	% Moon
+	\fill[tidefaint] (340,100) circle[radius=16];
+	\node[font=\bfseries\scriptsize, text=white] at (340,100) {M};
+	
+	% Pull arrows
+	\draw[arr, tidewarm]  (52,100)  -- (140,100);
+	\draw[arr, tidefaint] (324,100) -- (242,100);
+	
+	\node[font=\footnotesize, text=tidesoft] at (190,172)
+	{Both pull same line $\rightarrow$ very large tidal range};
+\end{tikzpicture}
+\end{center}
 
-\begin{fnbox}{Lunar calendars in Aboriginal traditions}
-Many Aboriginal Australian groups have used the 29.5-day lunar cycle for ceremony, food harvesting, travel, and health practices. For Kulin Nation groups, the monthly cycle is embedded in governance and knowledge transmission. The same lunar cycle that determines tides was used to create a precise, multi-purpose calendar operating on Country long before European contact.
-\end{fnbox}
-
-% Working space for the "You do" question on deck 2 slide 18. Kept as an
-% unnumbered scaffold, matching the other "Your turn" blocks, so it does
-% not disturb the auto-numbered \question sequence.
-\begin{scaffold}{Your turn: eclipses and phases}
-A \textbf{lunar eclipse} is happening tonight. A \textbf{solar eclipse} happened two weeks ago.
+% Working space for the "You do" on lesson 3, slide 7. Unnumbered, like the
+% other "Your turn" blocks, so it does not disturb the \question sequence.
+% Deliberately about tides only: eclipses are Year 8 extension material in
+% this unit, so a You-do on them would sit above the level.
+\begin{scaffold}{Your turn: spring and neap tides}
+There is a \textbf{full Moon} on 5 March.
 
 \medskip
-\textbf{(a)} What phase is the Moon in during the \textbf{lunar} eclipse?
-\anslines{1}
+\textbf{(a)} What kind of tides would you expect that week --- spring or neap? Explain your answer using the positions of the Sun, Earth and Moon.
+\anslines{3}
 
 \medskip
-\textbf{(b)} What phase was the Moon in during the \textbf{solar} eclipse?
-\anslines{1}
+\textbf{(b)} Roughly how many days later would you next expect \textbf{neap} tides, and what phase will the Moon be then?
+\anslines{2}
 
 \medskip
-\textbf{(c)} Explain why the two eclipses \textbf{cannot} happen on the same night. Refer to where the Moon has to be in each case.
-\anslines{5}
+\textbf{(c)} Why does one place on Earth get \textbf{two} high tides in a day, rather than just one?
+\anslines{3}
 \end{scaffold}
 
-\begin{yr8box}
-\textbf{Year 8 Extension: Eclipse geometry}
 
-Eclipses don't happen every New or Full Moon because the Moon's orbit is tilted 5.1° relative to Earth's orbit around the Sun. Eclipses only occur when a New or Full Moon coincides with the Moon being at a \vocab{node} (one of two points where its orbit crosses the ecliptic). The pattern of eclipses repeats every 18 years, 11 days, 8 hours --- the \vocab{Saros cycle}.
 
-\medskip
-\textbf{Why the Moon fits the Sun perfectly}: The Moon is 400$\times$ smaller than the Sun but 400$\times$ closer. Their angular diameters in our sky are almost identical --- making total solar eclipses possible. This is unique in our solar system.
-\end{yr8box}
-
-%\newpage
 % ============================================================
-
+\newpage
 \begin{yr7box}
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
 
@@ -852,20 +968,325 @@ Eclipses don't happen every New or Full Moon because the Moon's orbit is tilted 
 
 \end{yr7box}
 
-\newpage
+\begin{yr8box}
+	\textbf{Year 8 Extension: Eclipse geometry}
+	
+	Eclipses don't happen every New or Full Moon because the Moon's orbit is tilted 5.1° relative to Earth's orbit around the Sun. Eclipses only occur when a New or Full Moon coincides with the Moon being at a \vocab{node} (one of two points where its orbit crosses the ecliptic). The pattern of eclipses repeats every 18 years, 11 days, 8 hours --- the \vocab{Saros cycle}.
+	
+	\medskip
+	\textbf{Why the Moon fits the Sun perfectly}: The Moon is 400$\times$ smaller than the Sun but 400$\times$ closer. Their angular diameters in our sky are almost identical --- making total solar eclipses possible. This is unique in our solar system.
+\end{yr8box}
 
-\section{Our Solar System}
+\newpage
+% ============================================================
+
+\newpage
+% ============================================================
+\section{Reading the Rocks --- Tides in Stone and the Acraman Impact}\label{sec:4}
+% ============================================================
+\vc{Science as a Human Endeavour}{Science knowledge is used to inform decisions and is developed through the work of individual scientists; Earth and space sciences: predictable phenomena}
+
+Everything so far in this unit has been observed by looking \emph{up}. This
+section does the opposite. Two sets of South Australian rocks, both studied by
+\textbf{Professor George Williams} at the University of Adelaide, record events
+that happened in space --- one a rhythm repeated for sixty years, the other a
+single morning that changed the planet. \textbf{We hold samples of both}, so
+this section is written to be worked through with the specimens in front of
+you.
+
+\subsection{Tides written in stone}\label{sub:4.1}
+
+\begin{scaffold}{Entry task: what could you count in a rock?}
+The photograph on the poster shows a slab of rock made of hundreds of thin,
+regular layers, each one a fraction of a millimetre thick. Before you read on:
+what natural process could lay down a layer of sediment that regularly, and
+what would counting the layers tell you?
+\anslines{4}
+\end{scaffold}
+
+A \vocab{tidal rhythmite} is a sedimentary rock made of finely layered silt and
+sand laid down by tidal currents. Each incoming tide carries sediment into a
+tidal inlet and drops it as a thin layer, called a \vocab{lamina}. A stronger
+tide carries more sediment and leaves a thicker lamina.
+
+That makes a rhythmite a \textbf{recording} of the tides, in the same way a
+tree's rings record its years:
+
+\begin{itemize}
+  \item one \textbf{lamina} = one tidal cycle (roughly one lunar day)
+  \item laminae get thicker and thinner on a fortnightly cycle --- the
+        \textbf{spring} and \textbf{neap} tides you met in Section 2
+  \item counting laminae between one neap and the next gives the number of days
+        in a lunar month, \emph{at the time the rock formed}
+\end{itemize}
+
+The \vocab{Elatina Formation} in the Flinders Ranges is a rhythmite
+\textbf{635 million years} old. Williams analysed a 10 m drill core holding a
+continuous 60-year record and counted:
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+\headingfont\textbf{Measurement} & \headingfont\textbf{635 Ma} & \headingfont\textbf{Today} \\
+\midrule
+Solar days per lunar month & $30.5 \pm 0.5$ & 29.53 \\
+Lunar months per year      & $13.1 \pm 0.1$ & 12.37 \\
+Solar days per year        & $400 \pm 7$    & 365.24 \\
+Length of a solar day (hours) & $21.9 \pm 0.4$ & 24.00 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{infobox}{The year did not change --- the day did}
+$400 \times 21.9 = 8760$ hours. $365.24 \times 24.00 = 8766$ hours. The two
+agree to better than 0.1\%. Earth took just as long to go round the Sun 635
+million years ago as it does now --- it simply \textbf{spun faster}, so more
+days fitted into the same year.
+\end{infobox}
+\newpage
+\subsubsection{Why Earth is slowing down}
+
+The Moon raises a tidal bulge in Earth's oceans. Earth rotates faster than the
+Moon orbits, so friction drags that bulge slightly \emph{ahead} of the Moon.
+The bulge pulls the Moon forward, and the Moon pulls back on Earth.
+
+\begin{itemize}
+  \item Earth loses rotational energy --- \textbf{the day gets longer}
+  \item the Moon gains orbital energy --- \textbf{the Moon moves further away}
+\end{itemize}
+
+This is called \vocab{tidal braking}. Laser reflectors left on the Moon by
+Apollo astronauts let us measure the recession directly today:
+\textbf{3.8 cm per year}.
+
+The rhythmites let us check that figure against the deep past, and the answer
+is interesting: averaged over the last 635 million years the Moon receded at
+only about \textbf{2 cm per year} --- barely half today's rate. The rate is not
+a constant. It depends on the shape of the ocean basins, which changes as the
+continents drift.
+
+\begin{infobox}{Why this matters for where the Moon came from}
+Any explanation of the Moon's origin has to produce an orbit that behaves the
+way the rocks say it behaved. Assume today's recession rate has always applied,
+wind the clock back, and you get an Earth--Moon history that does not fit a
+4.5-billion-year-old Moon. The rhythmites are one of very few
+\textbf{direct measurements} of the ancient Earth--Moon system, so they are
+used to test the models rather than trust them. The currently accepted
+explanation --- a Mars-sized body striking the young Earth and throwing debris
+into orbit --- rests mostly on other evidence (the Moon's tiny iron core, and
+lunar rock chemistry that matches Earth's mantle almost exactly).
+\end{infobox}
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 13 marks}
+
+\question{1}{State what one lamina in a tidal rhythmite represents.}
+\anslines{1}
+
+\question{2}{Explain why laminae in a rhythmite vary in thickness on a fortnightly cycle.}
+\anslines{3}
+
+\question{2}{Using the table, state how many days there were in a year 635 million years ago, and how long a day was.}
+\anslines{2}
+
+\question{3}{Show that a 400-day year of 21.9-hour days is about the same length as our year of 365.24 days. Explain what this tells you about Earth's orbit compared with Earth's spin.}
+\anslines{4}
+
+\question{3}{Describe how tidal braking makes Earth's day longer and pushes the Moon further away. Refer to the tidal bulge in your answer.}
+\anslines{4}
+
+\question{2}{The Moon currently recedes at 3.8 cm per year, but the average over the last 635 million years was about 2 cm per year. State what this shows about the recession rate, and give one reason it changes.}
+\anslines{3}
+
+\end{yr7box}
+
+\subsection{The Acraman impact}\label{sub:4.2}
+
+\begin{scaffold}{Entry task: what would be left behind?}
+An asteroid 5 km across hits South Australia. 580 million years of erosion
+follow. List three things you would look for today as evidence that it
+happened.
+\anslines{3}
+\end{scaffold}
+
+About \textbf{580 million years ago} an asteroid roughly \textbf{5 km across},
+travelling at \textbf{25 km per second}, struck the Gawler Range Volcanics in
+what is now the Gawler Ranges of South Australia.
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+\headingfont\textbf{Quantity} & \headingfont\textbf{Value} \\
+\midrule
+Diameter of the asteroid & $\approx$5 km \\
+Impact speed & 25 km/s \\
+Energy released & 5 million megatons of TNT \\
+Transient crater & 40 km across, 4 km deep \\
+Final collapse crater & 90 km across \\
+Ejecta found & up to 300 km away \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+It is the \textbf{largest known impact structure in Australia}, and it disturbed
+the global environment.
+\newpage
+\subsubsection{Finding a crater that is not there}
+
+The crater itself has been erased by 580 million years of erosion. What
+survives is a circular topographic depression \textbf{30 km across}, underlain
+by shattered volcanic rock, with the salt lake \textbf{Lake Acraman} (20 km
+across) sitting inside it. Satellite infra-red imagery shows the wider
+structure as a set of concentric rings 90 km in diameter.
+
+The impact was dated not from the crater but from the debris. Fragments of
+Gawler Ranges dacite --- a volcanic rock found nowhere near the Flinders Ranges
+--- turn up in Flinders Ranges shales \textbf{300 km away}, in a layer 580
+million years old. That layer dates the impact, and the same fallout horizon
+has been identified overseas.
+
+\begin{infobox}{Why an impact leaves rock that looks like nothing else}
+At 25 km/s the asteroid delivers more energy than the rock can absorb as heat
+or motion, so the rock responds in ways it never does otherwise: it
+\textbf{shatters} along cone-shaped fracture surfaces, it \textbf{melts}
+instantly beneath the point of impact, and quartz crystals develop
+\vocab{planar deformation features} --- microscopic parallel lines that form
+only under shock pressure. These are the fingerprints geologists use to
+identify an impact site anywhere on Earth, and on the Moon.
+\end{infobox}
+
+\subsubsection{The specimens}
+
+Handle each sample, then complete the table. Look for grain size, angular
+fragments, colour, layering, and anything that looks as though it flowed.
+
+\begin{center}
+\begin{fillin}[2.9]
+\begin{tabular}{|p{4.3cm}|p{5.4cm}|p{4.6cm}|}
+\hline
+\textbf{Specimen} & \textbf{What I can see} & \textbf{What it tells me about the impact} \\ \hline
+Shattered dacite & & \\ \hline
+Melted dacite & & \\ \hline
+Ejecta in Flinders shale & & \\ \hline
+Disturbed sediment with dark fallout grains & & \\ \hline
+\end{tabular}
+\end{fillin}
+\end{center}
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 13 marks}
+
+\question{2}{State the diameter and impact speed of the Acraman asteroid.}
+\anslines{2}
+
+\question{2}{Explain why the Acraman crater cannot be seen today, and state what can be seen instead.}
+\anslines{3}
+
+\question{3}{Dacite from the Gawler Ranges is found in Flinders Ranges shale 300 km away. Explain how this both proves an impact occurred and fixes its date.}
+\anslines{4}
+
+\question{2}{Name two features of a rock that show it has been through an impact rather than ordinary geological processes.}
+\anslines{2}
+
+\question{2}{The transient crater was 40 km across but the final crater was 90 km across. Suggest why the crater ended up wider than the hole first excavated.}
+\anslines{3}
+
+\question{2}{The Moon is covered in craters and Earth is not, even though both have been hit about as often. Give two reasons Earth's craters are missing.}
+\anslines{3}
+
+\end{yr7box}
+\newpage
+\begin{yr8box}
+\textbf{Year 8 Extension: How much closer was the Moon?}
+
+Kepler's third law says the square of an orbital period is proportional to the
+cube of the orbital radius: $T^2 \propto r^3$, so $r \propto T^{2/3}$.
+
+At 635 Ma there were 13.1 lunar months in a year; today there are 12.37. Since
+the year itself has not changed length, the month was
+$12.37 / 13.1 = 0.944$ times as long as it is now. Therefore
+
+\[ \frac{r_{635}}{r_{\text{now}}} = 0.944^{2/3} = 0.963 \]
+
+so the Moon sat at about $0.963 \times 384{,}400 \approx 370{,}000$ km ---
+roughly \textbf{14,000 km closer}, or 3.7\%. Spread over 635 million years that
+is an average recession of about 2.2 cm per year, which is where the figure in
+Section 3.1 comes from. Notice what this does \emph{not} say: the Moon was not
+dramatically closer in the Precambrian. The interesting result is the
+\textbf{rate}, not the distance.
+
+\medskip
+\noindent\textbf{Try it:} the Moon's distance is measured today as 384,400 km
+and it recedes at 3.8 cm per year. If that rate had always applied, how far
+away was the Moon 635 million years ago? Compare your answer with the 14,000 km
+above, and say what the difference tells you.
+\answerbox{3.5cm}
+\end{yr8box}
+
+\begin{infobox}{Source and acknowledgement}
+Both topics in this section come from the research of \textbf{Professor George
+E. Williams}, Department of Earth Sciences, University of Adelaide. The
+specimens and research posters were provided to Northcote High School by
+\textbf{Stuart Williams}.
+
+\smallskip
+\noindent\small
+Williams, G.E. (2000). Geological constraints on the Precambrian history of
+Earth's rotation and the Moon's orbit. \textit{Reviews of Geophysics} 38,
+37--59.\\
+Williams, G.E. (1986). The Acraman impact structure: source of ejecta in late
+Precambrian shales, South Australia. \textit{Science} 233, 200--203.\\
+Williams, G.E. (1994). Acraman, a major impact structure from the Neoproterozoic
+of Australia. \textit{Geological Society of America Special Paper} 293,
+209--224.
+\end{infobox}
+
+\newpage
+% ============================================================
+\section{Our Solar System}\label{sec:5}
 % ============================================================
 \vc{Science Understanding}{Earth and space sciences: Structure and scale of the solar system; classification of planets}
 
-\subsection{The eight planets}
+\subsection{The eight planets}\label{sub:5.1}
+
+\begin{scaffold}{Entry task: order the planets}
+Write the eight planets into the table in order from the Sun, then tick which
+ones have rings and which have moons. Do this \textbf{before} you look at the
+reference table below --- use a mnemonic if it helps.
+
+\medskip
+\noindent\textbf{Word bank:}\; Saturn \;\textbullet\; Mercury \;\textbullet\;
+Neptune \;\textbullet\; Earth \;\textbullet\; Jupiter \;\textbullet\; Venus
+\;\textbullet\; Uranus \;\textbullet\; Mars
+
+\medskip
+\begin{center}
+\begin{fillin}[2.1]
+\begin{tabular}{|c|p{5.0cm}|c|c|}
+\hline
+\textbf{From the Sun} & \textbf{Planet} & \textbf{Rings?} & \textbf{Moons?} \\ \hline
+1 & & & \\ \hline
+2 & & & \\ \hline
+3 & & & \\ \hline
+4 & & & \\ \hline
+5 & & & \\ \hline
+6 & & & \\ \hline
+7 & & & \\ \hline
+8 & & & \\ \hline
+\end{tabular}
+\end{fillin}
+\end{center}
+
+\noindent\textbf{What pattern do you notice about which planets have rings?}
+\anslines{2}
+\end{scaffold}
 
 \begin{center}
 \begin{tabular}{llrrl}
 \toprule
 \textbf{Planet} & \textbf{Type} & \textbf{Distance (AU)} & \textbf{Diameter (km)} & \textbf{Moons} \\
 \midrule
-Mercury & Terrestrial & 0.39  & 4,879     & 0   \\
+\rule{3cm}{2pt} & Terrestrial & 0.39  & 4,879     & 0   \\
 Venus   & Terrestrial & 0.72  & 12,104    & 0   \\
 Earth   & Terrestrial & 1.00  & 12,742    & 1   \\
 Mars    & Terrestrial & 1.52  & 6,779     & 2   \\
@@ -907,7 +1328,7 @@ Mnemonic: \textbf{M}y \textbf{V}ery \textbf{E}xcited \textbf{M}other \textbf{J}u
 
 \end{yr7box}
 
-\subsection{Other solar system objects}
+\subsection{Other solar system objects}\label{sub:5.2}
 
 \begin{itemize}
   \item \vocab{Asteroid belt}: between Mars and Jupiter; rocky/metallic objects; gravitational influence of Jupiter prevented these from forming a planet
@@ -917,31 +1338,6 @@ Mnemonic: \textbf{M}y \textbf{V}ery \textbf{E}xcited \textbf{M}other \textbf{J}u
   \item \vocab{Oort Cloud}: distant spherical shell of icy objects; source of long-period comets
 \end{itemize}
 
-\begin{fnbox}{The Emu in the Sky and planet tracking}
-The Boorong people of Victoria observed and named the five naked-eye planets --- Mercury, Venus, Mars, Jupiter, and Saturn --- tracking their movements over decades and centuries. The dark dust lanes of the Milky Way, traced as the \textbf{Emu in the Sky}, provided a backdrop against which planetary motion was measured. The Emu's seasonal position and orientation also indicates when emus are laying eggs --- a verified ecological calendar encoded in sky observation.
-\end{fnbox}
-
-\begin{workedex}{Worked example: Travel time using AU}
-\textit{Saturn is 9.5 AU from the Sun. Earth is 1 AU, so the Earth--Saturn distance is approximately 8.5 AU. At 60,000 km/h, how long does the trip take?}
-
-$8.5 \times 150{,}000{,}000 = 1{,}275{,}000{,}000 \text{ km}$
-
-$\text{Time} = \frac{1{,}275{,}000{,}000}{60{,}000} = 21{,}250 \text{ hours} = 885 \text{ days} \approx \mathbf{2.4 \text{ years}}$
-\end{workedex}
-
-\begin{yr8box}
-\textbf{Year 8 Extension: Kepler's Laws of Planetary Motion}
-
-Johannes Kepler derived three laws from careful observation of planetary data:
-\begin{enumerate}
-  \item \textbf{Law of Ellipses}: Planets orbit the Sun in ellipses, with the Sun at one focus.
-  \item \textbf{Law of Equal Areas}: A planet sweeps equal areas in equal times --- moves faster when closer to the Sun.
-  \item \textbf{Harmonic Law}: $T^2 \propto a^3$ --- orbital period squared is proportional to semi-major axis cubed.
-\end{enumerate}
-\textbf{Apply Law 3}: Mars is 1.52 AU from the Sun. Orbital period: $T = 1.52^{3/2} \approx 1.87$ years (687 Earth days).
-\end{yr8box}
-
-\newpage
 % ============================================================
 
 \begin{yr7box}
@@ -964,339 +1360,243 @@ Johannes Kepler derived three laws from careful observation of planetary data:
 
 \end{yr7box}
 
-\section{Gravity and Orbits}
-% ============================================================
-\vc{Science Understanding}{Physical sciences: Gravitational force; orbital motion; Newton's law of universal gravitation}
-
-\subsection{Newton's law of universal gravitation}
-
-Every object with mass attracts every other object with mass:
-
-\begin{center}
-\Large $F = \dfrac{G \cdot m_1 \cdot m_2}{r^2}$
-\end{center}
-
-Where: $F$ = gravitational force (N), $G$ = gravitational constant ($6.67 \times 10^{-11}$ N\,m$^2$/kg$^2$), $m_1, m_2$ = masses (kg), $r$ = distance between centres (m).
-
-\begin{itemize}
-  \item Double either mass $\rightarrow$ force doubles
-  \item Double the distance $\rightarrow$ force decreases to \textbf{one quarter} (inverse square law)
-  \item Gravity is always \textit{attractive} --- it only pulls, never pushes
-\end{itemize}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 7 marks}
-
-\question{3}{Write Newton's law of universal gravitation and state what each symbol represents.}
-\anslines{4}
-
-\question{1}{State what happens to the gravitational force between two objects if one of the masses is doubled.}
-\anslines{1}
-
-\question{2}{Explain what happens to the gravitational force if the distance between two objects is doubled, and name this relationship.}
-\anslines{2}
-
-\question{1}{A student claims gravity can push objects apart. Explain why this is incorrect.}
-\anslines{2}
-
-\end{yr7box}
-
-\subsection{Orbital motion}
-
-An \vocab{orbit} occurs when gravity provides the centripetal force needed to keep an object moving in a curved path. Orbiting objects are in constant \vocab{free fall} toward the body they orbit --- but moving forward so fast they keep missing it.
-
-\begin{infobox}{Why astronauts appear weightless}
-The ISS orbits at $\approx$408 km altitude, where gravity is about 90\% of surface strength. Astronauts appear weightless because they \textit{and} the station are falling together at the same rate. ``Weightlessness'' is free fall --- not absence of gravity.
-\end{infobox}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 9 marks}
-
-\question{2}{Define an orbit, referring to gravity and centripetal force.}
-\anslines{2}
-
-\question{3}{Explain why an object in orbit is described as being in constant free fall.}
-\anslines{3}
-
-\question{2}{State the approximate altitude of the ISS and the strength of gravity there as a percentage of its strength at Earth's surface.}
-\anslines{2}
-
-\question{2}{A student says astronauts float on the ISS because there is no gravity in space. Correct this statement.}
-\anslines{3}
-
-\end{yr7box}
-
-\subsection{Orbital speed and altitude}
-
-Higher altitude = lower orbital speed (and longer period):
-
-\begin{center}
-\begin{tabular}{llrr}
-\toprule
-\textbf{Orbit} & \textbf{Altitude} & \textbf{Speed} & \textbf{Period} \\
-\midrule
-LEO (ISS) & 200--2,000 km & $\approx$7.9 km/s & $\approx$90 min \\
-MEO (GPS) & 2,000--35,786 km & $\approx$3.9 km/s & $\approx$12 h \\
-GEO (comms, weather) & 35,786 km & $\approx$3.1 km/s & 24 h \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{fnbox}{Celestial navigation on Wurundjeri Country}
-The predictability of orbital motion --- every star rises at a known azimuth, every planet follows a known path --- is what makes celestial navigation possible. The Wurundjeri-Woiwurrung used the Southern Cross, the Two Pointers (Alpha and Beta Centauri), and the seasonal movement of the Milky Way to navigate across Country with precision. This is applied orbital mechanics, developed through systematic observation over tens of thousands of years.
-\end{fnbox}
-
-\begin{workedex}{Worked example: Weight at ISS altitude}
-\textit{An astronaut weighs 700 N on Earth (radius 6,371 km). What is their weight at ISS altitude (408 km above surface)?}
-
-$r_\text{ISS} = 6{,}371 + 408 = 6{,}779$ km
-
-Force ratio $= \left(\dfrac{6{,}371}{6{,}779}\right)^2 = 0.883$
-
-Weight at ISS $= 700 \times 0.883 = \mathbf{618 \text{ N}}$ (about 88\% of surface weight)
-\end{workedex}
-
-\begin{yr8box}
-\textbf{Year 8 Extension: Escape velocity}
-
-To escape a planet's gravitational field entirely: $v_e = \sqrt{\dfrac{2GM}{r}}$
-
-Earth: 11.2 km/s \quad Moon: 2.4 km/s \quad Mars: 5.0 km/s \quad Jupiter: 59.5 km/s
-
-The Moon's low escape velocity explains why it has no atmosphere: gas molecules moving at thermal speeds can escape to space over time.
-\end{yr8box}
-
 \newpage
 % ============================================================
 
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 8 marks}
-
-\question{2}{Using the table, state the orbital speed and period of the ISS.}
-\anslines{2}
-
-\question{2}{Describe the relationship between orbital altitude and orbital speed shown in the table.}
-\anslines{2}
-
-\question{2}{Explain why a satellite in geostationary orbit appears to stay in the same place in the sky.}
-\anslines{3}
-
-\question{2}{GPS satellites operate in MEO. Using the table, state the altitude range and orbital period of this orbit.}
-\anslines{2}
-
-\end{yr7box}
-
-\section{Stars, Galaxies and Starlight}
+\newpage
+% ============================================================
+\section{Space Technology and Sustainability}\label{sec:6}
 % ============================================================
 \needspace{5\baselineskip}
 \vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part A --- Stars and Galaxies}
+{\headingfont\large\bfseries\color{Navy}Part A --- Exploration --- History and Technology}
 \vspace{0.2em}
 
 \noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
 \vspace{0.6em}
 
-\vc{Science Understanding}{Earth and space sciences: Properties of stars; galaxies; scale of the universe}
+\vc{Science Understanding}{Science as a Human Endeavour: Space exploration technologies; Australian contributions}
 
-\subsection{Light-years and stellar distances}
+\subsection{Key milestones in space exploration}\label{sub:6.1}
 
-A \vocab{light-year} is the distance light travels in one year: approximately $9.46 \times 10^{12}$ km (9.46 trillion km). It is a unit of \textit{distance}, not time.
+\begin{scaffold}{Entry task: sequence the space milestones}
+Write the eight events into the timeline in chronological order, then say what
+each one achieved. Do this \textbf{before} you read the table below.
 
-\begin{itemize}
-  \item The Sun: light takes 8 min 20 s to reach Earth
-  \item Proxima Centauri (nearest star): 4.2 light-years
-  \item Milky Way diameter: $\approx$100,000 light-years
-  \item Andromeda Galaxy: 2.5 million light-years
-\end{itemize}
+\medskip
+\noindent\textbf{Word bank:}\; Curiosity lands on Mars \;\textbullet\; ISS
+assembly begins \;\textbullet\; JWST launched \;\textbullet\; First humans on
+the Moon \;\textbullet\; Hubble Space Telescope launched \;\textbullet\;
+Sputnik 1 \;\textbullet\; Gagarin orbits Earth \;\textbullet\; Europa Clipper
+launched
 
-\begin{infobox}{Looking back in time}
-When we observe a star 100 light-years away, we see it as it was 100 years ago --- the light we detect left it then. Telescopes are time machines. JWST images galaxies as they appeared just 300--400 million years after the Big Bang.
-\end{infobox}
+\medskip
+\begin{center}
+\begin{fillin}[2.2]
+\begin{tabular}{|c|p{4.6cm}|p{6.4cm}|}
+\hline
+\textbf{Order} & \textbf{Event} & \textbf{What it achieved} \\ \hline
+1 & & \\ \hline
+2 & & \\ \hline
+3 & & \\ \hline
+4 & & \\ \hline
+5 & & \\ \hline
+6 & & \\ \hline
+7 & & \\ \hline
+8 & & \\ \hline
+\end{tabular}
+\end{fillin}
+\end{center}
+\end{scaffold}
+
+
+\begin{center}
+\begin{tabular}{rll}
+\toprule
+\textbf{Year} & \textbf{Event} & \textbf{Significance} \\
+\midrule
+1957 & Sputnik 1 (USSR) & First artificial satellite \\
+1961 & Yuri Gagarin (USSR) & First human in orbit \\
+1969 & Apollo 11 (USA) & First humans on the Moon \\
+1990 & Hubble Space Telescope & Revolutionised optical astronomy \\
+1998 & ISS construction begins & First permanent human presence in space \\
+2012 & Curiosity rover lands on Mars & Searches for habitability \\
+2021 & JWST launched & Infrared view of the early universe \\
+2024 & Europa Clipper launched & Searching for habitability on Europa \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 
 \begin{yr7box}
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
 
-\question{2}{Define a light-year and state what type of quantity it measures.}
+\question{2}{Using the table, state the year of Sputnik 1 and its significance.}
 \anslines{2}
 
-\question{2}{Proxima Centauri is 4.2 light-years away. Explain what we are actually seeing when we look at it tonight.}
+\question{2}{Identify the two missions in the table launched to investigate habitability, and state which bodies they target.}
+\anslines{2}
+
+\end{yr7box}
+
+\subsection{Australia's contributions to space science}\label{sub:6.2}
+
+\begin{itemize}
+  \item \textbf{Parkes Radio Telescope} (``The Dish'') --- received and relayed live TV of the Apollo 11 Moon landing to 600 million viewers worldwide (1969)
+  \item \textbf{CSIRO} --- invented Wi-Fi technology from radio astronomy research; operates major Australian telescope networks
+  \item \textbf{Australian Space Agency (ASA)} --- established 2018; growing commercial space sector targeting A\$12 billion by 2030
+  \item \textbf{Square Kilometre Array (SKA)} --- world's largest radio telescope, core in WA on Wajarri Country
+\end{itemize}
+
+\begin{fnbox}{Wajarri Yamatji Country and the SKA}
+The Square Kilometre Array is being built on \textbf{Wajarri Yamatji Country} in the Murchison region of Western Australia --- chosen for its radio-quiet environment and extraordinarily dark skies. The Wajarri Yamatji have a formal Indigenous Land Use Agreement with the Australian government, including veto rights and community benefit provisions. The Wajarri people have maintained detailed sky knowledge of this Country for tens of thousands of years. The SKA is a model of how Western science can operate in genuine partnership with Traditional Custodians.
+\end{fnbox}
+
+\begin{scaffold}{Your turn --- Mission evaluation}
+Choose one of the following and evaluate it as a scientific mission. State: (a) the goal; (b) whether it was crewed or uncrewed and why; (c) one key discovery; (d) one limitation.
+
+\medskip
+\textit{Options: Apollo 11, Hubble Space Telescope, Curiosity rover, JWST}
+
+\vspace{5cm}
+\end{scaffold}
+
+\newpage
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 5 marks}
+
+\question{2}{Explain the role the Parkes Radio Telescope played in the Apollo 11 mission.}
+\anslines{2}
+
+\question{1}{State the everyday technology CSIRO developed out of its radio astronomy research.}
+\anslines{1}
+
+\question{2}{State where the core of the Square Kilometre Array is being built, and give one reason that site was chosen.}
+\anslines{2}
+
+\end{yr7box}
+
+\needspace{5\baselineskip}
+\vspace{0.8em}
+{\headingfont\large\bfseries\color{Navy}Part B --- Satellites, Debris and Sustainability}
+\vspace{0.2em}
+
+\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
+\vspace{0.6em}
+
+\vc{Science Understanding}{Science as a Human Endeavour: Sustainability of space use; Earth observation technologies}
+
+\subsection{Space debris}\label{sub:6.3}
+
+\begin{scaffold}{Entry task: why orbital speed makes debris so dangerous}
+Kinetic energy is $E_k = \tfrac{1}{2}mv^2$, with mass in kilograms and speed in
+metres per second. Watch your units --- the masses below are given in grams.
+
+\medskip
+\noindent\textbf{1.}\; A 10 g bolt of debris in low Earth orbit, travelling at
+7,800 m/s.
+\anslines{3}
+
+\noindent\textbf{2.}\; A 150 g cricket ball bowled at 45 m/s (about 160 km/h).
+\anslines{3}
+
+\noindent\textbf{3.}\; How many times more kinetic energy does the bolt carry
+than the cricket ball? What does that tell you about a collision in orbit?
+\anslines{2}
+\end{scaffold}
+\newpage
+
+\vocab{Space debris} includes defunct satellites, spent rocket stages, collision fragments, and lost equipment. Current estimates:
+\begin{itemize}
+  \item $\approx$27,000 tracked objects $>$10 cm
+  \item $\approx$500,000 objects 1--10 cm (too small to track, too large to ignore)
+  \item $\approx$100 million fragments $<$1 cm
+\end{itemize}
+
+At orbital speeds ($\approx$7.8 km/s in LEO), even a 1 cm fragment has the kinetic energy of a hand grenade. The ISS has manoeuvred to avoid debris more than 30 times.
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{1}{State the approximate number of tracked debris objects larger than 10 cm.}
+\anslines{1}
+
+\question{3}{Explain why a fragment only 1 cm across is dangerous to a spacecraft.}
 \anslines{3}
 
 \end{yr7box}
 
-\subsection{Star types and the OBAFGKM sequence}
+\subsection{Kessler syndrome}\label{sub:6.4}
 
-Stars are classified by surface temperature and colour:
-
-\begin{center}
-\begin{tabular}{lllr}
-\toprule
-\textbf{Class} & \textbf{Colour} & \textbf{Temperature} & \textbf{Example} \\
-\midrule
-O & Blue-violet & $>$30,000 K & Zeta Puppis \\
-B & Blue-white  & 10,000--30,000 K & Rigel \\
-A & White       & 7,500--10,000 K & Sirius \\
-F & Yellow-white& 6,000--7,500 K & Procyon \\
-G & Yellow      & 5,200--6,000 K & \textbf{The Sun} \\
-K & Orange      & 3,700--5,200 K & Arcturus \\
-M & Red         & $<$3,700 K & Proxima Centauri \\
-\bottomrule
-\end{tabular}
-\end{center}
+\vocab{Kessler syndrome} (Donald Kessler, NASA, 1978): if orbital density exceeds a critical threshold, one collision generates debris that causes more collisions in a cascade --- potentially making certain orbital shells permanently unusable. Evidence suggests the Iridium 33/Cosmos 2251 collision (2009) created $>$2,000 tracked fragments.
 
 
 \begin{yr7box}
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 5 marks}
 
-\question{2}{Using the table, state the spectral class and colour of the Sun.}
-\anslines{2}
-
-\question{3}{Arrange Rigel, the Sun and Proxima Centauri in order of decreasing surface temperature, justifying your order with data from the table.}
+\question{3}{Define Kessler syndrome.}
 \anslines{3}
 
-\end{yr7box}
-
-\subsection{Stellar life cycle (sun-like star)}
-
-\begin{center}
-\begin{tikzpicture}[node distance=1.4cm, >=Stealth]
-  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=1.8cm, minimum height=0.7cm] (neb) {Nebula};
-  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=1.8cm, minimum height=0.7cm, right=of neb] (pro) {Protostar};
-  \node[draw=Gold!50, rounded corners=3pt, fill=GoldLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of pro] (ms) {\textbf{Main seq.}};
-  \node[draw=Coral!40, rounded corners=3pt, fill=CoralLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of ms] (rg) {Red giant};
-  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of rg] (wd) {White dwarf};
-  \draw[->] (neb) -- (pro);
-  \draw[->] (pro) -- (ms);
-  \draw[->] (ms) -- (rg);
-  \draw[->] (rg) -- (wd);
-\end{tikzpicture}
-
-\vspace{0.4em}
-\small\textit{Massive stars ($>$8 M$_\odot$): Main sequence $\rightarrow$ Red supergiant $\rightarrow$ Supernova $\rightarrow$ Neutron star / Black hole}
-\end{center}
-
-\begin{fnbox}{Boorong knowledge: The Magellanic Clouds}
-The Large and Small Magellanic Clouds --- dwarf galaxies visible to the naked eye from the Southern Hemisphere --- are incorporated into Boorong star lore as \textit{Yugarilya}, the two Bram-bram-bult (sons of Bunjil the creator), who appear as wedge-tailed eagles in the sky. Aboriginal Australians observed these objects for tens of thousands of years before European astronomers named them after Magellan's 1521 voyage.
-\end{fnbox}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
-
-\question{2}{List, in order, the stages in the life cycle of a Sun-like star.}
-\anslines{2}
-
-\question{2}{State how the life cycle of a star more massive than 8 solar masses differs after the main sequence.}
-\anslines{3}
-
-\end{yr7box}
-
-\begin{yr8box}
-\textbf{Year 8 Extension: The Hertzsprung--Russell Diagram}
-
-The H--R diagram plots stellar luminosity (vertical axis) against surface temperature (horizontal axis, running \textit{right to left} --- hot on left). Stars cluster in recognisable zones: the \vocab{main sequence} (a diagonal band), the \vocab{giant branch} (upper right, cool but luminous), and \vocab{white dwarfs} (lower left, hot but dim). A star's position reveals its evolutionary stage, mass, and age.
-\end{yr8box}
-
-\needspace{5\baselineskip}
-\vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part B --- Light from Space --- Telescopes and the EM Spectrum}
-\vspace{0.2em}
-
-\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
-\vspace{0.6em}
-
-\vc{Science Understanding}{Physical sciences: Electromagnetic radiation; wave properties; telescopes as scientific instruments}
-
-\subsection{The electromagnetic spectrum}
-
-Visible light is only a small part of the \vocab{electromagnetic spectrum} (EM spectrum). All EM waves travel at the speed of light ($3 \times 10^8$ m/s) but differ in wavelength and frequency.
-
-\begin{center}
-\begin{tabular}{lllp{5cm}}
-\toprule
-\textbf{Region} & \textbf{Wavelength} & \textbf{Energy} & \textbf{Astronomical use} \\
-\midrule
-Radio waves  & mm to km   & Lowest  & Pulsars, CMB, galaxy mapping (Parkes, SKA) \\
-Microwaves   & mm         & Low     & CMB, molecular clouds \\
-Infrared     & 1\,$\mu$m--1\,mm & Medium-low & Star formation, cool objects, exoplanet atmospheres (JWST) \\
-Visible      & 400--700 nm & Medium & Stars, planets, galaxies (optical telescopes) \\
-UV           & 10--400 nm  & Medium-high & Hot stars, quasars \\
-X-ray        & 0.01--10 nm & High   & Black holes, neutron stars, galaxy clusters \\
-Gamma ray    & $<$0.01 nm & Highest & Supernovae, gamma-ray bursts \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
-
-\question{2}{State one property all electromagnetic waves share, and two properties that differ between them.}
-\anslines{2}
-
-\question{2}{Using the table, name the region of the spectrum used to study black holes, and the region used to map galaxies with the SKA.}
+\question{2}{State the evidence given in the booklet that this cascade risk is real.}
 \anslines{2}
 
 \end{yr7box}
+\newpage
 
-\subsection{Telescopes}
+\subsection{Earth observation satellites}\label{sub:6.5}
 
 \begin{itemize}
-  \item \vocab{Refracting telescopes}: glass lenses bend light to a focus. Limited to small instruments
-  \item \vocab{Reflecting telescopes}: mirrors reflect light to a focus. All major modern telescopes; can be built much larger (Hubble: 2.4 m mirror; JWST: 6.5 m)
-  \item \vocab{Radio telescopes}: large dish antennas; collect radio waves; Parkes dish (64 m) relayed Moon landing footage
-  \item \vocab{Space telescopes}: above the atmosphere; avoid absorption and blurring; JWST orbits at the Sun--Earth L2 point
+  \item \vocab{Weather satellites}: Himawari and GOES provide real-time storm tracking; forecasts beyond 24 h depend entirely on satellite data
+  \item \vocab{Climate monitoring}: sea level rise, ice extent, deforestation, coral bleaching, wildfire extent
+  \item \vocab{Precision agriculture}: multispectral imaging tracks crop health, water stress, soil condition
+  \item \vocab{Emergency response}: floods, earthquakes, wildfires mapped in near-real-time
+  \item \vocab{GPS}: 24+ satellites; positioning $<$1 m accuracy; underpins transport, shipping, aviation, and smartphones
 \end{itemize}
 
+\begin{fnbox}{Satellite data on Country}
+Indigenous ranger groups across Australia use Earth observation satellite data to manage Country. Multispectral satellite imagery tracks vegetation health, water sources, fire risk, and invasive species spread across remote land. The CSIRO's Digital Earth Australia programme provides this data freely to ranger programs. Traditional Owners often describe the satellite data as confirming what their ancestors already knew about Country --- but now they can document it and advocate for its protection with evidence that government agencies accept.
+\end{fnbox}
+
+\begin{workedex}{Worked example: Kinetic energy of debris}
+\textit{A 10 g bolt of space debris travels at 7,800 m/s. Calculate its kinetic energy. Compare with a 150 g cricket ball bowled at 45 m/s.}
+
+$KE_\text{bolt} = \frac{1}{2} \times 0.010 \times 7800^2 = \frac{1}{2} \times 0.010 \times 60{,}840{,}000 = \mathbf{304{,}200 \text{ J}}$
+
+$KE_\text{cricket} = \frac{1}{2} \times 0.150 \times 45^2 = \frac{1}{2} \times 0.150 \times 2{,}025 = \mathbf{152 \text{ J}}$
+
+The space bolt has about \textbf{2,000$\times$} more kinetic energy than the cricket ball.
+\end{workedex}
+
+\begin{yr8box}
+\textbf{Year 8 Extension: Active debris removal and orbital governance}
+
+Active debris removal (ADR) technologies in development include robotic arm capture (ESA ClearSpace-1), electromagnetic tether deorbit (JAXA ELSA-d), and laser ablation. The fundamental challenge is economic: removing debris benefits all space users, not just the company paying for removal --- a classic ``tragedy of the commons.'' Proposed governance solutions include binding UN agreements, debris levies on satellite operators, and mandatory deorbit insurance. Current international frameworks (Outer Space Treaty 1967, UN COPUOS guidelines) are non-binding and insufficient for the scale of the problem.
+\end{yr8box}
+
+
+% ============================================================
 
 \begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 7 marks}
 
-\question{2}{Explain the difference between a refracting and a reflecting telescope.}
+\question{3}{Name three distinct uses of Earth observation satellites given in the booklet.}
 \anslines{3}
 
-\question{2}{Give two reasons for placing a telescope in space rather than on the ground.}
+\question{2}{Explain why weather forecasts beyond 24 hours depend on satellites.}
+\anslines{2}
+
+\question{2}{State the accuracy of GPS positioning and name two sectors that depend on it.}
 \anslines{2}
 
 \end{yr7box}
-
-\subsection{Spectroscopy --- reading starlight}
-
-When starlight passes through a prism or diffraction grating, \vocab{absorption lines} appear --- dark lines at specific wavelengths absorbed by elements in the star's outer atmosphere. Each element has a unique spectral fingerprint. From absorption spectra, astronomers determine:
-\begin{itemize}
-  \item Elemental \vocab{composition} of stars and exoplanet atmospheres
-  \item \vocab{Temperature} (line types reveal temperature class)
-  \item \vocab{Velocity}: blueshifted = moving toward us; redshifted = moving away (Doppler effect)
-\end{itemize}
-
-\begin{fnbox}{Wajarri knowledge and the MWA}
-The Murchison Widefield Array (MWA) --- precursor to the SKA --- sits on Wajarri Yamatji Country in Western Australia. It maps hydrogen across the Milky Way using radio waves invisible to the naked eye. The Wajarri have observed and named features of this same sky for tens of thousands of years using different instruments (their senses, memory, and song). Both the MWA and Wajarri sky knowledge reveal the same cosmos at different scales and with different tools.
-\end{fnbox}
-
-\begin{yr8box}
-\textbf{Year 8 Extension: Interferometry and the Event Horizon Telescope}
-
-By linking multiple radio telescopes worldwide and combining their signals with atomic-clock precision, astronomers create a \vocab{virtual telescope} as large as the separation between dishes --- a technique called \vocab{interferometry}. The \textbf{Event Horizon Telescope} linked 8 observatories to create an Earth-sized virtual dish, imaging the shadow of a black hole in galaxy M87 (2019) and the Milky Way's central black hole Sgr A* (2022). Resolution achieved: 40 microarcseconds --- equivalent to reading a newspaper in New York from Sydney.
-\end{yr8box}
 
 \newpage
 % ============================================================
 
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
-
-\question{3}{Explain how absorption lines allow astronomers to identify the elements present in a star.}
-\anslines{4}
-
-\question{1}{A star's spectral lines are redshifted. State what this tells you about its motion.}
-\anslines{1}
-
-\end{yr7box}
-
-\section{Aboriginal and Torres Strait Islander Astronomy}
+\newpage
+% ============================================================
+\section{Aboriginal and Torres Strait Islander Astronomy}\label{sec:7}
 % ============================================================
 \vc{Science Understanding}{Science as a Human Endeavour: Indigenous knowledge systems; dark constellations; ecological calendars}
 
@@ -1304,12 +1604,19 @@ By linking multiple radio telescopes worldwide and combining their signals with 
 Aboriginal and Torres Strait Islander peoples have practised systematic astronomy for at least 65,000 years --- making these the oldest continuing astronomical traditions on Earth. This is not historical knowledge. It is a living, ongoing science embedded in ceremony, ecology, governance, and art.
 \end{fnbox}
 
-\subsection{Dark constellations}
+\subsection{Dark constellations}\label{sub:7.1}
 
 Western constellation traditions connect \textit{stars} into figures. Aboriginal traditions also identify figures formed by the \vocab{dark dust lanes} of the Milky Way --- regions of interstellar dust that block the light of stars behind them.
 
 \begin{itemize}
   \item The \vocab{Emu in the Sky}: head = Coalsack Nebula (near the Southern Cross); body traces dark lanes along the Milky Way. When the Emu's head is near the horizon at dusk in autumn, emus are laying eggs --- verified independently by zoologists
+  
+  \begin{figure}[H]
+  	\centering
+  	\includegraphics[width=0.7\linewidth]{screenshot001}
+  	\caption{}
+  \end{figure}
+  
   \item Other dark constellations: Possum, Caterpillar, Pregnant Woman, Wedge-tailed Eagle
   \item The dark areas are \vocab{molecular clouds} --- real, scientifically significant objects and birthplaces of new stars
 \end{itemize}
@@ -1332,7 +1639,7 @@ Western constellation traditions connect \textit{stars} into figures. Aboriginal
 
 \end{yr7box}
 
-\subsection{The Boorong star catalogue}
+\subsection{The Boorong star catalogue}\label{sub:7.2}
 
 The Boorong people (Wergaia, north-western Victoria) have one of the best-documented Aboriginal astronomical knowledge systems. With the assistance of Elder William Barak, surveyor William Stanbridge documented 47 named celestial objects in 1857:
 
@@ -1361,7 +1668,7 @@ The Boorong people (Wergaia, north-western Victoria) have one of the best-docume
 
 \end{yr7box}
 
-\subsection{The sky as ecological calendar}
+\subsection{The sky as ecological calendar}\label{sub:7.3}
 
 \begin{fnbox}{Wurundjeri sky knowledge in practice}
 On Wurundjeri Country, the rising of the Pleiades (Seven Sisters, \textit{Nurrumbunguttias}) marks the transition between seasons and signals specific ecological activities. The six-season Kulin calendar integrates the position and orientation of stars, the Milky Way, and the Moon to create a precise framework for land management that has been maintained across hundreds of generations.
@@ -1399,187 +1706,70 @@ Research suggests Aboriginal oral traditions have preserved geographically accur
 
 \end{yr7box}
 
-\section{Space Technology and Sustainability}
+\newpage
 % ============================================================
-\needspace{5\baselineskip}
-\vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part A --- Exploration --- History and Technology}
-\vspace{0.2em}
-
-\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
-\vspace{0.6em}
-
-\vc{Science Understanding}{Science as a Human Endeavour: Space exploration technologies; Australian contributions}
-
-\subsection{Key milestones in space exploration}
-
+% ABOVE-LEVEL EXTENSION DIVIDER
+% Sections 7 and 8 run past the Year 7 level. They sit last so the core
+% booklet reads straight through in lesson order; this page marks the
+% break for a student working through a printed copy.
+% ============================================================
+\vspace*{3cm}
 \begin{center}
-\begin{tabular}{rll}
-\toprule
-\textbf{Year} & \textbf{Event} & \textbf{Significance} \\
-\midrule
-1957 & Sputnik 1 (USSR) & First artificial satellite \\
-1961 & Yuri Gagarin (USSR) & First human in orbit \\
-1969 & Apollo 11 (USA) & First humans on the Moon \\
-1990 & Hubble Space Telescope & Revolutionised optical astronomy \\
-1998 & ISS construction begins & First permanent human presence in space \\
-2012 & Curiosity rover lands on Mars & Searches for habitability \\
-2021 & JWST launched & Infrared view of the early universe \\
-2024 & Europa Clipper launched & Searching for habitability on Europa \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
-
-\question{2}{Using the table, state the year of Sputnik 1 and its significance.}
-\anslines{2}
-
-\question{2}{Identify the two missions in the table launched to investigate habitability, and state which bodies they target.}
-\anslines{2}
-
-\end{yr7box}
-
-\subsection{Australia's contributions to space science}
-
-\begin{itemize}
-  \item \textbf{Parkes Radio Telescope} (``The Dish'') --- received and relayed live TV of the Apollo 11 Moon landing to 600 million viewers worldwide (1969)
-  \item \textbf{CSIRO} --- invented Wi-Fi technology from radio astronomy research; operates major Australian telescope networks
-  \item \textbf{Australian Space Agency (ASA)} --- established 2018; growing commercial space sector targeting A\$12 billion by 2030
-  \item \textbf{Square Kilometre Array (SKA)} --- world's largest radio telescope, core in WA on Wajarri Country
-\end{itemize}
-
-\begin{fnbox}{Wajarri Yamatji Country and the SKA}
-The Square Kilometre Array is being built on \textbf{Wajarri Yamatji Country} in the Murchison region of Western Australia --- chosen for its radio-quiet environment and extraordinarily dark skies. The Wajarri Yamatji have a formal Indigenous Land Use Agreement with the Australian government, including veto rights and community benefit provisions. The Wajarri people have maintained detailed sky knowledge of this Country for tens of thousands of years. The SKA is a model of how Western science can operate in genuine partnership with Traditional Custodians.
-\end{fnbox}
-
-\begin{scaffold}{Your turn --- Mission evaluation}
-Choose one of the following and evaluate it as a scientific mission. State: (a) the goal; (b) whether it was crewed or uncrewed and why; (c) one key discovery; (d) one limitation.
+{\headingfont\Huge\bfseries\color{Violet}Above level}\\[0.4em]
+{\headingfont\Large\color{Violet}Extension sections}\\[1.4em]
+{\color{Violet}\rule{0.45\linewidth}{1.4pt}}\\[1.4em]
+\begin{minipage}{0.72\linewidth}
+\centering
+The three sections that follow sit \textbf{above} the Year 7 level. The core
+unit --- Sections 1 to 6 --- is complete without them.
 
 \medskip
-\textit{Options: Apollo 11, Hubble Space Telescope, Curiosity rover, JWST}
-
-\vspace{5cm}
-\end{scaffold}
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 5 marks}
-
-\question{2}{Explain the role the Parkes Radio Telescope played in the Apollo 11 mission.}
-\anslines{2}
-
-\question{1}{State the everyday technology CSIRO developed out of its radio astronomy research.}
-\anslines{1}
-
-\question{2}{State where the core of the Square Kilometre Array is being built, and give one reason that site was chosen.}
-\anslines{2}
-
-\end{yr7box}
-
-\needspace{5\baselineskip}
-\vspace{0.8em}
-{\headingfont\large\bfseries\color{Navy}Part B --- Satellites, Debris and Sustainability}
-\vspace{0.2em}
-
-\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
-\vspace{0.6em}
-
-\vc{Science Understanding}{Science as a Human Endeavour: Sustainability of space use; Earth observation technologies}
-
-\subsection{Space debris}
-
-\vocab{Space debris} includes defunct satellites, spent rocket stages, collision fragments, and lost equipment. Current estimates:
-\begin{itemize}
-  \item $\approx$27,000 tracked objects $>$10 cm
-  \item $\approx$500,000 objects 1--10 cm (too small to track, too large to ignore)
-  \item $\approx$100 million fragments $<$1 cm
-\end{itemize}
-
-At orbital speeds ($\approx$7.8 km/s in LEO), even a 1 cm fragment has the kinetic energy of a hand grenade. The ISS has manoeuvred to avoid debris more than 30 times.
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
-
-\question{1}{State the approximate number of tracked debris objects larger than 10 cm.}
-\anslines{1}
-
-\question{3}{Explain why a fragment only 1 cm across is dangerous to a spacecraft.}
-\anslines{3}
-
-\end{yr7box}
-
-\subsection{Kessler syndrome}
-
-\vocab{Kessler syndrome} (Donald Kessler, NASA, 1978): if orbital density exceeds a critical threshold, one collision generates debris that causes more collisions in a cascade --- potentially making certain orbital shells permanently unusable. Evidence suggests the Iridium 33/Cosmos 2251 collision (2009) created $>$2,000 tracked fragments.
-
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 5 marks}
-
-\question{3}{Define Kessler syndrome.}
-\anslines{3}
-
-\question{2}{State the evidence given in the booklet that this cascade risk is real.}
-\anslines{2}
-
-\end{yr7box}
-
-\subsection{Earth observation satellites}
-
-\begin{itemize}
-  \item \vocab{Weather satellites}: Himawari and GOES provide real-time storm tracking; forecasts beyond 24 h depend entirely on satellite data
-  \item \vocab{Climate monitoring}: sea level rise, ice extent, deforestation, coral bleaching, wildfire extent
-  \item \vocab{Precision agriculture}: multispectral imaging tracks crop health, water stress, soil condition
-  \item \vocab{Emergency response}: floods, earthquakes, wildfires mapped in near-real-time
-  \item \vocab{GPS}: 24+ satellites; positioning $<$1 m accuracy; underpins transport, shipping, aviation, and smartphones
-\end{itemize}
-
-\begin{fnbox}{Satellite data on Country}
-Indigenous ranger groups across Australia use Earth observation satellite data to manage Country. Multispectral satellite imagery tracks vegetation health, water sources, fire risk, and invasive species spread across remote land. The CSIRO's Digital Earth Australia programme provides this data freely to ranger programs. Traditional Owners often describe the satellite data as confirming what their ancestors already knew about Country --- but now they can document it and advocate for its protection with evidence that government agencies accept.
-\end{fnbox}
-
-\begin{workedex}{Worked example: Kinetic energy of debris}
-\textit{A 10 g bolt of space debris travels at 7,800 m/s. Calculate its kinetic energy. Compare with a 150 g cricket ball bowled at 45 m/s.}
-
-$KE_\text{bolt} = \frac{1}{2} \times 0.010 \times 7800^2 = \frac{1}{2} \times 0.010 \times 60{,}840{,}000 = \mathbf{304{,}200 \text{ J}}$
-
-$KE_\text{cricket} = \frac{1}{2} \times 0.150 \times 45^2 = \frac{1}{2} \times 0.150 \times 2{,}025 = \mathbf{152 \text{ J}}$
-
-The space bolt has about \textbf{2,000$\times$} more kinetic energy than the cricket ball.
-\end{workedex}
-
-\begin{yr8box}
-\textbf{Year 8 Extension: Active debris removal and orbital governance}
-
-Active debris removal (ADR) technologies in development include robotic arm capture (ESA ClearSpace-1), electromagnetic tether deorbit (JAXA ELSA-d), and laser ablation. The fundamental challenge is economic: removing debris benefits all space users, not just the company paying for removal --- a classic ``tragedy of the commons.'' Proposed governance solutions include binding UN agreements, debris levies on satellite operators, and mandatory deorbit insurance. Current international frameworks (Outer Space Treaty 1967, UN COPUOS guidelines) are non-binding and insufficient for the scale of the problem.
-\end{yr8box}
+Work through them if you have finished the earlier sections, or if your
+teacher sets them as extension.
+\end{minipage}
+\end{center}
+\addcontentsline{toc}{section}{\textnormal{Above level --- extension sections}}
 
 \newpage
 % ============================================================
-
-\begin{yr7box}
-\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 7 marks}
-
-\question{3}{Name three distinct uses of Earth observation satellites given in the booklet.}
-\anslines{3}
-
-\question{2}{Explain why weather forecasts beyond 24 hours depend on satellites.}
-\anslines{2}
-
-\question{2}{State the accuracy of GPS positioning and name two sectors that depend on it.}
-\anslines{2}
-
-\end{yr7box}
-
-\section{The Search for Life --- Astrobiology}
+\section[The Search for Life --- Astrobiology \textnormal{(above level)}]{The Search for Life --- Astrobiology}\label{sec:8}
 % ============================================================
+\extension{This section sits \textbf{above} the Year 7 level. The core unit
+is complete without it --- work through it if you have finished the earlier
+sections, or if your teacher sets it as extension.}
 \vc{Science Understanding}{Biological sciences: Conditions for life; Earth and space sciences: Habitable zones; exoplanets}
 
-\subsection{Requirements for life as we know it}
+\subsection{Requirements for life as we know it}\label{sub:8.1}
+
+\begin{scaffold}{Entry task: what does life actually need?}
+Sort the eight conditions into the two columns, then rank the four you think
+matter most. Do this \textbf{before} you read on --- you are predicting, not
+looking it up.
+
+\medskip
+\noindent\textbf{Sort these:}\; liquid water \;\textbullet\; oxygen atmosphere
+\;\textbullet\; carbon chemistry \;\textbullet\; sunlight \;\textbullet\; an
+energy source \;\textbullet\; a magnetic field \;\textbullet\; a stable
+environment over time \;\textbullet\; moderate temperature
+
+\medskip
+\begin{center}
+\begin{fillin}[2.9]
+\begin{tabular}{|p{6.4cm}|p{6.4cm}|}
+\hline
+\textbf{Required for life as we know it} & \textbf{Not required (but might help)} \\ \hline
+ & \\ \hline
+ & \\ \hline
+ & \\ \hline
+ & \\ \hline
+\end{tabular}
+\end{fillin}
+\end{center}
+
+\noindent\textbf{My top four, most important first --- and why:}
+\anslines{4}
+\end{scaffold}
+
 
 Life on Earth requires:
 \begin{itemize}
@@ -1589,7 +1779,7 @@ Life on Earth requires:
   \item \vocab{Stable environment}: over geological timescales for evolution
 \end{itemize}
 
-
+\newpage
 \begin{yr7box}
 \textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
 
@@ -1601,7 +1791,7 @@ Life on Earth requires:
 
 \end{yr7box}
 
-\subsection{The habitable zone}
+\subsection{The habitable zone}\label{sub:8.2}
 
 The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from a star where liquid water can exist on a planet's surface. Earth is well within the Sun's habitable zone. Mars is on the outer edge.
 
@@ -1620,8 +1810,8 @@ The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from 
 \anslines{3}
 
 \end{yr7box}
-
-\subsection{Promising targets in our solar system}
+\newpage
+\subsection{Promising targets in our solar system}\label{sub:8.3}
 
 \begin{itemize}
   \item \vocab{Mars}: ancient river channels, delta deposits, and lake beds confirm liquid water billions of years ago. Possible present-day liquid brines under the southern polar ice cap. Perseverance rover collecting samples for return to Earth
@@ -1643,8 +1833,8 @@ The \vocab{habitable zone} (``Goldilocks zone'') is the range of distances from 
 \anslines{3}
 
 \end{yr7box}
-
-\subsection{Extremophiles}
+\newpage
+\subsection{Extremophiles}\label{sub:8.4}
 
 \vocab{Extremophiles} are organisms that thrive in conditions once thought impossible for life:
 \begin{itemize}
@@ -1667,7 +1857,7 @@ Their existence vastly expands the range of environments where we search for lif
 
 \end{yr7box}
 
-\subsection{Exoplanets and biosignatures}
+\subsection{Exoplanets and biosignatures}\label{sub:8.5}
 
 More than 5,500 exoplanets confirmed (2024). Detection methods:
 \begin{itemize}
@@ -1715,6 +1905,423 @@ Construct a scientific argument for whether life might exist in Europa's subsurf
 
 Given the size and age of the universe, intelligent life should be detectable --- yet we detect nothing. Proposed resolutions include: (1) Rare Earth hypothesis (complex life is extraordinarily rare); (2) Great Filter (a catastrophic barrier that most civilisations don't survive); (3) communication limits (light-speed travel; we've only been broadcasting for $\sim$100 years in a galaxy 100,000 light-years across); (4) non-radio technologies we don't recognise. The Breakthrough Listen initiative uses Parkes and other telescopes in systematic SETI searches. No confirmed signal has ever been received.
 \end{yr8box}
+
+\newpage
+% ============================================================
+
+\newpage
+% ============================================================
+\section[Gravity and Orbits \textnormal{(above level)}]{Gravity and Orbits}\label{sec:9}
+% ============================================================
+\extension{This section sits \textbf{above} the Year 7 level. The core unit
+is complete without it --- work through it if you have finished the earlier
+sections, or if your teacher sets it as extension.}
+\vc{Science Understanding}{Physical sciences: Gravitational force; orbital motion; Newton's law of universal gravitation}
+
+\subsection{Newton's law of universal gravitation}\label{sub:9.1}
+
+Every object with mass attracts every other object with mass:
+
+\begin{center}
+\Large $F = \dfrac{G \cdot m_1 \cdot m_2}{r^2}$
+\end{center}
+
+Where: $F$ = gravitational force (N), $G$ = gravitational constant ($6.67 \times 10^{-11}$ N\,m$^2$/kg$^2$), $m_1, m_2$ = masses (kg), $r$ = distance between centres (m).
+
+\begin{itemize}
+  \item Double either mass $\rightarrow$ force doubles
+  \item Double the distance $\rightarrow$ force decreases to \textbf{one quarter} (inverse square law)
+  \item Gravity is always \textit{attractive} --- it only pulls, never pushes
+\end{itemize}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 7 marks}
+
+\question{3}{Write Newton's law of universal gravitation and state what each symbol represents.}
+\anslines{4}
+
+\question{1}{State what happens to the gravitational force between two objects if one of the masses is quadrupled.}
+\anslines{1}
+
+\question{2}{Explain what happens to the gravitational force if the distance between two objects is doubled, and name this relationship.}
+\anslines{2}
+
+\question{1}{A student claims gravity can push objects apart. Explain why this is incorrect.}
+\anslines{2}
+
+\end{yr7box}
+\newpage
+\subsection{Orbital motion}\label{sub:9.2}
+
+\begin{scaffold}{Entry task: Newton's cannonball}
+A cannon sits on top of an impossibly tall mountain and fires horizontally.
+On the diagram, sketch the path of the cannonball when it is fired
+\textbf{(a)} slowly, \textbf{(b)} faster, and \textbf{(c)} fast enough that it
+never lands. Label each path.
+
+\begin{center}
+\begin{tikzpicture}
+  \fill[SpaceLight] (0,0) circle (2.5cm);
+  \draw[Space, thick] (0,0) circle (2.5cm);
+  \node[Space, font=\headingfont\bfseries] at (0,0) {Earth};
+  \fill[DarkGrey] (-0.26,2.46) -- (0,2.95) -- (0.26,2.46) -- cycle;
+  \draw[DarkGrey, thick, -latex] (0.10,2.86) -- (1.05,2.86);
+  \node[DarkGrey, font=\footnotesize, anchor=west] at (1.15,2.86) {cannon fires this way};
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{Is the cannonball in path (c) still falling? Explain.}
+\anslines{3}
+\end{scaffold}
+
+
+An \vocab{orbit} occurs when gravity provides the centripetal force needed to keep an object moving in a curved path. Orbiting objects are in constant \vocab{free fall} toward the body they orbit --- but moving forward so fast they keep missing it.
+
+
+Higher altitude = lower orbital speed (and longer period):
+
+\begin{center}
+	\begin{tabular}{llrr}
+		\toprule
+		\textbf{Orbit} & \textbf{Altitude} & \textbf{Speed} & \textbf{Period} \\
+		\midrule
+		LEO (ISS) & 200--2,000 km & $\approx$7.9 km/s & $\approx$90 min \\
+		MEO (GPS) & 2,000--35,786 km & $\approx$3.9 km/s & $\approx$12 h \\
+		GEO (comms, weather) & 35,786 km & $\approx$3.1 km/s & 24 h \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+\begin{infobox}{Why astronauts appear weightless}
+The ISS orbits at $\approx$408 km altitude, where gravity is about 90\% of surface strength. Astronauts appear weightless because they \textit{and} the station are falling together at the same rate. ``Weightlessness'' is free fall --- not absence of gravity.
+\end{infobox}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 9 marks}
+
+\question{2}{Define an orbit, referring to gravity and centripetal force.}
+\anslines{2}
+
+\question{3}{Explain why an object in orbit is described as being in constant free fall.}
+\anslines{3}
+
+\question{2}{State the approximate altitude of the ISS and the strength of gravity there as a percentage of its strength at Earth's surface.}
+\anslines{2}
+
+\question{2}{A student says astronauts float on the ISS because there is no gravity in space. Correct this statement.}
+\anslines{3}
+
+\end{yr7box}
+\newpage
+
+\begin{workedex}{Worked example: Weight at ISS altitude}
+\textit{An astronaut weighs 700 N on Earth (radius 6,371 km). What is their weight at ISS altitude (408 km above surface)?}
+
+$r_\text{ISS} = 6{,}371 + 408 = 6{,}779$ km
+
+Force ratio $= \left(\dfrac{6{,}371}{6{,}779}\right)^2 = 0.883$
+
+Weight at ISS $= 700 \times 0.883 = \mathbf{618 \text{ N}}$ (about 88\% of surface weight)
+\end{workedex}
+
+\begin{yr8box}
+\textbf{Year 8 Extension: Escape velocity}
+
+To escape a planet's gravitational field entirely: $v_e = \sqrt{\dfrac{2GM}{r}}$
+
+Earth: 11.2 km/s \quad Moon: 2.4 km/s \quad Mars: 5.0 km/s \quad Jupiter: 59.5 km/s
+
+The Moon's low escape velocity explains why it has no atmosphere: gas molecules moving at thermal speeds can escape to space over time.
+\end{yr8box}
+
+
+% ============================================================
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 8 marks}
+
+\question{2}{Using the table, state the orbital speed and period of the ISS.}
+\anslines{2}
+
+\question{2}{Describe the relationship between orbital altitude and orbital speed shown in the table.}
+\anslines{2}
+
+\question{2}{Explain why a satellite in geostationary orbit appears to stay in the same place in the sky.}
+\anslines{3}
+
+\question{2}{GPS satellites operate in MEO. Using the table, state the altitude range and orbital period of this orbit.}
+\anslines{2}
+
+\end{yr7box}
+
+\newpage
+% ============================================================
+
+\newpage
+% ============================================================
+\section[Stars, Galaxies and Starlight \textnormal{(above level)}]{Stars, Galaxies and Starlight}\label{sec:10}
+% ============================================================
+\extension{This section sits \textbf{above} the Year 7 level. The core unit
+is complete without it --- work through it if you have finished the earlier
+sections, or if your teacher sets it as extension.}
+\needspace{5\baselineskip}
+\vspace{0.8em}
+{\headingfont\large\bfseries\color{Navy}Part A --- Stars and Galaxies}
+\vspace{0.2em}
+
+\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
+\vspace{0.6em}
+
+\vc{Science Understanding}{Earth and space sciences: Properties of stars; galaxies; scale of the universe}
+
+\subsection{Light-years and stellar distances}\label{sub:10.1}
+
+\begin{scaffold}{Entry task: which unit fits which distance?}
+Complete the table. For each distance, choose the unit that gives a sensible
+number --- kilometres, astronomical units (AU) or light-years --- and fill in
+the blanks.
+
+\medskip
+\begin{center}
+\begin{fillin}
+\begin{tabular}{|p{5.4cm}|p{3.6cm}|p{4.4cm}|}
+\hline
+\textbf{Distance} & \textbf{Best unit} & \textbf{Approximate value} \\ \hline
+Earth to the Moon & & 384,400 km \\ \hline
+Earth to the Sun & AU & \\ \hline
+To the nearest star (Proxima Centauri) & & 4.2 light-years \\ \hline
+Diameter of the Milky Way & light-years & \\ \hline
+\end{tabular}
+\end{fillin}
+\end{center}
+
+\noindent\textbf{Why would it be silly to give the Milky Way's diameter in
+kilometres?}
+\anslines{2}
+\end{scaffold}
+
+
+A \vocab{light-year} is the distance light travels in one year: approximately $9.46 \times 10^{12}$ km (9.46 trillion km). It is a unit of \textit{distance}, not time.
+
+\begin{itemize}
+  \item The Sun: light takes 8 min 20 s to reach Earth
+  \item Proxima Centauri (nearest star): 4.2 light-years
+  \item Milky Way diameter: $\approx$100,000 light-years
+  \item Andromeda Galaxy: 2.5 million light-years
+\end{itemize}
+
+\begin{infobox}{Looking back in time}
+When we observe a star 100 light-years away, we see it as it was 100 years ago --- the light we detect left it then. Telescopes are time machines. JWST images galaxies as they appeared just 300--400 million years after the Big Bang.
+\end{infobox}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{2}{Define a light-year and state what type of quantity it measures.}
+\anslines{2}
+
+\question{2}{Proxima Centauri is 4.2 light-years away. Explain what we are actually seeing when we look at it tonight.}
+\anslines{3}
+
+\end{yr7box}
+
+\subsection{Star types and the OBAFGKM sequence}\label{sub:10.2}
+
+Stars are classified by surface temperature and colour:
+
+\begin{center}
+\begin{tabular}{lllr}
+\toprule
+\textbf{Class} & \textbf{Colour} & \textbf{Temperature} & \textbf{Example} \\
+\midrule
+O & Blue-violet & $>$30,000 K & Zeta Puppis \\
+B & Blue-white  & 10,000--30,000 K & Rigel \\
+A & White       & 7,500--10,000 K & Sirius \\
+F & Yellow-white& 6,000--7,500 K & Procyon \\
+G & Yellow      & 5,200--6,000 K & \textbf{The Sun} \\
+K & Orange      & 3,700--5,200 K & Arcturus \\
+M & Red         & $<$3,700 K & Proxima Centauri \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 5 marks}
+
+\question{2}{Using the table, state the spectral class and colour of the Sun.}
+\anslines{2}
+
+\question{3}{Arrange Rigel, the Sun and Proxima Centauri in order of decreasing surface temperature, justifying your order with data from the table.}
+\anslines{3}
+
+\end{yr7box}
+\newpage
+\subsection{Stellar life cycle (sun-like star)}\label{sub:10.3}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.4cm, >=Stealth]
+  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=1.8cm, minimum height=0.7cm] (neb) {Nebula};
+  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=1.8cm, minimum height=0.7cm, right=of neb] (pro) {Protostar};
+  \node[draw=Gold!50, rounded corners=3pt, fill=GoldLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of pro] (ms) {\textbf{Main seq.}};
+  \node[draw=Coral!40, rounded corners=3pt, fill=CoralLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of ms] (rg) {Red giant};
+  \node[draw=Space!40, rounded corners=3pt, fill=SpaceLight, font=\small, minimum width=2cm, minimum height=0.7cm, right=of rg] (wd) {White dwarf};
+  \draw[->] (neb) -- (pro);
+  \draw[->] (pro) -- (ms);
+  \draw[->] (ms) -- (rg);
+  \draw[->] (rg) -- (wd);
+\end{tikzpicture}
+
+\vspace{0.4em}
+\small\textit{Massive stars ($>$8 M$_\odot$): Main sequence $\rightarrow$ Red supergiant $\rightarrow$ Supernova $\rightarrow$ Neutron star / Black hole}
+\end{center}
+
+\begin{fnbox}{Boorong knowledge: The Magellanic Clouds}
+The Large and Small Magellanic Clouds --- dwarf galaxies visible to the naked eye from the Southern Hemisphere --- are incorporated into Boorong star lore as \textit{Yugarilya}, the two Bram-bram-bult (sons of Bunjil the creator), who appear as wedge-tailed eagles in the sky. Aboriginal Australians observed these objects for tens of thousands of years before European astronomers named them after Magellan's 1521 voyage.
+\end{fnbox}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{2}{List, in order, the stages in the life cycle of a Sun-like star.}
+\anslines{2}
+
+\question{2}{State how the life cycle of a star more massive than 8 solar masses differs after the main sequence.}
+\anslines{3}
+
+\end{yr7box}
+
+\begin{yr8box}
+\textbf{Year 8 Extension: The Hertzsprung--Russell Diagram}
+
+The H--R diagram plots stellar luminosity (vertical axis) against surface temperature (horizontal axis, running \textit{right to left} --- hot on left). Stars cluster in recognisable zones: the \vocab{main sequence} (a diagonal band), the \vocab{giant branch} (upper right, cool but luminous), and \vocab{white dwarfs} (lower left, hot but dim). A star's position reveals its evolutionary stage, mass, and age.
+\end{yr8box}
+
+\needspace{5\baselineskip}
+\vspace{0.8em}
+\newpage
+{\headingfont\large\bfseries\color{Navy}Part B --- Light from Space --- Telescopes and the EM Spectrum}
+\vspace{0.2em}
+
+\noindent{\color{Gold}\rule{\linewidth}{1.2pt}}
+\vspace{0.6em}
+
+\vc{Science Understanding}{Physical sciences: Electromagnetic radiation; wave properties; telescopes as scientific instruments}
+
+\subsection{The electromagnetic spectrum}\label{sub:10.4}
+
+\begin{scaffold}{Entry task: order the electromagnetic spectrum}
+Write the seven regions into the strip in order, longest wavelength on the
+left. Then circle the one we can see with our eyes.
+
+\medskip
+\noindent\textbf{Word bank:}\; gamma \;\textbullet\; infrared \;\textbullet\;
+microwave \;\textbullet\; radio \;\textbullet\; ultraviolet \;\textbullet\;
+visible \;\textbullet\; X-ray
+
+\medskip
+\begin{center}
+\begin{fillin}[3.2]
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\makebox[1.55cm]{} & \makebox[1.55cm]{} & \makebox[1.55cm]{} & \makebox[1.55cm]{} & \makebox[1.55cm]{} & \makebox[1.55cm]{} & \makebox[1.55cm]{} \\ \hline
+\end{tabular}
+\end{fillin}
+
+\smallskip
+{\footnotesize\color{DarkGrey}$\longleftarrow$ longer wavelength, lower energy
+\hfill higher energy, shorter wavelength $\longrightarrow$}
+\end{center}
+\end{scaffold}
+
+
+Visible light is only a small part of the \vocab{electromagnetic spectrum} (EM spectrum). All EM waves travel at the speed of light ($3 \times 10^8$ m/s) but differ in wavelength and frequency.
+
+\begin{center}
+\begin{tabular}{lllp{5cm}}
+\toprule
+\textbf{Region} & \textbf{Wavelength} & \textbf{Energy} & \textbf{Astronomical use} \\
+\midrule
+Radio waves  & mm to km   & Lowest  & Pulsars, CMB, galaxy mapping (Parkes, SKA) \\
+Microwaves   & mm         & Low     & CMB, molecular clouds \\
+Infrared     & 1\,$\mu$m--1\,mm & Medium-low & Star formation, cool objects, exoplanet atmospheres (JWST) \\
+Visible      & 400--700 nm & Medium & Stars, planets, galaxies (optical telescopes) \\
+UV           & 10--400 nm  & Medium-high & Hot stars, quasars \\
+X-ray        & 0.01--10 nm & High   & Black holes, neutron stars, galaxy clusters \\
+Gamma ray    & $<$0.01 nm & Highest & Supernovae, gamma-ray bursts \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{2}{State one property all electromagnetic waves share, and two properties that differ between them.}
+\anslines{2}
+
+\question{2}{Using the table, name the region of the spectrum used to study black holes, and the region used to map galaxies with the SKA.}
+\anslines{2}
+
+\end{yr7box}
+\newpage
+\subsection{Telescopes}\label{sub:10.5}
+
+\begin{itemize}
+  \item \vocab{Refracting telescopes}: glass lenses bend light to a focus. Limited to small instruments
+  \item \vocab{Reflecting telescopes}: mirrors reflect light to a focus. All major modern telescopes; can be built much larger (Hubble: 2.4 m mirror; JWST: 6.5 m)
+  \item \vocab{Radio telescopes}: large dish antennas; collect radio waves; Parkes dish (64 m) relayed Moon landing footage
+  \item \vocab{Space telescopes}: above the atmosphere; avoid absorption and blurring; JWST orbits at the Sun--Earth L2 point
+\end{itemize}
+
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{2}{Explain the difference between a refracting and a reflecting telescope.}
+\anslines{3}
+
+\question{2}{Give two reasons for placing a telescope in space rather than on the ground.}
+\anslines{2}
+
+\end{yr7box}
+
+\subsection{Spectroscopy --- reading starlight}\label{sub:10.6}
+
+When starlight passes through a prism or diffraction grating, \vocab{absorption lines} appear --- dark lines at specific wavelengths absorbed by elements in the star's outer atmosphere. Each element has a unique spectral fingerprint. From absorption spectra, astronomers determine:
+\begin{itemize}
+  \item Elemental \vocab{composition} of stars and exoplanet atmospheres
+  \item \vocab{Temperature} (line types reveal temperature class)
+  \item \vocab{Velocity}: blueshifted = moving toward us; redshifted = moving away (Doppler effect)
+\end{itemize}
+
+\begin{fnbox}{Wajarri knowledge and the MWA}
+The Murchison Widefield Array (MWA) --- precursor to the SKA --- sits on Wajarri Yamatji Country in Western Australia. It maps hydrogen across the Milky Way using radio waves invisible to the naked eye. The Wajarri have observed and named features of this same sky for tens of thousands of years using different instruments (their senses, memory, and song). Both the MWA and Wajarri sky knowledge reveal the same cosmos at different scales and with different tools.
+\end{fnbox}
+
+\begin{yr8box}
+\textbf{Year 8 Extension: Interferometry and the Event Horizon Telescope}
+
+By linking multiple radio telescopes worldwide and combining their signals with atomic-clock precision, astronomers create a \vocab{virtual telescope} as large as the separation between dishes --- a technique called \vocab{interferometry}. The \textbf{Event Horizon Telescope} linked 8 observatories to create an Earth-sized virtual dish, imaging the shadow of a black hole in galaxy M87 (2019) and the Milky Way's central black hole Sgr A* (2022). Resolution achieved: 40 microarcseconds --- equivalent to reading a newspaper in New York from Sydney.
+\end{yr8box}
+
+\newpage
+% ============================================================
+
+\begin{yr7box}
+\textbf{\headingfont Check your understanding}\hfill\textcolor{DarkGrey}{\itshape 4 marks}
+
+\question{3}{Explain how absorption lines allow astronomers to identify the elements present in a star.}
+\anslines{4}
+
+\question{1}{A star's spectral lines are redshifted. State what this tells you about its motion.}
+\anslines{1}
+
+\end{yr7box}
 
 % ============================================================
 % UNIT GLOSSARY

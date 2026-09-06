@@ -1,0 +1,160 @@
+/* ============================================================
+   planner.css — UNIT PLANNING DOCUMENT
+   Staff-facing, landscape-print page type. Peer of course.css,
+   worksheet.css and solutions.css. One wide table: a week per row,
+   the planning columns a faculty expects across the top.
+
+   Requires tokens.css first; theme with a body class:
+     <link rel="stylesheet" href="../../assets/css/tokens.css">
+     <link rel="stylesheet" href="../../assets/css/planner.css">
+     <body class="planner-page theme-science">
+
+   Structure:
+     .pl-bar           screen-only toolbar (back link, print button)
+     .pl-head          .pl-tag, h1, .pl-sub, .pl-meta, .pl-note
+     table.planner     thead th = the planning columns
+       td.wk             week cell — .wk-lab + .wk-n
+       .lead             a bold focus/label line
+       .sc               italic success-criteria line
+       ul.pl-list        the bullet stacks in the wide columns
+     .pl-foot          closing note
+
+   Colour comes only from tokens.css. Prints A4 landscape with the
+   header row repeated on every page.
+   ============================================================ */
+
+body.planner-page {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--c-slate-300) 24%, #fff);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.planner-page * { box-sizing: border-box; }
+.planner-page h1, .planner-page h2 { font-family: var(--font-display); margin: 0; }
+.planner-page a { color: var(--accent-dark); }
+
+/* ---------- Screen-only toolbar ---------- */
+.planner-page .pl-bar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; gap: .6em; align-items: center; flex-wrap: wrap;
+  padding: 10px max(16px, 3vw);
+  background: color-mix(in srgb, var(--accent-dark) 96%, #000);
+  color: #fff;
+}
+.planner-page .pl-bar a,
+.planner-page .pl-bar button {
+  font-family: var(--font-display); font-weight: 700; font-size: .84rem;
+  color: #fff; text-decoration: none; cursor: pointer;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+  border-radius: 100px; padding: .35em 1em;
+}
+.planner-page .pl-bar a:hover,
+.planner-page .pl-bar button:hover { background: rgba(255,255,255,.28); }
+.planner-page .pl-bar .spacer { flex: 1; }
+.planner-page .pl-bar .hint { font-size: .78rem; opacity: .8; }
+
+/* ---------- The sheet ---------- */
+.planner-page .sheet {
+  background: var(--panel);
+  margin: 18px auto; padding: 12mm;
+  width: min(1600px, calc(100% - 24px));
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-sm);
+}
+
+.planner-page .pl-tag {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent-dark);
+}
+.planner-page .pl-head h1 {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem); font-weight: 800;
+  margin: .1em 0 .25em; padding-bottom: .25em;
+  border-bottom: 2px solid var(--accent);
+}
+.planner-page .pl-meta { color: var(--muted); font-size: .9rem; margin: 0 0 .5em; }
+.planner-page .pl-note {
+  color: var(--muted); font-size: .82rem; max-width: 100ch;
+  margin: 0 0 1.1em;
+}
+
+/* ---------- The table ---------- */
+.planner-page table.planner {
+  width: 100%; border-collapse: collapse;
+  font-size: .78rem;
+}
+.planner-page table.planner th {
+  background: var(--accent-dark); color: #fff; text-align: left;
+  font-family: var(--font-display); font-weight: 700; font-size: .78rem;
+  padding: .7em .7em; border: 1px solid var(--line-strong);
+  vertical-align: bottom;
+}
+.planner-page table.planner td {
+  border: 1px solid var(--line-strong);
+  padding: .7em .7em; vertical-align: top;
+}
+/* Column rhythm — the wide columns carry the detail. */
+.planner-page table.planner col.c-wk   { width:  6%; }
+.planner-page table.planner col.c-foc  { width: 10%; }
+.planner-page table.planner col.c-li   { width: 19%; }
+.planner-page table.planner col.c-core { width: 22%; }
+.planner-page table.planner col.c-sup  { width: 15%; }
+.planner-page table.planner col.c-opt  { width: 14%; }
+.planner-page table.planner col.c-ass  { width: 14%; }
+
+.planner-page td.wk {
+  background: color-mix(in srgb, var(--accent) 7%, #fff);
+  text-align: center;
+}
+.planner-page .wk-lab {
+  display: block; font-size: .66rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.planner-page .wk-n {
+  display: block; font-family: var(--font-display); font-weight: 800;
+  font-size: 1.7rem; line-height: 1.1; color: var(--accent-dark);
+}
+.planner-page td.foc { background: color-mix(in srgb, var(--accent) 4%, #fff); }
+
+.planner-page ul.pl-list { margin: 0; padding: 0 0 0 1.05em; }
+.planner-page ul.pl-list > li { margin: 0 0 .45em; }
+.planner-page ul.pl-list > li:last-child { margin-bottom: 0; }
+.planner-page .lead { font-weight: 700; }
+.planner-page .sc { color: var(--muted); font-style: italic; }
+.planner-page .marks { color: var(--muted); font-variant-numeric: tabular-nums; }
+.planner-page .stile { color: var(--accent-dark); font-weight: 700; }
+
+.planner-page .pl-foot {
+  margin-top: 1.2em; padding-top: .6em;
+  border-top: 1px solid var(--line);
+  color: var(--ink-faint); font-size: .74rem;
+}
+
+/* ---------- Narrow screens: the table stays a table, but scrolls ---------- */
+.planner-page .pl-scroll { overflow-x: auto; }
+@media (max-width: 1100px) {
+  .planner-page .sheet { padding: 16px; }
+  .planner-page table.planner { min-width: 1400px; }
+}
+
+/* ---------- Print: A4 landscape ---------- */
+@page { size: A4 landscape; margin: 10mm; }
+@media print {
+  body.planner-page { background: #fff; }
+  .planner-page .pl-bar { display: none !important; }
+  .planner-page .sheet {
+    width: auto; margin: 0; padding: 0;
+    box-shadow: none; border-radius: 0;
+  }
+  .planner-page .pl-scroll { overflow: visible; }
+  .planner-page table.planner { font-size: 7.4pt; min-width: 0; }
+  .planner-page table.planner th { font-size: 7.4pt; padding: .45em .5em; }
+  .planner-page table.planner td { padding: .45em .5em; }
+  /* Repeat the column headings on every printed page. */
+  .planner-page table.planner thead { display: table-header-group; }
+  .planner-page table.planner tbody tr { break-inside: avoid; }
+  .planner-page a { color: var(--ink); text-decoration: none; }
+  .planner-page .wk-n { font-size: 1.3rem; }
+}
