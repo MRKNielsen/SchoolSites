@@ -1,0 +1,2378 @@
+% ============================================================
+%  Forces and Motion — Unit Booklet
+%  Years 7–8  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: pdflatex booklet.tex  (twice for page refs)
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}Forces and Motion}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Years 7--8 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedex}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question command: \question{number}{marks}{text}
+\newcommand{\question}[3]{%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\textbf{Q#1}\ifx&#2&\else\ \textcolor{DarkGrey}{(#2 mark\ifnum#2=1\else s\fi)}\fi\quad #3%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+
+% Section divider (big numbered banner)
+\newcommand{\sectiondiv}[3]{%
+  \needspace{5\baselineskip}
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.0cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont #1}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #2}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #3}
+  \end{tcolorbox}%
+}
+
+% Figure caption
+\newcommand{\figcap}[1]{%
+  \begin{center}
+    \small\itshape\color{DarkGrey} #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ══════════════════════════════════════════════════════════════════════════════
+%  EMBEDDED DIAGRAM DEFINITIONS  (formerly tikz_diagrams.tex)
+%  Edit any figure here; each \diag... macro is called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+% ============================================================
+%  TikZ Diagram Definitions — Forces and Motion Unit Booklet
+%  Self-contained macros, no external image files.
+%  Requires: tikz with arrows.meta, calc, positioning, patterns
+% ============================================================
+
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+
+% ── D1: Contact vs Non-contact Forces ─────────────────────────────────────────
+\newcommand{\diagForceTypes}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Contact forces box
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (cbox) at (0,0) {};
+  \node[font=\small\bfseries, text=NavyBlue] at (0, 1.65) {Contact Forces};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 1.1)  {\textbullet\ Friction};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.65) {\textbullet\ Normal force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.20) {\textbullet\ Tension};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.25) {\textbullet\ Applied force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.70) {\textbullet\ Air resistance};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-1.15) {\textbullet\ Spring force};
+  % Non-contact forces box
+  \node[draw=red!55!black, fill=red!8, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (ncbox) at (6.4,0) {};
+  \node[font=\small\bfseries, text=red!55!black] at (6.4, 1.65) {Non-contact Forces};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 1.1)  {\textbullet\ Gravity};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.65) {\textbullet\ Magnetic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.20) {\textbullet\ Electrostatic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9,-0.25) {\textbullet\ Nuclear force};
+\end{tikzpicture}
+\end{center}}
+
+% ── D2: Free Body Diagrams ────────────────────────────────────────────────────
+\newcommand{\diagFBD}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── LEFT: Balanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (0,3.6) {Balanced Forces};
+  \fill[ground hatch] (-1.5,-1.0) rectangle (1.5,-0.7);
+  \draw[thick, DarkGrey] (-1.5,-0.7) -- (1.5,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (book) at (0,0) {Book};
+  % Normal up
+  \draw[force arrow, TealGreen] (book.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N=10$\,N};
+  % Weight down
+  \draw[force arrow, red!65!black] (book.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W=10$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.2) {Net force $= 0$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.65) {No acceleration};
+
+  % ── RIGHT: Unbalanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (7.5,3.6) {Unbalanced Forces};
+  \fill[ground hatch] (6.0,-1.0) rectangle (9.0,-0.7);
+  \draw[thick, DarkGrey] (6.0,-0.7) -- (9.0,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (box) at (7.5,0) {Box};
+  % Normal up
+  \draw[force arrow, TealGreen] (box.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N$};
+  % Weight down
+  \draw[force arrow, red!65!black] (box.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Push right (20N, longer)
+  \draw[force arrow, PurpleDark] (box.east) -- ++(2.6,0)
+        node[above, font=\small\bfseries, text=PurpleDark] {Push 20\,N};
+  % Friction left (5N, shorter)
+  \draw[force arrow, OrangeDark] (box.west) -- ++(-1.6,0)
+        node[above, font=\small\bfseries, text=OrangeDark] {Friction 5\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.2) {Net force $= 15$\,N $\rightarrow$};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.65) {Accelerates rightward};
+\end{tikzpicture}
+\end{center}}
+
+% ── D3: Newton's First Law ─────────────────────────────────────────────────────
+\newcommand{\diagNewtonOne}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Law statement
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=PurpleDark] at (5.5,2.8)
+        {\textit{``An object at rest stays at rest, and an object in motion stays in}\\[-1pt]
+         \textit{motion, unless acted on by an unbalanced force.''\ (Law of Inertia)}};
+
+  % Ground lines
+  \draw[thick, DarkGrey] (-0.4,0) -- (2.2,0);
+  \draw[thick, DarkGrey] (3.6,0) -- (7.0,0);
+  \draw[thick, DarkGrey] (8.5,0) -- (11.5,0);
+
+  % Ball 1: at rest
+  \shade[ball color=MidBlue!80] (0.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=NavyBlue] at (0.9,1.9) {At rest};
+  \draw[force arrow, TealGreen]   (0.9,0.84) -- (0.9,1.5);
+  \draw[force arrow, red!65!black](0.9,0.0)  -- (0.9,-0.65);
+  \node[font=\scriptsize, text=TealGreen, right]    at (0.9,1.2)  {$N$};
+  \node[font=\scriptsize, text=red!65!black, right] at (0.9,-0.3) {$W$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (0.9,-1.1) {stays at rest};
+
+  % Arrow 1→2
+  \draw[-{Stealth}, thick, DarkGrey!60] (2.4,-2) -- (3.4,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {no force added};
+
+  % Ball 2: rolling
+  \shade[ball color=TealGreen!70] (5.3,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=TealGreen] at (5.3,1.9) {Rolling (no friction)};
+  \draw[force arrow, MidBlue] (5.72,0.42) -- (7.0,0.42)
+        node[above, font=\scriptsize, text=MidBlue] {$v$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (5.3,-1.1) {keeps moving};
+
+  % Arrow 2→3
+  \draw[-{Stealth}, thick, DarkGrey!60] (7.4,-2) -- (8.3,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {force applied};
+
+  % Ball 3: stopping
+  \shade[ball color=MidBlue!80] (9.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=red!60!black] at (9.9,1.9) {Unbalanced force};
+  \draw[force arrow, red!65!black] (9.48,0.42) -- (8.4,0.42)
+        node[above, font=\scriptsize, text=red!65!black] {friction};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (9.9,-1.1) {decelerates / stops};
+\end{tikzpicture}
+\end{center}}
+
+% ── D4: Newton's Second Law — F=ma ────────────────────────────────────────────
+\newcommand{\diagFma}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Law banner
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=0.9cm, align=center,
+        font=\small\bfseries, text=PurpleDark]
+        at (5.5,3.6)
+        {Newton's Second Law: \quad $F = m \times a$ \quad $\Rightarrow$ \quad
+         $a = F/m$ \quad $\Rightarrow$ \quad $m = F/a$};
+  % F box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (1.0,1.5)
+        {\textbf{\color{GoldDark}$F$\ (Force)}\\[4pt]
+         \small\color{DarkGrey}Measured in Newtons (N)\\
+         \small\color{DarkGrey}A push or pull\\[2pt]
+         \small\color{GoldDark}$F = m \times a$};
+  \node[font=\large\bfseries, text=DarkGrey] at (3.2,1.5) {$=$};
+  % m box
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (5.5,1.5)
+        {\textbf{\color{MidBlue}$m$\ (Mass)}\\[4pt]
+         \small\color{DarkGrey}Measured in kg\\
+         \small\color{DarkGrey}More mass\,=\,more\\
+         \small\color{DarkGrey}inertia to overcome};
+  \node[font=\large\bfseries, text=DarkGrey] at (7.7,1.5) {$\times$};
+  % a box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (10.0,1.5)
+        {\textbf{\color{TealGreen}$a$\ (Acceleration)}\\[4pt]
+         \small\color{DarkGrey}Measured in m/s$^2$\\
+         \small\color{DarkGrey}Bigger $F$ on same\\
+         \small\color{DarkGrey}mass\,=\,bigger $a$};
+\end{tikzpicture}
+\end{center}}
+
+% ── D5: Energy Types and Transformation ───────────────────────────────────────
+\newcommand{\diagEnergy}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Top row: three energy type boxes
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (0.0,3.2)
+        {\textbf{\color{GoldDark}Kinetic Energy (KE)}\\[3pt]
+         \small\color{DarkGrey}Energy of motion\\[2pt]
+         \small\color{GoldDark}$KE = \tfrac{1}{2}mv^2$};
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (4.8,3.2)
+        {\textbf{\color{MidBlue}Gravitational PE}\\[3pt]
+         \small\color{DarkGrey}Stored by height\\[2pt]
+         \small\color{MidBlue}$GPE = mgh$};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (9.6,3.2)
+        {\textbf{\color{TealGreen}Elastic PE}\\[3pt]
+         \small\color{DarkGrey}Stored by stretching\\[2pt]
+         \small\color{DarkGrey}springs, rubber bands};
+  % Divider label
+  \node[font=\small\bfseries, text=DarkGrey] at (4.8,1.85)
+        {Energy Transformation in a Trebuchet};
+  % Chain: GPE box
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=OrangeDark] (n1) at (0.8,0.7)
+        {Gravitational PE\\[-1pt]{\scriptsize\color{DarkGrey}(counterweight up)}};
+  % Chain: KE1 box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=GoldDark] (n2) at (4.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(arm swings)}};
+  % Chain: KE2 box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=TealGreen] (n3) at (8.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(ball launches)}};
+  % Waste box
+  \node[draw=DarkGrey, fill=LightGrey, rounded corners=4pt,
+        minimum width=2.8cm, minimum height=0.9cm, align=center,
+        font=\small, text=DarkGrey] (nw) at (8.8,-0.75)
+        {$+$ Thermal \& Sound\\[-1pt]{\scriptsize(wasted)}};
+  % Arrows
+  \draw[-{Stealth}, thick, DarkGrey] (n1.east) -- (n2.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n2.east) -- (n3.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n3.south) -- (nw.north);
+\end{tikzpicture}
+\end{center}}
+
+% ── D6: Three Classes of Lever ────────────────────────────────────────────────
+\newcommand{\diagLevers}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── Class 1: Fulcrum between E and L ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,4.85) {Class 1: Fulcrum between E and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,4.85) {e.g.\ seesaw};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,4.2) -- (10.5,4.2);
+  \fill[red!65!black] (5.5,4.2) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (5.5,3.68) {F};
+  \draw[force arrow, MidBlue]   (1.5,5.05) -- (1.5,4.2);
+  \draw[force arrow, TealGreen] (9.5,5.05) -- (9.5,4.2);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (1.5,5.05) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (9.5,5.05) {L};
+
+  % ── Class 2: Load between F and E ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,2.55) {Class 2: Load between F and E};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,2.55) {e.g.\ wheelbarrow};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,1.9) -- (10.5,1.9);
+  \fill[red!65!black] (1.0,1.9) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (1.0,1.38) {F};
+  \draw[force arrow, MidBlue]   (9.5,2.75) -- (9.5,1.9);
+  \draw[force arrow, TealGreen] (5.0,2.75) -- (5.0,1.9);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (9.5,2.75) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (5.0,2.75) {L};
+
+  % ── Class 3: Effort between F and L ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,0.25) {Class 3: Effort between F and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,0.25) {e.g.\ tweezers};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,-0.4) -- (10.5,-0.4);
+  \fill[red!65!black] (1.0,-0.4) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (1.0,-0.92) {F};
+  \draw[force arrow, MidBlue]   (5.0,0.45) -- (5.0,-0.4);
+  \draw[force arrow, TealGreen] (9.5,0.45) -- (9.5,-0.4);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (5.0,0.45) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (9.5,0.45) {L};
+\end{tikzpicture}
+\end{center}}
+
+% ── D7: Trebuchet as Class 1 Lever ────────────────────────────────────────────
+\newcommand{\diagTrebuchetLever}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.55) rectangle (12.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (12.5,0);
+  % Uprights
+  \draw[line width=3pt, DarkGrey!70] (2.8,0) -- (2.8,1.8);
+  \draw[line width=3pt, DarkGrey!70] (4.4,0) -- (4.4,1.8);
+  \draw[line width=3pt, DarkGrey!70] (7.6,0) -- (7.6,1.8);
+  \draw[line width=3pt, DarkGrey!70] (9.2,0) -- (9.2,1.8);
+  % Arm (tilted left-low to right-high)
+  \draw[line width=6pt, brown!55!black, line cap=round] (2.4,2.6) -- (10.5,5.0);
+  % Pivot
+  \fill[DarkGrey!80] (6.2,3.6) circle (0.18);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, below] at (6.2,3.42) {Pivot};
+  % Counterweight
+  \node[draw=red!60!black, fill=red!12, rounded corners=3pt,
+        minimum width=1.5cm, minimum height=1.5cm,
+        font=\small\bfseries, text=red!60!black, align=center]
+        at (2.0,1.4) {Heavy\\CW\\(Effort)};
+  \draw[force arrow, red!65!black] (2.0,0.65) -- (2.0,-0.1);
+  \node[font=\scriptsize, text=red!65!black, right] at (2.1,-0.05) {$W_1$};
+  % Short arm brace
+  \draw[dim arrow] (2.4,0.5) -- (6.2,0.5)
+        node[midway, below, font=\scriptsize, text=red!60!black] {Short arm};
+  % Ball
+  \shade[ball color=MidBlue!85] (10.9,5.2) circle (0.38);
+  \node[font=\scriptsize\bfseries, text=MidBlue, above right] at (11.1,5.35) {Ball (Load)};
+  \draw[force arrow, red!65!black] (10.9,4.82) -- (10.9,3.8);
+  \node[font=\scriptsize, text=red!65!black, right] at (11.0,4.3) {$W_2$};
+  % Long arm brace
+  \draw[dim arrow] (6.2,0.5) -- (10.5,0.5)
+        node[midway, below, font=\scriptsize, text=MidBlue] {Long arm};
+  % MA formula box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
+        font=\small, text=GoldDark, align=center, inner sep=4pt]
+        at (6.2,-1.3)
+        {$\text{MA} = \text{Long arm} \div \text{Short arm}$};
+\end{tikzpicture}
+\end{center}}
+
+% ── D8: Projectile Motion ─────────────────────────────────────────────────────
+\newcommand{\diagProjectile}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.45) rectangle (11.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (11.5,0);
+  % Launch platform
+  \fill[DarkGrey!35] (0,0) rectangle (1.3,3.0);
+  \draw[thick, DarkGrey] (1.3,3.0) -- (0,3.0);
+  % Height brace
+  \draw[dim arrow] (-0.4,0) -- (-0.4,3.0)
+        node[midway, left, font=\small\bfseries, text=red!65!black] {$h$};
+  % Parabolic trajectory
+  \draw[thick, MidBlue, dashed]
+        (1.3,3.0) .. controls (4.2,3.8) and (8.2,2.6) .. (10.8,0);
+  % Ball at launch
+  \shade[ball color=MidBlue!85] (1.3,3.0) circle (0.32);
+  % Horizontal velocity
+  \draw[force arrow, MidBlue] (1.62,3.0) -- (3.4,3.0)
+        node[above, font=\small\bfseries, text=MidBlue] {$v$ (horizontal)};
+  % Weight at launch
+  \draw[force arrow, red!65!black] (1.3,2.68) -- (1.3,1.4)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Ball mid-trajectory
+  \shade[ball color=MidBlue!60] (6.0,3.5) circle (0.22);
+  \draw[-{Stealth}, thin, MidBlue]    (6.22,3.5)  -- ++(0.9,0);
+  \draw[-{Stealth}, thin, red!65!black] (6.0,3.28) -- ++(0,-0.8);
+  % Ball at landing
+  \shade[ball color=MidBlue!85] (10.8,0.32) circle (0.32);
+  % Range brace
+  \draw[dim arrow] (1.3,-0.75) -- (10.8,-0.75)
+        node[midway, below, font=\small\bfseries, text=TealGreen] {$R$ (horizontal range)};
+  % Equations box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
+        font=\small, text=GoldDark, align=center, inner sep=6pt]
+        at (7.8,2.6)
+        {\textbf{Key equations}\\[3pt]
+         \color{NavyBlue}$h = \tfrac{1}{2}g t^2$\\[1pt]
+         \color{NavyBlue}$g = 2h \div t^2$\\[1pt]
+         \color{NavyBlue}$R = v \times t$\\[2pt]
+         \color{DarkGrey}\scriptsize$g = 9.8$\,m/s$^2$};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Trolley and pulley setup ─────────────────────────────────────
+\newcommand{\diagExpTwoSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  % Ground
+  \fill[ground hatch] (0,-0.4) rectangle (10.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (10.5,0);
+  % Runway
+  \fill[DarkGrey!15] (0.3,0) rectangle (9.8,0.18);
+  \draw[DarkGrey!60] (0.3,0.18) -- (9.8,0.18);
+  % Trolley
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.4cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (trolley) at (3.5,0.68) {Trolley ($M$)};
+  % Wheels
+  \fill[DarkGrey!60] (2.55,0.18) circle (0.13);
+  \fill[DarkGrey!60] (4.45,0.18) circle (0.13);
+  % Ticker tape
+  \draw[dashed, DarkGrey!50, thick] (2.3,0.68) -- (0.3,0.68);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (0.22,0.68) {ticker tape};
+  % String to pulley
+  \draw[thick, DarkGrey!70] (trolley.east) -- (9.0,0.68);
+  % Pulley
+  \draw[thick, DarkGrey] (9.0,0.68) circle (0.34);
+  \fill[DarkGrey!25] (9.0,0.68) circle (0.34);
+  \draw[thick, DarkGrey] (9.0,0.68) circle (0.11);
+  \node[font=\scriptsize, text=DarkGrey, above right] at (9.22,0.88) {pulley};
+  % String over pulley and down
+  \draw[thick, DarkGrey!70] (9.0,0.34) -- (9.0,-1.7);
+  % Hanging mass
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
+        minimum width=1.3cm, minimum height=0.85cm,
+        font=\small\bfseries, text=OrangeDark] (hm) at (9.0,-2.2) {$m$};
+  \node[font=\scriptsize, text=OrangeDark, anchor=west] at (9.7,-2.2) {hanging mass};
+  % Weight arrow
+  \draw[force arrow, red!65!black] (hm.south) -- ++(0,-1.0)
+        node[right, font=\scriptsize\bfseries, text=red!65!black] {$W\!=\!mg$};
+  % Tension on hanging mass
+  \draw[force arrow, TealGreen] (9.0,-1.5) -- (9.0,-0.8)
+        node[left, font=\scriptsize\bfseries, text=TealGreen] {$T$};
+  % Tension arrow on trolley
+  \draw[force arrow, OrangeDark] (trolley.east) ++(0.1,0) -- ++(1.5,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark] {$T$};
+  % Acceleration arrow
+  \draw[force arrow, PurpleDark] (trolley.north) ++(0.0,0.1) -- ++(1.8,0)
+        node[above, font=\scriptsize\bfseries, text=PurpleDark] {$a$};
+  % Mass label
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (3.5,1.48)
+        {total trolley mass $= M$ (kept constant)};
+  % Bench label
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.3,-0.28) {bench / runway};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: FBD of trolley and hanging mass side by side ────────────────
+\newcommand{\diagExpTwoFBD}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  %% ── LEFT: Trolley FBD ──
+  \node[font=\small\bfseries, text=NavyBlue] at (0,3.5) {FBD: Trolley ($M$)};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
+        minimum width=2.6cm, minimum height=1.2cm,
+        font=\small\bfseries, text=NavyBlue] (T) at (0,0) {Trolley ($M$)};
+  % Normal up
+  \draw[force arrow, TealGreen] (T.north) -- ++(0,2.0)
+        node[right, font=\small\bfseries, text=TealGreen] {$N$ (normal)};
+  % Weight down
+  \draw[force arrow, red!65!black] (T.south) -- ++(0,-2.0)
+        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!Mg$};
+  % Tension right
+  \draw[force arrow, OrangeDark] (T.east) -- ++(2.8,0)
+        node[above, font=\small\bfseries, text=OrangeDark] {$T$ (tension)};
+  % Friction dashed
+  \draw[thin arrow, DarkGrey!55, dashed] (T.west) -- ++(-1.8,0)
+        node[above, font=\scriptsize\itshape, text=DarkGrey!65] {friction $\approx 0$};
+  % Vertical balance
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (0,2.9)
+        {$N = Mg$ (vertical balance)};
+  % Equation
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
+        font=\small, text=OrangeDark, inner sep=3pt]
+        at (0,-3.4) {$T = Ma$};
+
+  %% ── RIGHT: Hanging mass FBD ──
+  \node[font=\small\bfseries, text=NavyBlue] at (8.5,3.5) {FBD: Hanging mass ($m$)};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
+        minimum width=2.4cm, minimum height=1.1cm,
+        font=\small\bfseries, text=OrangeDark] (H) at (8.5,0) {Mass ($m$)};
+  % Tension up (shorter than weight — mass accelerates down)
+  \draw[force arrow, TealGreen] (H.north) -- ++(0,1.6)
+        node[right, font=\small\bfseries, text=TealGreen] {$T$ (tension)};
+  % Weight down (longer)
+  \draw[force arrow, red!65!black] (H.south) -- ++(0,-2.6)
+        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!mg$};
+  % Unbalanced label
+  \node[font=\scriptsize\itshape, text=red!60!black] at (8.5,2.5)
+        {$mg > T$ — forces unbalanced};
+  % Net force arrow overlay
+  \draw[force arrow, red!65!black, line width=1.2pt, opacity=0.5]
+        (H.south) ++(0,-0.3) -- ++(0,-0.9)
+        node[left, font=\scriptsize\bfseries, text=red!65!black] {net $F$};
+  % Equation
+  \node[draw=red!55!black, fill=red!8, rounded corners=3pt,
+        font=\small, text=red!55!black, inner sep=3pt, align=center]
+        at (8.5,-3.4) {$mg - T = ma$};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Comparing force sizes (50g / 100g / 200g) ──────────────────
+\newcommand{\diagExpTwoForces}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \node[font=\small\bfseries, text=NavyBlue] at (6.0,1.4)
+        {Effect of increasing hanging mass — arrow length shows force magnitude};
+
+  % ── 50 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (1.5,0.5) {$m = 50$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t1) at (1.5,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t1.east) -- ++(1.0,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_1$};
+  \draw[force arrow, PurpleDark] (t1.south east) -- ++(0.7,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_1$};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=0.9cm, minimum height=0.7cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (3.0,-2.2) {50\,g};
+  \draw[force arrow, red!65!black] (3.0,-2.55) -- ++(0,-0.7)
+        node[right, font=\scriptsize, text=red!65!black] {$W_1$};
+
+  % ── 100 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (6.0,0.5) {$m = 100$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t2) at (6.0,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t2.east) -- ++(1.7,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_2$};
+  \draw[force arrow, PurpleDark] (t2.south east) -- ++(1.2,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_2$};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=1.0cm, minimum height=0.85cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (8.1,-2.2) {100\,g};
+  \draw[force arrow, red!65!black] (8.1,-2.6) -- ++(0,-1.1)
+        node[right, font=\scriptsize, text=red!65!black] {$W_2$};
+
+  % ── 200 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (10.8,0.5) {$m = 200$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t3) at (10.8,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t3.east) -- ++(2.4,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_3$};
+  \draw[force arrow, PurpleDark] (t3.south east) -- ++(1.8,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_3$ (largest)};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=1.1cm, minimum height=1.1cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (13.6,-2.2) {200\,g};
+  \draw[force arrow, red!65!black] (13.6,-2.65) -- ++(0,-1.6)
+        node[right, font=\scriptsize, text=red!65!black] {$W_3$};
+
+  % Observation box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=14.2cm, inner sep=5pt,
+        font=\small, text=TealGreen, align=center]
+        at (6.5,-5.0)
+        {As hanging mass doubles ($50 \to 100$\,g), tension $T$ doubles, so acceleration $a$ doubles.
+         This confirms: $F \propto a$ when mass $M$ is constant ($F = ma$).};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Combined system equation derivation ─────────────────────────
+\newcommand{\diagExpTwoSystem}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Background panel
+  \node[draw=NavyBlue, fill=LightBlue!30, rounded corners=5pt,
+        minimum width=13cm, minimum height=5.5cm] at (5.5,0) {};
+
+  \node[font=\small\bfseries, text=NavyBlue] at (5.5,2.4)
+        {System Analysis: Combining both free body diagrams};
+
+  % Trolley side
+  \node[font=\small\bfseries, text=NavyBlue, anchor=north west] at (0.4,1.8)
+        {Trolley ($M$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (0.4,1.3)
+        {Horizontal net force $= T$};
+  \node[font=\small, text=NavyBlue, anchor=north west] at (0.4,0.8)
+        {$\Rightarrow\quad T = Ma \quad\cdots(1)$};
+
+  % Hanging mass side
+  \node[font=\small\bfseries, text=OrangeDark, anchor=north west] at (6.2,1.8)
+        {Hanging mass ($m$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (6.2,1.3)
+        {Net force $= mg - T$ downward};
+  \node[font=\small, text=OrangeDark, anchor=north west] at (6.2,0.8)
+        {$\Rightarrow\quad mg - T = ma \quad\cdots(2)$};
+
+  % Combined
+  \node[font=\small\bfseries, text=TealGreen] at (5.5,-0.1)
+        {Add (1) and (2) to eliminate $T$:};
+  \node[font=\small, text=NavyBlue] at (5.5,-0.6)
+        {$mg = Ma + ma = (M+m)\,a$};
+  \node[font=\small\bfseries, text=NavyBlue] at (5.5,-1.1)
+        {$\displaystyle a = \frac{mg}{M+m}$};
+
+  % Insight box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
+        font=\small, text=GoldDark, inner sep=5pt, align=center]
+        at (5.5,-2.3)
+        {When $M \gg m$: total mass $\approx M$,\quad
+         so $a \approx \dfrac{mg}{M} = \dfrac{F}{M}$
+         \quad --- confirming $F = Ma$};
+\end{tikzpicture}
+\end{center}}
+
+
+% ── New in this update: spring-scale and force-arrow scale diagrams ──────────
+\newcommand{\diagSpringScales}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
+  % --- Scale A: 0-10 N, pointer at 4 N ---
+  \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+  \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {A};
+  \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+  \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+  \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+  \foreach \v in {0,1,2,3,4,5,6,7,8,9,10}{
+    \pgfmathsetmacro{\yy}{5.5-\v*0.5}
+    \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+    \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+  }
+  \draw[line width=2pt, red!70!black] (0.1,3.5) -- (1.4,3.5);
+  \node[anchor=west, font=\tiny\bfseries, text=red!70!black] at (1.5,3.5) {};
+  \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--10\,N};
+
+  % --- Scale B: 0-5 N, pointer at 2.5 N ---
+  \begin{scope}[xshift=4cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {B};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,1,2,3,4,5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \foreach \v in {0.5,1.5,2.5,3.5,4.5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.5pt, DarkGrey] (0.25,\yy) -- (0.45,\yy);
+    }
+    \draw[line width=2pt, red!70!black] (0.1,3.0) -- (1.4,3.0);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--5\,N};
+  \end{scope}
+
+  % --- Scale C: 0-20 N, pointer at 13 N ---
+  \begin{scope}[xshift=8cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {C};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,2,4,6,8,10,12,14,16,18,20}{
+      \pgfmathsetmacro{\yy}{5.5-\v*0.25}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \draw[line width=2pt, red!70!black] (0.1,2.25) -- (1.4,2.25);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--20\,N};
+  \end{scope}
+
+  % Instruction note
+  \node[anchor=west, font=\footnotesize\itshape, text=DarkGrey, align=left]
+        at (10.4,3) {Read the value where\\the red pointer sits.\\Check what one small\\division is worth first.};
+\end{tikzpicture}
+\end{center}}
+
+\newcommand{\diagArrowScale}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
+  % Scale key
+  \node[anchor=west, font=\small\bfseries, text=Ink] at (0,3.4) {Scale: 1\,cm represents 5\,N};
+  \draw[line width=1.2pt, Ink] (0,3.0) -- (1,3.0);
+  \draw[line width=0.8pt, Ink] (0,2.88) -- (0,3.12);
+  \draw[line width=0.8pt, Ink] (1,2.88) -- (1,3.12);
+  \node[anchor=west, font=\footnotesize, text=DarkGrey] at (1.2,3.0) {= 1\,cm = 5\,N};
+
+  % 5 N arrow
+  \draw[force arrow, MidBlue] (0,2.0) -- (1,2.0);
+  \node[anchor=west, font=\footnotesize\bfseries, text=MidBlue] at (1.3,2.0) {5\,N \; (1\,cm long)};
+
+  % 10 N arrow
+  \draw[force arrow, TealGreen] (0,1.2) -- (2,1.2);
+  \node[anchor=west, font=\footnotesize\bfseries, text=TealGreen] at (2.3,1.2) {10\,N \; (2\,cm long)};
+
+  % 15 N arrow
+  \draw[force arrow, OrangeDark] (0,0.4) -- (3,0.4);
+  \node[anchor=west, font=\footnotesize\bfseries, text=OrangeDark] at (3.3,0.4) {15\,N \; (3\,cm long)};
+
+  % Worked box on right
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt, inner sep=5pt,
+        font=\footnotesize, text=GoldDark, align=left, anchor=north west]
+        at (8.2,3.3)
+        {\textbf{To find the length:}\\[2pt]
+         length $=$ force $\div$ scale\\[2pt]
+         e.g.\ $15 \div 5 = 3$\,cm};
+\end{tikzpicture}
+\end{center}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  CONTENT BLOCKS  (reading passages, beginner skills, practice sets)
+%  Each \reading../\practice.. macro is called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+
+\newcommand{\readingOne}{%
+\begin{readingbox}{Reading --- The Forces You Cannot See}
+Right now, while you sit perfectly still, you are being pushed and pulled from several directions at once. Gravity is pulling every part of your body downwards towards the centre of the Earth. At the same time, the chair beneath you is pushing upwards on you with exactly the same strength. Because these two forces are equal and opposite, you stay put. If the chair suddenly vanished, the pushing force would disappear, gravity would win, and you would fall.
+
+People often think that astronauts on the International Space Station float because there is no gravity in space. This is not true. At the height the Space Station orbits, Earth's gravity is still about 90\% as strong as it is on the ground. Astronauts float because they --- and the whole Space Station --- are falling around the Earth at enormous speed, and they fall together. Everything inside falls at the same rate, so nothing presses against anything else. The astronauts do not feel the push of a floor, so they seem weightless.
+
+Forces are invisible, so scientists need a way to record them. The solution is simple but powerful: draw each force as an arrow. The direction of the arrow shows which way the force acts, and the length of the arrow shows how strong it is. A picture full of invisible pushes and pulls becomes something you can measure, compare and calculate with.
+\end{readingbox}
+
+\rcreset
+\rcq{According to the passage, name the two forces acting on you while you sit still, and state the direction of each.}{1.6cm}
+\rcq{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
+\rcq{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 1 — BEGINNER SKILLS
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\beginnerSkills}{%
+
+\subsection{Starting Point: Every Force is a Push or a Pull}
+
+This is the whole idea, and it really is that simple. Whenever one object affects another --- by touching it, or from a distance --- it does so by \textbf{pushing} it or \textbf{pulling} it. There is no third option.
+
+\begin{skillbox}{Think about it}
+A magnet \emph{pulls} a paperclip. A hand \emph{pushes} a door. The Earth \emph{pulls} you downwards. A rope \emph{pulls} a sledge. The ground \emph{pushes} up on your feet.
+\end{skillbox}
+
+\textbf{Task 1.1} \markscount{6}\quad For each everyday action, decide whether the force is a push or a pull. Write \textbf{PUSH} or \textbf{PULL} in the box.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{5.4cm} C{2.2cm} L{5.4cm} C{2.2cm}@{}}
+  \thead{Action} & \thead{Push or pull?} & \thead{Action} & \thead{Push or pull?} \\
+  \talt Kicking a football          & & Opening a drawer           & \\[8pt]
+        A crane lifting a girder    & & Squeezing a stress ball    & \\[8pt]
+  \talt A dog straining on a lead   & & Wind on a sail             & \\[8pt]
+\end{tabular}
+
+\subsection{What Forces Can Do}
+
+A force can only change an object in a small number of ways. Learn these five and you can describe almost any situation in this unit.
+
+\vspace{4pt}
+\begin{tabular}{@{}C{0.8cm} L{5.6cm} L{8.4cm}@{}}
+  \thead{\#} & \thead{A force can\ldots} & \thead{Example} \\
+  \talt 1 & Make a still object start moving   & A kicked football leaves the ground \\
+        2 & Make a moving object stop          & Brakes bring a bicycle to a halt \\
+  \talt 3 & Make an object speed up or slow down & Pedalling harder makes you accelerate \\
+        4 & Change the direction of motion     & A tennis racquet sends the ball back \\
+  \talt 5 & Change the shape of an object      & Squashing a drink can \\
+\end{tabular}
+
+\vspace{5pt}
+\textbf{Task 1.2} \markscount{4}\quad For each event below, write the \textbf{number} (1--5) of the effect the force is having. Some may have more than one.
+
+\vspace{3pt}
+\begin{tabular}{@{}L{7.2cm} C{1.6cm} L{5.6cm} C{1.6cm}@{}}
+  \talt A goalkeeper catches a ball        & & Stretching a rubber band & \\[8pt]
+        A car turns a corner at steady speed & & A rocket lifts off      & \\[8pt]
+\end{tabular}
+
+\subsection{Measuring Force: The Newton}
+
+Force is measured in \textbf{newtons}, written \textbf{N}. The unit is named after Sir Isaac Newton, whose work you will meet in Section 2.
+
+\begin{infobox}{Getting a feel for a newton}
+\textbf{1 N} is roughly the force you feel holding a small apple (about 100 g) against gravity.\\
+\textbf{10 N} is about the weight of a 1 kg bag of sugar.\\
+\textbf{500 N} is roughly the weight of an average adult.
+\end{infobox}
+
+We measure force with a \textbf{spring scale} (also called a \emph{newton meter}). Inside is a spring: the harder you pull, the further it stretches, and a pointer moves down a scale marked in newtons.
+
+\vspace{4pt}
+\diagSpringScales
+\figcap{Figure 1.0 --- Reading a spring scale. Always read at eye level, and check the size of each small division first.}
+
+\begin{skillbox}{How to read a spring scale correctly}
+\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
+  \item Check the \textbf{largest} number on the scale --- this is the maximum it can measure.
+  \item Work out what \textbf{one small division} is worth. If there are 10 small gaps between 0 and 5 N, each is 0.5 N.
+  \item Hold the scale still and read at \textbf{eye level} to avoid parallax error.
+  \item Read the value where the \textbf{pointer} sits, and always write the \textbf{unit (N)}.
+\end{enumerate}
+\end{skillbox}
+
+\textbf{Task 1.3} \markscount{3}\quad Write the reading shown on each of the three scales in Figure 1.0.
+
+\vspace{3pt}
+\begin{tabular}{@{}C{4.6cm} C{4.6cm} C{4.6cm}@{}}
+  \thead{Scale A} & \thead{Scale B} & \thead{Scale C} \\
+  \talt \rule{0pt}{1.1cm} & & \\
+\end{tabular}
+
+\subsection{Mass and Weight Are Not the Same Thing}
+
+In everyday speech we use these words as if they mean the same thing. In science they are quite different, and mixing them up causes a lot of lost marks.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{3.2cm} L{6.0cm} L{6.0cm}@{}}
+  \thead{} & \thead{Mass} & \thead{Weight} \\
+  \talt What it is   & The amount of matter in an object & The \emph{force} of gravity pulling on that mass \\
+        Unit         & kilograms (kg)                    & newtons (N) \\
+  \talt Measured with& A balance                         & A spring scale \\
+        Changes?     & Same everywhere in the universe   & Changes with the strength of gravity \\
+\end{tabular}
+
+\begin{infobox}{The link between them}
+\[ \text{Weight} = \text{mass} \times \text{gravitational field strength} \qquad\Rightarrow\qquad \boxed{W = mg} \]
+On Earth, $g = 9.8$\,N/kg. On the Moon, $g = 1.6$\,N/kg.
+\end{infobox}
+
+\begin{workedex}{Worked Example 1.1 --- Mass and weight}
+A student has a mass of 50\,kg. Find their weight on Earth, and on the Moon.
+
+\medskip
+\textbf{On Earth:}\quad $W = mg = 50 \times 9.8 = \mathbf{490\ \text{N}}$
+
+\textbf{On the Moon:}\quad $W = mg = 50 \times 1.6 = \mathbf{80\ \text{N}}$
+
+\medskip
+Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
+\end{workedex}
+
+\textbf{Task 1.4} \markscount{4}\quad Complete the table. Use $g = 9.8$\,N/kg on Earth.
+
+\vspace{3pt}
+\begin{tabular}{@{}L{5.0cm} C{3.2cm} C{3.2cm} C{3.4cm}@{}}
+  \thead{Object} & \thead{Mass (kg)} & \thead{Weight on Earth (N)} & \thead{Weight on Moon (N)} \\
+  \talt Bag of sugar    & 1   & & \\[8pt]
+        Bicycle         & 12  & & \\[8pt]
+  \talt Small car       & 900 & & \\[8pt]
+\end{tabular}
+
+\subsection{Naming the Forces}
+
+Before you can draw a force diagram, you need the right names. These are the forces you will use again and again in this unit.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{3.4cm} L{6.4cm} L{5.4cm}@{}}
+  \thead{Force} & \thead{What causes it} & \thead{Which way it acts} \\
+  \talt Weight ($W$)        & Gravity pulling on mass              & Always straight down \\
+        Normal force ($N$)  & A surface pushing back on an object  & Perpendicular to the surface \\
+  \talt Friction ($f$)      & Two surfaces rubbing together        & Opposite to the motion \\
+        Air resistance      & Air pushing against a moving object  & Opposite to the motion \\
+  \talt Tension ($T$)       & A rope, string or cable pulling      & Along the rope, away from the object \\
+        Applied force       & A person or machine pushing/pulling  & Whichever way it is applied \\
+\end{tabular}
+
+\subsection{Drawing Force Arrows --- The Three Rules}
+
+\begin{skillbox}{The three rules for every force arrow}
+\begin{enumerate}[itemsep=2pt, leftmargin=1.4em, topsep=1pt]
+  \item \textbf{Start the arrow on the object.} The tail sits on the object the force acts on.
+  \item \textbf{Point the arrowhead the way the force acts.} Down for weight, up for the normal force, and so on.
+  \item \textbf{Make the length match the size.} A 20\,N force is drawn twice as long as a 10\,N force. \emph{Always}.
+\end{enumerate}
+\end{skillbox}
+
+Rule 3 is the one students most often forget --- and it matters, because the picture should tell you the answer at a glance. If two arrows are the same length, the forces are balanced. If one is longer, that is the direction the object accelerates.
+
+\vspace{4pt}
+\diagArrowScale
+\figcap{Figure 1.0b --- Using a scale for force arrows. Here 1\,cm represents 5\,N, so a 15\,N force is drawn 3\,cm long.}
+
+\textbf{Task 1.5} \markscount{4}\quad A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
+\end{tcolorbox}
+
+\subsection{Putting It Together: Balanced and Unbalanced}
+
+When you add up all the forces on an object, the single force left over is called the \textbf{net force} (or resultant force).
+
+\begin{infobox}{Working out the net force}
+\textbf{Same direction} $\rightarrow$ \textbf{add} the forces.\\
+\textbf{Opposite directions} $\rightarrow$ \textbf{subtract} the smaller from the larger. The net force acts in the direction of the larger force.\\[3pt]
+If the net force is \textbf{zero}, the forces are \textbf{balanced} and the motion does not change.\\
+If the net force is \textbf{not zero}, the forces are \textbf{unbalanced} and the object accelerates.
+\end{infobox}
+
+\begin{workedex}{Worked Example 1.2 --- Finding the net force}
+A sledge is pulled forwards with 45\,N. Friction pushes back with 18\,N. Find the net force.
+
+\medskip
+Opposite directions, so subtract: \quad $45 - 18 = \mathbf{27\ \text{N forwards}}$
+
+\medskip
+The net force is not zero, so the forces are unbalanced and the sledge \textbf{speeds up}.
+\end{workedex}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PRACTICE SET — NET FORCE
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\practiceNetForce}{%
+\needspace{8\baselineskip}
+\practiceset{Net Force}
+Show all working. Remember to state the \textbf{direction} of the net force and whether the forces are balanced or unbalanced.
+
+\pqpair{Two people push a car in the same direction with 250\,N and 310\,N. Find the net force.}{2.4cm}
+       {A trolley is pushed right with 40\,N while friction pushes left with 12\,N. Find the net force.}{2.4cm}
+
+\pqpair{A book rests on a table. Its weight is 8\,N. What is the normal force from the table? Explain.}{2.4cm}
+       {A tug-of-war team pulls left with 900\,N, the other pulls right with 900\,N. Describe the motion.}{2.4cm}
+
+\pq{A rocket engine produces 50\,000\,N of upward thrust. The rocket's weight is 32\,000\,N. \textbf{(a)} Find the net force. \textbf{(b)} State the direction the rocket accelerates. \textbf{(c)} Explain what would happen if the thrust dropped to 32\,000\,N.}{3.4cm}
+
+\pq{A swimmer moves forward at a constant speed. Her arms provide 120\,N of forward force. \textbf{(a)} What is the size of the water resistance acting on her? \textbf{(b)} Explain how you know.}{3.0cm}
+
+\pq{A parachutist has a weight of 700\,N. Just after the parachute opens, air resistance is 950\,N. \textbf{(a)} Find the net force and its direction. \textbf{(b)} Describe what happens to the parachutist's speed. \textbf{(c)} Air resistance then falls to 700\,N --- describe the motion now.}{3.8cm}
+
+\begin{yr8box}
+\pq{A 1200\,kg car has a driving force of 4800\,N. Air resistance and friction total 1500\,N. \textbf{(a)} Find the net force. \textbf{(b)} Use $F = ma$ to find the acceleration. \textbf{(c)} The driver then increases the driving force to 6000\,N --- find the new acceleration.}{4.4cm}
+\end{yr8box}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 2 — READING
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\readingTwo}{%
+\begin{readingbox}{Reading --- Why Rockets Work in Empty Space}
+When rockets were first proposed as a way of reaching space, some newspapers scoffed at the idea. In 1920 an editorial in the \emph{New York Times} argued that a rocket could never work beyond the atmosphere, because out in the vacuum there would be nothing for the exhaust gases to push against. It seemed like common sense. A swimmer pushes against water, a runner pushes against the ground --- so surely a rocket must push against the air?
+
+The reasoning was wrong, and the mistake came from misunderstanding Newton's Third Law. A rocket does not push against the air behind it. It pushes against \emph{its own exhaust}. The engine hurls a huge mass of hot gas backwards, and by the Third Law the gas pushes the rocket forwards with exactly the same force. Nothing outside the rocket is needed at all. In fact rockets work \emph{better} in space, because there is no air resistance slowing them down.
+
+The \emph{New York Times} eventually printed a correction --- in July 1969, three days after Apollo 11 launched for the Moon, and forty-nine years after the original editorial. It noted, briefly, that further investigation had confirmed the work of Newton in the seventeenth century, and regretted the error.
+\end{readingbox}
+
+\rcreset
+\rcq{What mistaken reason did the 1920 editorial give for believing rockets could not work in space?}{1.6cm}
+\rcq{Explain, using Newton's Third Law, what a rocket actually pushes against.}{2.2cm}
+\rcq{The passage says rockets work \emph{better} in space. Give the reason, and name the force that is absent.}{1.8cm}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PRACTICE SET — F = ma
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\practiceFma}{%
+\needspace{8\baselineskip}
+\practiceset{Newton's Second Law ($F = ma$)}
+Show all working, including the formula you start with and the rearranged version. Always give units.
+
+\begin{infobox}{Reminder --- rearranging}
+\[ F = ma \qquad\qquad a = \frac{F}{m} \qquad\qquad m = \frac{F}{a} \]
+\end{infobox}
+
+\pqpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{2.4cm}
+       {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{2.4cm}
+
+\pqpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{2.4cm}
+       {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the driving force needed.}{2.4cm}
+
+\pq{A shopping trolley of mass 15\,kg is pushed with a force of 45\,N. Friction opposes the motion with 15\,N. \textbf{(a)} Find the net force. \textbf{(b)} Find the acceleration of the trolley.}{3.2cm}
+
+\pq{A 60\,kg cyclist and her 12\,kg bicycle accelerate at 1.5\,m/s$^2$. \textbf{(a)} Find the total mass. \textbf{(b)} Find the net force. \textbf{(c)} If air resistance is 30\,N, find the force she must produce by pedalling.}{3.6cm}
+
+\pq{Two identical trolleys are pushed with the same force. Trolley A is empty (2\,kg); trolley B carries a 6\,kg mass. \textbf{(a)} Which accelerates more? \textbf{(b)} Explain your answer using $F = ma$. \textbf{(c)} If the force is 16\,N, calculate both accelerations.}{3.8cm}
+
+\begin{yr8box}
+\pq{A 0.045\,kg golf ball is struck and leaves the tee at 60\,m/s. The club is in contact with the ball for 0.0005\,s. \textbf{(a)} Calculate the acceleration of the ball ($a = \Delta v \div t$). \textbf{(b)} Calculate the force applied by the club. \textbf{(c)} Comment on how this force compares to the ball's weight.}{4.6cm}
+\end{yr8box}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 3 — READING
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\readingThree}{%
+\begin{readingbox}{Reading --- Why the First Hill is Always the Tallest}
+Look carefully at any roller coaster and you will notice something: the first hill is always the highest one on the track. This is not a matter of taste or thrill design. It is a rule imposed by physics, and no engineer can get around it.
+
+Most roller coasters have no engine. A chain drags the train slowly up that first hill, and after that the ride is entirely powered by gravity. Hauling the train to the top stores energy in it --- gravitational potential energy --- and the amount stored depends on how high the train is lifted. As the train plunges down, that stored energy is converted into kinetic energy, the energy of movement, and the train reaches its greatest speed at the bottom. Climbing the next hill converts kinetic energy back into potential energy, and so the ride continues, trading one form for the other.
+
+The catch is that the swap is never perfect. Every time the wheels turn, a little energy is lost as heat through friction, and a little more is lost as sound --- that familiar roar. Because energy cannot be created, the train can never climb higher than it started. Each successive hill must be a little lower than the one before, and the ride must end before the energy runs out entirely.
+\end{readingbox}
+
+\rcreset
+\rcq{Where does a roller coaster train get the energy for the whole ride, and how is that energy stored?}{1.8cm}
+\rcq{Describe the energy transformation that happens as the train travels down the first hill.}{1.8cm}
+\rcq{Explain why each hill on the track must be lower than the one before it. Name the two ways energy is lost.}{2.2cm}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PRACTICE SET — ENERGY
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\practiceEnergy}{%
+\needspace{8\baselineskip}
+\practiceset{Energy Calculations}
+Use $g = 9.8$\,m/s$^2$. Show all working and give units in every answer.
+
+\begin{infobox}{Reminder --- the three formulas}
+\[ \text{GPE} = mgh \qquad\qquad \text{KE} = \tfrac{1}{2}mv^2 \qquad\qquad
+   \text{Efficiency} = \frac{\text{useful output}}{\text{total input}} \times 100\% \]
+\end{infobox}
+
+\pqpair{A 2\,kg book is lifted onto a shelf 1.8\,m high. Find its GPE.}{2.4cm}
+       {A 0.15\,kg ball moves at 20\,m/s. Find its KE.}{2.4cm}
+
+\pqpair{A 60\,kg student climbs stairs 4\,m high. Find the GPE gained.}{2.4cm}
+       {A 1200\,kg car travels at 15\,m/s. Find its KE.}{2.4cm}
+
+\pq{A 0.5\,kg ball is dropped from a height of 3\,m. \textbf{(a)} Calculate its GPE before it is dropped. \textbf{(b)} Assuming no energy is lost, state its KE just before it lands. \textbf{(c)} Use $KE = \tfrac{1}{2}mv^2$ to find the speed at which it lands.}{4.0cm}
+
+\pq{A machine is supplied with 800\,J of energy and produces 560\,J of useful output. \textbf{(a)} Calculate the efficiency. \textbf{(b)} How much energy was wasted? \textbf{(c)} Suggest two forms the wasted energy is likely to take.}{3.4cm}
+
+\pq{A trebuchet counterweight of 12\,kg is raised 1.2\,m. \textbf{(a)} Calculate the GPE stored. \textbf{(b)} If the trebuchet is 30\% efficient, calculate the KE given to the projectile. \textbf{(c)} The projectile has a mass of 0.05\,kg --- calculate its launch speed.}{4.6cm}
+
+\begin{yr8box}
+\pq{A 0.2\,kg ball is dropped from 2.0\,m and bounces back to 1.4\,m. \textbf{(a)} Calculate the GPE before the drop and after the bounce. \textbf{(b)} Calculate the efficiency of the bounce. \textbf{(c)} Explain, in terms of energy transformation, why the ball does not return to its original height.}{4.6cm}
+\end{yr8box}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 4 — READING
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\readingFour}{%
+\begin{readingbox}{Reading --- Lifting Stones for a Pharaoh}
+The Great Pyramid of Giza contains roughly 2.3 million blocks of limestone. Many weigh more than two tonnes, and some of the granite slabs inside weigh as much as eighty. The pyramid was completed around 4{,}500 years ago, long before engines, hydraulics or steel cable existed. The builders had rope, timber, copper tools and their own muscles --- and yet the structure stood as the tallest building on Earth for nearly four thousand years.
+
+The answer lies in simple machines. A \emph{lever} lets a small effort applied over a long distance produce a large force over a short one. A \emph{ramp}, or inclined plane, does the same thing in a different way: dragging a block up a long gentle slope needs far less force than lifting it straight up, though you must move it much further. Neither device creates energy --- that would be impossible --- but both let human beings trade distance for force, which is exactly the trade a person with a rope and a lot of patience needs to make.
+
+The same principle drives the machine you will build towards in this unit. A trebuchet is essentially a giant lever. A heavy counterweight falls a short distance on the short arm, and the long arm sweeps through a huge arc, flinging the projectile at high speed. The Egyptians used levers to move stone slowly and deliberately. Medieval engineers used the same physics to throw it as fast and as far as they possibly could.
+\end{readingbox}
+
+\rcreset
+\rcq{What tools and materials did the pyramid builders have available to them?}{1.4cm}
+\rcq{Explain what is meant by ``trade distance for force''. Use the ramp as your example.}{2.2cm}
+\rcq{According to the passage, what do the pyramid builders' levers and a medieval trebuchet have in common?}{1.8cm}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PRACTICE SET — LEVERS
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\practiceLevers}{%
+\needspace{8\baselineskip}
+\practiceset{Levers and Mechanical Advantage}
+Show all working. Remember that a balanced lever obeys: effort $\times$ effort arm $=$ load $\times$ load arm.
+
+\begin{infobox}{Reminder}
+\[ \text{MA} = \frac{\text{load force}}{\text{effort force}} = \frac{\text{effort arm}}{\text{load arm}}
+   \qquad\qquad E \times d_E = L \times d_L \]
+\end{infobox}
+
+\pqpair{A lever has an effort arm of 1.5\,m and a load arm of 0.3\,m. Find the MA.}{2.4cm}
+       {A lever with MA of 5 is used with an effort of 80\,N. What load can it lift?}{2.4cm}
+
+\pqpair{A seesaw has a 500\,N child 1.8\,m from the pivot. Where must a 750\,N child sit to balance it?}{2.6cm}
+       {A crowbar has MA of 8. What effort is needed to shift a 2400\,N rock?}{2.4cm}
+
+\pq{A wheelbarrow carries a 400\,N load positioned 0.4\,m from the wheel. The handles are 1.2\,m from the wheel. \textbf{(a)} Identify the lever class. \textbf{(b)} Calculate the mechanical advantage. \textbf{(c)} Calculate the effort needed to lift the handles.}{3.6cm}
+
+\pq{A trebuchet has a short arm of 0.6\,m and a long arm of 3.0\,m. \textbf{(a)} Calculate the mechanical advantage. \textbf{(b)} The counterweight exerts 600\,N --- calculate the force transferred to the projectile end. \textbf{(c)} Explain why a trebuchet is designed with MA less than 1 rather than greater than 1.}{4.0cm}
+
+\begin{yr8box}
+\pq{Two trebuchets have the same counterweight, dropping the same distance. Trebuchet A has arm lengths 0.5\,m and 2.0\,m; Trebuchet B has 0.5\,m and 3.5\,m. \textbf{(a)} Calculate the arm ratio for each. \textbf{(b)} Explain which will launch the projectile faster and why, referring to the distance the arm tip travels. \textbf{(c)} Suggest one practical limit on making the long arm even longer.}{4.8cm}
+\end{yr8box}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 5 — READING
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\readingFive}{%
+\begin{readingbox}{Reading --- Galileo and the Two Motions}
+For nearly two thousand years, European scholars followed Aristotle's account of how a thrown object moves. He argued that a cannonball flew in a straight line until its ``impetus'' was used up, at which point it dropped more or less straight down. Gunners knew from experience that this was not what really happened, but the theory persisted because nobody had a better one.
+
+In the early 1600s Galileo Galilei worked out what was actually going on, and the insight was elegant. He realised that a projectile is doing \emph{two things at once}, and that the two motions are completely independent. Horizontally, nothing pushes or pulls the object once it has been released, so it keeps travelling sideways at a steady speed. Vertically, gravity pulls it downwards, so it accelerates towards the ground exactly as if it had simply been dropped. Combine a steady sideways motion with an accelerating downwards one and the result is the curved path we call a parabola.
+
+The most striking consequence is one that still surprises people. If you fire a bullet horizontally and drop an identical bullet from the same height at the same instant, both hit the ground at the same time. The fired bullet lands hundreds of metres away, but its sideways speed has no effect at all on how quickly gravity brings it down. This is why, in this unit, you can measure the acceleration due to gravity simply by timing how long a launched projectile takes to fall.
+\end{readingbox}
+
+\rcreset
+\rcq{Describe Aristotle's explanation of how a cannonball moves, and state who knew it was wrong.}{1.8cm}
+\rcq{Galileo said a projectile does ``two things at once''. Describe each motion and state what causes it.}{2.4cm}
+\rcq{Explain why a bullet fired horizontally and a bullet dropped from the same height land at the same time.}{2.2cm}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  PRACTICE SET — PROJECTILE MOTION
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\practiceProjectile}{%
+\needspace{8\baselineskip}
+\practiceset{Projectile Motion}
+Use $g = 9.8$\,m/s$^2$. Show all working, including the formula and any rearrangement.
+
+\begin{infobox}{Reminder --- horizontal launch}
+\[ h = \tfrac{1}{2}gt^2 \qquad t = \sqrt{\frac{2h}{g}} \qquad g = \frac{2h}{t^2} \qquad R = v \times t \]
+\end{infobox}
+
+\pqpair{A ball is launched horizontally from a height of 1.2\,m. Find the time of flight.}{2.6cm}
+       {A projectile falls for 0.55\,s. Find the height it was launched from.}{2.6cm}
+
+\pqpair{A ball launched horizontally lands 2.4\,m away after 0.6\,s. Find its launch speed.}{2.6cm}
+       {A ball falls 1.6\,m in 0.57\,s. Calculate $g$ from this data.}{2.6cm}
+
+\pq{A marble rolls off a bench 0.95\,m high and lands 1.4\,m from the base of the bench. \textbf{(a)} Calculate the time of flight. \textbf{(b)} Calculate the horizontal launch speed. \textbf{(c)} State one assumption you made.}{3.8cm}
+
+\pq{In an experiment, a student measures a launch height of 1.25\,m and a time of flight of 0.52\,s. \textbf{(a)} Calculate the experimental value of $g$. \textbf{(b)} Calculate the percentage error compared with 9.8\,m/s$^2$. \textbf{(c)} Suggest one reason the measured value differs from the accepted value.}{4.0cm}
+
+\pq{A projectile is launched horizontally at 6.0\,m/s from a height of 2.0\,m. \textbf{(a)} Find the time of flight. \textbf{(b)} Find the horizontal range. \textbf{(c)} If the launch height were doubled, would the range double? Show a calculation to justify your answer.}{4.4cm}
+
+\begin{yr8box}
+\pq{A ballista fires a projectile at 22\,m/s at an angle of 45$^\circ$. \textbf{(a)} Use $R = v^2 \div g$ to calculate the maximum range. \textbf{(b)} Explain why 45$^\circ$ gives the greatest range. \textbf{(c)} The launch point is 1.5\,m above the landing ground --- explain whether the true range will be more or less than your answer to (a).}{4.8cm}
+\end{yr8box}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+%  SECTION 6 — READING
+% ─────────────────────────────────────────────────────────────────────────────
+\newcommand{\readingSix}{%
+\begin{readingbox}{Reading --- The Machine That Ended the Castle}
+For centuries, a high stone wall was the best defence a community could buy. Attackers could starve a castle out, but breaking in was slow, expensive and usually fatal. That balance shifted in the twelfth century with the arrival in Europe of the counterweight trebuchet. Earlier siege engines had relied on teams of soldiers hauling on ropes, which meant the force applied varied from shot to shot and accuracy was poor. The counterweight trebuchet replaced muscle with gravity: a box of stones or earth, sometimes weighing ten tonnes, was winched up and then released.
+
+Because gravity is utterly consistent, the machine was consistent too. A well-built trebuchet could drop projectile after projectile onto almost the same spot, hammering a single section of wall until it collapsed. Records from the siege of Stirling Castle in 1304 describe a trebuchet named \emph{Warwolf}, built on site by order of Edward I, which was reportedly so effective that the garrison attempted to surrender before it had even been used. Edward refused the surrender until he had seen his machine work.
+
+What makes the trebuchet interesting to a physics student is that every stage of its operation is something you have already studied. Raising the counterweight stores gravitational potential energy. Releasing it converts that store into kinetic energy. The arm is a lever, trading a short drop for a long, fast sweep. And once the projectile leaves the sling, it becomes exactly the kind of projectile Galileo described --- moving sideways at a steady speed while gravity pulls it down. In your final investigation, you will run that process in reverse: by measuring the flight, you will measure gravity itself.
+\end{readingbox}
+
+\rcreset
+\rcq{What advantage did a counterweight trebuchet have over earlier siege engines powered by teams of soldiers?}{2.0cm}
+\rcq{Explain why the consistency of the machine mattered so much when attacking a castle wall.}{1.8cm}
+\rcq{The passage lists four physics ideas involved in a trebuchet. Name three of them and briefly state where each applies.}{2.6cm}
+}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  COVER PAGE
+% ══════════════════════════════════════════════════════════════════════════════
+\thispagestyle{plain}
+
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=NavyBlue, colframe=NavyBlue,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Sky}\footnotesize\MakeUppercase{Unit Booklet \textbullet\ Years 7 and 8}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{40}{44}\selectfont Forces and Motion}\\[8pt]
+    {\large\color{white!85!NavyBlue}\itshape Types of force \textbullet\ Newton's laws \textbullet\ energy \textbullet\ levers \textbullet\ projectiles}\\[14pt]
+    {\headingfont\color{white!72!NavyBlue}\normalsize Victorian Curriculum F--10 Version 2.0 \textbar{}
+     VCSSU103 \textbar{} VCSSU104 \textbar{} VCSIS108--113}
+  \end{center}
+\end{tcolorbox}
+
+\vspace{10pt}
+
+% Student details
+\begin{tabular}{@{}p{3.5cm} p{6cm} p{2cm} p{3.5cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{5.8cm}} & \textbf{Class:}   & \underline{\hspace{3.3cm}} \\[8pt]
+  \textbf{Teacher:} & \underline{\hspace{5.8cm}} & \textbf{Year level:} & \underline{\hspace{3.3cm}} \\
+\end{tabular}
+
+\vspace{10pt}
+
+\begin{infobox}{How to use this booklet}
+This booklet is your complete guide to the Forces and Motion unit. Work through it in order — each section builds on the last, and everything leads to the final trebuchet investigation.
+
+\medskip
+\begin{tabular}{@{}ll@{}}
+  \textcolor{NavyBlue}{\rule{10pt}{10pt}}\ \textbf{Blue boxes} & Year 7 core content and questions \\
+  \textcolor{PurpleDark}{\rule{10pt}{10pt}}\ \textbf{Purple boxes} & Year 8 extension tasks \\
+  \textcolor{TealGreen}{\rule{10pt}{10pt}}\ \textbf{Green boxes} & Worked examples and reading passages \\
+  \textcolor{GoldDark}{\rule{10pt}{10pt}}\ \textbf{Yellow boxes} & Scaffolds and practice sets \\
+\end{tabular}
+
+\medskip
+Each section opens with a short \textbf{reading passage} and comprehension questions, and most
+include a \textbf{practice set} of calculation questions with working space. These are for
+practice and are not counted in the assessed mark totals below.
+\end{infobox}
+
+\vspace{8pt}
+
+% Contents table
+\begin{tabular}{@{}C{0.6cm} L{8.5cm} C{2cm} C{2cm}@{}}
+  \thead{\#} & \thead{Section} & \thead{Yr 7} & \thead{Yr 8} \\
+  \talt 1 & What is a Force? & 37 & 37 \\
+        2 & Newton's Laws of Motion & 20 & 26 \\
+  \talt 3 & Energy --- Types and Transformation & 16 & 20 \\
+        4 & Simple Machines and Levers & 14 & 18 \\
+  \talt 5 & Projectile Motion & 14 & 20 \\
+        6 & Culminating Investigation --- Trebuchet & 36 & 52 \\
+  \tmid \multicolumn{2}{l}{\textbf{Total}} & \textbf{137} & \textbf{173} \\
+\end{tabular}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 1 — WHAT IS A FORCE?
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{1}{What is a Force?}{Types of force \textbullet{} Contact vs non-contact \textbullet{} Balanced and unbalanced forces}
+
+\readingOne
+
+\beginnerSkills
+
+\subsection{Types of Force}
+
+Forces fall into two groups: \textbf{contact forces} (objects must touch) and \textbf{non-contact forces} (objects do not need to touch).
+
+\vspace{4pt}
+\diagForceTypes
+\figcap{Figure 1.1 --- Contact and non-contact forces}
+
+\begin{yr7box}
+\textbf{Task 1.1} \markscount{6}\quad
+Complete the table. For each force, identify whether it is contact or non-contact, and give a real-world example.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{3.5cm} C{3.5cm} L{6cm}@{}}
+  \thead{Force} & \thead{Contact / Non-contact} & \thead{Real-world example} \\
+  \talt Gravity       & & \\[10pt]
+        Friction       & & \\[10pt]
+  \talt Magnetic force & & \\[10pt]
+        Normal force   & & \\[10pt]
+  \talt Air resistance & & \\[10pt]
+        Tension        & & \\[10pt]
+\end{tabular}
+\end{yr7box}
+
+\subsection{Free Body Diagrams}
+
+A \textbf{free body diagram (FBD)} shows all forces acting on a single object as labelled arrows. When forces are \textbf{balanced} (equal in size, opposite in direction), the net force is zero and the object does not accelerate. When forces are \textbf{unbalanced}, there is a net force and the object accelerates.
+
+\diagFBD
+\figcap{Figure 1.2 --- Balanced forces (left) and unbalanced forces (right)}
+
+\begin{yr7box}
+\textbf{Task 1.2a} \markscount{2}\quad
+Look at the balanced forces diagram (left). Why is the book not accelerating? Use the word \textit{net force} in your answer.
+\answerbox{2.5cm}
+
+\medskip
+\textbf{Task 1.2b} \markscount{2}\quad
+Look at the unbalanced forces diagram (right). Calculate the net force on the box and state the direction of acceleration.
+\answerbox{2.5cm}
+
+\medskip
+\textbf{Task 1.2c} \markscount{2}\quad
+Draw a free body diagram for a skydiver at terminal velocity. Label all forces with their names and comparative sizes.
+
+\vspace{4pt}
+\begin{tcolorbox}[colback=white, colframe=MidGrey, height=5cm, boxrule=0.5pt]
+\textit{\color{MidGrey}Draw your force diagram here.}
+\end{tcolorbox}
+\end{yr7box}
+
+\begin{yr8box}
+\textbf{Extension 1.3} \markscount{3}\quad
+A car has a driving force of 4500\,N and a total resistive force of 1200\,N. Calculate the net force, determine the direction of acceleration, and state which of Newton's laws this demonstrates.
+\answerbox{3cm}
+\end{yr8box}
+
+\newpage
+\practiceNetForce
+
+\newpage
+% ─── EXPERIMENT 1 ─────────────────────────────────────────────────────────────
+\section*{\textcolor{NavyBlue}{Experiment 1: Investigating Friction}}
+\addcontentsline{toc}{section}{Experiment 1: Investigating Friction}
+
+\begin{expheader}{1}{Investigating Friction}{To investigate how the type of surface affects the friction force on a sliding object.}
+\medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108 \textbullet{} VCSIS109 \textbullet{} VCSIS112
+\hfill Score: \underline{\hspace{1.5cm}} / \underline{\hspace{1cm}}
+\end{expheader}
+
+\medskip
+\textbf{Background.}
+Friction is a contact force that opposes the relative motion of surfaces in contact. The rougher the surface, the greater the friction force.
+
+\begin{scaffold}{Prediction --- before you begin}
+Which surface do you think will produce the most friction? Why?
+\answerbox{2cm}
+\end{scaffold}
+
+\subsubsection*{Equipment}
+Wooden block (or heavy book) \quad Spring scale (Newton meter) \quad 3+ surfaces (bench, sandpaper, fabric, carpet) \quad Ruler
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Place the wooden block on the first surface.
+  \item Attach the spring scale to the block. Pull slowly and steadily.
+  \item Read the spring scale when the block moves at constant speed. Record the friction force in Newtons.
+  \item Repeat 3 times for each surface and record all values.
+  \item Repeat for each surface type.
+\end{enumerate}
+
+\subsubsection*{Results}
+
+\begin{tabular}{@{}L{3.5cm} C{2cm} C{2cm} C{2cm} C{3cm}@{}}
+  \thead{Surface} & \thead{Trial 1 (N)} & \thead{Trial 2 (N)} & \thead{Trial 3 (N)} & \thead{Mean (N)} \\
+  \talt  & & & & \\[10pt]
+         & & & & \\[10pt]
+  \talt  & & & & \\[10pt]
+         & & & & \\[10pt]
+\end{tabular}
+
+\medskip
+\begin{yr7box}
+\question{1}{2}{Which surface produced the greatest friction? Which produced the least?}
+\answerbox{2.5cm}
+
+\question{2}{2}{Why did you take three trials for each surface? What did you do with the three values?}
+\answerbox{2.5cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{3}{3}{The wooden block has a mass of 0.3\,kg. Using $F = ma$, calculate the deceleration the block would experience if friction is the only horizontal force acting on it. Show all working.}
+\answerbox{3.5cm}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 2 — NEWTON'S LAWS
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{2}{Newton's Laws of Motion}{1st Law: inertia \textbullet{} 2nd Law: $F = ma$ \textbullet{} 3rd Law: action--reaction}
+
+\readingTwo
+
+
+\subsection{Newton's First Law --- The Law of Inertia}
+
+\diagNewtonOne
+\figcap{Figure 2.1 --- Newton's First Law}
+
+\begin{infobox}{First Law}
+\textit{``An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an unbalanced (net) force.''}
+
+\medskip
+\textbf{Inertia} is the tendency of an object to resist changes to its motion. Greater mass $=$ greater inertia.
+\end{infobox}
+
+\begin{yr7box}
+\question{1}{2}{Explain why passengers lurch forward when a bus suddenly brakes. Use the words \textit{inertia} and \textit{unbalanced force} in your answer.}
+\answerbox{3cm}
+
+\question{2}{2}{A hockey puck slides across an almost frictionless ice surface. What will eventually stop it, and why?}
+\answerbox{2.5cm}
+\end{yr7box}
+
+\subsection{Newton's Second Law --- $F = ma$}
+
+\diagFma
+\figcap{Figure 2.2 --- Newton's Second Law: force, mass and acceleration}
+
+\begin{infobox}{Second Law}
+The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass.
+\[
+  \boxed{F = m \times a}
+  \qquad\qquad
+  \boxed{a = \frac{F}{m}}
+  \qquad\qquad
+  \boxed{m = \frac{F}{a}}
+\]
+Force in Newtons (N) \quad Mass in kilograms (kg) \quad Acceleration in m/s$^2$
+\end{infobox}
+
+\begin{workedex}{Worked Example 2.1 --- Finding acceleration}
+A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
+
+\medskip
+Write the formula: \quad $F = m \times a$ \quad $\Rightarrow$ \quad $a = F \div m$
+
+Substitute: \quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
+\end{workedex}
+
+\begin{yr7box}
+\textbf{Task 2.2} \markscount{6}\quad Use $F = ma$ to complete the table. Show working in the space below.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{5cm} C{2.5cm} C{2.5cm} C{2.5cm}@{}}
+  \thead{Situation} & \thead{Force (N)} & \thead{Mass (kg)} & \thead{Accel. (m/s$^2$)} \\
+  \talt Soccer ball kicked  & 45     & 0.45   & \phantom{00} \\[8pt]
+        Car braking         &        & 1200   & 3.5 \\[8pt]
+  \talt Rocket launch       & 6\,000 & ?      & 30 \\[8pt]
+\end{tabular}
+
+\vspace{4pt}Working space:
+\answerbox{3.5cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{4}{3}{A rocket expels gas downward with a force of 500\,000\,N. The rocket has a mass of 20\,000\,kg. Calculate its acceleration and identify which Newton's Law this demonstrates.}
+\answerbox{3.5cm}
+\end{yr8box}
+
+\subsection{Newton's Third Law --- Action and Reaction}
+
+\begin{infobox}{Third Law}
+\textit{``For every action force, there is an equal and opposite reaction force.''}
+
+\medskip
+Action--reaction pairs \textbf{always act on different objects} --- they do \textbf{not} cancel each other.
+\end{infobox}
+
+\begin{yr7box}
+\question{3}{3}{A swimmer pushes backward against the water with a force of 80\,N. Describe the reaction force: name it, state its size, and state its direction.}
+\answerbox{3cm}
+\end{yr7box}
+
+\newpage
+\practiceFma
+
+\newpage
+% ─── EXPERIMENT 2 ─────────────────────────────────────────────────────────────
+\section*{\textcolor{NavyBlue}{Experiment 2: Investigating Newton's Second Law}}
+
+\begin{expheader}{2}{Newton's Second Law --- Mass, Force and Acceleration}{To investigate the relationship between net force, mass and acceleration using a trolley system.}
+\medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
+\hfill Score: \underline{\hspace{1.5cm}} / \underline{\hspace{1cm}}
+\end{expheader}
+
+\textbf{Background.} If $F = ma$, then doubling the force on the same mass should double the acceleration. This experiment tests that prediction. Study the setup diagram and free body diagrams below before beginning.
+
+\subsubsection*{Experimental Setup}
+\diagExpTwoSetup
+\figcap{Figure E2.1 --- Trolley connected by string over a pulley to a hanging mass. The hanging mass provides the driving force; the pulley redirects the tension.}
+
+\subsubsection*{Free Body Diagrams}
+\diagExpTwoFBD
+\figcap{Figure E2.2 --- Left: FBD of trolley (tension drives it right; normal force and weight balance vertically). Right: FBD of hanging mass (weight exceeds tension, so it accelerates downward).}
+
+\subsubsection*{How force size affects acceleration}
+\diagExpTwoForces
+\figcap{Figure E2.3 --- As the hanging mass increases, the tension force (and hence acceleration) increases proportionally --- confirming Newton's Second Law.}
+
+\subsubsection*{System equations (Year 8)}
+\begin{yr8box}
+\diagExpTwoSystem
+\figcap{Figure E2.4 --- Combining both FBDs gives the full system equation. When $M \gg m$, the result simplifies to $F = Ma$.}
+\end{yr8box}
+
+\subsubsection*{Equipment}
+Dynamics trolley \quad Runway \quad Pulley and string \quad Hanging masses (50, 100, 150, 200\,g) \quad Ticker tape timer or motion sensor \quad Balance
+
+\subsubsection*{Method --- Part A: Vary force, keep mass constant}
+
+\begin{enumerate}[itemsep=2pt]
+  \item Set up the trolley on the runway with a pulley at one end. Attach a string from the trolley over the pulley to a hanging mass hanger.
+  \item \textbf{Keep total trolley mass constant} --- move masses from the trolley to the hanger (so total system mass stays the same).
+  \item Start with 50\,g hanging. Release the trolley and measure its acceleration.
+  \item Repeat with 100\,g, 150\,g, and 200\,g hanging.
+\end{enumerate}
+
+\subsubsection*{Results}
+
+\begin{tabular}{@{}C{2.5cm} C{2.5cm} C{2.8cm} C{2.8cm} C{2.5cm}@{}}
+  \thead{Hanging mass (kg)} & \thead{Force $F=mg$ (N)} & \thead{Trolley total mass (kg)} & \thead{Accel. (m/s$^2$)} & \thead{$F \div a$} \\
+  \talt 0.050 & & & & \\[10pt]
+        0.100 & & & & \\[10pt]
+  \talt 0.150 & & & & \\[10pt]
+        0.200 & & & & \\[10pt]
+\end{tabular}
+
+\begin{yr7box}
+\question{5}{2}{Describe the relationship between force and acceleration that you observed. Was your prediction correct?}
+\answerbox{3cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{6}{4}{Plot acceleration (y-axis) vs.\ force (x-axis) using your Part A results. What does the gradient of the line represent? Calculate it.}
+
+\vspace{4pt}
+\begin{tcolorbox}[colback=white, colframe=MidGrey, height=7cm, boxrule=0.5pt]
+\textit{\color{MidGrey}Graph space --- label axes, include units, draw a line of best fit.}
+\end{tcolorbox}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 3 — ENERGY
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{3}{Energy --- Types and Transformation}{Kinetic energy \textbullet{} Gravitational PE \textbullet{} Elastic PE \textbullet{} Conservation \textbullet{} Efficiency}
+
+\readingThree
+
+
+\subsection{Types of Energy}
+
+\diagEnergy
+\figcap{Figure 3.1 --- Energy types and the trebuchet energy transformation chain}
+
+\begin{infobox}{Key equations}
+\[
+  \text{GPE} = mgh \qquad\qquad \text{KE} = \tfrac{1}{2}mv^2 \qquad\qquad \text{Efficiency} = \frac{\text{useful output}}{\text{total input}} \times 100\%
+\]
+where $m$ = mass (kg), $g = 9.8$\,m/s$^2$, $h$ = height (m), $v$ = speed (m/s).
+\end{infobox}
+
+\begin{workedex}{Worked Example 3.1 --- GPE calculation}
+A 2\,kg ball is held at a height of 5\,m. Find its gravitational potential energy.
+
+\medskip
+$\text{GPE} = mgh = 2 \times 9.8 \times 5 = \mathbf{98\ \text{J}}$
+\end{workedex}
+
+\begin{yr7box}
+\question{1}{2}{Calculate the GPE of a 3\,kg ball held at a height of 4\,m.}
+\answerbox{2.5cm}
+
+\question{2}{3}{The ball is dropped and just before it hits the ground its speed is 8.85\,m/s. Calculate its KE. Compare it to the GPE --- what does this suggest?}
+\answerbox{3cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{3}{3}{If the ball actually hits the ground with KE = 92\,J (not 98\,J), calculate the efficiency of the GPE$\to$KE transformation and suggest where the ``missing'' energy went.}
+\answerbox{3cm}
+\end{yr8box}
+
+\subsection{Energy Chains}
+
+An \textbf{energy chain} shows how energy transforms step by step. For the trebuchet:
+
+\vspace{4pt}
+\begin{center}
+\begin{tikzpicture}[node distance=0.3cm and 0.3cm,
+  box/.style={rectangle, rounded corners=3pt, draw=NavyBlue, fill=RowAlt,
+              text width=3.2cm, align=center, minimum height=1cm, font=\small\bfseries},
+  arr/.style={-{Stealth}, thick, color=DarkGrey}]
+  \node[box, fill=OrangeLight, draw=OrangeDark, text=OrangeDark] (gpe) {Gravitational PE\\(counterweight)};
+  \node[box, fill=GoldLight, draw=GoldDark, text=GoldDark, right=of gpe] (ke1) {Kinetic Energy\\(arm swings)};
+  \node[box, fill=LightGreen, draw=TealGreen, text=TealGreen, right=of ke1] (ke2) {Kinetic Energy\\(ball launches)};
+  \node[box, fill=LightGrey, draw=DarkGrey, text=DarkGrey, below=of ke2, yshift=0.1cm] (waste) {Thermal + Sound\\(wasted)};
+  \draw[arr] (gpe) -- (ke1);
+  \draw[arr] (ke1) -- (ke2);
+  \draw[arr] (ke2) -- (waste);
+\end{tikzpicture}
+\end{center}
+
+\begin{yr7box}
+\question{4}{2}{Name TWO forms of energy present at the moment the trebuchet releases the ball.}
+\answerbox{2cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{5}{4}{A trebuchet counterweight provides 500\,J of GPE. Only 380\,J is transferred to the ball as KE. Draw a Sankey diagram for this energy transfer in the space below, with proportionally sized arrows.}
+\vspace{4pt}
+\begin{tcolorbox}[colback=white, colframe=MidGrey, height=5cm, boxrule=0.5pt]
+\textit{\color{MidGrey}Draw Sankey diagram here (input arrow left, useful output straight, waste turns downward).}
+\end{tcolorbox}
+\end{yr8box}
+
+\newpage
+\practiceEnergy
+
+\newpage
+% ─── EXPERIMENT 3 ─────────────────────────────────────────────────────────────
+\section*{\textcolor{NavyBlue}{Experiment 3: Energy Transformation Efficiency}}
+
+\begin{expheader}{3}{GPE to KE --- How Efficient?}{To measure the efficiency of converting gravitational potential energy to kinetic energy when a ball is dropped.}
+\medskip\small\textbf{Curriculum:} VCSSU104 \textbullet{} VCSIS108--113
+\hfill Score: \underline{\hspace{1.5cm}} / \underline{\hspace{1cm}}
+\end{expheader}
+
+\textbf{Background.} When a ball is dropped from height $h_1$, it should convert all GPE to KE by landing. We measure efficiency by comparing the bounce height $h_2$ to the drop height $h_1$.
+
+\[\text{Efficiency} = \frac{h_2}{h_1} \times 100\%\]
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Measure and record the mass of the ball in kg.
+  \item Drop the ball from a fixed height $h_1$. Measure the bounce height $h_2$.
+  \item Repeat 5 times and record all bounce heights.
+  \item Calculate GPE$_\text{in} = mgh_1$ and GPE$_\text{recovered} = mgh_2$ for each trial.
+\end{enumerate}
+
+Ball mass: \underline{\hspace{2cm}}\,kg \qquad Drop height $h_1$: \underline{\hspace{2cm}}\,m
+
+\subsubsection*{Results}
+
+\begin{tabular}{@{}C{1.2cm} C{2.5cm} C{2.5cm} C{2.8cm} C{2.8cm} C{2.5cm}@{}}
+  \thead{Trial} & \thead{$h_1$ (m)} & \thead{$h_2$ (m)} & \thead{GPE in (J)} & \thead{GPE out (J)} & \thead{Eff. (\%)} \\
+  \talt 1 & & & & & \\[9pt]
+        2 & & & & & \\[9pt]
+  \talt 3 & & & & & \\[9pt]
+        4 & & & & & \\[9pt]
+  \talt 5 & & & & & \\[9pt]
+  \tmid \textbf{Mean} & & & & & \\[9pt]
+\end{tabular}
+
+\begin{yr7box}
+\question{7}{2}{Was the energy transformation 100\% efficient? Where did the ``lost'' energy go?}
+\answerbox{2.5cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{8}{3}{If you repeated this experiment with a steel ball and a rubber ball of identical mass from the same height, predict which would be more efficient and explain why in terms of elastic potential energy.}
+\answerbox{3.5cm}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 4 — SIMPLE MACHINES AND LEVERS
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{4}{Simple Machines and Levers}{Mechanical advantage \textbullet{} Lever classes \textbullet{} The trebuchet as a lever}
+
+\readingFour
+
+
+\subsection{Levers and Mechanical Advantage}
+
+A \textbf{lever} is a rigid bar that rotates around a fixed point called the \textbf{fulcrum}. It has three components: the \textbf{effort} (input force), the \textbf{load} (output force), and the \textbf{fulcrum} (pivot).
+
+\begin{infobox}{Mechanical Advantage (MA)}
+\[
+  \text{MA} = \frac{\text{Load force}}{\text{Effort force}} = \frac{\text{Effort arm length}}{\text{Load arm length}}
+\]
+MA $>$ 1 means the machine multiplies your force. MA $<$ 1 means you gain speed or distance instead.
+\end{infobox}
+
+\diagLevers
+\figcap{Figure 4.1 --- The three classes of lever (E\,=\,Effort, L\,=\,Load)}
+
+\begin{workedex}{Worked Example 4.1 --- Mechanical advantage}
+A lever has an effort arm of 2.0\,m and a load arm of 0.5\,m.
+
+\medskip
+$\text{MA} = 2.0 \div 0.5 = \mathbf{4}$ \quad A 100\,N effort lifts a 400\,N load.
+\end{workedex}
+
+\begin{yr7box}
+\question{1}{2}{A seesaw has a 600\,N person sitting 2\,m from the pivot. How far from the pivot must a 400\,N child sit to balance it?}
+\answerbox{3cm}
+\end{yr7box}
+
+\subsection{The Trebuchet as a Class 1 Lever}
+
+\diagTrebuchetLever
+\figcap{Figure 4.2 --- Trebuchet as a Class 1 lever with short and long arms}
+
+\begin{yr7box}
+\question{2}{3}{Identify the effort, load, and fulcrum in the trebuchet diagram above.}
+\answerbox{3cm}
+
+\question{3}{2}{A trebuchet has a long arm of 3.0\,m and a short arm of 0.5\,m. Calculate the mechanical advantage. If the counterweight exerts 500\,N, what force acts on the projectile?}
+\answerbox{3cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{4}{3}{A longer arm increases both MA and the speed of the projectile tip. Using the concept of arc length (arc $=$ radius $\times$ angle in radians), explain why a longer arm produces a faster launch speed even if the counterweight falls the same distance.}
+\answerbox{4cm}
+\end{yr8box}
+
+\newpage
+\practiceLevers
+
+\newpage
+% ─── EXPERIMENT 4 ─────────────────────────────────────────────────────────────
+\section*{\textcolor{NavyBlue}{Experiment 4: Lever Mechanical Advantage}}
+
+\begin{expheader}{4}{How does arm length affect mechanical advantage?}{To investigate how varying the effort arm length affects the mechanical advantage of a lever.}
+\medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
+\hfill Score: \underline{\hspace{1.5cm}} / \underline{\hspace{1cm}}
+\end{expheader}
+
+\subsubsection*{Equipment}
+Metre stick \quad Pencil or triangular prism (fulcrum) \quad 100\,g load mass \quad 50\,g effort mass \quad String \quad Ruler
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Balance the metre stick on the pencil fulcrum at the 50\,cm mark.
+  \item Hang a 100\,g load at the 10\,cm mark (load arm = 40\,cm).
+  \item Find where to hang a 50\,g effort mass to balance the ruler. Record the effort arm.
+  \item Move the fulcrum to 40, 30, and 60\,cm and repeat.
+  \item Calculate MA $=$ effort arm $\div$ load arm for each setup.
+\end{enumerate}
+
+\subsubsection*{Results}
+
+\begin{tabular}{@{}C{2.8cm} C{2.5cm} C{2.5cm} C{2.5cm} C{2.5cm}@{}}
+  \thead{Fulcrum pos. (cm)} & \thead{Load arm (cm)} & \thead{Effort arm (cm)} & \thead{MA (calc.)} & \thead{MA (measured)} \\
+  \talt 30 & & & & \\[10pt]
+        40 & & & & \\[10pt]
+  \talt 50 & & & & \\[10pt]
+        60 & & & & \\[10pt]
+\end{tabular}
+
+\begin{yr7box}
+\question{5}{2}{What happens to the mechanical advantage as the effort arm gets longer?}
+\answerbox{2.5cm}
+
+\question{6}{2}{Why is this experiment relevant to understanding how a trebuchet works?}
+\answerbox{2.5cm}
+\end{yr7box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 5 — PROJECTILE MOTION
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{5}{Projectile Motion}{Trajectory \textbullet{} Gravity as the only force \textbullet{} $h = \frac{1}{2}gt^2$ \textbullet{} $g = 9.8$\,m/s$^2$}
+
+\readingFive
+
+
+\subsection{What is a Projectile?}
+
+Once launched, a projectile is only acted on by gravity. Key principles:
+
+\begin{itemize}[itemsep=2pt]
+  \item Gravity accelerates the projectile \textbf{downward} at $g = 9.8$\,m/s$^2$
+  \item Horizontal speed remains \textbf{constant} (no horizontal force)
+  \item The curved path is called the \textbf{trajectory}
+\end{itemize}
+
+\diagProjectile
+\figcap{Figure 5.1 --- Projectile motion: $h$ = launch height, $R$ = horizontal range}
+
+\begin{infobox}{Key equations --- horizontal launch}
+\[
+  h = \tfrac{1}{2}g t^2
+  \quad\Rightarrow\quad
+  t = \sqrt{\frac{2h}{g}}
+  \qquad\qquad
+  g = \frac{2h}{t^2}
+  \qquad\qquad
+  R = v \times t
+\]
+where $h$ = drop height (m), $t$ = time of flight (s), $g = 9.8$\,m/s$^2$, $R$ = range (m), $v$ = launch speed (m/s).
+\end{infobox}
+
+\begin{workedex}{Worked Example 5.1 --- Time of flight}
+A ball is launched horizontally from $h = 1.25$\,m. How long to land?
+
+\medskip
+$t = \sqrt{2h/g} = \sqrt{2 \times 1.25 / 9.8} = \sqrt{0.255} \approx \mathbf{0.51\ \text{s}}$
+\end{workedex}
+
+\begin{yr7box}
+\textbf{Task 5.1} \markscount{6}\quad Complete the table. Show working below.
+
+\vspace{4pt}
+\begin{tabular}{@{}L{6cm} C{3cm} C{3cm}@{}}
+  \thead{Problem} & \thead{Working / formula} & \thead{Answer} \\
+  \talt A ball launched from $h = 0.80$\,m. Find $t$. & & \\[16pt]
+        Ball from $h = 1.8$\,m lands at $R = 3.2$\,m. Find $v$. & & \\[16pt]
+  \talt $t = 0.64$\,s, $h = 2.0$\,m. Calculate $g$. & & \\[16pt]
+\end{tabular}
+\end{yr7box}
+
+\begin{yr8box}
+\subsection*{5.2 Optimising Range (Year 8 Extension)}
+
+\begin{infobox}{Range equation --- angled launch}
+\[R = \frac{v^2 \sin(2\theta)}{g}\]
+Maximum range occurs at $\theta = 45°$, giving $R_{\max} = v^2/g$.
+\end{infobox}
+
+\question{7}{2}{A ball is launched at 20\,m/s. Calculate the maximum range (at $\theta = 45°$).}
+\answerbox{3cm}
+
+\question{8}{2}{Why might a real trebuchet \textit{not} be set to exactly $45°$? Consider air resistance and the height of the launch point above the landing area.}
+\answerbox{3cm}
+\end{yr8box}
+
+\newpage
+\practiceProjectile
+
+\newpage
+% ─── EXPERIMENT 5 ─────────────────────────────────────────────────────────────
+\section*{\textcolor{NavyBlue}{Experiment 5: Ball Roll-off --- Measuring $g$}}
+
+\begin{expheader}{5}{Measuring $g$ with a Ball Rolling off a Table}{To measure the acceleration due to gravity using projectile motion equations.}
+\medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
+\hfill Score: \underline{\hspace{1.5cm}} / \underline{\hspace{1cm}}
+\end{expheader}
+
+\textbf{Background.} This experiment uses the same physics as the trebuchet. By measuring the table height ($h$) and where the ball lands ($R$), and using slow-motion video for time ($t$), we can calculate $g = 2h/t^2$. This is your practice run before the trebuchet.
+
+\begin{infobox}{Strategy}
+  1.\ Measure $h$ (table height above floor) \quad
+  2.\ Use a fixed ramp to give a consistent launch speed \quad
+  3.\ Use slow-motion video (120+ fps) to measure $t$ from frames $\div$ frame rate \quad
+  4.\ Calculate $g = 2h/t^2$ for each trial
+\end{infobox}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Measure and record the table height $h$ above the floor.
+  \item Set up a fixed ramp --- always release the ball from the same point.
+  \item Film in slow-motion (120+ fps) from the side.
+  \item Roll the ball. Record the landing position $R$ and count frames to determine $t$.
+  \item Repeat for 8 trials. Flag anomalies and calculate $g = 2h/t^2$ for each trial.
+\end{enumerate}
+
+Table height $h =$ \underline{\hspace{2cm}}\,m \qquad Camera frame rate $=$ \underline{\hspace{2cm}}\,fps
+
+\subsubsection*{Results}
+
+\begin{tabular}{@{}C{1cm} C{2cm} C{2cm} C{2.5cm} C{2cm} C{2.2cm} C{2.3cm}@{}}
+  \thead{Trial} & \thead{$R$ (m)} & \thead{Frames} & \thead{$t = \text{fr}/\text{fps}$ (s)} & \thead{$t^2$ (s$^2$)} & \thead{$g = 2h/t^2$} & \thead{Anomaly?} \\
+  \talt 1 & & & & & & \\[9pt]
+        2 & & & & & & \\[9pt]
+  \talt 3 & & & & & & \\[9pt]
+        4 & & & & & & \\[9pt]
+  \talt 5 & & & & & & \\[9pt]
+        6 & & & & & & \\[9pt]
+  \talt 7 & & & & & & \\[9pt]
+        8 & & & & & & \\[9pt]
+  \tmid \multicolumn{5}{l|}{\textbf{Mean $g$ (valid trials only)}} & & \\[9pt]
+\end{tabular}
+
+\begin{yr7box}
+\question{9}{2}{How close was your mean $g$ to 9.8\,m/s$^2$? Calculate the percentage error.
+  \[\% \text{ error} = \frac{|\text{measured } g - 9.8|}{9.8} \times 100\%\]}
+\answerbox{2.5cm}
+
+\question{10}{4}{List TWO sources of error in this experiment and suggest how each could be reduced.}
+\answerbox{4cm}
+\end{yr7box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SECTION 6 — CULMINATING INVESTIGATION
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{6}{Culminating Investigation --- Trebuchet}{Connecting all learning: forces, Newton's laws, energy, levers, projectile motion}
+
+\readingSix
+
+
+\begin{infobox}{Before you begin}
+This investigation draws on \textbf{everything} from this unit:
+\begin{multicols}{2}
+\begin{itemize}[itemsep=1pt]
+  \item Section 1 --- force diagrams
+  \item Section 2 --- Newton's laws
+  \item Section 3 --- energy transformation
+  \item Section 4 --- levers and MA
+  \item Section 5 --- projectile motion equations
+\end{itemize}
+\end{multicols}
+\end{infobox}
+
+\subsection{Force and Energy Analysis}
+
+\begin{yr7box}
+\textbf{Task 6.1a} \markscount{4}\quad
+Draw a labelled free body diagram for the projectile at TWO moments: (i) just after release from the sling, and (ii) at the peak of its trajectory.
+
+\vspace{6pt}
+\begin{tcolorbox}[sidebyside, sidebyside align=top, colback=white, colframe=MidGrey, boxrule=0.5pt,
+  lefthand width=0.48\linewidth, height=5.5cm]
+  \textbf{(i) At release from sling}\\[4pt]
+  \textit{\color{MidGrey}Draw here}
+  \tcblower
+  \textbf{(ii) At peak of trajectory}\\[4pt]
+  \textit{\color{MidGrey}Draw here}
+\end{tcolorbox}
+
+\question{}{3}{Describe the energy transformation in the trebuchet from when the counterweight is raised to when the projectile lands. Name all energy types involved.}
+\answerbox{3.5cm}
+\end{yr7box}
+
+\begin{yr8box}
+\question{}{5}{A trebuchet counterweight of 15\,kg drops 0.8\,m. Assume 25\% of energy is lost to friction and sound. Calculate: (i) GPE of the counterweight, (ii) KE transferred to the 0.04\,kg projectile, (iii) launch speed of the projectile.}
+\answerbox{5cm}
+\end{yr8box}
+
+\subsection{Planning}
+
+\subsubsection*{Aim}
+\answerbox{2cm}
+
+\subsubsection*{Hypothesis}
+
+\begin{yr7box}
+\begin{scaffold}{Scaffold --- complete the sentence}
+``I predict that by launching a projectile horizontally from the trebuchet at height $h = \underline{\hspace{1cm}}$\,m, I will measure a time of flight of approximately $\underline{\hspace{1cm}}$\,s, giving a value of $g \approx \underline{\hspace{1cm}}$\,m/s$^2$, because\ldots''
+\end{scaffold}
+\answerbox{3.5cm}
+\end{yr7box}
+
+\begin{yr8box}
+Write a full scientific hypothesis including: a testable prediction, the relevant scientific principle, and an expected numerical outcome. \markscount{3}
+\answerbox{4cm}
+\end{yr8box}
+
+\subsubsection*{Variables}
+
+\begin{tabular}{@{}L{3.5cm} L{5.5cm} L{4cm}@{}}
+  \thead{Variable type} & \thead{Name and description} & \thead{How measured / controlled} \\
+  \talt Independent variable & & \\[22pt]
+        Dependent variable & & \\[22pt]
+  \talt Controlled variables (list 3) & 1.\hspace{1cm} 2.\hspace{1cm} 3. & \\[22pt]
+\end{tabular}
+
+\subsubsection*{Risk Assessment}
+
+\begin{tabular}{@{}C{0.6cm} L{3.5cm} C{1.8cm} L{3.5cm} C{2cm}@{}}
+  \thead{\#} & \thead{Hazard} & \thead{Risk (L/M/H)} & \thead{Control measure} & \thead{Residual (L/M/H)} \\
+  \talt 1 & & & & \\[16pt]
+        2 & & & & \\[16pt]
+  \talt 3 & & & & \\[16pt]
+\end{tabular}
+
+\newpage
+\subsection{Results}
+
+\begin{tabular}{@{}L{4cm} C{3cm} C{3.5cm}@{}}
+  \thead{Measurement} & \thead{Value (with units)} & \thead{Instrument used} \\
+  \talt Launch height $h$ (m) & & \\[10pt]
+        Camera frame rate (fps) & & \\[10pt]
+  \talt Projectile mass (g) & & \\[10pt]
+\end{tabular}
+
+\vspace{8pt}
+
+\begin{tabular}{@{}C{0.8cm} C{1.6cm} C{1.6cm} C{2.2cm} C{1.6cm} C{2cm} C{1.5cm} C{2.5cm}@{}}
+  \thead{Trial} & \thead{$R$ (m)} & \thead{Frames} & \thead{$t = \text{fr}/\text{fps}$} & \thead{$t^2$ (s$^2$)} & \thead{$g = 2h/t^2$} & \thead{Anom.?} & \thead{Reason} \\
+  \talt  1 & & & & & & & \\[9pt]
+         2 & & & & & & & \\[9pt]
+  \talt  3 & & & & & & & \\[9pt]
+         4 & & & & & & & \\[9pt]
+  \talt  5 & & & & & & & \\[9pt]
+         6 & & & & & & & \\[9pt]
+  \talt  7 & & & & & & & \\[9pt]
+         8 & & & & & & & \\[9pt]
+  \talt  9 & & & & & & & \\[9pt]
+        10 & & & & & & & \\[9pt]
+  \tmid \multicolumn{5}{l|}{\textbf{Mean $g$ (valid trials only)}} & & & \\[9pt]
+\end{tabular}
+
+\begin{yr8box}
+\textbf{Percentage error and uncertainty} \markscount{6}
+\[
+  \% \text{ error} = \frac{|g_{\text{meas}} - 9.8|}{9.8} \times 100\%
+  \qquad\qquad
+  \text{Uncertainty} = \frac{g_{\max} - g_{\min}}{2}
+\]
+\[
+  \Rightarrow \quad g = \underline{\hspace{1.6cm}} \;\pm\; \underline{\hspace{1.6cm}} \text{ m/s}^2
+\]
+\answerbox{3.5cm}
+\end{yr8box}
+
+\subsection{Analysis and Discussion}
+
+\subsubsection*{Patterns and trends}
+
+\begin{yr7box}
+\begin{scaffold}{Sentence starters}
+``My results show that $g$ ranged from \underline{\hspace{1cm}} to \underline{\hspace{1cm}} m/s$^2$. Most values were close to / far from the accepted value of 9.8\,m/s$^2$. The data is consistent / variable because\ldots''
+\end{scaffold}
+\answerbox{4cm}
+\end{yr7box}
+
+\begin{yr8box}
+Analyse your data in detail. Discuss spread, outliers, and assess the precision, accuracy, reliability, and validity of your method. \markscount{5}
+\answerbox{5.5cm}
+\end{yr8box}
+
+\subsubsection*{Sources of error}
+
+\begin{yr7box}
+Identify TWO sources of error. Classify each as random or systematic and suggest an improvement. \markscount{4}
+
+\vspace{4pt}
+\begin{tabular}{@{}C{0.6cm} L{3.5cm} C{2.5cm} L{2.5cm} L{3.3cm}@{}}
+  \thead{\#} & \thead{Source of error} & \thead{Type} & \thead{Effect on $g$} & \thead{Improvement} \\
+  \talt 1 & & & & \\[22pt]
+        2 & & & & \\[22pt]
+\end{tabular}
+\end{yr7box}
+
+\begin{yr8box}
+Identify FOUR sources of error with type, directional effect on $g$, and improvement. \markscount{8}
+
+\vspace{4pt}
+\begin{tabular}{@{}C{0.5cm} L{2.5cm} C{1.7cm} C{1.6cm} C{1.5cm} L{2.2cm}@{}}
+  \thead{\#} & \thead{Source} & \thead{Type} & \thead{Effect on $g$} & \thead{Higher / Lower} & \thead{Improvement} \\
+  \talt 1 & & & & & \\[18pt]
+        2 & & & & & \\[18pt]
+  \talt 3 & & & & & \\[18pt]
+        4 & & & & & \\[18pt]
+\end{tabular}
+\end{yr8box}
+
+\subsubsection*{Evaluation of hypothesis}
+
+\begin{yr7box}
+\begin{scaffold}{Use this structure}
+``My hypothesis predicted \underline{\hspace{2cm}}. My results showed \underline{\hspace{2cm}}. This [supports / does not support] my hypothesis because \underline{\hspace{2cm}}. The percentage error was \underline{\hspace{1cm}}\%, which suggests\ldots''
+\end{scaffold}
+\answerbox{4cm}
+\end{yr7box}
+
+\begin{yr8box}
+Link your results to Newton's Second Law. Refer to the force of gravity, projectile mass, and your measured acceleration. \markscount{4}
+\answerbox{5cm}
+\end{yr8box}
+
+\subsection{Conclusion}
+
+\begin{yr7box}
+\begin{scaffold}{Sentence starters}
+``This investigation aimed to measure \underline{\hspace{2cm}} using \underline{\hspace{2cm}}. My results gave a mean value of $g = $ \underline{\hspace{1cm}} m/s$^2$. The accepted value is 9.8\,m/s$^2$, so my result was \underline{\hspace{1cm}}\% different. The method [worked well / had limitations] because\ldots If I repeated this investigation I would improve \underline{\hspace{2cm}} by\ldots''
+\end{scaffold}
+\answerbox{6cm}
+\end{yr7box}
+
+\begin{yr8box}
+Write a comprehensive conclusion: address the aim, mean $g$ with uncertainty, percentage error, validity, significance of errors, and at least one design improvement. \markscount{8}
+\answerbox{8cm}
+\end{yr8box}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MARKING RUBRIC — TEACHER USE ONLY
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{tcolorbox}[enhanced, colback=GoldLight, colframe=GoldDark, boxrule=1.5pt,
+  fonttitle=\bfseries\large\color{GoldDark}, title={Marking Rubric --- Teacher Use Only}]
+\begin{center}
+\small Year 7 total: \textbf{137 marks} \quad\textbar\quad Year 8 total: \textbf{173 marks}
+\end{center}
+\end{tcolorbox}
+
+\vspace{6pt}
+\begin{longtable}{@{}L{4.5cm} L{4.5cm} C{1.5cm} C{1.2cm} C{1.2cm}@{}}
+  \thead{Criterion} & \thead{Descriptors} & \thead{Available} & \thead{Yr 7} & \thead{Yr 8} \\
+\endfirsthead
+  \thead{Criterion} & \thead{Descriptors} & \thead{Available} & \thead{Yr 7} & \thead{Yr 8} \\
+\endhead
+        S1: Push or pull (T1.1)   & All 6 correctly classified                    & 6 / 6  & & \\
+  \talt S1: Effects of forces (T1.2) & Correct effect number for each event    & 4 / 4  & & \\
+        S1: Reading a spring scale (T1.3) & All 3 scales read with units        & 3 / 3  & & \\
+  \talt S1: Mass vs weight (T1.4) & $W=mg$ applied for Earth and Moon            & 4 / 4  & & \\
+        S1: Force arrows to scale (T1.5) & Correct lengths, directions, labels  & 4 / 4  & & \\
+  \talt S1: Force classification  & Correct type + real example for all 6       & 6 / 6  & & \\
+        S1: Free body diagrams    & Correct arrows, labels, net force stated     & 4 / 4  & & \\
+  \talt S1: Net force calc (Yr 8) & Correct arithmetic + direction               & 0 / 3  & & \\
+        Exp 1: Friction data      & 3 trials + correct means                     & 4 / 4  & & \\
+  \talt Exp 1: Analysis           & Trend explained, repeats justified           & 2 / 5  & & \\
+        S2: Newton 1 questions    & Inertia and unbalanced force used correctly  & 4 / 4  & & \\
+  \talt S2: F=ma table            & Correct rearrangement + arithmetic           & 6 / 6  & & \\
+        S2: Newton 3              & Action-reaction pair correctly described     & 3 / 3  & & \\
+  \talt S2: Ext (Yr 8)            & Newton 2 + 3 applied to rocket              & 0 / 3  & & \\
+        Exp 2: Data table         & F calculated; accel + ratio recorded         & 6 / 6  & & \\
+  \talt Exp 2: Graph (Yr 8)       & Axes, best fit, gradient calculated          & 0 / 4  & & \\
+        S3: Energy calcs          & GPE and KE correct with units                & 5 / 5  & & \\
+        S3: Efficiency (Yr 8)     & Correct formula, \% stated                    & 0 / 3  & & \\
+        S3: Sankey (Yr 8)         & Proportional arrows; input $=$ outputs       & 0 / 4  & & \\
+        Exp 3: Efficiency data    & 5 trials + mean efficiency calculated        & 6 / 6  & & \\
+        S4: Lever + MA            & Correct class, formula, calculation          & 6 / 6  & & \\
+  \talt S4: Ext (Yr 8)            & Arc length argument correct                  & 0 / 3  & & \\
+        Exp 4: Results + analysis & MA calculated, trend described               & 4 / 4  & & \\
+  \talt S5: Projectile calcs      & t, v, g all correct from data                & 6 / 6  & & \\
+        S5: Range eq (Yr 8)       & $R = v^2/g$ applied correctly                & 0 / 4  & & \\
+  \talt Exp 5: Measuring g        & 8-trial table, mean, \% error                & 8 / 8  & & \\
+        S6: Force diagrams        & Correct forces, labels at 2 moments          & 4 / 4  & & \\
+  \talt S6: Energy calc (Yr 8)    & GPE, KE, launch speed all correct            & 0 / 5  & & \\
+        S6: Hypothesis            & Testable, principle, numerical prediction    & 2 / 3  & & \\
+  \talt S6: Variables             & All 3 types correctly identified             & 4 / 4  & & \\
+        S6: Risk assessment       & 3 hazards, level, control, residual          & 4 / 4  & & \\
+  \talt S6: 10-trial data table   & Correct t, t², g; anomalies noted            & 8 / 10 & & \\
+        S6: \% error + unc (Yr 8) & Correct formula and working shown            & 0 / 6  & & \\
+  \talt S6: Analysis --- trends   & Data described with appropriate language     & 3 / 5  & & \\
+        S6: Error analysis        & Errors classified, effect + improvement      & 4 / 8  & & \\
+  \talt S6: Hyp. evaluation       & Evidence-based with specific data            & 3 / 3  & & \\
+        S6: Newton's Laws (Yr 8)  & F=ma referenced with measured values         & 0 / 4  & & \\
+  \talt S6: Conclusion            & Aim, mean g, \% error, validity, improvement & 4 / 8  & & \\
+  \tmid \multicolumn{2}{l|}{\textbf{TOTAL}} & & \textbf{/137} & \textbf{/173} \\
+\end{longtable}
+
+\vspace{10pt}
+\textbf{Teacher Comments:}
+\answerbox{5cm}
+
+\label{LastPage}
+\end{document}

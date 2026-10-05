@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-09-02",
+ "generated": "2026-10-05",
  "tree": [
   {
    "t": "Home",
@@ -203,6 +203,25 @@ window.SITEMAP = {
           {
            "t": "Worksheet Booklet · All 11 Worksheets",
            "h": "year7-science/bio-ecosystems/worksheets-all.html",
+           "k": "science"
+          }
+         ]
+        }
+       ],
+       "k": "science"
+      },
+      {
+       "t": "Forces & Motion",
+       "h": "year7-science/forces/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "Lesson 1 — What is a Force?",
+           "h": "year7-science/forces/deck1.html",
            "k": "science"
           }
          ]

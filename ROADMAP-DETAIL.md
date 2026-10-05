@@ -234,7 +234,7 @@ makes it cheap relative to the stubs.
 
 | Source | Target | Shape of the job |
 |---|---|---|
-| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces-motion` | Same unit-local shape bio and space had. Mostly a rename job. |
+| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces` | Same unit-local shape bio and space had. Mostly a rename job. |
 | `ClaudeSPM/Specialist Maths Calc` — beamer `.tex` for Ch8 Differentiation, Ch9 Integration, Ch10 Applications, Ch11 Differential Equations, Ch12 Kinematics, plus SAC materials | `year12-specialist/calculus` (or per-chapter units) | LaTeX → HTML deck conversion. No existing HTML to rename. |
 | `Algorithmics` — `AOS1 - AlgoSlides.tex`, `AOS2 - Algorithm Design.tex`, problem sets AOS2PS1–5 + 2 graph extras, `AOS2 Notes W1.tex`, marimo workbooks, SAC1 materials | `year12-algorithmics/unit-3`, `year11-algorithmics` | LaTeX → HTML. Unit 4 is the template to copy. |
 | `ClaudeSPM/SPM Term 3` — `TeacherCompanion-T3.tex`, `PracticeSAC3` + marking scheme, SAC 2 Task A/B solutions | `year12-specialist/term-3` (staff-gated additions) | Existing unit, missing its staff layer. |
@@ -385,14 +385,27 @@ CLAUDE.md before starting one — the class-rename vocabulary and the two
 traps (strip inline `style=` *before* renaming classes; don't promote a
 Recap slide to `.exit-slide`) are written down there.
 
-- [ ] **Port `7 Science/Forces` → `year7-science/forces-motion`. M**
+- [ ] **Port `7 Science/Forces` → `year7-science/forces`. M** *(in progress — Kodie, 2026-10-06)*
       The cheapest real content win in the repo, and it completes Year 7
       Science's third unit.
   - [ ] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
+        — deck1 done 2026-10-06 (lab slide links the booklet PDF page
+        until `experiments.html` is ported; repoint it then)
   - [ ] `experiments.html` — decide its page type (likely `course.css`
         section on the landing page, or a `profile.css` reference page)
-  - [ ] Unit landing page, `theme-science`
+  - [x] Unit landing page, `theme-science` *(done 2026-10-06 — lists only what is published; add cards as decks land)*
   - [ ] `booklet/` — `.tex` + PDF + `fonts/`, embedded via `.pdf-frame`
+        — files copied 2026-10-06, linked from the landing page; not yet
+        in a `.pdf-frame` page
+  - [ ] **Fix the booklet's numbering before deriving any more `.bookref`
+        chips.** Sections use `\sectiondiv` + `\section*`, so the section
+        counter never moves and every subsection prints as 0.1…0.22 across
+        the whole booklet. Section 1 also has two Task 1.1s and two Task
+        1.2s (the beginner-skills block and the original tasks both number
+        from 1), and a "Figure 1.0". The committed `.aux` is from an
+        older 34-page build — the PDF is 52 pages. The source decks' chips
+        ("p.4 · §1.1", "Q1.2c") point at that older booklet. Deck 1's
+        chips were re-derived from a fresh build by page and task name.
   - [ ] 8 SVG figures — theme colours to tokens, illustrative hues left alone
   - [ ] Ballista + Trebuchet lab tech sheets as linked PDFs
   - [ ] `.bookref` chips derived from the built `.toc`

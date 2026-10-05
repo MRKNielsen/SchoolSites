@@ -248,6 +248,11 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   padding: 7px 18px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,.4); font-size: 15px; letter-spacing: .06em; opacity: .85;
 }
+/* A .chip can be a link — e.g. the "open the experiment" pointer on a
+   lab section slide. Section slides are dark, so links there are white. */
+.section-slide a { color: #fff; }
+a.chip { text-decoration: none; }
+a.chip:hover, a.chip:focus-visible { opacity: 1; border-color: #fff; }
 .small { font-size: .9em; }
 .exit-slide { justify-content: center; align-items: center; text-align: center; }
 .exit-wrap { max-width: 820px; }
@@ -502,6 +507,11 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 .graph-card.narrow  { max-width: 80%; margin-inline: auto; }
 .graph-card.narrower{ max-width: 65%; margin-inline: auto; }
 .graph-card.half    { max-width: 50%; margin-inline: auto; }
+/* width:100% is what makes the variants work as a direct child of a
+   slide: the slide is a flex column, and auto inline margins on a flex
+   item shrink it to its content — an SVG has none, so the card collapsed
+   to a thumbnail. Inside a .cols cell (grid) this changes nothing. */
+.graph-card.narrow, .graph-card.narrower, .graph-card.half { width: 100%; }
 /* Below tablet width a halved figure gets too small to read — let the
    narrower variants relax back toward full width. */
 @media (max-width: 900px) {
