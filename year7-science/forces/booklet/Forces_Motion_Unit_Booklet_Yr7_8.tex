@@ -208,11 +208,16 @@
 
 % ── Custom Commands ───────────────────────────────────────────────────────────
 
-% Question command: \question{number}{marks}{text}
-\newcommand{\question}[3]{%
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
   \needspace{3\baselineskip}%
   \medskip
-  \noindent\textbf{Q#1}\ifx&#2&\else\ \textcolor{DarkGrey}{(#2 mark\ifnum#2=1\else s\fi)}\fi\quad #3%
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
   \medskip
 }
 
@@ -266,9 +271,14 @@
   \answerbox{#2}
 }
 
-% Section divider (big numbered banner)
-\newcommand{\sectiondiv}[3]{%
-  \needspace{5\baselineskip}
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
   \begin{tcolorbox}[
     enhanced, breakable=false, arc=3.5mm,
     colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
@@ -277,18 +287,41 @@
     left=2mm, right=4mm, top=4mm, bottom=4mm
   ]
     \begin{center}
-      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont #1}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
     \end{center}
     \tcblower
-    {\headingfont\bfseries\color{white}\LARGE #2}\\[3pt]
-    {\itshape\color{white!75!NavyBlue}\small #3}
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
   \end{tcolorbox}%
 }
 
-% Figure caption
-\newcommand{\figcap}[1]{%
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
   \begin{center}
-    \small\itshape\color{DarkGrey} #1
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
   \end{center}%
 }
 
@@ -1018,7 +1051,7 @@ Forces are invisible, so scientists need a way to record them. The solution is s
 % ─────────────────────────────────────────────────────────────────────────────
 \newcommand{\beginnerSkills}{%
 
-\subsection{Starting Point: Every Force is a Push or a Pull}
+\subsection{Starting Point: Every Force is a Push or a Pull}\label{sub:1.1}
 
 This is the whole idea, and it really is that simple. Whenever one object affects another --- by touching it, or from a distance --- it does so by \textbf{pushing} it or \textbf{pulling} it. There is no third option.
 
@@ -1026,7 +1059,7 @@ This is the whole idea, and it really is that simple. Whenever one object affect
 A magnet \emph{pulls} a paperclip. A hand \emph{pushes} a door. The Earth \emph{pulls} you downwards. A rope \emph{pulls} a sledge. The ground \emph{pushes} up on your feet.
 \end{skillbox}
 
-\textbf{Task 1.1} \markscount{6}\quad For each everyday action, decide whether the force is a push or a pull. Write \textbf{PUSH} or \textbf{PULL} in the box.
+\task \markscount{6}\quad For each everyday action, decide whether the force is a push or a pull. Write \textbf{PUSH} or \textbf{PULL} in the box.
 
 \vspace{4pt}
 \begin{tabular}{@{}L{5.4cm} C{2.2cm} L{5.4cm} C{2.2cm}@{}}
@@ -1036,7 +1069,7 @@ A magnet \emph{pulls} a paperclip. A hand \emph{pushes} a door. The Earth \emph{
   \talt A dog straining on a lead   & & Wind on a sail             & \\[8pt]
 \end{tabular}
 
-\subsection{What Forces Can Do}
+\subsection{What Forces Can Do}\label{sub:1.2}
 
 A force can only change an object in a small number of ways. Learn these five and you can describe almost any situation in this unit.
 
@@ -1051,7 +1084,7 @@ A force can only change an object in a small number of ways. Learn these five an
 \end{tabular}
 
 \vspace{5pt}
-\textbf{Task 1.2} \markscount{4}\quad For each event below, write the \textbf{number} (1--5) of the effect the force is having. Some may have more than one.
+\task \markscount{4}\quad For each event below, write the \textbf{number} (1--5) of the effect the force is having. Some may have more than one.
 
 \vspace{3pt}
 \begin{tabular}{@{}L{7.2cm} C{1.6cm} L{5.6cm} C{1.6cm}@{}}
@@ -1059,9 +1092,9 @@ A force can only change an object in a small number of ways. Learn these five an
         A car turns a corner at steady speed & & A rocket lifts off      & \\[8pt]
 \end{tabular}
 
-\subsection{Measuring Force: The Newton}
+\subsection{Measuring Force: The Newton}\label{sub:1.3}
 
-Force is measured in \textbf{newtons}, written \textbf{N}. The unit is named after Sir Isaac Newton, whose work you will meet in Section 2.
+Force is measured in \textbf{newtons}, written \textbf{N}. The unit is named after Sir Isaac Newton, whose work you will meet in Section~\ref{sec:2}.
 
 \begin{infobox}{Getting a feel for a newton}
 \textbf{1 N} is roughly the force you feel holding a small apple (about 100 g) against gravity.\\
@@ -1073,7 +1106,7 @@ We measure force with a \textbf{spring scale} (also called a \emph{newton meter}
 
 \vspace{4pt}
 \diagSpringScales
-\figcap{Figure 1.0 --- Reading a spring scale. Always read at eye level, and check the size of each small division first.}
+\figcap[fig:spring-scale]{Reading a spring scale. Always read at eye level, and check the size of each small division first.}
 
 \begin{skillbox}{How to read a spring scale correctly}
 \begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
@@ -1084,7 +1117,7 @@ We measure force with a \textbf{spring scale} (also called a \emph{newton meter}
 \end{enumerate}
 \end{skillbox}
 
-\textbf{Task 1.3} \markscount{3}\quad Write the reading shown on each of the three scales in Figure 1.0.
+\task \markscount{3}\quad Write the reading shown on each of the three scales in Figure~\ref{fig:spring-scale}.
 
 \vspace{3pt}
 \begin{tabular}{@{}C{4.6cm} C{4.6cm} C{4.6cm}@{}}
@@ -1092,7 +1125,7 @@ We measure force with a \textbf{spring scale} (also called a \emph{newton meter}
   \talt \rule{0pt}{1.1cm} & & \\
 \end{tabular}
 
-\subsection{Mass and Weight Are Not the Same Thing}
+\subsection{Mass and Weight Are Not the Same Thing}\label{sub:1.4}
 
 In everyday speech we use these words as if they mean the same thing. In science they are quite different, and mixing them up causes a lot of lost marks.
 
@@ -1122,7 +1155,7 @@ A student has a mass of 50\,kg. Find their weight on Earth, and on the Moon.
 Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
 \end{workedex}
 
-\textbf{Task 1.4} \markscount{4}\quad Complete the table. Use $g = 9.8$\,N/kg on Earth.
+\task \markscount{4}\quad Complete the table. Use $g = 9.8$\,N/kg on Earth.
 
 \vspace{3pt}
 \begin{tabular}{@{}L{5.0cm} C{3.2cm} C{3.2cm} C{3.4cm}@{}}
@@ -1132,7 +1165,7 @@ Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
   \talt Small car       & 900 & & \\[8pt]
 \end{tabular}
 
-\subsection{Naming the Forces}
+\subsection{Naming the Forces}\label{sub:1.5}
 
 Before you can draw a force diagram, you need the right names. These are the forces you will use again and again in this unit.
 
@@ -1147,7 +1180,7 @@ Before you can draw a force diagram, you need the right names. These are the for
         Applied force       & A person or machine pushing/pulling  & Whichever way it is applied \\
 \end{tabular}
 
-\subsection{Drawing Force Arrows --- The Three Rules}
+\subsection{Drawing Force Arrows --- The Three Rules}\label{sub:1.6}
 
 \begin{skillbox}{The three rules for every force arrow}
 \begin{enumerate}[itemsep=2pt, leftmargin=1.4em, topsep=1pt]
@@ -1161,15 +1194,15 @@ Rule 3 is the one students most often forget --- and it matters, because the pic
 
 \vspace{4pt}
 \diagArrowScale
-\figcap{Figure 1.0b --- Using a scale for force arrows. Here 1\,cm represents 5\,N, so a 15\,N force is drawn 3\,cm long.}
+\figcap{Using a scale for force arrows. Here 1\,cm represents 5\,N, so a 15\,N force is drawn 3\,cm long.}
 
-\textbf{Task 1.5} \markscount{4}\quad A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
+\task \markscount{4}\quad A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
 
 \vspace{3pt}
 \begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
 \end{tcolorbox}
 
-\subsection{Putting It Together: Balanced and Unbalanced}
+\subsection{Putting It Together: Balanced and Unbalanced}\label{sub:1.7}
 
 When you add up all the forces on an object, the single force left over is called the \textbf{net force} (or resultant force).
 
@@ -1476,15 +1509,15 @@ practice and are not counted in the assessed mark totals below.
 \vspace{8pt}
 
 % Contents table
-\begin{tabular}{@{}C{0.6cm} L{8.5cm} C{2cm} C{2cm}@{}}
-  \thead{\#} & \thead{Section} & \thead{Yr 7} & \thead{Yr 8} \\
-  \talt 1 & What is a Force? & 37 & 37 \\
-        2 & Newton's Laws of Motion & 20 & 26 \\
-  \talt 3 & Energy --- Types and Transformation & 16 & 20 \\
-        4 & Simple Machines and Levers & 14 & 18 \\
-  \talt 5 & Projectile Motion & 14 & 20 \\
-        6 & Culminating Investigation --- Trebuchet & 36 & 52 \\
-  \tmid \multicolumn{2}{l}{\textbf{Total}} & \textbf{137} & \textbf{173} \\
+\begin{tabular}{@{}C{0.6cm} L{7.6cm} C{1.8cm} C{1.8cm} C{1.4cm}@{}}
+  \thead{\#} & \thead{Section} & \thead{Yr 7} & \thead{Yr 8} & \thead{Page} \\
+  \talt 1 & What is a Force? & 37 & 37 & p.\ \pageref{sec:1} \\
+        2 & Newton's Laws of Motion & 20 & 26 & p.\ \pageref{sec:2} \\
+  \talt 3 & Energy --- Types and Transformation & 16 & 20 & p.\ \pageref{sec:3} \\
+        4 & Simple Machines and Levers & 14 & 18 & p.\ \pageref{sec:4} \\
+  \talt 5 & Projectile Motion & 14 & 20 & p.\ \pageref{sec:5} \\
+        6 & Culminating Investigation --- Trebuchet & 36 & 52 & p.\ \pageref{sec:6} \\
+  \tmid \multicolumn{2}{l}{\textbf{Total}} & \textbf{137} & \textbf{173} & \\
 \end{tabular}
 
 \newpage
@@ -1492,22 +1525,22 @@ practice and are not counted in the assessed mark totals below.
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 1 — WHAT IS A FORCE?
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{1}{What is a Force?}{Types of force \textbullet{} Contact vs non-contact \textbullet{} Balanced and unbalanced forces}
+\sectiondiv{What is a Force?}{Types of force \textbullet{} Contact vs non-contact \textbullet{} Balanced and unbalanced forces}\label{sec:1}
 
 \readingOne
 
 \beginnerSkills
 
-\subsection{Types of Force}
+\subsection{Types of Force}\label{sub:1.8}
 
 Forces fall into two groups: \textbf{contact forces} (objects must touch) and \textbf{non-contact forces} (objects do not need to touch).
 
 \vspace{4pt}
 \diagForceTypes
-\figcap{Figure 1.1 --- Contact and non-contact forces}
+\figcap{Contact and non-contact forces}
 
 \begin{yr7box}
-\textbf{Task 1.1} \markscount{6}\quad
+\task \markscount{6}\quad
 Complete the table. For each force, identify whether it is contact or non-contact, and give a real-world example.
 
 \vspace{4pt}
@@ -1522,25 +1555,25 @@ Complete the table. For each force, identify whether it is contact or non-contac
 \end{tabular}
 \end{yr7box}
 
-\subsection{Free Body Diagrams}
+\subsection{Free Body Diagrams}\label{sub:1.9}
 
 A \textbf{free body diagram (FBD)} shows all forces acting on a single object as labelled arrows. When forces are \textbf{balanced} (equal in size, opposite in direction), the net force is zero and the object does not accelerate. When forces are \textbf{unbalanced}, there is a net force and the object accelerates.
 
 \diagFBD
-\figcap{Figure 1.2 --- Balanced forces (left) and unbalanced forces (right)}
+\figcap{Balanced forces (left) and unbalanced forces (right)}
 
 \begin{yr7box}
-\textbf{Task 1.2a} \markscount{2}\quad
+\task[a] \markscount{2}\quad
 Look at the balanced forces diagram (left). Why is the book not accelerating? Use the word \textit{net force} in your answer.
 \answerbox{2.5cm}
 
 \medskip
-\textbf{Task 1.2b} \markscount{2}\quad
+\taskpart{b} \markscount{2}\quad
 Look at the unbalanced forces diagram (right). Calculate the net force on the box and state the direction of acceleration.
 \answerbox{2.5cm}
 
 \medskip
-\textbf{Task 1.2c} \markscount{2}\quad
+\taskpart{c} \markscount{2}\quad
 Draw a free body diagram for a skydiver at terminal velocity. Label all forces with their names and comparative sizes.
 
 \vspace{4pt}
@@ -1550,7 +1583,7 @@ Draw a free body diagram for a skydiver at terminal velocity. Label all forces w
 \end{yr7box}
 
 \begin{yr8box}
-\textbf{Extension 1.3} \markscount{3}\quad
+\exttask \markscount{3}\quad
 A car has a driving force of 4500\,N and a total resistive force of 1200\,N. Calculate the net force, determine the direction of acceleration, and state which of Newton's laws this demonstrates.
 \answerbox{3cm}
 \end{yr8box}
@@ -1560,7 +1593,7 @@ A car has a driving force of 4500\,N and a total resistive force of 1200\,N. Cal
 
 \newpage
 % ─── EXPERIMENT 1 ─────────────────────────────────────────────────────────────
-\section*{\textcolor{NavyBlue}{Experiment 1: Investigating Friction}}
+\section*{\textcolor{NavyBlue}{Experiment 1: Investigating Friction}}\label{exp:1}
 \addcontentsline{toc}{section}{Experiment 1: Investigating Friction}
 
 \begin{expheader}{1}{Investigating Friction}{To investigate how the type of surface affects the friction force on a sliding object.}
@@ -1601,15 +1634,15 @@ Wooden block (or heavy book) \quad Spring scale (Newton meter) \quad 3+ surfaces
 
 \medskip
 \begin{yr7box}
-\question{1}{2}{Which surface produced the greatest friction? Which produced the least?}
+\question{2}{Which surface produced the greatest friction? Which produced the least?}
 \answerbox{2.5cm}
 
-\question{2}{2}{Why did you take three trials for each surface? What did you do with the three values?}
+\question{2}{Why did you take three trials for each surface? What did you do with the three values?}
 \answerbox{2.5cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{3}{3}{The wooden block has a mass of 0.3\,kg. Using $F = ma$, calculate the deceleration the block would experience if friction is the only horizontal force acting on it. Show all working.}
+\question{3}{The wooden block has a mass of 0.3\,kg. Using $F = ma$, calculate the deceleration the block would experience if friction is the only horizontal force acting on it. Show all working.}
 \answerbox{3.5cm}
 \end{yr8box}
 
@@ -1618,15 +1651,15 @@ Wooden block (or heavy book) \quad Spring scale (Newton meter) \quad 3+ surfaces
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 2 — NEWTON'S LAWS
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{2}{Newton's Laws of Motion}{1st Law: inertia \textbullet{} 2nd Law: $F = ma$ \textbullet{} 3rd Law: action--reaction}
+\sectiondiv{Newton's Laws of Motion}{1st Law: inertia \textbullet{} 2nd Law: $F = ma$ \textbullet{} 3rd Law: action--reaction}\label{sec:2}
 
 \readingTwo
 
 
-\subsection{Newton's First Law --- The Law of Inertia}
+\subsection{Newton's First Law --- The Law of Inertia}\label{sub:2.1}
 
 \diagNewtonOne
-\figcap{Figure 2.1 --- Newton's First Law}
+\figcap{Newton's First Law}
 
 \begin{infobox}{First Law}
 \textit{``An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an unbalanced (net) force.''}
@@ -1636,17 +1669,17 @@ Wooden block (or heavy book) \quad Spring scale (Newton meter) \quad 3+ surfaces
 \end{infobox}
 
 \begin{yr7box}
-\question{1}{2}{Explain why passengers lurch forward when a bus suddenly brakes. Use the words \textit{inertia} and \textit{unbalanced force} in your answer.}
+\question{2}{Explain why passengers lurch forward when a bus suddenly brakes. Use the words \textit{inertia} and \textit{unbalanced force} in your answer.}
 \answerbox{3cm}
 
-\question{2}{2}{A hockey puck slides across an almost frictionless ice surface. What will eventually stop it, and why?}
+\question{2}{A hockey puck slides across an almost frictionless ice surface. What will eventually stop it, and why?}
 \answerbox{2.5cm}
 \end{yr7box}
 
-\subsection{Newton's Second Law --- $F = ma$}
+\subsection{Newton's Second Law --- $F = ma$}\label{sub:2.2}
 
 \diagFma
-\figcap{Figure 2.2 --- Newton's Second Law: force, mass and acceleration}
+\figcap{Newton's Second Law: force, mass and acceleration}
 
 \begin{infobox}{Second Law}
 The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass.
@@ -1670,7 +1703,7 @@ Substitute: \quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
 \end{workedex}
 
 \begin{yr7box}
-\textbf{Task 2.2} \markscount{6}\quad Use $F = ma$ to complete the table. Show working in the space below.
+\task \markscount{6}\quad Use $F = ma$ to complete the table. Show working in the space below.
 
 \vspace{4pt}
 \begin{tabular}{@{}L{5cm} C{2.5cm} C{2.5cm} C{2.5cm}@{}}
@@ -1685,11 +1718,11 @@ Substitute: \quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
 \end{yr7box}
 
 \begin{yr8box}
-\question{4}{3}{A rocket expels gas downward with a force of 500\,000\,N. The rocket has a mass of 20\,000\,kg. Calculate its acceleration and identify which Newton's Law this demonstrates.}
+\question{3}{A rocket expels gas downward with a force of 500\,000\,N. The rocket has a mass of 20\,000\,kg. Calculate its acceleration and identify which Newton's Law this demonstrates.}
 \answerbox{3.5cm}
 \end{yr8box}
 
-\subsection{Newton's Third Law --- Action and Reaction}
+\subsection{Newton's Third Law --- Action and Reaction}\label{sub:2.3}
 
 \begin{infobox}{Third Law}
 \textit{``For every action force, there is an equal and opposite reaction force.''}
@@ -1699,7 +1732,7 @@ Action--reaction pairs \textbf{always act on different objects} --- they do \tex
 \end{infobox}
 
 \begin{yr7box}
-\question{3}{3}{A swimmer pushes backward against the water with a force of 80\,N. Describe the reaction force: name it, state its size, and state its direction.}
+\question{3}{A swimmer pushes backward against the water with a force of 80\,N. Describe the reaction force: name it, state its size, and state its direction.}
 \answerbox{3cm}
 \end{yr7box}
 
@@ -1708,7 +1741,7 @@ Action--reaction pairs \textbf{always act on different objects} --- they do \tex
 
 \newpage
 % ─── EXPERIMENT 2 ─────────────────────────────────────────────────────────────
-\section*{\textcolor{NavyBlue}{Experiment 2: Investigating Newton's Second Law}}
+\section*{\textcolor{NavyBlue}{Experiment 2: Investigating Newton's Second Law}}\label{exp:2}
 
 \begin{expheader}{2}{Newton's Second Law --- Mass, Force and Acceleration}{To investigate the relationship between net force, mass and acceleration using a trolley system.}
 \medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
@@ -1719,20 +1752,20 @@ Action--reaction pairs \textbf{always act on different objects} --- they do \tex
 
 \subsubsection*{Experimental Setup}
 \diagExpTwoSetup
-\figcap{Figure E2.1 --- Trolley connected by string over a pulley to a hanging mass. The hanging mass provides the driving force; the pulley redirects the tension.}
+\expfigcap{Trolley connected by string over a pulley to a hanging mass. The hanging mass provides the driving force; the pulley redirects the tension.}
 
 \subsubsection*{Free Body Diagrams}
 \diagExpTwoFBD
-\figcap{Figure E2.2 --- Left: FBD of trolley (tension drives it right; normal force and weight balance vertically). Right: FBD of hanging mass (weight exceeds tension, so it accelerates downward).}
+\expfigcap{Left: FBD of trolley (tension drives it right; normal force and weight balance vertically). Right: FBD of hanging mass (weight exceeds tension, so it accelerates downward).}
 
 \subsubsection*{How force size affects acceleration}
 \diagExpTwoForces
-\figcap{Figure E2.3 --- As the hanging mass increases, the tension force (and hence acceleration) increases proportionally --- confirming Newton's Second Law.}
+\expfigcap{As the hanging mass increases, the tension force (and hence acceleration) increases proportionally --- confirming Newton's Second Law.}
 
 \subsubsection*{System equations (Year 8)}
 \begin{yr8box}
 \diagExpTwoSystem
-\figcap{Figure E2.4 --- Combining both FBDs gives the full system equation. When $M \gg m$, the result simplifies to $F = Ma$.}
+\expfigcap{Combining both FBDs gives the full system equation. When $M \gg m$, the result simplifies to $F = Ma$.}
 \end{yr8box}
 
 \subsubsection*{Equipment}
@@ -1758,12 +1791,12 @@ Dynamics trolley \quad Runway \quad Pulley and string \quad Hanging masses (50, 
 \end{tabular}
 
 \begin{yr7box}
-\question{5}{2}{Describe the relationship between force and acceleration that you observed. Was your prediction correct?}
+\question{2}{Describe the relationship between force and acceleration that you observed. Was your prediction correct?}
 \answerbox{3cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{6}{4}{Plot acceleration (y-axis) vs.\ force (x-axis) using your Part A results. What does the gradient of the line represent? Calculate it.}
+\question{4}{Plot acceleration (y-axis) vs.\ force (x-axis) using your Part A results. What does the gradient of the line represent? Calculate it.}
 
 \vspace{4pt}
 \begin{tcolorbox}[colback=white, colframe=MidGrey, height=7cm, boxrule=0.5pt]
@@ -1776,15 +1809,15 @@ Dynamics trolley \quad Runway \quad Pulley and string \quad Hanging masses (50, 
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 3 — ENERGY
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{3}{Energy --- Types and Transformation}{Kinetic energy \textbullet{} Gravitational PE \textbullet{} Elastic PE \textbullet{} Conservation \textbullet{} Efficiency}
+\sectiondiv{Energy --- Types and Transformation}{Kinetic energy \textbullet{} Gravitational PE \textbullet{} Elastic PE \textbullet{} Conservation \textbullet{} Efficiency}\label{sec:3}
 
 \readingThree
 
 
-\subsection{Types of Energy}
+\subsection{Types of Energy}\label{sub:3.1}
 
 \diagEnergy
-\figcap{Figure 3.1 --- Energy types and the trebuchet energy transformation chain}
+\figcap{Energy types and the trebuchet energy transformation chain}
 
 \begin{infobox}{Key equations}
 \[
@@ -1801,19 +1834,19 @@ $\text{GPE} = mgh = 2 \times 9.8 \times 5 = \mathbf{98\ \text{J}}$
 \end{workedex}
 
 \begin{yr7box}
-\question{1}{2}{Calculate the GPE of a 3\,kg ball held at a height of 4\,m.}
+\question{2}{Calculate the GPE of a 3\,kg ball held at a height of 4\,m.}
 \answerbox{2.5cm}
 
-\question{2}{3}{The ball is dropped and just before it hits the ground its speed is 8.85\,m/s. Calculate its KE. Compare it to the GPE --- what does this suggest?}
+\question{3}{The ball is dropped and just before it hits the ground its speed is 8.85\,m/s. Calculate its KE. Compare it to the GPE --- what does this suggest?}
 \answerbox{3cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{3}{3}{If the ball actually hits the ground with KE = 92\,J (not 98\,J), calculate the efficiency of the GPE$\to$KE transformation and suggest where the ``missing'' energy went.}
+\question{3}{If the ball actually hits the ground with KE = 92\,J (not 98\,J), calculate the efficiency of the GPE$\to$KE transformation and suggest where the ``missing'' energy went.}
 \answerbox{3cm}
 \end{yr8box}
 
-\subsection{Energy Chains}
+\subsection{Energy Chains}\label{sub:3.2}
 
 An \textbf{energy chain} shows how energy transforms step by step. For the trebuchet:
 
@@ -1834,12 +1867,12 @@ An \textbf{energy chain} shows how energy transforms step by step. For the trebu
 \end{center}
 
 \begin{yr7box}
-\question{4}{2}{Name TWO forms of energy present at the moment the trebuchet releases the ball.}
+\question{2}{Name TWO forms of energy present at the moment the trebuchet releases the ball.}
 \answerbox{2cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{5}{4}{A trebuchet counterweight provides 500\,J of GPE. Only 380\,J is transferred to the ball as KE. Draw a Sankey diagram for this energy transfer in the space below, with proportionally sized arrows.}
+\question{4}{A trebuchet counterweight provides 500\,J of GPE. Only 380\,J is transferred to the ball as KE. Draw a Sankey diagram for this energy transfer in the space below, with proportionally sized arrows.}
 \vspace{4pt}
 \begin{tcolorbox}[colback=white, colframe=MidGrey, height=5cm, boxrule=0.5pt]
 \textit{\color{MidGrey}Draw Sankey diagram here (input arrow left, useful output straight, waste turns downward).}
@@ -1851,7 +1884,7 @@ An \textbf{energy chain} shows how energy transforms step by step. For the trebu
 
 \newpage
 % ─── EXPERIMENT 3 ─────────────────────────────────────────────────────────────
-\section*{\textcolor{NavyBlue}{Experiment 3: Energy Transformation Efficiency}}
+\section*{\textcolor{NavyBlue}{Experiment 3: Energy Transformation Efficiency}}\label{exp:3}
 
 \begin{expheader}{3}{GPE to KE --- How Efficient?}{To measure the efficiency of converting gravitational potential energy to kinetic energy when a ball is dropped.}
 \medskip\small\textbf{Curriculum:} VCSSU104 \textbullet{} VCSIS108--113
@@ -1885,12 +1918,12 @@ Ball mass: \underline{\hspace{2cm}}\,kg \qquad Drop height $h_1$: \underline{\hs
 \end{tabular}
 
 \begin{yr7box}
-\question{7}{2}{Was the energy transformation 100\% efficient? Where did the ``lost'' energy go?}
+\question{2}{Was the energy transformation 100\% efficient? Where did the ``lost'' energy go?}
 \answerbox{2.5cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{8}{3}{If you repeated this experiment with a steel ball and a rubber ball of identical mass from the same height, predict which would be more efficient and explain why in terms of elastic potential energy.}
+\question{3}{If you repeated this experiment with a steel ball and a rubber ball of identical mass from the same height, predict which would be more efficient and explain why in terms of elastic potential energy.}
 \answerbox{3.5cm}
 \end{yr8box}
 
@@ -1899,12 +1932,12 @@ Ball mass: \underline{\hspace{2cm}}\,kg \qquad Drop height $h_1$: \underline{\hs
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 4 — SIMPLE MACHINES AND LEVERS
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{4}{Simple Machines and Levers}{Mechanical advantage \textbullet{} Lever classes \textbullet{} The trebuchet as a lever}
+\sectiondiv{Simple Machines and Levers}{Mechanical advantage \textbullet{} Lever classes \textbullet{} The trebuchet as a lever}\label{sec:4}
 
 \readingFour
 
 
-\subsection{Levers and Mechanical Advantage}
+\subsection{Levers and Mechanical Advantage}\label{sub:4.1}
 
 A \textbf{lever} is a rigid bar that rotates around a fixed point called the \textbf{fulcrum}. It has three components: the \textbf{effort} (input force), the \textbf{load} (output force), and the \textbf{fulcrum} (pivot).
 
@@ -1916,7 +1949,7 @@ MA $>$ 1 means the machine multiplies your force. MA $<$ 1 means you gain speed 
 \end{infobox}
 
 \diagLevers
-\figcap{Figure 4.1 --- The three classes of lever (E\,=\,Effort, L\,=\,Load)}
+\figcap{The three classes of lever (E\,=\,Effort, L\,=\,Load)}
 
 \begin{workedex}{Worked Example 4.1 --- Mechanical advantage}
 A lever has an effort arm of 2.0\,m and a load arm of 0.5\,m.
@@ -1926,25 +1959,25 @@ $\text{MA} = 2.0 \div 0.5 = \mathbf{4}$ \quad A 100\,N effort lifts a 400\,N loa
 \end{workedex}
 
 \begin{yr7box}
-\question{1}{2}{A seesaw has a 600\,N person sitting 2\,m from the pivot. How far from the pivot must a 400\,N child sit to balance it?}
+\question{2}{A seesaw has a 600\,N person sitting 2\,m from the pivot. How far from the pivot must a 400\,N child sit to balance it?}
 \answerbox{3cm}
 \end{yr7box}
 
-\subsection{The Trebuchet as a Class 1 Lever}
+\subsection{The Trebuchet as a Class 1 Lever}\label{sub:4.2}
 
 \diagTrebuchetLever
-\figcap{Figure 4.2 --- Trebuchet as a Class 1 lever with short and long arms}
+\figcap{Trebuchet as a Class 1 lever with short and long arms}
 
 \begin{yr7box}
-\question{2}{3}{Identify the effort, load, and fulcrum in the trebuchet diagram above.}
+\question{3}{Identify the effort, load, and fulcrum in the trebuchet diagram above.}
 \answerbox{3cm}
 
-\question{3}{2}{A trebuchet has a long arm of 3.0\,m and a short arm of 0.5\,m. Calculate the mechanical advantage. If the counterweight exerts 500\,N, what force acts on the projectile?}
+\question{2}{A trebuchet has a long arm of 3.0\,m and a short arm of 0.5\,m. Calculate the mechanical advantage. If the counterweight exerts 500\,N, what force acts on the projectile?}
 \answerbox{3cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{4}{3}{A longer arm increases both MA and the speed of the projectile tip. Using the concept of arc length (arc $=$ radius $\times$ angle in radians), explain why a longer arm produces a faster launch speed even if the counterweight falls the same distance.}
+\question{3}{A longer arm increases both MA and the speed of the projectile tip. Using the concept of arc length (arc $=$ radius $\times$ angle in radians), explain why a longer arm produces a faster launch speed even if the counterweight falls the same distance.}
 \answerbox{4cm}
 \end{yr8box}
 
@@ -1953,7 +1986,7 @@ $\text{MA} = 2.0 \div 0.5 = \mathbf{4}$ \quad A 100\,N effort lifts a 400\,N loa
 
 \newpage
 % ─── EXPERIMENT 4 ─────────────────────────────────────────────────────────────
-\section*{\textcolor{NavyBlue}{Experiment 4: Lever Mechanical Advantage}}
+\section*{\textcolor{NavyBlue}{Experiment 4: Lever Mechanical Advantage}}\label{exp:4}
 
 \begin{expheader}{4}{How does arm length affect mechanical advantage?}{To investigate how varying the effort arm length affects the mechanical advantage of a lever.}
 \medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
@@ -1983,10 +2016,10 @@ Metre stick \quad Pencil or triangular prism (fulcrum) \quad 100\,g load mass \q
 \end{tabular}
 
 \begin{yr7box}
-\question{5}{2}{What happens to the mechanical advantage as the effort arm gets longer?}
+\question{2}{What happens to the mechanical advantage as the effort arm gets longer?}
 \answerbox{2.5cm}
 
-\question{6}{2}{Why is this experiment relevant to understanding how a trebuchet works?}
+\question{2}{Why is this experiment relevant to understanding how a trebuchet works?}
 \answerbox{2.5cm}
 \end{yr7box}
 
@@ -1995,12 +2028,12 @@ Metre stick \quad Pencil or triangular prism (fulcrum) \quad 100\,g load mass \q
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 5 — PROJECTILE MOTION
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{5}{Projectile Motion}{Trajectory \textbullet{} Gravity as the only force \textbullet{} $h = \frac{1}{2}gt^2$ \textbullet{} $g = 9.8$\,m/s$^2$}
+\sectiondiv{Projectile Motion}{Trajectory \textbullet{} Gravity as the only force \textbullet{} $h = \frac{1}{2}gt^2$ \textbullet{} $g = 9.8$\,m/s$^2$}\label{sec:5}
 
 \readingFive
 
 
-\subsection{What is a Projectile?}
+\subsection{What is a Projectile?}\label{sub:5.1}
 
 Once launched, a projectile is only acted on by gravity. Key principles:
 
@@ -2011,7 +2044,7 @@ Once launched, a projectile is only acted on by gravity. Key principles:
 \end{itemize}
 
 \diagProjectile
-\figcap{Figure 5.1 --- Projectile motion: $h$ = launch height, $R$ = horizontal range}
+\figcap{Projectile motion: $h$ = launch height, $R$ = horizontal range}
 
 \begin{infobox}{Key equations --- horizontal launch}
 \[
@@ -2034,7 +2067,7 @@ $t = \sqrt{2h/g} = \sqrt{2 \times 1.25 / 9.8} = \sqrt{0.255} \approx \mathbf{0.5
 \end{workedex}
 
 \begin{yr7box}
-\textbf{Task 5.1} \markscount{6}\quad Complete the table. Show working below.
+\task \markscount{6}\quad Complete the table. Show working below.
 
 \vspace{4pt}
 \begin{tabular}{@{}L{6cm} C{3cm} C{3cm}@{}}
@@ -2046,17 +2079,17 @@ $t = \sqrt{2h/g} = \sqrt{2 \times 1.25 / 9.8} = \sqrt{0.255} \approx \mathbf{0.5
 \end{yr7box}
 
 \begin{yr8box}
-\subsection*{5.2 Optimising Range (Year 8 Extension)}
+\subsection{Optimising Range (Year 8 Extension)}\label{sub:5.2}
 
 \begin{infobox}{Range equation --- angled launch}
 \[R = \frac{v^2 \sin(2\theta)}{g}\]
 Maximum range occurs at $\theta = 45°$, giving $R_{\max} = v^2/g$.
 \end{infobox}
 
-\question{7}{2}{A ball is launched at 20\,m/s. Calculate the maximum range (at $\theta = 45°$).}
+\question{2}{A ball is launched at 20\,m/s. Calculate the maximum range (at $\theta = 45°$).}
 \answerbox{3cm}
 
-\question{8}{2}{Why might a real trebuchet \textit{not} be set to exactly $45°$? Consider air resistance and the height of the launch point above the landing area.}
+\question{2}{Why might a real trebuchet \textit{not} be set to exactly $45°$? Consider air resistance and the height of the launch point above the landing area.}
 \answerbox{3cm}
 \end{yr8box}
 
@@ -2065,7 +2098,7 @@ Maximum range occurs at $\theta = 45°$, giving $R_{\max} = v^2/g$.
 
 \newpage
 % ─── EXPERIMENT 5 ─────────────────────────────────────────────────────────────
-\section*{\textcolor{NavyBlue}{Experiment 5: Ball Roll-off --- Measuring $g$}}
+\section*{\textcolor{NavyBlue}{Experiment 5: Ball Roll-off --- Measuring $g$}}\label{exp:5}
 
 \begin{expheader}{5}{Measuring $g$ with a Ball Rolling off a Table}{To measure the acceleration due to gravity using projectile motion equations.}
 \medskip\small\textbf{Curriculum:} VCSSU103 \textbullet{} VCSIS108--113
@@ -2108,11 +2141,11 @@ Table height $h =$ \underline{\hspace{2cm}}\,m \qquad Camera frame rate $=$ \und
 \end{tabular}
 
 \begin{yr7box}
-\question{9}{2}{How close was your mean $g$ to 9.8\,m/s$^2$? Calculate the percentage error.
+\question{2}{How close was your mean $g$ to 9.8\,m/s$^2$? Calculate the percentage error.
   \[\% \text{ error} = \frac{|\text{measured } g - 9.8|}{9.8} \times 100\%\]}
 \answerbox{2.5cm}
 
-\question{10}{4}{List TWO sources of error in this experiment and suggest how each could be reduced.}
+\question{4}{List TWO sources of error in this experiment and suggest how each could be reduced.}
 \answerbox{4cm}
 \end{yr7box}
 
@@ -2121,7 +2154,7 @@ Table height $h =$ \underline{\hspace{2cm}}\,m \qquad Camera frame rate $=$ \und
 % ══════════════════════════════════════════════════════════════════════════════
 %  SECTION 6 — CULMINATING INVESTIGATION
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{6}{Culminating Investigation --- Trebuchet}{Connecting all learning: forces, Newton's laws, energy, levers, projectile motion}
+\sectiondiv{Culminating Investigation --- Trebuchet}{Connecting all learning: forces, Newton's laws, energy, levers, projectile motion}\label{sec:6}
 
 \readingSix
 
@@ -2130,19 +2163,19 @@ Table height $h =$ \underline{\hspace{2cm}}\,m \qquad Camera frame rate $=$ \und
 This investigation draws on \textbf{everything} from this unit:
 \begin{multicols}{2}
 \begin{itemize}[itemsep=1pt]
-  \item Section 1 --- force diagrams
-  \item Section 2 --- Newton's laws
-  \item Section 3 --- energy transformation
-  \item Section 4 --- levers and MA
-  \item Section 5 --- projectile motion equations
+  \item Section~\ref{sec:1} --- force diagrams
+  \item Section~\ref{sec:2} --- Newton's laws
+  \item Section~\ref{sec:3} --- energy transformation
+  \item Section~\ref{sec:4} --- levers and MA
+  \item Section~\ref{sec:5} --- projectile motion equations
 \end{itemize}
 \end{multicols}
 \end{infobox}
 
-\subsection{Force and Energy Analysis}
+\subsection{Force and Energy Analysis}\label{sub:6.1}
 
 \begin{yr7box}
-\textbf{Task 6.1a} \markscount{4}\quad
+\task \markscount{4}\quad
 Draw a labelled free body diagram for the projectile at TWO moments: (i) just after release from the sling, and (ii) at the peak of its trajectory.
 
 \vspace{6pt}
@@ -2155,16 +2188,16 @@ Draw a labelled free body diagram for the projectile at TWO moments: (i) just af
   \textit{\color{MidGrey}Draw here}
 \end{tcolorbox}
 
-\question{}{3}{Describe the energy transformation in the trebuchet from when the counterweight is raised to when the projectile lands. Name all energy types involved.}
+\question{3}{Describe the energy transformation in the trebuchet from when the counterweight is raised to when the projectile lands. Name all energy types involved.}
 \answerbox{3.5cm}
 \end{yr7box}
 
 \begin{yr8box}
-\question{}{5}{A trebuchet counterweight of 15\,kg drops 0.8\,m. Assume 25\% of energy is lost to friction and sound. Calculate: (i) GPE of the counterweight, (ii) KE transferred to the 0.04\,kg projectile, (iii) launch speed of the projectile.}
+\question{5}{A trebuchet counterweight of 15\,kg drops 0.8\,m. Assume 25\% of energy is lost to friction and sound. Calculate: (i) GPE of the counterweight, (ii) KE transferred to the 0.04\,kg projectile, (iii) launch speed of the projectile.}
 \answerbox{5cm}
 \end{yr8box}
 
-\subsection{Planning}
+\subsection{Planning}\label{sub:6.2}
 
 \subsubsection*{Aim}
 \answerbox{2cm}
@@ -2202,7 +2235,7 @@ Write a full scientific hypothesis including: a testable prediction, the relevan
 \end{tabular}
 
 \newpage
-\subsection{Results}
+\subsection{Results}\label{sub:6.3}
 
 \begin{tabular}{@{}L{4cm} C{3cm} C{3.5cm}@{}}
   \thead{Measurement} & \thead{Value (with units)} & \thead{Instrument used} \\
@@ -2241,7 +2274,7 @@ Write a full scientific hypothesis including: a testable prediction, the relevan
 \answerbox{3.5cm}
 \end{yr8box}
 
-\subsection{Analysis and Discussion}
+\subsection{Analysis and Discussion}\label{sub:6.4}
 
 \subsubsection*{Patterns and trends}
 
@@ -2297,7 +2330,7 @@ Link your results to Newton's Second Law. Refer to the force of gravity, project
 \answerbox{5cm}
 \end{yr8box}
 
-\subsection{Conclusion}
+\subsection{Conclusion}\label{sub:6.5}
 
 \begin{yr7box}
 \begin{scaffold}{Sentence starters}
@@ -2374,5 +2407,4 @@ Write a comprehensive conclusion: address the aim, mean $g$ with uncertainty, pe
 \textbf{Teacher Comments:}
 \answerbox{5cm}
 
-\label{LastPage}
 \end{document}

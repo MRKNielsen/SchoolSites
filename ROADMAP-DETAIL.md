@@ -260,7 +260,7 @@ as unfinished.
    class, MathJax config block with the `pageReady` hook if there's maths.
 3. **Booklet** — `.tex` source + built PDF in the unit's `booklet/`,
    embedded via `.pdf-frame`, `.bookref` chips derived from the built
-   `.toc` (never hand-numbered).
+   `.aux` (never hand-numbered) — `node tools/check-bookrefs.js` verifies them.
 4. **Worksheets** — `worksheet.css`, marks totals agreeing across
    `.namebar`, toolbar hint and the index `.wl-marks`.
 5. **Retrieval quiz** — unit-local `questions.js` + `quiz.html`, plus
@@ -397,18 +397,23 @@ Recap slide to `.exit-slide`) are written down there.
   - [ ] `booklet/` — `.tex` + PDF + `fonts/`, embedded via `.pdf-frame`
         — files copied 2026-10-06, linked from the landing page; not yet
         in a `.pdf-frame` page
-  - [ ] **Fix the booklet's numbering before deriving any more `.bookref`
-        chips.** Sections use `\sectiondiv` + `\section*`, so the section
-        counter never moves and every subsection prints as 0.1…0.22 across
-        the whole booklet. Section 1 also has two Task 1.1s and two Task
-        1.2s (the beginner-skills block and the original tasks both number
-        from 1), and a "Figure 1.0". The committed `.aux` is from an
-        older 34-page build — the PDF is 52 pages. The source decks' chips
-        ("p.4 · §1.1", "Q1.2c") point at that older booklet. Deck 1's
-        chips were re-derived from a fresh build by page and task name.
+  - [x] **Booklet numbering fixed** *(2026-10-06)*. `\sectiondiv{title}{summary}`
+        now steps the real section counter and is followed by `\label{sec:N}`;
+        every subsection has `\label{sub:N.M}`. Tasks (`\task`, `\task[a]`,
+        `\taskpart{b}`, `\exttask`), questions (`\question{marks}{text}`) and
+        figures (`\figcap`, `\expfigcap` → E-numbered) are all auto-numbered
+        per section and auto-labelled `task:`/`q:`/`fig:`; experiments carry
+        `\label{exp:N}`. Never type a number by hand. The beginner-skills
+        block is §1.1–1.7, so the original Task 1.1/1.2a–c/Extension 1.3 are
+        now Task 1.6/1.7a–c/Extension 1.8; questions were hand-numbered out of
+        order (Q4 before Q3 in §2) and now run Q2.1–2.6 etc. Cover contents
+        table gained a `\pageref` page column; stray `\label{LastPage}`
+        removed (the `lastpage` package already defines it). 52 pp.
+        Deck 1 chips re-derived from the `.aux`.
   - [ ] 8 SVG figures — theme colours to tokens, illustrative hues left alone
   - [ ] Ballista + Trebuchet lab tech sheets as linked PDFs
-  - [ ] `.bookref` chips derived from the built `.toc`
+  - [ ] `.bookref` chips derived from the built `.aux` — check every deck with
+        `node tools/check-bookrefs.js year7-science/forces` (deck1 ✓)
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
   - [ ] Quiz + gated solutions *(can defer to a second pass)*
 
