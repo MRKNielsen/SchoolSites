@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-05",
+ "generated": "2026-10-07",
  "tree": [
   {
    "t": "Home",
@@ -222,6 +222,42 @@ window.SITEMAP = {
           {
            "t": "Lesson 1 — What is a Force?",
            "h": "year7-science/forces/deck1.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 2 — Newton’s Laws of Motion",
+           "h": "year7-science/forces/deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Energy & Transformation",
+           "h": "year7-science/forces/deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Simple Machines & Levers",
+           "h": "year7-science/forces/deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Projectile Motion",
+           "h": "year7-science/forces/deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — The Trebuchet Investigation",
+           "h": "year7-science/forces/deck6.html",
+           "k": "science"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit Planner",
+           "h": "year7-science/forces/planner.html",
            "k": "science"
           }
          ]

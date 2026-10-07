@@ -388,9 +388,12 @@ Recap slide to `.exit-slide`) are written down there.
 - [ ] **Port `7 Science/Forces` → `year7-science/forces`. M** *(in progress — Kodie, 2026-10-06)*
       The cheapest real content win in the repo, and it completes Year 7
       Science's third unit.
-  - [ ] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
-        — deck1 done 2026-10-06 (lab slide links the booklet PDF page
-        until `experiments.html` is ported; repoint it then)
+  - [x] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
+        *(deck1 2026-10-06, decks 2–6 2026-10-07 — awaiting Kodie's review)*.
+        Lab slides link the booklet PDF page until `experiments.html` is
+        ported; repoint them then. Chips with no booklet content behind them
+        (the "§N · Extension" slides) were dropped, not re-pointed. Shared
+        `deck.css` gained `.cols.three`.
   - [ ] `experiments.html` — decide its page type (likely `course.css`
         section on the landing page, or a `profile.css` reference page)
   - [x] Unit landing page, `theme-science` *(done 2026-10-06 — lists only what is published; add cards as decks land)*
@@ -411,9 +414,10 @@ Recap slide to `.exit-slide`) are written down there.
         removed (the `lastpage` package already defines it). 52 pp.
         Deck 1 chips re-derived from the `.aux`.
   - [ ] 8 SVG figures — theme colours to tokens, illustrative hues left alone
-  - [ ] Ballista + Trebuchet lab tech sheets as linked PDFs
-  - [ ] `.bookref` chips derived from the built `.aux` — check every deck with
-        `node tools/check-bookrefs.js year7-science/forces` (deck1 ✓)
+  - [x] Ballista + Trebuchet lab tech sheets as linked PDFs *(in `labs/`, Planning section of the index)*
+  - [x] `.bookref` chips derived from the built `.aux` — 61 refs, all decks ✓
+        (`node tools/check-bookrefs.js year7-science/forces`)
+  - [x] Unit planner `planner.html`, 5 weeks; index grouped by the same weeks *(2026-10-07)*
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
   - [ ] Quiz + gated solutions *(can defer to a second pass)*
 

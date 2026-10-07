@@ -142,13 +142,20 @@
 }
 
 % Worked example box
-\newtcolorbox{workedex}[1]{
+\newtcolorbox{workedexbox}[1]{
   breakable, arc=2.5mm, boxrule=0.5pt,
   colback=white, colframe=Amber!50,
   fonttitle=\headingfont\bfseries, coltitle=GoldDark,
   title={#1},
   left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
 }
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
 
 % Year 7 box (blue)
 \newtcolorbox{yr7box}{
@@ -1143,7 +1150,7 @@ In everyday speech we use these words as if they mean the same thing. In science
 On Earth, $g = 9.8$\,N/kg. On the Moon, $g = 1.6$\,N/kg.
 \end{infobox}
 
-\begin{workedex}{Worked Example 1.1 --- Mass and weight}
+\begin{workedex}{Mass and weight}
 A student has a mass of 50\,kg. Find their weight on Earth, and on the Moon.
 
 \medskip
@@ -1213,7 +1220,7 @@ If the net force is \textbf{zero}, the forces are \textbf{balanced} and the moti
 If the net force is \textbf{not zero}, the forces are \textbf{unbalanced} and the object accelerates.
 \end{infobox}
 
-\begin{workedex}{Worked Example 1.2 --- Finding the net force}
+\begin{workedex}{Finding the net force}
 A sledge is pulled forwards with 45\,N. Friction pushes back with 18\,N. Find the net force.
 
 \medskip
@@ -1693,7 +1700,7 @@ The acceleration of an object is directly proportional to the net force acting o
 Force in Newtons (N) \quad Mass in kilograms (kg) \quad Acceleration in m/s$^2$
 \end{infobox}
 
-\begin{workedex}{Worked Example 2.1 --- Finding acceleration}
+\begin{workedex}{Finding acceleration}
 A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
 
 \medskip
@@ -1826,7 +1833,7 @@ Dynamics trolley \quad Runway \quad Pulley and string \quad Hanging masses (50, 
 where $m$ = mass (kg), $g = 9.8$\,m/s$^2$, $h$ = height (m), $v$ = speed (m/s).
 \end{infobox}
 
-\begin{workedex}{Worked Example 3.1 --- GPE calculation}
+\begin{workedex}{GPE calculation}
 A 2\,kg ball is held at a height of 5\,m. Find its gravitational potential energy.
 
 \medskip
@@ -1951,7 +1958,7 @@ MA $>$ 1 means the machine multiplies your force. MA $<$ 1 means you gain speed 
 \diagLevers
 \figcap{The three classes of lever (E\,=\,Effort, L\,=\,Load)}
 
-\begin{workedex}{Worked Example 4.1 --- Mechanical advantage}
+\begin{workedex}{Mechanical advantage}
 A lever has an effort arm of 2.0\,m and a load arm of 0.5\,m.
 
 \medskip
@@ -2059,7 +2066,7 @@ Once launched, a projectile is only acted on by gravity. Key principles:
 where $h$ = drop height (m), $t$ = time of flight (s), $g = 9.8$\,m/s$^2$, $R$ = range (m), $v$ = launch speed (m/s).
 \end{infobox}
 
-\begin{workedex}{Worked Example 5.1 --- Time of flight}
+\begin{workedex}{Time of flight}
 A ball is launched horizontally from $h = 1.25$\,m. How long to land?
 
 \medskip

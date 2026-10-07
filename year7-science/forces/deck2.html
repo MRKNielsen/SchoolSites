@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 2 &#8212; Newton&#8217;s Laws of Motion | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 2 of 6</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Lesson 2 of 6</p>
+    <h1>Newton's Laws of Motion</h1>
+    <p class="subtitle">Inertia, \(F = ma\), and action–reaction — the three laws that explain why things move.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Section 2</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Section 2 <b>&#183;</b> Overview</p>
+    <h2>What we're learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Learning intentions</span>
+        <ul>
+          <li>Explain Newton's First Law using <strong>inertia</strong> and net force</li>
+          <li>Use <strong>\(F = ma\)</strong> to calculate force, mass or acceleration</li>
+          <li>Identify <strong>action–reaction</strong> pairs (Newton's Third Law)</li>
+          <li>Apply the laws to real situations and the trebuchet</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">Success criteria</span>
+        <ul>
+          <li>I can explain why objects resist changes to their motion</li>
+          <li>I can rearrange and use \(F = ma\) with correct units</li>
+          <li>I can name both forces in an action–reaction pair</li>
+          <li>I can say which law explains a given situation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter discussion</span><p>When a car brakes hard, your body keeps moving forward against the seatbelt. What's going on — and which of Newton's laws might explain it?</p></div>
+  </section>
+
+  <section class="slide" data-menu="First Law: inertia">
+    <p class="bookref book">Booklet p.14 &#183; §2.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> First Law</p>
+    <h2>Newton's First Law — inertia</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 270" xmlns="http://www.w3.org/2000/svg">
+        <!-- Panel 1: at rest -->
+        <text x="225" y="30" text-anchor="middle" font-size="20" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">At rest → stays at rest</text>
+        <line x1="60" y1="205" x2="390" y2="205" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <rect x="185" y="165" width="80" height="40" rx="6" fill="#2E6FE0"/>
+        <text x="225" y="190" text-anchor="middle" font-size="14" fill="white" font-weight="600">box</text>
+        <line x1="225" y1="165" x2="225" y2="120" stroke="#18A999" stroke-width="5"/>
+        <polygon points="225,110 218,126 232,126" fill="#18A999"/>
+        <text x="236" y="135" font-size="14" fill="#0F6E63" font-weight="600">N</text>
+        <line x1="225" y1="205" x2="225" y2="250" stroke="#E0533F" stroke-width="5"/>
+        <polygon points="225,260 218,244 232,244" fill="#E0533F"/>
+        <text x="236" y="240" font-size="14" fill="#B23A2B" font-weight="600">W</text>
+        <text x="225" y="32" font-size="12" style="fill:var(--ink-soft)"></text>
+        <!-- divider -->
+        <line x1="450" y1="40" x2="450" y2="240" stroke-width="2" style="stroke:var(--line)"/>
+        <!-- Panel 2: in motion -->
+        <text x="675" y="30" text-anchor="middle" font-size="20" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">In motion → stays in motion</text>
+        <line x1="500" y1="205" x2="880" y2="205" stroke="#4DA3FF" stroke-width="3" stroke-dasharray="2 7"/>
+        <text x="510" y="227" font-size="12" style="fill:var(--ink-soft)">frictionless ice</text>
+        <ellipse cx="560" cy="193" rx="22" ry="11" fill="#7C5CE0"/>
+        <text x="560" y="178" text-anchor="middle" font-size="12" fill="#5B3FC0" font-weight="600">puck</text>
+        <line x1="588" y1="190" x2="720" y2="190" stroke="#7C5CE0" stroke-width="5"/>
+        <polygon points="732,190 716,183 716,197" fill="#7C5CE0"/>
+        <text x="640" y="178" text-anchor="middle" font-size="14" fill="#5B3FC0" font-weight="600">v (constant)</text>
+        <line x1="740" y1="190" x2="868" y2="190" stroke-width="2" stroke-dasharray="5 5" style="stroke:var(--ink-faint)"/>
+        <text x="675" y="252" text-anchor="middle" font-size="13" font-style="italic" style="fill:var(--ink-soft)">no net force → keeps gliding at the same speed</text>
+      </svg>
+    </div>
+    <div class="box defn"><span class="lbl">Definition</span><p>An object at rest <strong>stays at rest</strong>, and an object in motion <strong>stays in motion at constant velocity</strong>, unless acted on by an <strong>unbalanced (net) force</strong>. <strong>Inertia</strong> is the tendency to resist a change in motion — more mass means more inertia.</p></div>
+  </section>
+
+  <section class="slide" data-menu="First Law: explain it">
+    <p class="bookref book">Booklet p.14 &#183; Q2.1, Q2.2</p>
+    <p class="eyebrow">Your turn — explain using inertia</p>
+    <h2><span class="phase-tag youdo">You do</span> Explain it with the First Law</h2>
+    <div class="box question"><span class="lbl">Use the words <em>inertia</em> and <em>unbalanced force</em></span><p><strong>Q2.1</strong> Passengers lurch forward when a bus suddenly brakes. Why?<br><strong>Q2.2</strong> A hockey puck slides across almost-frictionless ice — what eventually stops it, and why?</p></div>
+    <ol class="steps" id="f2w1">
+      <li><span class="stepno">1</span> <strong>Q2.1</strong> The bus decelerates, but the passengers' <strong>inertia</strong> keeps them moving forward at the original speed.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result"><strong>Q2.1</strong> They keep going until an <strong>unbalanced force</strong> (seatbelt / seat) acts to slow them too.</span></li>
+      <li><span class="stepno">2</span> <strong>Q2.2</strong> With almost no friction there is no net force, so the puck glides at near-constant velocity.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result"><strong>Q2.2</strong> The small remaining <strong>friction</strong> (an unbalanced force) gradually brings it to rest.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w1">Show answers</button>
+  </section>
+
+  <section class="slide" data-menu="Second Law: F = ma">
+    <p class="bookref book">Booklet p.15 &#183; §2.2</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Second Law</p>
+    <h2>Newton's Second Law — \(F = ma\)</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg">
+        <!-- F box -->
+        <rect x="40" y="55" width="200" height="105" rx="14" fill="#FFF3DC" stroke="#D98A0B" stroke-width="2.5"/>
+        <text x="140" y="105" text-anchor="middle" font-size="40" font-weight="700" fill="#A86A08" font-family="Bitter, serif">F</text>
+        <text x="140" y="135" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">Force (N)</text>
+        <text x="270" y="118" text-anchor="middle" font-size="40" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">=</text>
+        <!-- m box -->
+        <rect x="300" y="55" width="200" height="105" rx="14" fill="#E8F1FF" stroke="#2E6FE0" stroke-width="2.5"/>
+        <text x="400" y="105" text-anchor="middle" font-size="40" font-weight="700" fill="#2E6FE0" font-family="Bitter, serif">m</text>
+        <text x="400" y="135" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">Mass (kg)</text>
+        <text x="530" y="118" text-anchor="middle" font-size="34" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">×</text>
+        <!-- a box -->
+        <rect x="560" y="55" width="300" height="105" rx="14" fill="#E0F7F3" stroke="#18A999" stroke-width="2.5"/>
+        <text x="710" y="105" text-anchor="middle" font-size="40" font-weight="700" fill="#0F6E63" font-family="Bitter, serif">a</text>
+        <text x="710" y="135" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">Acceleration (m/s²)</text>
+        <text x="450" y="205" text-anchor="middle" font-size="16" font-weight="600" style="fill:var(--ink)">Bigger force → bigger acceleration   ·   bigger mass → smaller acceleration</text>
+        <text x="450" y="232" text-anchor="middle" font-size="14" font-style="italic" style="fill:var(--ink-soft)">rearrange:  a = F ÷ m   ·   m = F ÷ a</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">Key equations</span><p><span class="formula">\(F = m \times a\)</span> <span class="formula">\(a = F \div m\)</span> <span class="formula">\(m = F \div a\)</span></p><p>Acceleration is <strong>directly proportional</strong> to the net force and <strong>inversely proportional</strong> to mass. Force in newtons (N), mass in kilograms (kg), acceleration in \(\text{m/s}^2\).</p></div>
+  </section>
+
+  <section class="slide" data-menu="Worked example: a = F/m">
+    <p class="bookref book">Booklet p.15 &#183; Worked Example 2.1</p>
+    <p class="eyebrow">Work through with the class</p>
+    <h2><span class="phase-tag ido">I do</span> Worked example — find the acceleration</h2>
+    <div class="box question"><span class="lbl">A trolley is pushed — how fast does it speed up?</span><p>A <strong>5 kg</strong> trolley is pushed with a net force of <strong>20 N</strong>. What is its acceleration?</p></div>
+    <ol class="steps" id="f2w2">
+      <li><span class="stepno">1</span> Write the formula and rearrange for \(a\): \(F = m \times a \;\Rightarrow\; a = F \div m\).</li>
+      <li><span class="stepno">2</span> Identify the values: \(F = 20\ \text{N}\), \(m = 5\ \text{kg}\).</li>
+      <li><span class="stepno">3</span> Substitute: \(a = 20 \div 5\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> The trolley accelerates at \(a = 4\ \text{m/s}^2\).</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Your turn: F = ma">
+    <p class="bookref book">Booklet p.15 &#183; Task 2.1</p>
+    <p class="eyebrow">Your turn</p>
+    <h2><span class="phase-tag youdo">You do</span> Now you try — fill the table</h2>
+    <div class="box question"><span class="lbl">Rearrange \(F = ma\) for the missing value</span><p><strong>(a)</strong> Soccer ball: \(F = 45\ \text{N},\ m = 0.45\ \text{kg}\). Find \(a\).<br><strong>(b)</strong> Car braking: \(m = 1200\ \text{kg},\ a = 3.5\ \text{m/s}^2\). Find \(F\).<br><strong>(c)</strong> Rocket: \(F = 6000\ \text{N},\ a = 30\ \text{m/s}^2\). Find \(m\).</p></div>
+    <ol class="steps" id="f2w3">
+      <li><span class="stepno">1</span> <strong>(a)</strong> \(a = F \div m = 45 \div 0.45 = 100\ \text{m/s}^2\)</li>
+      <li><span class="stepno">2</span> <strong>(b)</strong> \(F = m \times a = 1200 \times 3.5 = 4200\ \text{N}\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <strong>(c)</strong> \(m = F \div a = 6000 \div 30 = 200\ \text{kg}\)</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w3">Show answers</button>
+    <p class="note">Let students attempt all three, then reveal</p>
+  </section>
+
+  <section class="slide" data-menu="Year 8: rocket F = ma">
+    <p class="bookref book">Booklet p.16 &#183; Q2.3 (Yr 8)</p>
+    <p class="eyebrow">Year 8 extension</p>
+    <h2><span class="phase-tag wedo">We do</span> Extension — the rocket problem</h2>
+    <div class="box question"><span class="lbl">Two laws at once</span><p>A rocket expels gas downward with a force of <strong>500 000 N</strong>. The rocket's mass is <strong>20 000 kg</strong>. Find its acceleration and state which of Newton's laws are involved.</p></div>
+    <ol class="steps" id="f2w4">
+      <li><span class="stepno">1</span> Use \(a = F \div m = 500\,000 \div 20\,000\).</li>
+      <li><span class="stepno">2</span> \(a = 25\ \text{m/s}^2\), directed upward.</li>
+      <li><span class="stepno">3</span> <strong>Second Law</strong> gives the size of the acceleration from the net force and mass.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result"><strong>Third Law</strong> too: the rocket pushes gas <em>down</em>, so the gas pushes the rocket <em>up</em> — that's the thrust.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w4">Show working</button>
+    <p class="note">Reveal step-by-step · note how the Second and Third Laws work together</p>
+  </section>
+
+  <section class="slide" data-menu="Third Law: action–reaction">
+    <p class="bookref book">Booklet p.16 &#183; §2.3</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Third Law</p>
+    <h2>Newton's Third Law — action &amp; reaction</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Panel 1: swimmer -->
+        <text x="225" y="28" text-anchor="middle" font-size="18" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Swimmer in water</text>
+        <rect x="40" y="150" width="370" height="80" rx="6" fill="#E8F1FF"/>
+        <text x="55" y="222" font-size="12" fill="#4DA3FF">water</text>
+        <circle cx="250" cy="135" r="20" fill="#2E6FE0"/>
+        <text x="250" y="140" text-anchor="middle" font-size="12" fill="white" font-weight="600">swim</text>
+        <!-- action: swimmer pushes water back (left) -->
+        <line x1="230" y1="170" x2="120" y2="170" stroke="#E0533F" stroke-width="5"/>
+        <polygon points="108,170 124,163 124,177" fill="#E0533F"/>
+        <text x="60" y="158" font-size="12" fill="#B23A2B" font-weight="600">ACTION</text>
+        <text x="60" y="192" font-size="11" style="fill:var(--ink-soft)">pushes water back</text>
+        <!-- reaction: water pushes swimmer forward (right) -->
+        <line x1="270" y1="120" x2="380" y2="120" stroke="#18A999" stroke-width="5"/>
+        <polygon points="392,120 376,113 376,127" fill="#18A999"/>
+        <text x="320" y="108" font-size="12" fill="#0F6E63" font-weight="600">REACTION</text>
+        <text x="300" y="146" font-size="11" style="fill:var(--ink-soft)">water pushes swimmer fwd</text>
+        <!-- divider -->
+        <line x1="450" y1="35" x2="450" y2="230" stroke-width="2" style="stroke:var(--line)"/>
+        <!-- Panel 2: rocket -->
+        <text x="675" y="28" text-anchor="middle" font-size="18" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Rocket</text>
+        <rect x="655" y="60" width="40" height="90" rx="8" fill="#7C5CE0"/>
+        <polygon points="655,60 695,60 675,35" fill="#7C5CE0"/>
+        <!-- reaction up on rocket -->
+        <line x1="675" y1="60" x2="675" y2="45" stroke="#18A999" stroke-width="5"/>
+        <polygon points="675,33 668,49 682,49" fill="#18A999"/>
+        <text x="700" y="60" font-size="12" fill="#0F6E63" font-weight="600">REACTION</text>
+        <text x="700" y="76" font-size="11" style="fill:var(--ink-soft)">rocket pushed up</text>
+        <!-- action down: gas -->
+        <line x1="675" y1="150" x2="675" y2="215" stroke="#E0533F" stroke-width="5"/>
+        <polygon points="675,227 668,211 682,211" fill="#E0533F"/>
+        <text x="700" y="190" font-size="12" fill="#B23A2B" font-weight="600">ACTION</text>
+        <text x="700" y="206" font-size="11" style="fill:var(--ink-soft)">gas pushed down</text>
+        <text x="450" y="252" text-anchor="middle" font-size="13" font-style="italic" style="fill:var(--ink-soft)">equal &amp; opposite — but the two forces act on different objects, so they don't cancel</text>
+      </svg>
+    </div>
+    <div class="box defn"><span class="lbl">Definition</span><p>For every <strong>action</strong> force there is an equal and opposite <strong>reaction</strong> force. The pair always acts on <strong>different objects</strong>, so they do <strong>not</strong> cancel each other out.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Third Law: your turn">
+    <p class="bookref book">Booklet p.16 &#183; Q2.4</p>
+    <p class="eyebrow">Your turn</p>
+    <h2><span class="phase-tag youdo">You do</span> Name the reaction force</h2>
+    <div class="box question"><span class="lbl">Name it, size it, direct it</span><p>A swimmer pushes backward against the water with a force of <strong>80 N</strong>. Describe the reaction force: name it, state its size, and state its direction.</p></div>
+    <ol class="steps" id="f2w5">
+      <li><span class="stepno">1</span> <strong>Name:</strong> the force of the <strong>water on the swimmer</strong>.</li>
+      <li><span class="stepno">2</span> <strong>Size:</strong> equal to the action — \(80\ \text{N}\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result"><strong>Direction:</strong> opposite — <strong>forward</strong>, pushing the swimmer ahead.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w5">Show answers</button>
+    <div class="box question"><span class="lbl">Check</span><p>Why don't these two 80 N forces cancel and leave the swimmer still?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Year 8: laws in the trebuchet">
+    <p class="eyebrow">Year 8 extension <b>&#183;</b> connecting forward</p>
+    <h2><span class="phase-tag wedo">We do</span> The laws in the trebuchet launch</h2>
+    <div class="box question"><span class="lbl">Bringing the three laws together</span><p>During launch, the trebuchet arm exerts a net force of <strong>8 N</strong> on a <strong>0.04 kg</strong> projectile. (a) Find the projectile's acceleration. (b) Name the reaction force. (c) Once it leaves the sling, what happens to its motion?</p></div>
+    <ol class="steps" id="f2w6">
+      <li><span class="stepno">1</span> <strong>(a) 2nd Law:</strong> \(a = F \div m = 8 \div 0.04 = 200\ \text{m/s}^2\).</li>
+      <li><span class="stepno">2</span> <strong>(b) 3rd Law:</strong> the projectile pushes back on the sling/arm with \(8\ \text{N}\), in the opposite direction.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result"><strong>(c) 1st Law:</strong> in flight the only force is gravity — horizontally there's no force, so its horizontal speed stays <strong>constant</strong>.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#f2w6">Show working</button>
+    <p class="note">All three laws in one launch — the bridge to the projectile &amp; trebuchet investigation</p>
+  </section>
+
+  <!-- LAB POINTER — repoint at experiments.html#exp2 once that page is ported -->
+  <section class="slide section-slide" data-menu="&#8594; Lab: Experiment 2">
+    <p class="kicker">Lab time</p>
+    <h2>Experiment 2 — Newton's Second Law</h2>
+    <p>Time to test <strong>\(F = ma\)</strong> for real. Using a trolley, a pulley and hanging masses, students measure how acceleration changes with force. The full method, free body diagrams and results table are in the student booklet.</p>
+    <a class="chip" href="booklet/Forces_Motion_Unit_Booklet_Yr7_8.pdf#page=19">Open Experiment 2 in the booklet &#8594;</a>
+    <p class="slide-foot">Booklet pp.19&#8211;21 &#183; Experiment 2 &#183; How does net force affect acceleration?</p>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Section 2 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li><strong>First Law:</strong> objects keep doing what they're doing unless an <strong>unbalanced force</strong> acts — that's <strong>inertia</strong></li>
+      <li><strong>Second Law:</strong> <strong>\(F = ma\)</strong> — bigger force means bigger acceleration; bigger mass means smaller acceleration</li>
+      <li><strong>Third Law:</strong> every action force has an <strong>equal and opposite reaction</strong> on a different object</li>
+      <li>The three laws work <strong>together</strong> — as in the rocket and the trebuchet launch</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span><p>A 2 kg ball is pushed with a net force of 10 N. What is its acceleration — and which law did you just use?</p></div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 13</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 2 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

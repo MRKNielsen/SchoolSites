@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 5 &#8212; Projectile Motion | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 5 of 6</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Lesson 5 of 6</p>
+    <h1>Projectile Motion</h1>
+    <p class="subtitle">Gravity, trajectories, and measuring \(g\) — the same physics that governs your trebuchet.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Section 5</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Section 5 <b>&#183;</b> Overview</p>
+    <h2>What we're learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Learning intentions</span>
+        <ul>
+          <li>Explain what makes an object a <strong>projectile</strong></li>
+          <li>Describe the <strong>horizontal and vertical</strong> motion separately</li>
+          <li>Use <strong>\(h = \tfrac{1}{2}gt^2\)</strong> to find time of flight</li>
+          <li>Use <strong>\(g = 2h \div t^2\)</strong> and <strong>\(R = v \times t\)</strong> to solve problems</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">Success criteria</span>
+        <ul>
+          <li>I can describe a trajectory and name the only force acting</li>
+          <li>I can calculate time of flight from a drop height</li>
+          <li>I can calculate \(g\) from measured height and time</li>
+          <li>I can find launch speed from range and time</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter question</span><p>If you drop a ball and throw another one horizontally at the same moment from the same height — which hits the ground first?</p></div>
+  </section>
+
+  <section class="slide" data-menu="What is a projectile?">
+    <p class="bookref book">Booklet p.36 &#183; §5.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Projectiles</p>
+    <h2>Once launched, only gravity acts</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- ground -->
+        <rect x="0" y="230" width="900" height="30" opacity="0.6" style="fill:var(--line)"/>
+        <line x1="0" y1="230" x2="900" y2="230" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <!-- platform -->
+        <rect x="60" y="90" width="100" height="140" rx="4" fill="#AEBED4" opacity="0.55"/>
+        <line x1="60" y1="90" x2="170" y2="90" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <!-- height brace -->
+        <line x1="40" y1="230" x2="40" y2="90" stroke="#B23A2B" stroke-width="1.8"/>
+        <line x1="32" y1="230" x2="48" y2="230" stroke="#B23A2B" stroke-width="1.8"/>
+        <line x1="32" y1="90" x2="48" y2="90" stroke="#B23A2B" stroke-width="1.8"/>
+        <text x="22" y="163" text-anchor="middle" font-size="17" font-weight="700" fill="#B23A2B" font-family="Bitter, serif">h</text>
+        <!-- parabolic path -->
+        <path d="M 165,90 C 310,60 620,130 830,230" fill="none" stroke="#2E6FE0" stroke-width="3" stroke-dasharray="9 5"/>
+        <!-- ball at launch -->
+        <circle cx="165" cy="90" r="13" fill="#2E6FE0"/>
+        <!-- horizontal arrow at launch -->
+        <line x1="178" y1="90" x2="280" y2="90" stroke="#2E6FE0" stroke-width="4.5"/>
+        <polygon points="280,90 262,83 262,97" fill="#2E6FE0"/>
+        <text x="228" y="78" text-anchor="middle" font-size="14" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">v (horizontal)</text>
+        <!-- gravity arrow at launch -->
+        <line x1="165" y1="103" x2="165" y2="165" stroke="#B23A2B" stroke-width="4.5"/>
+        <polygon points="165,165 158,147 172,147" fill="#B23A2B"/>
+        <text x="191" y="144" font-size="13" font-weight="600" fill="#B23A2B">W (gravity)</text>
+        <!-- ball mid-flight -->
+        <circle cx="497" cy="116" r="9" fill="#2E6FE0" opacity="0.55"/>
+        <line x1="506" y1="116" x2="548" y2="116" stroke="#2E6FE0" stroke-width="3"/>
+        <polygon points="548,116 536,110 536,122" fill="#2E6FE0"/>
+        <line x1="497" y1="125" x2="497" y2="163" stroke="#B23A2B" stroke-width="3"/>
+        <polygon points="497,163 490,149 504,149" fill="#B23A2B"/>
+        <!-- ball at landing -->
+        <circle cx="830" cy="230" r="13" fill="#2E6FE0" opacity="0.7"/>
+        <!-- range brace -->
+        <line x1="165" y1="250" x2="830" y2="250" stroke="#18A999" stroke-width="1.8"/>
+        <line x1="165" y1="243" x2="165" y2="257" stroke="#18A999" stroke-width="1.8"/>
+        <line x1="830" y1="243" x2="830" y2="257" stroke="#18A999" stroke-width="1.8"/>
+        <text x="498" y="272" text-anchor="middle" font-size="15" font-weight="700" fill="#0F6E63" font-family="Bitter, serif">R (horizontal range)</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">Key principle</span><p>After launch, a projectile has <strong>no horizontal force</strong> — so horizontal speed stays <strong>constant</strong>. Gravity pulls it <strong>downward</strong> at \(g = 9.8\ \text{m/s}^2\), curving the path into a <strong>parabola</strong>. The two directions are independent.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Two independent motions">
+    <p class="bookref book">Booklet p.36 &#183; §5.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Separating the motions</p>
+    <h2>Horizontal and vertical — treated separately</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- divider -->
+        <line x1="450" y1="20" x2="450" y2="210" stroke-width="2.5" style="stroke:var(--line)"/>
+        <!-- LEFT: horizontal (constant) -->
+        <text x="225" y="28" text-anchor="middle" font-size="17" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Horizontal motion</text>
+        <text x="225" y="50" text-anchor="middle" font-size="14" fill="#0F6E63" font-weight="600">No force → constant speed</text>
+        <!-- equal arrows -->
+        <line x1="40" y1="120" x2="115" y2="120" stroke="#2E6FE0" stroke-width="5"/><polygon points="115,120 100,113 100,127" fill="#2E6FE0"/>
+        <circle cx="30" cy="120" r="9" fill="#2E6FE0"/>
+        <line x1="160" y1="120" x2="235" y2="120" stroke="#2E6FE0" stroke-width="5"/><polygon points="235,120 220,113 220,127" fill="#2E6FE0"/>
+        <circle cx="150" cy="120" r="9" fill="#2E6FE0"/>
+        <line x1="280" y1="120" x2="355" y2="120" stroke="#2E6FE0" stroke-width="5"/><polygon points="355,120 340,113 340,127" fill="#2E6FE0"/>
+        <circle cx="270" cy="120" r="9" fill="#2E6FE0"/>
+        <text x="225" y="160" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">Same arrow length each step</text>
+        <text x="225" y="180" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">→ constant horizontal velocity</text>
+        <text x="225" y="204" text-anchor="middle" font-size="14" font-weight="600" style="fill:var(--ink)">R = v × t</text>
+        <!-- RIGHT: vertical (accelerating) -->
+        <text x="675" y="28" text-anchor="middle" font-size="17" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Vertical motion</text>
+        <text x="675" y="50" text-anchor="middle" font-size="14" fill="#B23A2B" font-weight="600">Gravity → accelerating downward</text>
+        <!-- growing arrows -->
+        <circle cx="570" cy="80" r="9" fill="#B23A2B"/>
+        <line x1="570" y1="89" x2="570" y2="108" stroke="#B23A2B" stroke-width="5"/><polygon points="570,108 563,95 577,95" fill="#B23A2B"/>
+        <circle cx="675" cy="80" r="9" fill="#B23A2B"/>
+        <line x1="675" y1="89" x2="675" y2="120" stroke="#B23A2B" stroke-width="5"/><polygon points="675,120 668,104 682,104" fill="#B23A2B"/>
+        <circle cx="780" cy="80" r="9" fill="#B23A2B"/>
+        <line x1="780" y1="89" x2="780" y2="138" stroke="#B23A2B" stroke-width="5"/><polygon points="780,138 773,119 787,119" fill="#B23A2B"/>
+        <text x="675" y="162" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">Arrows get longer each step</text>
+        <text x="675" y="182" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">→ accelerating at g = 9.8 m/s²</text>
+        <text x="675" y="204" text-anchor="middle" font-size="14" font-weight="600" style="fill:var(--ink)">h = ½ g t²</text>
+      </svg>
+    </div>
+    <div class="box question"><span class="lbl">Back to the starter</span><p>Both balls fall from the same height — so they take the same time to reach the ground. The thrown ball just travels further sideways.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Key equations">
+    <p class="bookref book">Booklet pp.36&#8211;37 &#183; §5.1 &#183; Key equations</p>
+    <p class="eyebrow">Equations <b>&#183;</b> Horizontal launch</p>
+    <h2>Three equations — one experiment</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg">
+        <!-- eq 1 box -->
+        <rect x="30" y="30" width="255" height="150" rx="10" fill="#FFF3DC" stroke="#D98A0B" stroke-width="2.5"/>
+        <text x="157" y="65" text-anchor="middle" font-size="15" font-weight="700" fill="#A86A08">Find time of flight</text>
+        <text x="157" y="108" text-anchor="middle" font-size="26" font-weight="700" style="fill:var(--ink)">h = ½gt²</text>
+        <text x="157" y="140" text-anchor="middle" font-size="18" font-weight="600" style="fill:var(--ink)">t = √(2h ÷ g)</text>
+        <text x="157" y="165" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">h = drop height (m)</text>
+        <!-- eq 2 box -->
+        <rect x="323" y="30" width="255" height="150" rx="10" fill="#E0F7F3" stroke="#18A999" stroke-width="2.5"/>
+        <text x="450" y="65" text-anchor="middle" font-size="15" font-weight="700" fill="#0F6E63">Find range</text>
+        <text x="450" y="115" text-anchor="middle" font-size="28" font-weight="700" style="fill:var(--ink)">R = v × t</text>
+        <text x="450" y="148" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">R = range (m)</text>
+        <text x="450" y="165" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">v = launch speed (m/s)</text>
+        <!-- eq 3 box -->
+        <rect x="616" y="30" width="255" height="150" rx="10" fill="#FFE9E6" stroke="#E0533F" stroke-width="2.5"/>
+        <text x="743" y="65" text-anchor="middle" font-size="15" font-weight="700" fill="#B23A2B">Measure gravity</text>
+        <text x="743" y="115" text-anchor="middle" font-size="28" font-weight="700" style="fill:var(--ink)">g = 2h ÷ t²</text>
+        <text x="743" y="148" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">Rearranged from h = ½gt²</text>
+        <text x="743" y="165" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">accepted g = 9.8 m/s²</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">The connection</span><p>Measure \(h\) with a ruler and \(t\) with a slow-motion video → you can calculate \(g\). If you also measure \(R\) (where the ball lands), you get the launch speed \(v\). This is exactly what Experiment 5 does.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Worked example: time of flight">
+    <p class="bookref book">Booklet p.37 &#183; Worked Example 5.1</p>
+    <p class="eyebrow">Work through with the class</p>
+    <h2><span class="phase-tag ido">I do</span> Worked example — time of flight</h2>
+    <div class="box question"><span class="lbl">How long does the ball take to land?</span><p>A ball is launched <strong>horizontally</strong> from a height of <strong>\(h = 1.25\ \text{m}\)</strong>. How long does it take to hit the ground?</p></div>
+    <ol class="steps" id="f5w1">
+      <li><span class="stepno">1</span> Write the formula: \(h = \tfrac{1}{2} g t^2\), rearranged to \(t = \sqrt{2h \div g}\).</li>
+      <li><span class="stepno">2</span> Substitute: \(t = \sqrt{2 \times 1.25 \div 9.8} = \sqrt{0.255}\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> \(t \approx 0.51\ \text{s}\). The height sets the time — not the horizontal speed.</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f5w1">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Worked example: finding g">
+    <p class="bookref book">Booklet p.37 &#183; Task 5.1, row 3</p>
+    <p class="eyebrow">Work through with the class</p>
+    <h2><span class="phase-tag ido">I do</span> Worked example — calculating g from data</h2>
+    <div class="box question"><span class="lbl">Checking the accepted value of gravity</span><p>A student measures <strong>\(t = 0.64\ \text{s}\)</strong> for a ball dropped from <strong>\(h = 2.0\ \text{m}\)</strong>. Calculate \(g\) and find the percentage error from \(9.8\ \text{m/s}^2\).</p></div>
+    <ol class="steps" id="f5w2">
+      <li><span class="stepno">1</span> Use: \(g = 2h \div t^2 = 2 \times 2.0 \div (0.64)^2\).</li>
+      <li><span class="stepno">2</span> \(g = 4.0 \div 0.410 \approx 9.76\ \text{m/s}^2\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> % error \(= |9.76 - 9.8| \div 9.8 \times 100 \approx 0.4\%\) — very close to accepted.</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f5w2">Show working</button>
+    <p class="note">Small errors in t have a big effect — t is squared</p>
+  </section>
+
+  <section class="slide" data-menu="Your turn: Task 5.1">
+    <p class="bookref book">Booklet p.37 &#183; Task 5.1</p>
+    <p class="eyebrow">Your turn</p>
+    <h2><span class="phase-tag youdo">You do</span> Three problems — Task 5.1</h2>
+    <div class="box question"><span class="lbl">Try each row in your booklet first</span><p>Work through the table in your booklet (§5.1). Each row uses a different equation — choose the right one first.</p></div>
+    <ol class="steps" id="f5w3">
+      <li><span class="stepno">1</span> <strong>Row 1:</strong> \(h = 0.80\ \text{m}\) → \(t = \sqrt{2 \times 0.80 \div 9.8} = \sqrt{0.163} \approx 0.40\ \text{s}\).</li>
+      <li><span class="stepno">2</span> <strong>Row 2:</strong> \(h = 1.8\ \text{m}\) → \(t \approx 0.606\ \text{s}\); then \(v = R \div t = 3.2 \div 0.606 \approx 5.3\ \text{m/s}\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <strong>Row 3:</strong> \(t = 0.64\ \text{s},\ h = 2.0\ \text{m}\) → \(g = 2 \times 2.0 \div 0.64^2 \approx 9.8\ \text{m/s}^2\) ✓</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f5w3">Show answers</button>
+  </section>
+
+  <section class="slide" data-menu="Year 8: angled launch">
+    <p class="bookref book">Booklet p.38 &#183; §5.2 (Yr 8)</p>
+    <p class="eyebrow">Year 8 extension <b>&#183;</b> Angled launch</p>
+    <h2>Angled launch — optimising range</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 248" xmlns="http://www.w3.org/2000/svg">
+        <!-- ground -->
+        <line x1="40" y1="205" x2="588" y2="205" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <circle cx="70" cy="205" r="9" fill="#2E6FE0"/>
+        <!-- 60 deg: high peak, short range (grey dashed) -->
+        <path d="M70,205 Q282,-95 494,205" fill="none" stroke="#AEBED4" stroke-width="3" stroke-dasharray="6 4"/>
+        <text x="282" y="44" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink-soft)">60°</text>
+        <!-- 30 deg: low peak, short range (grey dashed) -->
+        <path d="M70,205 Q282,105 494,205" fill="none" stroke="#AEBED4" stroke-width="3" stroke-dasharray="6 4"/>
+        <text x="282" y="186" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink-soft)">30°</text>
+        <!-- 45 deg: maximum range (blue solid) -->
+        <path d="M70,205 Q315,5 560,205" fill="none" stroke="#2E6FE0" stroke-width="4"/>
+        <text x="470" y="74" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink)">45° — maximum range</text>
+        <!-- landing markers -->
+        <circle cx="494" cy="205" r="5" style="fill:var(--ink-faint)"/>
+        <circle cx="560" cy="205" r="6" fill="#2E6FE0"/>
+        <!-- 45 range bracket -->
+        <line x1="70" y1="221" x2="560" y2="221" stroke="#2E6FE0" stroke-width="2"/>
+        <line x1="70" y1="215" x2="70" y2="227" stroke="#2E6FE0" stroke-width="2"/>
+        <line x1="560" y1="215" x2="560" y2="227" stroke="#2E6FE0" stroke-width="2"/>
+        <text x="315" y="241" text-anchor="middle" font-size="12.5" font-weight="600" fill="#2E6FE0">same launch speed → 45° goes furthest; 30° &amp; 60° land equally short</text>
+        <!-- equation box -->
+        <rect x="610" y="52" width="262" height="120" rx="8" fill="#FFF3DC" stroke="#D98A0B" stroke-width="2"/>
+        <text x="741" y="85" text-anchor="middle" font-size="15" font-weight="700" fill="#A86A08" font-family="Bitter, serif">Range equation</text>
+        <text x="741" y="119" text-anchor="middle" font-size="20" font-weight="700" style="fill:var(--ink)">R = v² sin(2θ) ÷ g</text>
+        <text x="741" y="148" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">Max at θ = 45°, sin(90°) = 1</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">Year 8 key idea</span><p>The range equation <strong>\(R = \dfrac{v^2 \sin 2\theta}{g}\)</strong> peaks at 45° because \(\sin(2 \times 45^\circ) = \sin 90^\circ = 1\). Higher or lower angles give shorter range. But real trebuchets often aren't set to exactly 45° — think about why.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Year 8: max range">
+    <p class="bookref book">Booklet p.38 &#183; Q5.1 (Yr 8)</p>
+    <p class="eyebrow">Year 8 extension <b>&#183;</b> Worked example</p>
+    <h2><span class="phase-tag wedo">We do</span> Maximum range at 45°</h2>
+    <div class="box question"><span class="lbl">How far can it go?</span><p>A ball is launched at <strong>\(v = 20\ \text{m/s}\)</strong> at the optimal angle of <strong>45°</strong>. Calculate the maximum range. Use \(g = 9.8\ \text{m/s}^2\).</p></div>
+    <ol class="steps" id="f5w4">
+      <li><span class="stepno">1</span> At 45°: \(R_{\max} = v^2 \div g\) (because \(\sin 90^\circ = 1\)).</li>
+      <li><span class="stepno">2</span> Substitute: \(R = 20^2 \div 9.8 = 400 \div 9.8\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> \(R \approx 40.8\ \text{m}\). Double the speed → four times the range (the \(v^2\) effect).</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f5w4">Show working</button>
+    <p class="note">Reveal steps — then ask Q5.2: why might 45° not be ideal for a trebuchet?</p>
+  </section>
+
+  <section class="slide" data-menu="Year 8: why not 45°?">
+    <p class="bookref book">Booklet p.38 &#183; Q5.2 (Yr 8)</p>
+    <p class="eyebrow">Year 8 extension <b>&#183;</b> Discussion</p>
+    <h2>Why a real trebuchet isn't set to exactly 45°</h2>
+    <ul>
+      <li><strong>Air resistance</strong> slows the projectile more at high speeds — a lower angle keeps the ball faster for longer, so a slightly flatter launch (<em>below</em> 45°) often wins.</li>
+      <li><strong>Launch height</strong> — the trebuchet releases the ball from several metres above the ground, not from ground level. When the launch point is higher than the landing point, the optimal angle is <em>less than</em> 45°.</li>
+      <li><strong>Sling geometry</strong> — the sling releases at a fixed point in the arm's rotation, locking the actual launch angle regardless of intent.</li>
+      <li><strong>Practical optimum</strong> — competition trebuchets are typically tuned to around 40–42°, not 45°.</li>
+    </ul>
+    <div class="box question"><span class="lbl">Discuss</span><p>If you can only change the counterweight position on your trebuchet, how would you try to adjust the launch angle — and which direction would you move it?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Connection to trebuchet">
+    <p class="bookref book">Booklet p.43 &#183; §6</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Connecting the unit</p>
+    <h2>The trebuchet is a projectile launcher</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- chain boxes -->
+        <rect x="30" y="60" width="170" height="80" rx="8" fill="#FFE9E6" stroke="#E0533F" stroke-width="2"/>
+        <text x="115" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#B23A2B">GPE → KE</text>
+        <text x="115" y="115" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">Section 3</text>
+        <text x="115" y="133" text-anchor="middle" font-size="11" style="fill:var(--ink-soft)">counterweight falls</text>
+        <!-- arrow -->
+        <polygon points="225,100 205,92 205,108" style="fill:var(--ink-faint)"/>
+        <line x1="200" y1="100" x2="250" y2="100" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <rect x="250" y="60" width="170" height="80" rx="8" fill="#FFF3DC" stroke="#D98A0B" stroke-width="2"/>
+        <text x="335" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#A86A08">Lever action</text>
+        <text x="335" y="115" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">Section 4</text>
+        <text x="335" y="133" text-anchor="middle" font-size="11" style="fill:var(--ink-soft)">arm multiplies speed</text>
+        <!-- arrow -->
+        <polygon points="445,100 425,92 425,108" style="fill:var(--ink-faint)"/>
+        <line x1="420" y1="100" x2="470" y2="100" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <rect x="470" y="60" width="170" height="80" rx="8" fill="#E0F7F3" stroke="#18A999" stroke-width="2"/>
+        <text x="555" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#0F6E63">Projectile motion</text>
+        <text x="555" y="115" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">Section 5</text>
+        <text x="555" y="133" text-anchor="middle" font-size="11" style="fill:var(--ink-soft)">gravity curves the path</text>
+        <!-- arrow -->
+        <polygon points="665,100 645,92 645,108" style="fill:var(--ink-faint)"/>
+        <line x1="640" y1="100" x2="690" y2="100" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <rect x="690" y="60" width="170" height="80" rx="8" fill="#EEF4FF" stroke="#2E6FE0" stroke-width="2"/>
+        <text x="775" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#2E6FE0">Measure g</text>
+        <text x="775" y="115" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">Experiment 5 → 6</text>
+        <text x="775" y="133" text-anchor="middle" font-size="11" style="fill:var(--ink-soft)">h, t, R → calculate g</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">The big picture</span><p>Sections 3, 4 and 5 all come together in the trebuchet investigation (Section 6). You've now got every tool you need: <strong>energy equations, lever mechanics, and projectile equations</strong>. Experiment 5 is the practice run for measuring \(g\) before the real thing.</p></div>
+  </section>
+
+  <!-- LAB POINTER — repoint at experiments.html#exp5 once that page is ported -->
+  <section class="slide section-slide" data-menu="&#8594; Lab: Experiment 5">
+    <p class="kicker">Lab time</p>
+    <h2>Experiment 5 — Ball roll-off: measuring g</h2>
+    <p>Students roll a ball off a table from a fixed ramp, film it in slow-motion (120+ fps), and use <strong>\(g = 2h \div t^2\)</strong> to calculate gravity. Eight trials, flag anomalies, find the mean \(g\) and percentage error from \(9.8\ \text{m/s}^2\). Full method and results table are in the student booklet.</p>
+    <a class="chip" href="booklet/Forces_Motion_Unit_Booklet_Yr7_8.pdf#page=41">Open Experiment 5 in the booklet &#8594;</a>
+    <p class="slide-foot">Booklet pp.41&#8211;42 &#183; Experiment 5 &#183; Measure height with a ruler, time from slow-motion video frames</p>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Section 5 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>A <strong>projectile</strong> after launch has only gravity acting — horizontal speed stays <strong>constant</strong></li>
+      <li>Vertical fall: <strong>\(h = \tfrac{1}{2}gt^2\)</strong> → time of flight depends only on height</li>
+      <li>Horizontal range: <strong>\(R = v \times t\)</strong> — launch speed × time</li>
+      <li>Measuring gravity: <strong>\(g = 2h \div t^2\)</strong> — rearranged from the fall equation</li>
+      <li><em>(Yr 8)</em> Angled range: <strong>\(R = \dfrac{v^2 \sin 2\theta}{g}\)</strong> — maximum at 45°</li>
+      <li>This is exactly the physics of Experiment 5 and the trebuchet investigation</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span><p>A ball rolls off a table 0.8 m high and lands 1.2 m from the base. Find the time of flight and the launch speed. (Answers: \(t \approx 0.40\ \text{s}\), \(v \approx 3.0\ \text{m/s}\))</p></div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 14</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 5 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>
