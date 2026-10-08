@@ -246,10 +246,14 @@ table.ref .qc{font-family:var(--mono);font-weight:600;font-size:11px;color:var(-
 .sheet-head .who .sp{font-style:italic;color:var(--ink-soft)}
 
 table.rub{border-collapse:collapse;width:100%;table-layout:fixed}
-table.rub th,table.rub td{border:.5pt solid #9AA69F;padding:3.6pt 4.4pt;vertical-align:top;font-size:7.9pt;line-height:1.28}
-table.rub thead th{background:#EDF0EC;font-size:7pt;letter-spacing:.05em;text-transform:uppercase;font-weight:700;text-align:left;padding:4pt}
-table.rub thead th.hstrand{width:17%}
-table.rub thead th.hzero{width:11%}
+table.rub th,table.rub td{border:.5pt solid #9AA69F;padding:3.6pt 4.4pt;vertical-align:top;font-size:7.9pt;line-height:1.28;
+  /* table-layout is fixed, so anything too wide would spill out of its cell.
+     The band labels are editable, so no column can assume a length. */
+  overflow-wrap:break-word;word-break:break-word;hyphens:auto}
+table.rub thead th{background:#EDF0EC;font-size:7pt;letter-spacing:.02em;text-transform:uppercase;font-weight:700;text-align:left;
+  padding:4pt 3.4pt;line-height:1.22}
+table.rub thead th.hstrand{width:16%}
+table.rub thead th.hzero{width:13%}
 table.rub td.strand{font-weight:700;font-size:8.1pt;background:#F7F8F5}
 table.rub td.strand .sub{display:block;font-weight:400;font-size:7pt;color:var(--ink-soft);font-style:italic;margin-top:1px}
 table.rub td .qc{font-family:var(--mono);font-weight:600;font-size:7.2pt;color:var(--myrtle-dark)}
@@ -987,9 +991,16 @@ function buildComment(st){
   const alsoStep = second ? "It would also help to " : "It would also help "+P.obj+" to ";
   const thirdStep = "Beyond that, the aim is to ";
 
-  /* how much of the booklet was actually attempted */
+  /* How much of the booklet was actually attempted. Name only the parts that
+     really hold unattempted questions — attributing the whole count to the
+     single worst part misreports the student's work. */
   const tl = tally(st);
-  const partName = id => (PARTS.find(pt => pt.id === id) || {}).name || "";
+  const shortPart = id => ((PARTS.find(pt => pt.id === id) || {}).name || "").split(" · ")[0];
+  const hitParts = PARTS.filter(pt => tl.byPart[pt.id] > 0).map(pt => pt.id);
+  const whereList = hitParts.length
+    ? (hitParts.length === 1 ? shortPart(hitParts[0])
+       : "Parts " + joinList(hitParts.map(id => shortPart(id).replace(/^Part /, ""))))
+    : "";
   let completion = "";
   if(tl.notAtt === 0){
     completion = second ? "You attempted every question in the booklet."
@@ -997,13 +1008,16 @@ function buildComment(st){
   } else if(tl.notAtt <= 3){
     completion = (second ? "You left " : fn + " left ") + tl.notAtt + " question"
       + (tl.notAtt===1?"":"s") + " unattempted"
-      + (tl.worstPart ? " in " + partName(tl.worstPart).split(" · ")[0] : "")
+      + (whereList ? (hitParts.length === 1 ? " in " : " across ") + whereList : "")
       + ", so there is little evidence to mark there.";
   } else {
     const share = Math.round(tl.notAtt / tl.total * 100);
-    completion = (tl.notAtt) + " of the " + tl.total + " questions were left unattempted"
-      + (tl.worstPart ? ", most of them in " + partName(tl.worstPart).split(" · ")[0] : "")
-      + " — about " + share + "% of the booklet. "
+    const dominant = hitParts.length > 1 && tl.worstPart && tl.byPart[tl.worstPart] * 2 > tl.notAtt;
+    const where = hitParts.length === 1 ? ", all of them in " + whereList
+                : dominant ? ", most of them in " + shortPart(tl.worstPart)
+                : whereList ? ", spread across " + whereList : "";
+    completion = tl.notAtt + " of the " + tl.total + " questions were left unattempted"
+      + where + " — about " + share + "% of the booklet. "
       + (second ? "Attempting those questions is the single quickest way to lift this result, because an unanswered question cannot show what you know."
                 : "Attempting those questions is the single quickest way to lift this result, because an unanswered question cannot show what "
                   + fn + " knows.");
