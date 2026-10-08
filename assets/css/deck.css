@@ -408,6 +408,30 @@ table.tbl.vocab td:nth-child(2) { font-style: italic; color: var(--muted); white
 .qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 900px) { .qgrid { grid-template-columns: 1fr; } }
 
+/* ---------- Hidden answer inside a callout box ----------
+   The same reveal component as .qcard .a, for a discussion or starter
+   question that is already a .box and shouldn't be wrapped in a second
+   card. deck.js wires it through data-answer, so the button needs the
+   id rather than a .qcard ancestor:
+
+     <div class="box question"><span class="lbl">Starter</span>
+       <p>…the question…</p>
+       <button class="reveal-btn" data-answer="#d1s2a">Show answer</button>
+       <div class="a" id="d1s2a">…what you're listening for…</div>
+     </div>
+
+   Child selector, not descendant: a .qcard nested inside a box keeps
+   its own rule and must not pick up the box variant as well. Text is
+   --ink rather than --muted because the box already sits on a tinted
+   background, and --muted on tint is too faint to project. */
+.box > .reveal-btn { margin-top: 6px; }
+.box > .a { display: none; border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 9px; color: var(--ink); }
+.box > .a.shown { display: block; animation: slideIn .25s ease; }
+.box > .a b { color: var(--accent-dark); }
+.box > .a > :first-child { margin-top: 0; }
+.box > .a .lbl-a { display: block; font-family: var(--font-display); font-size: .78em; font-weight: 700;
+                   letter-spacing: .04em; text-transform: uppercase; color: var(--pos); margin-bottom: 4px; }
+
 /* ---------- Option chooser ----------
    "Pick the one that fits" cards. Unlike a normal .frag the chooser
    stays visible from the start — revealing it highlights the correct
@@ -534,8 +558,11 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 /* Labels inside inline SVG figures. An SVG has no inherited font, so
    without this every diagram label falls back to the UA serif — which
    is why the Specialist Term 3 decks each carried an inline
-   <style>text{font-family:Segoe UI…}</style> inside every figure. One
-   rule here replaces all of them.
+   <style>text{font-family:Segoe UI…}<\/style> inside every figure. One
+   rule here replaces all of them. (The backslash in that closing tag is
+   deliberate: the sequence is inert in CSS, but an unescaped one ends
+   the element early for anyone inlining this file into a <style> block
+   — which is how the style-guide harnesses load it.)
    Two opt-outs, both necessary. MathJax's SVG output lives inside
    <mjx-container> and brings its own metrics. And a CSS declaration
    beats an SVG presentation attribute at any specificity, so without
@@ -636,7 +663,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
   .slide.overflowing { padding-top: 5vh; -webkit-mask-image: none; mask-image: none; }
   .progress, .chrome, .keyhint, .lessontag, .homebtn, .reveal-btn { display: none; }
   .deck::after { display: none; }
-  .qcard .a { display: block !important; }
+  .qcard .a, .box > .a { display: block !important; }
   .steps li, .frag { opacity: 1 !important; visibility: visible !important; transform: none !important; }
   .partpanel { display: block !important; }
   .teacher, .slidemenu, .menuclose { display: none; }

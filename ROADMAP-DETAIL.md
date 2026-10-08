@@ -65,6 +65,64 @@ in June, terminator through both poles at both equinoxes, sub-solar
 latitude 23.4°S/N at the solstices, and the axis attributes byte-identical
 at every point in the year.
 
+### Landed — Space answer reveals, planet definition, recap sweep (8 Oct 2026)
+
+Three jobs across all ten Space decks.
+
+**On-click answers, 33 of them.** Every `.box.question` labelled Starter,
+Think, Discuss, Check, Reflect or Predict now carries a reveal. Two
+registers: a definite answer gets *Show answer* / **Answer**, an open
+discussion gets *What to listen for* / **What we're listening for** —
+because writing a single "correct" answer under a Discuss question would
+quietly close down the discussion it exists to open. The one box left
+without a reveal is deck 4's "Checking the rate against the rocks", which
+is a You-do and already has its `ol.steps` working behind a button.
+
+This needed a **new shared component**: `.box > .a` in deck.css, the
+`.qcard .a` reveal generalised so it works inside a callout box without
+wrapping the question in a second card. deck.js needed no change —
+`data-answer="#id"` was already wired and had never been used in the repo.
+Child selector, not descendant, so a `.qcard` nested in a box keeps its
+own rule. `--ink` not `--muted`, because the box is already on a tinted
+background. Print rule extended alongside it.
+
+**The IAU definition of a planet** — new deck 5 slide 7, *What counts as a
+planet?*: the three criteria, a table testing Pluto against each, and the
+Pluto discussion moved onto it (it previously said "using the definition
+above" on a slide where no definition existed).
+
+Correcting it meant a four-file sweep, because **"dwarf planets are too
+small" was wrong and was baked into an assessed question.** Size is not an
+IAU criterion; Pluto passes the roundness test comfortably at 2,377 km and
+fails criterion 3 and only criterion 3. Fixed in deck 5's bullet, the
+booklet §5.2 bullet, booklet Q5.10 (which asked for "the two reasons", of
+which there is one), worksheet 5 Q7, and both answers in
+`solutions-payload.html`. The booklet gained a matching
+`what counts as a planet` infobox at §5.2. Rebuilt ×3: still 48 pages,
+every `\newlabel` page unchanged, all 67 deck `.bookref` chips still
+correct, Q5.10 still Q5.10 at 3 marks.
+
+**Recap slides.** Five of the ten — decks 1, 5, 8, 9 and 10 — claimed
+First Nations content their deck does not teach. Left over from the
+original 11-lesson shape, where the material was threaded through every
+lesson; since the 31 Aug resequence it is all in Lesson 7. A recap that
+summarises another lesson is simply wrong, so the bullets came out and
+each deck gained one `.note` line pointing at the Lesson 7 slide that
+actually covers it. Every pointer was checked against the slide map.
+All ten recaps were then brought up to what the deck now contains —
+mostly the Year 8 extension slides, which eight of the ten never
+mentioned. Deck 8 had no exit question at all and now has one.
+
+Two errors fixed in passing: deck 9 said JWST at L2 is "always in Earth's
+shadow" (it is not, and must not be — it needs its solar panels lit; the
+point of L2 is that Sun, Earth and Moon stay on one side so a single
+shield covers all three), and the ISS gravity figure read 88% in the recap
+against "about 90%" on two slides.
+
+Also: deck.css line 561 carried a literal `</style>` inside a comment,
+which silently truncated the file for anything inlining it into a `<style>`
+block. Escaped. Harmless via `<link>`, which is why it survived this long.
+
 ### Landed — Space worksheets (2 Sep 2026)
 
 Ten `worksheet.css` sheets for `year7-science/space`, one per lesson, 337
@@ -281,6 +339,20 @@ label on its own.
 
 ### Tier 0 — Housekeeping (minutes each)
 
+- [ ] **`year7-science/bio-ecosystems/rubric.html` lost its body classes.**
+      Noticed 8 Oct 2026 while rebuilding the sitemap for unrelated work.
+      Commit `db7b36b` ("Update rubric.html", same day) left it with a bare
+      `<body>` where every sibling gated page has
+      `class="solutions-page theme-science"`. Three consequences: the
+      `.lockscreen` loses its `.solutions-page` styling; the nav dot loses
+      its colour, because `build-sitemap.js` reads the theme class off
+      `<body>` into the tree's `k` field; and the unlock handler's
+      documented swap of `body.solutions-page` → `body.rubric-page` has
+      nothing to swap. **Not fixed here** — the page was being worked on
+      the same day and this is someone else's in-flight edit. Its
+      `<title>` also changed without a sitemap rebuild, so
+      `node tools/build-sitemap.js` is owed either way; do both in one
+      pass. **S**
 - [x] **`.gitignore` has a stray trailing quote.** Stripped; confirmed
       with `git check-ignore -v` that
       `year12-algorithmics/unit-4/sat/Memo03_brief.pdf` now matches.

@@ -372,6 +372,28 @@ path and not a stack of overlapping objects.
   and an overline `<tspan>` there reads as a detached bar — write a plain
   `√2` in diagram labels. A bare √ is also fine when referring to the
   symbol itself in prose.
+- **A hidden answer inside a callout box** is `.box > .a`, revealed by a
+  `.reveal-btn` carrying `data-answer="#id"` — the same component as
+  `.qcard .a`, for a question that is already a `.box` and shouldn't be
+  wrapped in a second card:
+
+  ```html
+  <div class="box question"><span class="lbl">Starter</span>
+    <p>…the question…</p>
+    <button class="reveal-btn" data-answer="#d1a1">Show answer</button>
+    <div class="a" id="d1a1"><span class="lbl-a">Answer</span>…</div>
+  </div>
+  ```
+
+  `data-answer` is required: without it, and without a `.qcard`
+  ancestor, deck.js treats the button as a *step* reveal and it silently
+  does nothing. The id must be unique in the page. Child selector, so a
+  `.qcard` nested inside a box keeps its own styling. Year 7 Space uses
+  it on every Starter / Think / Discuss box. Two registers worth keeping
+  to: a question with a definite answer gets *Show answer* and a
+  `.lbl-a` of **Answer**; an open discussion gets *What to listen for*
+  and **What we're listening for** — a single "correct" answer under a
+  Discuss question closes down the discussion it exists to open.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
   **Forward nav (→ / space / next) reveals the next hidden thing on the
