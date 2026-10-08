@@ -178,6 +178,8 @@ td.lvlcol{padding:6px 12px 6px 8px;text-align:right;white-space:nowrap}
 .chip.b4{background:var(--band4);border-color:#5C907C;color:#0E241C}
 .chip.b0{background:var(--band0);border-color:#D3C0BB;color:#7A5147}
 .chip.bnil{background:#EFEEE9;border-color:var(--rule-strong);color:var(--ink-faint)}
+.chip.prov{border-style:dashed;opacity:.82}
+.chip.prov::after{content:"?";font-size:9px;vertical-align:super;margin-left:1px;opacity:.75}
 
 .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink-soft);padding:2px 0 0}
 .legend div{display:flex;align-items:center;gap:5px}
@@ -306,6 +308,8 @@ table.rub td.na{background:repeating-linear-gradient(135deg,#F4F4F0,#F4F4F0 4px,
 .overallbar .olvl.b1{background:var(--band1)} .overallbar .olvl.b2{background:var(--band2)}
 .overallbar .olvl.b3{background:var(--band3)} .overallbar .olvl.b4{background:var(--band4)}
 .overallbar .omean{font-family:var(--mono);font-size:7.4pt;color:var(--ink-soft)}
+.overallbar .oprov{font-family:var(--mono);font-size:7.2pt;color:var(--red);
+  border:.5pt solid var(--red);border-radius:2pt;padding:.8pt 4pt;background:var(--red-soft)}
 .overallbar .ofoot{margin-left:auto;font-family:var(--mono);font-size:6.8pt;color:var(--ink-faint);letter-spacing:.03em}
 
 .groupsheet .gs-strand{border:.5pt solid #9AA69F;margin-bottom:5pt;break-inside:avoid}
@@ -897,12 +901,26 @@ function seedOf(str){ let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= st
 const pick = (arr, seed, salt=0) => arr[(seed + salt*7919) % arr.length];
 
 function assessed(st){ return STRANDS.filter(s => Number.isInteger(st.marks[s.id])); }
-/* weighted position on the 0-to-top band scale */
+/* Strands still untouched by the marker. These are "not looked at yet",
+   which is different from "looked at and not demonstrated" — a question
+   crossed off as not attempted DOES mark its strand, at band 0.          */
+function unmarked(st){ return STRANDS.filter(s => !Number.isInteger(st.marks[s.id])); }
+function markingComplete(st){ return unmarked(st).length === 0; }
+
+/* Weighted position on the 0-to-top band scale, across EVERY strand.
+   An unmarked strand counts as 0, so a student cannot read "at the
+   expected standard" overall on the strength of one strand while the
+   other six are blank. While marking is incomplete the figure is
+   provisional, and the interface says so rather than hiding it. */
 function pctOf(st){
-  const a = assessed(st);
-  if(!a.length) return null;
+  if(!assessed(st).length) return null;
   let got = 0, max = 0;
-  a.forEach(s => { const w = s.weight || 1; got += (st.marks[s.id] / maxBandOf(s)) * w; max += w; });
+  STRANDS.forEach(s => {
+    const w = s.weight || 1;
+    const b = Number.isInteger(st.marks[s.id]) ? st.marks[s.id] : 0;
+    got += (b / maxBandOf(s)) * w;
+    max += w;
+  });
   return max === 0 ? null : got / max;
 }
 function plain(t){ return String(t||"").replace(/\{their\}/g,"their"); }
@@ -957,7 +975,12 @@ function buildComment(st){
            "In this investigation of "+sp+", "+fn+" is "+g+"."])
     : (second ? ["Across this investigation you are "+g+"."]
               : ["Across this investigation "+fn+" is "+g+"."]);
-  const opening = pick(OPEN, seed, 0);
+  let opening = pick(OPEN, seed, 0);
+  if(!markingComplete(st)){
+    const un = unmarked(st).length;
+    opening += " This is a provisional result: " + un + " of " + STRANDS.length
+      + " strand" + (un===1?" has":"s have") + " not been marked yet.";
+  }
 
   const strengthLead = pick(
     second ? ["You can now ", "You have shown that you can ", "Your work shows that you can "]
@@ -1190,7 +1213,11 @@ function renderMark(){
     }).join("");
     const pct = pctOf(st), lv = overallLevel(pct);
     h += "<td class='bandcol'>"+bands+"</td>";
-    h += "<td class='lvlcol'><span class='chip b"+lv.key+"' title='"+esc(lv.name)+"'>"+(pct===null?"—":lv.mean.toFixed(1))+"</span></td></tr>";
+    const un = unmarked(st).length;
+    const tip = pct===null ? "Not yet assessed"
+      : lv.name + (un ? " — provisional, "+un+" strand"+(un===1?"":"s")+" not yet marked" : "");
+    h += "<td class='lvlcol'><span class='chip b"+lv.key+(un&&pct!==null?" prov":"")+"' title='"+esc(tip)+"'>"
+       + (pct===null?"—":lv.mean.toFixed(1)) + "</span></td></tr>";
   });
   h += "</tbody>";
   t.innerHTML = h;
@@ -1443,6 +1470,8 @@ function sheetHTML(st, withComment, scale){
      + '<span class="olab">Overall</span>'
      + '<span class="olvl b'+(lv.key < 0 ? "nil" : lv.key)+'">'+esc(lv.name)+'</span>'
      + (pct===null ? '' : '<span class="omean">mean band '+lv.mean.toFixed(1)+' of 4</span>')
+     + (pct!==null && !markingComplete(st)
+        ? '<span class="oprov">Provisional &mdash; '+unmarked(st).length+' of '+STRANDS.length+' strands not yet marked</span>' : '')
      + '<span class="omean">'+tl.done+' of '+tl.total+' questions successful'
      + (tl.notAtt ? ' &middot; '+tl.notAtt+' not attempted' : '')+'</span>'
      + '<span class="ofoot">'+esc([m.cls, m.teacher].filter(Boolean).join(" · "))+'</span>'
@@ -1684,6 +1713,7 @@ function persist(){
   persistTimer = setTimeout(async () => {
     try{
       await window.storage.set("ecosystem-rubric:v1", JSON.stringify({
+        version:SAVE_VERSION,
         meta:state.meta, band0:state.band0, bandLabels:state.bandLabels, opts:state.opts,
         students: state.students.map(s=>({name:s.name,species:s.species,pron:s.pron,q:s.q,override:s.override,comment:s.comment,edited:s.edited}))
       }));
