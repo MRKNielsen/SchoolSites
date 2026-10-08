@@ -178,8 +178,6 @@ td.lvlcol{padding:6px 12px 6px 8px;text-align:right;white-space:nowrap}
 .chip.b4{background:var(--band4);border-color:#5C907C;color:#0E241C}
 .chip.b0{background:var(--band0);border-color:#D3C0BB;color:#7A5147}
 .chip.bnil{background:#EFEEE9;border-color:var(--rule-strong);color:var(--ink-faint)}
-.chip.prov{border-style:dashed;opacity:.82}
-.chip.prov::after{content:"?";font-size:9px;vertical-align:super;margin-left:1px;opacity:.75}
 
 .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink-soft);padding:2px 0 0}
 .legend div{display:flex;align-items:center;gap:5px}
@@ -308,8 +306,6 @@ table.rub td.na{background:repeating-linear-gradient(135deg,#F4F4F0,#F4F4F0 4px,
 .overallbar .olvl.b1{background:var(--band1)} .overallbar .olvl.b2{background:var(--band2)}
 .overallbar .olvl.b3{background:var(--band3)} .overallbar .olvl.b4{background:var(--band4)}
 .overallbar .omean{font-family:var(--mono);font-size:7.4pt;color:var(--ink-soft)}
-.overallbar .oprov{font-family:var(--mono);font-size:7.2pt;color:var(--red);
-  border:.5pt solid var(--red);border-radius:2pt;padding:.8pt 4pt;background:var(--red-soft)}
 .overallbar .ofoot{margin-left:auto;font-family:var(--mono);font-size:6.8pt;color:var(--ink-faint);letter-spacing:.03em}
 
 .groupsheet .gs-strand{border:.5pt solid #9AA69F;margin-bottom:5pt;break-inside:avoid}
@@ -591,7 +587,7 @@ const STRANDS = [
   id:"s3", start:"draw a single food chain, with the arrows running from the food to the feeder", name:"Represents feeding relationships",
   sub:"Food chains and webs",
   bands:[
-    {q:"B2 (i)", d:"Draws a food chain with arrows pointing from the food to the feeder."},
+    {q:"B2", d:"Draws a food chain with arrows pointing from the food to the feeder."},
     {q:"B1 (i)", d:"Constructs a food web that links several chains."},
     {q:"B1 (ii)", d:"Constructs a food web that links all organisms in the ecosystem."},
     {q:"B7 + B8", d:"Traces through the web how the loss of one species reaches other organisms."}
@@ -610,10 +606,10 @@ const STRANDS = [
   ]
 },
 {
-  id:"s4", start:"find the producer in the food chain and name where its energy first comes from", name:"Explains the flow of matter and energy",
+  id:"s4", start:"use the definitions of producer and consumer to decide which one {their} species is", name:"Explains the flow of matter and energy",
   sub:"Producers, consumers, decomposers",
   bands:[
-    {q:"B2 (ii)", d:"States the initial source of energy in the ecosystem."},
+    {q:"—",   d:"No question in this task."},
     {q:"B3", d:"States whether the species is a producer or a consumer and explains how they know, using the definition."},
     {q:"B4 + B6", d:"Explains why decomposers matter by linking them to the recycling of matter, and links an adaptation of the species to how it gets energy or avoids being eaten."},
     {q:"B5", d:"Judges the claim that energy is recycled, and separates the one-way flow of energy from the cycling of matter."}
@@ -724,8 +720,7 @@ const CRITERIA = [
  {id:"A6",   q:"A6",  sub:"",    part:"A", label:"Adds a seventh animal and names the question needed",             strand:"s1", band:4},
  {id:"B1i",  q:"B1",  sub:"i",   part:"B", label:"Food web links several chains together",                          strand:"s3", band:2},
  {id:"B1ii", q:"B1",  sub:"ii",  part:"B", label:"Food web includes every organism, producers and decomposers",     strand:"s3", band:3},
- {id:"B2i",  q:"B2",  sub:"i",   part:"B", label:"Food chain producer → their organism, arrows food to feeder",     strand:"s3", band:1},
- {id:"B2ii", q:"B2",  sub:"ii",  part:"B", label:"Names where the energy in the ecosystem first comes from",        strand:"s4", band:1},
+ {id:"B2",   q:"B2",  sub:"",    part:"B", label:"Food chain producer → their organism, arrows food to feeder",     strand:"s3", band:1},
  {id:"B3",   q:"B3",  sub:"",    part:"B", label:"Producer or consumer, justified using the definition",            strand:"s4", band:2},
  {id:"B4",   q:"B4",  sub:"",    part:"B", label:"Links an adaptation to getting energy or avoiding predation",     strand:"s4", band:3},
  {id:"B5",   q:"B5",  sub:"",    part:"B", label:"Judges the “energy is recycled” claim; energy one-way",           strand:"s4", band:4},
@@ -750,14 +745,19 @@ const qLabel = c => c.q + (c.sub ? " (" + c.sub + ")" : "");
    step below renames that version's tick ids into the next one's.
      1 → 2  columns realigned to the booklet (B1/B2 food chain fix)
      2 → 3  Part A renumbered in the FINAL booklet (old A1+A2 merged into A1,
-            so A3→A2, A4→A3, A5a/b→A4a/b, A6→A5, A7→A6)                     */
-const SAVE_VERSION = 3;
+            so A3→A2, A4→A3, A5a/b→A4a/b, A6→A5, A7→A6)
+     3 → 4  B2 (ii) removed, so B2i becomes B2                               */
+const SAVE_VERSION = 4;
 const MIGRATIONS = {
   1: {A3a:"A3i", A3b:"A3ii", A4a:"A4i", A4b:"A4ii",
       B1a:"B2i", B1b:"B1i", B1c:"B1ii", B2:"B2i",
       C1a:"C1i", C1b:"C1ii", D3a:"D3i", D3b:"D3ii"},
   2: {A1:"A1i", A2:"A1ii", A3i:"A2i", A3ii:"A2ii", A4i:"A3i", A4ii:"A3ii",
-      A5a:"A4a", A5b:"A4b", A6:"A5", A7:"A6"}
+      A5a:"A4a", A5b:"A4b", A6:"A5", A7:"A6"},
+  /* 3 → 4  B2 (ii) removed — the booklet has no question asking for the
+     initial energy source — so B2 is a single tick again. B2ii is dropped
+     on import because nothing in CRITERIA matches it. */
+  3: {B2i:"B2"}
 };
 /* rename every key in one pass, so swaps like A3i→A2i and A4i→A3i cannot collide */
 function migrateTicks(q, fromVersion){
@@ -901,12 +901,6 @@ function seedOf(str){ let h = 2166136261; for(let i=0;i<str.length;i++){ h ^= st
 const pick = (arr, seed, salt=0) => arr[(seed + salt*7919) % arr.length];
 
 function assessed(st){ return STRANDS.filter(s => Number.isInteger(st.marks[s.id])); }
-/* Strands still untouched by the marker. These are "not looked at yet",
-   which is different from "looked at and not demonstrated" — a question
-   crossed off as not attempted DOES mark its strand, at band 0.          */
-function unmarked(st){ return STRANDS.filter(s => !Number.isInteger(st.marks[s.id])); }
-function markingComplete(st){ return unmarked(st).length === 0; }
-
 /* Weighted position on the 0-to-top band scale, across EVERY strand.
    An unmarked strand counts as 0, so a student cannot read "at the
    expected standard" overall on the strength of one strand while the
@@ -975,12 +969,7 @@ function buildComment(st){
            "In this investigation of "+sp+", "+fn+" is "+g+"."])
     : (second ? ["Across this investigation you are "+g+"."]
               : ["Across this investigation "+fn+" is "+g+"."]);
-  let opening = pick(OPEN, seed, 0);
-  if(!markingComplete(st)){
-    const un = unmarked(st).length;
-    opening += " This is a provisional result: " + un + " of " + STRANDS.length
-      + " strand" + (un===1?" has":"s have") + " not been marked yet.";
-  }
+  const opening = pick(OPEN, seed, 0);
 
   const strengthLead = pick(
     second ? ["You can now ", "You have shown that you can ", "Your work shows that you can "]
@@ -1205,7 +1194,7 @@ function renderMark(){
     const bands = STRANDS.map(s => {
       const m = st.marks[s.id], r = st.res[s.id] || {};
       const ov = r.overridden;
-      const tip = s.name + (m===null ? " — not assessed" : " — band " + m)
+      const tip = s.name + " — band " + (m===null ? 0 : m)
         + (r.missed ? " (top cell " + r.top + ", " + r.missed + " developing question" + (r.missed===1?"":"s") + " missing)" : "")
         + (ov ? " — overridden" : "");
       return "<span class='bnum b"+(m===null?"nil":m)+(ov?" ov":"")+(r.missed?" pen":"")+"' title='"+esc(tip)+"'>"
@@ -1213,10 +1202,7 @@ function renderMark(){
     }).join("");
     const pct = pctOf(st), lv = overallLevel(pct);
     h += "<td class='bandcol'>"+bands+"</td>";
-    const un = unmarked(st).length;
-    const tip = pct===null ? "Not yet assessed"
-      : lv.name + (un ? " — provisional, "+un+" strand"+(un===1?"":"s")+" not yet marked" : "");
-    h += "<td class='lvlcol'><span class='chip b"+lv.key+(un&&pct!==null?" prov":"")+"' title='"+esc(tip)+"'>"
+    h += "<td class='lvlcol'><span class='chip b"+lv.key+"' title='"+esc(lv.name)+"'>"
        + (pct===null?"—":lv.mean.toFixed(1)) + "</span></td></tr>";
   });
   h += "</tbody>";
@@ -1350,6 +1336,7 @@ function renderGroups(){
   h += buckets[0].length ? '<ul>'+buckets[0].map(n=>'<li>'+esc(n)+'</li>').join("")+'</ul>' : '<div class="none">Nobody here</div>';
   h += '<div class="nextline"><strong>Teach next:</strong> '+esc(plain(s.start).charAt(0).toUpperCase()+plain(s.start).slice(1))+'.</div></div>';
   for(let b=1;b<=maxBandOf(s);b++){
+    if(!EV[s.id][b].length) continue;
     h += '<div class="groupbox g'+b+'"><h4>'+b+' · '+esc(state.bandLabels[b-1])+' <span style="font-weight:400">('+buckets[b].length+')</span></h4>';
     h += buckets[b].length ? '<ul>'+buckets[b].map(n=>'<li>'+esc(n)+'</li>').join("")+'</ul>' : '<div class="none">Nobody here</div>';
     const nx = plain(s.next[b-1]);
@@ -1407,7 +1394,10 @@ function sheetHTML(st, withComment, scale){
 
   STRANDS.forEach(s => {
     const r = st.res[s.id] || {};
-    const awarded = st.marks[s.id];
+    /* On a printed report there is no such thing as an unmarked strand:
+       teachers tick what was achieved and leave the rest blank, so blank
+       is band 0 — not demonstrated. */
+    const awarded = Number.isInteger(st.marks[s.id]) ? st.marks[s.id] : 0;
     h += '<tr><td class="strand">'+esc(s.name)+'<span class="sub">'+esc(s.sub)+'</span>'
        + (r.missed ? '<span class="pen">&minus;'+r.missed+' band'+(r.missed===1?'':'s')+' for missing developing skills</span>' : '')
        + '</td>';
@@ -1420,7 +1410,7 @@ function sheetHTML(st, withComment, scale){
 
     for(let bd=1;bd<=4;bd++){
       const band = s.bands[bd-1];
-      if(bd > maxBandOf(s)){ h += '<td class="na">No question in this task.</td>'; continue; }
+      if(bd > maxBandOf(s) || !EV[s.id][bd].length){ h += '<td class="na">No question in this task.</td>'; continue; }
       const met = cellMet(st, s, bd);
       const isAward = awarded === bd;
       const cls = (met ? 'hit b'+bd : 'off') + (isAward ? ' awarded' : '');
@@ -1470,8 +1460,6 @@ function sheetHTML(st, withComment, scale){
      + '<span class="olab">Overall</span>'
      + '<span class="olvl b'+(lv.key < 0 ? "nil" : lv.key)+'">'+esc(lv.name)+'</span>'
      + (pct===null ? '' : '<span class="omean">mean band '+lv.mean.toFixed(1)+' of 4</span>')
-     + (pct!==null && !markingComplete(st)
-        ? '<span class="oprov">Provisional &mdash; '+unmarked(st).length+' of '+STRANDS.length+' strands not yet marked</span>' : '')
      + '<span class="omean">'+tl.done+' of '+tl.total+' questions successful'
      + (tl.notAtt ? ' &middot; '+tl.notAtt+' not attempted' : '')+'</span>'
      + '<span class="ofoot">'+esc([m.cls, m.teacher].filter(Boolean).join(" · "))+'</span>'
@@ -1491,13 +1479,14 @@ function groupSheetHTML(scale){
 
   STRANDS.forEach(s => {
     const buckets = {0:[],1:[],2:[],3:[],4:[]};
-    state.students.forEach(st => { const b = st.marks[s.id]; if(Number.isInteger(b)) buckets[b].push(firstName(st.name)); });
+    state.students.forEach(st => { const b = st.marks[s.id];
+      buckets[Number.isInteger(b) ? b : 0].push(firstName(st.name)); });
     h += '<div class="gs-strand"><h3>'+esc(s.name)+'</h3><div class="gs-bands">';
     h += '<div class="gs-band b0"><span class="bh">0 · '+esc(state.band0)+'</span>'
        + (buckets[0].length ? esc(buckets[0].join(", ")) : '<span style="opacity:.5">—</span>')
        + '<span class="teach">Next: '+esc(plain(s.start))+'</span></div>';
     for(let b=1;b<=4;b++){
-      if(b > maxBandOf(s)){ h += '<div class="gs-band" style="background:#F4F4F0;color:#8A948F;font-style:italic">No question in this task.</div>'; continue; }
+      if(b > maxBandOf(s) || !EV[s.id][b].length){ h += '<div class="gs-band" style="background:#F4F4F0;color:#8A948F;font-style:italic">No question in this task.</div>'; continue; }
       h += '<div class="gs-band b'+b+'"><span class="bh">'+b+' · '+esc(state.bandLabels[b-1])+'</span>'
          + (buckets[b].length ? esc(buckets[b].join(", ")) : '<span style="opacity:.5">—</span>')
          + '<span class="teach">Next: '+esc(plain(s.next[b-1])||"—")+'</span></div>';
@@ -1518,7 +1507,7 @@ function renderRef(){
        + '<span style="font-size:11px;color:#7A5147">Start by: '+esc(plain(s.start))+'</span></td>';
     for(let b=1;b<=4;b++){
       const band = s.bands[b-1];
-      if(b > maxBandOf(s)){ h += '<td style="color:#8A948F;font-style:italic;background:#F7F7F4">No question in this task.</td>'; continue; }
+      if(b > maxBandOf(s) || !EV[s.id][b].length){ h += '<td style="color:#8A948F;font-style:italic;background:#F7F7F4">No question in this task.</td>'; continue; }
       h += '<td><span class="qc">'+esc(band.q)+'</span>'+esc(band.d)+'</td>';
     }
     h += '</tr>';
