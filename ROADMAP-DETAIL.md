@@ -41,6 +41,39 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — Year 10 exponential graphs redrawn (9 Oct 2026)
+
+All ten figures in `10methods-primer/Ch3FL_ExponentialsLogs_Slides.html`
+plus the compound-interest graph on slide 14 of
+`Term4_RevisionExam_Slides.html`. The originals came out of the old JS
+deck's graph helper: 310 px wide, no scale, curve labels written on top of
+the curve, coordinate labels colliding with each other (`(3, ?)` sat
+exactly on `V = 30000(0.88)ⁿ`), the `asymptote y = 0` label clipped off
+the right edge, money curves drawn into negative years, and the
+compound/simple graph with no x-axis at all.
+
+What replaced them, so the next primer redraw can follow suit:
+
+- Inline SVG in a `.graph-card` (`.narrow` on Key idea slides), 480×360
+  viewBox, light grid, numbered axes, tokens only — `--accent` first
+  curve, `--accent-warm` second curve or reference line, `--neg` dashed
+  asymptote, `--accent-dark` points. Every label carries a
+  `paint-order="stroke"` halo in `--card` so a gridline never cuts it.
+- **Exponents are `<tspan>`s, not Unicode superscripts.** `⁰ ⁴ ⁵ ⁿ ⁻`
+  (U+2070–207F) are in neither of Source Sans 3's latin subsets, so
+  `10⁰` and `Aⁿ` were rendering in a fallback font mid-label while `10¹`
+  `10²` `10³` (Latin-1) didn't. The same applies to deck prose, which
+  still uses the Unicode forms.
+- Worked-example and Your-turn slides now put the question and steps in
+  the left column and the graph on the right, instead of a thumbnail
+  beside the question with the steps full-width underneath. Reveal order
+  is unchanged (checked with arrow presses). No slide overflows at
+  1600×900, 1366×768 or 1280×720.
+- Every label was checked in a browser against every stroke and every
+  other label — zero collisions, at least ~5 px clearance throughout.
+- Slide 21's formula chip was half MathJax, half text (`)ⁿ` floated
+  outside the typeset fraction); now one MathJax expression.
+
 ### Landed — seasons visualiser (2 Sep 2026)
 
 `assets/css/seasonsim.css` + `assets/js/seasonsim.js`, a third optional
@@ -449,6 +482,25 @@ label on its own.
       `a.href = url;` and matched as an `<a href>`; and HTML comments are
       blanked, because the root index.html deliberately keeps the
       unpublished subject cards commented out.
+
+- [ ] **Redraw the other primer figures from the old graph helper.**
+      The 9 Oct pass covered exponentials only. The same helper drew
+      the rest of the primer's figures and they show the same faults —
+      seen in `Term4_RevisionExam_Slides.html` slides 9, 10, 34, 35
+      (labels on the parabola, `x = 2` under `TP (2, −9)`, `√5 ≈ 2.236`
+      on the curve) and the tree diagrams on 20 and 38 (branch labels
+      overlapping). Ch1, Ch4, Ch6, Ch7 and Ch8 (~130 SVGs) not yet
+      audited. Follow the conventions in the exponential-graphs Landed
+      note. **M**
+- [ ] **`&amp;amp;` in primer `data-topic` attributes.** The lesson tag
+      reads "CAT 3 &AMP; WRAP-UP" on every topic slide —
+      double-escaped in `Ch3A-E_4A-D_IndicesSurds_Slides.html` (46),
+      `Ch4_2_MeasurementGeometry_Slides.html` (57) and
+      `Term4_RevisionExam_Slides.html` (32). One replace each. **S**
+- [ ] **Primer prose still mixes plain text and MathJax in one
+      expression**, e.g. Ch3FL "x = log₂ 20 = \(\dfrac{\log 20}{\log
+      2}\)" and Term4 "n = \(\dfrac{\log 2}{\log 1.05}\)". Sweep
+      to whole-expression MathJax. **S–M**
 
 ### Tier 2 — Ports with HTML source (one to three sessions each)
 
