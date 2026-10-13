@@ -508,23 +508,20 @@
 \newcommand{\diagFma}{%
 \begin{center}
 \begin{tikzpicture}[font=\small]
-  % Law banner
   \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
         minimum width=13cm, minimum height=0.9cm, align=center,
         font=\small\bfseries, text=PurpleDark]
         at (5.5,3.6)
         {Newton's Second Law: \quad $F = m \times a$ \quad $\Rightarrow$ \quad
          $a = F/m$ \quad $\Rightarrow$ \quad $m = F/a$};
-  % F box
   \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
         minimum width=3.6cm, minimum height=3.2cm, align=center]
-        at (1.0,1.5)
+        at (0.8,1.5)
         {\textbf{\color{GoldDark}$F$\ (Force)}\\[4pt]
-         \small\color{DarkGrey}Measured in Newtons (N)\\
+         \small\color{DarkGrey}Measured in newtons (N)\\
          \small\color{DarkGrey}A push or pull\\[2pt]
          \small\color{GoldDark}$F = m \times a$};
-  \node[font=\large\bfseries, text=DarkGrey] at (3.2,1.5) {$=$};
-  % m box
+  \node[font=\large\bfseries, text=DarkGrey] at (3.3,1.5) {$=$};
   \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
         minimum width=3.6cm, minimum height=3.2cm, align=center]
         at (5.5,1.5)
@@ -532,8 +529,7 @@
          \small\color{DarkGrey}Measured in kg\\
          \small\color{DarkGrey}More mass\,=\,more\\
          \small\color{DarkGrey}inertia to overcome};
-  \node[font=\large\bfseries, text=DarkGrey] at (7.7,1.5) {$\times$};
-  % a box
+  \node[font=\large\bfseries, text=DarkGrey] at (7.75,1.5) {$\times$};
   \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
         minimum width=3.6cm, minimum height=3.2cm, align=center]
         at (10.0,1.5)
@@ -728,53 +724,41 @@
 \newcommand{\diagExpTwoSetup}{%
 \begin{center}
 \begin{tikzpicture}[font=\small, x=1cm, y=1cm]
-  % Ground
-  \fill[ground hatch] (0,-0.4) rectangle (10.5,0);
-  \draw[thick, DarkGrey] (0,0) -- (10.5,0);
-  % Runway
-  \fill[DarkGrey!15] (0.3,0) rectangle (9.8,0.18);
-  \draw[DarkGrey!60] (0.3,0.18) -- (9.8,0.18);
-  % Trolley
+  % bench ends just before the pulley, so the hanging mass falls past its edge
+  \fill[ground hatch] (0,-0.4) rectangle (8.95,0);
+  \draw[thick, DarkGrey] (0,0) -- (8.95,0) -- (8.95,-0.4);
+  \fill[DarkGrey!15] (0.3,0) rectangle (8.6,0.18);
+  \draw[DarkGrey!60] (0.3,0.18) -- (8.6,0.18);
   \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
         minimum width=2.4cm, minimum height=1.0cm,
         font=\small\bfseries, text=NavyBlue] (trolley) at (3.5,0.68) {Trolley ($M$)};
-  % Wheels
   \fill[DarkGrey!60] (2.55,0.18) circle (0.13);
   \fill[DarkGrey!60] (4.45,0.18) circle (0.13);
-  % Ticker tape
   \draw[dashed, DarkGrey!50, thick] (2.3,0.68) -- (0.3,0.68);
   \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (0.22,0.68) {ticker tape};
-  % String to pulley
-  \draw[thick, DarkGrey!70] (trolley.east) -- (9.0,0.68);
-  % Pulley
-  \draw[thick, DarkGrey] (9.0,0.68) circle (0.34);
-  \fill[DarkGrey!25] (9.0,0.68) circle (0.34);
-  \draw[thick, DarkGrey] (9.0,0.68) circle (0.11);
-  \node[font=\scriptsize, text=DarkGrey, above right] at (9.22,0.88) {pulley};
-  % String over pulley and down
-  \draw[thick, DarkGrey!70] (9.0,0.34) -- (9.0,-1.7);
-  % Hanging mass
+  % pulley clamped to the bench edge: string runs over its top, down its right side
+  \draw[thick, DarkGrey] (8.95,0.0) -- (8.95,0.34);
+  \draw[thick, DarkGrey!70] (trolley.east) -- (8.95,0.68);
+  \fill[DarkGrey!25] (8.95,0.34) circle (0.34);
+  \draw[thick, DarkGrey] (8.95,0.34) circle (0.34);
+  \draw[thick, DarkGrey] (8.95,0.34) circle (0.11);
+  \node[font=\scriptsize, text=DarkGrey, above right] at (9.15,0.6) {pulley};
+  \draw[thick, DarkGrey!70] (9.29,0.34) -- (9.29,-1.77);
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
         minimum width=1.3cm, minimum height=0.85cm,
-        font=\small\bfseries, text=OrangeDark] (hm) at (9.0,-2.2) {$m$};
-  \node[font=\scriptsize, text=OrangeDark, anchor=west] at (9.7,-2.2) {hanging mass};
-  % Weight arrow
+        font=\small\bfseries, text=OrangeDark] (hm) at (9.29,-2.2) {$m$};
+  \node[font=\scriptsize, text=OrangeDark, anchor=west] at (9.99,-2.2) {hanging mass};
   \draw[force arrow, red!65!black] (hm.south) -- ++(0,-1.0)
         node[right, font=\scriptsize\bfseries, text=red!65!black] {$W\!=\!mg$};
-  % Tension on hanging mass
-  \draw[force arrow, TealGreen] (9.0,-1.5) -- (9.0,-0.8)
-        node[left, font=\scriptsize\bfseries, text=TealGreen] {$T$};
-  % Tension arrow on trolley
+  \draw[force arrow, TealGreen] (9.29,-1.6) -- (9.29,-0.9)
+        node[right, font=\scriptsize\bfseries, text=TealGreen] {$T$};
   \draw[force arrow, OrangeDark] (trolley.east) ++(0.1,0) -- ++(1.5,0)
         node[above, font=\scriptsize\bfseries, text=OrangeDark] {$T$};
-  % Acceleration arrow
   \draw[force arrow, PurpleDark] (trolley.north) ++(0.0,0.1) -- ++(1.8,0)
         node[above, font=\scriptsize\bfseries, text=PurpleDark] {$a$};
-  % Mass label
-  \node[font=\scriptsize\itshape, text=DarkGrey] at (3.5,1.48)
-        {total trolley mass $= M$ (kept constant)};
-  % Bench label
-  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.3,-0.28) {bench / runway};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (3.5,2.05)
+        {total mass $M + m$ kept constant (masses move from trolley to hanger)};
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.3,-0.65) {bench / runway};
 \end{tikzpicture}
 \end{center}}
 
@@ -782,53 +766,40 @@
 \newcommand{\diagExpTwoFBD}{%
 \begin{center}
 \begin{tikzpicture}[font=\small]
-  %% ── LEFT: Trolley FBD ──
   \node[font=\small\bfseries, text=NavyBlue] at (0,3.5) {FBD: Trolley ($M$)};
   \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
         minimum width=2.6cm, minimum height=1.2cm,
         font=\small\bfseries, text=NavyBlue] (T) at (0,0) {Trolley ($M$)};
-  % Normal up
   \draw[force arrow, TealGreen] (T.north) -- ++(0,2.0)
         node[right, font=\small\bfseries, text=TealGreen] {$N$ (normal)};
-  % Weight down
   \draw[force arrow, red!65!black] (T.south) -- ++(0,-2.0)
         node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!Mg$};
-  % Tension right
   \draw[force arrow, OrangeDark] (T.east) -- ++(2.8,0)
         node[above, font=\small\bfseries, text=OrangeDark] {$T$ (tension)};
-  % Friction dashed
   \draw[thin arrow, DarkGrey!55, dashed] (T.west) -- ++(-1.8,0)
         node[above, font=\scriptsize\itshape, text=DarkGrey!65] {friction $\approx 0$};
-  % Vertical balance
-  \node[font=\scriptsize\itshape, text=DarkGrey] at (0,2.9)
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (-0.2,1.5)
         {$N = Mg$ (vertical balance)};
-  % Equation
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
         font=\small, text=OrangeDark, inner sep=3pt]
-        at (0,-3.4) {$T = Ma$};
+        at (0,-3.6) {$T = Ma$};
 
-  %% ── RIGHT: Hanging mass FBD ──
   \node[font=\small\bfseries, text=NavyBlue] at (8.5,3.5) {FBD: Hanging mass ($m$)};
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
         minimum width=2.4cm, minimum height=1.1cm,
         font=\small\bfseries, text=OrangeDark] (H) at (8.5,0) {Mass ($m$)};
-  % Tension up (shorter than weight — mass accelerates down)
   \draw[force arrow, TealGreen] (H.north) -- ++(0,1.6)
         node[right, font=\small\bfseries, text=TealGreen] {$T$ (tension)};
-  % Weight down (longer)
   \draw[force arrow, red!65!black] (H.south) -- ++(0,-2.6)
         node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!mg$};
-  % Unbalanced label
-  \node[font=\scriptsize\itshape, text=red!60!black] at (8.5,2.5)
-        {$mg > T$ — forces unbalanced};
-  % Net force arrow overlay
+  \node[font=\scriptsize\itshape, text=red!60!black] at (8.5,2.9)
+        {$mg > T$ --- forces unbalanced};
   \draw[force arrow, red!65!black, line width=1.2pt, opacity=0.5]
-        (H.south) ++(0,-0.3) -- ++(0,-0.9)
-        node[left, font=\scriptsize\bfseries, text=red!65!black] {net $F$};
-  % Equation
+        (H.south) ++(0.45,-0.3) -- ++(0,-0.9)
+        node[right, font=\scriptsize\bfseries, text=red!65!black] {net $F$};
   \node[draw=red!55!black, fill=red!8, rounded corners=3pt,
         font=\small, text=red!55!black, inner sep=3pt, align=center]
-        at (8.5,-3.4) {$mg - T = ma$};
+        at (8.5,-4.0) {$mg - T = ma$};
 \end{tikzpicture}
 \end{center}}
 
@@ -836,10 +807,8 @@
 \newcommand{\diagExpTwoForces}{%
 \begin{center}
 \begin{tikzpicture}[font=\small]
-  \node[font=\small\bfseries, text=NavyBlue] at (6.0,1.4)
-        {Effect of increasing hanging mass — arrow length shows force magnitude};
-
-  % ── 50 g case ──
+  \node[font=\small\bfseries, text=NavyBlue] at (7.0,1.4)
+        {Effect of increasing hanging mass --- arrow length shows force size};
   \node[font=\small\bfseries, text=GoldDark] at (1.5,0.5) {$m = 50$\,g};
   \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
         minimum width=2.0cm, minimum height=0.9cm,
@@ -850,11 +819,10 @@
         node[below, font=\scriptsize, text=PurpleDark] {$a_1$};
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
         minimum width=0.9cm, minimum height=0.7cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (3.0,-2.2) {50\,g};
-  \draw[force arrow, red!65!black] (3.0,-2.55) -- ++(0,-0.7)
+        font=\scriptsize\bfseries, text=OrangeDark] at (3.0,-2.5) {50\,g};
+  \draw[force arrow, red!65!black] (3.0,-2.85) -- ++(0,-0.7)
         node[right, font=\scriptsize, text=red!65!black] {$W_1$};
 
-  % ── 100 g case ──
   \node[font=\small\bfseries, text=GoldDark] at (6.0,0.5) {$m = 100$\,g};
   \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
         minimum width=2.0cm, minimum height=0.9cm,
@@ -865,11 +833,10 @@
         node[below, font=\scriptsize, text=PurpleDark] {$a_2$};
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
         minimum width=1.0cm, minimum height=0.85cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (8.1,-2.2) {100\,g};
-  \draw[force arrow, red!65!black] (8.1,-2.6) -- ++(0,-1.1)
+        font=\scriptsize\bfseries, text=OrangeDark] at (8.1,-2.5) {100\,g};
+  \draw[force arrow, red!65!black] (8.1,-2.925) -- ++(0,-1.1)
         node[right, font=\scriptsize, text=red!65!black] {$W_2$};
 
-  % ── 200 g case ──
   \node[font=\small\bfseries, text=GoldDark] at (10.8,0.5) {$m = 200$\,g};
   \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
         minimum width=2.0cm, minimum height=0.9cm,
@@ -880,17 +847,17 @@
         node[below, font=\scriptsize, text=PurpleDark] {$a_3$ (largest)};
   \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
         minimum width=1.1cm, minimum height=1.1cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (13.6,-2.2) {200\,g};
-  \draw[force arrow, red!65!black] (13.6,-2.65) -- ++(0,-1.6)
+        font=\scriptsize\bfseries, text=OrangeDark] at (13.6,-2.5) {200\,g};
+  \draw[force arrow, red!65!black] (13.6,-3.05) -- ++(0,-1.6)
         node[right, font=\scriptsize, text=red!65!black] {$W_3$};
 
-  % Observation box
   \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
-        minimum width=14.2cm, inner sep=5pt,
+        text width=13.4cm, inner sep=5pt,
         font=\small, text=TealGreen, align=center]
-        at (6.5,-5.0)
-        {As hanging mass doubles ($50 \to 100$\,g), tension $T$ doubles, so acceleration $a$ doubles.
-         This confirms: $F \propto a$ when mass $M$ is constant ($F = ma$).};
+        at (7.0,-5.95)
+        {Prediction: when the hanging mass doubles from 50\,g to 100\,g, the tension doubles,
+         so the acceleration should double too. When the mass stays the same,
+         force and acceleration are directly proportional.};
 \end{tikzpicture}
 \end{center}}
 
@@ -898,44 +865,29 @@
 \newcommand{\diagExpTwoSystem}{%
 \begin{center}
 \begin{tikzpicture}[font=\small]
-  % Background panel
   \node[draw=NavyBlue, fill=LightBlue!30, rounded corners=5pt,
-        minimum width=13cm, minimum height=5.5cm] at (5.5,0) {};
-
+        minimum width=13cm, minimum height=6.4cm] at (5.5,-0.4) {};
   \node[font=\small\bfseries, text=NavyBlue] at (5.5,2.4)
-        {System Analysis: Combining both free body diagrams};
-
-  % Trolley side
-  \node[font=\small\bfseries, text=NavyBlue, anchor=north west] at (0.4,1.8)
-        {Trolley ($M$):};
-  \node[font=\small, text=DarkGrey, anchor=north west] at (0.4,1.3)
-        {Horizontal net force $= T$};
+        {System analysis: combining both free body diagrams};
+  \node[font=\small\bfseries, text=NavyBlue, anchor=north west] at (0.4,1.8) {Trolley ($M$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (0.4,1.3) {Horizontal net force $= T$};
   \node[font=\small, text=NavyBlue, anchor=north west] at (0.4,0.8)
         {$\Rightarrow\quad T = Ma \quad\cdots(1)$};
-
-  % Hanging mass side
-  \node[font=\small\bfseries, text=OrangeDark, anchor=north west] at (6.2,1.8)
-        {Hanging mass ($m$):};
-  \node[font=\small, text=DarkGrey, anchor=north west] at (6.2,1.3)
-        {Net force $= mg - T$ downward};
+  \node[font=\small\bfseries, text=OrangeDark, anchor=north west] at (6.2,1.8) {Hanging mass ($m$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (6.2,1.3) {Net force $= mg - T$ downward};
   \node[font=\small, text=OrangeDark, anchor=north west] at (6.2,0.8)
         {$\Rightarrow\quad mg - T = ma \quad\cdots(2)$};
-
-  % Combined
-  \node[font=\small\bfseries, text=TealGreen] at (5.5,-0.1)
+  \node[font=\small\bfseries, text=TealGreen] at (5.5,-0.2)
         {Add (1) and (2) to eliminate $T$:};
-  \node[font=\small, text=NavyBlue] at (5.5,-0.6)
+  \node[font=\small, text=NavyBlue] at (5.5,-0.75)
         {$mg = Ma + ma = (M+m)\,a$};
-  \node[font=\small\bfseries, text=NavyBlue] at (5.5,-1.1)
+  \node[font=\small\bfseries, text=NavyBlue] at (5.5,-1.6)
         {$\displaystyle a = \frac{mg}{M+m}$};
-
-  % Insight box
   \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
         font=\small, text=GoldDark, inner sep=5pt, align=center]
-        at (5.5,-2.3)
-        {When $M \gg m$: total mass $\approx M$,\quad
-         so $a \approx \dfrac{mg}{M} = \dfrac{F}{M}$
-         \quad --- confirming $F = Ma$};
+        at (5.5,-2.85)
+        {When $M \gg m$, the total mass $\approx M$, so
+         $a \approx \dfrac{mg}{M} = \dfrac{F}{M}$ --- confirming $F = Ma$};
 \end{tikzpicture}
 \end{center}}
 
@@ -1030,6 +982,70 @@
         {\textbf{To find the length:}\\[2pt]
          length $=$ force $\div$ scale\\[2pt]
          e.g.\ $15 \div 5 = 3$\,cm};
+\end{tikzpicture}
+\end{center}}
+
+
+% ── Diagrams added with Lessons 4–6 (Newton's laws) ───────────────────────
+% ── Newton's Third Law: two skaters, and a rocket with its exhaust ────────────
+\newcommand{\diagThirdLaw}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  %% ── LEFT: two skaters push apart ──
+  \node[font=\small\bfseries, text=NavyBlue] at (2.7,2.95) {Two skaters push apart};
+  \fill[LightBlue] (0.3,-0.3) rectangle (5.1,0);
+  \draw[thick, Sky] (0.3,0) -- (5.1,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (2.7,-0.55) {ice};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
+        minimum width=1.4cm, minimum height=2.1cm,
+        font=\small\bfseries, text=NavyBlue] (A) at (2.0,1.1) {A};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=1.4cm, minimum height=2.1cm,
+        font=\small\bfseries, text=TealGreen] (B) at (3.4,1.1) {B};
+  \draw[force arrow, OrangeDark] (A.west) -- ++(-1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {B pushes A\\60\,N};
+  \draw[force arrow, OrangeDark] (B.east) -- ++(1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {A pushes B\\60\,N};
+
+  %% ── RIGHT: a rocket in space and its exhaust gas ──
+  \node[font=\small\bfseries, text=NavyBlue] at (11.0,2.95) {A rocket and its exhaust gas};
+  % exhaust gas (drawn first)
+  \shade[inner color=Amber!80, outer color=OrangeLight] (9.3,1.1) ellipse (0.6 and 0.42);
+  \node[font=\scriptsize\bfseries, text=GoldDark] at (9.3,1.1) {gas};
+  % fins
+  \fill[NavyBlue!75] (9.95,1.45) -- (9.7,1.85) -- (10.35,1.45) -- cycle;
+  \fill[NavyBlue!75] (9.95,0.75) -- (9.7,0.35) -- (10.35,0.75) -- cycle;
+  % body and nose
+  \draw[NavyBlue, fill=LightBlue, thick] (9.95,0.75) rectangle (11.75,1.45);
+  \fill[NavyBlue] (11.75,0.75) -- (12.25,1.1) -- (11.75,1.45) -- cycle;
+  \node[font=\scriptsize\bfseries, text=NavyBlue] at (10.9,1.1) {rocket};
+  % the pair
+  \draw[force arrow, OrangeDark] (8.7,1.1) -- ++(-1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {rocket pushes\\gas back};
+  \draw[force arrow, OrangeDark] (12.25,1.1) -- ++(1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {gas pushes\\rocket forward};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (10.8,-0.55) {in space --- no air needed};
+\end{tikzpicture}
+\end{center}}
+
+% ── Newton's Second Law: formula triangle ──────────────────────────────────────
+\newcommand{\diagFmaTriangle}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \draw[thick, GoldDark, fill=GoldLight, line join=round] (0,0) -- (3.8,0) -- (1.9,3.0) -- cycle;
+  \draw[thick, GoldDark] (0.76,1.2) -- (3.04,1.2);
+  \draw[thick, GoldDark] (1.9,0) -- (1.9,1.2);
+  \node[text=GoldDark]  at (1.9,1.85) {\LARGE $\boldsymbol{F}$};
+  \node[text=MidBlue]   at (1.22,0.52) {\LARGE $\boldsymbol{m}$};
+  \node[text=TealGreen] at (2.58,0.52) {\LARGE $\boldsymbol{a}$};
+  \node[text=DarkGrey, fill=GoldLight, inner sep=1pt] at (1.9,0.52) {$\times$};
+  % how to use it
+  \node[anchor=west, align=left, text=Ink, font=\normalsize] at (4.8,1.5)
+       {\textbf{Cover} $\boldsymbol{F}$:\quad $F = m \times a$\\[7pt]
+        \textbf{Cover} $\boldsymbol{a}$:\quad $a = F \div m$\\[7pt]
+        \textbf{Cover} $\boldsymbol{m}$:\quad $m = F \div a$};
+  \node[anchor=west, align=left, text=DarkGrey, font=\footnotesize\itshape] at (4.8,-0.1)
+       {Side by side means multiply. One above the other means divide.};
 \end{tikzpicture}
 \end{center}}
 
@@ -1209,6 +1225,9 @@ Experiment lessons follow the same four parts: a reading about the science, plan
   \talt 1 & What is a Force? & p.\ \pageref{sec:1} \\ \hline
         2 & Force Diagrams and Net Force & p.\ \pageref{sec:2} \\ \hline
   \talt 3 & Experiment 1 --- Investigating Friction & p.\ \pageref{sec:3} \\ \hline
+        4 & Newton's First and Third Laws & p.\ \pageref{sec:4} \\ \hline
+  \talt 5 & Newton's Second Law: $F = ma$ & p.\ \pageref{sec:5} \\ \hline
+        6 & Experiment 2 --- Investigating Newton's Second Law & p.\ \pageref{sec:6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1921,6 +1940,752 @@ These questions go beyond the Year 7 standard. They ask you to evaluate the meth
 \pt{c}Predict what you would find, and give a reason.
 \answerbox{4.2cm}
 
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 4 — NEWTON'S FIRST AND THIRD LAWS                       (Week 2 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Newton's First and Third Laws}{Inertia \textbullet{} Why moving things keep moving \textbullet{} Action and reaction \textbullet{} Force pairs}\label{sec:4}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:4}
+
+\begin{readingbox}{Reading --- Why Rockets Work in Empty Space}
+When rockets were first proposed as a way of reaching space, some newspapers scoffed at the idea. In 1920 an editorial in the \emph{New York Times} argued that a rocket could never work beyond the atmosphere, because out in the vacuum there would be nothing for the exhaust gases to push against. It seemed like common sense. A swimmer pushes against water, a runner pushes against the ground --- so surely a rocket must push against the air?
+
+The reasoning was wrong, and the mistake came from misunderstanding Newton's Third Law. A rocket does not push against the air behind it. It pushes against \emph{its own exhaust}. The engine hurls a huge mass of hot gas backwards, and by the Third Law the gas pushes the rocket forwards with exactly the same force. Nothing outside the rocket is needed at all. In fact rockets work \emph{better} in space, because there is no air resistance slowing them down.
+
+Out in deep space, something even more surprising happens: a spacecraft can switch its engines off and simply keep going. Far from any planet there is no air and almost nothing pushing or pulling on it, so there is almost no unbalanced force to slow it down. The two \emph{Voyager} space probes were launched in 1977. No engine has pushed them forwards for more than thirty years, yet they are still travelling away from the Sun at more than 55\,000 kilometres per hour. Here on Earth, a ball rolled along the ground soon stops --- but only because friction and air resistance act on it. Take those away, and a moving object just keeps moving.
+
+The \emph{New York Times} eventually printed a correction --- in July 1969, the day after Apollo 11 launched for the Moon, and forty-nine years after the original editorial. It noted, briefly, that further investigation had confirmed the work of Newton in the seventeenth century, and regretted the error.
+\end{readingbox}
+
+\rcreset
+\rcq{What mistaken reason did the 1920 editorial give for believing rockets could not work in space?}{1.6cm}
+\rcq{Explain, using Newton's Third Law, what a rocket actually pushes against.}{2.0cm}
+\rcq{The passage says rockets work \emph{better} in space. Give the reason, and name the force that is absent.}{1.6cm}
+\rcq{The \emph{Voyager} probes are still moving fast, even though no engine is pushing them. Explain why they have not slowed down.}{2.0cm}
+\rcq{According to the passage, why does a ball rolled along the ground on Earth soon stop?}{1.6cm}
+\rcq{Which phrase in the second paragraph tells you how the push of the gas on the rocket compares with the push of the rocket on the gas?}{1.4cm}
+\rcq{The editorial's reasoning ``seemed like common sense''. Using the two examples in the passage, explain why it seemed right to many people.}{1.8cm}
+\rcq{Imagine a \emph{Voyager} probe drifted into a thin cloud of gas and dust in space. Using the passage, predict what would happen to its speed, and explain why.}{2.0cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:4}
+
+\subsection{Newton's First Law --- The Law of Inertia}\label{sub:4.1}
+
+In Lesson~2 you learned that when the forces on an object are balanced, its motion does not change. Nearly 340 years ago, Sir Isaac Newton made this the first of his three laws of motion.
+
+\diagNewtonOne
+\figcap[fig:newton-one]{Newton's First Law}
+
+\begin{infobox}{First Law}
+\textit{``An object at rest stays at rest, and an object in motion stays in motion at constant velocity, unless acted upon by an unbalanced (net) force.''}
+
+\medskip
+\textbf{Inertia} is the tendency of an object to resist changes to its motion. Greater mass $=$ greater inertia.
+\end{infobox}
+
+The First Law has two halves, and both say the same thing: \emph{without an unbalanced force, nothing about the motion changes.}
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|L{3.6cm}|L{5.2cm}|L{6.2cm}|}
+  \thead{If the object is\ldots} & \thead{With no unbalanced force, it\ldots} & \thead{Example} \\ \hline
+  \talt At rest & stays at rest & A book on a shelf never starts sliding by itself \\ \hline
+        Moving  & keeps moving at the same speed, in the same direction & A space probe coasting with its engines off \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{skillbox}{Think about it --- why do things on Earth seem to stop by themselves?}
+For almost 2000 years, people followed the Greek thinker Aristotle, who taught that a moving object needs a force to \emph{keep} it moving. It seems right: a ball rolled along the ground soon stops. Newton showed that the ball stops because \textbf{friction} and \textbf{air resistance} are acting on it. They are unbalanced forces, and they slow it down. With no friction and no air resistance, the ball would roll on forever.
+\end{skillbox}
+
+\subsubsection*{Mass and inertia}
+The more mass an object has, the more inertia it has --- so the harder it is to change its motion in \emph{any} way.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|L{4.4cm}|L{5.0cm}|L{5.0cm}|}
+  \thead{} & \thead{Empty shopping trolley} & \thead{Full shopping trolley} \\ \hline
+  \talt Mass and inertia      & Small & Large \\ \hline
+        Getting it moving     & Easy  & Hard \\ \hline
+  \talt Stopping it           & Easy  & Hard \\ \hline
+        Steering it round a corner & Easy  & Hard \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{workedex}{At rest stays at rest}
+A coin sits on a playing card on top of a glass. The card is flicked quickly sideways. Explain why the coin drops into the glass instead of flying off with the card.
+
+\medskip
+\textbf{Step 1 --- before the flick.} The coin is at rest. Its weight pulls down and the card pushes up: the forces are balanced.
+
+\textbf{Step 2 --- the flick.} The big force acts on the \emph{card}, not the coin. Only a tiny friction force acts on the coin, for a very short time.
+
+\textbf{Step 3 --- inertia.} The coin's inertia keeps it at rest where it is. With the card gone, nothing pushes up on the coin, so its weight is now \textbf{unbalanced} and it falls straight into the glass.
+\end{workedex}
+
+\begin{workedex}{Moving keeps moving}
+A car travelling at 50\,km/h crashes into a wall and stops suddenly. Explain what happens to a passenger who is not wearing a seatbelt, and how a seatbelt helps.
+
+\medskip
+\textbf{Step 1 --- what the crash does.} The wall exerts a huge unbalanced force on the \emph{car}, so the car stops.
+
+\textbf{Step 2 --- inertia.} No force has acted on the passenger yet, so by the First Law the passenger \textbf{keeps moving forwards at 50\,km/h} --- until they hit the dashboard or windscreen.
+
+\textbf{Step 3 --- the seatbelt.} A seatbelt supplies the unbalanced force that slows the passenger down \emph{with} the car, spread across the strong bones of the chest and hips.
+\end{workedex}
+
+\subsection{Newton's Third Law --- Action and Reaction}\label{sub:4.2}
+
+Forces always come in pairs. You cannot push on something without it pushing back on you. Press your hand flat against a wall and you can feel the wall pushing back.
+
+\begin{infobox}{Third Law}
+\textit{``For every action force, there is an equal and opposite reaction force.''}
+
+\medskip
+Action--reaction pairs \textbf{always act on different objects} --- they do \textbf{not} cancel each other.
+\end{infobox}
+
+\diagThirdLaw
+\figcap[fig:third-law]{Two Third Law pairs. In each pair the forces are the same size, point in opposite directions and act on different objects.}
+
+\begin{skillbox}{How to find the reaction force}
+Write the action as ``\emph{A pushes B}'', then swap the names: the reaction is ``\emph{B pushes A}''. The reaction force is always:
+\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=2pt]
+  \item the \textbf{same size} as the action force;
+  \item in the \textbf{opposite direction};
+  \item acting on the \textbf{other object};
+  \item the \textbf{same type} of force --- a push answers a push, and a gravity pull answers a gravity pull.
+\end{enumerate}
+\end{skillbox}
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|L{7.4cm}|L{7.4cm}|}
+  \thead{Action force} & \thead{Reaction force} \\ \hline
+  \talt Your foot pushes the ground backwards     & The ground pushes your foot forwards \\ \hline
+        A swimmer's hands push the water backwards & The water pushes the swimmer's hands forwards \\ \hline
+  \talt A rocket pushes its exhaust gas backwards  & The gas pushes the rocket forwards \\ \hline
+        The Earth pulls you down (your weight)     & You pull the Earth up \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Why don't the two forces cancel?}
+Forces only cancel when they act on the \emph{same} object. A Third Law pair always acts on \emph{two different} objects, so the forces can never cancel. When the skaters in Figure~\ref{fig:third-law} push apart, each skater has one unbalanced force acting on them --- so \emph{both} skaters move, in opposite directions. If one skater has less mass, they move away faster. Lesson~5 shows why.
+
+\begin{workedex}{Describing a reaction force}
+A student on roller skates pushes against a wall with a force of 40\,N. Describe the reaction force: name it, and give its size and direction. What happens to the student?
+
+\medskip
+\textbf{Action:} the student pushes on the wall, 40\,N, towards the wall.
+
+\textbf{Reaction:} the \textbf{wall pushes on the student}, with \textbf{40\,N}, \textbf{away from the wall}.
+
+\textbf{Motion:} this force acts on the student, and the skate wheels give very little friction, so it is \textbf{unbalanced}. The student rolls backwards, away from the wall.
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:4}
+
+Work through every task. Use the words \emph{inertia}, \emph{unbalanced force}, \emph{action} and \emph{reaction} wherever they fit.
+
+\needspace{12\baselineskip}
+\task For each situation, decide which law explains it. Write \textbf{FIRST} or \textbf{THIRD} in the box.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{5.4cm}|Z{2.0cm}|W{5.4cm}|Z{2.0cm}|}
+  \hd & \thead{Situation} & \thead{Law} & \thead{Situation} & \thead{Law} \\ \hline
+  & Passengers lurch forwards when a bus brakes & \scaf{FIRST} & A swimmer pushes water back and moves forwards & \scaf{THIRD} \\ \hline
+  & A puck keeps sliding across smooth ice & & A balloon flies off when its air rushes out & \\ \hline
+  & A tablecloth is whipped away and the plates stay put & & A fire hose pushes back hard on the firefighters holding it & \\ \hline
+  & When a car turns sharply right, you slide to the left of your seat & & Pushing off the side of a pool sends you away from the wall & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Explain why passengers lurch forwards when a bus suddenly brakes. Use the words \textit{inertia} and \textit{unbalanced force} in your answer.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task A hockey puck slides across an almost frictionless ice surface.
+\pt{a}Describe how the puck moves while it slides.
+\pt{b}What will eventually stop it, and why?
+\answerbox{2.8cm}
+
+\taskpair{Which has more inertia: an empty shopping trolley or a full one? Explain.}{2.4cm}
+         {A truck and a small car travel at the same speed. Why does the truck need much stronger brakes?}{2.4cm}
+
+\taskpair{The same push sends a ball rolling across carpet and across a smooth wooden floor. On which surface does it roll further? Explain.}{2.4cm}
+         {When you shake a wet umbrella and then stop it suddenly, the water flies off. Use the idea of inertia to explain why.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task When a car is hit hard from behind, it is suddenly pushed forwards. Use the First Law to explain why a passenger's head is jolted backwards, and how a headrest helps.
+\answerbox{2.8cm}
+
+\needspace{14\baselineskip}
+\task Complete the table. For each action force, describe the reaction force.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{7.2cm}|W{7.6cm}|}
+  \hd & \thead{Action force} & \thead{Reaction force} \\ \hline
+  & A boat's paddle pushes the water backwards & \scaf{The water pushes the paddle (and the boat) forwards} \\ \hline
+  & A hammer pushes down on a nail & \\ \hline
+  & A tennis racquet pushes the ball forwards & \\ \hline
+  & A bird's wings push the air downwards & \\ \hline
+  & The Earth pulls an apple downwards & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task A swimmer pushes backward against the water with a force of 80\,N. Describe the reaction force: name it, state its size, and state its direction.
+\answerbox{2.4cm}
+
+\needspace{16\baselineskip}
+\task Two skaters stand still on ice, facing each other. Skater A pushes skater B with a force of 30\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both forces of the Third Law pair. Draw each skater as a box, start each arrow on the skater it acts on, and label each arrow with its size.
+
+\vspace{3pt}
+\drawbox{4.4cm}{
+\textit{\color{MidGrey}Draw your force diagram here.}
+}
+
+\needspace{10\baselineskip}
+\task When you blow up a balloon and let it go, it zooms around the room.
+\pt{a}What does the balloon push on?
+\pt{b}Use the Third Law to explain why the balloon moves forwards.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\task A skateboarder jumps forwards off the back of a skateboard, and the skateboard shoots off backwards. Explain why, naming the action force and the reaction force.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task A student steps forwards off a small rowing boat onto a jetty, and the boat drifts backwards, away from the jetty.
+\pt{a}Name the action force and the reaction force.
+\pt{b}Explain why the boat moves, even though nobody pushed it with their hands.
+\answerbox{2.8cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:4}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to combine ideas, use both laws together, or judge someone else's reasoning.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Jess says: \emph{``The weight of a book on a table and the normal force from the table are a Third Law pair, because they are equal and opposite.''} Is Jess right? Explain, and name the true reaction force to each of the two forces.
+\answerbox{2.8cm}
+
+\needspace{12\baselineskip}
+\exttask For each pair of forces, decide whether it is a Third Law pair. Write \textbf{YES} or \textbf{NO}, and explain how you decided.
+\pt{i}The Earth pulls a book down; the book pulls the Earth up.
+\pt{ii}A rope pulls a sledge forwards; friction from the snow pulls the sledge backwards.
+\pt{iii}A swimmer pushes the water backwards; the water pushes the swimmer forwards.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask A horse pulls a cart. By the Third Law, the cart pulls back on the horse with an equal force. Liam says: \emph{``So the forces cancel out, and the horse can never get the cart moving.''} Explain Liam's mistake. \textit{(Hint: draw a free body diagram for the horse alone. What pushes the horse forwards?)}
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask An astronaut on a spacewalk is floating 10\,m from the Space Station, not moving. Her safety line has come loose, but she is holding a heavy toolbox.
+\pt{a}Explain how she can use the Third Law to start moving back towards the station.
+\pt{b}Once she is moving, does she need to keep doing anything to keep moving? Use the First Law.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask An apple falls from a tree. The Earth pulls the apple down with a force of 1\,N.
+\pt{a}What is the reaction force? Give its size and direction, and say what it acts on.
+\pt{b}The two forces are the same size. So why do we see the apple move towards the Earth, and not the Earth move towards the apple? Use the idea of inertia.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask Two skaters stand still on ice and push each other apart. Skater A has twice the mass of skater B.
+\pt{a}Compare the sizes of the forces on the two skaters.
+\pt{b}Which skater moves away faster? Explain, using the idea of inertia.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask A waiter carries a full cup of water on a tray.
+\pt{a}The waiter suddenly moves the tray forwards. Which way does the water spill? Explain.
+\pt{b}Later, walking at a steady speed, the waiter suddenly stops. Which way does the water spill now? Explain.
+\pt{c}Use the First Law to explain why moving the tray smoothly stops the water spilling.
+\answerbox{3.4cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 5 — NEWTON'S SECOND LAW                                 (Week 2 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Newton's Second Law: $F = ma$}{Acceleration \textbullet{} Force, mass and acceleration \textbullet{} Rearranging $F = ma$ \textbullet{} Using the net force}\label{sec:5}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:5}
+
+\begin{readingbox}{Reading --- Pushing a Broken-Down Car}
+A car has broken down on a quiet, flat street, and it needs to be pushed to the side of the road. One person leans against the back and pushes as hard as they can. Slowly --- very slowly --- the car starts to roll. Two friends run over to help, and with three people pushing, the car speeds up much more quickly. A bigger force gives a bigger acceleration.
+
+Further down the street, a removalist's van packed full of furniture has also broken down. The same three people push it just as hard as they pushed the car. This time it barely creeps forwards. The force is the same, but the van has far more mass, and more mass means a smaller acceleration.
+
+Once the car is rolling, something changes: the pushers can ease off. They only need to push hard enough to match the friction acting on the car, and it keeps rolling at a steady speed. Pushing harder only matters if they want it to go faster.
+
+Isaac Newton tied all of this together in his Second Law: how quickly an object speeds up depends on the net force acting on it, and on its mass. That is why racing cars and racing bikes are built to be as light as possible. With the same engine, or the same legs, a lighter vehicle speeds up faster.
+\end{readingbox}
+
+\rcreset
+\rcq{What happened to the car's acceleration when two friends joined in? Explain why.}{1.6cm}
+\rcq{The same push was used on the loaded van. Describe what happened, and explain it using the word \emph{mass}.}{1.8cm}
+\rcq{Once the car rolls at a steady speed, which force are the pushers balancing? How do you know the forces are balanced?}{1.8cm}
+\rcq{Why are racing cars and racing bikes built to be as light as possible?}{1.6cm}
+\rcq{According to the passage, what \emph{two} things decide how quickly an object speeds up?}{1.4cm}
+\rcq{Which sentence in the first paragraph sums up what happened when more people pushed the car?}{1.4cm}
+\rcq{Describe one other everyday example where the same push gives a smaller acceleration because the object has more mass.}{1.6cm}
+\rcq{Suppose the three pushers kept pushing just as hard after the car was already rolling. Using the passage, predict what would happen to the car, and explain why using the words \emph{net force}.}{2.0cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
+
+\subsection{What is Acceleration?}\label{sub:5.1}
+
+\textbf{Acceleration} is how quickly an object's speed changes. It is measured in \textbf{metres per second squared (m/s$^2$)}, which means ``metres per second, every second''.
+
+\begin{infobox}{Reading an acceleration}
+An acceleration of \textbf{3\,m/s$^2$} means the speed goes up by \textbf{3\,m/s every second}. Starting from rest:
+
+\medskip
+\begin{tabular}{|l|c|c|c|c|}
+  \hline
+  \textbf{Time (s)}    & 0 & 1 & 2 & 3 \\ \hline
+  \textbf{Speed (m/s)} & 0 & 3 & 6 & 9 \\ \hline
+\end{tabular}
+
+\medskip
+Slowing down is also an acceleration. It is sometimes called a \textbf{deceleration}.
+\end{infobox}
+
+\subsection{Force, Mass and Acceleration}\label{sub:5.2}
+
+Newton's Second Law links three things: the \textbf{net force} on an object, its \textbf{mass}, and its \textbf{acceleration}.
+
+\diagFma
+\figcap[fig:fma]{Newton's Second Law: force, mass and acceleration}
+
+\vspace{2pt}
+\begin{ctab}
+\begin{tabular}{|L{5.4cm}|L{3.2cm}|L{6.4cm}|}
+  \thead{If you\ldots} & \thead{the acceleration\ldots} & \thead{Example} \\ \hline
+  \talt increase the force (same mass) & increases & Three people push the car instead of one \\ \hline
+        increase the mass (same force) & decreases & The same push on a loaded van \\ \hline
+  \talt double the force (same mass)   & doubles   & Two people push a trolley, each as hard as one did before \\ \hline
+        double the mass (same force)   & halves    & The same push on two identical trolleys joined together \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{11\baselineskip}
+\begin{infobox}{Second Law}
+The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass.
+\[
+  \boxed{F = m \times a}
+  \qquad\qquad
+  \boxed{a = \frac{F}{m}}
+  \qquad\qquad
+  \boxed{m = \frac{F}{a}}
+\]
+Force in newtons (N) \quad Mass in kilograms (kg) \quad Acceleration in m/s$^2$
+\end{infobox}
+
+\subsection{Using $F = ma$}\label{sub:5.3}
+
+You only need to remember one formula. The \textbf{formula triangle} shows how to rearrange it.
+
+\diagFmaTriangle
+\figcap{The formula triangle. Cover the quantity you want; what is left shows how to find it.}
+
+\begin{skillbox}{Four steps for every $F = ma$ question}
+\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
+  \item Write down what you \textbf{know}, with units.
+  \item Choose the \textbf{version} of the formula you need (use the triangle).
+  \item \textbf{Substitute} the numbers.
+  \item \textbf{Calculate}, and always write the \textbf{unit}.
+\end{enumerate}
+\end{skillbox}
+
+\begin{workedex}{Finding acceleration}
+A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
+
+\medskip
+\textbf{Know:}\quad $F = 20$\,N, \quad $m = 5$\,kg
+
+\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $a = F \div m$
+
+\textbf{Substitute:}\quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
+\end{workedex}
+
+\begin{workedex}{Finding force}
+A 1200\,kg car accelerates at 2\,m/s$^2$. What net force is acting on it?
+
+\medskip
+\textbf{Know:}\quad $m = 1200$\,kg, \quad $a = 2$\,m/s$^2$
+
+\textbf{Formula:}\quad $F = m \times a$
+
+\textbf{Substitute:}\quad $F = 1200 \times 2 = \mathbf{2400\ \text{N}}$
+\end{workedex}
+
+\begin{workedex}{Finding mass}
+A net force of 60\,N gives a box an acceleration of 4\,m/s$^2$. What is the mass of the box?
+
+\medskip
+\textbf{Know:}\quad $F = 60$\,N, \quad $a = 4$\,m/s$^2$
+
+\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $m = F \div a$
+
+\textbf{Substitute:}\quad $m = 60 \div 4 = \mathbf{15\ \text{kg}}$
+\end{workedex}
+
+\subsection{Always Use the Net Force}\label{sub:5.4}
+
+The $F$ in $F = ma$ is the \textbf{net force} --- the force left over after you add up all the forces (Lesson~2). If the forces are balanced, the net force is zero, so the acceleration is zero: the object stays still, or keeps moving at a steady speed. That is exactly what the First Law says.
+
+\begin{workedex}{Net force first}
+A 10\,kg trolley is pushed forwards with 50\,N. Friction pushes back with 10\,N. Find its acceleration.
+
+\medskip
+\textbf{Step 1 --- net force:}\quad opposite directions, so subtract: \quad $50 - 10 = 40$\,N forwards
+
+\textbf{Step 2 --- acceleration:}\quad $a = F \div m = 40 \div 10 = \mathbf{4\ \text{m/s}^2}$ \textbf{forwards}
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:5}
+
+Work through every task. Show your working for calculations, and always include the unit.
+
+\needspace{12\baselineskip}
+\task For each change, describe what happens to the acceleration. Write \textbf{increases}, \textbf{decreases}, \textbf{doubles} or \textbf{halves}.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{5.2cm}|Z{2.3cm}|W{5.2cm}|Z{2.3cm}|}
+  \hd & \thead{Change} & \thead{Acceleration} & \thead{Change} & \thead{Acceleration} \\ \hline
+  & The force is doubled; the mass stays the same & \scaf{doubles} & The mass is doubled; the force stays the same & \scaf{halves} \\ \hline
+  & More people help push the same car & & A heavier rider pedals the same bike just as hard & \\ \hline
+  & A truck is loaded with bricks; its engine force stays the same & & A rocket burns fuel and gets lighter; its thrust stays the same & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task Use $F = ma$ to complete the table. The first row is done for you.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|Z{3.2cm}|Z{3.2cm}|Z{3.6cm}|}
+  \hd & \thead{Situation} & \thead{Force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
+  & Trolley pushed      & 20     & 5    & \scaf{$a = 20 \div 5 = 4$} \\ \hline
+  & Soccer ball kicked  & 45     & 0.45 & \\ \hline
+  & Car braking         &        & 1200 & 3.5 \\ \hline
+  & Rocket launch       & 6\,000 &      & 30 \\ \hline
+\end{tabular}
+\end{ctab}
+
+\taskpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{2.4cm}
+         {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{2.4cm}
+
+\taskpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{2.4cm}
+         {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the net force needed.}{2.4cm}
+
+\taskpair{A 70\,kg sprinter accelerates at 4\,m/s$^2$ out of the blocks. Find the net force on her.}{2.4cm}
+         {A 0.15\,kg cricket ball is hit with a net force of 30\,N. Find its acceleration.}{2.4cm}
+
+\needspace{14\baselineskip}
+\task A 2.5\,kg trolley is pushed with different net forces.
+\pt{a}Complete the table.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SZ{3.4cm}|Z{3.4cm}|Z{5.6cm}|}
+  \hd & \thead{Net force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
+  & 5  & 2.5 & \scaf{$a = 5 \div 2.5 = 2$} \\ \hline
+  & 10 & 2.5 & \\ \hline
+  & 15 & 2.5 & \\ \hline
+  & 20 & 2.5 & \\ \hline
+\end{tabular}
+\end{ctab}
+\pt{b}What happens to the acceleration each time the force goes up by 5\,N? Describe the pattern.
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\task A shopping trolley of mass 15\,kg is pushed with a force of 45\,N. Friction opposes the motion with 15\,N.
+\pt{a}Find the net force.
+\pt{b}Find the acceleration of the trolley.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\task A 60\,kg cyclist and her 12\,kg bicycle accelerate at 1.5\,m/s$^2$.
+\pt{a}Find the total mass.
+\pt{b}Find the net force.
+\pt{c}Air resistance is 30\,N. Find the force she must produce by pedalling.
+\answerbox{3.6cm}
+
+\needspace{10\baselineskip}
+\task Two identical trolleys are pushed with the same force. Trolley A is empty, with a mass of 2\,kg. Trolley B carries an extra 6\,kg, so its total mass is 8\,kg.
+\pt{a}Which trolley accelerates more?
+\pt{b}Explain your answer using $F = ma$.
+\pt{c}The force is 16\,N. Calculate both accelerations.
+\answerbox{3.8cm}
+
+\needspace{10\baselineskip}
+\task A net force of 3600\,N gives a car an acceleration of 2\,m/s$^2$.
+\pt{a}Find the mass of the car.
+\pt{b}The car is then loaded with 200\,kg of luggage. Find its new acceleration with the same net force.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\task A 900\,kg car travels along a flat road at a steady 60\,km/h. Its engine provides a driving force of 2000\,N.
+\pt{a}What is the car's acceleration? Explain how you know.
+\pt{b}What is the total size of the resistive forces (friction and air resistance) acting on the car?
+\answerbox{3.0cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:5}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to combine ideas, use more than one formula, or judge someone else's reasoning.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Ahmed pushes a 20\,kg crate with a force of 60\,N, but it does not move. He says: \emph{``$F = ma$ means it should accelerate at 3\,m/s$^2$, so the formula must be wrong.''} Explain Ahmed's mistake, and find the size of the friction force on the crate.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask Mia pushes a 50\,kg crate across the floor. Friction on the crate is 40\,N. She says: \emph{``If I push twice as hard, the crate will speed up twice as fast.''}
+\pt{a}Find the acceleration when she pushes with 100\,N.
+\pt{b}Find the acceleration when she pushes with 200\,N.
+\pt{c}Is Mia right? Explain, using the idea of net force.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask A rocket's engines push exhaust gas downwards with a force of 500\,000\,N, and the gas pushes the rocket upwards with the same force. The rocket has a mass of 20\,000\,kg. Use $g = 9.8$\,N/kg.
+\pt{a}Find the rocket's weight.
+\pt{b}Find the net force on the rocket at lift-off.
+\pt{c}Find its acceleration.
+\pt{d}Which of Newton's laws explains (i) the upward push of the gas, and (ii) the size of the acceleration?
+\answerbox{3.6cm}
+
+\needspace{10\baselineskip}
+\exttask A lift and its passengers have a total mass of 800\,kg. The cable pulls the lift upwards with a force of 8640\,N. Use $g = 9.8$\,N/kg.
+\pt{a}Find the weight of the lift and its passengers.
+\pt{b}Find the size and direction of the net force.
+\pt{c}Find the acceleration of the lift.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask A cyclist speeds up from 2\,m/s to 8\,m/s in 4\,s. The cyclist and bicycle have a total mass of 80\,kg.
+\pt{a}Calculate the acceleration, using $a = \Delta v \div t$ (change in speed $\div$ time).
+\pt{b}Calculate the net force on the cyclist and bicycle.
+\pt{c}Air resistance and friction total 40\,N. Find the force the cyclist must supply by pedalling.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask A 0.045\,kg golf ball is struck and leaves the tee at 60\,m/s. The club is in contact with the ball for 0.0005\,s.
+\pt{a}Calculate the acceleration of the ball, using $a = \Delta v \div t$ (change in speed $\div$ time).
+\pt{b}Calculate the force applied by the club.
+\pt{c}Calculate the ball's weight, and comment on how the force from the club compares with it.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask In the trebuchet investigation at the end of this unit, a sling swings a 0.05\,kg projectile. While it is being swung, the net force on the projectile is 2\,N.
+\pt{a}Find the projectile's acceleration.
+\pt{b}The sling pulls on the projectile. Describe the reaction force.
+\pt{c}Once the projectile leaves the sling, nothing pushes it forwards. Explain why it keeps moving forwards, and name the force that brings it back to the ground.
+\answerbox{2.6cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 6 — EXPERIMENT 2: INVESTIGATING NEWTON'S SECOND LAW      (Week 2 · P3)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Experiment 2: Newton's Second Law}{Prediction \textbullet{} Variables \textbullet{} Trolley and pulley \textbullet{} Patterns in results}\label{sec:6}\label{exp:2}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:6}
+
+\begin{readingbox}{Reading --- Slowing Down Gravity}
+Drop a ball and it hits the floor in well under a second --- far too fast to measure by eye. Around 400 years ago, the Italian scientist Galileo Galilei faced exactly this problem. He wanted to find out how falling objects speed up, but he had no stopwatch, no camera and no clock accurate enough to help.
+
+His clever solution was to slow everything down. Instead of dropping a ball, he let it roll down a long, gently sloping wooden ramp with a smooth groove cut into it. On a gentle slope, only a small part of the pull of gravity drives the ball along, so it speeds up slowly enough to measure. To time each roll, Galileo let water flow out of a large container through a thin pipe while the ball rolled, then weighed the water he had collected. More water meant more time.
+
+Galileo's measurements showed that the ball sped up by the same amount every second --- it had a steady acceleration. Isaac Newton, born less than a year after Galileo died, built on this work to explain how force, mass and acceleration are linked.
+
+In this experiment you will use the same trick. A trolley rolls along a flat runway, pulled by a small hanging mass on a string. Only the weight of that small mass pulls the trolley along, so it speeds up slowly enough for you to measure. By changing the hanging mass, you change the pulling force --- and you can test Newton's Second Law for yourself.
+\end{readingbox}
+
+\rcreset
+\rcq{Why couldn't Galileo simply time a ball falling straight down?}{1.4cm}
+\rcq{Explain how a gentle ramp helped Galileo, and how he measured time without a clock.}{2.0cm}
+\rcq{In this experiment, what provides the force that pulls the trolley along?}{1.4cm}
+\rcq{Why does using a \emph{small} hanging mass make the trolley's motion easier to measure?}{1.6cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Planning the experiment}{Blue}\label{theory:6}
+
+\begin{expheader}{2}{Investigating Newton's Second Law}{To investigate how the size of the pulling force affects the acceleration of a trolley, when the total mass stays the same.}
+\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S10U17 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
+\end{expheader}
+
+\subsection{The Set-up}\label{sub:6.1}
+
+A trolley on a flat runway is joined by a string, over a pulley, to a hanging mass. The weight of the hanging mass provides the pulling force. The pulley simply turns the direction of the pull from \emph{down} to \emph{sideways}.
+
+\diagExpTwoSetup
+\expfigcap{Trolley connected by string over a pulley to a hanging mass. The hanging mass provides the driving force; the pulley redirects the tension.}
+
+\needspace{24\baselineskip}
+\subsection{The Forces on the Trolley}\label{sub:6.2}
+
+Vertically, the trolley's weight and the normal force from the runway are \textbf{balanced}. Horizontally, the tension in the string is the only force that matters (friction is very small), so it is \textbf{unbalanced} --- and the trolley accelerates.
+
+\diagExpTwoFBD
+\expfigcap{Left: free body diagram of the trolley (tension drives it right; normal force and weight balance vertically). Right: free body diagram of the hanging mass (weight is larger than tension, so it accelerates downwards).}
+
+\subsection{Calculating the Pulling Force}\label{sub:6.3}
+
+The pulling force is the weight of the hanging mass, so use $W = mg$ with $g = 9.8$\,N/kg. The mass must be in \textbf{kilograms}: divide grams by 1000.
+
+\begin{workedex}{Finding the pulling force}
+A 150\,g mass hangs on the end of the string. Find the pulling force on the trolley.
+
+\medskip
+\textbf{Step 1 --- convert to kg:}\quad $150 \div 1000 = 0.150$\,kg
+
+\textbf{Step 2 --- weight:}\quad $W = mg = 0.150 \times 9.8 = \mathbf{1.47\ \text{N}}$
+\end{workedex}
+
+\subsection{What $F = ma$ Predicts}\label{sub:6.4}
+
+If $F = ma$, then doubling the force on the same mass should double the acceleration. This experiment tests that prediction.
+
+\begin{scaffold}{Prediction --- before you begin}
+What do you think will happen to the trolley's acceleration as the hanging mass is increased from 50\,g to 200\,g? Use $F = ma$ to give a reason.
+\answerbox{2cm}
+\end{scaffold}
+
+\diagExpTwoForces
+\expfigcap{Check your prediction against what Newton's Second Law predicts: as the hanging mass increases, the tension force increases, and so does the acceleration.}
+
+\subsubsection*{Equipment}
+Dynamics trolley \quad Runway \quad Pulley (clamped to the end of the bench) and string \quad Mass hanger and slotted masses (4 $\times$ 50\,g) \quad Motion sensor or ticker-tape timer \quad Balance \quad Buffer block and catch box
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Measure the mass of the trolley with the balance and record it.
+  \item Clamp the pulley to the end of the bench. Tie a string from the trolley, over the pulley, to the mass hanger.
+  \item Load the hanger so the hanging mass is \textbf{50\,g}. Put the other three 50\,g masses \textbf{on the trolley}.
+  \item Hold the trolley still at the start line, then let go --- do not push it. Measure its acceleration with the motion sensor or ticker-tape timer.
+  \item Repeat 3 times and record every result.
+  \item Move one 50\,g mass from the trolley to the hanger (the hanging mass is now 100\,g) and repeat steps 4--5. Do the same for 150\,g and 200\,g.
+\end{enumerate}
+
+\begin{infobox}{Why move the masses instead of adding new ones?}
+Moving a mass from the trolley to the hanger keeps the \textbf{total mass} being pulled the same. Only the \textbf{force} changes --- so it is a fair test.
+\end{infobox}
+
+\begin{infobox}{Safety}
+Put a buffer block at the end of the runway and catch the trolley before it hits the pulley. Place a catch box under the hanging mass and keep your feet clear of it. Never overload the hanger.
+\end{infobox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Results and analysis}{Amber}\label{prac:6}
+
+\subsubsection*{Results}
+
+\begin{ctab}
+\begin{tabular}{|SZ{2.2cm}|Z{2.6cm}|Z{2.1cm}|Z{2.1cm}|Z{2.1cm}|Z{2.5cm}|}
+  \hd & \thead{Hanging mass (g)} & \thead{Pulling force $F = mg$ (N)} & \thead{Trial 1 (m/s$^2$)} & \thead{Trial 2 (m/s$^2$)} & \thead{Trial 3 (m/s$^2$)} & \thead{Mean accel. (m/s$^2$)} \\ \hline
+  & \scaf{e.g.\ 50} & \scaf{0.49} & \scaf{0.38} & \scaf{0.42} & \scaf{0.41} & \scaf{0.40} \\ \hline
+  & 50  & & & & & \\ \hline
+  & 100 & & & & & \\ \hline
+  & 150 & & & & & \\ \hline
+  & 200 & & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{Looking for a pattern}
+Two quantities are \textbf{directly proportional} if doubling one doubles the other. To check, compare two rows: when the force doubles (50\,g $\rightarrow$ 100\,g), does the mean acceleration roughly double too?
+\end{infobox}
+
+\needspace{10\baselineskip}
+\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task Why were the 50\,g masses moved from the trolley to the hanger, instead of adding new masses to the hanger?
+\answerbox{2.2cm}
+
+\needspace{10\baselineskip}
+\task Describe the relationship between force and acceleration that you observed. Did doubling the force (50\,g $\rightarrow$ 100\,g) roughly double the acceleration? Was your prediction correct?
+\answerbox{2.6cm}
+
+\taskpair{A different hanging mass of 120\,g is used. Find the pulling force on the trolley.}{2.4cm}
+         {Another group measured 0.81, 0.79 and 0.95\,m/s$^2$ for 100\,g. Which value looks wrong? Find the mean of the other two.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task Use Newton's Second Law to explain \emph{why} a larger hanging mass gave the trolley a larger acceleration. Use the words \emph{net force} and \emph{mass}.
+\answerbox{2.2cm}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{pulling force (N)} on the horizontal axis and \textbf{mean acceleration (m/s$^2$)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
+  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+\end{tcolorbox}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:6}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to interpret your graph, use a formula, or evaluate and extend the method.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Look at your graph from Task~\ref{task:6.7}.
+\pt{a}Is your line of best fit straight, and does it pass through (or close to) the origin? What does this tell you about force and acceleration?
+\pt{b}Calculate the gradient of your line. What does it represent?
+\answerbox{3.4cm}
+
+\needspace{10\baselineskip}
+\exttask For each row of your results, calculate $F \div a$ (pulling force $\div$ mean acceleration).
+\pt{a}What do you notice about your answers?
+\pt{b}Use $F = ma$ to explain what $F \div a$ should be equal to.
+\pt{c}Compare your values with the total mass of the trolley plus all four 50\,g masses.
+\answerbox{3.4cm}
+
+\needspace{20\baselineskip}
+\exttask Combining the two free body diagrams (Figure~\ref{fig:E6.2}) gives a formula for the acceleration of the whole system:
+
+\diagExpTwoSystem
+\expfigcap{Combining both free body diagrams gives the full system equation. When $M \gg m$, the result simplifies to $F = Ma$.}
+
+In this experiment the total mass $M + m$ (the trolley plus all four slotted masses, wherever they sit) is 1.2\,kg.
+\pt{a}Calculate the predicted acceleration when the hanging mass is 100\,g.
+\pt{b}Your measured acceleration was probably a little smaller than this. Suggest one reason, and one change to the method that would reduce the difference.
+\answerbox{3.4cm}
+
+\needspace{12\baselineskip}
+\exttask Design a second fair test, to find out how the \emph{mass} of the trolley affects its acceleration.
+\pt{a}Name the independent and dependent variables.
+\pt{b}What must you keep the same? Explain how you would keep the pulling force the same.
+\pt{c}Predict what you would find, and give a reason using $F = ma$.
+\answerbox{4.2cm}
 \end{yr8box}
 
 \end{document}
