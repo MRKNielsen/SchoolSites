@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-09-02",
+ "generated": "2026-10-09",
  "tree": [
   {
    "t": "Home",
@@ -181,9 +181,8 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Rubric & Report Generator",
-           "h": "year7-science/bio-ecosystems/rubric.html",
-           "k": "science"
+           "t": "Ecosystem Investigation — Rubric & Report Generator",
+           "h": "year7-science/bio-ecosystems/rubric.html"
           },
           {
            "t": "Solution Set",
@@ -203,6 +202,61 @@ window.SITEMAP = {
           {
            "t": "Worksheet Booklet · All 11 Worksheets",
            "h": "year7-science/bio-ecosystems/worksheets-all.html",
+           "k": "science"
+          }
+         ]
+        }
+       ],
+       "k": "science"
+      },
+      {
+       "t": "Forces & Motion",
+       "h": "year7-science/forces/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "Lesson 1 — What is a Force?",
+           "h": "year7-science/forces/deck1.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 2 — Newton’s Laws of Motion",
+           "h": "year7-science/forces/deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Energy & Transformation",
+           "h": "year7-science/forces/deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Simple Machines & Levers",
+           "h": "year7-science/forces/deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Projectile Motion",
+           "h": "year7-science/forces/deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — The Trebuchet Investigation",
+           "h": "year7-science/forces/deck6.html",
+           "k": "science"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit Planner",
+           "h": "year7-science/forces/planner.html",
            "k": "science"
           }
          ]

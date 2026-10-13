@@ -138,11 +138,20 @@ other without going back through the index.
 - **Opening**: a slim tab pinned to the left edge, or the `N` key.
   Escape closes. There is no always-visible chrome, which is why decks
   can carry it without cluttering a projected slide.
-- **Never edit `assets/js/sitemap.js`** — it is generated. After adding,
-  renaming, moving or deleting a page, run:
+- **Never edit `assets/js/sitemap.js` or `assets/js/searchindex.js`** —
+  both are generated, by the same command. Re-run it after adding,
+  renaming, moving or deleting a page, **and after editing any page's
+  text** (the search index holds the text; the tree only titles):
 
   ```bash
-  node tools/build-sitemap.js     # rebuild the tree
+  node tools/build-sitemap.js           # rebuild the tree + search index
+  node tools/build-sitemap.js --check   # exits 1 if either is stale
+  ```
+
+  A run that changes nothing leaves both files byte-identical, so it is
+  safe to run on every edit. After adding a page, also:
+
+  ```bash
   node tools/add-sitenav.js       # dry run: which pages lack the tag
   node tools/add-sitenav.js --write
   ```
@@ -189,6 +198,56 @@ other without going back through the index.
   advance the deck underneath. `M` still belongs to deck.js's slide-jump
   menu, and `N` stands down while that menu is up. If you add another
   global key anywhere, check it against both.
+- **In-lesson search.** On any page with `.slide` elements the drawer's
+  box reads "Search this lesson & the site…" and also searches the text of
+  every slide in the deck, listing matching slides under *In this
+  lesson* above the filtered page tree (*Pages*). Picking one jumps the
+  deck there and highlights the words via the CSS Custom Highlight API —
+  no DOM changes, cleared when the deck leaves that slide. A browser's
+  Ctrl+F can't do this because only the active slide is displayed.
+  - Every word must match the start of a word on the slide, so "moon
+    phase" finds "phases of the Moon" and "key" doesn't find "monkey".
+    Curly quotes and dashes fold to their keyboard forms.
+  - Result labels are the slide's `data-menu` title, else its first
+    heading — one more reason to give every slide a `data-menu`.
+  - Text in an unrevealed answer, step, `.frag` or part panel still
+    matches but is **never quoted in a snippet** (it reads "In working
+    or an answer not yet revealed"), so searching on the projector
+    can't put the answer on the board. Keep that if you touch it.
+  - Not indexed: typeset maths, buttons, `.quiz-container`, and the
+    orbit / season / binomial widgets (their text is generated and
+    changes as they move). Opt anything else out with `data-nosearch`.
+  - The jump is a `deck:goto` event (`detail: {slide: <0-based
+    index>}`) that deck.js answers with `preventDefault()`. The nine
+    legacy year11-methods decks have no listener, so sitenav.js falls
+    back to their global `go()` — remove that fallback when they're
+    ported.
+- **Site-wide search.** The same box searches the text of every page,
+  under *Found in page text* below the page tree. It reads
+  `assets/js/searchindex.js` (~1.2 MB, ~380 KB gzipped), fetched the
+  first time someone searches and never on page load.
+  - The index is built by `tools/search-index.js`, which
+    `build-sitemap.js` calls: the nav tree's page set, split into one
+    section per slide on a deck and one per h1–h3 / worksheet part
+    elsewhere. It is a small dependency-free tokenizer, not a real
+    HTML parser — if a new page type indexes badly, extend its
+    `SKIP_CLASSES` / `LABELS` lists rather than special-casing pages.
+  - Left out: `styleguide/`, `tools/`, PDFs, the marimo workbook
+    exports, the collated `worksheets-all` booklets (they duplicate
+    every single worksheet), and gated pages — anything carrying
+    `var BLOB` contributes nothing, and `*-payload.html` is never read.
+  - Unrevealed answers, steps, `.frag`s and part panels go into a
+    separate *hidden* field: they match, and are never quoted — the
+    same rule as in-lesson search, for the same projector reason.
+  - Ranking: pages whose title has every word first, then the most
+    matching sections; ties keep nav order. Pages already in the
+    filtered tree and the page you're on are left out of the list.
+  - A hit links to `page.html?q=words#7` (`#slide-7` on a legacy deck,
+    `#id` on an ordinary page when its section has one). On arrival,
+    sitenav.js waits for MathJax, highlights the words — on the slide
+    the deck opened at, or across the page, scrolled to the first one
+    after the anchor — drops `q` from the address bar, and puts the
+    words in the search box so the drawer reopens on the same search.
 - Excluded from the nav: the four bare-name legacy folders
   (`algorithmics/`, `foundation/`, `methods/`, `specialist/` — pre-year-
   prefix duplicates of their `year12-*` equivalents), `*-payload.html`,
@@ -372,6 +431,28 @@ path and not a stack of overlapping objects.
   and an overline `<tspan>` there reads as a detached bar — write a plain
   `√2` in diagram labels. A bare √ is also fine when referring to the
   symbol itself in prose.
+- **A hidden answer inside a callout box** is `.box > .a`, revealed by a
+  `.reveal-btn` carrying `data-answer="#id"` — the same component as
+  `.qcard .a`, for a question that is already a `.box` and shouldn't be
+  wrapped in a second card:
+
+  ```html
+  <div class="box question"><span class="lbl">Starter</span>
+    <p>…the question…</p>
+    <button class="reveal-btn" data-answer="#d1a1">Show answer</button>
+    <div class="a" id="d1a1"><span class="lbl-a">Answer</span>…</div>
+  </div>
+  ```
+
+  `data-answer` is required: without it, and without a `.qcard`
+  ancestor, deck.js treats the button as a *step* reveal and it silently
+  does nothing. The id must be unique in the page. Child selector, so a
+  `.qcard` nested inside a box keeps its own styling. Year 7 Space uses
+  it on every Starter / Think / Discuss box. Two registers worth keeping
+  to: a question with a definite answer gets *Show answer* and a
+  `.lbl-a` of **Answer**; an open discussion gets *What to listen for*
+  and **What we're listening for** — a single "correct" answer under a
+  Discuss question closes down the discussion it exists to open.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
   **Forward nav (→ / space / next) reveals the next hidden thing on the

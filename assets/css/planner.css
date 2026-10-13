@@ -17,6 +17,11 @@
        .lead             a bold focus/label line
        .sc               italic success-criteria line
        ul.pl-list        the bullet stacks in the wide columns
+       p.vc-row          curriculum code chips under a week's focus
+     dl.pl-codes       curriculum key in the header (dt chip, dd text)
+     .vc / .vc.above   a Victorian Curriculum code chip; .above = beyond
+                       the level being taught
+     .opt              "Optional" tag for a period that can be skipped
      .pl-foot          closing note
 
    Colour comes only from tokens.css. Prints A4 landscape with the
@@ -134,6 +139,26 @@ body.planner-page {
 
 /* ---------- Narrow screens: the table stays a table, but scrolls ---------- */
 .planner-page .pl-scroll { overflow-x: auto; }
+/* ---------- Curriculum codes ---------- */
+.planner-page .vc {
+  display: inline-block; font-family: var(--font-mono); font-size: .66rem;
+  padding: 1px 5px; border-radius: 4px; white-space: nowrap;
+  background: color-mix(in srgb, var(--accent) 12%, #fff); color: var(--accent-dark);
+}
+.planner-page .vc.above { background: #f1ecfb; color: #5b3fc0; }
+.planner-page .vc-row { margin: .7em 0 0; display: flex; flex-wrap: wrap; gap: 3px; }
+.planner-page dl.pl-codes {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .3em 1.4em;
+  margin: 0 0 1.1em; font-size: .78rem; color: var(--ink);
+}
+.planner-page dl.pl-codes > div { display: flex; gap: .6em; align-items: baseline; }
+.planner-page dl.pl-codes dt { flex: 0 0 auto; }
+.planner-page dl.pl-codes dd { margin: 0; }
+.planner-page .opt {
+  font-size: .62rem; letter-spacing: .07em; text-transform: uppercase;
+  font-weight: 700; color: var(--warn); white-space: nowrap;
+}
+
 @media (max-width: 1100px) {
   .planner-page .sheet { padding: 16px; }
   .planner-page table.planner { min-width: 1400px; }

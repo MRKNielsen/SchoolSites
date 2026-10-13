@@ -41,6 +41,39 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — Year 10 exponential graphs redrawn (9 Oct 2026)
+
+All ten figures in `10methods-primer/Ch3FL_ExponentialsLogs_Slides.html`
+plus the compound-interest graph on slide 14 of
+`Term4_RevisionExam_Slides.html`. The originals came out of the old JS
+deck's graph helper: 310 px wide, no scale, curve labels written on top of
+the curve, coordinate labels colliding with each other (`(3, ?)` sat
+exactly on `V = 30000(0.88)ⁿ`), the `asymptote y = 0` label clipped off
+the right edge, money curves drawn into negative years, and the
+compound/simple graph with no x-axis at all.
+
+What replaced them, so the next primer redraw can follow suit:
+
+- Inline SVG in a `.graph-card` (`.narrow` on Key idea slides), 480×360
+  viewBox, light grid, numbered axes, tokens only — `--accent` first
+  curve, `--accent-warm` second curve or reference line, `--neg` dashed
+  asymptote, `--accent-dark` points. Every label carries a
+  `paint-order="stroke"` halo in `--card` so a gridline never cuts it.
+- **Exponents are `<tspan>`s, not Unicode superscripts.** `⁰ ⁴ ⁵ ⁿ ⁻`
+  (U+2070–207F) are in neither of Source Sans 3's latin subsets, so
+  `10⁰` and `Aⁿ` were rendering in a fallback font mid-label while `10¹`
+  `10²` `10³` (Latin-1) didn't. The same applies to deck prose, which
+  still uses the Unicode forms.
+- Worked-example and Your-turn slides now put the question and steps in
+  the left column and the graph on the right, instead of a thumbnail
+  beside the question with the steps full-width underneath. Reveal order
+  is unchanged (checked with arrow presses). No slide overflows at
+  1600×900, 1366×768 or 1280×720.
+- Every label was checked in a browser against every stroke and every
+  other label — zero collisions, at least ~5 px clearance throughout.
+- Slide 21's formula chip was half MathJax, half text (`)ⁿ` floated
+  outside the typeset fraction); now one MathJax expression.
+
 ### Landed — seasons visualiser (2 Sep 2026)
 
 `assets/css/seasonsim.css` + `assets/js/seasonsim.js`, a third optional
@@ -64,6 +97,64 @@ re-deriving its maths: polar night at the December solstice, midnight sun
 in June, terminator through both poles at both equinoxes, sub-solar
 latitude 23.4°S/N at the solstices, and the axis attributes byte-identical
 at every point in the year.
+
+### Landed — Space answer reveals, planet definition, recap sweep (8 Oct 2026)
+
+Three jobs across all ten Space decks.
+
+**On-click answers, 33 of them.** Every `.box.question` labelled Starter,
+Think, Discuss, Check, Reflect or Predict now carries a reveal. Two
+registers: a definite answer gets *Show answer* / **Answer**, an open
+discussion gets *What to listen for* / **What we're listening for** —
+because writing a single "correct" answer under a Discuss question would
+quietly close down the discussion it exists to open. The one box left
+without a reveal is deck 4's "Checking the rate against the rocks", which
+is a You-do and already has its `ol.steps` working behind a button.
+
+This needed a **new shared component**: `.box > .a` in deck.css, the
+`.qcard .a` reveal generalised so it works inside a callout box without
+wrapping the question in a second card. deck.js needed no change —
+`data-answer="#id"` was already wired and had never been used in the repo.
+Child selector, not descendant, so a `.qcard` nested in a box keeps its
+own rule. `--ink` not `--muted`, because the box is already on a tinted
+background. Print rule extended alongside it.
+
+**The IAU definition of a planet** — new deck 5 slide 7, *What counts as a
+planet?*: the three criteria, a table testing Pluto against each, and the
+Pluto discussion moved onto it (it previously said "using the definition
+above" on a slide where no definition existed).
+
+Correcting it meant a four-file sweep, because **"dwarf planets are too
+small" was wrong and was baked into an assessed question.** Size is not an
+IAU criterion; Pluto passes the roundness test comfortably at 2,377 km and
+fails criterion 3 and only criterion 3. Fixed in deck 5's bullet, the
+booklet §5.2 bullet, booklet Q5.10 (which asked for "the two reasons", of
+which there is one), worksheet 5 Q7, and both answers in
+`solutions-payload.html`. The booklet gained a matching
+`what counts as a planet` infobox at §5.2. Rebuilt ×3: still 48 pages,
+every `\newlabel` page unchanged, all 67 deck `.bookref` chips still
+correct, Q5.10 still Q5.10 at 3 marks.
+
+**Recap slides.** Five of the ten — decks 1, 5, 8, 9 and 10 — claimed
+First Nations content their deck does not teach. Left over from the
+original 11-lesson shape, where the material was threaded through every
+lesson; since the 31 Aug resequence it is all in Lesson 7. A recap that
+summarises another lesson is simply wrong, so the bullets came out and
+each deck gained one `.note` line pointing at the Lesson 7 slide that
+actually covers it. Every pointer was checked against the slide map.
+All ten recaps were then brought up to what the deck now contains —
+mostly the Year 8 extension slides, which eight of the ten never
+mentioned. Deck 8 had no exit question at all and now has one.
+
+Two errors fixed in passing: deck 9 said JWST at L2 is "always in Earth's
+shadow" (it is not, and must not be — it needs its solar panels lit; the
+point of L2 is that Sun, Earth and Moon stay on one side so a single
+shield covers all three), and the ISS gravity figure read 88% in the recap
+against "about 90%" on two slides.
+
+Also: deck.css line 561 carried a literal `</style>` inside a comment,
+which silently truncated the file for anything inlining it into a `<style>`
+block. Escaped. Harmless via `<link>`, which is why it survived this long.
 
 ### Landed — Space worksheets (2 Sep 2026)
 
@@ -234,7 +325,7 @@ makes it cheap relative to the stubs.
 
 | Source | Target | Shape of the job |
 |---|---|---|
-| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces-motion` | Same unit-local shape bio and space had. Mostly a rename job. |
+| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces` | Same unit-local shape bio and space had. Mostly a rename job. |
 | `ClaudeSPM/Specialist Maths Calc` — beamer `.tex` for Ch8 Differentiation, Ch9 Integration, Ch10 Applications, Ch11 Differential Equations, Ch12 Kinematics, plus SAC materials | `year12-specialist/calculus` (or per-chapter units) | LaTeX → HTML deck conversion. No existing HTML to rename. |
 | `Algorithmics` — `AOS1 - AlgoSlides.tex`, `AOS2 - Algorithm Design.tex`, problem sets AOS2PS1–5 + 2 graph extras, `AOS2 Notes W1.tex`, marimo workbooks, SAC1 materials | `year12-algorithmics/unit-3`, `year11-algorithmics` | LaTeX → HTML. Unit 4 is the template to copy. |
 | `ClaudeSPM/SPM Term 3` — `TeacherCompanion-T3.tex`, `PracticeSAC3` + marking scheme, SAC 2 Task A/B solutions | `year12-specialist/term-3` (staff-gated additions) | Existing unit, missing its staff layer. |
@@ -260,7 +351,7 @@ as unfinished.
    class, MathJax config block with the `pageReady` hook if there's maths.
 3. **Booklet** — `.tex` source + built PDF in the unit's `booklet/`,
    embedded via `.pdf-frame`, `.bookref` chips derived from the built
-   `.toc` (never hand-numbered).
+   `.aux` (never hand-numbered) — `node tools/check-bookrefs.js` verifies them.
 4. **Worksheets** — `worksheet.css`, marks totals agreeing across
    `.namebar`, toolbar hint and the index `.wl-marks`.
 5. **Retrieval quiz** — unit-local `questions.js` + `quiz.html`, plus
@@ -281,6 +372,20 @@ label on its own.
 
 ### Tier 0 — Housekeeping (minutes each)
 
+- [ ] **`year7-science/bio-ecosystems/rubric.html` lost its body classes.**
+      Noticed 8 Oct 2026 while rebuilding the sitemap for unrelated work.
+      Commit `db7b36b` ("Update rubric.html", same day) left it with a bare
+      `<body>` where every sibling gated page has
+      `class="solutions-page theme-science"`. Three consequences: the
+      `.lockscreen` loses its `.solutions-page` styling; the nav dot loses
+      its colour, because `build-sitemap.js` reads the theme class off
+      `<body>` into the tree's `k` field; and the unlock handler's
+      documented swap of `body.solutions-page` → `body.rubric-page` has
+      nothing to swap. **Not fixed here** — the page was being worked on
+      the same day and this is someone else's in-flight edit. Its
+      `<title>` also changed without a sitemap rebuild, so
+      `node tools/build-sitemap.js` is owed either way; do both in one
+      pass. **S**
 - [x] **`.gitignore` has a stray trailing quote.** Stripped; confirmed
       with `git check-ignore -v` that
       `year12-algorithmics/unit-4/sat/Memo03_brief.pdf` now matches.
@@ -378,6 +483,25 @@ label on its own.
       blanked, because the root index.html deliberately keeps the
       unpublished subject cards commented out.
 
+- [ ] **Redraw the other primer figures from the old graph helper.**
+      The 9 Oct pass covered exponentials only. The same helper drew
+      the rest of the primer's figures and they show the same faults —
+      seen in `Term4_RevisionExam_Slides.html` slides 9, 10, 34, 35
+      (labels on the parabola, `x = 2` under `TP (2, −9)`, `√5 ≈ 2.236`
+      on the curve) and the tree diagrams on 20 and 38 (branch labels
+      overlapping). Ch1, Ch4, Ch6, Ch7 and Ch8 (~130 SVGs) not yet
+      audited. Follow the conventions in the exponential-graphs Landed
+      note. **M**
+- [ ] **`&amp;amp;` in primer `data-topic` attributes.** The lesson tag
+      reads "CAT 3 &AMP; WRAP-UP" on every topic slide —
+      double-escaped in `Ch3A-E_4A-D_IndicesSurds_Slides.html` (46),
+      `Ch4_2_MeasurementGeometry_Slides.html` (57) and
+      `Term4_RevisionExam_Slides.html` (32). One replace each. **S**
+- [ ] **Primer prose still mixes plain text and MathJax in one
+      expression**, e.g. Ch3FL "x = log₂ 20 = \(\dfrac{\log 20}{\log
+      2}\)" and Term4 "n = \(\dfrac{\log 2}{\log 1.05}\)". Sweep
+      to whole-expression MathJax. **S–M**
+
 ### Tier 2 — Ports with HTML source (one to three sessions each)
 
 These follow a known recipe. Read the "Legacy content" section of
@@ -385,17 +509,39 @@ CLAUDE.md before starting one — the class-rename vocabulary and the two
 traps (strip inline `style=` *before* renaming classes; don't promote a
 Recap slide to `.exit-slide`) are written down there.
 
-- [ ] **Port `7 Science/Forces` → `year7-science/forces-motion`. M**
+- [ ] **Port `7 Science/Forces` → `year7-science/forces`. M** *(in progress — Kodie, 2026-10-06)*
       The cheapest real content win in the repo, and it completes Year 7
       Science's third unit.
-  - [ ] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
+  - [x] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
+        *(deck1 2026-10-06, decks 2–6 2026-10-07 — awaiting Kodie's review)*.
+        Lab slides link the booklet PDF page until `experiments.html` is
+        ported; repoint them then. Chips with no booklet content behind them
+        (the "§N · Extension" slides) were dropped, not re-pointed. Shared
+        `deck.css` gained `.cols.three`.
   - [ ] `experiments.html` — decide its page type (likely `course.css`
         section on the landing page, or a `profile.css` reference page)
-  - [ ] Unit landing page, `theme-science`
+  - [x] Unit landing page, `theme-science` *(done 2026-10-06 — lists only what is published; add cards as decks land)*
   - [ ] `booklet/` — `.tex` + PDF + `fonts/`, embedded via `.pdf-frame`
+        — files copied 2026-10-06, linked from the landing page; not yet
+        in a `.pdf-frame` page
+  - [x] **Booklet numbering fixed** *(2026-10-06)*. `\sectiondiv{title}{summary}`
+        now steps the real section counter and is followed by `\label{sec:N}`;
+        every subsection has `\label{sub:N.M}`. Tasks (`\task`, `\task[a]`,
+        `\taskpart{b}`, `\exttask`), questions (`\question{marks}{text}`) and
+        figures (`\figcap`, `\expfigcap` → E-numbered) are all auto-numbered
+        per section and auto-labelled `task:`/`q:`/`fig:`; experiments carry
+        `\label{exp:N}`. Never type a number by hand. The beginner-skills
+        block is §1.1–1.7, so the original Task 1.1/1.2a–c/Extension 1.3 are
+        now Task 1.6/1.7a–c/Extension 1.8; questions were hand-numbered out of
+        order (Q4 before Q3 in §2) and now run Q2.1–2.6 etc. Cover contents
+        table gained a `\pageref` page column; stray `\label{LastPage}`
+        removed (the `lastpage` package already defines it). 52 pp.
+        Deck 1 chips re-derived from the `.aux`.
   - [ ] 8 SVG figures — theme colours to tokens, illustrative hues left alone
-  - [ ] Ballista + Trebuchet lab tech sheets as linked PDFs
-  - [ ] `.bookref` chips derived from the built `.toc`
+  - [x] Ballista + Trebuchet lab tech sheets as linked PDFs *(in `labs/`, Planning section of the index)*
+  - [x] `.bookref` chips derived from the built `.aux` — 61 refs, all decks ✓
+        (`node tools/check-bookrefs.js year7-science/forces`)
+  - [x] Unit planner `planner.html`, 5 weeks; index grouped by the same weeks *(2026-10-07)*
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
   - [ ] Quiz + gated solutions *(can defer to a second pass)*
 
@@ -491,10 +637,16 @@ starting a new one.
       site's assets, or whether the workbooks belong as downloads rather
       than committed pages. Weigh against CLAUDE.md's warning that
       re-exporting overwrites edits. **M**
-- [ ] **Site search.** 68 decks and growing. The nav drawer maps the site
+- [x] **Site search.** 68 decks and growing. The nav drawer maps the site
       but doesn't search it. `sitemap.js` is already a generated tree —
       a client-side title/heading index built by the same tool would be a
-      small extension. **M**
+      small extension. **M** *(done 2026-10-09)* Went full-text rather
+      than headings: `build-sitemap.js` now also writes
+      `assets/js/searchindex.js` (via `tools/search-index.js`), loaded
+      only when someone searches. The drawer shows this lesson's slides,
+      page titles, then page text, each hit deep-linking to the slide
+      with the words highlighted on arrival. See CLAUDE.md, "Site-wide
+      navigation".
 - [ ] **Hub pages for the remaining built units.** Only 3 of the built
       units have one. Not every unit needs a week grid, but the ones
       taught to a fixed calendar do. **S each**
@@ -521,3 +673,7 @@ starting a new one.
       exits 1 on any finding, so the action is a handful of lines —
       just gate it on `check-links.js` (not `--all`, until the workbook
       manifests above are dealt with). **S**
+      *(2026-10-09)* The "is sitemap.js current" half now exists too:
+      `node tools/build-sitemap.js --check` exits 1 if `sitemap.js` or
+      `searchindex.js` is stale. The search index goes stale on every
+      text edit, so it is now the likeliest thing to rot — gate on both.
