@@ -637,10 +637,16 @@ starting a new one.
       site's assets, or whether the workbooks belong as downloads rather
       than committed pages. Weigh against CLAUDE.md's warning that
       re-exporting overwrites edits. **M**
-- [ ] **Site search.** 68 decks and growing. The nav drawer maps the site
+- [x] **Site search.** 68 decks and growing. The nav drawer maps the site
       but doesn't search it. `sitemap.js` is already a generated tree —
       a client-side title/heading index built by the same tool would be a
-      small extension. **M**
+      small extension. **M** *(done 2026-10-09)* Went full-text rather
+      than headings: `build-sitemap.js` now also writes
+      `assets/js/searchindex.js` (via `tools/search-index.js`), loaded
+      only when someone searches. The drawer shows this lesson's slides,
+      page titles, then page text, each hit deep-linking to the slide
+      with the words highlighted on arrival. See CLAUDE.md, "Site-wide
+      navigation".
 - [ ] **Hub pages for the remaining built units.** Only 3 of the built
       units have one. Not every unit needs a week grid, but the ones
       taught to a fixed calendar do. **S each**
@@ -667,3 +673,7 @@ starting a new one.
       exits 1 on any finding, so the action is a handful of lines —
       just gate it on `check-links.js` (not `--all`, until the workbook
       manifests above are dealt with). **S**
+      *(2026-10-09)* The "is sitemap.js current" half now exists too:
+      `node tools/build-sitemap.js --check` exits 1 if `sitemap.js` or
+      `searchindex.js` is stale. The search index goes stale on every
+      text edit, so it is now the likeliest thing to rot — gate on both.

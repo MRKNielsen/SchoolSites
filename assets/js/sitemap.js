@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-07",
+ "generated": "2026-10-09",
  "tree": [
   {
    "t": "Home",
@@ -181,9 +181,8 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Rubric & Report Generator",
-           "h": "year7-science/bio-ecosystems/rubric.html",
-           "k": "science"
+           "t": "Ecosystem Investigation — Rubric & Report Generator",
+           "h": "year7-science/bio-ecosystems/rubric.html"
           },
           {
            "t": "Solution Set",

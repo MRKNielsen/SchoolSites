@@ -12,6 +12,8 @@
    - Forward nav (→ / space / next) reveals the next hidden step,
      fragment or answer on the slide before advancing
    - "R" key does the same reveal without any chance of advancing
+   - A "deck:goto" event ({detail: {slide: index}}) jumps to a slide;
+     the nav drawer's in-lesson search uses it
    ============================================================ */
 (function () {
   "use strict";
@@ -249,6 +251,15 @@
       else if ((e.key === "m" || e.key === "M") && !e.target.matches("input, textarea, select")) toggleMenu();
     });
   }
+
+  /* Jump requests from outside the deck — sitenav.js's in-lesson search
+     dispatches deck:goto with a 0-based slide index. preventDefault()
+     tells the sender a deck took it; without that it falls back to the
+     legacy decks' own go(). */
+  document.addEventListener("deck:goto", e => {
+    const i = e.detail && e.detail.slide;
+    if (Number.isInteger(i) && i >= 0 && i < slides.length) { go(i); e.preventDefault(); }
+  });
 
   /* Init: honour #n in URL, set chrome */
   const fromHash = parseInt(location.hash.slice(1), 10);
