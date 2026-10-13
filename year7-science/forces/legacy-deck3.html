@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 3 &#8212; Energy &amp; Transformation | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 3 of 6</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Lesson 3 of 6</p>
+    <h1>Energy &amp; Transformation</h1>
+    <p class="subtitle">Kinetic, gravitational and elastic energy — how energy is stored, transformed, and never lost.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Section 3</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Section 3 <b>&#183;</b> Overview</p>
+    <h2>What we're learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Learning intentions</span>
+        <ul>
+          <li>Name the main <strong>energy stores</strong> (kinetic, gravitational, elastic)</li>
+          <li>Calculate <strong>\(\text{GPE} = mgh\)</strong> and <strong>\(\text{KE} = \tfrac{1}{2}mv^2\)</strong></li>
+          <li>Explain energy <strong>conservation</strong> and <strong>efficiency</strong></li>
+          <li>Trace an <strong>energy chain</strong> through the trebuchet</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">Success criteria</span>
+        <ul>
+          <li>I can identify the energy store in a situation</li>
+          <li>I can calculate GPE and KE with correct units</li>
+          <li>I can calculate efficiency and say where energy is lost</li>
+          <li>I can draw an energy chain and a Sankey diagram</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter discussion</span><p>A trebuchet's counterweight is lifted up, then dropped to fling a ball. Where does the energy come from, and where does it end up?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Energy stores">
+    <p class="bookref book">Booklet p.23 &#183; §3.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Types of energy</p>
+    <h2>Energy is stored in different ways</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- GPE card -->
+        <rect x="30" y="30" width="262" height="175" rx="14" fill="#FFE9E6" stroke="#E0533F" stroke-width="2.5"/>
+        <text x="161" y="62" text-anchor="middle" font-size="19" font-weight="700" fill="#B23A2B" font-family="Bitter, serif">Gravitational PE</text>
+        <line x1="95" y1="120" x2="160" y2="120" stroke="#B23A2B" stroke-width="3"/>
+        <circle cx="127" cy="106" r="13" fill="#E0533F"/>
+        <line x1="200" y1="80" x2="200" y2="150" stroke="#B23A2B" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="210" y="118" font-size="12" style="fill:var(--ink-soft)">height h</text>
+        <text x="161" y="178" text-anchor="middle" font-size="17" font-weight="600" style="fill:var(--ink)">GPE = m g h</text>
+        <text x="161" y="197" text-anchor="middle" font-size="12.5" style="fill:var(--ink-soft)">stored by height</text>
+        <!-- KE card -->
+        <rect x="318" y="30" width="262" height="175" rx="14" fill="#E0F7F3" stroke="#18A999" stroke-width="2.5"/>
+        <text x="449" y="62" text-anchor="middle" font-size="19" font-weight="700" fill="#0F6E63" font-family="Bitter, serif">Kinetic energy</text>
+        <circle cx="430" cy="112" r="14" fill="#18A999"/>
+        <line x1="455" y1="112" x2="510" y2="112" stroke="#0F6E63" stroke-width="3"/>
+        <polygon points="520,112 506,106 506,118" fill="#0F6E63"/>
+        <line x1="400" y1="100" x2="412" y2="100" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <line x1="396" y1="124" x2="408" y2="124" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <text x="449" y="178" text-anchor="middle" font-size="17" font-weight="600" style="fill:var(--ink)">KE = ½ m v²</text>
+        <text x="449" y="197" text-anchor="middle" font-size="12.5" style="fill:var(--ink-soft)">stored by motion</text>
+        <!-- Elastic card -->
+        <rect x="606" y="30" width="262" height="175" rx="14" fill="#EFE9FF" stroke="#7C5CE0" stroke-width="2.5"/>
+        <text x="737" y="62" text-anchor="middle" font-size="19" font-weight="700" fill="#5B3FC0" font-family="Bitter, serif">Elastic PE</text>
+        <polyline points="675,112 690,98 705,126 720,98 735,126 750,98 765,112" fill="none" stroke="#5B3FC0" stroke-width="3"/>
+        <text x="737" y="178" text-anchor="middle" font-size="15.5" font-weight="600" style="fill:var(--ink)">stored in a stretch / twist</text>
+        <text x="737" y="197" text-anchor="middle" font-size="12.5" style="fill:var(--ink-soft)">springs, elastic, torsion skeins</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">Key equations</span><p><span class="formula">\(\text{GPE} = m g h\)</span> <span class="formula">\(\text{KE} = \tfrac{1}{2} m v^2\)</span> <span class="formula">\(\text{Efficiency} = \text{useful} \div \text{total} \times 100\%\)</span></p><p>Mass \(m\) in kg, \(g = 9.8\ \text{m/s}^2\), height \(h\) in m, speed \(v\) in m/s. Energy is measured in <strong>joules (J)</strong>.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Worked example: GPE">
+    <p class="bookref book">Booklet p.23 &#183; Worked Example 3.1</p>
+    <p class="eyebrow">Work through with the class</p>
+    <h2><span class="phase-tag ido">I do</span> Worked example — gravitational PE</h2>
+    <div class="box question"><span class="lbl">How much energy is stored by lifting a ball?</span><p>A <strong>2 kg</strong> ball is held at a height of <strong>5 m</strong>. Find its gravitational potential energy. (\(g = 9.8\ \text{m/s}^2\))</p></div>
+    <ol class="steps" id="f3w1">
+      <li><span class="stepno">1</span> Write the formula: \(\text{GPE} = m g h\).</li>
+      <li><span class="stepno">2</span> Substitute: \(\text{GPE} = 2 \times 9.8 \times 5\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> The ball stores \(\text{GPE} = 98\ \text{J}\).</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f3w1">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Your turn: GPE & KE">
+    <p class="bookref book">Booklet p.23 &#183; Q3.1, Q3.2</p>
+    <p class="eyebrow">Your turn</p>
+    <h2><span class="phase-tag youdo">You do</span> Now you try — GPE then KE</h2>
+    <div class="box question"><span class="lbl">Calculate, then compare</span><p><strong>(a)</strong> Find the GPE of a <strong>3 kg</strong> ball held at <strong>4 m</strong>. <br> <strong>(b)</strong> It is dropped; just before landing its speed is <strong>8.85 m/s</strong>. Find its KE and compare it to the GPE.</p></div>
+    <ol class="steps" id="f3w2">
+      <li><span class="stepno">1</span> <strong>(a)</strong> \(\text{GPE} = m g h = 3 \times 9.8 \times 4 = 117.6\ \text{J}\)</li>
+      <li><span class="stepno">2</span> <strong>(b)</strong> \(\text{KE} = \tfrac{1}{2} m v^2 = \tfrac{1}{2} \times 3 \times 8.85^2 \approx 117.5\ \text{J}\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(\text{KE} \approx \text{GPE}\) — almost all the GPE became KE, so <strong>energy was conserved</strong> (transformed, not lost).</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#f3w2">Show answers</button>
+    <p class="note">Let students attempt, then reveal — note that \(\text{KE} \approx \text{GPE}\)</p>
+  </section>
+
+  <section class="slide" data-menu="Conservation of energy">
+    <p class="bookref book">Booklet p.23 &#183; §3.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Conservation</p>
+    <h2>Energy is transformed, not lost</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg">
+        <!-- falling ball scene -->
+        <line x1="60" y1="220" x2="320" y2="220" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <circle cx="130" cy="55" r="16" fill="#E0533F"/>
+        <line x1="130" y1="71" x2="130" y2="196" stroke-width="1.6" stroke-dasharray="5 5" style="stroke:var(--ink-faint)"/>
+        <circle cx="130" cy="204" r="16" fill="#18A999"/>
+        <text x="160" y="50" font-size="13" font-weight="600" style="fill:var(--ink)">top: GPE max, KE = 0</text>
+        <text x="160" y="212" font-size="13" font-weight="600" style="fill:var(--ink)">bottom: GPE = 0, KE max</text>
+        <line x1="280" y1="90" x2="280" y2="180" stroke-width="2" style="stroke:var(--ink)"/>
+        <polygon points="280,190 273,174 287,174" style="fill:var(--ink)"/>
+        <text x="292" y="140" font-size="13" font-weight="600" style="fill:var(--ink)">GPE → KE</text>
+        <!-- bar charts -->
+        <text x="500" y="40" text-anchor="middle" font-size="15" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">At the top</text>
+        <line x1="430" y1="220" x2="580" y2="220" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <rect x="450" y="70" width="46" height="150" fill="#E0533F"/>
+        <rect x="514" y="214" width="46" height="6" fill="#18A999"/>
+        <text x="473" y="237" text-anchor="middle" font-size="12" fill="#B23A2B">GPE</text>
+        <text x="537" y="237" text-anchor="middle" font-size="12" fill="#0F6E63">KE</text>
+        <text x="730" y="40" text-anchor="middle" font-size="15" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">At the bottom</text>
+        <line x1="660" y1="220" x2="810" y2="220" stroke-width="2" style="stroke:var(--ink-faint)"/>
+        <rect x="680" y="214" width="46" height="6" fill="#E0533F"/>
+        <rect x="744" y="70" width="46" height="150" fill="#18A999"/>
+        <text x="703" y="237" text-anchor="middle" font-size="12" fill="#B23A2B">GPE</text>
+        <text x="767" y="237" text-anchor="middle" font-size="12" fill="#0F6E63">KE</text>
+      </svg>
+    </div>
+    <div class="box defn"><span class="lbl">Law of conservation of energy</span><p>Energy is never created or destroyed — it just <strong>changes form</strong>. As the ball falls, gravitational PE transforms into kinetic energy, but the <strong>total energy stays the same</strong>.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Efficiency">
+    <p class="bookref book">Booklet p.23 &#183; §3.1</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Efficiency</p>
+    <h2>No real machine is 100% efficient</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ambA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8B544"/><stop offset="1" stop-color="#EC9B0F"/></linearGradient>
+          <linearGradient id="tealA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27BCAB"/><stop offset="1" stop-color="#149384"/></linearGradient>
+          <linearGradient id="corA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8579"/><stop offset="1" stop-color="#F4584B"/></linearGradient>
+        </defs>
+        <!-- waste flow (behind), smooth turn down (thickness 36) -->
+        <path d="M300,147 C 348,147 364,168 364,200" fill="none" stroke="url(#corA)" stroke-width="36"/>
+        <polygon points="337,199 391,199 364,233" fill="#F4584B"/>
+        <!-- input band -->
+        <rect x="40" y="45" width="262" height="120" rx="9" fill="url(#ambA)"/>
+        <text x="171" y="99" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Total energy in</text>
+        <text x="171" y="121" text-anchor="middle" font-size="12.5" fill="#fff3dc">what you put in</text>
+        <!-- useful output band (straight) -->
+        <rect x="300" y="45" width="404" height="84" rx="4" fill="url(#tealA)"/>
+        <polygon points="700,45 770,87 700,129" fill="url(#tealA)"/>
+        <text x="500" y="93" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Useful output</text>
+        <!-- split divider -->
+        <line x1="301" y1="45" x2="301" y2="165" stroke-width="3" style="stroke:var(--card)"/>
+        <text x="402" y="190" font-size="14" font-weight="700" fill="#B23A2B">wasted</text>
+        <text x="402" y="208" font-size="12.5" style="fill:var(--ink-soft)">heat + sound</text>
+        <text x="450" y="252" text-anchor="middle" font-size="16" font-weight="600" style="fill:var(--ink)">Efficiency = useful output ÷ total input × 100%</text>
+      </svg>
+    </div>
+    <div class="box key"><span class="lbl">Key idea</span><p>Some input energy always becomes <strong>wasted energy</strong> — usually heat and sound from friction. <strong>Efficiency</strong> tells us what fraction of the input ends up as the useful output we wanted.</p></div>
+  </section>
+
+  <section class="slide" data-menu="Year 8: efficiency calc">
+    <p class="bookref book">Booklet p.24 &#183; Q3.3 (Yr 8)</p>
+    <p class="eyebrow">Year 8 extension</p>
+    <h2><span class="phase-tag wedo">We do</span> Extension — calculate the efficiency</h2>
+    <div class="box question"><span class="lbl">Where did the energy go?</span><p>A ball starts with <strong>98 J</strong> of GPE but lands with only <strong>92 J</strong> of KE. Calculate the efficiency of the GPE → KE transformation and suggest where the &ldquo;missing&rdquo; energy went.</p></div>
+    <ol class="steps" id="f3w3">
+      <li><span class="stepno">1</span> Efficiency \(= \text{useful} \div \text{total} \times 100\%\).</li>
+      <li><span class="stepno">2</span> Substitute: \(= 92 \div 98 \times 100\%\).</li>
+      <li><span class="stepno">3</span> \(\approx 93.9\%\ \text{efficient}\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> The missing \(6\ \text{J}\) became heat and sound (air resistance and the impact).</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f3w3">Show working</button>
+    <p class="note">Reveal step-by-step — efficiency is always less than 100%</p>
+  </section>
+
+  <section class="slide" data-menu="Energy chains">
+    <p class="bookref book">Booklet p.24 &#183; §3.2</p>
+    <p class="eyebrow">Concept <b>&#183;</b> Energy chains</p>
+    <h2>The trebuchet energy chain</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 230" xmlns="http://www.w3.org/2000/svg">
+        <!-- Box 1 GPE -->
+        <rect x="20" y="40" width="200" height="70" rx="10" fill="#FFE9E6" stroke="#E0533F" stroke-width="2.5"/>
+        <text x="120" y="68" text-anchor="middle" font-size="16" font-weight="700" fill="#B23A2B">Gravitational PE</text>
+        <text x="120" y="90" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">counterweight raised</text>
+        <line x1="220" y1="75" x2="252" y2="75" stroke-width="3" style="stroke:var(--ink-faint)"/>
+        <polygon points="262,75 248,69 248,81" style="fill:var(--ink-faint)"/>
+        <!-- Box 2 KE arm -->
+        <rect x="262" y="40" width="200" height="70" rx="10" fill="#FFF3DC" stroke="#D98A0B" stroke-width="2.5"/>
+        <text x="362" y="68" text-anchor="middle" font-size="16" font-weight="700" fill="#A86A08">Kinetic energy</text>
+        <text x="362" y="90" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">arm swings round</text>
+        <line x1="462" y1="75" x2="494" y2="75" stroke-width="3" style="stroke:var(--ink-faint)"/>
+        <polygon points="504,75 490,69 490,81" style="fill:var(--ink-faint)"/>
+        <!-- Box 3 KE ball -->
+        <rect x="504" y="40" width="200" height="70" rx="10" fill="#E0F7F3" stroke="#18A999" stroke-width="2.5"/>
+        <text x="604" y="68" text-anchor="middle" font-size="16" font-weight="700" fill="#0F6E63">Kinetic energy</text>
+        <text x="604" y="90" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">ball launches</text>
+        <!-- waste branch down -->
+        <line x1="604" y1="110" x2="604" y2="148" stroke-width="3" style="stroke:var(--ink-faint)"/>
+        <polygon points="604,158 598,144 610,144" style="fill:var(--ink-faint)"/>
+        <rect x="494" y="158" width="220" height="56" rx="10" stroke-width="2.5" style="stroke:var(--ink-faint);fill:var(--panel)"/>
+        <text x="604" y="183" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink-soft)">Thermal + Sound</text>
+        <text x="604" y="202" text-anchor="middle" font-size="12.5" style="fill:var(--muted)">wasted (friction, impact)</text>
+      </svg>
+    </div>
+    <div class="box question"><span class="lbl">Discuss</span><p>At the moment the trebuchet releases the ball, which energy stores are present at the same time?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Year 8: Sankey diagram">
+    <p class="bookref book">Booklet p.24 &#183; Q3.4, Q3.5 (Yr 8)</p>
+    <p class="eyebrow">Your turn <b>&#183;</b> Year 8 extension</p>
+    <h2><span class="phase-tag youdo">You do</span> Draw the Sankey diagram</h2>
+    <div class="graph-card narrow">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ambB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F8B544"/><stop offset="1" stop-color="#EC9B0F"/></linearGradient>
+          <linearGradient id="tealB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27BCAB"/><stop offset="1" stop-color="#149384"/></linearGradient>
+          <linearGradient id="corB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8579"/><stop offset="1" stop-color="#F4584B"/></linearGradient>
+        </defs>
+        <!-- waste 120 J (behind), smooth turn down (thickness 29) -->
+        <path d="M300,150 C 348,150 364,170 364,200" fill="none" stroke="url(#corB)" stroke-width="29"/>
+        <polygon points="342,199 386,199 364,230" fill="#F4584B"/>
+        <!-- input 500 J (thickness 120) -->
+        <rect x="40" y="45" width="262" height="120" rx="9" fill="url(#ambB)"/>
+        <text x="171" y="99" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">500 J in</text>
+        <text x="171" y="121" text-anchor="middle" font-size="12.5" fill="#fff3dc">counterweight GPE</text>
+        <!-- useful 380 J (straight, thickness 91) -->
+        <rect x="300" y="45" width="404" height="91" rx="4" fill="url(#tealB)"/>
+        <polygon points="700,45 770,90 700,136" fill="url(#tealB)"/>
+        <text x="500" y="96" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">380 J → projectile KE</text>
+        <!-- split divider -->
+        <line x1="301" y1="45" x2="301" y2="165" stroke-width="3" style="stroke:var(--card)"/>
+        <text x="402" y="190" font-size="14" font-weight="700" fill="#B23A2B">120 J wasted</text>
+        <text x="402" y="208" font-size="12.5" style="fill:var(--ink-soft)">heat + sound</text>
+        <text x="450" y="252" text-anchor="middle" font-size="15" font-weight="600" style="fill:var(--ink)">Efficiency = 380 ÷ 500 × 100% = 76%   ·   band widths show the energy</text>
+      </svg>
+    </div>
+    <div class="box question"><span class="lbl">Your turn</span><p><strong>Q3.4</strong> Name TWO energy forms present as the ball is released.<br><strong>Q3.5 (Yr 8)</strong> Check the band widths — does input (500 J) equal useful (380 J) + wasted (120 J)?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Year 8: KE &#8594; launch speed">
+    <p class="eyebrow">Year 8 extension <b>&#183;</b> connecting forward</p>
+    <h2><span class="phase-tag wedo">We do</span> From energy to launch speed</h2>
+    <div class="box question"><span class="lbl">Rearrange \(\text{KE} = \tfrac{1}{2}mv^2\)</span><p>A trebuchet transfers <strong>4.5 J</strong> of kinetic energy to a <strong>0.04 kg</strong> projectile. Find its launch speed \(v\).</p></div>
+    <ol class="steps" id="f3w4">
+      <li><span class="stepno">1</span> Start from \(\text{KE} = \tfrac{1}{2} m v^2\) and rearrange: \(v = \sqrt{2 \times \text{KE} \div m}\).</li>
+      <li><span class="stepno">2</span> Substitute: \(v = \sqrt{2 \times 4.5 \div 0.04} = \sqrt{225}\).</li>
+      <li class="ans"><span class="stepno">&#10003;</span> Launch speed \(v = 15\ \text{m/s}\) — this feeds straight into the projectile investigation.</li>
+    </ol>
+    <button class="reveal-btn" data-target="#f3w4">Show working</button>
+    <p class="note">The energy in the launch sets the speed — and the speed sets the range</p>
+  </section>
+
+  <!-- LAB POINTER — repoint at experiments.html#exp3 once that page is ported -->
+  <section class="slide section-slide" data-menu="&#8594; Lab: Experiment 3">
+    <p class="kicker">Lab time</p>
+    <h2>Experiment 3 — Energy efficiency</h2>
+    <p>How much energy survives a bounce? Students drop a ball, measure the bounce height, and calculate the efficiency of the GPE → KE → GPE transformation. The full method and results table are in the student booklet.</p>
+    <a class="chip" href="booklet/Forces_Motion_Unit_Booklet_Yr7_8.pdf#page=27">Open Experiment 3 in the booklet &#8594;</a>
+    <p class="slide-foot">Booklet pp.27&#8211;28 &#183; Experiment 3 &#183; Efficiency = bounce height &#247; drop height &#215; 100%</p>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Section 3 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>Energy is stored as <strong>kinetic</strong>, <strong>gravitational PE</strong> and <strong>elastic PE</strong></li>
+      <li><strong>\(\text{GPE} = mgh\)</strong> and <strong>\(\text{KE} = \tfrac{1}{2}mv^2\)</strong>, both measured in joules</li>
+      <li>Energy is <strong>conserved</strong> — it transforms form, but the total stays the same</li>
+      <li>Real transformations <strong>waste</strong> energy as heat and sound — efficiency is always under 100%</li>
+      <li>The trebuchet's energy chain: <strong>GPE → KE → KE</strong>, with thermal &amp; sound lost along the way</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span><p>A 1 kg ball is lifted to 2 m. How much GPE does it gain — and what type of energy does it have just before it lands?</p></div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 13</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 3 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

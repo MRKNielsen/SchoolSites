@@ -9,6 +9,7 @@
 // Checks, in every *.html in the unit folder:
 //   <p class="bookref book">Booklet p.N · §1.2 | Task 1.7b | Extension 1.8 | Q2.3 | Worked Example 2.1</p>
 //   <a href="booklet/X.pdf#page=N">… Experiment N …</a>
+// A page can pin its booklet with <meta name="booklet" content="booklet/X">.
 // Each reference must exist as a label (sec:, sub:, task:, q:, exp:, we:) and its
 // page must be p.N, or inside pp.N–M. A reference kind the booklet has no
 // labels for at all is reported as unchecked, not as an error.
@@ -43,11 +44,28 @@ function checkUnit(dir) {
   const bdir = path.join(dir, 'booklet');
   const aux = fs.existsSync(bdir) && fs.readdirSync(bdir).filter(f => f.endsWith('.aux') && !/_Lesson\d+_Print/.test(f));
   if (!aux || !aux.length) return { errors: 0, checked: 0, skipped: true };
-  const labels = Object.assign({}, ...aux.map(f => readAux(path.join(bdir, f))));
-  const kinds = new Set(Object.keys(labels).map(k => k.split(':')[0] + ':'));
+  // A page may name its booklet: <meta name="booklet" content="booklet/X">
+  // (X = the .tex/.aux basename). Pages without one check against every
+  // .aux that no page has claimed — so an old and a new booklet can sit
+  // side by side while a unit is being rewritten lesson by lesson.
+  const htmls = fs.readdirSync(dir).filter(f => f.endsWith('.html')).sort();
+  const metaOf = f => (/<meta name="booklet" content="booklet\/([^"]+)"/.exec(fs.readFileSync(path.join(dir, f), 'utf8')) || [])[1];
+  const claimed = new Set(htmls.map(metaOf).filter(Boolean).map(b => b + '.aux'));
+  const labelSets = {};
+  const labelsFor = f => {
+    const m = metaOf(f);
+    const files = m ? [m + '.aux'] : aux.filter(a => !claimed.has(a));
+    const key = files.join('|');
+    if (!labelSets[key]) {
+      const labels = Object.assign({}, ...files.filter(a => aux.includes(a)).map(a => readAux(path.join(bdir, a))));
+      labelSets[key] = { labels, kinds: new Set(Object.keys(labels).map(k => k.split(':')[0] + ':')) };
+    }
+    return labelSets[key];
+  };
   let errors = 0, checked = 0, unchecked = 0;
   const rel = p => path.relative(root, p).split(path.sep).join('/');
-  for (const f of fs.readdirSync(dir).filter(f => f.endsWith('.html')).sort()) {
+  for (const f of htmls) {
+    const { labels, kinds } = labelsFor(f);
     const html = fs.readFileSync(path.join(dir, f), 'utf8');
     const lines = html.split('\n');
     lines.forEach((line, i) => {
