@@ -1044,7 +1044,8 @@
 %  Above-level / higher-order questions live ONLY in Part D, at the end.
 % ══════════════════════════════════════════════════════════════════════════════
 \newcommand{\lessonpart}[3]{%
-  \par\needspace{8\baselineskip}\vspace{10pt}%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
   \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
     colback=#3!14, borderline west={4pt}{0pt}{#3},
     left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
@@ -1059,25 +1060,60 @@
 % \taskpair{text}{box height}{text}{box height}
 \newcommand{\taskpair}[4]{%
   \par\needspace{9\baselineskip}\vspace{4pt}\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
   \begin{minipage}[t]{0.485\linewidth}
     \task #1\par\vspace{2pt}\answerbox{#2}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.485\linewidth}
     \task #3\par\vspace{2pt}\answerbox{#4}
-  \end{minipage}\par\vspace{4pt}}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
 
 % Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
 \renewcommand{\answerbox}[1]{%
+  \abnext
   \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
-    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=#1]
-  \end{tcolorbox}%
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
 }
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
 
 
 
 % Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
 % (figures already centre themselves inside their \diag... macros)
-\newenvironment{ctab}{\par\smallskip\begingroup\centering}{\par\endgroup\smallskip}
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
 
 % ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
 % 1. No marks are shown anywhere in the booklet.
@@ -1099,7 +1135,9 @@
 %    vertically; put the S column first (see below).
 \newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
 \newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
-\newcommand{\wh}{\rule[-0.75cm]{0pt}{1.5cm}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
 % S = zero-width first column that makes every row of a write-in table
 % at least 1.5 cm tall with its text vertically centred. Start each data
 % row with "&"; start the header row with "\hd &" so it stays slim.
@@ -1198,6 +1236,9 @@ Forces are invisible, so scientists need a way to record them. The solution is s
 \rcq{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
 \rcq{Does an astronaut on the Space Station still have weight? Use a number from the passage to support your answer.}{1.6cm}
 \rcq{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
+\rcq{Which three-word phrase in the first paragraph describes two forces that are the same size but act in opposite directions?}{1.4cm}
+\rcq{Forces are invisible. Describe one way you could tell that a force is acting on an object, even though you cannot see the force itself.}{1.8cm}
+\rcq{Imagine the Space Station suddenly stopped moving around the Earth. Using the passage, predict what would happen to the station and the astronauts inside, and explain why.}{2.2cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:1}
@@ -1331,7 +1372,15 @@ Work through every task. Show your working for calculations, and always include 
 \end{ctab}
 
 \needspace{10\baselineskip}
-\task For each event below, write the \textbf{number} (1--5) of the effect the force is having (see the table in \S\ref{sub:1.2}). Some may have more than one.
+\task For each event below, write the \textbf{number} of the effect the force is having. Some events have more than one.
+
+\vspace{2pt}
+\begin{ctab}
+\begin{tabular}{|C{2.6cm}|C{2.6cm}|C{3.0cm}|C{2.6cm}|C{2.6cm}|}
+  \thead{1} & \thead{2} & \thead{3} & \thead{4} & \thead{5} \\ \hline
+  starts it moving & stops it & speeds it up or slows it down & changes its direction & changes its shape \\ \hline
+\end{tabular}
+\end{ctab}
 
 \vspace{3pt}
 \begin{ctab}
@@ -1342,8 +1391,24 @@ Work through every task. Show your working for calculations, and always include 
 \end{tabular}
 \end{ctab}
 
-\needspace{10\baselineskip}
-\task Write the reading shown on each of the three scales in Figure~\ref{fig:spring-scale}.
+\needspace{14\baselineskip}
+\task Think of three forces you used this morning. For each one, describe the action, write \textbf{PUSH} or \textbf{PULL}, and give the number of the effect it had: \textbf{1} starts it moving, \textbf{2} stops it, \textbf{3} speeds it up or slows it down, \textbf{4} changes its direction, \textbf{5} changes its shape.
+
+\vspace{3pt}
+\begin{ctab}
+\begin{tabular}{|SW{8.4cm}|Z{2.8cm}|Z{2.8cm}|}
+  \hd & \thead{Action} & \thead{Push or pull?} & \thead{Effect (1--5)} \\ \hline
+  & \scaf{Opening the fridge door} & \scaf{PULL} & \scaf{1} \\ \hline
+  & & & \\ \hline
+  & & & \\ \hline
+  & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{24\baselineskip}
+\task Write the reading shown on each of the three spring scales below. Check what one small division is worth on each scale first.
+
+\diagSpringScales
 
 \vspace{3pt}
 \begin{ctab}
@@ -1365,6 +1430,9 @@ Work through every task. Show your working for calculations, and always include 
   & Small car    & 900 & & \\ \hline
 \end{tabular}
 \end{ctab}
+
+\taskpair{A bag of flour has a mass of 2\,kg. Find its weight on Earth. Use $g = 9.8$\,N/kg.}{2.2cm}
+         {Which has the greater weight on Earth: a 5\,kg dog, or a box that weighs 50\,N? Show your working.}{2.2cm}
 
 \needspace{10\baselineskip}
 \task Complete the table. For each force, write whether it is a contact or non-contact force, and give a real-world example.
@@ -1419,6 +1487,26 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \exttask A bathroom scale really measures \emph{force}, but it is labelled in kilograms. A 60\,kg student reads 60\,kg on it on Earth. Predict what the same scale would read on the Moon, and explain why the scale is not really measuring mass.
 \answerbox{3.0cm}
 
+\needspace{10\baselineskip}
+\exttask On Mars, $g = 3.7$\,N/kg. A 10\,kg backpack is carried on Earth ($g = 9.8$\,N/kg), on the Moon ($g = 1.6$\,N/kg) and on Mars.
+\pt{a}Calculate the backpack's weight in each place.
+\pt{b}Rank the three places from easiest to hardest to carry the backpack, and explain your ranking.
+\answerbox{3.4cm}
+
+\needspace{10\baselineskip}
+\exttask A rock hangs from a spring scale on Earth, and the scale reads 4.9\,N. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
+\pt{a}Find the mass of the rock.
+\pt{b}Find what the same spring scale would read if the rock were hung from it on the Moon.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask A \emph{balance} compares an object with known masses. A \emph{spring scale} measures the pull of gravity on the object. Explain why a balance gives the same result on the Moon as on Earth, but a spring scale does not.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask Magnets can push or pull without touching. Describe a quick test you could do with a magnet, a paperclip and a sheet of paper to show that magnetic force acts \emph{through} the paper. Say what you would do and what you would expect to see.
+\answerbox{3.4cm}
+
 \end{yr8box}
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
@@ -1446,6 +1534,9 @@ Coaches explain this with force arrows. They draw the rope, the two pulls and th
 \rcq{According to the passage, why does a team on a slippery surface lose, however strong they are?}{1.8cm}
 \rcq{List two things from the passage that give a team better grip.}{1.4cm}
 \rcq{How can a coach tell which team will win just by looking at the force arrows?}{1.6cm}
+\rcq{Explain why each person needs friction under their shoes in order to pull on the rope.}{1.8cm}
+\rcq{A team plays in socks on a polished wooden floor. Use the passage to predict what will happen to them, and explain why.}{1.8cm}
+\rcq{In your own words, explain the difference between balanced and unbalanced forces. Give an example of each from the passage.}{2.2cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:2}
@@ -1541,6 +1632,9 @@ Work through every task. Show your working for calculations, and always include 
 \pt{c}3\,N
 \answerbox{2.0cm}
 
+\taskpair{Using a scale of 1\,cm = 10\,N, how long should the arrow be for a 45\,N pull?}{2.0cm}
+         {An arrow is 3.5\,cm long. The scale is 1\,cm = 20\,N. What force does it show?}{2.0cm}
+
 \needspace{14\baselineskip}
 \task A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
 
@@ -1548,28 +1642,31 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
 \end{tcolorbox}
 
-\needspace{10\baselineskip}
-\task[a] Look at the balanced forces diagram in Figure~\ref{fig:fbd} (left). Why is the book not speeding up or slowing down? Use the words \textit{net force} in your answer.
+\needspace{24\baselineskip}
+\task[a] The diagrams below show the forces on a book resting on a table (left) and on a box being pushed along the floor (right).
+
+\diagFBD
+Why is the book not speeding up or slowing down? Use the words \textit{net force} in your answer.
 \answerbox{2.2cm}
 
-\taskpart{b} Look at the unbalanced forces diagram (right). Calculate the net force on the box and state which way it speeds up.
+\taskpart{b} The box is pushed right with 20\,N, and friction pushes left with 5\,N. Calculate the net force on the box and state which way it speeds up.
 \answerbox{2.2cm}
 
 \needspace{16\baselineskip}
 \taskpart{c} Draw a free body diagram for a skydiver falling at a steady speed (terminal velocity). Label each force with its name and show their comparative sizes.
 
 \vspace{3pt}
-\begin{tcolorbox}[colback=white, colframe=MidGrey, height=4.6cm, boxrule=0.5pt]
+\drawbox{4.6cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
-\end{tcolorbox}
+}
 
 \needspace{14\baselineskip}
 \task A lamp with a weight of 15\,N hangs still from the ceiling on a cord. Draw its free body diagram, labelling each force with its name and size.
 
 \vspace{3pt}
-\begin{tcolorbox}[colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
+\drawbox{4.2cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
-\end{tcolorbox}
+}
 
 \needspace{6\baselineskip}
 \textbf{Net force.} For each question, state the size \emph{and} direction of the net force, and whether the forces are balanced or unbalanced.
@@ -1587,6 +1684,9 @@ Work through every task. Show your working for calculations, and always include 
 \pt{c}Explain what would happen if the thrust dropped to 32\,000\,N.
 \answerbox{3.2cm}
 
+\taskpair{A box has three forces on it: 15\,N right, 10\,N right and 30\,N left. Find the size and direction of the net force.}{2.4cm}
+         {A skydiver weighs 600\,N. Air resistance on her is 600\,N. Are the forces balanced or unbalanced? Describe her motion.}{2.4cm}
+
 \needspace{10\baselineskip}
 \task A swimmer moves forward at a steady speed. Her arms provide 120\,N of forward force.
 \pt{a}What is the size of the water resistance acting on her?
@@ -1602,6 +1702,18 @@ Work through every task. Show your working for calculations, and always include 
 
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
+\needspace{12\baselineskip}
+\task In a tug-of-war, Team A pulls the rope left with 550\,N and Team B pulls it right with 620\,N.
+\pt{a}Find the size and direction of the net force on the rope.
+\pt{b}Which team is winning? Explain using the words \emph{unbalanced} and \emph{net force}.
+\pt{c}Draw both pulls on the rope below as force arrows, using a scale of 1\,cm = 100\,N. Label each arrow with its size.
+
+\vspace{3pt}
+\drawbox{4.4cm}{
+\vspace*{2.4cm}
+\begin{center}\tikz{\draw[line width=2pt, DarkGrey] (0,0) -- (6,0);}\\[2pt]\textit{\small\color{MidGrey}rope}\end{center}
+}
+
 \lessonpart{D}{Above level}{Violet}\label{ext:2}
 
 \begin{yr8box}
@@ -1619,13 +1731,17 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \pt{iii}at terminal velocity
 
 \vspace{3pt}
-\noindent\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(i)} just after jumping\end{tcolorbox}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(ii)} speeding up\end{tcolorbox}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(iii)} terminal velocity\end{tcolorbox}\end{minipage}
+\edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+\noindent\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(i)} just after jumping}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(ii)} speeding up}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(iii)} terminal velocity}\end{minipage}\par\gdef\abgrp{0}
 \answerbox{2.6cm}
 
 \needspace{10\baselineskip}
-\exttask A car has a driving force of 4500\,N and a total resistive force of 1200\,N. Calculate the net force, state which way the car accelerates, and suggest one way the driver could make the forces balanced.
+\exttask A car has a driving force of 4500\,N and a total resistive force of 1200\,N.
+\pt{a}Calculate the net force.
+\pt{b}State which way the car accelerates.
+\pt{c}Suggest one way the driver could make the forces balanced.
 \answerbox{2.8cm}
 
 \needspace{10\baselineskip}
@@ -1634,6 +1750,25 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \pt{b}Use $F = ma$ (acceleration = net force $\div$ mass) to find the acceleration.
 \pt{c}The driving force rises to 6000\,N --- find the new acceleration.
 \answerbox{3.6cm}
+\needspace{16\baselineskip}
+\exttask A car drives along a flat road at a steady 60\,km/h. Draw a free body diagram for the car showing four forces: weight, the normal force, the driving force and the total resistive force. Show which pairs of forces are balanced.
+
+\vspace{3pt}
+\drawbox{4.6cm}{
+\textit{\color{MidGrey}Draw your force diagram here.}
+}
+
+\needspace{10\baselineskip}
+\exttask A 2\,kg ball is falling. Air resistance pushes up on it with 5\,N. Use $W = mg$ with $g = 9.8$\,N/kg.
+\pt{a}Find the weight of the ball.
+\pt{b}Find the size and direction of the net force.
+\pt{c}Is the ball speeding up, slowing down or moving at a steady speed? Explain.
+\answerbox{3.4cm}
+
+\needspace{10\baselineskip}
+\exttask A loaded truck and a small car are both travelling at the same speed. Explain, using the idea of net force, why the truck needs a much bigger braking force to stop in the same distance.
+\answerbox{3.0cm}
+
 \end{yr8box}
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
@@ -1750,10 +1885,18 @@ Add the trials, then divide by how many there are. For 1.2\,N, 1.4\,N and 1.3\,N
          {A group measured 1.8\,N, 1.9\,N and 2.9\,N on fabric. Which value looks wrong? Find the mean of the other two.}{2.2cm}
 
 \needspace{10\baselineskip}
-\task Use the reading on page~\pageref{read:3} to explain \emph{why} the surface you named in Task~\ref{task:3.2} produced the most friction.
+\task Rough surfaces are covered in bigger bumps, which catch on each other and resist sliding. Use this idea to explain \emph{why} the surface that gave the most friction in your experiment did so.
 \answerbox{2.2cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
+\needspace{20\baselineskip}
+\task Draw a column graph of the \emph{mean} friction force for each surface you tested. Put the surfaces on the horizontal axis and \textbf{friction force (N)} on the vertical axis. Give your graph a title.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
+  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+\end{tcolorbox}
+
 \lessonpart{D}{Above level}{Violet}\label{ext:3}
 
 \begin{yr8box}
@@ -1765,12 +1908,19 @@ These questions go beyond the Year 7 standard. They ask you to evaluate the meth
 \answerbox{2.6cm}
 
 \needspace{10\baselineskip}
-\exttask Predict what would happen to the friction force if you stacked a second block on top of the first. Explain your prediction using the reading.
+\exttask Predict what would happen to the friction force if you stacked a second block on top of the first. Explain your prediction.\par\noindent\textit{Hint: pressing two surfaces together harder makes their bumps catch more.}
 \answerbox{2.4cm}
 
 \needspace{10\baselineskip}
 \exttask The wooden block has a mass of 0.3\,kg. Choose your highest mean friction force. If the block were sliding and you let go of the spring scale, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
 \answerbox{3.2cm}
+\needspace{12\baselineskip}
+\exttask Design a fair test to find out whether the \emph{mass} of the block changes the friction force on the bench.
+\pt{a}Name the independent and dependent variables.
+\pt{b}Name two variables you would keep the same.
+\pt{c}Predict what you would find, and give a reason.
+\answerbox{4.2cm}
+
 \end{yr8box}
 
 \end{document}
