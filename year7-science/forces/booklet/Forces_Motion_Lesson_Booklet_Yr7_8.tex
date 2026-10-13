@@ -1,0 +1,1744 @@
+% ============================================================
+%  Forces and Motion — Lesson Booklet (one section per lesson: A Reading · B Theory · C Practice · D Above level)
+%  Years 7–8  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: pdflatex booklet.tex  (twice for page refs)
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}Forces and Motion}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Years 7--8 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.0cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ══════════════════════════════════════════════════════════════════════════════
+%  EMBEDDED DIAGRAM DEFINITIONS  (formerly tikz_diagrams.tex)
+%  Edit any figure here; each \diag... macro is called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+% ============================================================
+%  TikZ Diagram Definitions — Forces and Motion Unit Booklet
+%  Self-contained macros, no external image files.
+%  Requires: tikz with arrows.meta, calc, positioning, patterns
+% ============================================================
+
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+
+% ── D1: Contact vs Non-contact Forces ─────────────────────────────────────────
+\newcommand{\diagForceTypes}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Contact forces box
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (cbox) at (0,0) {};
+  \node[font=\small\bfseries, text=NavyBlue] at (0, 1.65) {Contact Forces};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 1.1)  {\textbullet\ Friction};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.65) {\textbullet\ Normal force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.20) {\textbullet\ Tension};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.25) {\textbullet\ Applied force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.70) {\textbullet\ Air resistance};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-1.15) {\textbullet\ Spring force};
+  % Non-contact forces box
+  \node[draw=red!55!black, fill=red!8, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (ncbox) at (6.4,0) {};
+  \node[font=\small\bfseries, text=red!55!black] at (6.4, 1.65) {Non-contact Forces};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 1.1)  {\textbullet\ Gravity};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.65) {\textbullet\ Magnetic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.20) {\textbullet\ Electrostatic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9,-0.25) {\textbullet\ Nuclear force};
+\end{tikzpicture}
+\end{center}}
+
+% ── D2: Free Body Diagrams ────────────────────────────────────────────────────
+\newcommand{\diagFBD}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── LEFT: Balanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (0,3.6) {Balanced Forces};
+  \fill[ground hatch] (-1.5,-1.0) rectangle (1.5,-0.7);
+  \draw[thick, DarkGrey] (-1.5,-0.7) -- (1.5,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (book) at (0,0) {Book};
+  % Normal up
+  \draw[force arrow, TealGreen] (book.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N=10$\,N};
+  % Weight down
+  \draw[force arrow, red!65!black] (book.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W=10$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.2) {Net force $= 0$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.65) {No acceleration};
+
+  % ── RIGHT: Unbalanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (7.5,3.6) {Unbalanced Forces};
+  \fill[ground hatch] (6.0,-1.0) rectangle (9.0,-0.7);
+  \draw[thick, DarkGrey] (6.0,-0.7) -- (9.0,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (box) at (7.5,0) {Box};
+  % Normal up
+  \draw[force arrow, TealGreen] (box.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N$};
+  % Weight down
+  \draw[force arrow, red!65!black] (box.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Push right (20N, longer)
+  \draw[force arrow, PurpleDark] (box.east) -- ++(2.6,0)
+        node[above, font=\small\bfseries, text=PurpleDark] {Push 20\,N};
+  % Friction left (5N, shorter)
+  \draw[force arrow, OrangeDark] (box.west) -- ++(-1.6,0)
+        node[above, font=\small\bfseries, text=OrangeDark] {Friction 5\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.2) {Net force $= 15$\,N $\rightarrow$};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.65) {Accelerates rightward};
+\end{tikzpicture}
+\end{center}}
+
+% ── D3: Newton's First Law ─────────────────────────────────────────────────────
+\newcommand{\diagNewtonOne}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Law statement
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=PurpleDark] at (5.5,2.8)
+        {\textit{``An object at rest stays at rest, and an object in motion stays in}\\[-1pt]
+         \textit{motion, unless acted on by an unbalanced force.''\ (Law of Inertia)}};
+
+  % Ground lines
+  \draw[thick, DarkGrey] (-0.4,0) -- (2.2,0);
+  \draw[thick, DarkGrey] (3.6,0) -- (7.0,0);
+  \draw[thick, DarkGrey] (8.5,0) -- (11.5,0);
+
+  % Ball 1: at rest
+  \shade[ball color=MidBlue!80] (0.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=NavyBlue] at (0.9,1.9) {At rest};
+  \draw[force arrow, TealGreen]   (0.9,0.84) -- (0.9,1.5);
+  \draw[force arrow, red!65!black](0.9,0.0)  -- (0.9,-0.65);
+  \node[font=\scriptsize, text=TealGreen, right]    at (0.9,1.2)  {$N$};
+  \node[font=\scriptsize, text=red!65!black, right] at (0.9,-0.3) {$W$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (0.9,-1.1) {stays at rest};
+
+  % Arrow 1→2
+  \draw[-{Stealth}, thick, DarkGrey!60] (2.4,-2) -- (3.4,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {no force added};
+
+  % Ball 2: rolling
+  \shade[ball color=TealGreen!70] (5.3,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=TealGreen] at (5.3,1.9) {Rolling (no friction)};
+  \draw[force arrow, MidBlue] (5.72,0.42) -- (7.0,0.42)
+        node[above, font=\scriptsize, text=MidBlue] {$v$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (5.3,-1.1) {keeps moving};
+
+  % Arrow 2→3
+  \draw[-{Stealth}, thick, DarkGrey!60] (7.4,-2) -- (8.3,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {force applied};
+
+  % Ball 3: stopping
+  \shade[ball color=MidBlue!80] (9.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=red!60!black] at (9.9,1.9) {Unbalanced force};
+  \draw[force arrow, red!65!black] (9.48,0.42) -- (8.4,0.42)
+        node[above, font=\scriptsize, text=red!65!black] {friction};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (9.9,-1.1) {decelerates / stops};
+\end{tikzpicture}
+\end{center}}
+
+% ── D4: Newton's Second Law — F=ma ────────────────────────────────────────────
+\newcommand{\diagFma}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Law banner
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=0.9cm, align=center,
+        font=\small\bfseries, text=PurpleDark]
+        at (5.5,3.6)
+        {Newton's Second Law: \quad $F = m \times a$ \quad $\Rightarrow$ \quad
+         $a = F/m$ \quad $\Rightarrow$ \quad $m = F/a$};
+  % F box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (1.0,1.5)
+        {\textbf{\color{GoldDark}$F$\ (Force)}\\[4pt]
+         \small\color{DarkGrey}Measured in Newtons (N)\\
+         \small\color{DarkGrey}A push or pull\\[2pt]
+         \small\color{GoldDark}$F = m \times a$};
+  \node[font=\large\bfseries, text=DarkGrey] at (3.2,1.5) {$=$};
+  % m box
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (5.5,1.5)
+        {\textbf{\color{MidBlue}$m$\ (Mass)}\\[4pt]
+         \small\color{DarkGrey}Measured in kg\\
+         \small\color{DarkGrey}More mass\,=\,more\\
+         \small\color{DarkGrey}inertia to overcome};
+  \node[font=\large\bfseries, text=DarkGrey] at (7.7,1.5) {$\times$};
+  % a box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (10.0,1.5)
+        {\textbf{\color{TealGreen}$a$\ (Acceleration)}\\[4pt]
+         \small\color{DarkGrey}Measured in m/s$^2$\\
+         \small\color{DarkGrey}Bigger $F$ on same\\
+         \small\color{DarkGrey}mass\,=\,bigger $a$};
+\end{tikzpicture}
+\end{center}}
+
+% ── D5: Energy Types and Transformation ───────────────────────────────────────
+\newcommand{\diagEnergy}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Top row: three energy type boxes
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (0.0,3.2)
+        {\textbf{\color{GoldDark}Kinetic Energy (KE)}\\[3pt]
+         \small\color{DarkGrey}Energy of motion\\[2pt]
+         \small\color{GoldDark}$KE = \tfrac{1}{2}mv^2$};
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (4.8,3.2)
+        {\textbf{\color{MidBlue}Gravitational PE}\\[3pt]
+         \small\color{DarkGrey}Stored by height\\[2pt]
+         \small\color{MidBlue}$GPE = mgh$};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (9.6,3.2)
+        {\textbf{\color{TealGreen}Elastic PE}\\[3pt]
+         \small\color{DarkGrey}Stored by stretching\\[2pt]
+         \small\color{DarkGrey}springs, rubber bands};
+  % Divider label
+  \node[font=\small\bfseries, text=DarkGrey] at (4.8,1.85)
+        {Energy Transformation in a Trebuchet};
+  % Chain: GPE box
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=OrangeDark] (n1) at (0.8,0.7)
+        {Gravitational PE\\[-1pt]{\scriptsize\color{DarkGrey}(counterweight up)}};
+  % Chain: KE1 box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=GoldDark] (n2) at (4.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(arm swings)}};
+  % Chain: KE2 box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=TealGreen] (n3) at (8.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(ball launches)}};
+  % Waste box
+  \node[draw=DarkGrey, fill=LightGrey, rounded corners=4pt,
+        minimum width=2.8cm, minimum height=0.9cm, align=center,
+        font=\small, text=DarkGrey] (nw) at (8.8,-0.75)
+        {$+$ Thermal \& Sound\\[-1pt]{\scriptsize(wasted)}};
+  % Arrows
+  \draw[-{Stealth}, thick, DarkGrey] (n1.east) -- (n2.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n2.east) -- (n3.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n3.south) -- (nw.north);
+\end{tikzpicture}
+\end{center}}
+
+% ── D6: Three Classes of Lever ────────────────────────────────────────────────
+\newcommand{\diagLevers}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── Class 1: Fulcrum between E and L ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,4.85) {Class 1: Fulcrum between E and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,4.85) {e.g.\ seesaw};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,4.2) -- (10.5,4.2);
+  \fill[red!65!black] (5.5,4.2) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (5.5,3.68) {F};
+  \draw[force arrow, MidBlue]   (1.5,5.05) -- (1.5,4.2);
+  \draw[force arrow, TealGreen] (9.5,5.05) -- (9.5,4.2);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (1.5,5.05) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (9.5,5.05) {L};
+
+  % ── Class 2: Load between F and E ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,2.55) {Class 2: Load between F and E};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,2.55) {e.g.\ wheelbarrow};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,1.9) -- (10.5,1.9);
+  \fill[red!65!black] (1.0,1.9) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (1.0,1.38) {F};
+  \draw[force arrow, MidBlue]   (9.5,2.75) -- (9.5,1.9);
+  \draw[force arrow, TealGreen] (5.0,2.75) -- (5.0,1.9);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (9.5,2.75) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (5.0,2.75) {L};
+
+  % ── Class 3: Effort between F and L ──
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,0.25) {Class 3: Effort between F and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,0.25) {e.g.\ tweezers};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,-0.4) -- (10.5,-0.4);
+  \fill[red!65!black] (1.0,-0.4) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize, text=red!65!black, below] at (1.0,-0.92) {F};
+  \draw[force arrow, MidBlue]   (5.0,0.45) -- (5.0,-0.4);
+  \draw[force arrow, TealGreen] (9.5,0.45) -- (9.5,-0.4);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (5.0,0.45) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (9.5,0.45) {L};
+\end{tikzpicture}
+\end{center}}
+
+% ── D7: Trebuchet as Class 1 Lever ────────────────────────────────────────────
+\newcommand{\diagTrebuchetLever}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.55) rectangle (12.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (12.5,0);
+  % Uprights
+  \draw[line width=3pt, DarkGrey!70] (2.8,0) -- (2.8,1.8);
+  \draw[line width=3pt, DarkGrey!70] (4.4,0) -- (4.4,1.8);
+  \draw[line width=3pt, DarkGrey!70] (7.6,0) -- (7.6,1.8);
+  \draw[line width=3pt, DarkGrey!70] (9.2,0) -- (9.2,1.8);
+  % Arm (tilted left-low to right-high)
+  \draw[line width=6pt, brown!55!black, line cap=round] (2.4,2.6) -- (10.5,5.0);
+  % Pivot
+  \fill[DarkGrey!80] (6.2,3.6) circle (0.18);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, below] at (6.2,3.42) {Pivot};
+  % Counterweight
+  \node[draw=red!60!black, fill=red!12, rounded corners=3pt,
+        minimum width=1.5cm, minimum height=1.5cm,
+        font=\small\bfseries, text=red!60!black, align=center]
+        at (2.0,1.4) {Heavy\\CW\\(Effort)};
+  \draw[force arrow, red!65!black] (2.0,0.65) -- (2.0,-0.1);
+  \node[font=\scriptsize, text=red!65!black, right] at (2.1,-0.05) {$W_1$};
+  % Short arm brace
+  \draw[dim arrow] (2.4,0.5) -- (6.2,0.5)
+        node[midway, below, font=\scriptsize, text=red!60!black] {Short arm};
+  % Ball
+  \shade[ball color=MidBlue!85] (10.9,5.2) circle (0.38);
+  \node[font=\scriptsize\bfseries, text=MidBlue, above right] at (11.1,5.35) {Ball (Load)};
+  \draw[force arrow, red!65!black] (10.9,4.82) -- (10.9,3.8);
+  \node[font=\scriptsize, text=red!65!black, right] at (11.0,4.3) {$W_2$};
+  % Long arm brace
+  \draw[dim arrow] (6.2,0.5) -- (10.5,0.5)
+        node[midway, below, font=\scriptsize, text=MidBlue] {Long arm};
+  % MA formula box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
+        font=\small, text=GoldDark, align=center, inner sep=4pt]
+        at (6.2,-1.3)
+        {$\text{MA} = \text{Long arm} \div \text{Short arm}$};
+\end{tikzpicture}
+\end{center}}
+
+% ── D8: Projectile Motion ─────────────────────────────────────────────────────
+\newcommand{\diagProjectile}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.45) rectangle (11.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (11.5,0);
+  % Launch platform
+  \fill[DarkGrey!35] (0,0) rectangle (1.3,3.0);
+  \draw[thick, DarkGrey] (1.3,3.0) -- (0,3.0);
+  % Height brace
+  \draw[dim arrow] (-0.4,0) -- (-0.4,3.0)
+        node[midway, left, font=\small\bfseries, text=red!65!black] {$h$};
+  % Parabolic trajectory
+  \draw[thick, MidBlue, dashed]
+        (1.3,3.0) .. controls (4.2,3.8) and (8.2,2.6) .. (10.8,0);
+  % Ball at launch
+  \shade[ball color=MidBlue!85] (1.3,3.0) circle (0.32);
+  % Horizontal velocity
+  \draw[force arrow, MidBlue] (1.62,3.0) -- (3.4,3.0)
+        node[above, font=\small\bfseries, text=MidBlue] {$v$ (horizontal)};
+  % Weight at launch
+  \draw[force arrow, red!65!black] (1.3,2.68) -- (1.3,1.4)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Ball mid-trajectory
+  \shade[ball color=MidBlue!60] (6.0,3.5) circle (0.22);
+  \draw[-{Stealth}, thin, MidBlue]    (6.22,3.5)  -- ++(0.9,0);
+  \draw[-{Stealth}, thin, red!65!black] (6.0,3.28) -- ++(0,-0.8);
+  % Ball at landing
+  \shade[ball color=MidBlue!85] (10.8,0.32) circle (0.32);
+  % Range brace
+  \draw[dim arrow] (1.3,-0.75) -- (10.8,-0.75)
+        node[midway, below, font=\small\bfseries, text=TealGreen] {$R$ (horizontal range)};
+  % Equations box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
+        font=\small, text=GoldDark, align=center, inner sep=6pt]
+        at (7.8,2.6)
+        {\textbf{Key equations}\\[3pt]
+         \color{NavyBlue}$h = \tfrac{1}{2}g t^2$\\[1pt]
+         \color{NavyBlue}$g = 2h \div t^2$\\[1pt]
+         \color{NavyBlue}$R = v \times t$\\[2pt]
+         \color{DarkGrey}\scriptsize$g = 9.8$\,m/s$^2$};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Trolley and pulley setup ─────────────────────────────────────
+\newcommand{\diagExpTwoSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  % Ground
+  \fill[ground hatch] (0,-0.4) rectangle (10.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (10.5,0);
+  % Runway
+  \fill[DarkGrey!15] (0.3,0) rectangle (9.8,0.18);
+  \draw[DarkGrey!60] (0.3,0.18) -- (9.8,0.18);
+  % Trolley
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.4cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (trolley) at (3.5,0.68) {Trolley ($M$)};
+  % Wheels
+  \fill[DarkGrey!60] (2.55,0.18) circle (0.13);
+  \fill[DarkGrey!60] (4.45,0.18) circle (0.13);
+  % Ticker tape
+  \draw[dashed, DarkGrey!50, thick] (2.3,0.68) -- (0.3,0.68);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (0.22,0.68) {ticker tape};
+  % String to pulley
+  \draw[thick, DarkGrey!70] (trolley.east) -- (9.0,0.68);
+  % Pulley
+  \draw[thick, DarkGrey] (9.0,0.68) circle (0.34);
+  \fill[DarkGrey!25] (9.0,0.68) circle (0.34);
+  \draw[thick, DarkGrey] (9.0,0.68) circle (0.11);
+  \node[font=\scriptsize, text=DarkGrey, above right] at (9.22,0.88) {pulley};
+  % String over pulley and down
+  \draw[thick, DarkGrey!70] (9.0,0.34) -- (9.0,-1.7);
+  % Hanging mass
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
+        minimum width=1.3cm, minimum height=0.85cm,
+        font=\small\bfseries, text=OrangeDark] (hm) at (9.0,-2.2) {$m$};
+  \node[font=\scriptsize, text=OrangeDark, anchor=west] at (9.7,-2.2) {hanging mass};
+  % Weight arrow
+  \draw[force arrow, red!65!black] (hm.south) -- ++(0,-1.0)
+        node[right, font=\scriptsize\bfseries, text=red!65!black] {$W\!=\!mg$};
+  % Tension on hanging mass
+  \draw[force arrow, TealGreen] (9.0,-1.5) -- (9.0,-0.8)
+        node[left, font=\scriptsize\bfseries, text=TealGreen] {$T$};
+  % Tension arrow on trolley
+  \draw[force arrow, OrangeDark] (trolley.east) ++(0.1,0) -- ++(1.5,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark] {$T$};
+  % Acceleration arrow
+  \draw[force arrow, PurpleDark] (trolley.north) ++(0.0,0.1) -- ++(1.8,0)
+        node[above, font=\scriptsize\bfseries, text=PurpleDark] {$a$};
+  % Mass label
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (3.5,1.48)
+        {total trolley mass $= M$ (kept constant)};
+  % Bench label
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.3,-0.28) {bench / runway};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: FBD of trolley and hanging mass side by side ────────────────
+\newcommand{\diagExpTwoFBD}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  %% ── LEFT: Trolley FBD ──
+  \node[font=\small\bfseries, text=NavyBlue] at (0,3.5) {FBD: Trolley ($M$)};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
+        minimum width=2.6cm, minimum height=1.2cm,
+        font=\small\bfseries, text=NavyBlue] (T) at (0,0) {Trolley ($M$)};
+  % Normal up
+  \draw[force arrow, TealGreen] (T.north) -- ++(0,2.0)
+        node[right, font=\small\bfseries, text=TealGreen] {$N$ (normal)};
+  % Weight down
+  \draw[force arrow, red!65!black] (T.south) -- ++(0,-2.0)
+        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!Mg$};
+  % Tension right
+  \draw[force arrow, OrangeDark] (T.east) -- ++(2.8,0)
+        node[above, font=\small\bfseries, text=OrangeDark] {$T$ (tension)};
+  % Friction dashed
+  \draw[thin arrow, DarkGrey!55, dashed] (T.west) -- ++(-1.8,0)
+        node[above, font=\scriptsize\itshape, text=DarkGrey!65] {friction $\approx 0$};
+  % Vertical balance
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (0,2.9)
+        {$N = Mg$ (vertical balance)};
+  % Equation
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
+        font=\small, text=OrangeDark, inner sep=3pt]
+        at (0,-3.4) {$T = Ma$};
+
+  %% ── RIGHT: Hanging mass FBD ──
+  \node[font=\small\bfseries, text=NavyBlue] at (8.5,3.5) {FBD: Hanging mass ($m$)};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
+        minimum width=2.4cm, minimum height=1.1cm,
+        font=\small\bfseries, text=OrangeDark] (H) at (8.5,0) {Mass ($m$)};
+  % Tension up (shorter than weight — mass accelerates down)
+  \draw[force arrow, TealGreen] (H.north) -- ++(0,1.6)
+        node[right, font=\small\bfseries, text=TealGreen] {$T$ (tension)};
+  % Weight down (longer)
+  \draw[force arrow, red!65!black] (H.south) -- ++(0,-2.6)
+        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!mg$};
+  % Unbalanced label
+  \node[font=\scriptsize\itshape, text=red!60!black] at (8.5,2.5)
+        {$mg > T$ — forces unbalanced};
+  % Net force arrow overlay
+  \draw[force arrow, red!65!black, line width=1.2pt, opacity=0.5]
+        (H.south) ++(0,-0.3) -- ++(0,-0.9)
+        node[left, font=\scriptsize\bfseries, text=red!65!black] {net $F$};
+  % Equation
+  \node[draw=red!55!black, fill=red!8, rounded corners=3pt,
+        font=\small, text=red!55!black, inner sep=3pt, align=center]
+        at (8.5,-3.4) {$mg - T = ma$};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Comparing force sizes (50g / 100g / 200g) ──────────────────
+\newcommand{\diagExpTwoForces}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \node[font=\small\bfseries, text=NavyBlue] at (6.0,1.4)
+        {Effect of increasing hanging mass — arrow length shows force magnitude};
+
+  % ── 50 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (1.5,0.5) {$m = 50$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t1) at (1.5,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t1.east) -- ++(1.0,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_1$};
+  \draw[force arrow, PurpleDark] (t1.south east) -- ++(0.7,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_1$};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=0.9cm, minimum height=0.7cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (3.0,-2.2) {50\,g};
+  \draw[force arrow, red!65!black] (3.0,-2.55) -- ++(0,-0.7)
+        node[right, font=\scriptsize, text=red!65!black] {$W_1$};
+
+  % ── 100 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (6.0,0.5) {$m = 100$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t2) at (6.0,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t2.east) -- ++(1.7,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_2$};
+  \draw[force arrow, PurpleDark] (t2.south east) -- ++(1.2,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_2$};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=1.0cm, minimum height=0.85cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (8.1,-2.2) {100\,g};
+  \draw[force arrow, red!65!black] (8.1,-2.6) -- ++(0,-1.1)
+        node[right, font=\scriptsize, text=red!65!black] {$W_2$};
+
+  % ── 200 g case ──
+  \node[font=\small\bfseries, text=GoldDark] at (10.8,0.5) {$m = 200$\,g};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=2.0cm, minimum height=0.9cm,
+        font=\small\bfseries, text=NavyBlue] (t3) at (10.8,-0.8) {$M$};
+  \draw[force arrow, OrangeDark] (t3.east) -- ++(2.4,0)
+        node[above, font=\scriptsize, text=OrangeDark] {$T_3$};
+  \draw[force arrow, PurpleDark] (t3.south east) -- ++(1.8,0)
+        node[below, font=\scriptsize, text=PurpleDark] {$a_3$ (largest)};
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
+        minimum width=1.1cm, minimum height=1.1cm,
+        font=\scriptsize\bfseries, text=OrangeDark] at (13.6,-2.2) {200\,g};
+  \draw[force arrow, red!65!black] (13.6,-2.65) -- ++(0,-1.6)
+        node[right, font=\scriptsize, text=red!65!black] {$W_3$};
+
+  % Observation box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=14.2cm, inner sep=5pt,
+        font=\small, text=TealGreen, align=center]
+        at (6.5,-5.0)
+        {As hanging mass doubles ($50 \to 100$\,g), tension $T$ doubles, so acceleration $a$ doubles.
+         This confirms: $F \propto a$ when mass $M$ is constant ($F = ma$).};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: Combined system equation derivation ─────────────────────────
+\newcommand{\diagExpTwoSystem}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Background panel
+  \node[draw=NavyBlue, fill=LightBlue!30, rounded corners=5pt,
+        minimum width=13cm, minimum height=5.5cm] at (5.5,0) {};
+
+  \node[font=\small\bfseries, text=NavyBlue] at (5.5,2.4)
+        {System Analysis: Combining both free body diagrams};
+
+  % Trolley side
+  \node[font=\small\bfseries, text=NavyBlue, anchor=north west] at (0.4,1.8)
+        {Trolley ($M$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (0.4,1.3)
+        {Horizontal net force $= T$};
+  \node[font=\small, text=NavyBlue, anchor=north west] at (0.4,0.8)
+        {$\Rightarrow\quad T = Ma \quad\cdots(1)$};
+
+  % Hanging mass side
+  \node[font=\small\bfseries, text=OrangeDark, anchor=north west] at (6.2,1.8)
+        {Hanging mass ($m$):};
+  \node[font=\small, text=DarkGrey, anchor=north west] at (6.2,1.3)
+        {Net force $= mg - T$ downward};
+  \node[font=\small, text=OrangeDark, anchor=north west] at (6.2,0.8)
+        {$\Rightarrow\quad mg - T = ma \quad\cdots(2)$};
+
+  % Combined
+  \node[font=\small\bfseries, text=TealGreen] at (5.5,-0.1)
+        {Add (1) and (2) to eliminate $T$:};
+  \node[font=\small, text=NavyBlue] at (5.5,-0.6)
+        {$mg = Ma + ma = (M+m)\,a$};
+  \node[font=\small\bfseries, text=NavyBlue] at (5.5,-1.1)
+        {$\displaystyle a = \frac{mg}{M+m}$};
+
+  % Insight box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
+        font=\small, text=GoldDark, inner sep=5pt, align=center]
+        at (5.5,-2.3)
+        {When $M \gg m$: total mass $\approx M$,\quad
+         so $a \approx \dfrac{mg}{M} = \dfrac{F}{M}$
+         \quad --- confirming $F = Ma$};
+\end{tikzpicture}
+\end{center}}
+
+
+% ── New in this update: spring-scale and force-arrow scale diagrams ──────────
+\newcommand{\diagSpringScales}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
+  % --- Scale A: 0-10 N, pointer at 4 N ---
+  \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+  \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {A};
+  \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+  \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+  \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+  \foreach \v in {0,1,2,3,4,5,6,7,8,9,10}{
+    \pgfmathsetmacro{\yy}{5.5-\v*0.5}
+    \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+    \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+  }
+  \draw[line width=2pt, red!70!black] (0.1,3.5) -- (1.4,3.5);
+  \node[anchor=west, font=\tiny\bfseries, text=red!70!black] at (1.5,3.5) {};
+  \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--10\,N};
+
+  % --- Scale B: 0-5 N, pointer at 2.5 N ---
+  \begin{scope}[xshift=4cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {B};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,1,2,3,4,5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \foreach \v in {0.5,1.5,2.5,3.5,4.5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.5pt, DarkGrey] (0.25,\yy) -- (0.45,\yy);
+    }
+    \draw[line width=2pt, red!70!black] (0.1,3.0) -- (1.4,3.0);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--5\,N};
+  \end{scope}
+
+  % --- Scale C: 0-20 N, pointer at 13 N ---
+  \begin{scope}[xshift=8cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {C};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,2,4,6,8,10,12,14,16,18,20}{
+      \pgfmathsetmacro{\yy}{5.5-\v*0.25}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \draw[line width=2pt, red!70!black] (0.1,2.25) -- (1.4,2.25);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--20\,N};
+  \end{scope}
+
+  % Instruction note
+  \node[anchor=west, font=\footnotesize\itshape, text=DarkGrey, align=left]
+        at (10.4,3) {Read the value where\\the red pointer sits.\\Check what one small\\division is worth first.};
+\end{tikzpicture}
+\end{center}}
+
+\newcommand{\diagArrowScale}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
+  % Scale key
+  \node[anchor=west, font=\small\bfseries, text=Ink] at (0,3.4) {Scale: 1\,cm represents 5\,N};
+  \draw[line width=1.2pt, Ink] (0,3.0) -- (1,3.0);
+  \draw[line width=0.8pt, Ink] (0,2.88) -- (0,3.12);
+  \draw[line width=0.8pt, Ink] (1,2.88) -- (1,3.12);
+  \node[anchor=west, font=\footnotesize, text=DarkGrey] at (1.2,3.0) {= 1\,cm = 5\,N};
+
+  % 5 N arrow
+  \draw[force arrow, MidBlue] (0,2.0) -- (1,2.0);
+  \node[anchor=west, font=\footnotesize\bfseries, text=MidBlue] at (1.3,2.0) {5\,N \; (1\,cm long)};
+
+  % 10 N arrow
+  \draw[force arrow, TealGreen] (0,1.2) -- (2,1.2);
+  \node[anchor=west, font=\footnotesize\bfseries, text=TealGreen] at (2.3,1.2) {10\,N \; (2\,cm long)};
+
+  % 15 N arrow
+  \draw[force arrow, OrangeDark] (0,0.4) -- (3,0.4);
+  \node[anchor=west, font=\footnotesize\bfseries, text=OrangeDark] at (3.3,0.4) {15\,N \; (3\,cm long)};
+
+  % Worked box on right
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt, inner sep=5pt,
+        font=\footnotesize, text=GoldDark, align=left, anchor=north west]
+        at (8.2,3.3)
+        {\textbf{To find the length:}\\[2pt]
+         length $=$ force $\div$ scale\\[2pt]
+         e.g.\ $15 \div 5 = 3$\,cm};
+\end{tikzpicture}
+\end{center}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\needspace{8\baselineskip}\vspace{10pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{marks}{box height}{text}{marks}{box height}
+\newcommand{\taskpair}[6]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}\noindent
+  \begin{minipage}[t]{0.485\linewidth}
+    \task \markscount{#2}\par #1\par\vspace{2pt}\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task \markscount{#5}\par #4\par\vspace{2pt}\answerbox{#6}
+  \end{minipage}\par\vspace{4pt}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+\renewcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=#1]
+  \end{tcolorbox}%
+}
+
+% ── Automatic mark totals ────────────────────────────────────────────────────
+% \markscount{n} adds n to the lesson's Year 7 total when it appears in
+% Part C, and to its above-level total in Part D. Each lesson's totals are
+% written to the .aux as labels marks7:N (Part C) and marks8:N (C + D), so
+% the contents table uses \ref{marks7:N} and can never go stale. Like any
+% \ref, a fresh build needs a second run before the numbers appear.
+\makeatletter
+\newcounter{mkseven}\newcounter{mkextra}
+\gdef\mk@part{X}
+\newcommand\mk@flush{%
+  \ifnum\value{section}>0
+    \immediate\write\@mainaux{\string\newlabel{marks7:\thesection}{{\arabic{mkseven}}{}}}%
+    \immediate\write\@mainaux{\string\newlabel{marks8:\thesection}{{\number\numexpr\value{mkseven}+\value{mkextra}\relax}{}}}%
+  \fi
+  \setcounter{mkseven}{0}\setcounter{mkextra}{0}\gdef\mk@part{X}}
+\renewcommand{\markscount}[1]{%
+  \if C\mk@part\addtocounter{mkseven}{#1}\fi
+  \if D\mk@part\addtocounter{mkextra}{#1}\fi
+  \hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+\let\mk@oldsectiondiv\sectiondiv
+\renewcommand{\sectiondiv}[2]{\mk@flush\mk@oldsectiondiv{#1}{#2}}
+\let\mk@oldlessonpart\lessonpart
+\renewcommand{\lessonpart}[3]{\gdef\mk@part{#1}\mk@oldlessonpart{#1}{#2}{#3}}
+\AtEndDocument{\mk@flush}
+\makeatother
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+\newenvironment{ctab}{\par\smallskip\begingroup\centering}{\par\endgroup\smallskip}
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  COVER PAGE
+% ══════════════════════════════════════════════════════════════════════════════
+\thispagestyle{plain}
+
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=NavyBlue, colframe=NavyBlue,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Sky}\footnotesize\MakeUppercase{Lesson Booklet \textbullet\ Years 7 and 8}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{40}{44}\selectfont Forces and Motion}\\[8pt]
+    {\large\color{white!85!NavyBlue}\itshape Types of force \textbullet\ Newton's laws \textbullet\ energy \textbullet\ levers \textbullet\ projectiles}\\[14pt]
+    {\headingfont\color{white!72!NavyBlue}\normalsize Victorian Curriculum F--10 Version 2.0 \textbar{}
+     VC2S8U13 \textbar{} VC2S8U14 \textbar{} VC2S8U15 \textbar{} VC2S8I01--I08}
+  \end{center}
+\end{tcolorbox}
+
+\vspace{10pt}
+
+% Student details
+\begin{tabular}{@{}p{3.5cm} p{6cm} p{2cm} p{3.5cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{5.8cm}} & \textbf{Class:}   & \underline{\hspace{3.3cm}} \\[8pt]
+  \textbf{Teacher:} & \underline{\hspace{5.8cm}} & \textbf{Year level:} & \underline{\hspace{3.3cm}} \\
+\end{tabular}
+
+\vspace{10pt}
+
+\begin{infobox}{How to use this booklet}
+There is one section for each lesson, and every lesson works the same way:
+
+\medskip
+\begin{tabular}{@{}ll@{}}
+  \textcolor{Teal}{\rule{10pt}{10pt}}\ \textbf{Part A --- Reading} & a short passage and comprehension questions to start the lesson \\
+  \textcolor{Blue}{\rule{10pt}{10pt}}\ \textbf{Part B --- Theory} & the ideas, with worked examples to follow step by step \\
+  \textcolor{Amber}{\rule{10pt}{10pt}}\ \textbf{Part C --- Practice} & questions like the examples, so you can build the skill \\
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Part D --- Above level} & harder, higher-order questions --- Year 8 and extension \\
+\end{tabular}
+
+\medskip
+Experiment lessons follow the same four parts: a reading about the science, planning the experiment, results and analysis, then above-level questions. Everything leads to the trebuchet investigation at the end of the unit.
+\end{infobox}
+
+\vspace{8pt}
+
+% Contents — rows are added as each lesson is revised
+\begin{ctab}
+\begin{tabular}{@{}C{1.3cm} L{7.0cm} C{1.8cm} C{1.8cm} C{1.4cm}@{}}
+  \thead{Lesson} & \thead{Title} & \thead{Yr 7 marks} & \thead{Yr 8 marks} & \thead{Page} \\
+  \talt 1 & What is a Force? & \ref{marks7:1} & \ref{marks8:1} & p.\ \pageref{sec:1} \\
+        2 & Force Diagrams and Net Force & \ref{marks7:2} & \ref{marks8:2} & p.\ \pageref{sec:2} \\
+  \talt 3 & Experiment 1 --- Investigating Friction & \ref{marks7:3} & \ref{marks8:3} & p.\ \pageref{sec:3} \\
+\end{tabular}
+\end{ctab}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 1 — WHAT IS A FORCE?                                    (Week 1 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{What is a Force?}{Pushes and pulls \textbullet{} Measuring force \textbullet{} Mass and weight \textbullet{} Contact and non-contact forces}\label{sec:1}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I04}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:1}
+
+\begin{readingbox}{Reading --- The Forces You Cannot See}
+Right now, while you sit perfectly still, you are being pushed and pulled from several directions at once. Gravity is pulling every part of your body downwards towards the centre of the Earth. At the same time, the chair beneath you is pushing upwards on you with exactly the same strength. Because these two forces are equal and opposite, you stay put. If the chair suddenly vanished, the pushing force would disappear, gravity would win, and you would fall.
+
+People often think that astronauts on the International Space Station float because there is no gravity in space. This is not true. At the height the Space Station orbits, Earth's gravity is still about 90\% as strong as it is on the ground. Astronauts float because they --- and the whole Space Station --- are falling around the Earth at enormous speed, and they fall together. Everything inside falls at the same rate, so nothing presses against anything else. The astronauts do not feel the push of a floor, so they seem weightless.
+
+Forces are invisible, so scientists need a way to record them. The solution is simple but powerful: draw each force as an arrow. The direction of the arrow shows which way the force acts, and the length of the arrow shows how strong it is. A picture full of invisible pushes and pulls becomes something you can measure, compare and calculate with.
+\end{readingbox}
+
+\rcreset
+\rcq{According to the passage, name the two forces acting on you while you sit still, and state the direction of each.}{1.6cm}
+\rcq{The passage says that if the chair vanished, ``gravity would win''. Explain what this means, using the idea of two forces that are no longer equal.}{1.8cm}
+\rcq{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
+\rcq{Does an astronaut on the Space Station still have weight? Use a number from the passage to support your answer.}{1.6cm}
+\rcq{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:1}
+
+\subsection{Every Force is a Push or a Pull}\label{sub:1.1}
+
+This is the whole idea, and it really is that simple. Whenever one object affects another --- by touching it, or from a distance --- it does so by \textbf{pushing} it or \textbf{pulling} it. There is no third option.
+
+\begin{skillbox}{Think about it}
+A magnet \emph{pulls} a paperclip. A hand \emph{pushes} a door. The Earth \emph{pulls} you downwards. A rope \emph{pulls} a sledge. The ground \emph{pushes} up on your feet.
+\end{skillbox}
+
+\subsection{What Forces Can Do}\label{sub:1.2}
+
+A force can only change an object in a small number of ways. Learn these five and you can describe almost any situation in this unit.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}C{0.8cm} L{5.6cm} L{8.4cm}@{}}
+  \thead{\#} & \thead{A force can\ldots} & \thead{Example} \\
+  \talt 1 & Make a still object start moving   & A kicked football leaves the ground \\
+        2 & Make a moving object stop          & Brakes bring a bicycle to a halt \\
+  \talt 3 & Make an object speed up or slow down & Pedalling harder makes you accelerate \\
+        4 & Change the direction of motion     & A tennis racquet sends the ball back \\
+  \talt 5 & Change the shape of an object      & Squashing a drink can \\
+\end{tabular}
+\end{ctab}
+
+\subsection{Measuring Force: The Newton}\label{sub:1.3}
+
+Force is measured in \textbf{newtons}, written \textbf{N}. The unit is named after Sir Isaac Newton, whose laws of motion you will meet in Lesson~4.
+
+\begin{infobox}{Getting a feel for a newton}
+\textbf{1 N} is roughly the force you feel holding a small apple (about 100 g) against gravity.\\
+\textbf{10 N} is about the weight of a 1 kg bag of sugar.\\
+\textbf{500 N} is roughly the weight of an average adult.
+\end{infobox}
+
+We measure force with a \textbf{spring scale} (also called a \emph{newton meter}). Inside is a spring: the harder you pull, the further it stretches, and a pointer moves down a scale marked in newtons.
+
+\vspace{4pt}
+\diagSpringScales
+\figcap[fig:spring-scale]{Reading a spring scale. Always read at eye level, and check the size of each small division first.}
+
+\begin{skillbox}{How to read a spring scale correctly}
+\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
+  \item Check the \textbf{largest} number on the scale --- this is the maximum it can measure.
+  \item Work out what \textbf{one small division} is worth. If there are 10 small gaps between 0 and 5 N, each is 0.5 N.
+  \item Hold the scale still and read at \textbf{eye level} to avoid parallax error.
+  \item Read the value where the \textbf{pointer} sits, and always write the \textbf{unit (N)}.
+\end{enumerate}
+\end{skillbox}
+
+\begin{workedex}{Reading a spring scale}
+A spring scale is marked from 0 to 10\,N, with \textbf{20} small divisions between 0 and 10. The pointer sits on the \textbf{7th} small division. What is the reading?
+
+\medskip
+\textbf{Step 1 --- one division:}\quad $10 \div 20 = 0.5$\,N per division
+
+\textbf{Step 2 --- the reading:}\quad $7 \times 0.5 = \mathbf{3.5\ \text{N}}$
+\end{workedex}
+
+\subsection{Mass and Weight Are Not the Same Thing}\label{sub:1.4}
+
+In everyday speech we use these words as if they mean the same thing. In science they are quite different, and mixing them up causes a lot of lost marks.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}L{3.2cm} L{6.0cm} L{6.0cm}@{}}
+  \thead{} & \thead{Mass} & \thead{Weight} \\
+  \talt What it is   & The amount of matter in an object & The \emph{force} of gravity pulling on that mass \\
+        Unit         & kilograms (kg)                    & newtons (N) \\
+  \talt Measured with& A balance                         & A spring scale \\
+        Changes?     & Same everywhere in the universe   & Changes with the strength of gravity \\
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{The link between them}
+\[ \text{Weight} = \text{mass} \times \text{gravitational field strength} \qquad\Rightarrow\qquad \boxed{W = mg} \]
+On Earth, $g = 9.8$\,N/kg. On the Moon, $g = 1.6$\,N/kg.
+\end{infobox}
+
+\begin{workedex}{Mass and weight}
+A student has a mass of 50\,kg. Find their weight on Earth, and on the Moon.
+
+\medskip
+\textbf{On Earth:}\quad $W = mg = 50 \times 9.8 = \mathbf{490\ \text{N}}$
+
+\textbf{On the Moon:}\quad $W = mg = 50 \times 1.6 = \mathbf{80\ \text{N}}$
+
+\medskip
+Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
+\end{workedex}
+
+\subsection{Contact and Non-contact Forces}\label{sub:1.5}
+
+Forces fall into two groups. \textbf{Contact forces} only act when two objects touch. \textbf{Non-contact forces} act across a gap --- the objects do not need to touch at all.
+
+\vspace{4pt}
+\diagForceTypes
+\figcap{Contact and non-contact forces}
+
+\begin{workedex}{Classifying forces}
+A fridge magnet holds a shopping list on the fridge door without sliding down. Name two forces acting on the magnet and classify each one.
+
+\medskip
+\textbf{Weight} pulls the magnet down --- gravity acts across a gap, so it is a \textbf{non-contact} force.
+
+\textbf{Friction} between the magnet and the door stops it sliding --- the surfaces must touch, so it is a \textbf{contact} force.
+
+\medskip
+\textit{(The magnetic pull towards the door is also non-contact --- it is what presses the magnet on hard enough for friction to hold it.)}
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:1}
+
+Work through every task. Show your working for calculations, and always include the unit.
+
+\needspace{10\baselineskip}
+\task \markscount{6}\quad For each everyday action, decide whether the force is a push or a pull. Write \textbf{PUSH} or \textbf{PULL} in the box.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}L{5.4cm} C{2.2cm} L{5.4cm} C{2.2cm}@{}}
+  \thead{Action} & \thead{Push or pull?} & \thead{Action} & \thead{Push or pull?} \\
+  \talt Kicking a football          & & Opening a drawer           & \\[8pt]
+        A crane lifting a girder    & & Squeezing a stress ball    & \\[8pt]
+  \talt A dog straining on a lead   & & Wind on a sail             & \\[8pt]
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task \markscount{4}\quad For each event below, write the \textbf{number} (1--5) of the effect the force is having (see the table in \S\ref{sub:1.2}). Some may have more than one.
+
+\vspace{3pt}
+\begin{ctab}
+\begin{tabular}{@{}L{6.8cm} C{1.6cm} L{5.4cm} C{1.6cm}@{}}
+  \talt A goalkeeper catches a ball        & & Stretching a rubber band & \\[8pt]
+        A car turns a corner at steady speed & & A rocket lifts off      & \\[8pt]
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task \markscount{3}\quad Write the reading shown on each of the three scales in Figure~\ref{fig:spring-scale}.
+
+\vspace{3pt}
+\begin{ctab}
+\begin{tabular}{@{}C{4.6cm} C{4.6cm} C{4.6cm}@{}}
+  \thead{Scale A} & \thead{Scale B} & \thead{Scale C} \\
+  \talt \rule{0pt}{1.1cm} & & \\
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task \markscount{4}\quad Complete the table. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
+
+\vspace{3pt}
+\begin{ctab}
+\begin{tabular}{@{}L{5.0cm} C{3.2cm} C{3.2cm} C{3.4cm}@{}}
+  \thead{Object} & \thead{Mass (kg)} & \thead{Weight on Earth (N)} & \thead{Weight on Moon (N)} \\
+  \talt Bag of sugar    & 1   & & \\[8pt]
+        Bicycle         & 12  & & \\[8pt]
+  \talt Small car       & 900 & & \\[8pt]
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task \markscount{6}\quad Complete the table. For each force, write whether it is a contact or non-contact force, and give a real-world example.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}L{3.5cm} C{3.5cm} L{7.6cm}@{}}
+  \thead{Force} & \thead{Contact / Non-contact} & \thead{Real-world example} \\
+  \talt Gravity       & & \\[10pt]
+        Friction       & & \\[10pt]
+  \talt Magnetic force & & \\[10pt]
+        Normal force   & & \\[10pt]
+  \talt Air resistance & & \\[10pt]
+        Tension        & & \\[10pt]
+\end{tabular}
+\end{ctab}
+
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad A spring scale is marked from 0 to 20\,N, with \textbf{40} small divisions. The pointer sits on the \textbf{13th} small division. What is the reading? Show both steps.
+\answerbox{2.2cm}
+
+\taskpair{A cat has a mass of 4\,kg. Find its weight on Earth.}{2}{2.2cm}
+         {The same cat travels to the Moon. Find its weight there. Has its mass changed?}{2}{2.2cm}
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad A balloon rubbed on your hair sticks to a wall. Name the force holding it there, and say whether it is a contact or non-contact force.
+\answerbox{2.0cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:1}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to combine ideas, use a formula, or judge someone else's reasoning.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask \markscount{4}\quad An astronaut has a mass of 75\,kg. \textbf{(a)} Find her weight on Earth. \textbf{(b)} Find her weight on the Moon. \textbf{(c)} Explain why she can jump much higher on the Moon, even though her mass has not changed.
+\answerbox{3.4cm}
+
+
+\needspace{10\baselineskip}
+\exttask \markscount{3}\quad A suitcase has a weight of 196\,N on Earth. \textbf{(a)} Find its mass. \textbf{(b)} Find its weight on the Moon.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask \markscount{3}\quad A bathroom scale really measures \emph{force}, but it is labelled in kilograms. A 60\,kg student reads 60\,kg on it on Earth. Predict what the same scale would read on the Moon, and explain why the scale is not really measuring mass.
+\answerbox{3.0cm}
+
+\end{yr8box}
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 2 — FORCE DIAGRAMS AND NET FORCE                        (Week 1 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Force Diagrams and Net Force}{Naming forces \textbullet{} Force arrows \textbullet{} Free body diagrams \textbullet{} Balanced and unbalanced forces}\label{sec:2}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I04}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:2}
+
+\begin{readingbox}{Reading --- Winning a Tug-of-War}
+In a tug-of-war, two teams pull on the same rope in opposite directions. While the rope stays still, the two pulls are exactly the same size. They are \emph{balanced}, so the net force on the rope is zero --- the rope does not move, even though both teams are pulling as hard as they can.
+
+The moment one team pulls even a little harder, the forces become \emph{unbalanced}. There is now a net force towards the stronger team, and the rope starts to move their way. The bigger the difference between the two pulls, the faster the rope speeds up.
+
+So how does a team pull harder? Strength helps, but the real secret is under their feet. To pull on the rope, each person pushes backwards against the ground with their shoes. Friction between the shoes and the ground stops them from sliding forwards. A team with good grip --- rough soles, a dry surface, bodies low and leaning back --- can pull harder before their feet slip. A team on a slippery surface will be dragged across, no matter how strong they are.
+
+Coaches explain this with force arrows. They draw the rope, the two pulls and the friction on the feet, each as an arrow whose length shows its size. One look at the arrows shows which team is going to win.
+\end{readingbox}
+
+\rcreset
+\rcq{While the rope is not moving, what can you say about the two teams' pulls? Use the word \emph{balanced}.}{1.6cm}
+\rcq{What happens to the rope when one team pulls harder? Explain why, using the words \emph{net force}.}{1.8cm}
+\rcq{According to the passage, why does a team on a slippery surface lose, however strong they are?}{1.8cm}
+\rcq{List two things from the passage that give a team better grip.}{1.4cm}
+\rcq{How can a coach tell which team will win just by looking at the force arrows?}{1.6cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:2}
+
+\subsection{Naming the Forces}\label{sub:2.1}
+
+Before you can draw a force diagram, you need the right names. These are the forces you will use again and again in this unit.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}L{3.4cm} L{6.4cm} L{5.4cm}@{}}
+  \thead{Force} & \thead{What causes it} & \thead{Which way it acts} \\
+  \talt Weight ($W$)        & Gravity pulling on mass              & Always straight down \\
+        Normal force ($N$)  & A surface pushing back on an object  & Perpendicular to the surface \\
+  \talt Friction ($f$)      & Two surfaces rubbing together        & Opposite to the motion \\
+        Air resistance      & Air pushing against a moving object  & Opposite to the motion \\
+  \talt Tension ($T$)       & A rope, string or cable pulling      & Along the rope, away from the object \\
+        Applied force       & A person or machine pushing/pulling  & Whichever way it is applied \\
+\end{tabular}
+\end{ctab}
+
+\subsection{Drawing Force Arrows --- The Three Rules}\label{sub:2.2}
+
+\begin{skillbox}{The three rules for every force arrow}
+\begin{enumerate}[itemsep=2pt, leftmargin=1.4em, topsep=1pt]
+  \item \textbf{Start the arrow on the object.} The tail sits on the object the force acts on.
+  \item \textbf{Point the arrowhead the way the force acts.} Down for weight, up for the normal force, and so on.
+  \item \textbf{Make the length match the size.} A 20\,N force is drawn twice as long as a 10\,N force. \emph{Always}.
+\end{enumerate}
+\end{skillbox}
+
+Rule 3 is the one students most often forget --- and it matters, because the picture should tell you the answer at a glance. If two arrows are the same length, the forces are balanced. If one is longer, that is the direction the object accelerates.
+
+\vspace{4pt}
+\diagArrowScale
+\figcap{Using a scale for force arrows. Here 1\,cm represents 5\,N, so a 15\,N force is drawn 3\,cm long.}
+
+\begin{workedex}{Drawing arrows to scale}
+Using a scale of 1\,cm = 5\,N, how long should the arrow be for a 25\,N push?
+
+\medskip
+\textbf{Length} $=$ force $\div$ scale $= 25 \div 5 = \mathbf{5\ \text{cm}}$
+\end{workedex}
+
+\subsection{Free Body Diagrams}\label{sub:2.3}
+
+A \textbf{free body diagram (FBD)} shows \emph{all} the forces acting on \emph{one} object, each drawn as a labelled arrow using the three rules. The object is drawn as a simple box or dot --- nothing else from the picture is included.
+
+\diagFBD
+\figcap[fig:fbd]{Balanced forces (left) and unbalanced forces (right)}
+
+\begin{workedex}{Drawing a free body diagram}
+A book with a weight of 10\,N rests on a table. Draw its free body diagram.
+
+\medskip
+\textbf{Step 1 --- find every force.} Gravity pulls the book down (\emph{weight}). The table pushes up on it (\emph{normal force}).
+
+\textbf{Step 2 --- size each force.} The book is not moving up or down, so the table pushes up exactly as hard as gravity pulls down: both are 10\,N.
+
+\textbf{Step 3 --- draw.} A box for the book, a 10\,N arrow down labelled $W$, and an arrow of the \emph{same length} up labelled $N$ --- as in the left of Figure~\ref{fig:fbd}.
+\end{workedex}
+
+\subsection{Balanced and Unbalanced: Net Force}\label{sub:2.4}
+
+When you add up all the forces on an object, the single force left over is called the \textbf{net force} (or resultant force).
+
+\begin{infobox}{Working out the net force}
+\textbf{Same direction} $\rightarrow$ \textbf{add} the forces.\\
+\textbf{Opposite directions} $\rightarrow$ \textbf{subtract} the smaller from the larger. The net force acts in the direction of the larger force.\\[3pt]
+If the net force is \textbf{zero}, the forces are \textbf{balanced} and the motion does not change.\\
+If the net force is \textbf{not zero}, the forces are \textbf{unbalanced} and the object speeds up, slows down or changes direction.
+\end{infobox}
+
+\begin{workedex}{Finding the net force}
+A sledge is pulled forwards with 45\,N. Friction pushes back with 18\,N. Find the net force.
+
+\medskip
+Opposite directions, so subtract: \quad $45 - 18 = \mathbf{27\ \text{N forwards}}$
+
+\medskip
+The net force is not zero, so the forces are unbalanced and the sledge \textbf{speeds up}.
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:2}
+
+Work through every task. Show your working for calculations, and always include the unit.
+
+\needspace{10\baselineskip}
+\task \markscount{3}\quad Using a scale of \textbf{1\,cm = 2\,N}, how long should the arrows be for forces of \textbf{(a)} 6\,N, \textbf{(b)} 10\,N and \textbf{(c)} 3\,N?
+\answerbox{2.0cm}
+
+\needspace{14\baselineskip}
+\task \markscount{4}\quad A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
+\end{tcolorbox}
+
+\needspace{10\baselineskip}
+\task[a] \markscount{2}\quad
+Look at the balanced forces diagram in Figure~\ref{fig:fbd} (left). Why is the book not speeding up or slowing down? Use the words \textit{net force} in your answer.
+\answerbox{2.2cm}
+
+\taskpart{b} \markscount{2}\quad
+Look at the unbalanced forces diagram (right). Calculate the net force on the box and state which way it speeds up.
+\answerbox{2.2cm}
+
+\needspace{16\baselineskip}
+\taskpart{c} \markscount{2}\quad
+Draw a free body diagram for a skydiver falling at a steady speed (terminal velocity). Label each force with its name and show their comparative sizes.
+
+\vspace{3pt}
+\begin{tcolorbox}[colback=white, colframe=MidGrey, height=4.6cm, boxrule=0.5pt]
+\textit{\color{MidGrey}Draw your force diagram here.}
+\end{tcolorbox}
+
+\needspace{14\baselineskip}
+\task \markscount{2}\quad A lamp with a weight of 15\,N hangs still from the ceiling on a cord. Draw its free body diagram, labelling each force with its name and size.
+
+\vspace{3pt}
+\begin{tcolorbox}[colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
+\textit{\color{MidGrey}Draw your force diagram here.}
+\end{tcolorbox}
+
+\needspace{6\baselineskip}
+\textbf{Net force.} For each question, state the size \emph{and} direction of the net force, and whether the forces are balanced or unbalanced.
+
+\taskpair{Two people push a car in the same direction with 250\,N and 310\,N. Find the net force.}{2}{2.2cm}
+         {A trolley is pushed right with 40\,N while friction pushes left with 12\,N. Find the net force.}{2}{2.2cm}
+
+\taskpair{A book rests on a table. Its weight is 8\,N. What is the normal force from the table? Explain.}{2}{2.2cm}
+         {In a tug-of-war, one team pulls left with 900\,N and the other pulls right with 900\,N. Describe the motion of the rope.}{2}{2.2cm}
+
+\needspace{10\baselineskip}
+\task \markscount{3}\quad A rocket engine produces 50\,000\,N of upward thrust. The rocket's weight is 32\,000\,N. \textbf{(a)} Find the net force. \textbf{(b)} State which way the rocket speeds up. \textbf{(c)} Explain what would happen if the thrust dropped to 32\,000\,N.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad A swimmer moves forward at a steady speed. Her arms provide 120\,N of forward force. \textbf{(a)} What is the size of the water resistance acting on her? \textbf{(b)} Explain how you know.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task \markscount{3}\quad A parachutist has a weight of 700\,N. Just after the parachute opens, air resistance is 950\,N. \textbf{(a)} Find the net force and its direction. \textbf{(b)} Describe what happens to the parachutist's speed. \textbf{(c)} Air resistance then falls to 700\,N --- describe the motion now.
+\answerbox{3.4cm}
+
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:2}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to combine ideas, use a formula, or judge someone else's reasoning.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask \markscount{3}\quad Sam says: \emph{``A hockey puck sliding across ice at a steady speed must have an unbalanced force pushing it forwards.''} Is Sam right? Use a free body diagram and the idea of net force to explain.
+\answerbox{3.4cm}
+
+\needspace{14\baselineskip}
+\exttask \markscount{4}\quad A skydiver jumps from a plane. Draw a free body diagram for each moment: \textbf{(i)} just after jumping, \textbf{(ii)} while still speeding up, \textbf{(iii)} at terminal velocity. Then explain why air resistance grows, and why the skydiver eventually stops speeding up.
+
+\vspace{3pt}
+\noindent\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(i)} just after jumping\end{tcolorbox}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(ii)} speeding up\end{tcolorbox}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=4.2cm]\textbf{(iii)} terminal velocity\end{tcolorbox}\end{minipage}
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask \markscount{3}\quad A car has a driving force of 4500\,N and a total resistive force of 1200\,N. Calculate the net force, state which way the car accelerates, and suggest one way the driver could make the forces balanced.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask \markscount{4}\quad A 1200\,kg car has a driving force of 4800\,N. Air resistance and friction total 1500\,N. \textbf{(a)} Find the net force. \textbf{(b)} Use $F = ma$ (acceleration = net force $\div$ mass) to find the acceleration. \textbf{(c)} The driving force rises to 6000\,N --- find the new acceleration.
+\answerbox{3.6cm}
+\end{yr8box}
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 3 — EXPERIMENT 1: INVESTIGATING FRICTION                (Week 1 · P3)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Experiment 1: Investigating Friction}{Prediction \textbullet{} Fair testing \textbullet{} Repeat trials \textbullet{} Means}\label{sec:3}\label{exp:1}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:3}
+
+\begin{readingbox}{Reading --- Grip}
+Friction is the force that makes walking possible. With every step, your shoe pushes backwards against the ground, and friction pushes you forwards. On ice, where friction is tiny, your foot slips backwards and you go nowhere.
+
+Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Rougher surfaces have bigger bumps that catch more, so they produce more friction. Pressing the surfaces together harder also increases friction.
+
+Sometimes engineers want as much friction as possible --- in the rubber of a car tyre, the soles of running shoes or the grip tape on a skateboard. Other times they want as little as possible: oil in an engine and wax on skis reduce friction, so parts slide easily and less energy is wasted as heat.
+
+In this experiment you will measure friction with a spring scale. When you pull a block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring scale is equal to the friction force.
+\end{readingbox}
+
+\rcreset
+\rcq{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
+\rcq{Why do rougher surfaces produce more friction? Use the word \emph{bumps} in your answer.}{1.6cm}
+\rcq{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
+\rcq{Why must the block move at a \emph{steady} speed when you read the spring scale?}{1.8cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Planning the experiment}{Blue}\label{theory:3}
+
+\begin{expheader}{1}{Investigating Friction}{To investigate how the type of surface affects the friction force on a sliding object.}
+\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
+\end{expheader}
+
+\subsection{Making it a Fair Test}\label{sub:3.1}
+
+In a fair test you change \textbf{one} thing, measure \textbf{one} thing, and keep everything else the same.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{@{}L{3.6cm} L{11.4cm}@{}}
+  \thead{Variable} & \thead{What it means} \\
+  \talt Independent & The one thing \emph{you} change on purpose \\
+        Dependent   & The thing you \emph{measure} to see the effect \\
+  \talt Controlled  & Everything you keep the \emph{same}, so the test is fair \\
+\end{tabular}
+\end{ctab}
+
+\begin{workedex}{Identifying variables}
+A student rolls a toy car down a ramp at different heights and measures how far it travels across the floor. Identify the variables.
+
+\medskip
+\textbf{Independent:} the height of the ramp (the student changes it).
+
+\textbf{Dependent:} the distance the car travels (the student measures it).
+
+\textbf{Controlled:} the same car, the same floor surface, releasing the car without pushing it.
+\end{workedex}
+
+\begin{scaffold}{Prediction --- before you begin}
+Which surface do you think will produce the most friction? Why?
+\answerbox{2cm}
+\end{scaffold}
+
+\subsubsection*{Equipment}
+Wooden block (or heavy book) \quad Spring scale (newton meter) \quad 3+ surfaces (bench, sandpaper, fabric, carpet) \quad Ruler
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Place the wooden block on the first surface.
+  \item Attach the spring scale to the block. Pull slowly and steadily.
+  \item Read the spring scale while the block moves at a steady speed. Record the friction force in newtons.
+  \item Repeat 3 times for this surface and record all values.
+  \item Repeat steps 1--4 for each surface.
+\end{enumerate}
+
+\begin{infobox}{Safety}
+Pull gently and keep the scale in line with the block --- a spring scale that is overstretched can snap back. Keep sandpaper away from eyes and skin.
+\end{infobox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Results and analysis}{Amber}\label{prac:3}
+
+\subsubsection*{Results}
+
+\begin{ctab}
+\begin{tabular}{@{}L{3.5cm} C{2cm} C{2cm} C{2cm} C{3cm}@{}}
+  \thead{Surface} & \thead{Trial 1 (N)} & \thead{Trial 2 (N)} & \thead{Trial 3 (N)} & \thead{Mean (N)} \\
+  \talt  & & & & \\[10pt]
+         & & & & \\[10pt]
+  \talt  & & & & \\[10pt]
+         & & & & \\[10pt]
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{Calculating a mean}
+Add the trials, then divide by how many there are. For 1.2\,N, 1.4\,N and 1.3\,N: \quad $(1.2 + 1.4 + 1.3) \div 3 = 3.9 \div 3 = \mathbf{1.3\ \text{N}}$
+\end{infobox}
+
+\needspace{10\baselineskip}
+\task \markscount{3}\quad Identify the independent variable, the dependent variable, and two controlled variables in \emph{your} experiment.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad Which surface produced the greatest friction? Which produced the least? Was your prediction correct?
+\answerbox{2.2cm}
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad Why did you take three trials for each surface? What did you do with the three values?
+\answerbox{2.2cm}
+
+\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N on carpet. Calculate the mean.}{2}{2.2cm}
+         {A group measured 1.8\,N, 1.9\,N and 2.9\,N on fabric. Which value looks wrong? Find the mean of the other two.}{2}{2.2cm}
+
+\needspace{10\baselineskip}
+\task \markscount{2}\quad Use the reading on page~\pageref{read:3} to explain \emph{why} the surface you named in Task~\ref{task:3.2} produced the most friction.
+\answerbox{2.2cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:3}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to evaluate the method, predict, or use a formula.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask \markscount{2}\quad Even on the same surface, your three readings were probably not identical. Suggest one reason why, and one change to the method that would make the readings more consistent.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask \markscount{2}\quad Predict what would happen to the friction force if you stacked a second block on top of the first. Explain your prediction using the reading.
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\exttask \markscount{3}\quad The wooden block has a mass of 0.3\,kg. Choose your highest mean friction force. If the block were sliding and you let go of the spring scale, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
+\answerbox{3.2cm}
+\end{yr8box}
+
+\end{document}

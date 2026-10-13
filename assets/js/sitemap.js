@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-09",
+ "generated": "2026-10-13",
  "tree": [
   {
    "t": "Home",
@@ -224,28 +224,13 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 2 — Newton’s Laws of Motion",
+           "t": "Lesson 2 — Force Diagrams and Net Force",
            "h": "year7-science/forces/deck2.html",
            "k": "science"
           },
           {
-           "t": "Lesson 3 — Energy & Transformation",
+           "t": "Lesson 3 — Experiment 1: Investigating Friction",
            "h": "year7-science/forces/deck3.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 4 — Simple Machines & Levers",
-           "h": "year7-science/forces/deck4.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 5 — Projectile Motion",
-           "h": "year7-science/forces/deck5.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 6 — The Trebuchet Investigation",
-           "h": "year7-science/forces/deck6.html",
            "k": "science"
           }
          ]
@@ -254,6 +239,31 @@ window.SITEMAP = {
          "t": "Resources",
          "g": 1,
          "c": [
+          {
+           "t": "Lesson 2 — Newton’s Laws of Motion",
+           "h": "year7-science/forces/legacy-deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Energy & Transformation",
+           "h": "year7-science/forces/legacy-deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Simple Machines & Levers",
+           "h": "year7-science/forces/legacy-deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Projectile Motion",
+           "h": "year7-science/forces/legacy-deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — The Trebuchet Investigation",
+           "h": "year7-science/forces/legacy-deck6.html",
+           "k": "science"
+          },
           {
            "t": "Unit Planner",
            "h": "year7-science/forces/planner.html",
