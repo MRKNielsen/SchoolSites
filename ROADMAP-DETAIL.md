@@ -41,6 +41,31 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — Ch3G–3L worked example set, print booklet (14 Oct 2026)
+
+`10methods-primer/booklet/Ch3G-L_Example_Set.tex` + `.pdf` — a 25-page
+A4 booklet of original worked examples for 3G–3L (27 examples, 6 key-idea
+panels, 6 fix-the-error tasks, 30 practice questions + 6 mixed). Each
+section: Key ideas → I do (fully worked) → We do (write-in blanks and
+1.5 cm tables, first row in red) → Fix it → You do. Not yet linked from
+the site — it was asked for as a print document.
+
+New pattern, reusable for any booklet that needs a teacher copy:
+
+- **One source, two builds.** The student `.tex` holds no answers; every
+  blank is `\blank{width}{key}`, `\cell{key}` or `\tans{key}`.
+  `Ch3G-L_Example_Set_Teacher.tex` defines every key with `\defans`
+  inside `\teacheranswers` and `\input`s the student file, which prints
+  them in red. The wrapper and its PDF are **gitignored** by path (staff
+  material). A missing key prints `??key??` — grep the teacher PDF.
+- **Both copies paginate identically** (teacher answers are `\smash`ed
+  or zero-height), so "page 14" means the same page in both.
+- **No bare gaps.** Example boxes are typeset, measured, then placed
+  whole; if one won't fit, the rest of the page becomes ruled *Notes*
+  lines (`\placeorfill`). Questions do the same with plain lines, and
+  each section ends with lines to the foot of the page. Writing lines are
+  8 mm everywhere (`\rulepitch`), which is what lets `\tans` sit on them.
+
 ### Landed — Year 10 exponential graphs redrawn (9 Oct 2026)
 
 All ten figures in `10methods-primer/Ch3FL_ExponentialsLogs_Slides.html`
