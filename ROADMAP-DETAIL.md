@@ -41,6 +41,16 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
+### Landed — Ch3F–3L question booklet linked (14 Oct 2026)
+
+`booklet/Ch3FL_ExponentialsLogs_Question_Booklet.pdf` (24 pp, 3F–3L) now
+has a page, `10methods-primer/booklet-exponentials.html`, built the same
+way as `booklet-trigonometry.html`: `.pdf-frame` embed, open/download
+buttons, and a section strip linking each section to its deck slide. The
+primer hub's 3F–3L chapter carries a "Question booklet" chip beside
+"Open deck". The Ch3G–3L example set below is deliberately **not**
+linked.
+
 ### Landed — Ch3G–3L worked example set, print booklet (14 Oct 2026)
 
 `10methods-primer/booklet/Ch3G-L_Example_Set.tex` + `.pdf` — a 25-page

@@ -411,6 +411,11 @@ window.SITEMAP = {
            "k": "space"
           },
           {
+           "t": "Revision Worksheet · Lessons 1–7",
+           "h": "year7-science/space/worksheet-revision.html",
+           "k": "space"
+          },
+          {
            "t": "Worksheet Booklet · All 10 Worksheets",
            "h": "year7-science/space/worksheets-all.html",
            "k": "space"
@@ -523,6 +528,11 @@ window.SITEMAP = {
          "t": "Resources",
          "g": 1,
          "c": [
+          {
+           "t": "Chapter 3F–3L Exponentials & Logarithms — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-exponentials.html",
+           "k": "primer"
+          },
           {
            "t": "Quadratics, Chapters 5 & 7 — Question Booklet",
            "h": "year10-mathematics/10methods-primer/booklet-quadratics.html",
