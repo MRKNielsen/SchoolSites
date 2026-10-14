@@ -555,28 +555,23 @@ milestones, and fills `.countdown[data-to]` elements.
 A unit long enough to need **several week grids stacked** wraps each in a
 `.chapter` opening with a `.ch-head` (`h2` + `.ch-meta`, then a `.ch-open`
 pill on the right, or a `.ch-links` span when a chapter has more than one
-destination — e.g. a question booklet beside the deck). No page uses it
-at the moment (the primer moved to the year grid below); year11-methods
-ch9/11 is the likely next user. A hub with a single grid goes straight
-from `h2` to `.grid` and needs none of it. Period lines carry their own
-link and label styling (`ul.periods a`, `ul.periods li b` — the lead-in
-code or day, in the hub's amber), so don't restate those per page.
+destination — e.g. a question booklet beside the deck). A hub with a
+single grid goes straight from `h2` to `.grid` and needs none of it.
+Period lines carry their own link and label styling (`ul.periods a`,
+`ul.periods li b` — the lead-in code or day, in the hub's amber), so
+don't restate those per page.
 
-A **whole course on one screen** uses the **year grid** instead:
-`<header class="hub-head slim">` with the milestones as
-`.timeline.inline` in the header row, then `<main class="year">` holding
-one `article.yc` card per chapter — `.yc-eyebrow` (unit · weeks), `h2`
-short title (the full chapter title goes in the link's `title`),
-`.yc-code`, `.yc-links` (Deck / Booklet pills), then a `.yc-wk` label
-(`T1 W1`, with the week's theme as its `title`) above each `ul.yc-list`
-of lessons. Columns come from the card count (`grid-auto-flow:
-column`), so nothing states a number; `data-group="Semester 2"` on a card
-labels a group and draws the divider before it. Reference
-implementation: `year10-mathematics/10methods-primer/index.html` — nine
-chapters and 132 lessons that fit a maximised browser at 1920×1080 with
-no scrolling. Below 1500px the cards wrap into rows. Keep lesson titles
-short when adding to it: the tallest column (Chapter 7) is what decides
-whether the page still fits.
+A **whole course** is split into **topic pages**: the course home keeps
+its `.hub-head` + milestone `.timeline` and then shows a
+`nav.topic-grid` of `a.topic` buttons (`.tp-eyebrow` unit · weeks,
+`.tp-title`, `.tp-meta` chapter · lesson count); each button opens that
+topic's own hub page — a `.chapter` week grid inside
+`<main class="topic-main">`, with a `nav.topic-pager` to the previous
+and next topic. Reference implementation:
+`year10-mathematics/10methods-primer/` — `index.html` plus
+`unit1-linear-relations.html` … `unit8-probability.html` and
+`wrapup-revision-cat3.html`. A new lesson goes on its topic page; the
+lesson count on the home page's button is typed, so update it too.
 
 ## Species / case-study profile pages
 
