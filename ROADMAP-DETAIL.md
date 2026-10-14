@@ -41,6 +41,24 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 7 gated pages.
 
+### Landed — Ch8 Probability question booklet (14 Oct 2026)
+
+`10methods-primer/booklet/Ch8_Probability_Question_Booklet.tex` + `.pdf`
+(44 pp, sections 8A–8J; 8K is not taught) — the fourth primer booklet,
+in the Ch3F–3L format: per section a refbox of textbook example numbers
+and question sets with pages, two original worked examples, then five
+hurdle questions on a new page. Diagrams are TikZ macros in the preamble
+(spinner, Venn with shaded-region variant, two-stage tree with an
+outcome/probability column, three-stage coin tree, outcome array with
+a crossed-out diagonal for "without replacement", counting boxes). Gaps
+are filled rather than left bare: each worked example and hurdle is
+measured and placed whole, and leftover space becomes Notes lines or
+working lines. All worked and hurdle answers were checked by script.
+Linked as `booklet-probability.html` (built like `booklet-exponentials.html`;
+8B links to the 8B+ lesson, slide #8), with a "Question booklet" chip on
+`unit8-probability.html` and on the Unit 8 topic button. No answer copy
+yet.
+
 ### Landed — Space revision worksheet + answer copy (13–14 Oct 2026)
 
 `year7-science/space/worksheet-revision.html` — two 50-minute lessons of

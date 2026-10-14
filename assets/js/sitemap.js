@@ -539,6 +539,11 @@ window.SITEMAP = {
            "k": "primer"
           },
           {
+           "t": "Chapter 8 Probability — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-probability.html",
+           "k": "primer"
+          },
+          {
            "t": "Quadratics, Chapters 5 & 7 — Question Booklet",
            "h": "year10-mathematics/10methods-primer/booklet-quadratics.html",
            "k": "primer"
