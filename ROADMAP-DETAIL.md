@@ -41,18 +41,18 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 6 gated pages.
 
-### Landed — primer course home as a one-screen year grid (14 Oct 2026)
+### Landed — primer course home split into topic pages (14 Oct 2026)
 
-`10methods-primer/index.html` went from nine stacked chapter sections
-(34 week cards, 4550 px tall at 1920 wide) to a nine-column **year
-grid** that fits a maximised browser at 1920×1080 with no scrolling:
-one card per chapter, Semester 1 / Semester 2 groups, every one of the
-132 lesson links kept (checked href-for-href against the old page),
-milestones moved into the header row. New components live at the end of
-`hub.css` ("Year grid"); see CLAUDE.md, Course hub pages. Dropped from the
-page: the per-chapter "assessed in…" lines (the CATs are in the header
-milestones) and the week themes, which are now the week labels' tooltips.
-Checked at 1920×1080, 1920×950, 1600, 1366, tablet and phone.
+`10methods-primer/index.html` was nine stacked chapter sections (34 week
+cards, ~4550 px tall). It is now the header and milestone timeline plus
+a 3×3 grid of topic buttons that fits one 1080p window (and 1366×768).
+Each button opens a topic page — `unit1-linear-relations.html` …
+`unit8-probability.html`, `wrapup-revision-cat3.html` — carrying that
+chapter's week cards verbatim (all 132 lesson links checked against the
+old page), its deck / booklet pills, and previous / next topic links.
+New components at the end of `hub.css` ("Topic buttons"); see CLAUDE.md,
+Course hub pages. A one-screen nine-column "year grid" was tried first
+the same day and dropped — too dense to read comfortably.
 
 ### Landed — Ch3F–3L question booklet linked (14 Oct 2026)
 

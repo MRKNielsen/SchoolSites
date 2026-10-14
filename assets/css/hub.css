@@ -7,7 +7,9 @@
        <header class="hub-head"> … <div class="timeline"> … </header>
        <main> <div class="grid" id="weeks"> <div class="week" data-start="…">
    For a long unit, wrap each grid in a .chapter with a .ch-head — see
-   "Chapter groups" below.
+   "Chapter groups" below. For a whole course, give each topic its own
+   page and link them from a .topic-grid of buttons — see "Topic
+   buttons" at the end of this file.
    Behaviour (current-week highlight, milestone states, countdown)
    comes from ../js/hub.js.
    ============================================================ */
@@ -108,10 +110,11 @@ ul.periods a { color: #fff; text-decoration: none; }
 ul.periods a:hover { text-decoration: underline; }
 
 /* ---------- Chapter groups ----------
-   A hub whose unit is long enough to need several week grids stacked
-   under their own headings (year10-mathematics/10methods-primer: nine
-   chapters across a full year). A hub with a single grid doesn't need
-   any of this — go straight from <h2> to .grid. */
+   A week grid under its own heading, with the destinations (deck,
+   booklet) as pills on the right — each 10 Methods Primer topic page
+   (year10-mathematics/10methods-primer/unit*.html) is one of these.
+   A hub with a single grid and no links doesn't need any of it — go
+   straight from <h2> to .grid. */
 .chapter { margin-bottom: 2.6rem; }
 .ch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
 .ch-head h2 { margin: 0; font-size: 1.25rem; }   /* overrides .hub-page h2 above */
@@ -150,90 +153,44 @@ ul.periods a:hover { text-decoration: underline; }
 
 .hub-page footer { text-align: center; font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 3rem; }
 
-/* ---------- Year grid ----------
-   A whole course on one screen: one column per chapter, every lesson
-   listed under its week, all of it visible at once on a 1080p display
-   (1920 wide) without scrolling. Reference implementation:
-   year10-mathematics/10methods-primer — nine chapters, 132 lessons.
+/* ---------- Topic buttons ----------
+   A course too long for one hub page: the home page is a grid of topic
+   buttons, each opening that topic's own hub page (a .chapter week grid
+   plus a .topic-pager to the neighbouring topics). Reference
+   implementation: year10-mathematics/10methods-primer — index.html and
+   the nine unit*.html / wrapup-*.html pages.
 
-     <header class="hub-head slim"> … <div class="timeline inline"> … </header>
-     <main class="year">
-       <article class="yc" data-group="Semester 1">
-         <div class="yc-eyebrow">Unit 1 · T1 W1–5</div>
-         <h2><a href="deck.html" title="Full chapter title">Short title</a></h2>
-         <div class="yc-code">Ch 1</div>
-         <div class="yc-links"><a href="deck.html">Deck</a><a …>Booklet</a></div>
-         <div class="yc-wk" title="Term 1 · Week 1 — theme">T1 W1</div>
-         <ul class="yc-list"><li><a href="deck.html#2"><b>1A</b> Lesson</a></li></ul>
-       </article> …
-     </main>
-
-   Columns come from the number of cards (grid-auto-flow: column), so no
-   count is written anywhere. data-group on a card starts a labelled
-   group — "Semester 2" — with a divider before it. Below 1500px the
-   cards wrap into rows instead. */
-.hub-head.slim { padding: .9rem 2rem .2rem; }
-body.hub-page:has(main.year) { padding-bottom: 1rem; }
-.hub-head.slim h1 { font-size: 1.45rem; line-height: 1.15; }
-.hub-head.slim .head-row { align-items: center; }
-.hub-head.slim .head-title p { font-size: .8rem; margin-top: .1rem; }
-.timeline.inline { margin: 0 0 0 auto; top: 0; gap: .4rem; flex-wrap: wrap; }
-.timeline.inline .mile { flex: 0 0 auto; min-width: 0; padding: .28rem .65rem; border-left-width: 4px; border-radius: 6px; }
-.timeline.inline .mile b { font-size: .74rem; line-height: 1.2; }
-.timeline.inline .mile span { font-size: .66rem; line-height: 1.2; display: block; }
-
-.hub-page main.year {
-  max-width: none; margin: 1.55rem 0 0; padding: 0 2rem;   /* 2rem clears the nav drawer's edge tab */
-  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
-  gap: .55rem; align-items: start;
-}
-.yc {
-  position: relative;
+     <nav class="topic-grid" aria-label="Topics">
+       <a class="topic" href="unit1-linear-relations.html">
+         <span class="tp-eyebrow">Unit 1 · Term 1 Weeks 1–5</span>
+         <span class="tp-title">Linear Relations</span>
+         <span class="tp-meta">Chapter 1 · 18 lessons</span>
+       </a> …
+     </nav>                                                         */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.topic {
+  display: flex; flex-direction: column; gap: .2rem; position: relative;
   background: rgba(24,20,28,.30);
   -webkit-backdrop-filter: saturate(.5);
   backdrop-filter: saturate(.5);
   border: 1px solid rgba(255,255,255,.18);
   border-radius: var(--radius-sm);
-  padding: .55rem .6rem .45rem;
+  padding: 1rem 2.6rem 1rem 1.15rem;
+  color: #fff; text-decoration: none;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
-.yc[data-group]::before {
-  content: attr(data-group); position: absolute; top: -1.3rem; left: .15rem;
-  font-family: var(--font-display); font-weight: 700; font-size: .68rem;
-  letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.75);
+.topic::after {
+  content: "\2192"; position: absolute; right: 1.1rem; top: 50%; transform: translateY(-50%);
+  font-size: 1.3rem; color: rgba(255,255,255,.55); transition: color .15s ease, right .15s ease;
 }
-/* the divider between groups sits in the extra gap before the card */
-.yc[data-group]:not(:first-child) { margin-left: .75rem; }
-.yc[data-group]:not(:first-child)::after {
-  content: ""; position: absolute; left: calc(-.65rem - 1px); top: -1.3rem; bottom: 0;
-  border-left: 1px dashed rgba(255,255,255,.35);
-}
-.yc-eyebrow { font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.62); }
-.hub-page .yc h2 { font-size: .98rem; line-height: 1.15; margin: .1rem 0 0; color: #fff; }
-.yc h2 a { color: inherit; text-decoration: none; }
-.yc h2 a:hover { text-decoration: underline; }
-.yc-code { font-size: .68rem; color: rgba(255,255,255,.55); margin-top: .05rem; }
-.yc-links { display: flex; gap: .3rem; flex-wrap: wrap; margin: .35rem 0 .1rem; }
-.yc-links a {
-  font-family: var(--font-display); font-weight: 700; font-size: .66rem;
-  text-decoration: none; color: #fff; white-space: nowrap;
-  border: 1px solid rgba(255,255,255,.3); border-radius: 100px;
-  padding: .1rem .55rem; background: rgba(255,255,255,.10);
-}
-.yc-links a:hover { background: rgba(255,255,255,.22); }
-.yc-wk {
-  font-size: .62rem; font-weight: 800; letter-spacing: .06em; color: var(--c-amber-400);
-  margin-top: .4rem; padding-top: .28rem; border-top: 1px solid rgba(255,255,255,.16); cursor: help;
-}
-ul.yc-list { list-style: none; }
-ul.yc-list li { font-size: .74rem; line-height: 1.25; padding: .1rem 0; }
-ul.yc-list a { color: rgba(255,255,255,.92); text-decoration: none; display: block; }
-ul.yc-list a:hover { color: #fff; text-decoration: underline; }
-ul.yc-list b { color: var(--c-amber-400); margin-right: .25em; }
-.year-legend { padding: 0 2rem; margin-top: .55rem; }
+.topic:hover, .topic:focus-visible { background: rgba(24,20,28,.42); border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+.topic:hover::after, .topic:focus-visible::after { color: var(--c-amber-400); right: .85rem; }
+.tp-eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c-amber-400); }
+.tp-title { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; line-height: 1.2; }
+.tp-meta { font-size: .8rem; color: rgba(255,255,255,.68); }
 
-@media (max-width: 1500px) {
-  .hub-page main.year { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); row-gap: 1.7rem; }
-  .yc[data-group]:not(:first-child) { margin-left: 0; }
-  .yc[data-group]:not(:first-child)::after { display: none; }
-  ul.yc-list li { font-size: .8rem; }
-}
+/* Topic pages have no milestone timeline overlapping the header, so the
+   main column doesn't need the usual gap below it. Previous / next topic
+   run along the foot of the week grid. */
+.hub-page main.topic-main { margin-top: 1.4rem; }
+.topic-pager { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-top: 1.4rem; }

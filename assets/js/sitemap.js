@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-13",
+ "generated": "2026-10-14",
  "tree": [
   {
    "t": "Home",
@@ -541,6 +541,51 @@ window.SITEMAP = {
           {
            "t": "Chapter 6 Trigonometry — Question Booklet",
            "h": "year10-mathematics/10methods-primer/booklet-trigonometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 1 · Linear Relations — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit1-linear-relations.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 2 · Indices & Surds — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit2-indices-surds.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 3 · Quadratic Algebra — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit3-quadratic-algebra.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 4 · Measurement & Geometry — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit4-measurement-geometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 5 · Trigonometry — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit5-trigonometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 6 · Quadratic Functions — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit6-quadratic-functions.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 7 · Exponentials & Logarithms — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit7-exponentials-logs.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 8 · Probability — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit8-probability.html",
+           "k": "primer"
+          },
+          {
+           "t": "Wrap-up · Revision & CAT 3 — Lessons",
+           "h": "year10-mathematics/10methods-primer/wrapup-revision-cat3.html",
            "k": "primer"
           }
          ]
