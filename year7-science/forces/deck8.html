@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 8 &#8212; Experiment 3: Bounce Efficiency | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="booklet" content="booklet/Forces_Motion_Lesson_Booklet_Yr7_8">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 8 of 18</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 3 <b>&#183;</b> Lesson 8 of 18</p>
+    <h1>Experiment 3: Bounce Efficiency</h1>
+    <p class="subtitle">How much energy survives a bounce? Drop height, bounce height, repeat trials and efficiency.</p>
+    <div class="head-meta">
+      <span class="pill">Experiment</span>
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Lesson 8</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide quiz-slide" data-quiz-before="8" data-quiz-recent="3" data-quiz-exclude="0" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 7</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Lesson 8 <b>&#183;</b> Overview</p>
+    <h2>What we&#8217;re learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
+        <ul>
+          <li>plan a fair test of how drop height affects bounce height</li>
+          <li>measure heights carefully and repeat trials</li>
+          <li>use bounce height and drop height to calculate efficiency</li>
+          <li>explain where the &#8220;missing&#8221; energy goes</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
+        <ul>
+          <li>name the independent, dependent and controlled variables</li>
+          <li>calculate a mean bounce height</li>
+          <li>calculate efficiency = bounce height &#247; drop height &#215; 100%</li>
+          <li>use energy words to explain why a ball never bounces back to where it started</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>Drop a tennis ball from your hand. Why doesn&#8217;t it bounce all the way back up to your hand?</p>
+      <button class="reveal-btn" data-answer="#l8s">What to listen for</button>
+      <div class="a" id="l8s"><span class="lbl-a">What we&#8217;re listening for</span>Listen for: some energy is &#8220;lost&#8221; when it hits the floor &#8212; as sound (you can hear it) and as heat. Push students on <em>lost</em>: energy isn&#8217;t destroyed, it changes into forms we didn&#8217;t want.</div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Part A: reading">
+    <p class="bookref book">Booklet p.68 &#183; Part A &#183; Reading and comprehension</p>
+    <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
+    <h2>The Rules of the Bounce</h2>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Before you read</span><p>Every tennis ball used in a real match has to pass a bounce test. How high do you think it has to bounce?</p></div>
+        <p>Read <em>The Rules of the Bounce</em> in your booklet. Then answer questions <strong>C1&#8211;C4</strong>.</p>
+      </div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>Why can a ball never bounce back up to the height it was dropped from?</p>
+        <button class="reveal-btn" data-answer="#l8r">Show answer</button>
+        <div class="a" id="l8r"><span class="lbl-a">Answer</span>When it hits the ground, some of its energy becomes <strong>thermal energy</strong> inside the rubber and some becomes <strong>sound</strong>. Less energy comes out than went in, so it can&#8217;t rise as high as it fell.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Measuring a bounce">
+    <p class="bookref book">Booklet p.69 &#183; §8.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>Measuring a bounce</h2>
+    <div class="cols wide-right">
+      <div>
+        <p>When the ball is held still at the drop height, its energy is <strong>gravitational potential energy</strong>. At the top of the bounce it is still again, so its energy is all GPE once more.</p>
+        <p>Because \(\text{GPE} = mgh\), and \(m\) and \(g\) don&#8217;t change, comparing the two <strong>heights</strong> tells us how much energy was kept.</p>
+        <div class="box defn"><span class="lbl">Bounce efficiency</span><p>\(\text{Efficiency} = \dfrac{\text{bounce height } h_2}{\text{drop height } h_1} \times 100\%\)</p></div>
+      </div>
+      <div class="graph-card">
+        <svg viewBox="0 0 640 345" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Measuring a bounce: a ball is dropped from 120 centimetres beside metre rulers on a wall, and bounces back up to 66 centimetres. The drop height h1 and bounce height h2 are both measured to the bottom of the ball.">
+        <rect x="10" y="300" width="620" height="16" style="fill:var(--accent-warm-soft)"/>
+        <line x1="10" y1="300" x2="630" y2="300" stroke-width="3" style="stroke:var(--ink-soft)"/>
+        <rect x="40" y="45" width="22" height="255" style="fill:#F6E7B4;stroke:#B58A1B"/>
+        <line x1="62" y1="300" x2="50" y2="300" stroke="#B58A1B" stroke-width="2"/>
+        <line x1="62" y1="285" x2="55" y2="285" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="270" x2="55" y2="270" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="255" x2="55" y2="255" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="240" x2="50" y2="240" stroke="#B58A1B" stroke-width="2"/>
+        <text x="34" y="245" text-anchor="end" font-size="15" fill="#8A6510">40</text>
+        <line x1="62" y1="225" x2="55" y2="225" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="210" x2="55" y2="210" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="195" x2="55" y2="195" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="180" x2="50" y2="180" stroke="#B58A1B" stroke-width="2"/>
+        <text x="34" y="185" text-anchor="end" font-size="15" fill="#8A6510">80</text>
+        <line x1="62" y1="165" x2="55" y2="165" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="150" x2="55" y2="150" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="135" x2="55" y2="135" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="120" x2="50" y2="120" stroke="#B58A1B" stroke-width="2"/>
+        <text x="34" y="125" text-anchor="end" font-size="15" fill="#8A6510">120</text>
+        <line x1="62" y1="105" x2="55" y2="105" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="90" x2="55" y2="90" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="75" x2="55" y2="75" stroke="#B58A1B" stroke-width="1"/>
+        <line x1="62" y1="60" x2="50" y2="60" stroke="#B58A1B" stroke-width="2"/>
+        <text x="34" y="65" text-anchor="end" font-size="15" fill="#8A6510">160</text>
+        <text x="20" y="172" text-anchor="middle" font-size="14" font-style="italic" fill="#8A6510" transform="rotate(-90 12 172)">height (cm)</text>
+        <circle cx="130" cy="106" r="14" fill="#F2B33D" stroke="#B57F12" stroke-width="1.5"/>
+        <line x1="62" y1="120" x2="590" y2="120" stroke-width="1.5" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <path d="M136,122 L182,270" stroke-width="2" stroke-dasharray="6 5" fill="none" style="stroke:var(--ink-faint)"/>
+        <circle cx="190" cy="286" r="14" fill="#F2B33D" stroke="#B57F12" stroke-width="1.5"/>
+        <path d="M200,270 L236,205" stroke-width="2" stroke-dasharray="6 5" fill="none" style="stroke:var(--ink-faint)"/>
+        <circle cx="246" cy="187" r="14" fill="#F2B33D" stroke="#B57F12" stroke-width="1.5"/>
+        <line x1="62" y1="201" x2="330" y2="201" stroke-width="1.5" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <line x1="590" y1="130" x2="590" y2="290" stroke-width="2.5" style="stroke:var(--accent-dark)"/><polygon points="590,120 584,132 596,132" style="fill:var(--accent-dark)"/><polygon points="590,300 584,288 596,288" style="fill:var(--accent-dark)"/>
+        <text x="578" y="190" text-anchor="end" font-size="18" font-weight="700" style="fill:var(--accent-dark)">drop height h&#8321;</text>
+        <line x1="330" y1="211" x2="330" y2="290" stroke-width="2.5" style="stroke:var(--c-blue-700)"/><polygon points="330,201 324,213 336,213" style="fill:var(--c-blue-700)"/><polygon points="330,300 324,288 336,288" style="fill:var(--c-blue-700)"/>
+        <text x="342" y="256" font-size="18" font-weight="700" style="fill:var(--c-blue-700)">bounce height h&#8322;</text>
+        <text x="110" y="30" font-size="16" font-style="italic" style="fill:var(--ink-soft)">Read the <tspan font-weight="700">bottom</tspan> of the ball, at eye level</text>
+        <text x="110" y="50" font-size="16" font-style="italic" style="fill:var(--ink-soft)">(or film it in slow motion and pause at the top).</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Worked example: bounce efficiency">
+    <p class="bookref book">Booklet p.69 &#183; §8.1 &#183; Worked Example 8.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2><span class="phase-tag ido">I do</span> Calculating bounce efficiency</h2>
+    <div class="cols">
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 8.1</span><p>A ball is dropped from 100&nbsp;cm and bounces back up to 62&nbsp;cm. Find the efficiency of the bounce, and the percentage of energy wasted.</p></div>
+        <ol class="steps" id="l8w1">
+          <li><span class="stepno">1</span> Efficiency: \(62 \div 100 \times 100\% = 62\%\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Wasted: \(100\% - 62\% = 38\%\) &#8212; as thermal energy and sound</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l8w1">Show working</button>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">We do</span>
+          <p>A ball dropped from 200&nbsp;cm bounces to 130&nbsp;cm. What is the efficiency of the bounce?</p>
+          <button class="reveal-btn" data-answer="#l8q1">Show answer</button>
+          <div class="a" id="l8q1"><span class="lbl-a">Answer</span>\(130 \div 200 \times 100\% = 65\%\) &#8212; so 35% of the energy was wasted.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Making it fair">
+    <p class="bookref book">Booklet pp.69&#8211;70 &#183; §8.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>Making it a fair test</h2>
+    <div class="cols">
+      <div>
+        <table class="tbl">
+          <tr><th>Variable</th><th>In this experiment</th></tr>
+          <tr><td><strong>Independent</strong> (change)</td><td>the drop height: 40, 80, 120, 160&nbsp;cm</td></tr>
+          <tr><td><strong>Dependent</strong> (measure)</td><td>the bounce height</td></tr>
+          <tr><td><strong>Controlled</strong> (keep the same)</td><td>the same ball, the same patch of floor, letting go without a push, measuring to the <em>bottom</em> of the ball</td></tr>
+        </table>
+      </div>
+      <div class="box question"><span class="lbl">Predict first</span><p>What will happen to the bounce height as the drop height goes up from 40&nbsp;cm to 160&nbsp;cm?</p><p>Will the <strong>efficiency</strong> change? Give a reason, and write it in your booklet.</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Method and safety">
+    <p class="bookref book">Booklet p.70 &#183; Part B &#183; Equipment and method</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>Method</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Method</span>
+        <ol>
+          <li>Tape two metre rulers upright to the wall, with 0&nbsp;cm touching the floor.</li>
+          <li>Hold the ball so its <strong>bottom</strong> is level with 40&nbsp;cm.</li>
+          <li>Let go &#8212; <strong>don&#8217;t push or throw</strong> it.</li>
+          <li>Read the height of the bottom of the ball at the top of its <strong>first</strong> bounce.</li>
+          <li>Do 3 trials. Then repeat for 80, 120 and 160&nbsp;cm.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="box key"><span class="lbl">Getting a good reading</span><p>The top of the bounce lasts a split second. Crouch so your eyes are level with where the ball will stop &#8212; or film it in slow motion and pause at the highest point. One person drops; one person reads.</p></div>
+        <div class="box flag"><span class="lbl">Safety</span><p>Keep every drop height within reach while standing on the floor &#8212; no standing on chairs or desks. Clear bags and chairs out of the way.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Mean and efficiency">
+    <p class="bookref book">Booklet p.71 &#183; Part C &#183; Results and analysis</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Results and analysis</p>
+    <h2><span class="phase-tag ido">I do</span> From three trials to one efficiency</h2>
+    <div class="box question"><span class="lbl">Example</span><p>From a drop height of 40&nbsp;cm, three bounces reached <strong>23&nbsp;cm</strong>, <strong>21&nbsp;cm</strong> and <strong>22&nbsp;cm</strong>. Find the mean bounce height and the efficiency.</p></div>
+    <ol class="steps" id="l8w2">
+      <li><span class="stepno">1</span> Mean: \((23 + 21 + 22) \div 3 = 66 \div 3 = 22\ \text{cm}\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Efficiency: \(22 \div 40 \times 100\% = 55\%\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l8w2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Looking for a pattern">
+    <p class="eyebrow">Part C <b>&#183;</b> Results and analysis</p>
+    <h2><span class="phase-tag wedo">We do</span> Looking for a pattern</h2>
+    <div class="cols">
+      <div>
+        <p>Here are one group&#8217;s results:</p>
+        <table class="tbl">
+          <tr><th>Drop height (cm)</th><th class="c">Mean bounce (cm)</th><th class="c">Efficiency</th></tr>
+          <tr><td>40</td><td class="c">22</td><td class="c">55%</td></tr>
+          <tr><td>80</td><td class="c">45</td><td class="c">?</td></tr>
+          <tr><td>120</td><td class="c">66</td><td class="c">?</td></tr>
+          <tr><td>160</td><td class="c">89</td><td class="c">?</td></tr>
+        </table>
+        <div class="box question"><span class="lbl">Fill the gaps</span>
+          <p>Calculate the three missing efficiencies. Does the efficiency go up, go down, or stay about the same?</p>
+          <button class="reveal-btn" data-answer="#l8q2">Show answer</button>
+          <div class="a" id="l8q2"><span class="lbl-a">Answer</span>\(45 \div 80 \times 100\% \approx 56\%\), &#160;\(66 \div 120 \times 100\% = 55\%\), &#160;\(89 \div 160 \times 100\% \approx 56\%\). It stays about the same &#8212; this ball keeps a bit more than half its energy each bounce, whatever height it falls from.</div>
+        </div>
+      </div>
+      <div class="graph-card">
+        <svg viewBox="0 0 500 345" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line graph of sample results: mean bounce height against drop height. The points lie close to a straight line through the origin.">
+        <line x1="170" y1="40" x2="170" y2="290" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="270" y1="40" x2="270" y2="290" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="370" y1="40" x2="370" y2="290" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="470" y1="40" x2="470" y2="290" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="70" y1="240" x2="470" y2="240" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="70" y1="190" x2="470" y2="190" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="70" y1="140" x2="470" y2="140" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="70" y1="90" x2="470" y2="90" stroke-width="1" style="stroke:var(--line)"/>
+        <line x1="70" y1="40" x2="470" y2="40" stroke-width="1" style="stroke:var(--line)"/>
+        <text x="70" y="310" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">0</text>
+        <text x="170" y="310" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">40</text>
+        <text x="270" y="310" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">80</text>
+        <text x="370" y="310" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">120</text>
+        <text x="470" y="310" text-anchor="middle" font-size="15" style="fill:var(--ink-soft)">160</text>
+        <text x="60" y="295" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">0</text>
+        <text x="60" y="245" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">20</text>
+        <text x="60" y="195" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">40</text>
+        <text x="60" y="145" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">60</text>
+        <text x="60" y="95" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">80</text>
+        <text x="60" y="45" text-anchor="end" font-size="15" style="fill:var(--ink-soft)">100</text>
+        <line x1="70" y1="290" x2="475" y2="290" stroke-width="2" style="stroke:var(--ink)"/><line x1="70" y1="290" x2="70" y2="35" stroke-width="2" style="stroke:var(--ink)"/>
+        <line x1="70" y1="290" x2="470.0" y2="68.0" stroke-width="2.5" stroke-dasharray="7 5" style="stroke:var(--accent)"/>
+        <circle cx="170.0" cy="235.0" r="6" style="fill:var(--accent-dark)"/>
+        <circle cx="270.0" cy="177.5" r="6" style="fill:var(--accent-dark)"/>
+        <circle cx="370.0" cy="125.0" r="6" style="fill:var(--accent-dark)"/>
+        <circle cx="470.0" cy="67.5" r="6" style="fill:var(--accent-dark)"/>
+        <text x="270" y="336" text-anchor="middle" font-size="16" font-weight="600" style="fill:var(--ink)">drop height (cm)</text>
+        <text x="20" y="165" text-anchor="middle" font-size="16" font-weight="600" transform="rotate(-90 20 165)" style="fill:var(--ink)">mean bounce height (cm)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: bounces">
+    <p class="bookref book">Booklet pp.71&#8211;72 &#183; Part C &#183; like Tasks 8.3&#8211;8.6</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Try these, then check your working</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A ball is dropped from 120&nbsp;cm and bounces to 78&nbsp;cm. Find the efficiency of the bounce.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(78 \div 120 \times 100\%\)</p>
+          <p><span class="result">65%</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A ball dropped from 80&nbsp;cm bounces to 44&nbsp;cm. Find the efficiency, and the percentage of energy wasted.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Efficiency: \(44 \div 80 \times 100\% = 55\%\)</p>
+          <p>Wasted: \(100\% - 55\% = 45\%\)</p>
+          <p><span class="result">55% efficient; 45% wasted</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">For a 160&nbsp;cm drop, the bounces were 86, 90 and 70&nbsp;cm. Which value looks wrong? Find the mean of the other two.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>70&nbsp;cm is much lower than the others, so it looks wrong.</p>
+          <p>\((86 + 90) \div 2 = 176 \div 2 = 88\)</p>
+          <p><span class="result">88&nbsp;cm</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A basketball is dropped and bounces. When does it have (a) the most kinetic energy (b) the most elastic potential energy (c) the most GPE?</p>
+        <button class="reveal-btn">Show answer</button>
+        <div class="a">
+          <p>(a) just before it hits the floor &#8212; it is moving fastest</p>
+          <p>(b) when it is most squashed against the floor</p>
+          <p><span class="result">(c) at the very start, at the drop height</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Part C: practice">
+    <p class="bookref book">Booklet pp.71&#8211;72 &#183; Part C &#183; Tasks 8.1&#8211;8.7</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Work through these tasks</span>
+        <ul>
+          <li><strong>Task 8.1</strong> &#8212; the variables</li>
+          <li><strong>Tasks 8.2&#8211;8.3</strong> &#8212; what <em>your</em> results show, and the efficiency</li>
+          <li><strong>Tasks 8.4&#8211;8.5</strong> &#8212; efficiency, and a result that doesn&#8217;t fit</li>
+          <li><strong>Task 8.6</strong> &#8212; explain it with energy words</li>
+          <li><strong>Task 8.7</strong> &#8212; draw a line graph</li>
+        </ul>
+      </div>
+      <div class="box key"><span class="lbl">Every time</span>
+        <ul>
+          <li>Measure to the <strong>bottom</strong> of the ball, every time</li>
+          <li>Record all three trials, then the mean</li>
+          <li>Efficiency is always less than 100%</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Above level: energy in a bounce">
+    <p class="bookref book">Booklet p.73 &#183; Part D &#183; like Extensions 8.9&#8211;8.10</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> Going further</h2>
+    <p class="lede">These go beyond the Year 7 standard: link heights to energy in joules, and predict.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A 0.5&nbsp;kg ball is dropped from 1.6&nbsp;m and bounces to 1.2&nbsp;m. Use <em>g</em> = 9.8&nbsp;N/kg. Find (a) the GPE before and after (b) the efficiency (c) the energy wasted.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>(a) Before: \(0.5 \times 9.8 \times 1.6 = 7.84\ \text{J}\); after: \(0.5 \times 9.8 \times 1.2 = 5.88\ \text{J}\)</p>
+          <p>(b) \(5.88 \div 7.84 \times 100\% = 75\%\)</p>
+          <p><span class="result">(c) \(7.84 - 5.88 = 1.96\ \text{J}\), as thermal energy and sound</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">Would a ball bounce more efficiently on concrete or on sand? Explain using energy words.</p>
+        <button class="reveal-btn">Show reasoning</button>
+        <div class="a">
+          <p>On sand, the sand moves and squashes and doesn&#8217;t spring back, so much more of the kinetic energy becomes <strong>thermal energy</strong> (and sound).</p>
+          <p><span class="result">Concrete &#8212; more energy is stored as elastic potential energy in the ball and given back.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Lesson 8 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>At the drop height and at the top of the bounce, all the useful energy is <strong>GPE</strong></li>
+      <li>So \(\text{efficiency} = \text{bounce height} \div \text{drop height} \times 100\%\)</li>
+      <li>A bounce wastes energy as <strong>thermal energy</strong> and <strong>sound</strong> &#8212; it is never destroyed</li>
+      <li>A higher drop gives a higher bounce, but the <strong>efficiency</strong> stays about the same</li>
+      <li>Measure to the bottom of the ball, repeat trials and take the mean</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>A ball dropped from 50&nbsp;cm bounces to 30&nbsp;cm. What is the efficiency of the bounce?</p>
+      <button class="reveal-btn" data-answer="#l8x">Show answer</button>
+      <div class="a" id="l8x"><span class="lbl-a">Answer</span>\(30 \div 50 \times 100\% = 60\%\).</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 14</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 8 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

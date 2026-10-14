@@ -643,8 +643,27 @@ Recap slide to `.exit-slide`) are written down there.
   - [x] `.bookref` chips derived from the built `.aux` — 61 refs, all decks ✓
         (`node tools/check-bookrefs.js year7-science/forces`)
   - [x] Unit planner `planner.html`, 5 weeks; index grouped by the same weeks *(2026-10-07)*
+  - [x] **Decks 1–9 rebuilt from the Lesson Booklet** *(2026-10-15)*.
+        Each opens with a five-question review quiz (`data-quiz-recent="3"`:
+        three on the lesson before, two older; Lesson 1 draws deck 0, a
+        primary-school prior-knowledge set). Worked examples are the
+        booklet's own, stepped; "Your turn" and Part D slides use
+        *lookalike* questions with hidden worked answers, so the booklet's
+        answers stay off the public site. Decks 1–3 keep the Key vocabulary
+        slides from 14 Oct. Lessons 4/5 now follow the booklet (4 = First
+        and Third Laws, 5 = Second Law); index cards and planner Weeks 2–3
+        match. `legacy-deck2.html` is no longer linked; `legacy-deck3/4`
+        still serve Lessons 10–11.
+  - [ ] Key vocabulary slides (decks 1–3) point students to a "Key
+        vocabulary table at the start of Lesson N" that the Lesson Booklet
+        doesn't have yet, and their chips cite p.2 for §2 and §3 — add the
+        tables to the booklet, then re-derive those chips
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
-  - [ ] Quiz + gated solutions *(can defer to a second pass)*
+  - [ ] Quiz + gated solutions *(can defer to a second pass)* — the
+        question bank `questions.js` (Lessons 1–9, 159 questions) landed
+        2026-10-15; a standalone `quiz.html` and the gated answer key are
+        still to do
+  - [ ] Decks 10–18 rebuilt the same way once their booklet sections exist
 
 - [ ] **Port `year11-methods` chapter-9 and chapter-11 off inline
       styles. M** Nine decks, the last inline-styled content in the repo.

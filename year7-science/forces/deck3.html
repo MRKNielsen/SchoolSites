@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
 <link rel="stylesheet" href="../../assets/css/sitenav.css">
 <script src="../../assets/js/sitenav.js" defer></script>
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
@@ -47,28 +48,39 @@
     <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
   </section>
 
+  <section class="slide quiz-slide" data-quiz-before="3" data-quiz-recent="3" data-quiz-exclude="0" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 2</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
   <section class="slide" data-menu="Learning intentions">
     <p class="eyebrow">Lesson 3 <b>&#183;</b> Overview</p>
     <h2>What we&#8217;re learning today</h2>
     <div class="cols">
-      <div class="box key"><span class="lbl">Learning intentions</span>
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
         <ul>
-          <li>Make a prediction and test it fairly</li>
-          <li>Identify independent, dependent and controlled variables</li>
-          <li>Measure friction with a spring scale</li>
-          <li>Use repeat trials and calculate a mean</li>
+          <li>make a prediction and test it fairly</li>
+          <li>name the independent, dependent and controlled variables</li>
+          <li>measure friction with a spring scale</li>
+          <li>use repeat trials and calculate a mean</li>
         </ul>
       </div>
-      <div class="box try"><span class="lbl">Success criteria</span>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
         <ul>
-          <li>I can name the variables in my experiment</li>
-          <li>I can record three trials and calculate the mean</li>
-          <li>I can spot a result that doesn&#8217;t fit</li>
-          <li>I can say whether my prediction was supported</li>
+          <li>name the variables in my experiment</li>
+          <li>record three trials and calculate the mean</li>
+          <li>spot a result that doesn&#8217;t fit</li>
+          <li>say whether my results supported my prediction</li>
         </ul>
       </div>
     </div>
-    <div class="box question"><span class="lbl">Starter</span><p>Why is it so hard to walk on ice?</p></div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>Why is it so hard to walk on ice?</p>
+      <button class="reveal-btn" data-answer="#l3s">Show answer</button>
+      <div class="a" id="l3s"><span class="lbl-a">Answer</span>To walk, your shoe pushes back on the ground and <strong>friction</strong> pushes you forwards. Ice is so smooth that there is hardly any friction, so your foot just slips backwards.</div>
+    </div>
   </section>
 
   <section class="slide" data-menu="Key vocabulary">
@@ -95,43 +107,83 @@
     <h2>Grip</h2>
     <div class="cols">
       <div>
-        <div class="box key"><span class="lbl">Before you read</span><p>Car tyres, running shoes and skateboard grip tape are all designed for one thing. What is it?</p></div>
-        <p>Read <em>Grip</em> in your booklet, then answer comprehension questions <strong>C1&#8211;C4</strong>.</p>
+        <div class="box key"><span class="lbl">Before you read</span><p>Car tyres, running shoes and skateboard grip tape are all designed to do one job. What is it?</p></div>
+        <p>Read <em>Grip</em> in your booklet. Then answer questions <strong>C1&#8211;C4</strong>.</p>
       </div>
-      <div class="box question"><span class="lbl">Check after reading</span><p>Why do we have to pull the block at a <strong>steady</strong> speed to measure friction?</p></div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>In our experiment, why must we pull the block at a <strong>steady</strong> speed when we read the spring scale?</p>
+        <button class="reveal-btn" data-answer="#l3r">Show answer</button>
+        <div class="a" id="l3r"><span class="lbl-a">Answer</span>At a steady speed the motion isn&#8217;t changing, so the forces are <strong>balanced</strong>: your pull is exactly the same size as the friction. That means the spring scale reading <em>is</em> the friction force.</div>
+      </div>
     </div>
-    <p class="note">The answer: at steady speed the pull and friction are balanced, so the scale reading equals the friction.</p>
   </section>
 
   <section class="slide" data-menu="Fair test: variables">
     <p class="bookref book">Booklet p.24 &#183; §3.1 &#183; Worked Example 3.1</p>
     <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
     <h2><span class="phase-tag ido">I do</span> Making it a fair test</h2>
-    <div class="box key"><span class="lbl">Fair test</span><p>Change <strong>one</strong> thing, measure <strong>one</strong> thing, keep <strong>everything else</strong> the same.</p></div>
-    <div class="box question"><span class="lbl">Worked Example 3.1</span><p>A student rolls a toy car down a ramp at different heights and measures how far it travels across the floor. Identify the variables.</p></div>
-    <ol class="steps" id="f3w1">
-      <li><span class="stepno">1</span> <strong>Independent</strong> &#8212; what the student changes: the height of the ramp.</li>
-      <li><span class="stepno">2</span> <strong>Dependent</strong> &#8212; what the student measures: the distance travelled.</li>
-      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Controlled &#8212; kept the same: the same car, the same floor, releasing without a push.</span></li>
-    </ol>
-    <button class="reveal-btn" data-target="#f3w1">Show variables</button>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Fair test</span><p>Change <strong>one</strong> thing, measure <strong>one</strong> thing, and keep <strong>everything else</strong> the same.</p></div>
+        <table class="tbl">
+          <tr><th>Variable</th><th>What it means</th></tr>
+          <tr><td><strong>Independent</strong></td><td>the one thing <em>you</em> change on purpose</td></tr>
+          <tr><td><strong>Dependent</strong></td><td>the thing you <em>measure</em></td></tr>
+          <tr><td><strong>Controlled</strong></td><td>everything you keep the <em>same</em></td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 3.1</span><p>A student rolls a toy car down a ramp set at different heights, and measures how far it travels across the floor. Identify the variables.</p></div>
+        <ol class="steps" id="l3w1">
+          <li><span class="stepno">1</span> <strong>Independent</strong> (changed): the height of the ramp.</li>
+          <li><span class="stepno">2</span> <strong>Dependent</strong> (measured): the distance the car travels.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Controlled (kept the same): the same car, the same floor, letting go without a push.</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l3w1">Show variables</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: spot the variables">
+    <p class="eyebrow">Part B <b>&#183;</b> Try it together</p>
+    <h2><span class="phase-tag wedo">We do</span> Spot the variables</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A student wants to know if the temperature of water changes how fast sugar dissolves. She times how long a spoonful of sugar takes to dissolve in water at 20&nbsp;&#176;C, 40&nbsp;&#176;C and 60&nbsp;&#176;C. Name the independent variable, the dependent variable and two controlled variables.</p>
+        <button class="reveal-btn">Show variables</button>
+        <div class="a">
+          <p><strong>Independent:</strong> the temperature of the water</p>
+          <p><strong>Dependent:</strong> the time the sugar takes to dissolve</p>
+          <p><strong>Controlled:</strong> the amount of sugar, the amount of water, how much it is stirred, the type of sugar</p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">In <em>our</em> friction experiment, what will we change and what will we measure?</p>
+        <button class="reveal-btn">Show answer</button>
+        <div class="a">
+          <p>We <strong>change</strong> the type of surface (independent).</p>
+          <p>We <strong>measure</strong> the friction force with the spring scale (dependent).</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="slide" data-menu="Prediction and method">
-    <p class="bookref book">Booklet p.24 &#183; Part B &#183; Prediction, equipment and method</p>
+    <p class="bookref book">Booklet pp.24&#8211;25 &#183; Part B &#183; Prediction, equipment and method</p>
     <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
     <h2>Investigating friction</h2>
     <div class="cols">
       <div>
-        <div class="box question"><span class="lbl">Predict first</span><p>Which surface will produce the most friction? Write your prediction <em>and a reason</em> in the booklet before you start.</p></div>
-        <div class="box key"><span class="lbl">Equipment</span><p>Wooden block &#183; spring scale &#183; 3+ surfaces (bench, sandpaper, fabric, carpet) &#183; ruler</p></div>
+        <div class="box question"><span class="lbl">Predict first</span><p>Which surface will make the most friction? Write your prediction <em>and a reason</em> in your booklet before you start.</p></div>
+        <div class="box key"><span class="lbl">Equipment</span><p>Wooden block (or heavy book) &#183; spring scale &#183; 3 or more surfaces (bench, sandpaper, fabric, carpet) &#183; ruler</p></div>
       </div>
       <div class="box try"><span class="lbl">Method</span>
         <ol>
-          <li>Place the block on the first surface.</li>
-          <li>Attach the spring scale and pull slowly and steadily.</li>
-          <li>Read the scale while the block moves at a <strong>steady</strong> speed.</li>
-          <li>Repeat 3 times, then repeat for each surface.</li>
+          <li>Put the block on the first surface.</li>
+          <li>Hook on the spring scale. Pull slowly and steadily.</li>
+          <li>Read the scale while the block moves at a <strong>steady</strong> speed. Record it in newtons.</li>
+          <li>Do 3 trials on this surface.</li>
+          <li>Repeat for each surface.</li>
         </ol>
       </div>
     </div>
@@ -142,13 +194,63 @@
     <p class="bookref book">Booklet p.26 &#183; Part C &#183; Results and analysis</p>
     <p class="eyebrow">Part C <b>&#183;</b> Results and analysis</p>
     <h2><span class="phase-tag ido">I do</span> Calculating a mean</h2>
-    <div class="box question"><span class="lbl">Example</span><p>Three trials on the bench gave <strong>1.2&nbsp;N</strong>, <strong>1.4&nbsp;N</strong> and <strong>1.3&nbsp;N</strong>. Find the mean.</p></div>
-    <ol class="steps" id="f3w2">
-      <li><span class="stepno">1</span> Add the trials: \(1.2 + 1.4 + 1.3 = 3.9\).</li>
-      <li><span class="stepno">2</span> Divide by the number of trials: \(3.9 \div 3\).</li>
-      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Mean friction on the bench = 1.3&nbsp;N.</span></li>
-    </ol>
-    <button class="reveal-btn" data-target="#f3w2">Show working</button>
+    <div class="cols">
+      <div>
+        <p>Every trial is a little different. The <strong>mean</strong> (average) gives one value we can trust more than any single trial.</p>
+        <div class="box key"><span class="lbl">How to find a mean</span><p><strong>Add</strong> all the trials, then <strong>divide</strong> by how many trials there are.</p></div>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Example</span><p>Three trials on the bench gave <strong>1.2&nbsp;N</strong>, <strong>1.4&nbsp;N</strong> and <strong>1.3&nbsp;N</strong>. Find the mean.</p></div>
+        <ol class="steps" id="l3w2">
+          <li><span class="stepno">1</span> Add the trials: \(1.2 + 1.4 + 1.3 = 3.9\)</li>
+          <li><span class="stepno">2</span> Divide by the number of trials: \(3.9 \div 3\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Mean friction on the bench = 1.3&nbsp;N</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l3w2">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: means and results">
+    <p class="bookref book">Booklet pp.26&#8211;27 &#183; Part C &#183; like Tasks 3.2&#8211;3.6</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Try these, then check your working</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A group measured 3.4&nbsp;N, 3.1&nbsp;N and 3.7&nbsp;N on rubber matting. Calculate the mean.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Add: \(3.4 + 3.1 + 3.7 = 10.2\)</p>
+          <p>Divide: \(10.2 \div 3 = 3.4\)</p>
+          <p><span class="result">3.4&nbsp;N</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">On cardboard a group measured 1.5&nbsp;N, 1.7&nbsp;N and 2.6&nbsp;N. Which value looks wrong? Find the mean of the other two.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>2.6&nbsp;N is much bigger than the others, so it looks wrong.</p>
+          <p>Mean of the other two: \((1.5 + 1.7) \div 2 = 3.2 \div 2 = 1.6\)</p>
+          <p><span class="result">1.6&nbsp;N</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">Means: bench 1.3&nbsp;N, sandpaper 3.2&nbsp;N, carpet 2.4&nbsp;N, fabric 1.9&nbsp;N. Which surface had the most friction, and which the least?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Put them in order: 3.2 &gt; 2.4 &gt; 1.9 &gt; 1.3</p>
+          <p><span class="result">Most: sandpaper. Least: the bench.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">Use the idea of <em>bumps</em> to explain why the sandpaper made the most friction.</p>
+        <button class="reveal-btn">Show answer</button>
+        <div class="a">
+          <p>Sandpaper is the roughest surface, so it has the biggest bumps.</p>
+          <p><span class="result">Bigger bumps catch on the bumps of the block more, so they resist sliding more &#8212; more friction.</span></p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="slide" data-menu="Part C: practice">
@@ -156,11 +258,11 @@
     <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
     <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
     <div class="cols">
-      <div class="box try"><span class="lbl">Build each skill</span>
+      <div class="box try"><span class="lbl">Work through these tasks</span>
         <ul>
           <li><strong>Task 3.1</strong> &#8212; the variables in <em>your</em> experiment</li>
           <li><strong>Tasks 3.2&#8211;3.3</strong> &#8212; your results and why we repeat trials</li>
-          <li><strong>Tasks 3.4&#8211;3.5</strong> &#8212; means and results that don&#8217;t fit</li>
+          <li><strong>Tasks 3.4&#8211;3.5</strong> &#8212; means, and results that don&#8217;t fit</li>
           <li><strong>Task 3.6</strong> &#8212; link your result back to the reading</li>
           <li><strong>Task 3.7</strong> &#8212; graph your means</li>
         </ul>
@@ -176,26 +278,44 @@
   </section>
 
   <section class="slide" data-menu="Above level: evaluate">
-    <p class="bookref book">Booklet p.28 &#183; Part D &#183; Extensions 3.8&#8211;3.11</p>
+    <p class="bookref book">Booklet pp.28&#8211;29 &#183; Part D &#183; like Extensions 3.8&#8211;3.10</p>
     <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
-    <h2><span class="phase-tag wedo">We do</span> How good was our method?</h2>
-    <div class="cols">
-      <div class="box question"><span class="lbl">Discuss</span><p>Your three readings on one surface were probably not identical. Why not &#8212; and what one change would make them more consistent?</p></div>
-      <div class="box question"><span class="lbl">Predict</span><p>What would happen to the friction force if you stacked a second block on top? Use the reading to explain.</p></div>
+    <h2><span class="phase-tag wedo">We do</span> How good was the method?</h2>
+    <p class="lede">These go beyond the Year 7 standard: judge a method, and use a formula.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">One group pulled the block quickly and in jerks. Their readings on the bench were 1.0&nbsp;N, 2.1&nbsp;N and 1.5&nbsp;N. Why are their readings so spread out? Suggest one improvement.</p>
+        <button class="reveal-btn">Show answer</button>
+        <div class="a">
+          <p>When the pull is jerky the block keeps speeding up and slowing down, so the pull is <strong>not balanced</strong> with friction and the scale jumps around.</p>
+          <p><span class="result">Improvement: pull slowly at a steady speed and read the scale while the speed is steady &#8212; or film the scale and read it from the video.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 0.5&nbsp;kg block is sliding across a bench. Friction of 2.0&nbsp;N is the only sideways force on it. Use \(a = F \div m\) to find how quickly it slows down.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(a = F \div m = 2.0 \div 0.5 = 4\ \text{m/s}^2\)</p>
+          <p><span class="result">It slows down by 4&nbsp;m/s every second.</span></p>
+        </div>
+      </div>
     </div>
-    <p class="note">Extensions 3.8&#8211;3.11 in the booklet; 3.10 uses \(F = ma\) to find how quickly the block slows down.</p>
   </section>
 
   <section class="slide" data-menu="Recap">
     <p class="eyebrow">Lesson 3 <b>&#183;</b> Recap</p>
     <h2>What we covered</h2>
     <ul>
-      <li>A <strong>fair test</strong> changes one variable, measures one, and controls the rest</li>
+      <li>A <strong>fair test</strong> changes one variable, measures one, and keeps the rest the same</li>
       <li>At a <strong>steady speed</strong>, the spring scale reading equals the friction force</li>
-      <li>Rougher surfaces produce <strong>more friction</strong></li>
-      <li>Repeat trials and take the <strong>mean</strong> to make results more reliable</li>
+      <li>Rougher surfaces have bigger bumps, so they make <strong>more friction</strong></li>
+      <li>Repeat each trial and take the <strong>mean</strong> &#8212; leave out a result that clearly doesn&#8217;t fit</li>
     </ul>
-    <div class="box question"><span class="lbl">Exit question</span><p>Name the independent and dependent variables in today&#8217;s experiment.</p></div>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>Name the independent and dependent variables in today&#8217;s experiment.</p>
+      <button class="reveal-btn" data-answer="#l3x">Show answer</button>
+      <div class="a" id="l3x"><span class="lbl-a">Answer</span><strong>Independent:</strong> the type of surface. <strong>Dependent:</strong> the friction force (the spring scale reading).</div>
+    </div>
   </section>
 
 </main>
@@ -203,7 +323,7 @@
 <div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
 <div class="chrome">
   <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
-  <span class="counter">1 / 9</span>
+  <span class="counter">1 / 13</span>
   <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
   <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
 </div>
@@ -213,6 +333,8 @@
   <div class="menugrid"></div>
 </div>
 
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
 <script src="../../assets/js/deck.js" defer></script>
 </body>
 </html>

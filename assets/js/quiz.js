@@ -12,6 +12,7 @@
      <section class="slide quiz-slide"
               data-quiz-before="9"     <!-- only questions from decks < 9 -->
               data-quiz-exclude="4"    <!-- optional: comma-separated decks to leave out -->
+              data-quiz-recent="3"     <!-- optional: this many from the latest lesson -->
               data-quiz-count="5">     <!-- how many to draw (default 5) -->
        <div class="quiz-container"></div>
      </section>
@@ -19,6 +20,12 @@
    data-quiz-exclude is for a lesson the class may not have been taught —
    an optional lesson inside an otherwise sequential unit. Without it a
    class that skipped that lesson gets cold-called on content it never saw.
+
+   data-quiz-recent weights the draw towards the lesson just taught: that
+   many questions come from the most recent deck left in the pool (so an
+   excluded optional lesson is stepped over), the rest from older decks.
+   If either group runs short, the other fills the gap. Without it every
+   eligible question has the same chance — Space and Biology work that way.
 
    Renders `count` questions drawn at random from the eligible pool,
    gives instant per-question feedback, and shows a tally once all
@@ -53,7 +60,19 @@
       return;
     }
 
-    const chosen = shuffle(pool).slice(0, Math.min(count, pool.length));
+    let chosen;
+    const recent = parseInt(slide.dataset.quizRecent, 10);
+    if (isNaN(recent)) {
+      chosen = shuffle(pool).slice(0, Math.min(count, pool.length));
+    } else {
+      const latest = Math.max.apply(null, pool.map(q => q.deck));
+      const last = shuffle(pool.filter(q => q.deck === latest));
+      const older = shuffle(pool.filter(q => q.deck !== latest));
+      let nLast = Math.min(recent, count, last.length);
+      const nOld = Math.min(count - nLast, older.length);
+      nLast = Math.min(count - nOld, last.length);
+      chosen = shuffle(last.slice(0, nLast).concat(older.slice(0, nOld)));
+    }
     let answered = 0, correct = 0;
 
     chosen.forEach((q, qi) => {

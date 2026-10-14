@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 5 &#8212; Newton&#8217;s Second Law | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="booklet" content="booklet/Forces_Motion_Lesson_Booklet_Yr7_8">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 5 of 18</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 2 <b>&#183;</b> Lesson 5 of 18</p>
+    <h1>Newton&#8217;s Second Law: \(F = ma\)</h1>
+    <p class="subtitle">How force, mass and acceleration are linked &#8212; and how to use \(F = ma\) to find any one of them.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Lesson 5</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide quiz-slide" data-quiz-before="5" data-quiz-recent="3" data-quiz-exclude="0" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 4</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Lesson 5 <b>&#183;</b> Overview</p>
+    <h2>What we&#8217;re learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
+        <ul>
+          <li>describe acceleration and its unit</li>
+          <li>explain how force and mass change acceleration</li>
+          <li>use \(F = ma\) to find force, mass or acceleration</li>
+          <li>use the <em>net</em> force in \(F = ma\)</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
+        <ul>
+          <li>say what an acceleration of 3&nbsp;m/s&#178; means</li>
+          <li>predict what happens to the acceleration when the force or the mass changes</li>
+          <li>rearrange \(F = ma\) and give the answer with the right unit</li>
+          <li>find the net force first, then the acceleration</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>Why is it harder to get a full shopping trolley moving than an empty one, even if you push just as hard?</p>
+      <button class="reveal-btn" data-answer="#l5s">Show answer</button>
+      <div class="a" id="l5s"><span class="lbl-a">Answer</span>The full trolley has more <strong>mass</strong>. The same push gives a bigger mass a <strong>smaller acceleration</strong> &#8212; it speeds up more slowly.</div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Part A: reading">
+    <p class="bookref book">Booklet p.40 &#183; Part A &#183; Reading and comprehension</p>
+    <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
+    <h2>Pushing a Broken-Down Car</h2>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Before you read</span><p>Three people push a broken-down car. Then they push a removal van full of furniture just as hard. What do you think will happen each time?</p></div>
+        <p>Read <em>Pushing a Broken-Down Car</em> in your booklet. Then answer questions <strong>C1&#8211;C8</strong>.</p>
+      </div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>According to the reading, what <strong>two</strong> things decide how quickly an object speeds up?</p>
+        <button class="reveal-btn" data-answer="#l5r">Show answer</button>
+        <div class="a" id="l5r"><span class="lbl-a">Answer</span>The <strong>net force</strong> acting on it, and its <strong>mass</strong>. A bigger force means a bigger acceleration; more mass means a smaller acceleration.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="What is acceleration?">
+    <p class="bookref book">Booklet p.42 &#183; §5.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>What is acceleration?</h2>
+    <div class="cols">
+      <div>
+        <p><strong>Acceleration</strong> is how quickly an object&#8217;s speed changes. It is measured in <strong>metres per second squared (m/s&#178;)</strong> &#8212; which means &#8220;metres per second, every second&#8221;.</p>
+        <div class="box key"><span class="lbl">3&nbsp;m/s&#178; means&#8230;</span>
+          <p>the speed goes up by <strong>3&nbsp;m/s every second</strong>. Starting from rest:</p>
+          <table class="tbl exact">
+            <tr><th>Time (s)</th><th class="c">0</th><th class="c">1</th><th class="c">2</th><th class="c">3</th></tr>
+            <tr><td>Speed (m/s)</td><td class="c">0</td><td class="c">3</td><td class="c">6</td><td class="c">9</td></tr>
+          </table>
+        </div>
+        <p class="note">Slowing down is an acceleration too. It is sometimes called a <strong>deceleration</strong>.</p>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Quick check</span>
+          <p>A bike starts from rest and accelerates at 2&nbsp;m/s&#178;. How fast is it going after 4 seconds?</p>
+          <button class="reveal-btn" data-answer="#l5q1">Show answer</button>
+          <div class="a" id="l5q1"><span class="lbl-a">Answer</span>Its speed goes up by 2&nbsp;m/s every second: \(4 \times 2 = 8\ \text{m/s}\).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Force, mass and acceleration">
+    <p class="bookref book">Booklet p.42 &#183; §5.2&#8211;5.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>Newton&#8217;s Second Law</h2>
+    <div class="cols wide-right">
+      <div>
+        <table class="tbl">
+          <tr><th>If you&#8230;</th><th>the acceleration&#8230;</th></tr>
+          <tr><td>increase the force (same mass)</td><td><strong>increases</strong></td></tr>
+          <tr><td>increase the mass (same force)</td><td><strong>decreases</strong></td></tr>
+          <tr><td>double the force (same mass)</td><td><strong>doubles</strong></td></tr>
+          <tr><td>double the mass (same force)</td><td><strong>halves</strong></td></tr>
+        </table>
+        <div class="box defn"><span class="lbl">Second Law</span><p>\(F = m \times a\) &#160; &#8594; &#160; \(a = \dfrac{F}{m}\) &#160; and &#160; \(m = \dfrac{F}{a}\)</p><p>Force in <strong>N</strong> &#183; mass in <strong>kg</strong> &#183; acceleration in <strong>m/s&#178;</strong></p></div>
+      </div>
+      <div class="graph-card narrow">
+        <svg viewBox="0 0 320 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The F = m a formula triangle: F at the top, m and a side by side at the bottom.">
+        <polygon points="160,14 16,244 304,244" stroke-width="3" stroke-linejoin="round" style="fill:var(--card);stroke:var(--accent-dark)"/>
+        <line x1="88" y1="129" x2="232" y2="129" stroke-width="3" style="stroke:var(--accent-dark)"/>
+        <line x1="160" y1="129" x2="160" y2="244" stroke-width="3" style="stroke:var(--accent-dark)"/>
+        <text x="160" y="108" text-anchor="middle" font-size="54" font-weight="700" font-family="Bitter, serif" style="fill:var(--accent-dark)">F</text>
+        <text x="110" y="212" text-anchor="middle" font-size="50" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">m</text>
+        <text x="210" y="212" text-anchor="middle" font-size="50" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">a</text>
+        <text x="160" y="266" text-anchor="middle" font-size="15" font-style="italic" style="fill:var(--ink-soft)">cover the one you want</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Worked example: acceleration">
+    <p class="bookref book">Booklet pp.42&#8211;43 &#183; §5.3 &#183; Worked Example 5.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Using \(F = ma\) &#8212; four steps</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Every \(F = ma\) question</span>
+        <ol>
+          <li>Write what you <strong>know</strong>, with units.</li>
+          <li>Choose the <strong>version</strong> of the formula you need (use the triangle).</li>
+          <li><strong>Substitute</strong> the numbers.</li>
+          <li><strong>Calculate</strong> &#8212; and write the <strong>unit</strong>.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 5.1</span><p>A 5&nbsp;kg trolley is pushed with a net force of 20&nbsp;N. What is its acceleration?</p></div>
+        <ol class="steps" id="l5w1">
+          <li><span class="stepno">1</span> Know: \(F = 20\ \text{N}\), \(m = 5\ \text{kg}\)</li>
+          <li><span class="stepno">2</span> Formula: \(a = F \div m\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(a = 20 \div 5 = 4\ \text{m/s}^2\)</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l5w1">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Worked examples: force and mass">
+    <p class="bookref book">Booklet pp.42&#8211;43 &#183; §5.3 &#183; Worked Examples 5.2&#8211;5.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Finding force and finding mass</h2>
+    <div class="cols even">
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 5.2</span><p>A 1200&nbsp;kg car accelerates at 2&nbsp;m/s&#178;. What net force is acting on it?</p></div>
+        <ol class="steps" id="l5w2">
+          <li><span class="stepno">1</span> Know: \(m = 1200\ \text{kg}\), \(a = 2\ \text{m/s}^2\)</li>
+          <li><span class="stepno">2</span> Formula: \(F = m \times a\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(F = 1200 \times 2 = 2400\ \text{N}\)</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l5w2">Show working</button>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 5.3</span><p>A net force of 60&nbsp;N gives a box an acceleration of 4&nbsp;m/s&#178;. What is the mass of the box?</p></div>
+        <ol class="steps" id="l5w3">
+          <li><span class="stepno">1</span> Know: \(F = 60\ \text{N}\), \(a = 4\ \text{m/s}^2\)</li>
+          <li><span class="stepno">2</span> Formula: \(m = F \div a\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(m = 60 \div 4 = 15\ \text{kg}\)</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l5w3">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Net force first">
+    <p class="bookref book">Booklet p.43 &#183; §5.4 &#183; Worked Example 5.4</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Always use the net force</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">The F is the net force</span><p>The \(F\) in \(F = ma\) is the <strong>net force</strong> &#8212; what&#8217;s left after you add up all the forces (Lesson&nbsp;2).</p><p>If the forces are balanced, the net force is zero, so the acceleration is zero: the object stays still or keeps a steady speed. That&#8217;s the First Law again!</p></div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 5.4</span><p>A 10&nbsp;kg trolley is pushed forwards with 50&nbsp;N. Friction pushes back with 10&nbsp;N. Find its acceleration.</p></div>
+        <ol class="steps" id="l5w4">
+          <li><span class="stepno">1</span> Net force: opposite directions, so subtract: \(50 - 10 = 40\ \text{N}\) forwards</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(a = F \div m = 40 \div 10 = 4\ \text{m/s}^2\) forwards</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l5w4">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: F = ma">
+    <p class="bookref book">Booklet pp.44&#8211;45 &#183; Part C &#183; like Tasks 5.2&#8211;5.8</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Choose the right version, then calculate</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A net force of 36&nbsp;N acts on a 9&nbsp;kg mass. Find its acceleration.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(a = F \div m = 36 \div 9\)</p>
+          <p><span class="result">\(4\ \text{m/s}^2\)</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 0.6&nbsp;kg ball accelerates at 15&nbsp;m/s&#178;. Find the net force on it.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(F = m \times a = 0.6 \times 15\)</p>
+          <p><span class="result">\(9\ \text{N}\)</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A force of 120&nbsp;N gives an object an acceleration of 4&nbsp;m/s&#178;. Find its mass.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(m = F \div a = 120 \div 4\)</p>
+          <p><span class="result">\(30\ \text{kg}\)</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 2000&nbsp;kg van accelerates at 1.5&nbsp;m/s&#178;. Find the net force needed.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(F = m \times a = 2000 \times 1.5\)</p>
+          <p><span class="result">\(3000\ \text{N}\)</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: net force and patterns">
+    <p class="bookref book">Booklet pp.45&#8211;47 &#183; Part C &#183; like Tasks 5.9&#8211;5.14</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Net force first</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A 20&nbsp;kg go-kart is pushed with 70&nbsp;N. Friction pushes back with 10&nbsp;N. Find (a) the net force (b) the acceleration.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>(a) \(70 - 10 = 60\ \text{N}\) forwards</p>
+          <p>(b) \(a = 60 \div 20 = 3\ \text{m/s}^2\)</p>
+          <p><span class="result">60&nbsp;N; 3&nbsp;m/s&#178;</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 4&nbsp;kg trolley is pushed with net forces of 8&nbsp;N, 16&nbsp;N and 24&nbsp;N. Find each acceleration. What is the pattern?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(8 \div 4 = 2\), &#160;\(16 \div 4 = 4\), &#160;\(24 \div 4 = 6\ \text{m/s}^2\)</p>
+          <p><span class="result">Each extra 8&nbsp;N adds 2&nbsp;m/s&#178; &#8212; double the force, double the acceleration.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 1000&nbsp;kg car drives at a steady 50&nbsp;km/h on a flat road. The engine gives a driving force of 1800&nbsp;N. (a) What is its acceleration? (b) How big are the resistive forces?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>(a) <strong>Zero</strong> &#8212; its speed isn&#8217;t changing.</p>
+          <p>(b) Zero acceleration means zero net force, so the forces are balanced.</p>
+          <p><span class="result">Resistive forces = 1800&nbsp;N backwards</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Part C: practice">
+    <p class="bookref book">Booklet pp.44&#8211;47 &#183; Part C &#183; Tasks 5.1&#8211;5.14</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Work through these tasks</span>
+        <ul>
+          <li><strong>Task 5.1</strong> &#8212; what happens to the acceleration?</li>
+          <li><strong>Tasks 5.2&#8211;5.8</strong> &#8212; using \(F = ma\) three ways</li>
+          <li><strong>Task 5.9</strong> &#8212; finding a pattern</li>
+          <li><strong>Tasks 5.10&#8211;5.14</strong> &#8212; net force first, then acceleration</li>
+        </ul>
+      </div>
+      <div class="box key"><span class="lbl">Every time</span>
+        <ul>
+          <li>Write what you know, with units, before you start</li>
+          <li>Use the <strong>net</strong> force</li>
+          <li>Units: N for force, kg for mass, m/s&#178; for acceleration</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Above level: forces in action">
+    <p class="bookref book">Booklet pp.48&#8211;49 &#183; Part D &#183; like Extensions 5.15&#8211;5.18</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> Going further</h2>
+    <p class="lede">These go beyond the Year 7 standard: judge someone&#8217;s reasoning, and use more than one formula.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">Zoe pushes a 30&nbsp;kg box with 90&nbsp;N, but it doesn&#8217;t move. She says: &#8220;\(F = ma\) means it should accelerate at 3&nbsp;m/s&#178;.&#8221; What has she got wrong? How big is the friction?</p>
+        <button class="reveal-btn">Show reasoning</button>
+        <div class="a">
+          <p>Zoe used her push, not the <strong>net</strong> force.</p>
+          <p>The box doesn&#8217;t move, so its acceleration is zero &#8212; the net force must be zero.</p>
+          <p><span class="result">Friction balances her push: 90&nbsp;N.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A lift and its passengers have a mass of 600&nbsp;kg. The cable pulls up with 6600&nbsp;N. Use <em>g</em> = 9.8&nbsp;N/kg. Find (a) the weight (b) the net force (c) the acceleration.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>(a) \(W = mg = 600 \times 9.8 = 5880\ \text{N}\)</p>
+          <p>(b) \(6600 - 5880 = 720\ \text{N}\) upwards</p>
+          <p>(c) \(a = 720 \div 600 = 1.2\ \text{m/s}^2\) upwards</p>
+          <p><span class="result">5880&nbsp;N; 720&nbsp;N up; 1.2&nbsp;m/s&#178; up</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Lesson 5 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li><strong>Acceleration</strong> is how quickly speed changes, in m/s&#178;</li>
+      <li>More force &#8594; more acceleration. More mass &#8594; less acceleration</li>
+      <li>\(F = ma\), &#160;\(a = F \div m\), &#160;\(m = F \div a\)</li>
+      <li>Always find the <strong>net</strong> force first</li>
+      <li>Balanced forces &#8594; zero acceleration (the First Law again)</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>A 2&nbsp;kg ball is pushed with a net force of 10&nbsp;N. Find its acceleration, and name the law you used.</p>
+      <button class="reveal-btn" data-answer="#l5x">Show answer</button>
+      <div class="a" id="l5x"><span class="lbl-a">Answer</span>\(a = F \div m = 10 \div 2 = 5\ \text{m/s}^2\) &#8212; <strong>Newton&#8217;s Second Law</strong>.</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 14</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 5 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

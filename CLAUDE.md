@@ -63,7 +63,11 @@ Optional modules — link only when a deck uses them:
   `data-quiz-exclude="4"` (comma-separated deck numbers) where a unit has
   an **optional** lesson inside an otherwise sequential run — without it a
   class that skipped that lesson gets cold-called on content it never saw.
-  Year 7 Space uses it for Lesson 4. quiz.css also
+  Year 7 Space uses it for Lesson 4. Add `data-quiz-recent="3"` to
+  weight the draw: that many questions come from the most recent lesson
+  left in the pool, the rest from older lessons. Year 7 Forces uses it
+  with `data-quiz-exclude="0"`, because its deck 0 is Lesson 1's
+  prior-knowledge warm-up (`data-quiz-before="1"`). quiz.css also
   styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
 - `assets/css/orbit.css` + `assets/js/orbit.js` — the orbital phase
   visualiser. Markup is one line, `<div class="orbitsim"></div>`; the JS

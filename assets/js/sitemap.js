@@ -232,6 +232,36 @@ window.SITEMAP = {
            "t": "Lesson 3 — Experiment 1: Investigating Friction",
            "h": "year7-science/forces/deck3.html",
            "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Newton’s First and Third Laws",
+           "h": "year7-science/forces/deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Newton’s Second Law",
+           "h": "year7-science/forces/deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — Experiment 2: Newton’s Second Law",
+           "h": "year7-science/forces/deck6.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 7 — Energy and Transformation",
+           "h": "year7-science/forces/deck7.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 8 — Experiment 3: Bounce Efficiency",
+           "h": "year7-science/forces/deck8.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 9 — Simple Machines and Levers",
+           "h": "year7-science/forces/deck9.html",
+           "k": "science"
           }
          ]
         },

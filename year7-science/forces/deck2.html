@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
 <link rel="stylesheet" href="../../assets/css/sitenav.css">
 <script src="../../assets/js/sitenav.js" defer></script>
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
@@ -37,7 +38,7 @@
   <section class="slide title-slide active" data-menu="Title">
     <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 1 <b>&#183;</b> Lesson 2 of 18</p>
     <h1>Force Diagrams and Net Force</h1>
-    <p class="subtitle">Naming forces, drawing force arrows to scale, free body diagrams, and balanced vs unbalanced forces.</p>
+    <p class="subtitle">Naming forces, drawing force arrows to scale, free body diagrams, and balanced and unbalanced forces.</p>
     <div class="head-meta">
       <span class="pill">Unit: Forces &amp; Motion</span>
       <span class="pill">Year 7&#8211;8</span>
@@ -46,28 +47,39 @@
     <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
   </section>
 
+  <section class="slide quiz-slide" data-quiz-before="2" data-quiz-recent="3" data-quiz-exclude="0" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> Lesson 1</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
   <section class="slide" data-menu="Learning intentions">
     <p class="eyebrow">Lesson 2 <b>&#183;</b> Overview</p>
     <h2>What we&#8217;re learning today</h2>
     <div class="cols">
-      <div class="box key"><span class="lbl">Learning intentions</span>
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
         <ul>
-          <li>Name the forces that act on everyday objects</li>
-          <li>Draw force arrows to scale</li>
-          <li>Represent forces using free body diagrams</li>
-          <li>Explain balanced and unbalanced forces using net force</li>
+          <li>name the forces that act on everyday objects</li>
+          <li>draw force arrows to scale</li>
+          <li>draw free body diagrams</li>
+          <li>use net force to decide if forces are balanced or unbalanced</li>
         </ul>
       </div>
-      <div class="box try"><span class="lbl">Success criteria</span>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
         <ul>
-          <li>I can draw an arrow whose length matches the force</li>
-          <li>I can draw and label a free body diagram</li>
-          <li>I can calculate net force and give its direction</li>
-          <li>I can predict whether an object speeds up, slows down or stays the same</li>
+          <li>draw an arrow whose length matches the force</li>
+          <li>draw and label a free body diagram</li>
+          <li>calculate the net force and give its direction</li>
+          <li>predict whether an object will speed up, slow down or keep the same speed</li>
         </ul>
       </div>
     </div>
-    <div class="box question"><span class="lbl">Starter</span><p>A book sits still on a table. Gravity is pulling it down. Why doesn&#8217;t it fall?</p></div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>You push hard on a heavy box, but it doesn&#8217;t move. Is your push doing nothing? What is going on?</p>
+      <button class="reveal-btn" data-answer="#l2s">What to listen for</button>
+      <div class="a" id="l2s"><span class="lbl-a">What we&#8217;re listening for</span>Listen for: your push is real, but something pushes back just as hard &#8212; <strong>friction</strong> from the floor. The two forces cancel, so the box doesn&#8217;t move. Today we learn to draw and add up forces like these.</div>
+    </div>
   </section>
 
   <section class="slide" data-menu="Key vocabulary">
@@ -91,113 +103,224 @@
   <section class="slide" data-menu="Part A: reading">
     <p class="bookref book">Booklet p.13 &#183; Part A &#183; Reading and comprehension</p>
     <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
-    <h2>Winning a tug-of-war</h2>
+    <h2>Winning a Tug-of-War</h2>
     <div class="cols">
       <div>
         <div class="box key"><span class="lbl">Before you read</span><p>Two tug-of-war teams pull as hard as they can, but the rope doesn&#8217;t move. Are they pulling at all? What is going on?</p></div>
-        <p>Read <em>Winning a Tug-of-War</em> in your booklet, then answer comprehension questions <strong>C1&#8211;C8</strong>.</p>
+        <p>Read <em>Winning a Tug-of-War</em> in your booklet. Then answer questions <strong>C1&#8211;C8</strong>.</p>
       </div>
-      <div class="box question"><span class="lbl">Check after reading</span><p>The reading says the secret to pulling harder is under your feet. What is it, and why does it matter?</p></div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>The reading says the secret to pulling harder is under your feet. What is it, and why does it matter?</p>
+        <button class="reveal-btn" data-answer="#l2r">Show answer</button>
+        <div class="a" id="l2r"><span class="lbl-a">Answer</span><strong>Grip</strong> &#8212; friction between your shoes and the ground. You pull on the rope by pushing back against the ground. Without enough friction your feet slide, and you get dragged along however strong you are.</div>
+      </div>
     </div>
-    <p class="note">The answer: friction between shoes and ground &#8212; without grip, a team slides forward however strong it is.</p>
   </section>
 
-  <section class="slide" data-menu="Naming forces &amp; arrows">
+  <section class="slide" data-menu="Naming forces and arrows">
     <p class="bookref book">Booklet p.15 &#183; §2.1&#8211;2.2 &#183; Worked Example 2.1</p>
     <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
     <h2>Naming forces and drawing arrows</h2>
     <div class="cols">
       <div class="box key"><span class="lbl">The forces we use</span>
         <ul>
-          <li><strong>Weight (\(W\))</strong> &#8212; gravity, always straight down</li>
+          <li><strong>Weight (\(W\))</strong> &#8212; gravity; always straight down</li>
           <li><strong>Normal force (\(N\))</strong> &#8212; a surface pushing back</li>
-          <li><strong>Friction (\(f\))</strong> &#8212; opposite to the motion</li>
-          <li><strong>Air resistance</strong> &#8212; opposite to the motion</li>
-          <li><strong>Tension (\(T\))</strong> &#8212; along a rope or string</li>
-          <li><strong>Applied force</strong> &#8212; a push or pull from a person or machine</li>
+          <li><strong>Friction (\(f\))</strong> &#8212; surfaces rubbing; opposite to the motion</li>
+          <li><strong>Air resistance</strong> &#8212; air pushing back; opposite to the motion</li>
+          <li><strong>Tension (\(T\))</strong> &#8212; a rope or string pulling</li>
+          <li><strong>Applied force</strong> &#8212; a person or machine pushing or pulling</li>
         </ul>
       </div>
-      <div class="box defn"><span class="lbl">Three rules for every force arrow</span>
-        <ol>
-          <li><strong>Start</strong> the arrow on the object.</li>
-          <li><strong>Point</strong> it the way the force acts.</li>
-          <li><strong>Length matches size</strong> &#8212; a 20&nbsp;N arrow is twice as long as a 10&nbsp;N arrow.</li>
+      <div>
+        <div class="box defn"><span class="lbl">Three rules for every force arrow</span>
+          <ol>
+            <li><strong>Start</strong> the arrow on the object.</li>
+            <li><strong>Point</strong> it the way the force acts.</li>
+            <li><strong>Make the length match the size</strong> &#8212; a 20&nbsp;N arrow is twice as long as a 10&nbsp;N arrow.</li>
+          </ol>
+        </div>
+        <div class="box question"><span class="lbl">Worked Example 2.1</span><p>Using a scale of 1&nbsp;cm = 5&nbsp;N, how long should the arrow be for a 25&nbsp;N push?</p></div>
+        <ol class="steps" id="l2w1">
+          <li><span class="stepno">1</span> Length = force &#247; scale: \(25 \div 5\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">5&nbsp;cm long</span></li>
         </ol>
+        <button class="reveal-btn" data-target="#l2w1">Show working</button>
       </div>
     </div>
-    <div class="box question"><span class="lbl">Worked Example 2.1</span><p>Using 1&nbsp;cm&nbsp;=&nbsp;5&nbsp;N, how long is the arrow for a 25&nbsp;N push? &#160;<span class="frag"><strong>25 &#247; 5 = 5&nbsp;cm</strong></span></p></div>
   </section>
 
   <section class="slide" data-menu="Free body diagrams">
     <p class="bookref book">Booklet pp.15&#8211;16 &#183; §2.3 &#183; Worked Example 2.2</p>
     <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
     <h2>Free body diagrams</h2>
-    <div class="graph-card narrow">
-      <svg viewBox="0 8 900 304" xmlns="http://www.w3.org/2000/svg">
-        <text x="220" y="32" text-anchor="middle" font-size="21" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Balanced &#8212; no acceleration</text>
-        <line x1="100" y1="210" x2="340" y2="210" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+    <p>A <strong>free body diagram</strong> shows <em>every</em> force on <em>one</em> object. Draw the object as a simple box, then add a labelled arrow for each force, using the three rules.</p>
+    <div class="cols even">
+      <div class="graph-card">
+        <svg viewBox="0 0 900 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two free body diagrams. Left: a book with a 10 newton normal force up and a 10 newton weight down, arrows the same length. Right: a box pushed right with 20 newtons and friction of 5 newtons to the left; the push arrow is four times as long.">
+        <text x="220" y="30" text-anchor="middle" font-size="27" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Balanced &#8212; no change in motion</text>
+        <line x1="110" y1="210" x2="330" y2="210" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
         <rect x="180" y="168" width="80" height="42" rx="6" style="fill:var(--accent)"/>
-        <text x="220" y="194" text-anchor="middle" font-size="15" fill="#fff" font-weight="600">Book</text>
-        <line x1="220" y1="168" x2="220" y2="128" stroke="#18A999" stroke-width="5"/>
-        <polygon points="220,118 213,134 227,134" fill="#18A999"/>
-        <text x="232" y="140" font-size="16" fill="#0F6E63" font-weight="600">N = 10 N</text>
-        <line x1="220" y1="210" x2="220" y2="250" stroke="#E0533F" stroke-width="5"/>
-        <polygon points="220,260 213,244 227,244" fill="#E0533F"/>
-        <text x="232" y="240" font-size="16" fill="#B23A2B" font-weight="600">W = 10 N</text>
-        <text x="220" y="300" text-anchor="middle" font-size="15" font-style="italic" style="fill:var(--ink-soft)">arrows equal length &#8594; forces balanced</text>
-
-        <text x="660" y="32" text-anchor="middle" font-size="21" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Unbalanced &#8212; accelerates &#8594;</text>
-        <line x1="470" y1="210" x2="850" y2="210" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
+        <text x="220" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="600">Book</text>
+        <line x1="220" y1="168" x2="220" y2="123" stroke="#18A999" stroke-width="5"/><polygon points="220,108 228,123 212,123" fill="#18A999"/>
+        <text x="232" y="130" font-size="22" font-weight="600" text-anchor="start" fill="#0F6E63">N = 10 N</text>
+        <line x1="220" y1="210" x2="220" y2="255" stroke="#E0533F" stroke-width="5"/><polygon points="220,270 212,255 228,255" fill="#E0533F"/>
+        <text x="232" y="262" font-size="22" font-weight="600" text-anchor="start" fill="#B23A2B">W = 10 N</text>
+        <text x="220" y="300" text-anchor="middle" font-size="19" font-style="italic" style="fill:var(--ink-soft)">arrows the same length &#8594; balanced</text>
+        <text x="660" y="30" text-anchor="middle" font-size="27" font-weight="700" font-family="Bitter, serif" style="fill:var(--ink)">Unbalanced &#8212; speeds up &#8594;</text>
+        <line x1="480" y1="210" x2="860" y2="210" stroke-width="2.5" style="stroke:var(--ink-faint)"/>
         <rect x="600" y="168" width="80" height="42" rx="6" style="fill:var(--accent)"/>
-        <text x="640" y="194" text-anchor="middle" font-size="15" fill="#fff" font-weight="600">Box</text>
-        <line x1="680" y1="189" x2="760" y2="189" stroke="#7C5CE0" stroke-width="5"/>
-        <polygon points="770,189 754,182 754,196" fill="#7C5CE0"/>
-        <text x="690" y="160" font-size="16" fill="#5B3FC0" font-weight="600">Push = 20 N</text>
-        <line x1="600" y1="189" x2="580" y2="189" stroke="#D98A0B" stroke-width="5"/>
-        <polygon points="570,189 586,182 586,196" fill="#D98A0B"/>
-        <text x="460" y="160" font-size="16" fill="#A86A08" font-weight="600">Friction = 5 N</text>
-        <text x="660" y="250" text-anchor="middle" font-size="15" font-style="italic" style="fill:var(--ink-soft)">push arrow 4&#215; longer than friction &#8594; net 15 N right</text>
-      </svg>
+        <text x="640" y="194" text-anchor="middle" font-size="18" fill="#fff" font-weight="600">Box</text>
+        <line x1="680" y1="189" x2="785" y2="189" stroke="#7C5CE0" stroke-width="5"/><polygon points="800,189 785,197 785,181" fill="#7C5CE0"/>
+        <text x="700" y="160" font-size="22" font-weight="600" text-anchor="start" fill="#5B3FC0">Push = 20 N</text>
+        <line x1="600" y1="189" x2="585" y2="189" stroke="#D98A0B" stroke-width="5"/><polygon points="570,189 585,181 585,197" fill="#D98A0B"/>
+        <text x="596" y="160" font-size="22" font-weight="600" text-anchor="end" fill="#A86A08">Friction = 5 N</text>
+        <text x="660" y="258" text-anchor="middle" font-size="19" font-style="italic" style="fill:var(--ink-soft)">push arrow 4&#215; as long as friction &#8594; net force 15 N right</text>
+        </svg>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 2.2</span><p>A book with a weight of 10&nbsp;N rests on a table. Draw its free body diagram.</p></div>
+        <ol class="steps" id="l2w2">
+          <li><span class="stepno">1</span> <strong>Find every force:</strong> gravity pulls the book down (weight); the table pushes it up (normal force).</li>
+          <li><span class="stepno">2</span> <strong>Size each force:</strong> the book isn&#8217;t moving up or down, so the push up equals the pull down &#8212; both 10&nbsp;N.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">A box, a 10&nbsp;N arrow down labelled W, and an arrow the same length up labelled N &#8212; like the left-hand diagram.</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l2w2">Show working</button>
+      </div>
     </div>
-    <div class="box defn"><span class="lbl">Definition</span><p>A <strong>free body diagram</strong> shows every force on one object as a labelled arrow. <strong>Arrow length is proportional to the size of the force</strong> &#8212; a 20&nbsp;N arrow is twice as long as a 10&nbsp;N arrow.</p></div>
   </section>
 
-  <section class="slide" data-menu="Worked example: net force">
+  <section class="slide" data-menu="Net force">
     <p class="bookref book">Booklet p.16 &#183; §2.4 &#183; Worked Example 2.3</p>
-    <p class="eyebrow">Part B <b>&#183;</b> Work through with the class</p>
-    <h2><span class="phase-tag ido">I do</span> Worked example &#8212; net force</h2>
-    <div class="box key"><span class="lbl">Net force</span><p>Same direction: <strong>add</strong>. Opposite directions: <strong>subtract</strong> &#8212; the net force points the way of the bigger force. Zero net force means <strong>balanced</strong>; anything else is <strong>unbalanced</strong>.</p></div>
-    <div class="box question"><span class="lbl">Find the net force and the motion</span><p>A sledge is pulled forwards with <strong>45&nbsp;N</strong>. Friction pushes back with <strong>18&nbsp;N</strong>. Find the net force and describe the motion.</p></div>
-    <ol class="steps" id="f1w1">
-      <li><span class="stepno">1</span> The forces act in opposite directions, so <strong>subtract</strong> them.</li>
-      <li><span class="stepno">2</span> \(F_{\text{net}} = 45 - 18 = 27\ \text{N}\) forwards.</li>
-      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">The net force is not zero, so the forces are unbalanced and the sledge speeds up.</span></li>
-    </ol>
-    <button class="reveal-btn" data-target="#f1w1">Show working</button>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Adding up forces &#8212; the net force</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Net force</span>
+        <p>The <strong>net force</strong> is the single force left over when you add up all the forces.</p>
+        <ul>
+          <li>Same direction &#8594; <strong>add</strong></li>
+          <li>Opposite directions &#8594; <strong>subtract</strong>; the net force points the way of the bigger one</li>
+          <li>Net force <strong>zero</strong> &#8594; <strong>balanced</strong> &#8594; the motion doesn&#8217;t change</li>
+          <li>Net force <strong>not zero</strong> &#8594; <strong>unbalanced</strong> &#8594; speeds up, slows down or turns</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 2.3</span><p>A sledge is pulled forwards with <strong>45&nbsp;N</strong>. Friction pushes back with <strong>18&nbsp;N</strong>. Find the net force and describe the motion.</p></div>
+        <ol class="steps" id="l2w3">
+          <li><span class="stepno">1</span> The forces point in opposite directions, so <strong>subtract</strong>.</li>
+          <li><span class="stepno">2</span> \(45 - 18 = 27\ \text{N}\) forwards.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">The net force is not zero, so the forces are unbalanced &#8212; the sledge speeds up.</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l2w3">Show working</button>
+      </div>
+    </div>
   </section>
 
-  <section class="slide" data-menu="Draw it: skydiver">
-    <p class="bookref book">Booklet p.18 &#183; Part C &#183; Task 2.5c</p>
-    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
-    <h2><span class="phase-tag youdo">You do</span> Draw the free body diagram</h2>
+  <section class="slide" data-menu="We do: draw it">
+    <p class="eyebrow">Part B <b>&#183;</b> Try it together</p>
+    <h2><span class="phase-tag wedo">We do</span> Draw the free body diagram</h2>
     <div class="cols">
       <div>
-        <div class="box question"><span class="lbl">Skydiver at terminal velocity</span><p>A <strong>skydiver</strong> has reached <strong>terminal velocity</strong> &#8212; falling at a steady speed. Draw and label the free body diagram. Make your arrow <strong>lengths match the sizes</strong> of the forces.</p></div>
-        <p class="note">Let students draw first, then press &#8594; to reveal the model answer.</p>
+        <div class="box question"><span class="lbl">A box on a rope</span><p>A box is dragged across the floor by a rope at a <strong>steady speed</strong>. The rope pulls with <strong>30&nbsp;N</strong>. The box weighs <strong>50&nbsp;N</strong>.</p><p>Draw its free body diagram. Label four forces with their names and sizes, and make the arrow lengths match.</p></div>
+        <div class="box hint"><span class="lbl">Hint</span><p>Steady speed means the motion isn&#8217;t changing. So what must be true about the forces?</p></div>
       </div>
-      <div class="graph-card narrow frag">
-        <svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
-          <text x="12" y="24" font-size="15" font-weight="700" style="fill:var(--neg)">&#10003; Model answer</text>
-          <circle cx="180" cy="150" r="26" style="fill:var(--accent)"/>
-          <text x="180" y="156" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">diver</text>
-          <line x1="180" y1="176" x2="180" y2="256" stroke="#E0533F" stroke-width="6"/>
-          <polygon points="180,268 171,250 189,250" fill="#E0533F"/>
-          <text x="196" y="230" font-size="17" fill="#B23A2B" font-weight="600">Weight</text>
-          <line x1="180" y1="124" x2="180" y2="44" stroke="#18A999" stroke-width="6"/>
-          <polygon points="180,32 171,50 189,50" fill="#18A999"/>
-          <text x="196" y="80" font-size="17" fill="#0F6E63" font-weight="600">Air resistance</text>
-          <text x="180" y="292" text-anchor="middle" font-size="13" font-style="italic" style="fill:var(--ink-soft)">equal arrows &#8594; balanced &#8594; constant speed</text>
+      <div class="graph-card frag">
+        <svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Free body diagram of the box: tension 30 newtons right, friction 30 newtons left, weight 50 newtons down, normal force 50 newtons up.">
+        <text x="12" y="24" font-size="15" font-weight="700" style="fill:var(--neg)">&#10003; Model answer</text>
+        <rect x="250" y="135" width="100" height="60" rx="6" style="fill:var(--accent)"/>
+        <text x="300" y="171" text-anchor="middle" font-size="15" fill="#fff" font-weight="600">Box</text>
+        <line x1="350" y1="165" x2="395" y2="165" stroke="#2F80ED" stroke-width="5"/><polygon points="410,165 395,173 395,157" fill="#2F80ED"/>
+        <text x="418" y="170" font-size="16" font-weight="600" text-anchor="start" fill="#1F5FB0">Tension 30 N</text>
+        <line x1="250" y1="165" x2="205" y2="165" stroke="#D98A0B" stroke-width="5"/><polygon points="190,165 205,157 205,173" fill="#D98A0B"/>
+        <text x="182" y="170" font-size="16" font-weight="600" text-anchor="end" fill="#A86A08">Friction 30 N</text>
+        <line x1="300" y1="135" x2="300" y2="50" stroke="#18A999" stroke-width="5"/><polygon points="300,35 308,50 292,50" fill="#18A999"/>
+        <text x="312" y="62" font-size="16" font-weight="600" text-anchor="start" fill="#0F6E63">Normal force 50 N</text>
+        <line x1="300" y1="195" x2="300" y2="280" stroke="#E0533F" stroke-width="5"/><polygon points="300,295 292,280 308,280" fill="#E0533F"/>
+        <text x="312" y="282" font-size="16" font-weight="600" text-anchor="start" fill="#B23A2B">Weight 50 N</text>
+        <text x="300" y="322" text-anchor="middle" font-size="13" font-style="italic" style="fill:var(--ink-soft)">left = right and up = down &#8594; balanced &#8594; steady speed</text>
         </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: arrows and net force">
+    <p class="bookref book">Booklet pp.17&#8211;19 &#183; Part C &#183; like Tasks 2.1&#8211;2.8</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Try these, then check your working</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">Using a scale of 1&nbsp;cm = 4&nbsp;N, how long should the arrows be for (a) 12&nbsp;N and (b) 30&nbsp;N?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>(a) \(12 \div 4 = 3\ \text{cm}\)</p>
+          <p>(b) \(30 \div 4 = 7.5\ \text{cm}\)</p>
+          <p><span class="result">3&nbsp;cm and 7.5&nbsp;cm</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">An arrow is 4.5&nbsp;cm long. The scale is 1&nbsp;cm = 10&nbsp;N. What force does it show?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Force = length &#215; scale: \(4.5 \times 10\)</p>
+          <p><span class="result">45&nbsp;N</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">Two dogs pull a sled forwards, one with 120&nbsp;N and one with 90&nbsp;N. Find the net force. Balanced or unbalanced?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Same direction, so add: \(120 + 90 = 210\ \text{N}\)</p>
+          <p><span class="result">210&nbsp;N forwards &#8212; unbalanced</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A cart is pushed right with 65&nbsp;N. Friction pushes left with 20&nbsp;N. Find the net force. What happens to the cart?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Opposite directions, so subtract: \(65 - 20 = 45\ \text{N}\)</p>
+          <p><span class="result">45&nbsp;N to the right &#8212; unbalanced, so it speeds up</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Your turn: balanced or unbalanced?">
+    <p class="bookref book">Booklet pp.19&#8211;20 &#183; Part C &#183; like Tasks 2.9&#8211;2.16</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Size, direction &#8212; and what happens next</h2>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A vase weighs 12&nbsp;N and sits still on a shelf. How big is the normal force from the shelf? Explain.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>The vase isn&#8217;t moving up or down, so the forces are balanced.</p>
+          <p><span class="result">12&nbsp;N upwards &#8212; the same size as its weight</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">In a tug-of-war, the left team pulls with 750&nbsp;N and the right team with 680&nbsp;N. Find the net force. Who is winning?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(750 - 680 = 70\ \text{N}\)</p>
+          <p><span class="result">70&nbsp;N to the left &#8212; the left team is winning</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A crate has three forces on it: 25&nbsp;N right, 15&nbsp;N right and 50&nbsp;N left. Find the net force.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Right: \(25 + 15 = 40\ \text{N}\)</p>
+          <p>Then: \(50 - 40 = 10\ \text{N}\)</p>
+          <p><span class="result">10&nbsp;N to the left</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A parachutist weighs 800&nbsp;N. Just after the parachute opens, air resistance is 1100&nbsp;N. Find the net force. What happens to her speed?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(1100 - 800 = 300\ \text{N}\) upwards</p>
+          <p><span class="result">The net force acts upwards, against her motion, so she slows down.</span></p>
+        </div>
       </div>
     </div>
   </section>
@@ -207,7 +330,7 @@
     <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
     <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
     <div class="cols">
-      <div class="box try"><span class="lbl">Build each skill</span>
+      <div class="box try"><span class="lbl">Work through these tasks</span>
         <ul>
           <li><strong>Tasks 2.1&#8211;2.3</strong> &#8212; arrows to scale</li>
           <li><strong>Tasks 2.4&#8211;2.6</strong> &#8212; free body diagrams</li>
@@ -224,30 +347,31 @@
     </div>
   </section>
 
-  <section class="slide" data-menu="Above level: hockey puck">
-    <p class="bookref book">Booklet p.21 &#183; Part D &#183; Extension 2.17</p>
+  <section class="slide" data-menu="Above level: reasoning with net force">
+    <p class="bookref book">Booklet pp.21&#8211;22 &#183; Part D &#183; like Extensions 2.17&#8211;2.20</p>
     <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
-    <h2><span class="phase-tag wedo">We do</span> Is Sam right?</h2>
-    <div class="box question"><span class="lbl">Judge the reasoning</span><p>Sam says: &#8220;A hockey puck sliding across ice at a steady speed must have an unbalanced force pushing it forwards.&#8221;</p></div>
-    <ol class="steps" id="f1w3">
-      <li><span class="stepno">1</span> Steady speed in a straight line means the motion is <strong>not changing</strong>.</li>
-      <li><span class="stepno">2</span> An unbalanced force would make the puck speed up, slow down or turn &#8212; so the net force must be <strong>zero</strong>.</li>
-      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Sam is wrong: no forward push is needed. Weight and the normal force balance; on near-frictionless ice the puck keeps gliding.</span></li>
-    </ol>
-    <button class="reveal-btn" data-target="#f1w3">Show reasoning</button>
-  </section>
-
-  <section class="slide" data-menu="Above level: car">
-    <p class="bookref book">Booklet p.21 &#183; Part D &#183; Extension 2.19</p>
-    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
-    <h2><span class="phase-tag youdo">You do</span> Predict the motion of the car</h2>
-    <div class="box question"><span class="lbl">Net force, motion, and how to balance it</span><p>A car has a driving force of <strong>4500&nbsp;N</strong>. Friction and air resistance total <strong>1200&nbsp;N</strong>. Find the net force, say which way the car accelerates, and suggest one way the forces could become balanced.</p></div>
-    <ol class="steps" id="f1w2">
-      <li><span class="stepno">1</span> Opposite directions, so subtract: \(4500 - 1200\).</li>
-      <li><span class="stepno">2</span> \(F_{\text{net}} = 3300\ \text{N}\) forwards &#8212; unbalanced, so the car speeds up.</li>
-      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Balanced if the driving force drops to 1200&nbsp;N, or the resistance rises to 4500&nbsp;N.</span></li>
-    </ol>
-    <button class="reveal-btn" data-target="#f1w2">Show answers</button>
+    <h2><span class="phase-tag wedo">We do</span> Going further</h2>
+    <p class="lede">These go beyond the Year 7 standard: judge someone&#8217;s reasoning, and use net force in a formula.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">Ben says: &#8220;A bowling ball rolling down a smooth lane at a steady speed must have a forward force pushing it.&#8221; Is Ben right?</p>
+        <button class="reveal-btn">Show reasoning</button>
+        <div class="a">
+          <p>A steady speed in a straight line means the motion is <strong>not changing</strong>.</p>
+          <p>So the net force must be <strong>zero</strong> &#8212; nothing has to push it forwards.</p>
+          <p><span class="result">Ben is wrong. It keeps rolling because nothing big is slowing it down.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A 1000&nbsp;kg car has a driving force of 3500&nbsp;N. Air resistance and friction add up to 1500&nbsp;N. Find the net force, then use \(a = F \div m\) to find its acceleration.</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>Net force: \(3500 - 1500 = 2000\ \text{N}\) forwards</p>
+          <p>\(a = 2000 \div 1000 = 2\ \text{m/s}^2\)</p>
+          <p><span class="result">2000&nbsp;N; 2&nbsp;m/s&#178; forwards</span></p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="slide" data-menu="Recap">
@@ -258,9 +382,13 @@
       <li>Force arrows start on the object, point the way the force acts, and are <strong>drawn to scale</strong></li>
       <li>A <strong>free body diagram</strong> shows every force on one object</li>
       <li><strong>Net force</strong>: add forces in the same direction, subtract opposite ones</li>
-      <li>Balanced &#8594; no change in motion; unbalanced &#8594; speeds up, slows down or turns</li>
+      <li>Balanced &#8594; no change in motion. Unbalanced &#8594; speeds up, slows down or turns</li>
     </ul>
-    <div class="box question"><span class="lbl">Exit question</span><p>A book sits still on a table. Are the forces on it balanced or unbalanced? How do you know?</p></div>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>A book sits still on a table. Are the forces on it balanced or unbalanced? How do you know?</p>
+      <button class="reveal-btn" data-answer="#l2x">Show answer</button>
+      <div class="a" id="l2x"><span class="lbl-a">Answer</span><strong>Balanced.</strong> The book isn&#8217;t moving, so its motion isn&#8217;t changing: the table pushes up (normal force) exactly as hard as gravity pulls down (weight).</div>
+    </div>
   </section>
 
 </main>
@@ -268,7 +396,7 @@
 <div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
 <div class="chrome">
   <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
-  <span class="counter">1 / 11</span>
+  <span class="counter">1 / 14</span>
   <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
   <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
 </div>
@@ -278,6 +406,8 @@
   <div class="menugrid"></div>
 </div>
 
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
 <script src="../../assets/js/deck.js" defer></script>
 </body>
 </html>
