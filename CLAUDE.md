@@ -645,6 +645,11 @@ Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
 - Question furniture: `.opts`/`.opt` multiple choice, `.tick` checkbox
   list, `table.wtbl` with `td.fill` blank cells, `.sortcols[data-cols]`
   of `.sortcol`, `.chips`/`.chip` word bank.
+- A figure the question is *about* (an orbit, a row of Moon phases) is an
+  inline SVG in `figure.ws-fig`, with `data-h="xs|sm|md|lg"` capping its
+  printed height. Keep fills greyscale so it survives a black-and-white
+  printer, and draw ink with `currentColor` (the wrapper sets it to
+  `--ink`). `.drawbox` stays the empty space a student draws in.
 - Callouts: `.infobox` (accent), `.fnbox` (First Nations — earth tone,
   theme-independent like `.box.country` in decks), `.y8box` plus the
   inline `.y8` marker for Year 8 extension. Each takes a `.lbl` first
@@ -674,7 +679,9 @@ year7-science/bio-ecosystems: `solutions.html` (answer key),
 `worksheets-all-solutions.html` (the collated worksheet booklet with
 answers), `portfolio-solutions.html` (the Research Portfolio key) and
 `rubric.html` (the Ecosystem Investigation marking tool). In
-year7-science/space: `solutions.html`.
+year7-science/space: `solutions.html` and
+`worksheet-revision-solutions.html` (the revision worksheet's answer
+copy, same shell as `worksheets-all-solutions.html`).
 
 **`portfolio-solutions.html` is not yet encrypted** — it ships the shell
 with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it

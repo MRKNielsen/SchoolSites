@@ -38,8 +38,34 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-methods | Stub | — |
 | year12-foundation | Stub | — |
 
-Totals: 70 decks, 21 worksheets, 3 hubs, 2 quizzes, 1 profile page,
-6 gated pages.
+Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
+7 gated pages.
+
+### Landed — Space revision worksheet + answer copy (13–14 Oct 2026)
+
+`year7-science/space/worksheet-revision.html` — two 50-minute lessons of
+revision for the written Astronomy Test (CAT 5), covering Lessons 1–7:
+Session 1 is Parts A–E (41 marks), Session 2 Parts F–J (42), 83 in all,
+10 printed pages with each session starting on a fresh page. Linked from
+the Space index under *Student resources*.
+
+- **It deliberately shares no question or question format with the
+  test.** It revises every content point the test assesses, but there
+  are no layer diagrams to label, no day/night globe, no orbit- or
+  Moon-position diagrams, no circle-the-phase, no planet-order list, and
+  no AU→km or Sun→Earth light-time sums. If the test changes, re-check
+  the revision sheet against it rather than copying test items in.
+- The answer copy is `worksheet-revision-solutions.html`, a gated shell
+  copied from bio's `worksheets-all-solutions.html`, linked under *Staff
+  only*. Its first page maps each part to the test content it covers.
+- Lesson 4 is optional and not assessed, so it appears only in a
+  fast-finisher box.
+- New shared component: `.ws-fig` in `worksheet.css` (see CLAUDE.md).
+- `tools/check-gated.js`, two fixes: the placeholder test now matches the
+  unquoted `{v:2, iv:"", ct:"", keys:[]}` form CLAUDE.md documents (it only
+  caught `"ct":""`, so `portfolio-solutions.html` was never flagged), and the
+  booklet diff is skipped for payloads with no `qref` Q-numbers, so a
+  worksheet answer copy is no longer reported as missing every question.
 
 ### Landed — primer course home as a one-screen year grid (14 Oct 2026)
 
@@ -420,6 +446,16 @@ label on its own.
 
 ### Tier 0 — Housekeeping (minutes each)
 
+- [ ] **Encrypt `year7-science/space/worksheet-revision-solutions.html`.**
+      Ships with a placeholder blob until the staff password is applied:
+      run `worksheet-revision-solutions-payload.html` through
+      `tools/staff-crypt.html`, paste the line over `var BLOB`, then
+      `node tools/check-gated.js`. **S**
+- [ ] **Space deck 6 understates the debris energy by 100×.** The "We do"
+      slide says a 10 g bolt at 7,800 m/s has "20× more kinetic energy than
+      a cricket ball", but its own figures are 304,200 J against 152 J,
+      which is about 2,000×. Found 13 Oct 2026 while writing the revision
+      sheet; not changed, because it is someone else's deck. **S**
 - [ ] **`year7-science/bio-ecosystems/rubric.html` lost its body classes.**
       Noticed 8 Oct 2026 while rebuilding the sitemap for unrelated work.
       Commit `db7b36b` ("Update rubric.html", same day) left it with a bare

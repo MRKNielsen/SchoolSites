@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-13",
+ "generated": "2026-10-14",
  "tree": [
   {
    "t": "Home",
@@ -408,6 +408,11 @@ window.SITEMAP = {
           {
            "t": "Solution Set",
            "h": "year7-science/space/solutions.html",
+           "k": "space"
+          },
+          {
+           "t": "Revision Worksheet · Lessons 1–7 — Answers",
+           "h": "year7-science/space/worksheet-revision-solutions.html",
            "k": "space"
           },
           {

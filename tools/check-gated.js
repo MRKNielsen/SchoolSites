@@ -63,7 +63,9 @@ for (const payload of walk(ROOT)) {
   /* A shell that ships an empty ct locks but can never unlock. Worth its own
      message — it is a different problem from "the blob is out of date". */
   const blob = gatedSrc.match(/var BLOB\s*=\s*\{[^;]*\}/);
-  if (blob && /"ct"\s*:\s*""/.test(blob[0])) {
+  /* Match the placeholder with or without quoted keys: CLAUDE.md documents
+     it as {v:2, iv:"", ct:"", keys:[]}, which a quoted-only pattern misses. */
+  if (blob && /"?ct"?\s*:\s*""/.test(blob[0])) {
     problems++;
     console.log(`  PLACEHOLDER  ${rel} — ships an empty blob, so the page locks but cannot unlock`);
     console.log(`         encrypt ${path.basename(payload)} through tools/staff-crypt.html.`);
@@ -85,9 +87,12 @@ for (const payload of walk(ROOT)) {
   }
 
   const bq = bookletQuestions(path.dirname(payload));
-  if (bq && bq.size) {
-    const src = fs.readFileSync(payload, 'utf8');
-    const kq = new Set((src.match(/(?<=qref">)Q\d+\.\d+/g) || []));
+  const src = fs.readFileSync(payload, 'utf8');
+  const kq = new Set((src.match(/(?<=qref">)Q\d+\.\d+/g) || []));
+  /* Only a booklet answer key carries qref Q-numbers. A worksheet answer
+     copy in the same unit (worksheet-revision-solutions) has none, and
+     diffing it against the booklet would report every question missing. */
+  if (bq && bq.size && kq.size) {
     const missing = [...bq].filter(q => !kq.has(q));
     const extra = [...kq].filter(q => !bq.has(q));
     if (missing.length || extra.length) {
