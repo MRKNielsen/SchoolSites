@@ -1,11 +1,13 @@
 /* ============================================================
    Forces & Motion — Year 7 Spaced Retrieval Question Bank
-   159 multiple-choice questions tagged by lesson (0–9).
+   211 multiple-choice questions tagged by lesson (0–12).
    Format: { deck: N, q: "question text", opts: ["A","B","C","D"], ans: 0-indexed-int }
    Deck 0 is Lesson 1's warm-up on primary-school ideas, so every
    later deck excludes it (data-quiz-exclude="0").
-   Decks 2–9 draw 3 questions from the lesson before and 2 from older
+   Decks 2–12 draw 3 questions from the lesson before and 2 from older
    lessons (data-quiz-recent="3"). Content follows the Lesson Booklet.
+   Lesson 11 is optional, so later decks also exclude deck 11
+   (data-quiz-exclude="0,11") and draw their 3 from Lesson 10.
    ============================================================ */
 window.RETRIEVAL_QUESTIONS = [
 
@@ -186,5 +188,63 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 9, q: "A trebuchet has an MA less than 1. What does it gain?", opts: ["Mass", "Energy", "Force", "Speed and distance"], ans: 3 },
   { deck: 9, q: "A ramp lets you push a load up with less force, but you must…", opts: ["push it a longer distance", "push it faster", "lift it straight up as well", "use more energy than you put in"], ans: 0 },
   { deck: 9, q: "An axe splitting wood is an example of which simple machine?", opts: ["A screw", "A wedge", "A pulley", "A wheel and axle"], ans: 1 },
-  { deck: 9, q: "The lid of a jam jar is an example of which simple machine?", opts: ["A lever", "A pulley", "A wedge", "A screw"], ans: 3 }
+  { deck: 9, q: "The lid of a jam jar is an example of which simple machine?", opts: ["A lever", "A pulley", "A wedge", "A screw"], ans: 3 },
+
+  /* ── LESSON 10: Experiment 4 — Lever Mechanical Advantage ────────────── */
+  { deck: 10, q: "In Experiment 4, where is the fulcrum placed?", opts: ["Under the 0 cm mark", "Under the 50 cm mark of the metre stick", "Under the 30 cm mark", "Under the 100 cm mark"], ans: 1 },
+  { deck: 10, q: "In Experiment 4, what is the independent variable (the one you change)?", opts: ["The effort arm", "Where the fulcrum is", "The effort mass", "The load mass"], ans: 2 },
+  { deck: 10, q: "In Experiment 4, what is the dependent variable (the one you measure)?", opts: ["The length of the metre stick", "The effort mass", "The load mass", "The effort arm needed to balance the stick"], ans: 3 },
+  { deck: 10, q: "Which of these is kept the same in Experiment 4?", opts: ["The 100 g load and where it sits", "Nothing at all", "The effort mass", "The effort arm"], ans: 0 },
+  { deck: 10, q: "When you measure an arm, you measure from…", opts: ["the end of the stick to the mass", "the 0 cm mark to the mass", "the mass to the end of the stick", "the fulcrum to the centre of the mass"], ans: 3 },
+  { deck: 10, q: "A 100 g load sits 20 cm from the fulcrum. Where does a 50 g effort balance it?", opts: ["10 cm from the fulcrum", "20 cm from the fulcrum", "40 cm from the fulcrum", "70 cm from the fulcrum"], ans: 2 },
+  { deck: 10, q: "A 50 g effort balances a 100 g load. What is the MA from the forces?", opts: ["0.5", "1", "2", "50"], ans: 2 },
+  { deck: 10, q: "The effort arm is 40 cm and the load arm is 20 cm. What is the MA?", opts: ["0.5", "2", "20", "60"], ans: 1 },
+  { deck: 10, q: "As the effort mass goes up, the effort arm needed to balance the load…", opts: ["gets shorter", "gets longer", "becomes zero", "stays the same"], ans: 0 },
+  { deck: 10, q: "Doubling the effort mass makes the balancing effort arm…", opts: ["twice as long", "half as long", "the same length", "four times as long"], ans: 1 },
+  { deck: 10, q: "Why does the method keep the fulcrum at the 50 cm mark?", opts: ["So the stick's own weight has no turning effect", "So the masses can't slide off", "So the stick is easier to lift", "Because 50 is easier to read"], ans: 0 },
+  { deck: 10, q: "Why do we do three trials for each effort mass?", opts: ["Because the load changes each time", "To make the stick balance faster", "To make the MA bigger", "To spot odd results and find a reliable mean"], ans: 3 },
+  { deck: 10, q: "Three trials gave effort arms of 30, 31 and 39 cm. Which result looks wrong?", opts: ["30 cm", "31 cm", "39 cm", "None of them"], ans: 2 },
+  { deck: 10, q: "What is the mean of 22 cm, 18 cm and 20 cm?", opts: ["18 cm", "20 cm", "22 cm", "60 cm"], ans: 1 },
+  { deck: 10, q: "What shape is the graph of effort arm against effort mass?", opts: ["A curve that falls more and more slowly", "A flat line", "A straight line going down", "A straight line going up"], ans: 0 },
+  { deck: 10, q: "A lever has an MA less than 1. What does that tell you?", opts: ["The lever is broken", "The lever creates energy", "The effort is smaller than the load", "The effort is bigger than the load"], ans: 3 },
+  { deck: 10, q: "A 100 g load is 20 cm from the fulcrum and a 200 g effort balances it. What is the MA?", opts: ["0.5", "1", "2", "10"], ans: 0 },
+
+  /* ── LESSON 11: Levers Extension (optional) ──────────────────────────── */
+  { deck: 11, q: "How do you calculate a turning effect?", opts: ["Mass × speed", "Force ÷ distance from the pivot", "Force + distance from the pivot", "Force × distance from the pivot"], ans: 3 },
+  { deck: 11, q: "What is the unit of a turning effect?", opts: ["Joules per second", "Metres per second", "Newton metres (N m)", "Newtons (N)"], ans: 2 },
+  { deck: 11, q: "A 50 N force acts 0.4 m from a pivot. What is its turning effect?", opts: ["12.5 N m", "20 N m", "50.4 N m", "125 N m"], ans: 1 },
+  { deck: 11, q: "Two children sit on the same side of a seesaw. To find their total turning effect you…", opts: ["add their two turning effects", "subtract the smaller from the larger", "multiply their turning effects", "use only the heavier child"], ans: 0 },
+  { deck: 11, q: "Why is it easier to undo a tight nut with a longer spanner?", opts: ["The spanner is heavier", "The nut becomes looser by itself", "A longer spanner adds energy", "The same push gives a bigger turning effect"], ans: 3 },
+  { deck: 11, q: "When a lever arm turns, every point on it turns through…", opts: ["the same distance", "a straight line", "the same angle in the same time", "the same speed"], ans: 2 },
+  { deck: 11, q: "Why does the tip of a trebuchet's long arm move faster than the counterweight end?", opts: ["Gravity pulls it harder", "It travels a longer arc in the same time", "It turns through a bigger angle", "It is lighter"], ans: 1 },
+  { deck: 11, q: "A trebuchet has a long arm of 3 m and a short arm of 0.5 m. How many times faster does the tip move than the short end?", opts: ["1.5 times", "2.5 times", "3.5 times", "6 times"], ans: 3 },
+  { deck: 11, q: "The tip of an arm travels a 6 m arc in 0.5 s. What is its average speed?", opts: ["3 m/s", "6.5 m/s", "12 m/s", "30 m/s"], ans: 2 },
+  { deck: 11, q: "To find the arc travelled by a point on a turning arm, you use…", opts: ["angle ÷ 360 × 2 × π × r", "2 × π × r ÷ angle", "angle ÷ r", "angle × r"], ans: 0 },
+  { deck: 11, q: "Where does all of a trebuchet stone's energy come from?", opts: ["The air", "The falling counterweight", "The sling", "The long arm"], ans: 1 },
+  { deck: 11, q: "Can a longer throwing arm give the stone more energy than the counterweight loses?", opts: ["No — energy cannot be created", "Yes, if the arm is long enough", "Only on a windy day", "Yes, but only with a sling"], ans: 0 },
+  { deck: 11, q: "A 10 kg counterweight falls 1 m. How much GPE does it give up? (g = 9.8 N/kg)", opts: ["9.8 J", "10 J", "98 J", "980 J"], ans: 2 },
+  { deck: 11, q: "A counterweight gives up 200 J and the stone gets 50 J. What is the efficiency?", opts: ["4%", "25%", "50%", "150%"], ans: 1 },
+  { deck: 11, q: "In a trebuchet, where does most of the wasted energy go?", opts: ["Into the still-moving arm and counterweight, and heat and sound", "It is destroyed", "Back into the counterweight's GPE", "Into the stone"], ans: 0 },
+  { deck: 11, q: "A 0.1 kg stone moves at 20 m/s. What is its kinetic energy?", opts: ["1 J", "2 J", "20 J", "40 J"], ans: 2 },
+  { deck: 11, q: "Which change gives a trebuchet more energy to launch with?", opts: ["A lighter counterweight", "A lighter stone", "A shorter drop", "A heavier counterweight"], ans: 3 },
+
+  /* ── LESSON 12: Projectile Motion ────────────────────────────────────── */
+  { deck: 12, q: "A projectile is an object that…", opts: ["moves in a straight line forever", "has been launched and then has only gravity acting on it", "floats in the air", "is pushed by an engine the whole way"], ans: 1 },
+  { deck: 12, q: "Which of these is a projectile?", opts: ["A ball after it rolls off a table", "A rocket with its engine on", "A car driving along a road", "A plane flying level"], ans: 0 },
+  { deck: 12, q: "Ignoring air, what happens to a projectile's sideways speed?", opts: ["It slows down", "It drops to zero straight away", "It stays the same", "It speeds up"], ans: 2 },
+  { deck: 12, q: "What happens to a projectile's downwards speed?", opts: ["It stays the same", "It decreases", "It is always zero", "It increases, because gravity pulls it"], ans: 3 },
+  { deck: 12, q: "What shape is the path of a ball launched sideways?", opts: ["A zigzag", "A curve (a parabola)", "A circle", "A straight line"], ans: 1 },
+  { deck: 12, q: "One ball is dropped and another is launched sideways from the same height at the same time. Which lands first?", opts: ["The dropped ball", "The launched ball", "They land at the same time", "Whichever is heavier"], ans: 2 },
+  { deck: 12, q: "How long a ball launched sideways stays in the air depends on…", opts: ["the height it falls from", "how fast it is launched", "its colour", "how far it travels"], ans: 0 },
+  { deck: 12, q: "Who showed that a projectile's sideways and downwards motions are independent?", opts: ["Archimedes", "Newton", "Tartaglia", "Galileo"], ans: 3 },
+  { deck: 12, q: "In 1537 Tartaglia described a cannonball's path as…", opts: ["a straight line, then an arc, then a straight drop", "a circle", "a straight line all the way", "a perfect parabola"], ans: 0 },
+  { deck: 12, q: "Which equation gives the time of flight from a drop height h?", opts: ["t = g ÷ 2h", "t = 2h × g", "t = h × g", "t = √(2h ÷ g)"], ans: 3 },
+  { deck: 12, q: "Which equation gives the range of a ball launched sideways?", opts: ["R = v ÷ t", "R = g × t", "R = v × t", "R = h × t"], ans: 2 },
+  { deck: 12, q: "A ball launched sideways at 3 m/s is in the air for 0.6 s. How far does it travel sideways?", opts: ["0.2 m", "1.8 m", "3.6 m", "5 m"], ans: 1 },
+  { deck: 12, q: "A ball rolls off a table 1.25 m high. About how long does it take to land? (g = 9.8 m/s²)", opts: ["0.13 s", "0.26 s", "0.51 s", "2.5 s"], ans: 2 },
+  { deck: 12, q: "How does a slow-motion video give the time of a fall?", opts: ["Count the seconds on the screen", "Number of frames ÷ frames per second", "Number of frames × frames per second", "Frames per second ÷ number of frames"], ans: 1 },
+  { deck: 12, q: "A fall lasts 60 frames on a video filmed at 120 frames per second. How long is the fall?", opts: ["0.2 s", "0.5 s", "2 s", "7200 s"], ans: 1 },
+  { deck: 12, q: "Which equation finds g from a drop height and a fall time?", opts: ["g = 2h ÷ t²", "g = h × t", "g = t² ÷ 2h", "g = 2h × t"], ans: 0 },
+  { deck: 12, q: "Why should a fall be filmed at 120 frames per second or more?", opts: ["Phones can't film any slower", "It makes gravity stronger", "The ball falls faster on camera", "Each frame is a shorter time, so a miscount matters less"], ans: 3 },
+  { deck: 12, q: "Launching a ball sideways faster from the same table makes it…", opts: ["stay in the air longer", "land in the same spot", "land further away, in the same time", "land closer, in less time"], ans: 2 }
 ];

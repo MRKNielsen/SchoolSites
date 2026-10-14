@@ -110,6 +110,24 @@ Optional modules — link only when a deck uses them:
   shortcut draws an empty chart at exactly the settings the widget
   exists to demonstrate. Colours come from tokens; sliders are hidden
   in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/leversim.css` + `assets/js/leversim.js` — the lever
+  balance for Year 7 Forces Experiment 4. Markup is one line,
+  `<div class="leversim"></div>`; the JS builds a metre stick on a
+  fulcrum at its 50 cm mark, a load on the left, slotted effort masses
+  on the right (drag them, or use the slider), the two arm dimensions,
+  a readout of mass × arm on each side and a verdict, plus effort-mass
+  buttons and a *Let go* / *Hold it level* toggle. Attributes:
+  `data-load` (g, default 100), `data-loadarm` (cm, default 20),
+  `data-effort`, `data-arm`, `data-masses="50,100,150,200"`,
+  `data-moveload="on"` for a load-arm slider, `data-hold="off"` to
+  start free. **It starts held level on purpose** so students predict
+  before they see the answer. Balanced means within half a centimetre
+  of the exact point, because positions move in whole centimetres (a
+  150 g effort balances at 13 cm, not 13.3); an exact-equality test
+  would never call it balanced. The stick's own weight sits on the
+  fulcrum and is left out, as in the experiment. Labels and dimensions
+  are drawn level at the tipped positions. Colours come from tokens;
+  controls are hidden in print. Live in `styleguide/deck-demo.html`.
 - Slide-jump menu — add `<button class="navbtn menubtn">` inside
   `.chrome` plus a `.slidemenu` overlay containing `.menugrid`, and give
   each slide a `data-menu="…"` title. deck.js builds the contents grid
@@ -219,7 +237,7 @@ other without going back through the index.
     or an answer not yet revealed"), so searching on the projector
     can't put the answer on the board. Keep that if you touch it.
   - Not indexed: typeset maths, buttons, `.quiz-container`, and the
-    orbit / season / binomial widgets (their text is generated and
+    orbit / season / binomial / lever widgets (their text is generated and
     changes as they move). Opt anything else out with `data-nosearch`.
   - The jump is a `deck:goto` event (`detail: {slide: <0-based
     index>}`) that deck.js answers with `preventDefault()`. The nine

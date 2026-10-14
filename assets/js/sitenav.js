@@ -297,7 +297,7 @@
 
   var SKIP = "script, style, noscript, template, title, desc, button, input, select, textarea, " +
              "mjx-container, .quiz-container, .start-hint, .orbitsim, .seasonsim, .binomsim, " +
-             ".marks, #sitenav, .sn-handle, [data-nosearch]";
+             ".leversim, .marks, #sitenav, .sn-handle, [data-nosearch]";
   /* Inline elements that read as a label of their own — text either
      side gets a separator, so "1" + "The Moon…" isn't "1The". Mirrors
      LABELS in tools/search-index.js. */

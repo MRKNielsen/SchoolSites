@@ -660,7 +660,7 @@ Recap slide to `.exit-slide`) are written down there.
         tables to the booklet, then re-derive those chips
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
   - [ ] Quiz + gated solutions *(can defer to a second pass)* — the
-        question bank `questions.js` (Lessons 1–9, 159 questions) landed
+        question bank `questions.js` (Lessons 1–12, 211 questions) landed
         2026-10-15; a standalone `quiz.html` and the gated answer key are
         still to do
   - [x] **Lesson Booklet Lessons 10–12** *(2026-10-15)*: Experiment 4 (lever
@@ -678,7 +678,20 @@ Recap slide to `.exit-slide`) are written down there.
         Its `\readingFive` also credits Aristotle with "impetus" and
         cannonballs; Lesson 12's reading replaces it (Tartaglia 1537,
         Galileo 1638).
-  - [ ] Decks 10–18 rebuilt the same way once their booklet sections exist
+  - [x] **Decks 10–12 rebuilt from the Lesson Booklet** *(2026-10-15)*, the
+        same way as decks 1–9: review quiz first (Lesson 12's uses
+        `data-quiz-exclude="0,11"`, so a class that skipped the optional
+        Lesson 11 draws its three recent questions from Lesson 10),
+        booklet worked examples stepped, lookalike questions with hidden
+        working, chips checked against the build. Deck 10 carries a new
+        optional module, `leversim.css` + `leversim.js` (lever balance:
+        predict, then let go; documented in CLAUDE.md, live in the deck
+        demo). `questions.js` now has Lessons 10–12 (211 questions).
+        Week 4 cards and planner rows match the booklet. `legacy-deck3`
+        and `legacy-deck4` are no longer linked; `legacy-deck5/6` still
+        serve Lessons 13–18.
+  - [ ] Decks 13–18 rebuilt the same way once their booklet sections exist.
+        Every review quiz after Lesson 11 needs `data-quiz-exclude="0,11"`.
 
 - [ ] **Port `year11-methods` chapter-9 and chapter-11 off inline
       styles. M** Nine decks, the last inline-styled content in the repo.

@@ -262,6 +262,21 @@ window.SITEMAP = {
            "t": "Lesson 9 — Simple Machines and Levers",
            "h": "year7-science/forces/deck9.html",
            "k": "science"
+          },
+          {
+           "t": "Lesson 10 — Experiment 4: Mechanical Advantage",
+           "h": "year7-science/forces/deck10.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 11 — Levers Extension (Optional)",
+           "h": "year7-science/forces/deck11.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 12 — Projectile Motion",
+           "h": "year7-science/forces/deck12.html",
+           "k": "science"
           }
          ]
         },

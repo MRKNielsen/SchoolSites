@@ -46,7 +46,7 @@ const RAW = new Set(["script", "style", "textarea", "title"]);
 /* Subtrees never indexed. */
 const SKIP_TAGS = new Set(["head", "button", "select", "textarea", "template", "noscript",
   "desc", "svg:title"]);
-const SKIP_CLASSES = ["quiz-container", "start-hint", "orbitsim", "seasonsim", "binomsim",
+const SKIP_CLASSES = ["quiz-container", "start-hint", "orbitsim", "seasonsim", "binomsim", "leversim",
   "chrome", "keyhint", "slidemenu", "lockscreen", "toolbar", "namebar", "back-btn",
   "progress", "homebtn", "ws-bar", "marks", "wl-ico", "wl-marks"];
 /* Inline elements that read as a label of their own (a question number,
