@@ -50,14 +50,13 @@ Session 1 is Parts A–E (41 marks), Session 2 Parts F–J (42), 83 in all,
 the Space index under *Student resources*.
 
 - **It deliberately shares no question or question format with the
-  test.** It revises every content point the test assesses, but there
-  are no layer diagrams to label, no day/night globe, no orbit- or
-  Moon-position diagrams, no circle-the-phase, no planet-order list, and
-  no AU→km or Sun→Earth light-time sums. If the test changes, re-check
-  the revision sheet against it rather than copying test items in.
+  test.** It revises the same content, but in different question types.
+  If the test changes, re-check the revision sheet against it rather than
+  copying test items in. Keep test details out of this repo — it is
+  public, and the answer copy also opens with the student password.
 - The answer copy is `worksheet-revision-solutions.html`, a gated shell
   copied from bio's `worksheets-all-solutions.html`, linked under *Staff
-  only*. Its first page maps each part to the test content it covers.
+  only*. It accepts the staff and the student password.
 - Lesson 4 is optional and not assessed, so it appears only in a
   fast-finisher box.
 - New shared component: `.ws-fig` in `worksheet.css` (see CLAUDE.md).
