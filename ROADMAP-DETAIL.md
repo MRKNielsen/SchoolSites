@@ -663,6 +663,21 @@ Recap slide to `.exit-slide`) are written down there.
         question bank `questions.js` (Lessons 1–9, 159 questions) landed
         2026-10-15; a standalone `quiz.html` and the gated answer key are
         still to do
+  - [x] **Lesson Booklet Lessons 10–12** *(2026-10-15)*: Experiment 4 (lever
+        mechanical advantage, with a set-up diagram), Levers Extension
+        (optional, Year 8: turning effects, arcs and tip speed, energy and
+        launch speed) and Projectile Motion (horizontal launch only; angled
+        launches stay with Lesson 14). 107 pp; pages 2–83 unchanged.
+        `\diagProjectile` redrawn (a sideways launch no longer rises first).
+        Decks 10–12 can now be rebuilt from it.
+  - [ ] Unit Booklet §4 Experiment 4 method can't balance: with the fulcrum
+        at 50 cm and the 100 g load on the 10 cm mark, a 50 g effort needs an
+        80 cm arm, which is off the stick. Lesson 10 of the Lesson Booklet
+        keeps the fulcrum at 50 cm, stands the load on the 30 cm mark and
+        varies the effort mass instead; port that back to the Unit Booklet.
+        Its `\readingFive` also credits Aristotle with "impetus" and
+        cannonballs; Lesson 12's reading replaces it (Tartaglia 1537,
+        Galileo 1638).
   - [ ] Decks 10–18 rebuilt the same way once their booklet sections exist
 
 - [ ] **Port `year11-methods` chapter-9 and chapter-11 off inline

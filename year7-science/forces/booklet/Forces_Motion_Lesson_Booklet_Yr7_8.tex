@@ -686,35 +686,27 @@
   % Height brace
   \draw[dim arrow] (-0.4,0) -- (-0.4,3.0)
         node[midway, left, font=\small\bfseries, text=red!65!black] {$h$};
-  % Parabolic trajectory
-  \draw[thick, MidBlue, dashed]
-        (1.3,3.0) .. controls (4.2,3.8) and (8.2,2.6) .. (10.8,0);
+  % Trajectory: launched sideways, so the path only ever curves down (a half parabola)
+  \draw[thick, MidBlue, dashed] plot[domain=0:9.5, samples=60] ({1.3+\x},{3.0-0.033241*\x*\x});
+  \node[font=\scriptsize\itshape, text=MidBlue, anchor=south west] at (6.9,2.05) {trajectory (a parabola)};
   % Ball at launch
   \shade[ball color=MidBlue!85] (1.3,3.0) circle (0.32);
   % Horizontal velocity
   \draw[force arrow, MidBlue] (1.62,3.0) -- (3.4,3.0)
-        node[above, font=\small\bfseries, text=MidBlue] {$v$ (horizontal)};
+        node[above, font=\small\bfseries, text=MidBlue] {$v$ (sideways)};
   % Weight at launch
   \draw[force arrow, red!65!black] (1.3,2.68) -- (1.3,1.4)
         node[right, font=\small\bfseries, text=red!65!black] {$W$};
-  % Ball mid-trajectory
-  \shade[ball color=MidBlue!60] (6.0,3.5) circle (0.22);
-  \draw[-{Stealth}, thin, MidBlue]    (6.22,3.5)  -- ++(0.9,0);
-  \draw[-{Stealth}, thin, red!65!black] (6.0,3.28) -- ++(0,-0.8);
+  % Ball part-way: same sideways speed, same weight
+  \shade[ball color=MidBlue!60] (5.3,2.468) circle (0.22);
+  \draw[-{Stealth}, thick, MidBlue]       (5.52,2.468) -- ++(0.9,0);
+  \draw[-{Stealth}, thick, red!65!black]  (5.3,2.248)  -- ++(0,-0.8)
+        node[right, font=\scriptsize\bfseries, text=red!65!black] {$W$};
   % Ball at landing
   \shade[ball color=MidBlue!85] (10.8,0.32) circle (0.32);
   % Range brace
   \draw[dim arrow] (1.3,-0.75) -- (10.8,-0.75)
         node[midway, below, font=\small\bfseries, text=TealGreen] {$R$ (horizontal range)};
-  % Equations box
-  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
-        font=\small, text=GoldDark, align=center, inner sep=6pt]
-        at (7.8,2.6)
-        {\textbf{Key equations}\\[3pt]
-         \color{NavyBlue}$h = \tfrac{1}{2}g t^2$\\[1pt]
-         \color{NavyBlue}$g = 2h \div t^2$\\[1pt]
-         \color{NavyBlue}$R = v \times t$\\[2pt]
-         \color{DarkGrey}\scriptsize$g = 9.8$\,m/s$^2$};
 \end{tikzpicture}
 \end{center}}
 
@@ -1134,6 +1126,111 @@
 \end{center}}
 
 
+% ── Diagrams added with Lessons 10–12 (Experiment 4, levers extension, projectiles) ──
+% ── Experiment 4: a metre stick balanced on a fulcrum at the 50 cm mark ──────
+%    1 unit = 1/0.12 cm of stick, so the 0–100 cm stick runs from x = 0 to 12.
+\newcommand{\diagExpFourSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.2cm, y=1cm]
+  % bench
+  \fill[ground hatch] (-0.3,0.15) rectangle (12.3,0.5);
+  \draw[thick, DarkGrey] (-0.3,0.5) -- (12.3,0.5);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (-0.25,0.3) {bench};
+  % fulcrum: triangular prism under the 50 cm mark
+  \fill[red!65!black] (6.0,1.5) -- (5.6,0.5) -- (6.4,0.5) -- cycle;
+  \node[font=\small\bfseries, text=red!65!black, anchor=west] at (6.5,0.95) {fulcrum at 50\,cm};
+  % metre stick, with a scale every 10 cm
+  \draw[fill=GoldLight, draw=GoldDark] (0,1.5) rectangle (12,1.9);
+  \foreach \c in {0,10,...,100} {
+    \draw[GoldDark] ({0.12*\c},1.9) -- ({0.12*\c},1.76);
+  }
+  \foreach \c in {5,15,...,95} { \draw[GoldDark!70] ({0.12*\c},1.9) -- ({0.12*\c},1.82); }
+  \foreach \c in {10,20,30,40,60,70,80,90} {
+    \node[font=\scriptsize, text=GoldDark] at ({0.12*\c},1.63) {\c};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=north west] at (0.1,1.45) {metre stick};
+  % load: 100 g standing on the 30 cm mark
+  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=1pt] (3.25,1.9) rectangle (3.95,2.75);
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,2.325) {100\,g};
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,3.05) {Load};
+  % effort: one 50 g slotted mass on the 90 cm mark
+  \draw[fill=MidBlue!25, draw=MidBlue, rounded corners=1pt] (10.5,1.9) rectangle (11.1,2.32);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (10.8,2.11) {50\,g};
+  \node[font=\small\bfseries, text=MidBlue] at (10.8,2.62) {Effort};
+  % arms, measured from the fulcrum to the centre of each mass
+  \draw[densely dashed, DarkGrey!60] (3.6,3.3) -- (3.6,3.95);
+  \draw[densely dashed, DarkGrey!60] (6.0,1.9) -- (6.0,3.95);
+  \draw[densely dashed, DarkGrey!60] (10.8,2.87) -- (10.8,3.95);
+  \draw[dim arrow] (3.6,3.8) -- (6.0,3.8) node[midway, above, font=\small, text=TealGreen] {load arm = 20\,cm};
+  \draw[dim arrow] (6.0,3.8) -- (10.8,3.8) node[midway, above, font=\small, text=MidBlue] {effort arm = 40\,cm};
+\end{tikzpicture}
+\end{center}}
+
+% ── Same angle, different arcs: why the long end of an arm moves faster ──────
+\newcommand{\diagArmArcs}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \def\ang{50}
+  % starting position of the arm (faint)
+  \draw[line width=4pt, DarkGrey!25, line cap=round] (-1.2,0) -- (4.8,0);
+  % turned position of the arm
+  \draw[line width=4pt, brown!55!black, line cap=round] ({-1.2*cos(\ang)},{-1.2*sin(\ang)}) -- ({4.8*cos(\ang)},{4.8*sin(\ang)});
+  % arcs travelled by each end in the same time
+  \draw[very thick, MidBlue, -{Stealth[length=8pt,width=6pt]}] (4.8,0) arc[start angle=0, end angle=\ang, radius=4.8];
+  \draw[very thick, red!65!black, -{Stealth[length=7pt,width=5pt]}] (-1.2,0) arc[start angle=180, end angle={180+\ang}, radius=1.2];
+  % pivot
+  \fill[DarkGrey] (0,0) circle (0.12);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=north] at (0.25,-0.15) {pivot};
+  % angle mark
+  \draw[DarkGrey] (0.8,0) arc[start angle=0, end angle=\ang, radius=0.8];
+  \node[font=\scriptsize, text=DarkGrey, anchor=west] at ({0.9*cos(14)},{0.9*sin(14)}) {same angle};
+  % labels
+  \node[font=\small\bfseries, text=MidBlue, anchor=west, align=left] at (5.0,1.8)
+       {long arm: big arc\\in the same time \(\rightarrow\) fast};
+  \node[font=\small\bfseries, text=red!65!black, anchor=east, align=right] at (-1.35,-0.75)
+       {short arm: small arc\\\(\rightarrow\) slow};
+\end{tikzpicture}
+\end{center}}
+
+% ── Two independent motions: a dropped ball and a ball launched sideways ──────
+%    h = 1.25 m, launch speed 3.0 m/s, positions every 0.1 s (1 m = 4.4 units)
+\newcommand{\diagTwoMotions}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  \fill[ground hatch] (-1.4,-0.3) rectangle (8.6,0);
+  \draw[thick, DarkGrey] (-1.4,0) -- (8.6,0);
+  \foreach \t in {0,1,2,3,4} {
+    \pgfmathsetmacro{\yy}{5.5-4.4*4.9*(\t/10)*(\t/10)}
+    \pgfmathsetmacro{\xx}{1.2+4.4*3.0*(\t/10)}
+    \draw[densely dashed, DarkGrey!45] (-0.4,\yy) -- (8.4,\yy);
+    \ifnum\t>0 \node[font=\scriptsize, text=DarkGrey, anchor=east] at (-0.45,\yy) {0.\t\,s};\fi
+    \shade[ball color=red!70] (0,\yy) circle (0.11);
+    \shade[ball color=MidBlue!85] (\xx,\yy) circle (0.11);
+  }
+  % path of the launched ball
+  \draw[MidBlue, thin, dashed] plot[domain=0:0.505, samples=40] ({1.2+13.2*\x},{5.5-21.56*\x*\x});
+  % both land at t = 0.505 s
+  \shade[ball color=red!70] (0,0.11) circle (0.11);
+  \shade[ball color=MidBlue!85] ({1.2+13.2*0.505},0.11) circle (0.11);
+  \node[font=\scriptsize, text=DarkGrey, anchor=east] at (-0.45,0.15) {0.51\,s};
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (0,5.7) {dropped};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south west] at (1.0,5.7) {launched sideways at 3\,m/s};
+  \draw[thin arrow, MidBlue] (1.4,5.5) -- (2.15,5.5);
+\end{tikzpicture}
+\end{center}}
+
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    fonttitle=\headingfont\bfseries, coltitle=PurpleDark,
+    title={Optional lesson \textbullet{} Year 8 extension},
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON STRUCTURE (lesson booklet, Oct 2026)
 %  Every lesson runs in the same four parts, in this order:
@@ -1315,6 +1412,9 @@ Experiment lessons follow the same four parts: a reading about the science, plan
   \talt 7 & Energy and Transformation & p.\ \pageref{sec:7} \\ \hline
         8 & Experiment 3 --- Bounce Efficiency & p.\ \pageref{sec:8} \\ \hline
   \talt 9 & Simple Machines and Levers & p.\ \pageref{sec:9} \\ \hline
+       10 & Experiment 4 --- Lever Mechanical Advantage & p.\ \pageref{sec:10} \\ \hline
+  \talt 11 & Levers Extension \textit{(optional)} & p.\ \pageref{sec:11} \\ \hline
+       12 & Projectile Motion & p.\ \pageref{sec:12} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3461,6 +3561,610 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, de
 \needspace{10\baselineskip}
 \exttask Ali says: \emph{``A lever with an MA of 4 gives you four times as much energy as you put in.''} Is Ali right? Explain, using the idea of trading distance for force.
 \answerbox{2.8cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 10 — EXPERIMENT 4: LEVER MECHANICAL ADVANTAGE              (Week 4 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Experiment 4: Mechanical Advantage}{Prediction \textbullet{} Balancing a lever \textbullet{} Effort arm and load arm \textbullet{} Calculating MA}\label{sec:10}\label{exp:4}
+\lessoncodes{VC2S8U13 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:10}
+
+\begin{readingbox}{Reading --- The Steelyard: Weighing with a Lever}
+Long before electronic scales, market sellers weighed goods with a \emph{steelyard}. A steelyard is a lever: a long bar hanging from a hook near one end, which acts as the pivot. The goods hang from the short side, close to the pivot. A small, heavy weight slides along the long side, which is marked with a scale. The seller slides the weight out until the bar hangs level, then reads the weight of the goods off the scale.
+
+How can a small weight balance a heavy load? The answer is distance. A lever balances when effort $\times$ effort arm equals load $\times$ load arm. Far from the pivot, a small weight turns the bar as strongly as a large weight close to it. A sliding weight ten times further from the pivot than the goods can balance goods ten times heavier than itself.
+
+Steelyards are very old: bronze ones have been found at Pompeii, the Roman town buried by Vesuvius in AD~79. About three hundred years earlier, the Greek mathematician Archimedes had worked out the law of the lever that makes them work.
+
+In this experiment you will do what a steelyard does: balance a heavy load near the pivot with a lighter mass further away, measure both arms, and work out your lever's mechanical advantage.
+\end{readingbox}
+
+\rcreset
+\rcq{Describe how a market seller uses a steelyard to find the weight of some goods.}{1.5cm}
+\rcq{Explain how a small sliding weight can balance a much heavier load. Use the words \emph{pivot} and \emph{distance}.}{1.5cm}
+\rcq{The sliding weight sits ten times further from the pivot than the goods. How heavy can the goods be, compared with the sliding weight?}{1.4cm}
+\rcq{In this experiment, what will you balance, and what will you measure?}{1.4cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Planning the experiment}{Blue}\label{theory:10}
+
+\begin{expheader}{4}{Lever Mechanical Advantage}{To investigate how the length of the effort arm affects the mechanical advantage of a lever.}
+\medskip\small\textbf{Curriculum:} VC2S8U13 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
+\end{expheader}
+
+\subsection{The Set-up}\label{sub:10.1}
+
+A metre stick rests on a fulcrum at its 50\,cm mark, so the stick balances by itself. A 100\,g \textbf{load} stands on the 30\,cm mark, 20\,cm from the fulcrum, and stays there for the whole experiment. On the other side you place an \textbf{effort} mass and slide it until the stick balances level. The distance from the fulcrum to the effort is the \textbf{effort arm}.
+
+\diagExpFourSetup
+\expfigcap{The set-up. Measure each arm from the fulcrum to the \emph{centre} of the mass. Here a 50\,g effort balances the 100\,g load at an effort arm of 40\,cm.}
+
+\subsection{Two Ways to Find the Mechanical Advantage}\label{sub:10.2}
+
+\begin{infobox}{Mechanical advantage, two ways}
+\textbf{From the arms:} \quad $\text{MA} = \text{effort arm} \div \text{load arm}$\\[2pt]
+\textbf{From the forces:} \quad $\text{MA} = \text{load} \div \text{effort}$\\[4pt]
+Weight is proportional to mass ($W = mg$), so you can compare the forces using the masses in grams. When the lever is balanced, the two answers should agree.
+\end{infobox}
+
+\begin{workedex}{Mechanical advantage of a balanced lever}
+A 100\,g load stands 20\,cm from the fulcrum. A 50\,g effort balances it 40\,cm from the fulcrum. Find the MA from the arms and from the forces.
+
+\medskip
+\textbf{From the arms:}\quad $40 \div 20 = \mathbf{2}$
+
+\textbf{From the forces:}\quad $100 \div 50 = \mathbf{2}$
+
+\medskip
+They agree. This is the law of the lever: $100 \times 20 = 50 \times 40 = 2000$ on both sides.
+\end{workedex}
+
+\subsection{Making it a Fair Test}\label{sub:10.3}
+
+You will change the \textbf{effort mass} (50, 100, 150 and 200\,g) and measure the \textbf{effort arm} needed to balance the stick. From these you calculate the MA. Everything else stays the same: the 100\,g load, its place on the 30\,cm mark, the fulcrum at the 50\,cm mark, and the same metre stick.
+
+\needspace{9\baselineskip}
+\begin{scaffold}{Prediction --- before you begin}
+As the effort mass increases from 50\,g to 200\,g, will the effort arm get longer or shorter? What will happen to the MA? Give a reason.
+\answerbox{2cm}
+\end{scaffold}
+
+\subsubsection*{Equipment}
+Metre stick \quad Triangular prism or thick pencil (fulcrum) \quad One 100\,g mass (load) \quad Four 50\,g slotted masses (effort) \quad Sticky tack
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Rest the metre stick on the fulcrum at the 50\,cm mark and check that it balances level. If it balances a little to one side of 50\,cm, use that point as the fulcrum and measure every arm from there.
+  \item Stand the 100\,g load on the 30\,cm mark, so the load arm is 20\,cm. Fix it in place with a little sticky tack. It stays there for the whole experiment.
+  \item Stand one 50\,g mass on the other side of the fulcrum. Slide it until the stick balances level. Record the effort arm: the distance from the fulcrum to the centre of the mass.
+  \item Take the effort mass off and repeat step 3 twice more, so you have 3 trials.
+  \item Repeat steps 3--4 with an effort of 100\,g, 150\,g and 200\,g (stack the 50\,g masses).
+\end{enumerate}
+
+\begin{infobox}{Safety}
+Keep the masses low on the bench and hold the stick while you add or move a mass --- an unbalanced stick can tip suddenly and drop the masses. Keep feet clear of the bench edge.
+\end{infobox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Results and analysis}{Amber}\label{prac:10}
+
+\subsubsection*{Results}
+\textit{Load: 100\,g \qquad Load arm: 20\,cm}
+
+\begin{ctab}
+\begin{tabular}{|SZ{1.9cm}|Z{1.5cm}|Z{1.5cm}|Z{1.5cm}|Z{2.2cm}|Z{2.5cm}|Z{2.5cm}|}
+  \hd & \thead{Effort mass (g)} & \thead{Effort arm, trial 1 (cm)} & \thead{Effort arm, trial 2 (cm)} & \thead{Effort arm, trial 3 (cm)} & \thead{Mean effort arm (cm)} & \thead{MA = effort arm $\div$ load arm} & \thead{MA = load $\div$ effort} \\ \hline
+  & \scaf{e.g.\ 50} & \scaf{39} & \scaf{41} & \scaf{40} & \scaf{40} & \scaf{$40 \div 20 = 2$} & \scaf{$100 \div 50 = 2$} \\ \hline
+  & 50  & & & & & & \\ \hline
+  & 100 & & & & & & \\ \hline
+  & 150 & & & & & & \\ \hline
+  & 200 & & & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{Calculating the mean and the MA}
+Mean: add the three trials and divide by 3. For 39, 41 and 40\,cm: \quad $(39 + 41 + 40) \div 3 = \mathbf{40\ \text{cm}}$.\\
+MA from the arms: \quad $40 \div 20 = \mathbf{2}$. \qquad MA from the forces: \quad $100 \div 50 = \mathbf{2}$.
+\end{infobox}
+
+\needspace{10\baselineskip}
+\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task What happened to the effort arm as the effort mass increased? What happened to the MA? Was your prediction correct?
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\task Compare your two MA columns. Do they agree? Suggest one reason why they might not agree exactly.
+\answerbox{2.4cm}
+
+\taskpair{Another group balanced the 100\,g load (load arm 20\,cm) with an 80\,g effort. Use the law of the lever to predict their effort arm.}{2.4cm}
+         {A group's effort arms for 100\,g were 19, 21 and 27\,cm. Which value looks wrong? Find the mean of the other two.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task Use the law of the lever to explain \emph{why} a heavier effort mass balanced the load closer to the fulcrum.
+\answerbox{2.4cm}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{effort mass (g)} on the horizontal axis and \textbf{mean effort arm (cm)} on the vertical axis. Plot each point, then draw a smooth curve of best fit --- it will not be a straight line. Give your graph a title.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
+  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+\end{tcolorbox}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:10}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard: interpret your graph, use the law of the lever, or extend the method.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Your graph from Task~\ref{task:10.7} is a curve, not a straight line.
+\pt{a}For each row of your results, calculate effort mass $\times$ mean effort arm. What do you notice?
+\pt{b}Use the law of the lever to explain why this number should be the same every time, and what it should equal.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask In this experiment the light effort sat on the long arm, so the MA was greater than 1. A trebuchet is a lever too.
+\pt{a}Describe how a trebuchet's effort and load are placed differently.
+\pt{b}Explain why a trebuchet is built with an MA \emph{less} than 1.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask The metre stick has its own weight, which acts at its centre --- the 50\,cm mark. Explain why the method keeps the fulcrum at the 50\,cm mark, and predict what would go wrong if the fulcrum were moved to the 30\,cm mark with nothing else changed.
+\answerbox{2.6cm}
+
+\needspace{12\baselineskip}
+\exttask Design a fair test to find out how the \emph{load arm} affects the effort needed to balance the 100\,g load. Use the same metre stick and masses.
+\pt{a}Name the independent and dependent variables.
+\pt{b}Name two variables you would keep the same.
+\pt{c}Predict what you would find, and give a reason using the law of the lever.
+\answerbox{3.2cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 11 — LEVERS EXTENSION (OPTIONAL)                          (Week 4 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Levers Extension (Optional)}{Year 8 extension \textbullet{} Turning effects \textbullet{} Arcs and tip speed \textbullet{} Energy and launch speed}\label{sec:11}
+\lessoncodes{VC2S8U13 \textbullet{} VC2S8U15 \textbullet{} VC2S10U15 (above level)}
+
+\optionalnote{Every part of this lesson goes beyond the Year 7 standard. Your teacher may skip it --- Lesson~12 follows straight on from Lesson~10.}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:11}
+
+\begin{readingbox}{Reading --- Warwolf, the Biggest Trebuchet}
+In 1304 King Edward I of England laid siege to Stirling Castle in Scotland. For weeks his siege engines battered the walls. To finish the job, Edward ordered his chief engineer, Master James of St George, to build something far bigger: a trebuchet called \emph{Warwolf}. It is believed to be the largest trebuchet ever made. Records say it took five master carpenters and forty-nine other labourers at least three months to build, and when it was taken apart it filled thirty wagons.
+
+A trebuchet is a giant Class 1 lever. A heavy counterweight hangs from the short arm. When it is released it falls, and the long arm swings up and over, flinging a stone from a sling at its end. The counterweight only drops a few metres, but in the same moment the tip of the long arm sweeps through a huge arc --- so the tip moves far faster than the counterweight.
+
+The energy for the throw comes from the falling counterweight. Its gravitational potential energy becomes kinetic energy of the arm, the sling and the stone. The arms decide how that energy is shared out. A longer throwing arm moves its tip faster, but no arrangement of arms can give the stone more energy than the counterweight loses --- and some is always wasted.
+
+The castle's small garrison, only about thirty men, offered to surrender before Warwolf was ready. Edward refused to accept until he had seen his new machine work. One medieval chronicle claims that a single stone from Warwolf smashed through two of the castle's walls.
+\end{readingbox}
+
+\rcreset
+\rcq{Who ordered Warwolf to be built, and where and when was it used?}{1.5cm}
+\rcq{Explain why a trebuchet is a Class 1 lever. Name its effort and its load.}{1.7cm}
+\rcq{The counterweight only drops a few metres. Explain why the tip of the long arm moves so much faster than the counterweight.}{1.9cm}
+\rcq{Where does the energy for the throw come from? Describe the energy transformation.}{1.7cm}
+\rcq{Which phrase in the third paragraph tells you that a lever cannot create energy?}{1.4cm}
+\rcq{Give two pieces of evidence from the passage that show how big Warwolf was.}{1.5cm}
+\rcq{Suggest why Edward refused to accept the surrender until Warwolf had been tested.}{1.7cm}
+\rcq{Suppose Warwolf's counterweight had been made heavier, with the arms kept the same. Using the passage, predict what would happen to the energy available and to the speed of the stone, and explain why.}{2.0cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:11}
+
+\subsection{Turning Effects}\label{sub:11.1}
+
+A force that acts on a lever tries to turn it about the pivot. Its \textbf{turning effect} (also called its \emph{moment}) depends on the size of the force and how far from the pivot it acts.
+
+\begin{infobox}{Turning effect}
+\[ \text{turning effect} = \text{force} \times \text{distance from the pivot} \]
+Force in newtons (N), distance in metres (m), turning effect in \textbf{newton metres (N\,m)}.\\[3pt]
+A lever balances when the total turning effect one way equals the total turning effect the other way. With two or more loads on one side, \textbf{add} their turning effects.
+\end{infobox}
+
+The law of the lever from Lesson~9 is a special case: effort $\times$ effort arm and load $\times$ load arm are the two turning effects.
+
+\begin{workedex}{Two children on one side}
+On one side of a seesaw, a 300\,N child sits 2.0\,m from the pivot and a 200\,N child sits 1.0\,m from the pivot. Where must a 400\,N child sit on the other side to balance it?
+
+\medskip
+\textbf{Left side:}\quad $300 \times 2.0 + 200 \times 1.0 = 600 + 200 = 800$\,N\,m
+
+\textbf{Right side:}\quad $400 \times d = 800$ \quad so \quad $d = 800 \div 400 = \mathbf{2.0\ \text{m}}$
+\end{workedex}
+
+\subsection{Arcs and Tip Speed}\label{sub:11.2}
+
+When a lever arm turns, every point on it turns through the \textbf{same angle in the same time}. A point far from the pivot travels around a bigger circle, so it covers a longer arc --- and moves faster.
+
+\diagArmArcs
+\figcap[fig:arm-arcs]{Both ends of the arm turn through the same angle in the same time, but the end of the long arm travels a much longer arc.}
+
+\begin{infobox}{Arc length and speed}
+\[ \text{arc length} = \frac{\text{angle}}{360} \times 2 \times \pi \times r \qquad\qquad \text{average speed} = \frac{\text{arc length}}{\text{time}} \]
+$r$ = distance from the pivot (m) \quad Use $\pi \approx 3.14$.\\[3pt]
+For two points on the same arm: \quad $\dfrac{\text{tip speed}}{\text{counterweight speed}} = \dfrac{\text{long arm}}{\text{short arm}}$
+\end{infobox}
+
+\begin{workedex}{Speed of the arm tip}
+A trebuchet's long arm is 2.0\,m long. During a launch it sweeps through 90$^\circ$ in 0.25\,s. Find the arc travelled by the tip, and the tip's average speed.
+
+\medskip
+\textbf{Arc:}\quad $\tfrac{90}{360} \times 2 \times 3.14 \times 2.0 = 0.25 \times 12.56 = 3.14$\,m
+
+\textbf{Speed:}\quad $3.14 \div 0.25 = \mathbf{12.6\ \text{m/s}}$
+\end{workedex}
+
+\begin{workedex}{Speed of the counterweight end}
+The same trebuchet has a short arm of 0.4\,m. How fast does the counterweight end of the arm move?
+
+\medskip
+\textbf{Ratio:}\quad long arm $\div$ short arm $= 2.0 \div 0.4 = 5$, so the tip moves 5 times as fast.
+
+\textbf{Speed:}\quad $12.6 \div 5 \approx \mathbf{2.5\ \text{m/s}}$
+\end{workedex}
+
+\subsection{Energy Sets the Limit}\label{sub:11.3}
+
+The arms share out the speed, but the energy comes from the falling counterweight. The stone's kinetic energy can never be more than the gravitational potential energy the counterweight gives up --- and because some energy is always wasted, it is always less.
+
+\begin{infobox}{From counterweight to launch speed}
+$\text{GPE lost} = m \times g \times h$ \quad(counterweight mass and drop)\\[2pt]
+$\text{KE of stone} = \text{efficiency} \times \text{GPE lost}$\\[2pt]
+$\text{KE} = \tfrac{1}{2}mv^2 \quad\Rightarrow\quad v = \sqrt{2 \times \text{KE} \div m}$ \quad(stone mass)
+\end{infobox}
+
+\begin{workedex}{Launch speed from energy}
+A 20\,kg counterweight falls 0.8\,m. The trebuchet is 25\% efficient and the stone has a mass of 0.2\,kg. Find the stone's launch speed. Use $g = 9.8$\,N/kg.
+
+\medskip
+\textbf{GPE lost:}\quad $20 \times 9.8 \times 0.8 = 156.8$\,J
+
+\textbf{KE of stone:}\quad $0.25 \times 156.8 = 39.2$\,J
+
+\textbf{Speed:}\quad $v^2 = 2 \times 39.2 \div 0.2 = 392$, \quad so \quad $v = \sqrt{392} \approx \mathbf{19.8\ \text{m/s}}$
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:11}
+
+Every question in this lesson goes beyond the Year 7 standard. Use $g = 9.8$\,N/kg and $\pi \approx 3.14$. Show your working, and always include the unit.
+
+\taskpair{A 40\,N force pushes on a door 0.5\,m from its hinges. Find its turning effect.}{2.4cm}
+         {Which has the bigger turning effect: 60\,N acting 0.4\,m from a pivot, or 30\,N acting 0.9\,m from it? Show your working.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task A mechanic pushes on a spanner with 50\,N, 0.25\,m from the nut.
+\pt{a}Find the turning effect.
+\pt{b}What force would give the same turning effect if she pushed only 0.10\,m from the nut?
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\task On one side of a seesaw, a 250\,N child sits 1.6\,m from the pivot and a 150\,N child sits 1.0\,m from the pivot. Where must a 500\,N adult sit on the other side to balance it?
+\answerbox{2.8cm}
+
+\needspace{12\baselineskip}
+\task Complete the table. Use arc length $= \tfrac{\text{angle}}{360} \times 2 \times \pi \times r$.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SZ{3.4cm}|Z{3.4cm}|Z{6.4cm}|}
+  \hd & \thead{Angle turned} & \thead{Distance from pivot $r$ (m)} & \thead{Arc length (m)} \\ \hline
+  & 90$^\circ$  & 2.0 & \scaf{$\tfrac{90}{360} \times 2 \times 3.14 \times 2.0 = 3.14$} \\ \hline
+  & 90$^\circ$  & 1.0 & \\ \hline
+  & 180$^\circ$ & 2.0 & \\ \hline
+  & 60$^\circ$  & 1.2 & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\taskpair{The tip of a trebuchet arm sweeps along a 4.8\,m arc in 0.3\,s. Find its average speed.}{2.4cm}
+         {A trebuchet has a long arm of 3.0\,m and a short arm of 0.6\,m. The counterweight end moves at 3\,m/s. How fast does the tip move?}{2.4cm}
+
+\needspace{10\baselineskip}
+\task Two trebuchets both have a short arm of 0.5\,m. Trebuchet A has a long arm of 2.0\,m; trebuchet B has a long arm of 3.0\,m. In both, the counterweight end moves at 2.4\,m/s.
+\pt{a}Find the tip speed of each trebuchet.
+\pt{b}Which one launches its stone faster, and why?
+\answerbox{3.0cm}
+
+\taskpair{A 15\,kg counterweight falls 1.0\,m. Find the GPE it gives up.}{2.4cm}
+         {A 0.1\,kg stone leaves a trebuchet at 18\,m/s. Find its kinetic energy.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task A counterweight gives up 150\,J of GPE, and the stone gains 45\,J of kinetic energy. Find the efficiency of the trebuchet, and name two places the rest of the energy went.
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\task A 12\,kg counterweight falls 1.5\,m. The trebuchet is 25\% efficient, and the stone has a mass of 0.15\,kg.
+\pt{a}Find the GPE the counterweight gives up.
+\pt{b}Find the KE given to the stone.
+\pt{c}Find the stone's launch speed.
+\answerbox{3.6cm}
+
+\needspace{10\baselineskip}
+\task Explain, in your own words, why making the long arm longer makes the tip move faster, but cannot make the stone go faster and faster without any limit.
+\answerbox{2.8cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Challenge}{Violet}\label{ext:11}
+
+\begin{yr8box}
+The hardest questions in this extension lesson. They ask you to check a claim, combine turning effects with energy, or design a better trebuchet.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Sam says his model trebuchet, with a 2\,kg counterweight that falls 0.5\,m, launched a 0.05\,kg ball at 25\,m/s. Use energy to decide whether this is possible. Show your working.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask A trebuchet has a short arm of 0.4\,m. The builders want the tip to move 6 times as fast as the counterweight end.
+\pt{a}How long must the long arm be?
+\pt{b}Suggest one practical problem with making the long arm very long.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask Before launch, a trebuchet arm is held level. A 30\,kg counterweight hangs 0.5\,m from the pivot on the short side. The arm's own weight, 100\,N, acts 0.6\,m from the pivot on the long side. A trigger rope pulls straight down on the end of the long arm, 2.5\,m from the pivot. Find the force in the trigger rope.
+\answerbox{3.4cm}
+
+\needspace{10\baselineskip}
+\exttask During a launch, a trebuchet arm turns through 120$^\circ$ in 0.4\,s. Its long arm is 2.4\,m and its short arm is 0.6\,m.
+\pt{a}Find the arc travelled by the tip, and its average speed.
+\pt{b}Find the average speed of the counterweight end.
+\pt{c}Check that your two speeds are in the same ratio as the arm lengths.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\exttask A 25\,kg counterweight falls 1.2\,m, and launches a 0.2\,kg stone at 15\,m/s.
+\pt{a}Calculate the efficiency of this trebuchet.
+\pt{b}Most of the energy did not reach the stone. Suggest where it went --- think about what is still moving when the stone leaves the sling.
+\answerbox{3.0cm}
+
+\needspace{18\baselineskip}
+\exttask A counterweight gives up 200\,J. The stone gets 60\,J, the counterweight and arm are still moving with 90\,J, and 50\,J becomes thermal energy and sound. Draw a Sankey diagram using a scale of \textbf{1\,cm = 20\,J}. Label each arrow with its energy.
+
+\vspace{3pt}
+\drawbox{4.6cm}{
+\textit{\color{MidGrey}Draw your Sankey diagram here: energy in on the left, the useful energy straight on, the other energy turning down.}
+}
+
+\needspace{10\baselineskip}
+\exttask Real trebuchets fling the stone from a sling that hangs from the end of the long arm. Use the idea of arcs and tip speed to explain how the sling helps the stone leave faster.
+\answerbox{3.0cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 12 — PROJECTILE MOTION                                     (Week 4 · P3)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Projectile Motion}{Projectiles \textbullet{} Two independent motions \textbullet{} Time of flight \textbullet{} Measuring $g$}\label{sec:12}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8H01 \textbullet{} VC2S10U17 (above level)}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:12}
+
+\begin{readingbox}{Reading --- Galileo and the Two Motions}
+How does a cannonball fly? In 1537 the Italian mathematician Niccolò Tartaglia published one of the first books to use mathematics to study gunnery. He described a cannonball leaving the barrel in a straight line, then curving around in an arc, and finally dropping straight down to the ground. Gunnery books repeated his ideas for many years.
+
+About a hundred years later, Galileo Galilei worked out what really happens, and he published it in 1638. He realised that a projectile is doing \emph{two things at once}, and that the two motions do not affect each other. Sideways, once the ball is launched nothing pushes or pulls it (if we ignore the air), so it keeps moving sideways at a steady speed. Downwards, gravity pulls it, so it speeds up as it falls --- exactly as if it had simply been dropped. Put a steady sideways motion together with a speeding-up downwards motion and you get a smooth curve called a \emph{parabola}, with no straight sections at all.
+
+The result that surprises people most is this. Launch one ball sideways and drop an identical ball from the same height at the same moment: they hit the ground at the same time. The launched ball lands far away, but its sideways speed makes no difference to how quickly gravity pulls it down.
+
+That is why, in this unit, you can measure the strength of gravity just by timing how long a launched ball takes to fall. Galileo's idea replaced a model that had been trusted for a century --- a good example of science changing when someone finds better evidence and better reasoning.
+\end{readingbox}
+
+\rcreset
+\rcq{Describe the path Tartaglia thought a cannonball followed.}{1.5cm}
+\rcq{Galileo said a projectile does ``two things at once''. Describe each motion.}{1.8cm}
+\rcq{According to the passage, why does a projectile's sideways speed stay the same?}{1.5cm}
+\rcq{What is the name of the curved path that Galileo described?}{1.2cm}
+\rcq{Explain why a ball launched sideways and a ball dropped from the same height land at the same time.}{1.9cm}
+\rcq{Which phrase in the second paragraph tells you that the sideways motion and the downwards motion are independent?}{1.4cm}
+\rcq{How does the passage show that scientific ideas can change? Give the old idea and the new one.}{1.8cm}
+\rcq{Imagine Galileo's test on the Moon, where gravity is weaker and there is no air. Predict whether the launched and dropped balls would still land together, and whether they would take more or less time than on Earth. Explain.}{2.0cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:12}
+
+\subsection{What is a Projectile?}\label{sub:12.1}
+
+A \textbf{projectile} is an object that has been launched and is then moving with only gravity acting on it. A thrown ball, water from a drinking fountain and a stone flung by a trebuchet are all projectiles. (We ignore air resistance, which is small for heavy, slow objects.) The curved path of a projectile is called its \textbf{trajectory}.
+
+\diagProjectile
+\figcap[fig:projectile]{A ball launched sideways from height $h$ lands a horizontal distance $R$ away. Once launched, the only force on it is its weight, $W$.}
+
+\subsection{Two Independent Motions}\label{sub:12.2}
+
+\vspace{2pt}
+\begin{ctab}
+\begin{tabular}{|L{3.0cm}|L{5.4cm}|L{6.0cm}|}
+  \thead{} & \thead{Sideways (horizontal)} & \thead{Downwards (vertical)} \\ \hline
+  Force acting & none (ignoring air) & gravity (the ball's weight) \\ \hline
+  Speed        & stays the same       & increases by 9.8\,m/s every second \\ \hline
+  Distance     & the same in every second & more in every second \\ \hline
+\end{tabular}
+\end{ctab}
+
+\diagTwoMotions
+\figcap[fig:two-motions]{Positions every 0.1\,s. At every moment the launched ball is at the same height as the dropped ball, so they land together. Sideways, the launched ball moves the same distance in each 0.1\,s.}
+
+\subsection{Time of Flight}\label{sub:12.3}
+
+The time a projectile spends in the air depends only on the height it falls from, not on its sideways speed.
+
+\begin{infobox}{Key equations --- launched sideways}
+\[
+  h = \tfrac{1}{2}g t^2
+  \quad\Rightarrow\quad
+  t = \sqrt{\frac{2h}{g}}
+  \qquad\qquad
+  R = v \times t
+  \qquad\qquad
+  g = \frac{2h}{t^2}
+\]
+$h$ = drop height (m) \quad $t$ = time of flight (s) \quad $g = 9.8$\,m/s$^2$\\
+$v$ = sideways launch speed (m/s) \quad $R$ = range (m)
+\end{infobox}
+
+\begin{workedex}{Time of flight}
+A ball rolls off a table 1.25\,m high. How long does it take to land?
+
+\medskip
+\textbf{Step 1:}\quad $2h = 2 \times 1.25 = 2.5$
+
+\textbf{Step 2:}\quad $2.5 \div 9.8 = 0.255$
+
+\textbf{Step 3:}\quad $t = \sqrt{0.255} \approx \mathbf{0.51\ \text{s}}$
+\end{workedex}
+
+\subsection{How Far Does It Go?}\label{sub:12.4}
+
+While the ball falls, it keeps moving sideways at its launch speed. So the distance it travels sideways is its launch speed multiplied by its time in the air.
+
+\begin{workedex}{Range}
+The ball in Worked Example~\ref{we:12.1} leaves the table at 3.0\,m/s. How far from the table does it land?
+
+\medskip
+$R = v \times t = 3.0 \times 0.51 \approx \mathbf{1.5\ \text{m}}$
+\end{workedex}
+
+\subsection{Measuring $g$}\label{sub:12.5}
+
+Rearranging $h = \tfrac{1}{2}gt^2$ gives $g = 2h \div t^2$. Measure the drop height and the time of flight, and you can calculate the strength of gravity. A slow-motion video gives the time:
+\[ t = \text{number of frames} \div \text{frames per second} \]
+
+\begin{workedex}{Finding $g$ from a video}
+A ball rolls off a bench 0.80\,m high. A video filmed at 120 frames per second shows 48 frames between the ball leaving the bench and landing. Find $t$, then $g$.
+
+\medskip
+\textbf{Time:}\quad $t = 48 \div 120 = 0.40$\,s
+
+\textbf{Gravity:}\quad $g = 2h \div t^2 = (2 \times 0.80) \div (0.40 \times 0.40) = 1.6 \div 0.16 = \mathbf{10\ \text{m/s}^2}$
+
+\medskip
+This is close to the accepted value of 9.8\,m/s$^2$.
+\end{workedex}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:12}
+
+Work through every task. Use $g = 9.8$\,m/s$^2$ and ignore air resistance. Show your working, and always include the unit.
+
+\needspace{12\baselineskip}
+\task Is each object a projectile? Write \textbf{YES} or \textbf{NO} in the box.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{5.4cm}|Z{2.0cm}|W{5.4cm}|Z{2.0cm}|}
+  \hd & \thead{Object} & \thead{Projectile?} & \thead{Object} & \thead{Projectile?} \\ \hline
+  & A basketball after it leaves the player's hands & \scaf{YES} & A rocket with its engine on & \scaf{NO} \\ \hline
+  & A stone flying from a trebuchet & & A car driving along a road & \\ \hline
+  & Water arcing from a drinking fountain & & A ball rolling off the edge of a table & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task Complete the table for a ball that has been launched sideways.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{5.2cm}|W{5.2cm}|}
+  \hd & \thead{} & \thead{Sideways motion} & \thead{Downwards motion} \\ \hline
+  & What force acts? & \scaf{none (ignoring air)} & \\ \hline
+  & What happens to the speed? & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task One ball is dropped, and an identical ball is launched sideways from the same height at the same moment. The dropped ball lands after 0.6\,s. When does the launched ball land? Explain.
+\answerbox{2.4cm}
+
+\taskpair{A ball rolls off a table 0.80\,m high. Find its time of flight.}{2.4cm}
+         {A ball rolls off a ledge 2.0\,m high. Find its time of flight.}{2.4cm}
+
+\taskpair{A ball is launched sideways at 4.0\,m/s and is in the air for 0.50\,s. How far does it travel sideways?}{2.4cm}
+         {A ball launched sideways lands 2.4\,m away after 0.60\,s. Find its launch speed.}{2.4cm}
+
+\taskpair{A ball falls 2.0\,m in 0.64\,s. Calculate $g$.}{2.4cm}
+         {A video filmed at 240 frames per second shows a fall lasting 60 frames. Find the time of the fall.}{2.4cm}
+
+\needspace{10\baselineskip}
+\task A marble rolls off a desk 0.45\,m high at 2.0\,m/s.
+\pt{a}Find its time of flight.
+\pt{b}Find how far from the desk it lands.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\task A group measures $g = 9.2$\,m/s$^2$. Calculate their percentage error, using
+\[ \% \text{ error} = \frac{|\text{measured } g - 9.8|}{9.8} \times 100\% \]
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task Two marbles roll off the same desk at the same moment, one at 1\,m/s and one at 3\,m/s.
+\pt{a}Which one lands first?
+\pt{b}Which one lands further from the desk?
+\pt{c}Explain both answers using the idea of two independent motions.
+\answerbox{3.0cm}
+
+\needspace{10\baselineskip}
+\task Priya says: \emph{``The faster I roll a ball off the table, the longer it stays in the air.''} Is Priya right? Explain.
+\answerbox{2.6cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:12}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to combine equations, compare situations, or evaluate a method.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask On the Moon, $g = 1.6$\,m/s$^2$. A ball rolls off a 1.25\,m ledge at 2.0\,m/s.
+\pt{a}Find its time of flight and how far it travels sideways.
+\pt{b}Compare your answers with the same roll on Earth ($t = 0.51$\,s). Explain the difference.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask Ball A rolls off a 0.45\,m step and ball B rolls off a 1.80\,m wall.
+\pt{a}Find the time of flight of each ball.
+\pt{b}B fell four times as far as A. How many times as long did it take? Use $h = \tfrac{1}{2}gt^2$ to explain why.
+\answerbox{3.2cm}
+
+\needspace{10\baselineskip}
+\exttask A ball rolls off a bench and takes 0.45\,s to land. Use $h = \tfrac{1}{2}gt^2$ to find the height of the bench.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask A ball machine fires tennis balls sideways from a height of 1.5\,m at 20\,m/s. Ignoring air resistance, how far do the balls travel before they land?
+\answerbox{2.8cm}
+
+\needspace{10\baselineskip}
+\exttask A group rolls a ball off a 0.80\,m bench and measures a mean value of $g = 10.6$\,m/s$^2$.
+\pt{a}Calculate their percentage error.
+\pt{b}Suggest two sources of error in the method, and how each could be reduced.
+\answerbox{3.4cm}
+
+\needspace{10\baselineskip}
+\exttask In Worked Example~\ref{we:12.3}, the fall lasted 48 frames at 120 frames per second.
+\pt{a}Suppose the student miscounted and recorded 49 frames. Calculate the new value of $g$.
+\pt{b}By how much did one frame change the answer? Explain why Experiment~5 and the trebuchet investigation film at 120 frames per second or more.
+\answerbox{3.4cm}
+
+\needspace{12\baselineskip}
+\exttask Galileo's idea says that sideways speed does not change how long a projectile takes to fall. Design a fair test, using a ramp, a table and a slow-motion video, to check this.
+\pt{a}Name the independent and dependent variables.
+\pt{b}Name two variables you would keep the same.
+\pt{c}Predict what you would find, and give a reason.
+\answerbox{3.6cm}
 \end{yr8box}
 
 \end{document}
