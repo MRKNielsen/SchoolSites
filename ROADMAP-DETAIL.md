@@ -99,6 +99,15 @@ level. Kodie's booklet rules apply (no marks, red first rows, 1.5 cm rows).
   (`ext:drop`), where the formula does apply because it starts from rest.
   The old-method critique and a release-pin design task were cut at
   Kodie's request (14 Oct).
+- **Assessed by an open-booklet test (15 Oct).** Lesson 17 is now the core
+  analysis lesson (no longer an optional launch buffer) and Lesson 18 is
+  the *Trebuchet Investigation Test*: Section A on the student's own
+  results (towards), Section B a common unseen data set — beanbag mass
+  changed, one answer key (at), Section C above level. Level is read off
+  Section B, with C for above. **The paper is staff material and is not in
+  this repo**: `.tex`, teacher wrapper and PDFs live in OneDrive at
+  `7 Science/Forces/Trebuchet_Test/`, building against `../fonts/`. The
+  unit is now 18 lessons with 2 optional (11, 14).
 - **Teacher copy** — `Trebuchet_Investigation_Yr7_8_Teacher.tex` + PDF,
   **gitignored**, using the Ch3G–3L one-source/two-builds pattern: every
   box, cell, blank and graph filled in red, then three pages of teacher

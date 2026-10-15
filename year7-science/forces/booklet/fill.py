@@ -64,6 +64,7 @@ def main():
     build()
     ref = read_abp(); npages = len(free_space())
     extra = defaultdict(float)
+    good = {}
     damp = defaultdict(lambda: 0.92)
     for rnd in range(6):
         free = free_space()
@@ -88,14 +89,14 @@ def main():
         now = read_abp(); n = len(free_space())
         moved = {ref[i]['page'] for i in ref if now.get(i, {}).get('page') != ref[i]['page']}
         if n != npages or moved:
-            # undo this round's growth on the offending pages and damp them
-            bad = moved or set(free)
-            for p in bad:
-                for i, b in ref.items():
-                    if b['page'] == p:
-                        extra[i] *= 0.85
-                damp[p] *= 0.6
+            # a box changed page: go back to the last good layout and damp
+            # the pages involved, so the next round grows them less
+            for p in (moved or set(free)):
+                damp[p] *= 0.5
+            extra = defaultdict(float, good)
             write_abx(extra); build()
+        else:
+            good = dict(extra)
         print('round', rnd + 1, 'free after:', {p: round(v) for p, v in free_space().items()})
     final = read_abp()
     assert all(final[i]['page'] == ref[i]['page'] for i in ref), 'a box moved page'

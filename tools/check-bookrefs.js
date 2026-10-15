@@ -7,10 +7,10 @@
 // The .aux is the source of truth: build the booklet first (xelatex ×3).
 //
 // Checks, in every *.html in the unit folder:
-//   <p class="bookref book">Booklet p.N · §1.2 | Task 1.7b | Extension 1.8 | Q2.3 | Worked Example 2.1</p>
+//   <p class="bookref book">Booklet p.N · §1.2 | Task 1.7b | Extension 1.8 | Q2.3 | Worked Example 2.1 | We do 2.1</p>
 //   <a href="booklet/X.pdf#page=N">… Experiment N …</a>
 // A page can pin its booklet with <meta name="booklet" content="booklet/X">.
-// Each reference must exist as a label (sec:, sub:, task:, q:, exp:, we:) and its
+// Each reference must exist as a label (sec:, sub:, task:, q:, exp:, we:, wd:) and its
 // page must be p.N, or inside pp.N–M. A reference kind the booklet has no
 // labels for at all is reported as unchecked, not as an error.
 'use strict';
@@ -36,7 +36,7 @@ function refsIn(text) {
     out.push((r.includes('.') ? 'sub:' : 'sec:') + r);
   const pats = [[/\bTask\s+(\d+\.\d+[a-z]?)/g, 'task:'], [/\bExtension\s+(\d+\.\d+)/g, 'task:'],
                 [/\bQ\s?(\d+\.\d+)/g, 'q:'], [/\bExperiment\s+(\d+)/g, 'exp:'],
-                [/\bWorked Example\s+(\d+\.\d+)/g, 'we:']];
+                [/\bWorked Example\s+(\d+\.\d+)/g, 'we:'], [/\bWe do\s+(\d+\.\d+)/g, 'wd:']];
   for (const [re, kind] of pats) while ((m = re.exec(text))) out.push(kind + m[1]);
   return out;
 }

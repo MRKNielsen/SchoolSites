@@ -157,6 +157,21 @@
   {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
   {\end{workedexbox}}
 
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
 % Year 7 box (blue)
 \newtcolorbox{yr7box}{
   breakable, arc=2.5mm, boxrule=0.5pt,
@@ -885,8 +900,8 @@
 % ── New in this update: spring-scale and force-arrow scale diagrams ──────────
 \newcommand{\diagSpringScales}{%
 \begin{center}
-\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
-  % --- Scale A: 0-10 N, pointer at 4 N ---
+\begin{tikzpicture}[font=\footnotesize, x=.7cm, y=.7cm]
+  % --- Scale A: 0-10 N, pointer at 4 N ---.
   \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
   \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {A};
   \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
@@ -939,7 +954,7 @@
 
   % Instruction note
   \node[anchor=west, font=\footnotesize\itshape, text=DarkGrey, align=left]
-        at (10.4,3) {Read the value where\\the red pointer sits.\\Check what one small\\division is worth first.};
+        at (15.2,3) {Read the value where\\the red pointer sits.\\Check what one small\\division is worth first.};
 \end{tikzpicture}
 \end{center}}
 
@@ -1467,6 +1482,8 @@ Experiment lessons follow the same four parts: a reading about the science, plan
 \end{ctab}
 
 \newpage
+\quad
+\clearpage
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 1 — WHAT IS A FORCE?                                    (Week 1 · P1)
 % ══════════════════════════════════════════════════════════════════════════════
@@ -1502,6 +1519,7 @@ Forces are invisible, so scientists need a way to record them. The solution is s
 \rcq{The passage says that if the chair vanished, ``gravity would win''. Explain what this means, using the idea of two forces that are no longer equal.}{1.8cm}
 \rcq{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
 \rcq{Does an astronaut on the Space Station still have weight? Use a number from the passage to support your answer.}{1.6cm}
+\clearpage
 \rcq{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
 \rcq{Which three-word phrase in the first paragraph describes two forces that are the same size but act in opposite directions?}{1.4cm}
 \rcq{Forces are invisible. Describe one way you could tell that a force is acting on an object, even though you cannot see the force itself.}{1.8cm}
@@ -1568,6 +1586,11 @@ A spring scale is marked from 0 to 10\,N, with \textbf{20} small divisions betwe
 \textbf{Step 2 --- the reading:}\quad $7 \times 0.5 = \mathbf{3.5\ \text{N}}$
 \end{workedex}
 
+\begin{wedo}{Reading a spring scale}
+A spring scale is marked from 0 to 5\,N, with \textbf{20} small divisions between 0 and 5. The pointer sits on the \textbf{9th} small division. What is the reading?
+\answerbox{2.4cm}
+\end{wedo}
+
 \subsection{Mass and Weight Are Not the Same Thing}\label{sub:1.4}
 
 In everyday speech we use these words as if they mean the same thing. In science they are quite different, and mixing them up causes a lot of lost marks.
@@ -1600,6 +1623,16 @@ A student has a mass of 50\,kg. Find their weight on Earth, and on the Moon.
 Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
 \end{workedex}
 
+\begin{wedo}{Mass and weight}
+A robot has a mass of 20\,kg. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
+\pt{a}Find its weight on Earth.
+\answerbox{1.8cm}
+\pt{b}Find its weight on the Moon.
+\answerbox{1.8cm}
+\pt{c}Has its mass changed? Explain.
+\answerbox{1.6cm}
+\end{wedo}
+
 \subsection{Contact and Non-contact Forces}\label{sub:1.5}
 
 Forces fall into two groups. \textbf{Contact forces} only act when two objects touch. \textbf{Non-contact forces} act across a gap --- the objects do not need to touch at all.
@@ -1608,6 +1641,7 @@ Forces fall into two groups. \textbf{Contact forces} only act when two objects t
 \diagForceTypes
 \figcap{Contact and non-contact forces}
 
+\needspace{14\baselineskip}
 \begin{workedex}{Classifying forces}
 A fridge magnet holds a shopping list on the fridge door without sliding down. Name two forces acting on the magnet and classify each one.
 
@@ -1619,6 +1653,11 @@ A fridge magnet holds a shopping list on the fridge door without sliding down. N
 \medskip
 \textit{(The magnetic pull towards the door is also non-contact --- it is what presses the magnet on hard enough for friction to hold it.)}
 \end{workedex}
+
+\begin{wedo}{Classifying forces}
+A book is pushed across a desk. After you let go, it slides and slows down. Name two forces acting on the book while it slides, and say whether each one is a contact or a non-contact force.
+\answerbox{4.0cm}
+\end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Practice}{Amber}\label{prac:1}

@@ -44,6 +44,7 @@
 
   function go(i) {
     if (i < 0 || i >= slides.length) return;
+    if (i !== cur) hideReveals(slides[cur]);
     slides[cur].classList.remove("active");
     cur = i;
     slides[cur].classList.add("active");
@@ -97,6 +98,13 @@
     else if (el.classList.contains("frag")) { el.classList.add("on"); syncFragBtns(s); }
     else { el.classList.add("shown"); syncAnsBtn(el); }
     return true;
+  }
+  /* Working and answers start hidden every time a slide is shown, so a
+     slide revisited (or reached from the menu) never gives the answer away. */
+  function hideReveals(s) {
+    s.querySelectorAll(".steps > li.shown").forEach(li => li.classList.remove("shown"));
+    s.querySelectorAll(".steps").forEach(syncStepBtn);
+    s.querySelectorAll("[data-answer-for].shown").forEach(a => { a.classList.remove("shown"); syncAnsBtn(a); });
   }
   function revealNextFrag(s) {
     const f = s.querySelector(".frag:not(.on)");
