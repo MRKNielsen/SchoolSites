@@ -725,178 +725,6 @@
 \end{tikzpicture}
 \end{center}}
 
-% ── Experiment 2: Trolley and pulley setup ─────────────────────────────────────
-\newcommand{\diagExpTwoSetup}{%
-\begin{center}
-\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
-  % bench ends just before the pulley, so the hanging mass falls past its edge
-  \fill[ground hatch] (0,-0.4) rectangle (8.95,0);
-  \draw[thick, DarkGrey] (0,0) -- (8.95,0) -- (8.95,-0.4);
-  \fill[DarkGrey!15] (0.3,0) rectangle (8.6,0.18);
-  \draw[DarkGrey!60] (0.3,0.18) -- (8.6,0.18);
-  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
-        minimum width=2.4cm, minimum height=1.0cm,
-        font=\small\bfseries, text=NavyBlue] (trolley) at (3.5,0.68) {Trolley ($M$)};
-  \fill[DarkGrey!60] (2.55,0.18) circle (0.13);
-  \fill[DarkGrey!60] (4.45,0.18) circle (0.13);
-  \draw[dashed, DarkGrey!50, thick] (2.3,0.68) -- (0.3,0.68);
-  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (0.22,0.68) {ticker tape};
-  % pulley clamped to the bench edge: string runs over its top, down its right side
-  \draw[thick, DarkGrey] (8.95,0.0) -- (8.95,0.34);
-  \draw[thick, DarkGrey!70] (trolley.east) -- (8.95,0.68);
-  \fill[DarkGrey!25] (8.95,0.34) circle (0.34);
-  \draw[thick, DarkGrey] (8.95,0.34) circle (0.34);
-  \draw[thick, DarkGrey] (8.95,0.34) circle (0.11);
-  \node[font=\scriptsize, text=DarkGrey, above right] at (9.15,0.6) {pulley};
-  \draw[thick, DarkGrey!70] (9.29,0.34) -- (9.29,-1.77);
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
-        minimum width=1.3cm, minimum height=0.85cm,
-        font=\small\bfseries, text=OrangeDark] (hm) at (9.29,-2.2) {$m$};
-  \node[font=\scriptsize, text=OrangeDark, anchor=west] at (9.99,-2.2) {hanging mass};
-  \draw[force arrow, red!65!black] (hm.south) -- ++(0,-1.0)
-        node[right, font=\scriptsize\bfseries, text=red!65!black] {$W\!=\!mg$};
-  \draw[force arrow, TealGreen] (9.29,-1.6) -- (9.29,-0.9)
-        node[right, font=\scriptsize\bfseries, text=TealGreen] {$T$};
-  \draw[force arrow, OrangeDark] (trolley.east) ++(0.1,0) -- ++(1.5,0)
-        node[above, font=\scriptsize\bfseries, text=OrangeDark] {$T$};
-  \draw[force arrow, PurpleDark] (trolley.north) ++(0.0,0.1) -- ++(1.8,0)
-        node[above, font=\scriptsize\bfseries, text=PurpleDark] {$a$};
-  \node[font=\scriptsize\itshape, text=DarkGrey] at (3.5,2.05)
-        {total mass $M + m$ kept constant (masses move from trolley to hanger)};
-  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.3,-0.65) {bench / runway};
-\end{tikzpicture}
-\end{center}}
-
-% ── Experiment 2: FBD of trolley and hanging mass side by side ────────────────
-\newcommand{\diagExpTwoFBD}{%
-\begin{center}
-\begin{tikzpicture}[font=\small]
-  \node[font=\small\bfseries, text=NavyBlue] at (0,3.5) {FBD: Trolley ($M$)};
-  \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
-        minimum width=2.6cm, minimum height=1.2cm,
-        font=\small\bfseries, text=NavyBlue] (T) at (0,0) {Trolley ($M$)};
-  \draw[force arrow, TealGreen] (T.north) -- ++(0,2.0)
-        node[right, font=\small\bfseries, text=TealGreen] {$N$ (normal)};
-  \draw[force arrow, red!65!black] (T.south) -- ++(0,-2.0)
-        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!Mg$};
-  \draw[force arrow, OrangeDark] (T.east) -- ++(2.8,0)
-        node[above, font=\small\bfseries, text=OrangeDark] {$T$ (tension)};
-  \draw[thin arrow, DarkGrey!55, dashed] (T.west) -- ++(-1.8,0)
-        node[above, font=\scriptsize\itshape, text=DarkGrey!65] {friction $\approx 0$};
-  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (-0.2,1.5)
-        {$N = Mg$ (vertical balance)};
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=3pt,
-        font=\small, text=OrangeDark, inner sep=3pt]
-        at (0,-3.6) {$T = Ma$};
-
-  \node[font=\small\bfseries, text=NavyBlue] at (8.5,3.5) {FBD: Hanging mass ($m$)};
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
-        minimum width=2.4cm, minimum height=1.1cm,
-        font=\small\bfseries, text=OrangeDark] (H) at (8.5,0) {Mass ($m$)};
-  \draw[force arrow, TealGreen] (H.north) -- ++(0,1.6)
-        node[right, font=\small\bfseries, text=TealGreen] {$T$ (tension)};
-  \draw[force arrow, red!65!black] (H.south) -- ++(0,-2.6)
-        node[right, font=\small\bfseries, text=red!65!black] {$W\!=\!mg$};
-  \node[font=\scriptsize\itshape, text=red!60!black] at (8.5,2.9)
-        {$mg > T$ --- forces unbalanced};
-  \draw[force arrow, red!65!black, line width=1.2pt, opacity=0.5]
-        (H.south) ++(0.45,-0.3) -- ++(0,-0.9)
-        node[right, font=\scriptsize\bfseries, text=red!65!black] {net $F$};
-  \node[draw=red!55!black, fill=red!8, rounded corners=3pt,
-        font=\small, text=red!55!black, inner sep=3pt, align=center]
-        at (8.5,-4.0) {$mg - T = ma$};
-\end{tikzpicture}
-\end{center}}
-
-% ── Experiment 2: Comparing force sizes (50g / 100g / 200g) ──────────────────
-\newcommand{\diagExpTwoForces}{%
-\begin{center}
-\begin{tikzpicture}[font=\small]
-  \node[font=\small\bfseries, text=NavyBlue] at (7.0,1.4)
-        {Effect of increasing hanging mass --- arrow length shows force size};
-  \node[font=\small\bfseries, text=GoldDark] at (1.5,0.5) {$m = 50$\,g};
-  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
-        minimum width=2.0cm, minimum height=0.9cm,
-        font=\small\bfseries, text=NavyBlue] (t1) at (1.5,-0.8) {$M$};
-  \draw[force arrow, OrangeDark] (t1.east) -- ++(1.0,0)
-        node[above, font=\scriptsize, text=OrangeDark] {$T_1$};
-  \draw[force arrow, PurpleDark] (t1.south east) -- ++(0.7,0)
-        node[below, font=\scriptsize, text=PurpleDark] {$a_1$};
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
-        minimum width=0.9cm, minimum height=0.7cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (3.0,-2.5) {50\,g};
-  \draw[force arrow, red!65!black] (3.0,-2.85) -- ++(0,-0.7)
-        node[right, font=\scriptsize, text=red!65!black] {$W_1$};
-
-  \node[font=\small\bfseries, text=GoldDark] at (6.0,0.5) {$m = 100$\,g};
-  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
-        minimum width=2.0cm, minimum height=0.9cm,
-        font=\small\bfseries, text=NavyBlue] (t2) at (6.0,-0.8) {$M$};
-  \draw[force arrow, OrangeDark] (t2.east) -- ++(1.7,0)
-        node[above, font=\scriptsize, text=OrangeDark] {$T_2$};
-  \draw[force arrow, PurpleDark] (t2.south east) -- ++(1.2,0)
-        node[below, font=\scriptsize, text=PurpleDark] {$a_2$};
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
-        minimum width=1.0cm, minimum height=0.85cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (8.1,-2.5) {100\,g};
-  \draw[force arrow, red!65!black] (8.1,-2.925) -- ++(0,-1.1)
-        node[right, font=\scriptsize, text=red!65!black] {$W_2$};
-
-  \node[font=\small\bfseries, text=GoldDark] at (10.8,0.5) {$m = 200$\,g};
-  \node[draw=NavyBlue, fill=LightBlue, rounded corners=3pt,
-        minimum width=2.0cm, minimum height=0.9cm,
-        font=\small\bfseries, text=NavyBlue] (t3) at (10.8,-0.8) {$M$};
-  \draw[force arrow, OrangeDark] (t3.east) -- ++(2.4,0)
-        node[above, font=\scriptsize, text=OrangeDark] {$T_3$};
-  \draw[force arrow, PurpleDark] (t3.south east) -- ++(1.8,0)
-        node[below, font=\scriptsize, text=PurpleDark] {$a_3$ (largest)};
-  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=2pt,
-        minimum width=1.1cm, minimum height=1.1cm,
-        font=\scriptsize\bfseries, text=OrangeDark] at (13.6,-2.5) {200\,g};
-  \draw[force arrow, red!65!black] (13.6,-3.05) -- ++(0,-1.6)
-        node[right, font=\scriptsize, text=red!65!black] {$W_3$};
-
-  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
-        text width=13.4cm, inner sep=5pt,
-        font=\small, text=TealGreen, align=center]
-        at (7.0,-5.95)
-        {Prediction: when the hanging mass doubles from 50\,g to 100\,g, the tension doubles,
-         so the acceleration should double too. When the mass stays the same,
-         force and acceleration are directly proportional.};
-\end{tikzpicture}
-\end{center}}
-
-% ── Experiment 2: Combined system equation derivation ─────────────────────────
-\newcommand{\diagExpTwoSystem}{%
-\begin{center}
-\begin{tikzpicture}[font=\small]
-  \node[draw=NavyBlue, fill=LightBlue!30, rounded corners=5pt,
-        minimum width=13cm, minimum height=6.4cm] at (5.5,-0.4) {};
-  \node[font=\small\bfseries, text=NavyBlue] at (5.5,2.4)
-        {System analysis: combining both free body diagrams};
-  \node[font=\small\bfseries, text=NavyBlue, anchor=north west] at (0.4,1.8) {Trolley ($M$):};
-  \node[font=\small, text=DarkGrey, anchor=north west] at (0.4,1.3) {Horizontal net force $= T$};
-  \node[font=\small, text=NavyBlue, anchor=north west] at (0.4,0.8)
-        {$\Rightarrow\quad T = Ma \quad\cdots(1)$};
-  \node[font=\small\bfseries, text=OrangeDark, anchor=north west] at (6.2,1.8) {Hanging mass ($m$):};
-  \node[font=\small, text=DarkGrey, anchor=north west] at (6.2,1.3) {Net force $= mg - T$ downward};
-  \node[font=\small, text=OrangeDark, anchor=north west] at (6.2,0.8)
-        {$\Rightarrow\quad mg - T = ma \quad\cdots(2)$};
-  \node[font=\small\bfseries, text=TealGreen] at (5.5,-0.2)
-        {Add (1) and (2) to eliminate $T$:};
-  \node[font=\small, text=NavyBlue] at (5.5,-0.75)
-        {$mg = Ma + ma = (M+m)\,a$};
-  \node[font=\small\bfseries, text=NavyBlue] at (5.5,-1.6)
-        {$\displaystyle a = \frac{mg}{M+m}$};
-  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
-        font=\small, text=GoldDark, inner sep=5pt, align=center]
-        at (5.5,-2.85)
-        {When $M \gg m$, the total mass $\approx M$, so
-         $a \approx \dfrac{mg}{M} = \dfrac{F}{M}$ --- confirming $F = Ma$};
-\end{tikzpicture}
-\end{center}}
-
-
 % ── New in this update: spring-scale and force-arrow scale diagrams ──────────
 \newcommand{\diagSpringScales}{%
 \begin{center}
@@ -1273,8 +1101,8 @@
   \end{tcolorbox}\vspace{2pt}}
 
 
-% ── Experiment 1: pulling a loaded wooden block along the bench with a spring balance ──
-\newcommand{\diagExpOneSetup}{%
+% ── Experiment 2: pulling a loaded wooden block along the bench with a spring balance ──
+\newcommand{\diagExpTwoSetup}{%
 \begin{center}
 \begin{tikzpicture}[font=\small, x=1.18cm, y=1.18cm]
   % bench
@@ -1411,6 +1239,10 @@
 \renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
 \renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
 \newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
 % 3. Tables have vertical rules between columns and down both sides
 %    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
 %    Keep the normal padding at the outer edges (no @{} there): colortbl paints
@@ -1484,7 +1316,7 @@ There is one section for each lesson, and every lesson works the same way:
 \end{tabular}
 
 \medskip
-Experiment lessons follow the same four parts: a reading about the science, planning the experiment, results and analysis, then above-level questions. Everything leads to the trebuchet investigation at the end of the unit.
+Experiments 2--4 follow the same four parts: a reading about the science, planning the experiment, results and analysis, then above-level questions. Experiment 1 is a rotation of five workstations instead. Everything leads to the trebuchet investigation at the end of the unit.
 \end{infobox}
 
 \vspace{8pt}
@@ -1495,10 +1327,10 @@ Experiment lessons follow the same four parts: a reading about the science, plan
   \thead{Lesson} & \thead{Title} & \thead{Page} \\ \hline
   \talt 1 & What is a Force? & p.\ \pageref{sec:1} \\ \hline
         2 & Force Diagrams and Net Force & p.\ \pageref{sec:2} \\ \hline
-  \talt 3 & Experiment 1 --- Friction and Mass & p.\ \pageref{sec:3} \\ \hline
+  \talt 3 & Experiment 1 --- Everyday Forces & p.\ \pageref{sec:3} \\ \hline
         4 & Newton's First and Third Laws & p.\ \pageref{sec:4} \\ \hline
   \talt 5 & Newton's Second Law: $F = ma$ & p.\ \pageref{sec:5} \\ \hline
-        6 & Experiment 2 --- Investigating Newton's Second Law & p.\ \pageref{sec:6} \\ \hline
+        6 & Experiment 2 --- Friction and Mass & p.\ \pageref{sec:6} \\ \hline
   \talt 7 & Energy and Transformation & p.\ \pageref{sec:7} \\ \hline
         8 & Experiment 3 --- Bounce Efficiency & p.\ \pageref{sec:8} \\ \hline
   \talt 9 & Simple Machines and Levers & p.\ \pageref{sec:9} \\ \hline
@@ -2161,200 +1993,159 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \end{yr8box}
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
-%  LESSON 3 — EXPERIMENT 1: FRICTION AND MASS                     (Week 1 · P3)
+%  LESSON 3 — EXPERIMENT 1: EVERYDAY FORCES                       (Week 1 · P3)
+%  A rotation of five workstations, laid out like the NHS teacher sheet
+%  "Everyday forces" (same order and wording). Safety follows RiskAssess
+%  8122291 "Everyday forces 2020". No reading and no Part D in this lesson.
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Experiment 1: Friction and Mass}{Prediction \textbullet{} Fair testing \textbullet{} Adding mass \textbullet{} Repeat trials and means}\label{sec:3}\label{exp:1}
-\lessoncodes{VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
+\sectiondiv{Experiment 1: Everyday Forces}{Pushing forces \textbullet{} Gravity \textbullet{} Electrostatic, magnetic and buoyancy forces \textbullet{} Five workstations}\label{sec:3}\label{exp:1}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I05}
 
 \vocabhead
 \begin{ctab}
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
-  & \scaf{\textbf{Fair test}} & \scaf{An experiment where only one variable is changed and everything else is kept the same.} \\ \hline
-  & \textbf{Independent variable} & \\ \hline
-  & \textbf{Dependent variable} & \\ \hline
-  & \textbf{Controlled variable} & \\ \hline
-  & \textbf{Trial} & \\ \hline
-  & \textbf{Mean} & \\ \hline
+  & \scaf{\textbf{Inference}} & \scaf{An explanation of what you observed, using what you already know.} \\ \hline
+  & \textbf{Electrostatic force} & \\ \hline
+  & \textbf{Magnetic force} & \\ \hline
+  & \textbf{Buoyancy force} & \\ \hline
+  & \textbf{Generalisation} & \\ \hline
 \end{tabular}
 \end{ctab}
 
-% ─── PART A ───────────────────────────────────────────────────────────────────
-\lessonpart{A}{Reading and comprehension}{Teal}\label{read:3}
-
-\begin{readingbox}{Reading --- Grip}
-Friction is the force that makes walking possible. With every step, your shoe pushes backwards against the ground, and friction pushes you forwards. On ice, where friction is tiny, your foot slips backwards and you go nowhere.
-
-Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Press the surfaces together harder and the bumps push further into each other and catch more, so the friction is bigger. That is why a full box is harder to slide across the floor than an empty one.
-
-Sometimes engineers want as much friction as possible --- in the rubber of a car tyre, the soles of running shoes or the grip tape on a skateboard. Other times they want as little as possible: oil in an engine and wax on skis reduce friction, so parts slide easily and less energy is wasted as heat.
-
-In this experiment you will measure friction with a spring balance, then add masses to a wooden block so it presses harder on the bench. When you pull the block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring balance is equal to the friction force.
-\end{readingbox}
-
-\rcreset
-\rcq{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
-\rcq{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{1.6cm}
-\rcq{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
-\rcq{Why must the block move at a \emph{steady} speed when you read the spring balance?}{1.8cm}
-
-% ─── PART B ───────────────────────────────────────────────────────────────────
-\lessonpart{B}{Planning the experiment}{Blue}\label{theory:3}
-
-\begin{expheader}{1}{Friction and Mass}{To investigate how increasing mass affects the size of friction.}
-\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
+\vspace{6pt}
+\begin{expheader}{1}{Everyday Forces}{To observe five everyday forces --- pushing, gravitational, electrostatic, magnetic and buoyancy forces --- and describe the direction each one acts in.}
+\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I05
 \end{expheader}
 
-\subsection{Making it a Fair Test}\label{sub:3.1}
-
-In a fair test you change \textbf{one} thing, measure \textbf{one} thing, and keep everything else the same.
-
-\vspace{4pt}
-\begin{ctab}
-\begin{tabular}{|L{3.6cm}|L{11.4cm}|}
-  \thead{Variable} & \thead{What it means} \\ \hline
-  \talt Independent & The one thing \emph{you} change on purpose \\ \hline
-        Dependent   & The thing you \emph{measure} to see the effect \\ \hline
-  \talt Controlled  & Everything you keep the \emph{same}, so the test is fair \\ \hline
-\end{tabular}
-\end{ctab}
-
-\begin{workedex}{Identifying variables}
-A student rolls a toy car down a ramp at different heights and measures how far it travels across the floor. Identify the variables.
-
-\medskip
-\textbf{Independent:} the height of the ramp (the student changes it).
-
-\textbf{Dependent:} the distance the car travels (the student measures it).
-
-\textbf{Controlled:} the same car, the same floor surface, releasing the car without pushing it.
-\end{workedex}
-
-\begin{wedo}{Identifying variables}
-A student wants to know if the temperature of water changes how fast sugar dissolves. She times how long a spoonful of sugar takes to dissolve in water at 20\,\textdegree C, 40\,\textdegree C and 60\,\textdegree C.
-\pt{a}Name the independent variable.
-\answerbox{1.4cm}
-\pt{b}Name the dependent variable.
-\answerbox{1.4cm}
-\pt{c}Name two controlled variables.
-\answerbox{1.8cm}
-\end{wedo}
-
-\begin{scaffold}{Prediction --- before you begin}
-What do you think will happen to the friction force as you add more mass to the block? Why?
-\answerbox{2cm}
-\end{scaffold}
-
-\subsubsection*{Equipment}
-Wooden block with a hook \quad Spring balance (spring scale) or force sensor \quad Five 200\,g masses
-
-\subsubsection*{Method}
-\begin{enumerate}[itemsep=2pt]
-  \item Place the wooden block on the bench top.
-  \item Attach the spring balance to the hook on the block, as shown in Figure~E\ref{fig:exp1-setup}.
-  \item Pull the block slowly, so it keeps moving at a steady speed. Read the force on the spring balance --- this is equal to the friction. Record it in your results table.
-  \item Repeat step 3 twice more, so you have three results.
-  \item Add a 200\,g mass on top of the block. Measure the friction three times and record the results.
-  \item Repeat the friction measurements with 400, 600, 800 and 1000\,g (1\,kg) on the block. Record three results for each.
-\end{enumerate}
-
-\diagExpOneSetup
-\expfigcap{Measuring friction. Pull the spring balance level with the bench, and read it while the block slides at a steady speed.}\label{fig:exp1-setup}
+There are five workstations, A to E, and each one has its own page in this booklet. Your group works at one workstation at a time and moves on when your teacher says so, so you may not visit them in order. Answer a workstation's questions before you leave it.
 
 \begin{infobox}{Safety}
-Pull gently and keep the spring balance in line with the block --- a spring balance that is overstretched can snap back. Stack the masses carefully so they cannot slide off, and keep your feet clear of the bench edge.
+\textbf{Straws (A):} use only your own straw, never blow towards anyone's face, and put it in the bin as soon as you finish. Wash your hands afterwards.
+\textbf{Balls (A, E):} never throw a ball --- a golf ball can hurt someone. Pick up any ball that falls on the floor straight away, so no one slips. Tell your teacher if you are allergic to latex (rubber).
+\textbf{Scissors and rod (B, C):} use them only for the task.
+\textbf{Magnets (D):} keep them away from laptops and phones.
+\textbf{Water (C, E):} don't carry a full tub, and wipe up spills straight away.
+\textbf{Paper and Styrofoam} burn easily: keep them away from flames.
 \end{infobox}
 
-% ─── PART C ───────────────────────────────────────────────────────────────────
-\lessonpart{C}{Results and analysis}{Amber}\label{prac:3}
+% ─── WORKSTATION A ────────────────────────────────────────────────────────────
+\newpage
+\subsection{Workstation A --- Pushing Forces}\label{sub:3.1}
 
-\subsubsection*{Results}
+\subsubsection*{Materials}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item table tennis ball
+  \item drinking straws
+\end{itemize}
+\wssafety{Use only your own straw, and never blow towards anyone's face. Put your straw in the bin as soon as you finish. Pick up the ball straight away if it falls on the floor.}
+
+\subsubsection*{Part 1}
+\wsstep{1}Use the table tennis ball and a straw to answer these questions.
+
+\pt{a}What happens if you blow on the ball while it is moving towards you?
+\answerbox{2.2cm}
+\pt{b}What happens if you blow on it while it is moving away from you?
+\answerbox{2.2cm}
+\pt{c}What happens if you blow on it while it is moving across in front of you?
+\answerbox{2.2cm}
+
+\subsubsection*{Part 2}
+\wsstep{2}Play a game of blowball. This game is played in groups of four, with two in each team. Use a straw each, and set up two goals. See who can score the most goals.
 
 \begin{ctab}
-\begin{tabular}{|SW{3.6cm}|Z{2.4cm}|Z{2.4cm}|Z{2.4cm}|Z{2.8cm}|}
-  \hd & \thead{Mass added (g)} & \thead{Friction, test 1 (N)} & \thead{Friction, test 2 (N)} & \thead{Friction, test 3 (N)} & \thead{Mean (N)} \\ \hline
-  & \scaf{e.g.\ 0 (block only)} & \scaf{0.8} & \scaf{1.0} & \scaf{0.9} & \scaf{0.9} \\ \hline
-  & 0 (block only) & & & & \\ \hline
-  & 200 & & & & \\ \hline
-  & 400 & & & & \\ \hline
-  & 600 & & & & \\ \hline
-  & 800 & & & & \\ \hline
-  & 1000 & & & & \\ \hline
+\begin{tabular}{|SW{4.6cm}|Z{5.2cm}|Z{5.2cm}|}
+  \hd & \thead{} & \thead{Team 1} & \thead{Team 2} \\ \hline
+  & \textbf{Number of goals scored} & & \\ \hline
 \end{tabular}
 \end{ctab}
 
-\begin{workedex}{Calculating a mean}
-With no mass added, three tests gave 0.8\,N, 1.0\,N and 0.9\,N. Find the mean.
+% ─── WORKSTATION B ────────────────────────────────────────────────────────────
+\newpage
+\subsection{Workstation B --- Gravitational Forces}\label{sub:3.2}
 
-\medskip
-Add the tests, then divide by how many there are: \quad $(0.8 + 1.0 + 0.9) \div 3 = 2.7 \div 3 = \mathbf{0.9\ \text{N}}$
-\end{workedex}
+\subsubsection*{Materials}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item 20 cent coin (or a metal washer)
+  \item scissors and paper
+\end{itemize}
+\wssafety{Use the scissors only to cut the paper, and carry them with the points down.}
 
-\begin{wedo}{Calculating a mean}
-With 400\,g on the block, a group measured 1.9\,N, 2.1\,N and 2.3\,N. Calculate the mean friction force.
-\answerbox{2.2cm}
-\end{wedo}
+\subsubsection*{Method}
+\wsstep{1}Cut out a piece of paper the size of the coin.
 
-\needspace{10\baselineskip}
-\task Identify the independent variable, the dependent variable, and two controlled variables in \emph{your} experiment.
+\wsstep{2}Hold the piece of paper in one hand and the coin in the other, at the same height. Drop them both at the same time.
+
+\pt{a}Write an inference to explain what happened. Say what forces were acting on the coin and the paper, and in which direction they were acting.
+\answerbox{3.4cm}
+
+\wsstep{3}Roll the paper into a ball and drop it and the coin again.
+
+\pt{b}Write an inference to explain what happened.
+\answerbox{3.0cm}
+
+% ─── WORKSTATION C ────────────────────────────────────────────────────────────
+\newpage
+\subsection{Workstation C --- Electrostatic Forces}\label{sub:3.3}
+
+\subsubsection*{Materials}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item piece of paper
+  \item plastic (Perspex) rod and a woollen cloth
+  \item running water from a tap
+\end{itemize}
+\wssafety{Use the rod only for the task. Wipe up any water you spill straight away.}
+
+\subsubsection*{Method}
+\wsstep{1}Tear a piece of paper into small bits. Rub a plastic rod briskly on your clothes. (A woollen jumper works well.)
+
+\pt{a}What happens when you bring the rod near the pieces of paper?
+\answerbox{2.4cm}
+\pt{b}The force acting here is due to an electrostatic charge on the rod. Does the rod need to be touching the paper, or can the electrostatic force act over a distance?
+\answerbox{2.4cm}
+\pt{c}Rub a plastic rod briskly on the woollen cloth, and then place the rod near a weak stream of running water. What happens?
 \answerbox{2.4cm}
 
-\needspace{10\baselineskip}
-\task What happened to the size of the friction force as the mass on the block increased? Was your prediction correct?
-\answerbox{2.0cm}
+% ─── WORKSTATION D ────────────────────────────────────────────────────────────
+\newpage
+\subsection{Workstation D --- Magnetic Forces}\label{sub:3.4}
 
-\needspace{10\baselineskip}
-\task
-\pt{a}Why did you take three results for each mass?
-\answerbox{2.0cm}
-\pt{b}Identify one error or mistake that could have affected your results.
-\answerbox{2.0cm}
-\pt{c}Propose one improvement to the design of the experiment.
-\answerbox{2.0cm}
+\subsubsection*{Materials}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item 2 bar magnets with their poles marked
+\end{itemize}
+\wssafety{Keep the magnets away from laptops, phones and other electronic devices.}
 
-\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean.}{2.2cm}
-         {A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.}{2.2cm}
-
-\needspace{10\baselineskip}
-\task Use the idea of \emph{bumps} pressing together to explain your results. Then describe a situation in everyday life where you have noticed this link between friction and mass.
-\answerbox{2.4cm}
-
-\needspace{20\baselineskip}
-\task Draw a line graph of your results. Put \textbf{mass added (g)} on the horizontal axis and \textbf{mean friction force (N)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
-
-\vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=19cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
-
-% ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:3}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to interpret your graph, predict, or use a formula.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask Look at your graph. With no masses added, the friction was not zero. Explain why the block still has friction when nothing is stacked on it, and say what your line of best fit would do if you could make the block lighter and lighter.
-\answerbox{2.6cm}
-
-\needspace{10\baselineskip}
-\exttask Predict how your results would change if you repeated the experiment with the block sliding on sandpaper instead of the bench. Would the line on your graph be steeper or less steep? Explain.
-\answerbox{2.4cm}
-
-\needspace{10\baselineskip}
-\exttask The wooden block has a mass of 0.3\,kg. With 1\,kg of masses on top, the total mass is 1.3\,kg. Use your mean friction force for 1000\,g. If the loaded block were sliding and you let go of the spring balance, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
-\answerbox{3.2cm}
-\needspace{12\baselineskip}
-\exttask Design a fair test to find out whether the \emph{type of surface} changes the friction force on the block.
-\pt{a}Name the independent and dependent variables.
-\answerbox{1.6cm}
-\pt{b}Name two variables you would keep the same.
-\answerbox{1.6cm}
-\pt{c}Predict what you would find, and give a reason.
+\subsubsection*{Method}
+\wsstep{1}Hold one magnet in each hand. Feel what happens as you slowly bring the end of one magnet close to the end of the other. Write down what happens. Draw the magnets below.
 \answerbox{1.8cm}
+\drawbox{3.2cm}{}
 
-\end{yr8box}
+\wsstep{2}Repeat the test, but use the other end of one of the magnets. Write down what happens.
+\answerbox{2.0cm}
+
+\wsstep{3}Write a generalisation describing the forces acting between the two magnets.
+\answerbox{2.2cm}
+
+% ─── WORKSTATION E ────────────────────────────────────────────────────────────
+\newpage
+\subsection{Workstation E --- Buoyancy Forces}\label{sub:3.5}
+
+\subsubsection*{Materials}
+\begin{itemize}[nosep, leftmargin=1.4em]
+  \item bucket or tub of water
+  \item balls of different types, e.g.\ golf, table tennis, tennis, rubber, Styrofoam
+\end{itemize}
+\wssafety{Never throw a ball. Don't carry the tub when it is full, and wipe up spills straight away. Tell your teacher if you are allergic to latex (rubber).}
+
+\subsubsection*{Method}
+\wsstep{1}Put a table tennis ball into a bucket of water. Push it to the bottom of the bucket and let it go.
+
+\wsstep{2}Do the same with the other balls. What forces act on a ball in water? In which direction do they act?
+\answerbox{3.0cm}
+
+\pt{a}Try to write a generalisation about what happens to different balls in water.
+\answerbox{3.0cm}
 
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
@@ -3027,116 +2818,108 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
-%  LESSON 6 — EXPERIMENT 2: INVESTIGATING NEWTON'S SECOND LAW      (Week 2 · P3)
+%  LESSON 6 — EXPERIMENT 2: FRICTION AND MASS                     (Week 2 · P3)
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Experiment 2: Newton's Second Law}{Prediction \textbullet{} Variables \textbullet{} Trolley and pulley \textbullet{} Patterns in results}\label{sec:6}\label{exp:2}
-\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
+\sectiondiv{Experiment 2: Friction and Mass}{Prediction \textbullet{} Fair testing \textbullet{} Adding mass \textbullet{} Repeat trials and means}\label{sec:6}\label{exp:2}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
 
 \vocabhead
 \begin{ctab}
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
-  & \scaf{\textbf{Pulley}} & \scaf{A wheel that a string runs over, used to change the direction of a pull.} \\ \hline
-  & \textbf{Tension} & \\ \hline
-  & \textbf{Hanging mass} & \\ \hline
-  & \textbf{Runway} & \\ \hline
-  & \textbf{Accurate} & \\ \hline
+  & \scaf{\textbf{Fair test}} & \scaf{An experiment where only one variable is changed and everything else is kept the same.} \\ \hline
+  & \textbf{Independent variable} & \\ \hline
+  & \textbf{Dependent variable} & \\ \hline
+  & \textbf{Controlled variable} & \\ \hline
+  & \textbf{Trial} & \\ \hline
+  & \textbf{Mean} & \\ \hline
 \end{tabular}
 \end{ctab}
 
 % ─── PART A ───────────────────────────────────────────────────────────────────
 \lessonpart{A}{Reading and comprehension}{Teal}\label{read:6}
 
-\begin{readingbox}{Reading --- Slowing Down Gravity}
-Drop a ball and it hits the floor in well under a second --- far too fast to measure by eye. Around 400 years ago, the Italian scientist Galileo Galilei faced exactly this problem. He wanted to find out how falling objects speed up, but he had no stopwatch, no camera and no clock accurate enough to help.
+\begin{readingbox}{Reading --- Grip}
+Friction is the force that makes walking possible. With every step, your shoe pushes backwards against the ground, and friction pushes you forwards. On ice, where friction is tiny, your foot slips backwards and you go nowhere.
 
-His clever solution was to slow everything down. Instead of dropping a ball, he let it roll down a long, gently sloping wooden ramp with a smooth groove cut into it. On a gentle slope, only a small part of the pull of gravity drives the ball along, so it speeds up slowly enough to measure. To time each roll, Galileo let water flow out of a large container through a thin pipe while the ball rolled, then weighed the water he had collected. More water meant more time.
+Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Press the surfaces together harder and the bumps push further into each other and catch more, so the friction is bigger. That is why a full box is harder to slide across the floor than an empty one.
 
-Galileo's measurements showed that the ball sped up by the same amount every second --- it had a steady acceleration. Isaac Newton, born less than a year after Galileo died, built on this work to explain how force, mass and acceleration are linked.
+Sometimes engineers want as much friction as possible --- in the rubber of a car tyre, the soles of running shoes or the grip tape on a skateboard. Other times they want as little as possible: oil in an engine and wax on skis reduce friction, so parts slide easily and less energy is wasted as heat.
 
-In this experiment you will use the same trick. A trolley rolls along a flat runway, pulled by a small hanging mass on a string. Only the weight of that small mass pulls the trolley along, so it speeds up slowly enough for you to measure. By changing the hanging mass, you change the pulling force --- and you can test Newton's Second Law for yourself.
+In this experiment you will measure friction with a spring balance, then add masses to a wooden block so it presses harder on the bench. When you pull the block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring balance is equal to the friction force.
 \end{readingbox}
 
 \rcreset
-\rcq{Why couldn't Galileo simply time a ball falling straight down?}{1.4cm}
-\rcq{Explain how a gentle ramp helped Galileo, and how he measured time without a clock.}{2.0cm}
-\rcq{In this experiment, what provides the force that pulls the trolley along?}{1.4cm}
-\rcq{Why does using a \emph{small} hanging mass make the trolley's motion easier to measure?}{1.6cm}
+\rcq{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
+\rcq{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{1.6cm}
+\rcq{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
+\rcq{Why must the block move at a \emph{steady} speed when you read the spring balance?}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:6}
 
-\begin{expheader}{2}{Investigating Newton's Second Law}{To investigate how the size of the pulling force affects the acceleration of a trolley, when the total mass stays the same.}
-\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S10U17 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
+\begin{expheader}{2}{Friction and Mass}{To investigate how increasing mass affects the size of friction.}
+\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
 \end{expheader}
 
-\subsection{The Set-up}\label{sub:6.1}
+\subsection{Making it a Fair Test}\label{sub:6.1}
 
-A trolley on a flat runway is joined by a string, over a pulley, to a hanging mass. The weight of the hanging mass provides the pulling force. The pulley simply turns the direction of the pull from \emph{down} to \emph{sideways}.
+In a fair test you change \textbf{one} thing, measure \textbf{one} thing, and keep everything else the same.
 
-\diagExpTwoSetup
-\expfigcap{Trolley connected by string over a pulley to a hanging mass. The hanging mass provides the driving force; the pulley redirects the tension.}
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|L{3.6cm}|L{11.4cm}|}
+  \thead{Variable} & \thead{What it means} \\ \hline
+  \talt Independent & The one thing \emph{you} change on purpose \\ \hline
+        Dependent   & The thing you \emph{measure} to see the effect \\ \hline
+  \talt Controlled  & Everything you keep the \emph{same}, so the test is fair \\ \hline
+\end{tabular}
+\end{ctab}
 
-\needspace{24\baselineskip}
-\subsection{The Forces on the Trolley}\label{sub:6.2}
-
-Vertically, the trolley's weight and the normal force from the runway are \textbf{balanced}. Horizontally, the tension in the string is the only force that matters (friction is very small), so it is \textbf{unbalanced} --- and the trolley accelerates.
-
-\diagExpTwoFBD
-\expfigcap{Left: free body diagram of the trolley (tension drives it right; normal force and weight balance vertically). Right: free body diagram of the hanging mass (weight is larger than tension, so it accelerates downwards).}
-
-\subsection{Calculating the Pulling Force}\label{sub:6.3}
-
-The pulling force is the weight of the hanging mass, so use $W = mg$ with $g = 9.8$\,N/kg. The mass must be in \textbf{kilograms}: divide grams by 1000.
-
-\begin{workedex}{Finding the pulling force}
-A 150\,g mass hangs on the end of the string. Find the pulling force on the trolley.
+\begin{workedex}{Identifying variables}
+A student rolls a toy car down a ramp at different heights and measures how far it travels across the floor. Identify the variables.
 
 \medskip
-\textbf{Step 1 --- convert to kg:}\quad $150 \div 1000 = 0.150$\,kg
+\textbf{Independent:} the height of the ramp (the student changes it).
 
-\textbf{Step 2 --- weight:}\quad $W = mg = 0.150 \times 9.8 = \mathbf{1.47\ \text{N}}$
+\textbf{Dependent:} the distance the car travels (the student measures it).
+
+\textbf{Controlled:} the same car, the same floor surface, releasing the car without pushing it.
 \end{workedex}
 
-\begin{wedo}{Finding the pulling force}
-A 250\,g mass hangs on the end of the string. Use $g = 9.8$\,N/kg.
-\pt{a}Convert the mass to kilograms.
+\begin{wedo}{Identifying variables}
+A student wants to know if the temperature of water changes how fast sugar dissolves. She times how long a spoonful of sugar takes to dissolve in water at 20\,\textdegree C, 40\,\textdegree C and 60\,\textdegree C.
+\pt{a}Name the independent variable.
 \answerbox{1.4cm}
-\pt{b}Find the pulling force on the trolley.
+\pt{b}Name the dependent variable.
+\answerbox{1.4cm}
+\pt{c}Name two controlled variables.
 \answerbox{1.8cm}
 \end{wedo}
 
-\subsection{What $F = ma$ Predicts}\label{sub:6.4}
-
-If $F = ma$, then doubling the force on the same mass should double the acceleration. This experiment tests that prediction.
-
 \begin{scaffold}{Prediction --- before you begin}
-What do you think will happen to the trolley's acceleration as the hanging mass is increased from 50\,g to 200\,g? Use $F = ma$ to give a reason.
+What do you think will happen to the friction force as you add more mass to the block? Why?
 \answerbox{2cm}
 \end{scaffold}
 
-\diagExpTwoForces
-\expfigcap{Check your prediction against what Newton's Second Law predicts: as the hanging mass increases, the tension force increases, and so does the acceleration.}
-
 \subsubsection*{Equipment}
-Dynamics trolley \quad Runway \quad Pulley (clamped to the end of the bench) and string \quad Mass hanger and slotted masses (4 $\times$ 50\,g) \quad Motion sensor or ticker-tape timer \quad Balance \quad Buffer block and catch box
+Wooden block with a hook \quad Spring balance (spring scale) or force sensor \quad Five 200\,g masses
 
 \subsubsection*{Method}
 \begin{enumerate}[itemsep=2pt]
-  \item Measure the mass of the trolley with the balance and record it.
-  \item Clamp the pulley to the end of the bench. Tie a string from the trolley, over the pulley, to the mass hanger.
-  \item Load the hanger so the hanging mass is \textbf{50\,g}. Put the other three 50\,g masses \textbf{on the trolley}.
-  \item Hold the trolley still at the start line, then let go --- do not push it. Measure its acceleration with the motion sensor or ticker-tape timer.
-  \item Repeat 3 times and record every result.
-  \item Move one 50\,g mass from the trolley to the hanger (the hanging mass is now 100\,g) and repeat steps 4--5. Do the same for 150\,g and 200\,g.
+  \item Place the wooden block on the bench top.
+  \item Attach the spring balance to the hook on the block, as shown in Figure~\ref{fig:E6.1}.
+  \item Pull the block slowly, so it keeps moving at a steady speed. Read the force on the spring balance --- this is equal to the friction. Record it in your results table.
+  \item Repeat step 3 twice more, so you have three results.
+  \item Add a 200\,g mass on top of the block. Measure the friction three times and record the results.
+  \item Repeat the friction measurements with 400, 600, 800 and 1000\,g (1\,kg) on the block. Record three results for each.
 \end{enumerate}
 
-\begin{infobox}{Why move the masses instead of adding new ones?}
-Moving a mass from the trolley to the hanger keeps the \textbf{total mass} being pulled the same. Only the \textbf{force} changes --- so it is a fair test.
-\end{infobox}
+\diagExpTwoSetup
+\expfigcap{Measuring friction. Pull the spring balance level with the bench, and read it while the block slides at a steady speed.}
 
 \begin{infobox}{Safety}
-Put a buffer block at the end of the runway and catch the trolley before it hits the pulley. Place a catch box under the hanging mass and keep your feet clear of it. Never overload the hanger.
+Pull gently and keep the spring balance in line with the block --- a spring balance that is overstretched can snap back. Stack the masses carefully so they cannot slide off, and keep your feet clear of the bench edge.
 \end{infobox}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -3145,44 +2928,59 @@ Put a buffer block at the end of the runway and catch the trolley before it hits
 \subsubsection*{Results}
 
 \begin{ctab}
-\begin{tabular}{|SZ{2.2cm}|Z{2.6cm}|Z{2.1cm}|Z{2.1cm}|Z{2.1cm}|Z{2.5cm}|}
-  \hd & \thead{Hanging mass (g)} & \thead{Pulling force $F = mg$ (N)} & \thead{Trial 1 (m/s$^2$)} & \thead{Trial 2 (m/s$^2$)} & \thead{Trial 3 (m/s$^2$)} & \thead{Mean accel. (m/s$^2$)} \\ \hline
-  & \scaf{e.g.\ 50} & \scaf{0.49} & \scaf{0.38} & \scaf{0.42} & \scaf{0.41} & \scaf{0.40} \\ \hline
-  & 50  & & & & & \\ \hline
-  & 100 & & & & & \\ \hline
-  & 150 & & & & & \\ \hline
-  & 200 & & & & & \\ \hline
+\begin{tabular}{|SW{3.6cm}|Z{2.4cm}|Z{2.4cm}|Z{2.4cm}|Z{2.8cm}|}
+  \hd & \thead{Mass added (g)} & \thead{Friction, test 1 (N)} & \thead{Friction, test 2 (N)} & \thead{Friction, test 3 (N)} & \thead{Mean (N)} \\ \hline
+  & \scaf{e.g.\ 0 (block only)} & \scaf{0.8} & \scaf{1.0} & \scaf{0.9} & \scaf{0.9} \\ \hline
+  & 0 (block only) & & & & \\ \hline
+  & 200 & & & & \\ \hline
+  & 400 & & & & \\ \hline
+  & 600 & & & & \\ \hline
+  & 800 & & & & \\ \hline
+  & 1000 & & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
-\begin{infobox}{Looking for a pattern}
-Two quantities are \textbf{directly proportional} if doubling one doubles the other. To check, compare two rows: when the force doubles (50\,g $\rightarrow$ 100\,g), does the mean acceleration roughly double too?
-\end{infobox}
+\begin{workedex}{Calculating a mean}
+With no mass added, three tests gave 0.8\,N, 1.0\,N and 0.9\,N. Find the mean.
 
-\needspace{10\baselineskip}
-\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
-\answerbox{2.6cm}
+\medskip
+Add the tests, then divide by how many there are: \quad $(0.8 + 1.0 + 0.9) \div 3 = 2.7 \div 3 = \mathbf{0.9\ \text{N}}$
+\end{workedex}
 
-\needspace{10\baselineskip}
-\task Why were the 50\,g masses moved from the trolley to the hanger, instead of adding new masses to the hanger?
+\begin{wedo}{Calculating a mean}
+With 400\,g on the block, a group measured 1.9\,N, 2.1\,N and 2.3\,N. Calculate the mean friction force.
 \answerbox{2.2cm}
+\end{wedo}
 
 \needspace{10\baselineskip}
-\task Describe the relationship between force and acceleration that you observed. Did doubling the force (50\,g $\rightarrow$ 100\,g) roughly double the acceleration? Was your prediction correct?
-\answerbox{2.6cm}
-
-\taskpair{A different hanging mass of 120\,g is used. Find the pulling force on the trolley.}{2.4cm}
-         {Another group measured 0.81, 0.79 and 0.95\,m/s$^2$ for 100\,g. Which value looks wrong? Find the mean of the other two.}{2.4cm}
+\task Identify the independent variable, the dependent variable, and two controlled variables in \emph{your} experiment.
+\answerbox{2.4cm}
 
 \needspace{10\baselineskip}
-\task Use Newton's Second Law to explain \emph{why} a larger hanging mass gave the trolley a larger acceleration. Use the words \emph{net force} and \emph{mass}.
-\answerbox{2.2cm}
+\task What happened to the size of the friction force as the mass on the block increased? Was your prediction correct?
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\task
+\pt{a}Why did you take three results for each mass?
+\answerbox{2.0cm}
+\pt{b}Identify one error or mistake that could have affected your results.
+\answerbox{2.0cm}
+\pt{c}Propose one improvement to the design of the experiment.
+\answerbox{2.0cm}
+
+\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean.}{2.2cm}
+         {A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.}{2.2cm}
+
+\needspace{10\baselineskip}
+\task Use the idea of \emph{bumps} pressing together to explain your results. Then describe a situation in everyday life where you have noticed this link between friction and mass.
+\answerbox{2.4cm}
 
 \needspace{20\baselineskip}
-\task Draw a line graph of your results. Put \textbf{pulling force (N)} on the horizontal axis and \textbf{mean acceleration (m/s$^2$)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
+\task Draw a line graph of your results. Put \textbf{mass added (g)} on the horizontal axis and \textbf{mean friction force (N)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=19cm,
   underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
 \end{tcolorbox}
 
@@ -3190,45 +2988,29 @@ Two quantities are \textbf{directly proportional} if doubling one doubles the ot
 \lessonpart{D}{Above level}{Violet}\label{ext:6}
 
 \begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to interpret your graph, use a formula, or evaluate and extend the method.
+These questions go beyond the Year 7 standard. They ask you to interpret your graph, predict, or use a formula.
 
 \medskip
 \needspace{10\baselineskip}
-\exttask Look at your graph from Task~\ref{task:6.7}.
-\pt{a}Is your line of best fit straight, and does it pass through (or close to) the origin? What does this tell you about force and acceleration?
-\answerbox{2.0cm}
-\pt{b}Calculate the gradient of your line. What does it represent?
-\answerbox{2.0cm}
+\exttask Look at your graph. With no masses added, the friction was not zero. Explain why the block still has friction when nothing is stacked on it, and say what your line of best fit would do if you could make the block lighter and lighter.
+\answerbox{2.6cm}
 
 \needspace{10\baselineskip}
-\exttask For each row of your results, calculate $F \div a$ (pulling force $\div$ mean acceleration).
-\pt{a}What do you notice about your answers?
-\answerbox{2.0cm}
-\pt{b}Use $F = ma$ to explain what $F \div a$ should be equal to.
-\answerbox{2.0cm}
-\pt{c}Compare your values with the total mass of the trolley plus all four 50\,g masses.
-\answerbox{2.0cm}
+\exttask Predict how your results would change if you repeated the experiment with the block sliding on sandpaper instead of the bench. Would the line on your graph be steeper or less steep? Explain.
+\answerbox{2.4cm}
 
-\needspace{20\baselineskip}
-\exttask Combining the two free body diagrams (Figure~\ref{fig:E6.2}) gives a formula for the acceleration of the whole system:
-
-\diagExpTwoSystem
-\expfigcap{Combining both free body diagrams gives the full system equation. When $M \gg m$, the result simplifies to $F = Ma$.}
-
-In this experiment the total mass $M + m$ (the trolley plus all four slotted masses, wherever they sit) is 1.2\,kg.
-\pt{a}Calculate the predicted acceleration when the hanging mass is 100\,g.
-\answerbox{2.0cm}
-\pt{b}Your measured acceleration was probably a little smaller than this. Suggest one reason, and one change to the method that would reduce the difference.
-\answerbox{2.0cm}
-
+\needspace{10\baselineskip}
+\exttask The wooden block has a mass of 0.3\,kg. With 1\,kg of masses on top, the total mass is 1.3\,kg. Use your mean friction force for 1000\,g. If the loaded block were sliding and you let go of the spring balance, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
+\answerbox{3.2cm}
 \needspace{12\baselineskip}
-\exttask Design a second fair test, to find out how the \emph{mass} of the trolley affects its acceleration.
+\exttask Design a fair test to find out whether the \emph{type of surface} changes the friction force on the block.
 \pt{a}Name the independent and dependent variables.
-\answerbox{2.0cm}
-\pt{b}What must you keep the same? Explain how you would keep the pulling force the same.
-\answerbox{2.0cm}
-\pt{c}Predict what you would find, and give a reason using $F = ma$.
-\answerbox{2.0cm}
+\answerbox{1.6cm}
+\pt{b}Name two variables you would keep the same.
+\answerbox{1.6cm}
+\pt{c}Predict what you would find, and give a reason.
+\answerbox{1.8cm}
+
 \end{yr8box}
 
 \newpage

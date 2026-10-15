@@ -750,7 +750,7 @@ Recap slide to `.exit-slide`) are written down there.
         tables to the booklet, then re-derive those chips
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
   - [ ] Quiz + gated solutions *(can defer to a second pass)* — the
-        question bank `questions.js` (Lessons 1–12, 211 questions) landed
+        question bank `questions.js` (Lessons 1–12, 212 questions) landed
         2026-10-15; a standalone `quiz.html` and the gated answer key are
         still to do
   - [x] **Lesson Booklet Lessons 10–12** *(2026-10-15)*: Experiment 4 (lever
@@ -778,9 +778,38 @@ Recap slide to `.exit-slide`) are written down there.
         its question-bank entries, the unit page card and the planner
         match. The sheet's second practical (reducing friction on a ramp)
         is not used anywhere yet.
-  - [ ] Unit Booklet Experiment 1 still tests surface type (bench,
-        sandpaper, fabric, carpet). Port the friction-and-mass version from
-        Lesson 3 of the Lesson Booklet if the Unit Booklet stays in use.
+  - [x] **Experiment 1 is now Everyday Forces; friction and mass moved to
+        Lesson 6 as Experiment 2** *(2026-10-16)*. Lesson 3 follows the
+        school's *Everyday forces* teacher sheet: five workstations (A
+        pushing forces and blowball, B gravitational, C electrostatic, D
+        magnetic, E buoyancy), one page each, in the sheet's order and
+        wording ("pen" corrected to "rod"), with a vocabulary table, the
+        aim and a safety box built from RiskAssess 8122291. No reading and
+        no Part D, so it is 6 pages (pp. 31–36). Lesson 6 is the friction
+        lesson unchanged apart from its numbering (Kodie's We do boxes
+        included); the trolley-and-pulley experiment and its four
+        `\diagExpTwo…` macros are gone, and the friction set-up macro is
+        now `\diagExpTwoSetup`. New helpers `\wsstep` and `\wssafety` for
+        the workstation pages. The booklet is now 144 pp: Lessons 4–5 moved
+        back 3 pages and Lessons 7–12 back 5. Every unchanged box kept its
+        committed fill (ids remapped), only Lessons 3 and 6 were filled, and
+        every unchanged page renders pixel-identical to 3e98f90 apart from
+        the contents page. Deck 3 is new (observation, inference and
+        generalisation; one slide per workstation with answers; a rotation
+        timer); deck 6 is Kodie's friction deck renumbered; chips in decks
+        4–5 and 7–12, the planner page ranges and the unit page cards
+        follow. `questions.js`: Lesson 3 is now everyday forces and the
+        friction questions moved to Lesson 6 (212 questions; other lessons'
+        option order unchanged).
+  - [ ] **RiskAssess 8122291 (Everyday forces 2020) expired on 1 Sep 2021.**
+        Renew it before the workstations run. It lists washers, a Perspex
+        rod and a plastic tub where the teacher sheet has a 20 cent coin, a
+        plastic rod and a bucket; the booklet names both.
+  - [ ] Unit Booklet Experiments 1 and 2 no longer match the Lesson
+        Booklet: its Experiment 1 still tests surface type (bench,
+        sandpaper, fabric, carpet) and its Experiment 2 is the trolley and
+        pulley. Port Everyday Forces and Friction and Mass across if the
+        Unit Booklet stays in use.
   - [x] **Decks 10–12 rebuilt from the Lesson Booklet** *(2026-10-15)*, the
         same way as decks 1–9: review quiz first (Lesson 12's uses
         `data-quiz-exclude="0,11"`, so a class that skipped the optional

@@ -229,7 +229,7 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 3 — Experiment 1: Friction and Mass",
+           "t": "Lesson 3 — Experiment 1: Everyday Forces",
            "h": "year7-science/forces/deck3.html",
            "k": "science"
           },
@@ -244,7 +244,7 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 6 — Experiment 2: Newton’s Second Law",
+           "t": "Lesson 6 — Experiment 2: Friction and Mass",
            "h": "year7-science/forces/deck6.html",
            "k": "science"
           },

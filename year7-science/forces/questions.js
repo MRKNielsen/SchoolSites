@@ -1,6 +1,6 @@
 /* ============================================================
    Forces & Motion — Year 7 Spaced Retrieval Question Bank
-   211 multiple-choice questions tagged by lesson (0–12).
+   212 multiple-choice questions tagged by lesson (0–12).
    Format: { deck: N, q: "question text", opts: ["A","B","C","D"], ans: 0-indexed-int }
    Deck 0 is Lesson 1's warm-up on primary-school ideas, so every
    later deck excludes it (data-quiz-exclude="0").
@@ -61,23 +61,23 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 2, q: "A rocket has 50 000 N of thrust upwards. Its weight is 32 000 N. What is the net force?", opts: ["82 000 N upwards", "32 000 N downwards", "18 000 N downwards", "18 000 N upwards"], ans: 3 },
   { deck: 2, q: "In the tug-of-war reading, what is the real secret to pulling harder?", opts: ["Grip — friction between your shoes and the ground", "Pulling with straight arms and one hand", "Standing up tall and leaning forwards", "Using a longer, thicker rope"], ans: 0 },
 
-  /* ── LESSON 3: Experiment 1 — Friction and Mass ──────────────────────── */
-  { deck: 3, q: "In a fair test, how many variables do you change on purpose?", opts: ["None", "One", "Two", "As many as possible"], ans: 1 },
-  { deck: 3, q: "The variable you change on purpose is called the…", opts: ["controlled variable", "mean", "dependent variable", "independent variable"], ans: 3 },
-  { deck: 3, q: "The variable you measure is called the…", opts: ["independent variable", "controlled variable", "dependent variable", "prediction"], ans: 2 },
-  { deck: 3, q: "In the friction experiment, what was the independent variable?", opts: ["The mass added to the block", "The spring balance", "The number of trials", "The friction force"], ans: 0 },
-  { deck: 3, q: "In the friction experiment, what was the dependent variable?", opts: ["The size of the bench", "The mass added to the block", "The friction force", "The number of trials"], ans: 2 },
-  { deck: 3, q: "Which of these is a controlled variable in the friction experiment?", opts: ["The mean", "Using the same block on the same bench", "The mass added to the block", "The friction force"], ans: 1 },
-  { deck: 3, q: "Why must you pull the block at a STEADY speed?", opts: ["So your pull equals the friction force", "So the block speeds up evenly", "So each trial takes less time", "So the spring balance doesn't get hot"], ans: 0 },
-  { deck: 3, q: "Why do scientists repeat each measurement three times?", opts: ["To use up the lesson", "To add more mass each time", "To make the block lighter", "To make the results more reliable"], ans: 3 },
-  { deck: 3, q: "What is the mean of 1.2 N, 1.4 N and 1.3 N?", opts: ["1.2 N", "1.3 N", "1.4 N", "3.9 N"], ans: 1 },
-  { deck: 3, q: "A group measured 2.1 N, 2.2 N and 3.0 N. Which value looks wrong?", opts: ["2.1 N", "2.2 N", "3.0 N", "None of them"], ans: 2 },
-  { deck: 3, q: "Why does adding mass to the block increase the friction?", opts: ["The block becomes smoother", "The spring balance gets stiffer", "Gravity on the bench gets weaker", "The block presses harder, so the bumps catch more"], ans: 3 },
-  { deck: 3, q: "In the experiment, what happened to the friction force as more mass was added to the block?", opts: ["It got bigger", "It got smaller", "It dropped to zero", "It stayed the same"], ans: 0 },
-  { deck: 3, q: "Which of these is designed to REDUCE friction?", opts: ["The tread on a car tyre", "Oil in an engine", "Grip tape on a skateboard", "The soles of running shoes"], ans: 1 },
-  { deck: 3, q: "Why is it so hard to walk on ice?", opts: ["Ice is magnetic", "Ice pushes you upwards", "There is very little friction to push you forwards", "Ice has extra gravity"], ans: 2 },
-  { deck: 3, q: "Which kind of graph suits mean friction force against the mass added?", opts: ["A map", "A pie chart", "A column graph", "A line graph"], ans: 3 },
-  { deck: 3, q: "What do we call a scientist's reasoned guess about what will happen, made BEFORE the experiment?", opts: ["A prediction", "A variable", "A mean", "A conclusion"], ans: 0 },
+  /* ── LESSON 3: Experiment 1 — Everyday Forces ────────────────────────── */
+  { deck: 3, q: "At Workstation A, you blow on a table tennis ball that is rolling towards you. What happens?", opts: ["It gets heavier", "It slows down", "Nothing happens", "It speeds up"], ans: 1 },
+  { deck: 3, q: "Blowing on a rolling ball from the side makes it…", opts: ["get heavier", "speed up in a straight line", "change direction", "stop spinning"], ans: 2 },
+  { deck: 3, q: "A coin and a flat piece of paper the same size are dropped together. What happens?", opts: ["The coin lands first", "They land at exactly the same time", "Neither of them falls", "The paper lands first"], ans: 0 },
+  { deck: 3, q: "Why does the flat piece of paper fall so slowly?", opts: ["Paper is magnetic", "Gravity does not pull on paper", "The coin pushes the air down on it", "Air resistance pushes up on it, and it has very little weight"], ans: 3 },
+  { deck: 3, q: "The paper is rolled into a ball and dropped with the coin again. Why does it now fall faster?", opts: ["It meets more air resistance", "It meets less air resistance", "It has more mass", "Gravity pulls harder on a ball"], ans: 1 },
+  { deck: 3, q: "A plastic rod is rubbed with wool and held near small bits of paper. What happens?", opts: ["The bits of paper jump up to the rod", "The paper is pushed away along the bench", "The paper turns over", "Nothing happens"], ans: 0 },
+  { deck: 3, q: "Does the charged rod need to touch the paper to move it?", opts: ["Yes — it is a contact force", "Only if the paper is wet", "Only if the rod is made of metal", "No — the electrostatic force acts over a distance"], ans: 3 },
+  { deck: 3, q: "A charged plastic rod is held near a thin stream of tap water. What happens?", opts: ["The water bends away from the rod", "Nothing happens", "The water bends towards the rod", "The water stops flowing"], ans: 2 },
+  { deck: 3, q: "How many of these are NON-contact forces: gravity, magnetic force, electrostatic force, buoyancy force?", opts: ["1", "2", "3", "4"], ans: 2 },
+  { deck: 3, q: "Two bar magnets are pushed together with their north poles facing. What happens?", opts: ["They push apart (repel)", "They pull together (attract)", "They stick together", "Nothing happens"], ans: 0 },
+  { deck: 3, q: "Two magnets have their poles labelled N and S. Which ends attract each other?", opts: ["N and N only", "S and S only", "N and S", "None of them"], ans: 2 },
+  { deck: 3, q: "Which of these is a generalisation?", opts: ["I held one magnet in each hand", "Like magnetic poles repel and unlike poles attract", "The magnets were painted red and blue", "My two magnets pushed apart once"], ans: 1 },
+  { deck: 3, q: "A table tennis ball is pushed to the bottom of a bucket of water and let go. Which force pushes it back up?", opts: ["Friction", "Magnetic force", "Gravity", "The buoyancy force"], ans: 3 },
+  { deck: 3, q: "Which way does the buoyancy force on a ball in water act?", opts: ["Up", "Down", "Sideways", "It has no direction"], ans: 0 },
+  { deck: 3, q: "Which way does gravity pull on a ball held under water?", opts: ["It doesn't pull on things in water", "Sideways", "Up", "Down"], ans: 3 },
+  { deck: 3, q: "What is an inference?", opts: ["A list of the equipment", "An explanation of what you observed, using what you already know", "A step in the method", "A measurement with a unit"], ans: 1 },
 
   /* ── LESSON 4: Newton's First and Third Laws ─────────────────────────── */
   { deck: 4, q: "Newton's First Law says an object at rest will…", opts: ["start moving by itself after a while", "keep speeding up", "stay at rest unless an unbalanced force acts on it", "slowly sink into the ground"], ans: 2 },
@@ -116,22 +116,23 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 5, q: "Why are racing bikes made as light as possible?", opts: ["Less mass means more gravity", "Less mass means more acceleration from the same force", "Light bikes have more weight", "Light bikes have more friction"], ans: 1 },
   { deck: 5, q: "Three people push a broken-down car instead of one. What happens?", opts: ["It speeds up more slowly", "It speeds up more quickly", "Its mass increases", "It stops"], ans: 1 },
 
-  /* ── LESSON 6: Experiment 2 — Newton's Second Law ────────────────────── */
-  { deck: 6, q: "In Experiment 2, what provides the force that pulls the trolley along?", opts: ["The weight of the hanging mass", "A person pushing", "The pulley", "The runway"], ans: 0 },
-  { deck: 6, q: "What does the pulley do in Experiment 2?", opts: ["Measures the acceleration", "Turns the pull from downwards to sideways", "Slows the trolley down", "Adds extra force"], ans: 1 },
-  { deck: 6, q: "In Experiment 2, what is the independent variable?", opts: ["The length of the string", "The trolley's acceleration", "The runway", "The pulling force (the hanging mass)"], ans: 3 },
-  { deck: 6, q: "In Experiment 2, what is the dependent variable?", opts: ["The pulley", "The hanging mass", "The trolley's acceleration", "The total mass"], ans: 2 },
-  { deck: 6, q: "Why are the 50 g masses moved from the trolley to the hanger, instead of adding new ones?", opts: ["To make the string tighter over the pulley", "To keep the total mass the same, so only the force changes", "Because there aren't enough masses to add new ones", "To make the trolley lighter so it goes faster"], ans: 1 },
-  { deck: 6, q: "What is 150 g in kilograms?", opts: ["0.15 kg", "1.5 kg", "15 kg", "150 kg"], ans: 0 },
-  { deck: 6, q: "A 0.150 kg mass hangs on the string. What is the pulling force? (g = 9.8 N/kg)", opts: ["0.15 N", "1.47 N", "9.8 N", "147 N"], ans: 1 },
-  { deck: 6, q: "A 100 g mass hangs on the string. What is the pulling force? (g = 9.8 N/kg)", opts: ["0.098 N", "0.98 N", "9.8 N", "98 N"], ans: 1 },
-  { deck: 6, q: "If F = ma is right, doubling the pulling force (same total mass) should make the acceleration…", opts: ["halve", "stay the same", "drop to zero", "roughly double"], ans: 3 },
-  { deck: 6, q: "How did Galileo slow down falling motion so he could measure it?", opts: ["He used a motion sensor", "He dropped balls from a tall tower", "He rolled balls down a gentle ramp", "He used a stopwatch"], ans: 2 },
-  { deck: 6, q: "How did Galileo measure time without a clock?", opts: ["He weighed the water that flowed out of a container during each roll", "He counted his heartbeats during each roll", "He watched how far the Sun's shadow moved", "He listened for the bells of a nearby church"], ans: 0 },
-  { deck: 6, q: "A group measured 0.81, 0.79 and 0.95 m/s². Which value looks wrong?", opts: ["0.81", "0.79", "0.95", "None of them"], ans: 2 },
-  { deck: 6, q: "Two quantities are directly proportional if…", opts: ["one of them is always zero", "they are always equal", "doubling one halves the other", "doubling one doubles the other"], ans: 3 },
-  { deck: 6, q: "Which graph suits pulling force against acceleration?", opts: ["A line graph", "A pie chart", "A pictograph", "A column graph"], ans: 0 },
-  { deck: 6, q: "Why do you put a buffer block at the end of the runway?", opts: ["To measure the force", "To add mass to the trolley", "To stop the trolley before it crashes into the pulley", "To make the trolley go faster"], ans: 2 },
+  /* ── LESSON 6: Experiment 2 — Friction and Mass ──────────────────────── */
+  { deck: 6, q: "In a fair test, how many variables do you change on purpose?", opts: ["None", "One", "Two", "As many as possible"], ans: 1 },
+  { deck: 6, q: "The variable you change on purpose is called the…", opts: ["independent variable", "controlled variable", "dependent variable", "mean"], ans: 0 },
+  { deck: 6, q: "The variable you measure is called the…", opts: ["controlled variable", "prediction", "dependent variable", "independent variable"], ans: 2 },
+  { deck: 6, q: "In the friction experiment, what was the independent variable?", opts: ["The spring balance", "The friction force", "The number of trials", "The mass added to the block"], ans: 3 },
+  { deck: 6, q: "In the friction experiment, what was the dependent variable?", opts: ["The number of trials", "The friction force", "The mass added to the block", "The size of the bench"], ans: 1 },
+  { deck: 6, q: "Which of these is a controlled variable in the friction experiment?", opts: ["The mean", "The friction force", "Using the same block on the same bench", "The mass added to the block"], ans: 2 },
+  { deck: 6, q: "Why must you pull the block at a STEADY speed?", opts: ["So the block speeds up evenly", "So the spring balance doesn't get hot", "So each trial takes less time", "So your pull equals the friction force"], ans: 3 },
+  { deck: 6, q: "Why do scientists repeat each measurement three times?", opts: ["To make the results more reliable", "To make the block lighter", "To use up the lesson", "To add more mass each time"], ans: 0 },
+  { deck: 6, q: "What is the mean of 1.2 N, 1.4 N and 1.3 N?", opts: ["1.2 N", "1.3 N", "1.4 N", "3.9 N"], ans: 1 },
+  { deck: 6, q: "A group measured 2.1 N, 2.2 N and 3.0 N. Which value looks wrong?", opts: ["2.1 N", "2.2 N", "3.0 N", "None of them"], ans: 2 },
+  { deck: 6, q: "Why does adding mass to the block increase the friction?", opts: ["The block presses harder, so the bumps catch more", "The block becomes smoother", "Gravity on the bench gets weaker", "The spring balance gets stiffer"], ans: 0 },
+  { deck: 6, q: "In the experiment, what happened to the friction force as more mass was added to the block?", opts: ["It got smaller", "It stayed the same", "It got bigger", "It dropped to zero"], ans: 2 },
+  { deck: 6, q: "Which of these is designed to REDUCE friction?", opts: ["The tread on a car tyre", "Grip tape on a skateboard", "The soles of running shoes", "Oil in an engine"], ans: 3 },
+  { deck: 6, q: "Why is it so hard to walk on ice?", opts: ["Ice has extra gravity", "There is very little friction to push you forwards", "Ice pushes you upwards", "Ice is magnetic"], ans: 1 },
+  { deck: 6, q: "Which kind of graph suits mean friction force against the mass added?", opts: ["A pie chart", "A column graph", "A map", "A line graph"], ans: 3 },
+  { deck: 6, q: "What do we call a scientist's reasoned guess about what will happen, made BEFORE the experiment?", opts: ["A prediction", "A variable", "A mean", "A conclusion"], ans: 0 },
 
   /* ── LESSON 7: Energy and Transformation ─────────────────────────────── */
   { deck: 7, q: "What unit is energy measured in?", opts: ["joules (J)", "newtons (N)", "metres (m)", "kilograms (kg)"], ans: 0 },
