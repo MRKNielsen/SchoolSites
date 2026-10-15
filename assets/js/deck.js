@@ -105,6 +105,8 @@
     s.querySelectorAll(".steps > li.shown").forEach(li => li.classList.remove("shown"));
     s.querySelectorAll(".steps").forEach(syncStepBtn);
     s.querySelectorAll("[data-answer-for].shown").forEach(a => { a.classList.remove("shown"); syncAnsBtn(a); });
+    s.querySelectorAll(".frag.on").forEach(f => f.classList.remove("on"));
+    syncFragBtns(s);
   }
   function revealNextFrag(s) {
     const f = s.querySelector(".frag:not(.on)");
