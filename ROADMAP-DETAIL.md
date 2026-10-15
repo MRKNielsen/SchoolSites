@@ -41,6 +41,87 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 7 gated pages.
 
+### Landed — Space booklet Moon phases flipped to southern (15 Oct 2026)
+
+The eight-phase row in booklet §3.1 was drawn for the **Northern
+Hemisphere** — waxing lit on the right. Everything else in the unit was
+already southern and explicit about it: deck 3 uses `orbit.js`, which
+defaults to `data-hemisphere="south"`; worksheet 3 asks for a waxing
+crescent "seen from Melbourne"; the revision worksheet's self-check says
+"waxing = lit on the left"; and the key for W3.6 spells out that a waxing
+Moon is lit on the left here and calls it worth naming explicitly. So the
+one static figure in the unit contradicted the widget, both worksheets and
+the answer key — a student shading from the booklet picture would have
+been marked wrong by the key.
+
+Cause worth recording: `\moonphase`'s second argument was documented as
+`{mirror: 1=waxing, -1=waning}`. Waxing and lit-side are opposite in the
+two hemispheres, so a macro keyed on *waxing* silently bakes in a
+hemisphere. It now takes `{lit side: -1 = left, +1 = right}` and the
+hemisphere is stated once, in the comment above it. Same trap as the
+seasons widget: the parameter that looks like the physics isn't.
+
+Also added a *Which side is lit depends on where you are standing*
+infobox beside the existing misconception box, and the subsection heading
+now reads "as seen from Melbourne".
+
+Rebuilt ×3: still 48 pages, every `\newlabel` page unchanged, all 67 deck
+`.bookref` chips still correct. `Space_Lesson1_Print.tex` was regenerated
+because it carries the preamble verbatim — it never calls `\moonphase`, so
+its committed PDF is byte-identical in rendered text and did not need
+rebuilding. **The unit booklet PDF does, and has not been.**
+
+One accessibility fix in passing: the shading question on
+`worksheet-revision.html` had an `aria-label` reading "(a) waxing crescent
+and (b) waning gibbous" against printed labels of "(a) Waxing gibbous" and
+"(b) Waning crescent" — crescent and gibbous swapped, so a screen-reader
+user got a different question. Label corrected to match what is printed.
+
+### Landed — Trebuchet Investigation booklet + teacher copy (14 Oct 2026)
+
+`year7-science/forces/booklet/Trebuchet_Investigation_Yr7_8.tex` + `.pdf` —
+the culminating investigation (Lessons 15–18) rebuilt as its own 18-page
+booklet, embedded on `forces/trebuchet-investigation.html` and linked from
+the unit index (*Student resources*, and lesson cards 15–18). Same look and
+four-part shape as the Lesson Booklet's experiment lessons, preamble copied
+from it: A Reading (*Warwolf*), B Planning, C Results and analysis, D Above
+level. Kodie's booklet rules apply (no marks, red first rows, 1.5 cm rows).
+
+- **Why it changed.** The old task measured *g* with g = 2h/t² from the
+  release height and the whole flight time. That only holds with zero
+  initial vertical velocity; a trebuchet releases upwards (about 40–50°),
+  so a typical desktop launch (h 0.81 m, t 1.09 s) gives 1.4 m/s² however
+  carefully students work. It also had no real independent variable. Now
+  the IV is counterweight mass (5 levels × 3 launches), DV1 is range, and
+  DV2 is the arm's peak spin from a **PASCO PS-3223** gyroscope strapped
+  to the long arm near the pivot; tip speed v = ω × L ties it to the lever
+  lesson. Measuring g survives only as a Part D drop test of the sensor
+  (`ext:drop`), where the formula does apply because it starts from rest.
+  The old-method critique and a release-pin design task were cut at
+  Kodie's request (14 Oct).
+- **Teacher copy** — `Trebuchet_Investigation_Yr7_8_Teacher.tex` + PDF,
+  **gitignored**, using the Ch3G–3L one-source/two-builds pattern: every
+  box, cell, blank and graph filled in red, then three pages of teacher
+  notes (why it changed, prep, SPARKvue, lesson timing, expected results,
+  an assessment guide by inquiry-skill criterion, misconceptions). There is
+  no gated HTML page for it. Build the student copy first — the teacher
+  build reads its `.abx`, so both paginate identically.
+- **The sample answers are modelled, not measured** — a rigid-arm + sling
+  simulation with pivot friction and drag (0.40/0.10 m arm, 25 g beanbag,
+  600–1000 g). The shape to expect: range close to linear (about 0.8 m per
+  100 g); peak spin up only about 16% and levelling off (the counterweight
+  can't beat free fall, about 19 rad/s on that arm); the projectile leaves
+  at 1.5–2× the tip speed because of the sling. Swap in a real class set
+  once one exists.
+- **Page filling** — `booklet/fill.py` (Python + Pillow + pdftoppm) writes
+  the `.abx` the booklet reads. It leaves 8 mm at every page foot: TeX Live
+  2022 and 2023 set this booklet a few mm apart, and with less slack a box
+  changed page on 2022. Re-run it after any content change.
+- `labs/Trebuchet_Lab_Tech_Sheet` rewritten for the new kit (slotted masses,
+  beanbags, sensors; no cameras or plumb line). `planner.html` weeks 5–6
+  follow the booklet; the summative is judged against the teacher copy's
+  assessment guide, not the old /137 rubric.
+
 ### Landed — Ch8 Probability question booklet (14 Oct 2026)
 
 `10methods-primer/booklet/Ch8_Probability_Question_Booklet.tex` + `.pdf`

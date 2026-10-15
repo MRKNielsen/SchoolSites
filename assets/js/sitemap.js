@@ -313,6 +313,11 @@ window.SITEMAP = {
            "t": "Unit Planner",
            "h": "year7-science/forces/planner.html",
            "k": "science"
+          },
+          {
+           "t": "Trebuchet Investigation",
+           "h": "year7-science/forces/trebuchet-investigation.html",
+           "k": "science"
           }
          ]
         }

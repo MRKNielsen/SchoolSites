@@ -310,7 +310,21 @@
 \newcommand{\moonR}{0.55}   % disc radius (cm)
 \newcommand{\moonGap}{1.71} % centre spacing (cm) — SVG's 112/36 ratio
 
-% {index}{mirror: 1=waxing, -1=waning}{terminator x-radius / R}{label}
+% {index}{lit side: -1 = lit on the LEFT, +1 = lit on the RIGHT}
+% {terminator x-radius / R}{label}
+%
+% The second argument is the side the lit part appears on, NOT whether
+% the phase is waxing — those are opposite in the two hemispheres, and
+% writing the macro the other way round is what produced a northern
+% diagram here while the deck widget, both worksheets and the answer key
+% were all southern. **In Melbourne a waxing Moon is lit on the LEFT**,
+% so the waxing phases take -1 and the waning phases +1. New and Full are
+% symmetric, so their argument is cosmetic; it matches the group beside
+% them so the column reads consistently.
+%
+% The unmirrored shape is lit on the right: the first arc sweeps 90° to
+% -90° (the right semicircle) and the second returns through x = #3*R,
+% so #3 = 1 is New, 0 is a quarter and -1 is Full.
 \newcommand{\moonphase}[4]{%
 	\begin{scope}[shift={(#1*\moonGap,0)}]
 		\fill[moonshadow] (0,0) circle[radius=\moonR cm];
@@ -857,21 +871,26 @@ Apply your knowledge — attempt all three, then we’ll reveal answers:
 \subsection{Why the Moon appears to change shape}\label{sub:3.1}
 
 The Moon does not produce light --- it \vocab{reflects sunlight}. At all times, the half facing the Sun is lit. As the Moon orbits Earth over \textbf{29.5 days}, we see different fractions of the lit half from Earth --- these are the \vocab{phases}.
-\subsubsection{The eight phases (in order)}
+\subsubsection{The eight phases (in order), as seen from Melbourne}
 \begin{center}
 	\begin{tikzpicture}[x=1cm, y=1cm]
-	\moonphase{0}{ 1}{ 1.000}{New}
-	\moonphase{1}{ 1}{ 0.500}{Waxing\\crescent}
-	\moonphase{2}{ 1}{ 0.000}{First\\quarter}
-	\moonphase{3}{ 1}{-0.278}{Waxing\\gibbous}
+	% As seen from Melbourne: waxing is lit on the LEFT (-1).
+	\moonphase{0}{-1}{ 1.000}{New}
+	\moonphase{1}{-1}{ 0.500}{Waxing\\crescent}
+	\moonphase{2}{-1}{ 0.000}{First\\quarter}
+	\moonphase{3}{-1}{-0.278}{Waxing\\gibbous}
 	\moonphase{4}{ 1}{-1.000}{Full}
-	\moonphase{5}{-1}{-0.278}{Waning\\gibbous}
-	\moonphase{6}{-1}{ 0.000}{Third\\quarter}
-	\moonphase{7}{-1}{ 0.500}{Waning\\crescent}
+	\moonphase{5}{ 1}{-0.278}{Waning\\gibbous}
+	\moonphase{6}{ 1}{ 0.000}{Third\\quarter}
+	\moonphase{7}{ 1}{ 0.500}{Waning\\crescent}
 	\node[moonsoft, font=\small] at (3.5*\moonGap,-1.68)
 	{$\leftarrow$ 29.5 days --- one complete lunar cycle $\rightarrow$};
 \end{tikzpicture}
 \end{center}
+
+\begin{infobox}{Which side is lit depends on where you are standing}
+From Australia a \textbf{waxing} Moon is lit on the \textbf{left}, and a \textbf{waning} Moon is lit on the \textbf{right} --- exactly the opposite of most textbook and internet diagrams, which are drawn for the Northern Hemisphere. Nothing about the Moon is different; an observer in Melbourne is simply standing ``upside down'' relative to one in London, so the same lit half is seen rotated by 180$^\circ$. The row above is drawn as you would actually see it from the school yard.
+\end{infobox}
 
 \begin{infobox}{Common misconception}
 Earth's shadow does \textbf{NOT} cause phases. A \vocab{lunar eclipse} (Earth's shadow on the Moon) is a separate, less frequent event. Phases are caused by our changing view of the Moon's lit half.

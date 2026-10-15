@@ -316,7 +316,21 @@
 \newcommand{\moonR}{0.55}   % disc radius (cm)
 \newcommand{\moonGap}{1.71} % centre spacing (cm) — SVG's 112/36 ratio
 
-% {index}{mirror: 1=waxing, -1=waning}{terminator x-radius / R}{label}
+% {index}{lit side: -1 = lit on the LEFT, +1 = lit on the RIGHT}
+% {terminator x-radius / R}{label}
+%
+% The second argument is the side the lit part appears on, NOT whether
+% the phase is waxing — those are opposite in the two hemispheres, and
+% writing the macro the other way round is what produced a northern
+% diagram here while the deck widget, both worksheets and the answer key
+% were all southern. **In Melbourne a waxing Moon is lit on the LEFT**,
+% so the waxing phases take -1 and the waning phases +1. New and Full are
+% symmetric, so their argument is cosmetic; it matches the group beside
+% them so the column reads consistently.
+%
+% The unmirrored shape is lit on the right: the first arc sweeps 90° to
+% -90° (the right semicircle) and the second returns through x = #3*R,
+% so #3 = 1 is New, 0 is a quarter and -1 is Full.
 \newcommand{\moonphase}[4]{%
 	\begin{scope}[shift={(#1*\moonGap,0)}]
 		\fill[moonshadow] (0,0) circle[radius=\moonR cm];
