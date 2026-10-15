@@ -30,6 +30,9 @@
 \definecolor{WoodDark} {HTML}{B8996A}
 \definecolor{Steel}    {HTML}{6B7178}
 \definecolor{Plate}    {HTML}{9AA0A6}
+\definecolor{Alu}      {HTML}{C9CED4}
+\definecolor{Sand}     {HTML}{D8C08A}
+\definecolor{Strap}    {HTML}{3E6C8C}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{3pt}
@@ -95,7 +98,7 @@
 {\LARGE\bfseries\color{Ink} Trebuchet Build Guide --- any scale}\\[3pt]
 {\color{RuleGrey}\rule{\linewidth}{1.2pt}}
 
-This guide builds a counterweight trebuchet at any size, from a desktop model to one that throws a tennis ball 20--30\,m across an oval. \textbf{Every measurement is a multiple of one number, $L$}: the length of the throwing arm, from the centre of the pivot to the release pin. Pick $L$, multiply, and cut. Page~2 has the sizes already worked out for three scales.
+This guide builds a counterweight trebuchet at any size, from a desktop model to one that throws a tennis ball 20--30\,m across an oval. \textbf{Every measurement is a multiple of one number, $L$}: the length of the throwing arm, from the centre of the pivot to the release pin. Pick $L$, multiply, and cut. Page~2 has the sizes already worked out for three scales, and \textbf{pages~8--9 give a complete recommended oval build that throws beanbags 20--30\,m with a wet-sand counterweight.}
 
 \sechead{How it works}
 A heavy counterweight on the short arm falls and swings the long throwing arm up and over. The sling, hanging from the tip of the arm, whips round faster still. One end of the sling is a loop resting on the release pin: when the sling swings far enough round, the loop slides off and the projectile flies free. A tennis ball can leave at two to three times the speed of the arm's tip.
@@ -692,5 +695,158 @@ Axle collars tight \textbullet{} cheek plate screws tight, no cracks near the ho
 \end{center}
 \vspace{-2pt}
 Choose a flat area with the wind \textbf{behind or across} the throw, and make the corridor at least 10\,m wider each side if the wind is gusty. Spotters stand side-on, outside the corridor, and never walk in until the teacher calls ``All clear''. Mark where the ball \textbf{first} lands with a cone or peg, then measure from the 0\,m line along the tape, at right angles to it.
+
+\newpage
+% =====================================================================
+%  PAGES 8-9 -- RECOMMENDED OVAL BUILD: BEANBAGS + WET SAND
+% =====================================================================
+{\LARGE\bfseries\color{Ink} Recommended oval build --- beanbags and wet sand}\\[3pt]
+{\color{RuleGrey}\rule{\linewidth}{1.2pt}}
+
+This is the oval scale ($L = 1000$\,mm) tuned for \textbf{100\,g beanbags} (they barely bounce, so landing marks are easy) and a \textbf{hanging bag of wet sand} as the counterweight. The dimensions came from a computer model that tested arm lengths, arm ratios, sling lengths, hang lengths and beanbag sizes; this combination gave the longest, most reliable throws without overloading the frame. Build pages~2--6 as written, with the changes on these two pages.
+
+\begin{center}
+\begin{tikzpicture}[x=7.2cm, y=7.2cm]
+  \draw[LineGrey] (-0.95,-0.06) -- (0.85,-0.06);
+  \fill[pattern=north east lines, pattern color=RuleGrey] (-0.95,-0.09) rectangle (0.85,-0.06);
+  \pic at (0,0) {frame};
+  % sling and beanbag in trough
+  \coordinate (T) at ($(0,0.85)+(228.6:1)$);
+  \draw[Ink, thin] (T) -- (0.30,0.035);
+  \fill[Ink] (0.33,0.035) ellipse (0.028 and 0.02);
+  % hanging sand bag: stub at P - 0.25u, bag centre 0.30 below
+  \coordinate (S) at ($(0,0.85)+(48.6:0.25)$);
+  \draw[Strap, line width=1.2pt] (S) -- ($(S)+(0,-0.19)$);
+  \fill[Sand, draw=Ink, thin, rounded corners=2pt] ($(S)+(-0.10,-0.19)$) rectangle ($(S)+(0.10,-0.41)$);
+  \node[font=\scriptsize] at ($(S)+(0,-0.30)$) {wet sand};
+  % aluminium arm, uniform section
+  \begin{scope}[shift={(0,0.85)}, rotate=228.6]
+    \fill[Alu, draw=Ink, thin] (-0.30,-0.025) rectangle (1.0,0.025);
+    \fill[Steel, draw=Ink, thin] (-0.25,0) circle (0.012);
+    \draw[Steel, line width=1.1pt] (1.0,0) -- (1.05,0);
+    \fill[white, draw=Ink, thin] (0,0) circle (0.02);
+  \end{scope}
+  % dimensions
+  \draw[ext] (0.06,0.85) -- (0.72,0.85);
+  \draw[dim] (0.68,0) -- (0.68,0.85) node[midway, right, dl] {850};
+  \draw[ext] ($(S)+(0.02,0)$) -- ($(S)+(0.30,0)$);
+  \draw[ext] ($(S)+(0.10,-0.30)$) -- ($(S)+(0.30,-0.30)$);
+  \draw[dim] ($(S)+(0.26,0)$) -- ($(S)+(0.26,-0.30)$) node[midway, right, dl] {hang 300};
+  \node[lbl, anchor=east] (aa) at (-0.38,0.98) {arm: 50$\times$25$\times$2 aluminium\\tube on edge, 1300 long\\$L = 1000$ pivot to pin, $a = 250$};
+  \draw[lead] (aa.east) -- (-0.28,0.55);
+  \node[lbl, anchor=north] (sl) at (-0.15,-0.12) {sling 1000 (tip to pouch centre)};
+  \draw[lead] (sl.north) -- (-0.15,0.06);
+  \node[lbl, anchor=north west] (bb) at (0.36,-0.12) {100\,g sand-filled beanbag};
+  \draw[lead] (0.42,-0.12) -- (0.34,0.02);
+  \draw[ext] (-0.80,-0.06) -- (-0.80,-0.28); \draw[ext] (0.70,-0.06) -- (0.70,-0.28);
+  \draw[dim] (-0.80,-0.25) -- (0.70,-0.25) node[midway, below, dl] {base 1500 long $\times$ 800 wide};
+  \node[lbl, anchor=west] at (-0.95,1.12) {\bfseries Side view, cocked (all sizes in mm)};
+\end{tikzpicture}
+\end{center}
+
+\sechead{What changes from the generic oval build}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{3.3cm} L{4.4cm} Y@{}}
+\toprule
+\textbf{Part} & \textbf{Recommended} & \textbf{Why} \\
+\midrule
+Arm & 50$\times$25$\times$2\,mm aluminium rectangular tube, on edge, 1300 long (about 1.2\,kg with plates) & Lighter and stiffer than pine. A tapered 70$\times$35 pine beam also works but throws about 10\% shorter. \\
+Holes in the arm & 6\,mm aluminium plate each side at the axle and at the hang bolt; a steel sleeve inside the tube at each hole & Stops the thin wall crushing, wearing oval or cracking. \\
+Short arm $a$ & 250 (4\,:\,1) & A 3.3\,:\,1 arm throws about 5\% further but doubles the peak load on the strap. \\
+Counterweight & Wet sand in a bag, \textbf{hanging} 300 below a 16\,mm hang bolt & A hanging weight falls more nearly straight down: about 15\% further than a fixed one. \\
+Gap between uprights & \textbf{350} (not 300) & The bag is about 200 wide and sways a little. \\
+Sling & 1000 long, low-stretch braided cord; pouch about 120 $\times$ 80 & Longer sling suits the light beanbag. \\
+Projectile & 100\,g beanbags filled with dry sand (about 50 across), all identical & Dense beanbags are slowed far less by air than bigger, lighter ones. \\
+Release & Start with the pin straight; aim for a 35--40\textdegree{} launch & The model's best launch angle was 38\textdegree. \\
+\bottomrule
+\end{tabularx}}
+
+\newpage
+\sechead{Counterweight hanger}
+\noindent\begin{minipage}[t]{0.47\linewidth}
+\vspace{0pt}\centering
+\begin{tikzpicture}[x=6.2cm, y=6.2cm]
+  % uprights (dashed, behind) at gap 350
+  \draw[densely dashed, LineGrey] (-0.175,0.62) -- (-0.175,-0.05);
+  \draw[densely dashed, LineGrey] (0.175,0.62) -- (0.175,-0.05);
+  \draw[dim] (-0.175,-0.02) -- (0.175,-0.02) node[midway, below, dl] {gap 350};
+  % arm end-on (25 wide, 50 tall) with plates
+  \fill[Alu, draw=Ink, thin] (-0.0125,0.50) rectangle (0.0125,0.55);
+  \fill[Plate, draw=Ink, thin] (-0.0185,0.49) rectangle (-0.0125,0.56);
+  \fill[Plate, draw=Ink, thin] (0.0125,0.49) rectangle (0.0185,0.56);
+  % hang bolt
+  \fill[Steel, draw=Ink, thin] (-0.06,0.518) rectangle (0.06,0.532);
+  % strap loops from each bolt end to shackle
+  \draw[Strap, line width=1.4pt] (-0.045,0.525) -- (0,0.40);
+  \draw[Strap, line width=1.4pt] (0.045,0.525) -- (0,0.40);
+  \draw[Ink, thick] (0,0.385) circle (0.015);
+  % cradle straps around the bag
+  \fill[Sand, draw=Ink, thin, rounded corners=3pt] (-0.10,0.11) rectangle (0.10,0.33);
+  \draw[Strap, line width=1.4pt] (0,0.37) -- (-0.085,0.33) -- (-0.085,0.11) -- (0.085,0.11) -- (0.085,0.33) -- (0,0.37);
+  \draw[Strap, line width=1.4pt] (0,0.37) -- (-0.03,0.33);
+  \draw[Strap, line width=1.4pt] (0,0.37) -- (0.03,0.33);
+  % hang length
+  \draw[ext] (0.06,0.525) -- (0.29,0.525); \draw[ext] (0.10,0.22) -- (0.29,0.22);
+  \draw[dim] (0.25,0.525) -- (0.25,0.22);
+  \node[lbl, anchor=west] at (0.26,0.37) {300 to the\\bag's centre};
+  % labels
+  \node[lbl, anchor=east] (hb) at (-0.20,0.64) {16\,mm hang bolt,\\nyloc nut and washers};
+  \draw[lead] (hb.east) -- (-0.05,0.53);
+  \node[lbl, anchor=west] (ap) at (0.06,0.64) {arm end-on, with\\6\,mm plates both sides};
+  \draw[lead] (ap.west) -- (0.018,0.555);
+  \node[lbl, anchor=east] (sh) at (-0.20,0.40) {rated shackle};
+  \draw[lead] (sh.east) -- (-0.016,0.385);
+  \node[lbl, anchor=east] (cr) at (-0.20,0.22) {two straps cross\\under the bag\\(a cradle)};
+  \draw[lead] (cr.east) -- (-0.087,0.22);
+  \node[lbl, anchor=west] at (-0.30,0.72) {\bfseries From the front, arm hanging at rest};
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\linewidth}
+\vspace{0pt}
+\begin{itemize}[itemsep=2pt, leftmargin=1.2em, topsep=1pt]
+  \item The bag's fabric must \textbf{not} carry the load. As the bag swings through the bottom it pulls with up to \textbf{six times its weight} --- about 700\,N (70\,kg) for a 12\,kg bag. Sit the bag in a cradle of two straps that cross underneath it and meet at a shackle.
+  \item Use lifting slings or ratchet straps \textbf{rated to at least 500\,kg}, and a rated shackle (stamped with its working load).
+  \item Hang a strap loop over each end of the hang bolt, one on each side of the arm, so the bag hangs centred and the arm is not twisted.
+  \item Set the hang length to 300\,mm from the bolt to the bag's centre. With the arm hanging at rest, the bottom of the bag must clear the base by at least 150\,mm.
+  \item Change bags only with the arm at rest and the safety strap on. \textbf{Never take the bag off while the arm is cocked}: the throwing arm then drops hard.
+\end{itemize}
+\end{minipage}
+
+\sechead{Making the sand bags and beanbags}
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Counterweight bags} (one per level)
+\begin{enumerate}[itemsep=1pt, leftmargin=1.5em, topsep=1pt]
+  \item Weigh damp sand into a heavy-duty plastic bag on bathroom or luggage scales: \textbf{8, 9, 10, 11 and 12\,kg}.
+  \item Squeeze out the air, seal it, and tape it into a firm block (about 200 $\times$ 200 $\times$ 160\,mm for 12\,kg). Loose sand shifts and soaks up energy.
+  \item Put it inside a woven polypropylene sandbag or canvas bag and tape that closed too.
+  \item Write the mass on the bag. Re-weigh on the day: wet sand dries and gets lighter, and the mass is your independent variable.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Beanbags} (make 6, all the same)
+\begin{enumerate}[itemsep=1pt, leftmargin=1.5em, topsep=1pt]
+  \item Weigh 100\,g of \textbf{dry} sand into a small zip-lock bag; squeeze out the air and seal it.
+  \item Put it inside a fabric pouch about 70 $\times$ 70\,mm (or the toe of a thick sock) and sew or tie it tight, so it makes a firm ball about 50\,mm across.
+  \item Check each finished beanbag weighs 100\,g $\pm$ 2\,g.
+  \item Bought beanbags filled with plastic pellets also work: they are bigger for their mass, so expect about 12\% less range.
+\end{enumerate}
+\end{minipage}
+
+\sechead{Expected range (100\,g sand-filled beanbag)}
+{\footnotesize
+\begin{tabularx}{\linewidth}{@{}L{2.6cm} *{7}{Y}@{}}
+\toprule
+\textbf{Wet sand} & 6\,kg & 7\,kg & \textbf{8\,kg} & \textbf{9\,kg} & \textbf{10\,kg} & \textbf{11\,kg} & \textbf{12\,kg} \\
+\midrule
+Plan on & 14\,m & 18\,m & \textbf{21\,m} & \textbf{24\,m} & \textbf{26\,m} & \textbf{29\,m} & \textbf{31\,m} \\
+Best case & 20\,m & 25\,m & 30\,m & 34\,m & 37\,m & 41\,m & 44\,m \\
+Peak arm spin (rad/s) & 6.0 & 6.9 & 7.7 & 8.5 & 9.2 & 9.9 & 10.6 \\
+Peak strap pull & 140\,N & 200\,N & 270\,N & 360\,N & 450\,N & 560\,N & 690\,N \\
+\bottomrule
+\end{tabularx}}
+
+\textbf{Use 8--12\,kg in 1\,kg steps} for the five counterweights: every level should pass 20\,m, and the range climbs steeply, so the pattern is clear. Below about 6\,kg the arm barely flings the beanbag. Don't go above 12\,kg on this frame: the strap load and the arm's swing after release rise fast. Lay out the range corridor \textbf{50\,m long}, for the best case, with the 4\,m exclusion zone from page~7.
+
+\textit{Plan on} is the model's range less 30\% for real-world losses; \textit{best case} is the model with everything tuned. Your first launches at 8\,kg will show which end you are near.
 
 \end{document}
