@@ -670,3 +670,17 @@ input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
   .section-slide { background: #fff; color: var(--ink); }
   .section-slide h1, .section-slide h2 { color: var(--ink); }
 }
+
+/* Countdown timer (deck.js builds the buttons): <div class="timer" data-minutes="15"></div> */
+.timer { display: flex; width: fit-content; align-items: center; gap: 10px; margin-top: 14px; padding: 8px 14px;
+  border: 2px solid var(--accent); border-radius: 999px; background: var(--card, #fff); }
+.timer .t-lbl { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent-dark); }
+.timer .t-time { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 34px; min-width: 3.4em; text-align: center; color: var(--ink); }
+.timer .t-btn { font: inherit; font-weight: 700; font-size: 16px; padding: 6px 14px; border-radius: 999px;
+  border: 1.5px solid var(--accent); background: transparent; color: var(--accent-dark); cursor: pointer; }
+.timer .t-btn[data-t="minus"], .timer .t-btn[data-t="plus"] { width: 38px; padding: 6px 0; font-size: 20px; line-height: 1; }
+.timer .t-go { background: var(--accent); color: #fff; min-width: 5.2em; }
+.timer.up { border-color: #E0533F; animation: timer-flash 1s ease-in-out 6; }
+.timer.up .t-time { color: #E0533F; }
+@keyframes timer-flash { 50% { background: #FDE3DF; } }
+@media print { .timer { display: none; } }

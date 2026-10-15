@@ -269,6 +269,62 @@
     if (Number.isInteger(i) && i >= 0 && i < slides.length) { go(i); e.preventDefault(); }
   });
 
+  /* Countdown timer: <div class="timer" data-minutes="15"></div>
+     Built here so any slide can carry one. − / + change it a minute at a
+     time (also while running); Start/Pause and Reset. At zero it flashes
+     and gives a short beep. It keeps running if you change slide. */
+  document.querySelectorAll(".timer").forEach(el => {
+    let total = Math.max(1, parseInt(el.dataset.minutes, 10) || 10) * 60;
+    let left = total, tick = null;
+    el.innerHTML =
+      '<span class="t-lbl">Timer</span>' +
+      '<button type="button" class="t-btn" data-t="minus" aria-label="One minute less">−</button>' +
+      '<span class="t-time" aria-live="polite"></span>' +
+      '<button type="button" class="t-btn" data-t="plus" aria-label="One minute more">+</button>' +
+      '<button type="button" class="t-btn t-go" data-t="go">Start</button>' +
+      '<button type="button" class="t-btn" data-t="reset">Reset</button>';
+    const shown = el.querySelector(".t-time"), goBtn = el.querySelector(".t-go");
+    const fmt = n => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
+    const draw = () => { shown.textContent = fmt(left); };
+    function beep() {
+      try {
+        const A = window.AudioContext || window.webkitAudioContext, ctx = new A();
+        [0, 0.35, 0.7].forEach(t => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+          g.gain.setValueAtTime(0.25, ctx.currentTime + t);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.3);
+          o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.3);
+        });
+      } catch (e) { /* no audio — the flash is enough */ }
+    }
+    function stop() { clearInterval(tick); tick = null; goBtn.textContent = left ? "Start" : "Done"; }
+    function start() {
+      if (!left) return;
+      el.classList.remove("up"); goBtn.textContent = "Pause";
+      tick = setInterval(() => {
+        left = Math.max(0, left - 1); draw();
+        if (!left) { stop(); el.classList.add("up"); beep(); }
+      }, 1000);
+    }
+    el.addEventListener("click", e => {
+      const b = e.target.closest("[data-t]");
+      if (!b) return;
+      e.stopPropagation(); b.blur();   /* keep Space/arrows for the deck */
+      const t = b.dataset.t;
+      if (t === "go") { tick ? stop() : start(); }
+      else if (t === "reset") { stop(); left = total; el.classList.remove("up"); goBtn.textContent = "Start"; }
+      else {
+        const d = t === "plus" ? 60 : -60;
+        total = Math.min(99 * 60, Math.max(60, total + d));
+        left = tick ? Math.min(99 * 60, Math.max(1, left + d)) : total;
+        el.classList.remove("up"); if (!tick) goBtn.textContent = "Start";
+      }
+      draw();
+    });
+    draw();
+  });
+
   /* Init: honour #n in URL, set chrome */
   const fromHash = parseInt(location.hash.slice(1), 10);
   slides.forEach(s => s.classList.remove("active"));
