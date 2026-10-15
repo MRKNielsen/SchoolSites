@@ -1231,6 +1231,43 @@
   \end{tcolorbox}\vspace{2pt}}
 
 
+% ── Experiment 1: pulling a loaded wooden block along the bench with a spring balance ──
+\newcommand{\diagExpOneSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.18cm, y=1.18cm]
+  % bench
+  \fill[ground hatch] (0,-0.35) rectangle (13,0);
+  \draw[thick, DarkGrey] (0,0) -- (13,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.05,-0.18) {bench top};
+  % wooden block with a hook on its left face
+  \draw[fill=GoldLight, draw=GoldDark, thick] (7.2,0) rectangle (10.2,1.3);
+  \foreach \y in {0.35,0.7,1.0} { \draw[GoldDark!45] (7.35,\y) .. controls (8.2,\y+0.08) and (9.2,\y-0.08) .. (10.05,\y); }
+  \draw[DarkGrey, thick] (7.2,0.65) -- (6.95,0.65);
+  \draw[DarkGrey, thick] (6.85,0.65) circle (0.1);
+  % two 200 g slotted masses on top
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.3) rectangle (9.5,1.62);
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.62) rectangle (9.5,1.94);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.46) {200\,g};
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.78) {200\,g};
+  % spring balance, hooked to the block
+  \draw[fill=white, draw=DarkGrey, thick, rounded corners=3pt] (2.6,0.42) rectangle (6.1,0.88);
+  \foreach \x in {3.0,3.25,...,5.5} { \draw[DarkGrey] (\x,0.42) -- (\x,0.56); }
+  \draw[red!65!black, very thick] (4.6,0.42) -- (4.6,0.88);
+  \draw[DarkGrey, thick] (6.1,0.65) -- (6.75,0.65);
+  \draw[DarkGrey, thick] (2.45,0.65) circle (0.15);
+  % pull and friction
+  \draw[force arrow, red!65!black] (2.25,0.65) -- (0.6,0.65);
+  \draw[force arrow, TealGreen] (10.2,0.12) -- (12.0,0.12);
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (1.4,0.8) {pull steadily};
+  \node[font=\small\bfseries, text=TealGreen, anchor=south] at (11.4,0.25) {friction};
+  \node[font=\small\bfseries, text=DarkGrey, anchor=south west] at (2.55,0.92) {spring balance (or force sensor)};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south] at (8.7,2.0) {200\,g masses};
+  \node[font=\small\bfseries, text=GoldDark, anchor=north] at (8.7,-0.45) {wooden block with a hook};
+\end{tikzpicture}
+\end{center}}
+
+
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON STRUCTURE (lesson booklet, Oct 2026)
 %  Every lesson runs in the same four parts, in this order:
@@ -1405,7 +1442,7 @@ Experiment lessons follow the same four parts: a reading about the science, plan
   \thead{Lesson} & \thead{Title} & \thead{Page} \\ \hline
   \talt 1 & What is a Force? & p.\ \pageref{sec:1} \\ \hline
         2 & Force Diagrams and Net Force & p.\ \pageref{sec:2} \\ \hline
-  \talt 3 & Experiment 1 --- Investigating Friction & p.\ \pageref{sec:3} \\ \hline
+  \talt 3 & Experiment 1 --- Friction and Mass & p.\ \pageref{sec:3} \\ \hline
         4 & Newton's First and Third Laws & p.\ \pageref{sec:4} \\ \hline
   \talt 5 & Newton's Second Law: $F = ma$ & p.\ \pageref{sec:5} \\ \hline
         6 & Experiment 2 --- Investigating Newton's Second Law & p.\ \pageref{sec:6} \\ \hline
@@ -1978,9 +2015,9 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \end{yr8box}
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
-%  LESSON 3 — EXPERIMENT 1: INVESTIGATING FRICTION                (Week 1 · P3)
+%  LESSON 3 — EXPERIMENT 1: FRICTION AND MASS                     (Week 1 · P3)
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Experiment 1: Investigating Friction}{Prediction \textbullet{} Fair testing \textbullet{} Repeat trials \textbullet{} Means}\label{sec:3}\label{exp:1}
+\sectiondiv{Experiment 1: Friction and Mass}{Prediction \textbullet{} Fair testing \textbullet{} Adding mass \textbullet{} Repeat trials and means}\label{sec:3}\label{exp:1}
 \lessoncodes{VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05}
 
 % ─── PART A ───────────────────────────────────────────────────────────────────
@@ -1989,23 +2026,23 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \begin{readingbox}{Reading --- Grip}
 Friction is the force that makes walking possible. With every step, your shoe pushes backwards against the ground, and friction pushes you forwards. On ice, where friction is tiny, your foot slips backwards and you go nowhere.
 
-Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Rougher surfaces have bigger bumps that catch more, so they produce more friction. Pressing the surfaces together harder also increases friction.
+Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Press the surfaces together harder and the bumps push further into each other and catch more, so the friction is bigger. That is why a full box is harder to slide across the floor than an empty one.
 
 Sometimes engineers want as much friction as possible --- in the rubber of a car tyre, the soles of running shoes or the grip tape on a skateboard. Other times they want as little as possible: oil in an engine and wax on skis reduce friction, so parts slide easily and less energy is wasted as heat.
 
-In this experiment you will measure friction with a spring scale. When you pull a block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring scale is equal to the friction force.
+In this experiment you will measure friction with a spring balance, then add masses to a wooden block so it presses harder on the bench. When you pull the block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring balance is equal to the friction force.
 \end{readingbox}
 
 \rcreset
 \rcq{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
-\rcq{Why do rougher surfaces produce more friction? Use the word \emph{bumps} in your answer.}{1.6cm}
+\rcq{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{1.6cm}
 \rcq{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
-\rcq{Why must the block move at a \emph{steady} speed when you read the spring scale?}{1.8cm}
+\rcq{Why must the block move at a \emph{steady} speed when you read the spring balance?}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:3}
 
-\begin{expheader}{1}{Investigating Friction}{To investigate how the type of surface affects the friction force on a sliding object.}
+\begin{expheader}{1}{Friction and Mass}{To investigate how increasing mass affects the size of friction.}
 \medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05
 \end{expheader}
 
@@ -2035,24 +2072,28 @@ A student rolls a toy car down a ramp at different heights and measures how far 
 \end{workedex}
 
 \begin{scaffold}{Prediction --- before you begin}
-Which surface do you think will produce the most friction? Why?
+What do you think will happen to the friction force as you add more mass to the block? Why?
 \answerbox{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
-Wooden block (or heavy book) \quad Spring scale (newton meter) \quad 3+ surfaces (bench, sandpaper, fabric, carpet) \quad Ruler
+Wooden block with a hook \quad Spring balance (spring scale) or force sensor \quad Five 200\,g masses
 
 \subsubsection*{Method}
 \begin{enumerate}[itemsep=2pt]
-  \item Place the wooden block on the first surface.
-  \item Attach the spring scale to the block. Pull slowly and steadily.
-  \item Read the spring scale while the block moves at a steady speed. Record the friction force in newtons.
-  \item Repeat 3 times for this surface and record all values.
-  \item Repeat steps 1--4 for each surface.
+  \item Place the wooden block on the bench top.
+  \item Attach the spring balance to the hook on the block, as shown in Figure~E\ref{fig:exp1-setup}.
+  \item Pull the block slowly, so it keeps moving at a steady speed. Read the force on the spring balance --- this is equal to the friction. Record it in your results table.
+  \item Repeat step 3 twice more, so you have three results.
+  \item Add a 200\,g mass on top of the block. Measure the friction three times and record the results.
+  \item Repeat the friction measurements with 400, 600, 800 and 1000\,g (1\,kg) on the block. Record three results for each.
 \end{enumerate}
 
+\diagExpOneSetup
+\expfigcap{Measuring friction. Pull the spring balance level with the bench, and read it while the block slides at a steady speed.}\label{fig:exp1-setup}
+
 \begin{infobox}{Safety}
-Pull gently and keep the scale in line with the block --- a spring scale that is overstretched can snap back. Keep sandpaper away from eyes and skin.
+Pull gently and keep the spring balance in line with the block --- a spring balance that is overstretched can snap back. Stack the masses carefully so they cannot slide off, and keep your feet clear of the bench edge.
 \end{infobox}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -2062,66 +2103,71 @@ Pull gently and keep the scale in line with the block --- a spring scale that is
 
 \begin{ctab}
 \begin{tabular}{|SW{3.6cm}|Z{2.4cm}|Z{2.4cm}|Z{2.4cm}|Z{2.8cm}|}
-  \hd & \thead{Surface} & \thead{Trial 1 (N)} & \thead{Trial 2 (N)} & \thead{Trial 3 (N)} & \thead{Mean (N)} \\ \hline
-  & \scaf{e.g.\ Bench} & \scaf{1.2} & \scaf{1.4} & \scaf{1.3} & \scaf{1.3} \\ \hline
-  & & & & & \\ \hline
-  & & & & & \\ \hline
-  & & & & & \\ \hline
-  & & & & & \\ \hline
+  \hd & \thead{Mass added (g)} & \thead{Friction, test 1 (N)} & \thead{Friction, test 2 (N)} & \thead{Friction, test 3 (N)} & \thead{Mean (N)} \\ \hline
+  & \scaf{e.g.\ 0 (block only)} & \scaf{0.8} & \scaf{1.0} & \scaf{0.9} & \scaf{0.9} \\ \hline
+  & 0 (block only) & & & & \\ \hline
+  & 200 & & & & \\ \hline
+  & 400 & & & & \\ \hline
+  & 600 & & & & \\ \hline
+  & 800 & & & & \\ \hline
+  & 1000 & & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
 \begin{infobox}{Calculating a mean}
-Add the trials, then divide by how many there are. For 1.2\,N, 1.4\,N and 1.3\,N: \quad $(1.2 + 1.4 + 1.3) \div 3 = 3.9 \div 3 = \mathbf{1.3\ \text{N}}$
+Add the tests, then divide by how many there are. For 0.8\,N, 1.0\,N and 0.9\,N: \quad $(0.8 + 1.0 + 0.9) \div 3 = 2.7 \div 3 = \mathbf{0.9\ \text{N}}$
 \end{infobox}
 
 \needspace{10\baselineskip}
 \task Identify the independent variable, the dependent variable, and two controlled variables in \emph{your} experiment.
-\answerbox{2.6cm}
-
-\needspace{10\baselineskip}
-\task Which surface produced the greatest friction? Which produced the least? Was your prediction correct?
-\answerbox{2.2cm}
-
-\needspace{10\baselineskip}
-\task Why did you take three trials for each surface? What did you do with the three values?
-\answerbox{2.2cm}
-
-\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N on carpet. Calculate the mean.}{2.2cm}
-         {A group measured 1.8\,N, 1.9\,N and 2.9\,N on fabric. Which value looks wrong? Find the mean of the other two.}{2.2cm}
-
-\needspace{10\baselineskip}
-\task Rough surfaces are covered in bigger bumps, which catch on each other and resist sliding. Use this idea to explain \emph{why} the surface that gave the most friction in your experiment did so.
-\answerbox{2.2cm}
-
-% ─── PART D ───────────────────────────────────────────────────────────────────
-\needspace{20\baselineskip}
-\task Draw a column graph of the \emph{mean} friction force for each surface you tested. Put the surfaces on the horizontal axis and \textbf{friction force (N)} on the vertical axis. Give your graph a title.
-
-\vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
-
-\lessonpart{D}{Above level}{Violet}\label{ext:3}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to evaluate the method, predict, or use a formula.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask Even on the same surface, your three readings were probably not identical. Suggest one reason why, and one change to the method that would make the readings more consistent.
-\answerbox{2.6cm}
-
-\needspace{10\baselineskip}
-\exttask Predict what would happen to the friction force if you stacked a second block on top of the first. Explain your prediction.\par\noindent\textit{Hint: pressing two surfaces together harder makes their bumps catch more.}
 \answerbox{2.4cm}
 
 \needspace{10\baselineskip}
-\exttask The wooden block has a mass of 0.3\,kg. Choose your highest mean friction force. If the block were sliding and you let go of the spring scale, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
+\task What happened to the size of the friction force as the mass on the block increased? Was your prediction correct?
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\task
+\pt{a}Why did you take three results for each mass?
+\pt{b}Identify one error or mistake that could have affected your results.
+\pt{c}Propose one improvement to the design of the experiment.
+\answerbox{2.4cm}
+
+\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean.}{2.2cm}
+         {A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.}{2.2cm}
+
+\needspace{10\baselineskip}
+\task Use the idea of \emph{bumps} pressing together to explain your results. Then describe a situation in everyday life where you have noticed this link between friction and mass.
+\answerbox{2.4cm}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{mass added (g)} on the horizontal axis and \textbf{mean friction force (N)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=19cm,
+  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+\end{tcolorbox}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:3}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. They ask you to interpret your graph, predict, or use a formula.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Look at your graph. With no masses added, the friction was not zero. Explain why the block still has friction when nothing is stacked on it, and say what your line of best fit would do if you could make the block lighter and lighter.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask Predict how your results would change if you repeated the experiment with the block sliding on sandpaper instead of the bench. Would the line on your graph be steeper or less steep? Explain.
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\exttask The wooden block has a mass of 0.3\,kg. With 1\,kg of masses on top, the total mass is 1.3\,kg. Use your mean friction force for 1000\,g. If the loaded block were sliding and you let go of the spring balance, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
 \answerbox{3.2cm}
 \needspace{12\baselineskip}
-\exttask Design a fair test to find out whether the \emph{mass} of the block changes the friction force on the bench.
+\exttask Design a fair test to find out whether the \emph{type of surface} changes the friction force on the block.
 \pt{a}Name the independent and dependent variables.
 \pt{b}Name two variables you would keep the same.
 \pt{c}Predict what you would find, and give a reason.

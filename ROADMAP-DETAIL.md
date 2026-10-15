@@ -678,6 +678,19 @@ Recap slide to `.exit-slide`) are written down there.
         Its `\readingFive` also credits Aristotle with "impetus" and
         cannonballs; Lesson 12's reading replaces it (Tartaglia 1537,
         Galileo 1638).
+  - [x] **Lesson 3 / Experiment 1 is now friction and mass** *(2026-10-15)*,
+        following the school's *Practical 1: Friction and Mass* sheet: same
+        aim, equipment (wooden block with a hook, spring balance or force
+        sensor, 200 g masses) and method (three results each with 0–1000 g
+        on the block), plus a set-up diagram and a line graph. Booklet
+        Lesson 3 still fills pp. 23–29 with the same writing-box ids, so
+        every other page and every later deck chip is unchanged. Deck 3,
+        its question-bank entries, the unit page card and the planner
+        match. The sheet's second practical (reducing friction on a ramp)
+        is not used anywhere yet.
+  - [ ] Unit Booklet Experiment 1 still tests surface type (bench,
+        sandpaper, fabric, carpet). Port the friction-and-mass version from
+        Lesson 3 of the Lesson Booklet if the Unit Booklet stays in use.
   - [x] **Decks 10–12 rebuilt from the Lesson Booklet** *(2026-10-15)*, the
         same way as decks 1–9: review quiz first (Lesson 12's uses
         `data-quiz-exclude="0,11"`, so a class that skipped the optional

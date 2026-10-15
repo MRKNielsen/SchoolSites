@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-14",
+ "generated": "2026-10-15",
  "tree": [
   {
    "t": "Home",
@@ -229,7 +229,7 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 3 — Experiment 1: Investigating Friction",
+           "t": "Lesson 3 — Experiment 1: Friction and Mass",
            "h": "year7-science/forces/deck3.html",
            "k": "science"
           },

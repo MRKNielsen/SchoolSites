@@ -61,22 +61,22 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 2, q: "A rocket has 50 000 N of thrust upwards. Its weight is 32 000 N. What is the net force?", opts: ["82 000 N upwards", "32 000 N downwards", "18 000 N downwards", "18 000 N upwards"], ans: 3 },
   { deck: 2, q: "In the tug-of-war reading, what is the real secret to pulling harder?", opts: ["Grip — friction between your shoes and the ground", "Pulling with straight arms and one hand", "Standing up tall and leaning forwards", "Using a longer, thicker rope"], ans: 0 },
 
-  /* ── LESSON 3: Experiment 1 — Investigating Friction ─────────────────── */
+  /* ── LESSON 3: Experiment 1 — Friction and Mass ──────────────────────── */
   { deck: 3, q: "In a fair test, how many variables do you change on purpose?", opts: ["None", "One", "Two", "As many as possible"], ans: 1 },
   { deck: 3, q: "The variable you change on purpose is called the…", opts: ["controlled variable", "mean", "dependent variable", "independent variable"], ans: 3 },
   { deck: 3, q: "The variable you measure is called the…", opts: ["independent variable", "controlled variable", "dependent variable", "prediction"], ans: 2 },
-  { deck: 3, q: "In the friction experiment, what was the independent variable?", opts: ["The type of surface", "The spring scale", "The number of trials", "The friction force"], ans: 0 },
-  { deck: 3, q: "In the friction experiment, what was the dependent variable?", opts: ["The size of the block", "The type of surface", "The friction force", "The number of trials"], ans: 2 },
-  { deck: 3, q: "Which of these is a controlled variable in the friction experiment?", opts: ["The mean", "Using the same block every time", "The type of surface", "The friction force"], ans: 1 },
-  { deck: 3, q: "Why must you pull the block at a STEADY speed?", opts: ["So your pull equals the friction force", "So the block speeds up evenly", "So each trial takes less time", "So the spring scale doesn't get hot"], ans: 0 },
-  { deck: 3, q: "Why do scientists repeat each measurement three times?", opts: ["To use up the lesson", "To change the surface each time", "To make the block lighter", "To make the results more reliable"], ans: 3 },
+  { deck: 3, q: "In the friction experiment, what was the independent variable?", opts: ["The mass added to the block", "The spring balance", "The number of trials", "The friction force"], ans: 0 },
+  { deck: 3, q: "In the friction experiment, what was the dependent variable?", opts: ["The size of the bench", "The mass added to the block", "The friction force", "The number of trials"], ans: 2 },
+  { deck: 3, q: "Which of these is a controlled variable in the friction experiment?", opts: ["The mean", "Using the same block on the same bench", "The mass added to the block", "The friction force"], ans: 1 },
+  { deck: 3, q: "Why must you pull the block at a STEADY speed?", opts: ["So your pull equals the friction force", "So the block speeds up evenly", "So each trial takes less time", "So the spring balance doesn't get hot"], ans: 0 },
+  { deck: 3, q: "Why do scientists repeat each measurement three times?", opts: ["To use up the lesson", "To add more mass each time", "To make the block lighter", "To make the results more reliable"], ans: 3 },
   { deck: 3, q: "What is the mean of 1.2 N, 1.4 N and 1.3 N?", opts: ["1.2 N", "1.3 N", "1.4 N", "3.9 N"], ans: 1 },
   { deck: 3, q: "A group measured 2.1 N, 2.2 N and 3.0 N. Which value looks wrong?", opts: ["2.1 N", "2.2 N", "3.0 N", "None of them"], ans: 2 },
-  { deck: 3, q: "Why do rough surfaces make more friction?", opts: ["They are heavier", "They are always wet", "They have less gravity", "Their bumps catch on each other more"], ans: 3 },
-  { deck: 3, q: "Which of these is designed to INCREASE friction?", opts: ["The rubber tread on a car tyre", "Oil in an engine", "A smooth ice rink", "Wax on skis"], ans: 0 },
+  { deck: 3, q: "Why does adding mass to the block increase the friction?", opts: ["The block becomes smoother", "The spring balance gets stiffer", "Gravity on the bench gets weaker", "The block presses harder, so the bumps catch more"], ans: 3 },
+  { deck: 3, q: "In the experiment, what happened to the friction force as more mass was added to the block?", opts: ["It got bigger", "It got smaller", "It dropped to zero", "It stayed the same"], ans: 0 },
   { deck: 3, q: "Which of these is designed to REDUCE friction?", opts: ["The tread on a car tyre", "Oil in an engine", "Grip tape on a skateboard", "The soles of running shoes"], ans: 1 },
   { deck: 3, q: "Why is it so hard to walk on ice?", opts: ["Ice is magnetic", "Ice pushes you upwards", "There is very little friction to push you forwards", "Ice has extra gravity"], ans: 2 },
-  { deck: 3, q: "Which kind of graph suits the mean friction force for each surface?", opts: ["A map", "A pie chart", "A line graph", "A column graph"], ans: 3 },
+  { deck: 3, q: "Which kind of graph suits mean friction force against the mass added?", opts: ["A map", "A pie chart", "A column graph", "A line graph"], ans: 3 },
   { deck: 3, q: "What do we call a scientist's reasoned guess about what will happen, made BEFORE the experiment?", opts: ["A prediction", "A variable", "A mean", "A conclusion"], ans: 0 },
 
   /* ── LESSON 4: Newton's First and Third Laws ─────────────────────────── */
