@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026. Last addition: 17 Oct 2026 (Applied Computing Unit 1 dataset + decks T1–T2).
+Last full audit: 16 Aug 2026. Last addition: 17 Oct 2026 (Applied Computing Unit 1 AOS 1 — dataset + all 16 decks).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -28,7 +28,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
 | year11-methods | **Built, on debt** | `chapter-9` (7 decks), `chapter-11` (2 decks) — still inline styles |
-| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and decks T1–T2 of 62. No workbooks or assessments yet |
+| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and **all 16 AOS 1 decks** (154 slides). No workbooks, worksheets or assessments yet |
 | year7-mathematics | Stub | — |
 | year8-mathematics | Stub | — |
 | year9-mathematics | Stub | — |
@@ -146,6 +146,39 @@ a placeholder file in a repo whose rules forbid them.
 
 Remaining in Unit 1 AOS 1: decks T3–T16, eight marimo workbooks, eight
 worksheets, the booklet and the Outcome 1 task.
+
+### Landed — Unit 1 AOS 1 decks complete (17 Oct 2026)
+
+All sixteen Area of Study 1 decks are built and wired into the hub week
+cards, 154 slides in total. Every key-knowledge dot-point in Outcome 1 is
+covered by exactly one deck.
+
+Built to Kodie's house style throughout: a key-vocabulary starter slide
+opens every lesson, every **I do** worked example is followed by a **We do**
+question, and there are no *You do* blocks. Current chrome on all of them
+(slide-jump menu, "reveals then advances" keyhint, empty `.counter`).
+
+**The decks are generated, not hand-typed.** A small generator held the
+boilerplate so house style is byte-identical across all sixteen; the content
+is authored per deck. The generator lives with the staff material, not in
+this repo — it is a one-off, not a tool anyone needs to maintain.
+
+Two verification steps worth repeating for any later deck set:
+
+- **Every SQL query in T12–T14 was run against `climate.db` before shipping.**
+  Thirteen queries, all returning the rows the slide implies. A deck that
+  teaches a query which does not run is worse than no deck.
+- **Every quoted statistic was recomputed from the dataset.** This caught one
+  error — T15 claimed Mildura had 56 rain days, a figure from before the
+  dataset was recalibrated against Bureau normals. It has 76.
+
+One honesty fix: T4's worked example shows a row carrying six faults at once.
+No real row in the extract is that bad (checked — none carries even three),
+so the slide now says plainly that the row is constructed from six faults
+that are genuinely in the file.
+
+Remaining in Unit 1 AOS 1: eight marimo workbooks, eight worksheets, the
+booklet and the Outcome 1 task.
 
 ### Source material that exists but isn't ported
 
@@ -405,7 +438,7 @@ re-earn it.
       Unit 2 AOS 1 project scaffolding and AOS 2 cyber security decks
       plus the teacher-provided case study. Unit 1 is the half to build
       first — it is taught in Semester 1. *(in progress — Kodie, 17 Oct 2026)*
-      Dataset and decks T1–T2 landed 17 Oct 2026; see Part 1.
+      Dataset and all 16 AOS 1 decks landed 17 Oct 2026; see Part 1.
 
 **Ordering note:** don't take a Tier 4 subject purely because it's next
 alphabetically. Prefer whichever you're actually teaching, or whichever

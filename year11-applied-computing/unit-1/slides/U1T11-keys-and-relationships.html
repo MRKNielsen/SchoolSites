@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T11 &middot; Keys and Relationships | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 11</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>Keys and Relationships</h1>
+    <p class="subtitle">Primary keys, foreign keys, and the setting that silently lets your database break.</p>
+    <div class="head-meta">
+      <span class="pill">Choose a primary key</span>
+      <span class="pill">Explain a foreign key</span>
+      <span class="pill">Turn on referential integrity</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>primary key</li>
+          <li>foreign key</li>
+          <li>referential integrity</li>
+          <li>orphan record</li>
+          <li>composite key</li>
+          <li>naming convention</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">One of these words will cost you marks</span>
+          <p><em>Referential integrity</em>. It means the relationships actually hold &mdash; and in SQLite it is switched off until you switch it on.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Primary keys">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>The field that identifies the record</h2>
+    <div class="cols">
+      <div>
+        <p>A <b>primary key</b> uniquely identifies one record. No two rows share it, and it is never empty.</p>
+        <p>In our data:</p>
+        <ul>
+          <li><code>region.region_id</code></li>
+          <li><code>station.station_id</code> &mdash; the real Bureau station number</li>
+          <li><code>observation.obs_id</code></li>
+        </ul>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">Natural or surrogate?</span>
+          <p><code>station_id</code> is a <b>natural key</b> &mdash; it already meant something before we had a database.</p>
+          <p><code>obs_id</code> is a <b>surrogate key</b> &mdash; invented, meaningless, and reliable precisely because it means nothing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Foreign keys">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>The field that points at another table</h2>
+    <div class="cols">
+      <div>
+        <p>A <b>foreign key</b> holds the primary key of a different table. That is the whole mechanism of a relational database.</p>
+        <p><code>observation.station_id</code> is a foreign key pointing at <code>station.station_id</code>.</p>
+        <p><code>station.region_id</code> points at <code>region.region_id</code>.</p>
+      </div>
+      <div>
+        <div class="box defn">
+          <span class="lbl">One to many</span>
+          <p>One region has many stations. One station has many observations.</p>
+          <p>The foreign key always lives on the <em>many</em> side. A station does not list its 365 observations; each observation names its station.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Referential integrity">
+    <p class="eyebrow">The one to remember</p>
+    <h2>SQLite will not enforce this unless you ask</h2>
+    <div class="cols">
+      <div>
+        <p>Declaring a foreign key is a <em>statement of intent</em>. Enforcing it is a separate switch, and it is off by default.</p>
+        <p>With it off, this works:</p>
+        <p><code>INSERT INTO observation VALUES (9999, 404, '2025-06-01', 8.0, 15.0, 0.0, 70);</code></p>
+        <p>Station 404 does not exist. The row goes in anyway, and you now have an <b>orphan record</b>.</p>
+      </div>
+      <div>
+        <div class="box try">
+          <span class="lbl">Switch it on, every session</span>
+          <p><code>PRAGMA foreign_keys = ON;</code></p>
+          <p>Put it at the top of every script. With it on, the same insert fails with <em>FOREIGN KEY constraint failed</em> &mdash; which is what you want.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="I do — choosing a key">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> What identifies an observation?</h2>
+    <div class="cols">
+      <div>
+        <ol class="steps" id="t11ido">
+          <li><span class="stepno">1</span> Could <code>obs_date</code> be the key? No &mdash; six stations share every date.</li>
+          <li><span class="stepno">2</span> Could <code>station_id</code>? No &mdash; each station has 365 rows.</li>
+          <li><span class="stepno">3</span> Could <code>station_id</code> <em>and</em> <code>obs_date</code> together? Yes. One station records one observation per day.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> That pair is a <b>composite key</b>. Our table uses a surrogate <code>obs_id</code> instead, and enforces the pair as a UNIQUE constraint.</li>
+        </ol>
+        <button class="reveal-btn" data-target="#t11ido">Work it through</button>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">Why both</span>
+          <p>The surrogate key makes joins simple. The unique constraint on the pair still stops the same station recording two observations for one day &mdash; which is what actually goes wrong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — key or not?">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Would this work as a primary key?</h2>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. Student surname</p>
+          <p class="a"><b>No &mdash; surnames repeat, and can change</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. Student ID issued by the school</p>
+          <p class="a"><b>Yes &mdash; unique, never empty, never reused</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. Email address</p>
+          <p class="a"><b>Usually &mdash; but it changes, and every row referencing it must change too</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="box hint">
+          <span class="lbl">The hidden cost in number 3</span>
+          <p>A key that can change has to be updated everywhere it is referenced. That is why surrogate keys exist.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Naming conventions">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Consistent naming is assessed</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Element</th><th>Convention</th><th>Ours</th></tr>
+      </thead>
+      <tbody>
+      <tr><td>Table</td><td>Singular, lower case</td><td><code>station</code>, not <code>Stations</code></td></tr>
+      <tr><td>Column</td><td>lower_snake_case</td><td><code>max_temp_c</code></td></tr>
+      <tr><td>Primary key</td><td><code>&lt;table&gt;_id</code></td><td><code>station_id</code></td></tr>
+      <tr><td>Foreign key</td><td>Same name as the key it points at</td><td><code>observation.station_id</code></td></tr>
+      <tr><td>Units</td><td>In the name where it helps</td><td><code>rainfall_mm</code>, <code>elevation_m</code></td></tr>
+      </tbody>
+    </table>
+    <p class="note">Putting the unit in the column name is the cheapest documentation there is. Nobody has to ask whether rainfall is in millimetres.</p>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>What two rules must a primary key obey?</li>
+        <li>Which table holds the foreign key in a one-to-many relationship?</li>
+        <li>Write the line that turns on referential integrity in SQLite.</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 11 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

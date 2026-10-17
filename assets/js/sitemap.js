@@ -161,6 +161,16 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
+           "t": "Unit Planner",
+           "h": "year7-science/bio-ecosystems/planner.html",
+           "k": "science"
+          },
+          {
+           "t": "Research Portfolio Answers",
+           "h": "year7-science/bio-ecosystems/portfolio-solutions.html",
+           "k": "science"
+          },
+          {
            "t": "Retrieval Quiz",
            "h": "year7-science/bio-ecosystems/quiz.html",
            "k": "science"
@@ -171,9 +181,8 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Rubric & Report Generator",
-           "h": "year7-science/bio-ecosystems/rubric.html",
-           "k": "science"
+           "t": "Ecosystem Investigation — Rubric & Report Generator",
+           "h": "year7-science/bio-ecosystems/rubric.html"
           },
           {
            "t": "Solution Set",
@@ -201,6 +210,121 @@ window.SITEMAP = {
        "k": "science"
       },
       {
+       "t": "Forces & Motion",
+       "h": "year7-science/forces/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "Lesson 1 — What is a Force?",
+           "h": "year7-science/forces/deck1.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 2 — Force Diagrams and Net Force",
+           "h": "year7-science/forces/deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Experiment 1: Everyday Forces",
+           "h": "year7-science/forces/deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Newton’s First and Third Laws",
+           "h": "year7-science/forces/deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Newton’s Second Law",
+           "h": "year7-science/forces/deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — Experiment 2: Friction and Mass",
+           "h": "year7-science/forces/deck6.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 7 — Energy and Transformation",
+           "h": "year7-science/forces/deck7.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 8 — Experiment 3: Bounce Efficiency",
+           "h": "year7-science/forces/deck8.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 9 — Simple Machines and Levers",
+           "h": "year7-science/forces/deck9.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 10 — Experiment 4: Mechanical Advantage",
+           "h": "year7-science/forces/deck10.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 11 — Levers Extension (Optional)",
+           "h": "year7-science/forces/deck11.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 12 — Projectile Motion",
+           "h": "year7-science/forces/deck12.html",
+           "k": "science"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Lesson 2 — Newton’s Laws of Motion",
+           "h": "year7-science/forces/legacy-deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Energy & Transformation",
+           "h": "year7-science/forces/legacy-deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4 — Simple Machines & Levers",
+           "h": "year7-science/forces/legacy-deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Projectile Motion",
+           "h": "year7-science/forces/legacy-deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — The Trebuchet Investigation",
+           "h": "year7-science/forces/legacy-deck6.html",
+           "k": "science"
+          },
+          {
+           "t": "Unit Planner",
+           "h": "year7-science/forces/planner.html",
+           "k": "science"
+          },
+          {
+           "t": "Trebuchet Investigation",
+           "h": "year7-science/forces/trebuchet-investigation.html",
+           "k": "science"
+          }
+         ]
+        }
+       ],
+       "k": "science"
+      },
+      {
        "t": "Space",
        "h": "year7-science/space/index.html",
        "u": 1,
@@ -215,38 +339,104 @@ window.SITEMAP = {
            "k": "space"
           },
           {
-           "t": "Lesson 2 — Predictable Patterns in the Sky",
+           "t": "Lesson 2 — Day, Night & Seasons",
            "h": "year7-science/space/deck2.html",
            "k": "space"
           },
           {
-           "t": "Lesson 3 — Our Solar System",
+           "t": "Lesson 3 — The Moon — Phases & Tides",
            "h": "year7-science/space/deck3.html",
            "k": "space"
           },
           {
-           "t": "Lesson 4 — Gravity & Orbits",
+           "t": "Lesson 4 — Reading the Rocks",
            "h": "year7-science/space/deck4.html",
            "k": "space"
           },
           {
-           "t": "Lesson 5 — Stars, Galaxies & Starlight",
+           "t": "Lesson 5 — Our Solar System",
            "h": "year7-science/space/deck5.html",
            "k": "space"
           },
           {
-           "t": "Lesson 6 — Aboriginal & Torres Strait Islander Astronomy",
+           "t": "Lesson 6 — Space Technology & Sustainability",
            "h": "year7-science/space/deck6.html",
            "k": "space"
           },
           {
-           "t": "Lesson 7 — Space Technology & Sustainability",
+           "t": "Lesson 7 — Aboriginal & Torres Strait Islander Astronomy",
            "h": "year7-science/space/deck7.html",
            "k": "space"
           },
           {
            "t": "Lesson 8 — The Search for Life",
            "h": "year7-science/space/deck8.html",
+           "k": "space"
+          },
+          {
+           "t": "Lesson 9 — Gravity & Orbits",
+           "h": "year7-science/space/deck9.html",
+           "k": "space"
+          },
+          {
+           "t": "Lesson 10 — Stars, Galaxies & Starlight",
+           "h": "year7-science/space/deck10.html",
+           "k": "space"
+          }
+         ]
+        },
+        {
+         "t": "Worksheets",
+         "g": 1,
+         "c": [
+          {
+           "t": "Worksheet 1 · Earth, Moon & Sun",
+           "h": "year7-science/space/worksheet1.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 2 · Day, Night & Seasons",
+           "h": "year7-science/space/worksheet2.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 3 · The Moon — Phases & Tides",
+           "h": "year7-science/space/worksheet3.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 4 · Reading the Rocks",
+           "h": "year7-science/space/worksheet4.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 5 · Our Solar System",
+           "h": "year7-science/space/worksheet5.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 6 · Space Technology & Sustainability",
+           "h": "year7-science/space/worksheet6.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 7 · Aboriginal & Torres Strait Islander Astronomy",
+           "h": "year7-science/space/worksheet7.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 8 · The Search for Life",
+           "h": "year7-science/space/worksheet8.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 9 · Gravity & Orbits",
+           "h": "year7-science/space/worksheet9.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet 10 · Stars, Galaxies & Starlight",
+           "h": "year7-science/space/worksheet10.html",
            "k": "space"
           }
          ]
@@ -256,6 +446,11 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
+           "t": "Unit Planner",
+           "h": "year7-science/space/planner.html",
+           "k": "space"
+          },
+          {
            "t": "Retrieval Quiz",
            "h": "year7-science/space/quiz.html",
            "k": "space"
@@ -263,6 +458,21 @@ window.SITEMAP = {
           {
            "t": "Solution Set",
            "h": "year7-science/space/solutions.html",
+           "k": "space"
+          },
+          {
+           "t": "Revision Worksheet · Lessons 1–7 — Answers",
+           "h": "year7-science/space/worksheet-revision-solutions.html",
+           "k": "space"
+          },
+          {
+           "t": "Revision Worksheet · Lessons 1–7",
+           "h": "year7-science/space/worksheet-revision.html",
+           "k": "space"
+          },
+          {
+           "t": "Worksheet Booklet · All 10 Worksheets",
+           "h": "year7-science/space/worksheets-all.html",
            "k": "space"
           }
          ]
@@ -374,6 +584,16 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
+           "t": "Chapter 3F–3L Exponentials & Logarithms — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-exponentials.html",
+           "k": "primer"
+          },
+          {
+           "t": "Chapter 8 Probability — Question Booklet",
+           "h": "year10-mathematics/10methods-primer/booklet-probability.html",
+           "k": "primer"
+          },
+          {
            "t": "Quadratics, Chapters 5 & 7 — Question Booklet",
            "h": "year10-mathematics/10methods-primer/booklet-quadratics.html",
            "k": "primer"
@@ -381,6 +601,51 @@ window.SITEMAP = {
           {
            "t": "Chapter 6 Trigonometry — Question Booklet",
            "h": "year10-mathematics/10methods-primer/booklet-trigonometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 1 · Linear Relations — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit1-linear-relations.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 2 · Indices & Surds — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit2-indices-surds.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 3 · Quadratic Algebra — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit3-quadratic-algebra.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 4 · Measurement & Geometry — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit4-measurement-geometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 5 · Trigonometry — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit5-trigonometry.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 6 · Quadratic Functions — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit6-quadratic-functions.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 7 · Exponentials & Logarithms — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit7-exponentials-logs.html",
+           "k": "primer"
+          },
+          {
+           "t": "Unit 8 · Probability — Lessons",
+           "h": "year10-mathematics/10methods-primer/unit8-probability.html",
+           "k": "primer"
+          },
+          {
+           "t": "Wrap-up · Revision & CAT 3 — Lessons",
+           "h": "year10-mathematics/10methods-primer/wrapup-revision-cat3.html",
            "k": "primer"
           }
          ]
@@ -424,6 +689,76 @@ window.SITEMAP = {
           {
            "t": "T2 · Data and Information",
            "h": "year11-applied-computing/unit-1/slides/U1T02-data-and-information.html",
+           "k": "computing"
+          },
+          {
+           "t": "T3 · Data Types and Characteristics",
+           "h": "year11-applied-computing/unit-1/slides/U1T03-data-types-and-characteristics.html",
+           "k": "computing"
+          },
+          {
+           "t": "T4 · Data Quality",
+           "h": "year11-applied-computing/unit-1/slides/U1T04-data-quality.html",
+           "k": "computing"
+          },
+          {
+           "t": "T5 · Sources and Referencing",
+           "h": "year11-applied-computing/unit-1/slides/U1T05-sources-and-referencing.html",
+           "k": "computing"
+          },
+          {
+           "t": "T6 · The Australian Privacy Principles",
+           "h": "year11-applied-computing/unit-1/slides/U1T06-australian-privacy-principles.html",
+           "k": "computing"
+          },
+          {
+           "t": "T7 · Ethics in Data and AI",
+           "h": "year11-applied-computing/unit-1/slides/U1T07-ethics-in-data-and-ai.html",
+           "k": "computing"
+          },
+          {
+           "t": "T8 · Requirements, Constraints and Scope",
+           "h": "year11-applied-computing/unit-1/slides/U1T08-requirements-constraints-scope.html",
+           "k": "computing"
+          },
+          {
+           "t": "T9 · Design Tools",
+           "h": "year11-applied-computing/unit-1/slides/U1T09-design-tools.html",
+           "k": "computing"
+          },
+          {
+           "t": "T10 · Relational Database Structure",
+           "h": "year11-applied-computing/unit-1/slides/U1T10-relational-database-structure.html",
+           "k": "computing"
+          },
+          {
+           "t": "T11 · Keys and Relationships",
+           "h": "year11-applied-computing/unit-1/slides/U1T11-keys-and-relationships.html",
+           "k": "computing"
+          },
+          {
+           "t": "T12 · SQL I — Selecting and Filtering",
+           "h": "year11-applied-computing/unit-1/slides/U1T12-sql-selecting-and-filtering.html",
+           "k": "computing"
+          },
+          {
+           "t": "T13 · SQL II — Joins",
+           "h": "year11-applied-computing/unit-1/slides/U1T13-sql-joins.html",
+           "k": "computing"
+          },
+          {
+           "t": "T14 · SQL III — Aggregation",
+           "h": "year11-applied-computing/unit-1/slides/U1T14-sql-aggregation.html",
+           "k": "computing"
+          },
+          {
+           "t": "T15 · Spreadsheets and Descriptive Statistics",
+           "h": "year11-applied-computing/unit-1/slides/U1T15-spreadsheets-and-statistics.html",
+           "k": "computing"
+          },
+          {
+           "t": "T16 · Data Visualisation",
+           "h": "year11-applied-computing/unit-1/slides/U1T16-data-visualisation.html",
            "k": "computing"
           }
          ]
@@ -885,7 +1220,7 @@ window.SITEMAP = {
      "t": "Staff tools",
      "c": [
       {
-       "t": "Page builder — decks & worksheets",
+       "t": "Page builder (slides & worksheets)",
        "h": "tools/page-builder.html"
       },
       {

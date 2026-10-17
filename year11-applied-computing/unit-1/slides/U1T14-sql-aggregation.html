@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T14 &middot; SQL III &mdash; Aggregation | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 14</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>SQL III &mdash; Aggregation</h1>
+    <p class="subtitle">Turning 2190 rows into the handful of numbers that answer the question.</p>
+    <div class="head-meta">
+      <span class="pill">Use COUNT, AVG, SUM, MIN, MAX</span>
+      <span class="pill">Group with GROUP BY</span>
+      <span class="pill">Filter groups with HAVING</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>aggregate function</li>
+          <li>COUNT</li>
+          <li>AVG</li>
+          <li>SUM</li>
+          <li>GROUP BY</li>
+          <li>HAVING</li>
+          <li>ROUND</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">The distinction worth getting right now</span>
+          <p><code>WHERE</code> filters <em>rows</em>, before grouping. <code>HAVING</code> filters <em>groups</em>, after. Swapping them is the most common mistake in this topic.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Aggregate functions">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Five functions that collapse many rows into one</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Function</th><th>Returns</th><th>Descriptive statistic</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><code>COUNT(*)</code></td><td>How many rows</td><td>Count / frequency</td></tr>
+      <tr><td><code>AVG(col)</code></td><td>The mean</td><td>Average</td></tr>
+      <tr><td><code>SUM(col)</code></td><td>The total</td><td>&mdash;</td></tr>
+      <tr><td><code>MIN(col)</code></td><td>The smallest</td><td>&mdash;</td></tr>
+      <tr><td><code>MAX(col)</code></td><td>The largest</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+    <p><code>SELECT COUNT(*), ROUND(AVG(max_temp_c),1), MAX(max_temp_c)<br>FROM observation;</code></p>
+    <p class="note">SQLite has no built-in median or standard deviation. Those two you do in the spreadsheet &mdash; which is Topic 15.</p>
+  </section>
+
+  <section class="slide" data-menu="GROUP BY">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>One answer per group instead of one overall</h2>
+    <p><code>SELECT station_id, COUNT(*) AS days, ROUND(AVG(max_temp_c),1) AS mean_max<br>FROM observation<br>GROUP BY station_id<br>ORDER BY mean_max DESC;</code></p>
+    <p>Without <code>GROUP BY</code> you get one row for the whole table. With it, you get one row per distinct value of the grouping column.</p>
+    <div class="box hint">
+      <span class="lbl">The rule that catches everyone</span>
+      <p>Every column in <code>SELECT</code> must either be <em>in</em> the <code>GROUP BY</code> or <em>inside</em> an aggregate function. Anything else is a question with no single answer.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="HAVING">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Filtering the groups, not the rows</h2>
+    <p><code>SELECT station_id, COUNT(*) AS wet_days<br>FROM observation<br>WHERE rainfall_mm > 0<br>GROUP BY station_id<br>HAVING COUNT(*) > 100<br>ORDER BY wet_days DESC;</code></p>
+    <table class="tbl">
+      <thead>
+        <tr><th>Clause</th><th>Filters</th><th>Runs</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><code>WHERE rainfall_mm &gt; 0</code></td><td>Individual rows</td><td>Before grouping</td></tr>
+      <tr><td><code>HAVING COUNT(*) &gt; 100</code></td><td>Whole groups</td><td>After grouping</td></tr>
+      </tbody>
+    </table>
+    <p class="note">You cannot put <code>COUNT(*)</code> in a <code>WHERE</code> &mdash; at that point the groups do not exist yet.</p>
+  </section>
+
+  <section class="slide" data-menu="I do — the full query">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> &ldquo;Mean maximum by region, busiest first&rdquo;</h2>
+    <div class="cols">
+      <div>
+        <ol class="steps" id="t14ido">
+          <li><span class="stepno">1</span> Region names mean joining through <code>station</code>. Two joins.</li>
+          <li><span class="stepno">2</span> One row per region, so <code>GROUP BY r.region_name</code>.</li>
+          <li><span class="stepno">3</span> I want the count and the mean, rounded to one decimal.</li>
+          <li><span class="stepno">4</span> Only regions with a full year of data, so <code>HAVING COUNT(*) &gt; 300</code>.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <code>SELECT r.region_name, COUNT(*) AS obs, ROUND(AVG(o.max_temp_c),1) AS mean_max<br>FROM observation o<br>JOIN station s ON s.station_id = o.station_id<br>JOIN region  r ON r.region_id  = s.region_id<br>GROUP BY r.region_name<br>HAVING COUNT(*) > 300<br>ORDER BY mean_max DESC;</code></li>
+        </ol>
+        <button class="reveal-btn" data-target="#t14ido">Build it up</button>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">The order to write it in</span>
+          <p>FROM and JOIN, then WHERE, then GROUP BY, then HAVING, then SELECT, then ORDER BY.</p>
+          <p>That is the order SQL executes in, and writing in that order makes the query come out right first time far more often.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — WHERE or HAVING?">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Which clause does the job?</h2>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. Keep only observations above 30&nbsp;&deg;C</p>
+          <p class="a"><b><code>WHERE</code> &mdash; it is a test on one row</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. Keep only stations averaging above 22&nbsp;&deg;C</p>
+          <p class="a"><b><code>HAVING</code> &mdash; the average needs the group first</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. Keep only 2025 winter rows, then count wet days per station</p>
+          <p class="a"><b><code>WHERE</code> for the dates, <code>GROUP BY</code> station, and both in one query</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>Name three aggregate functions.</li>
+        <li>What is the difference between <code>WHERE</code> and <code>HAVING</code>?</li>
+        <li>Why can SQLite not give you a median directly?</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 14 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

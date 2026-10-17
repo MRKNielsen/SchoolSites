@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T4 &middot; Data Quality | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 4</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>Data Quality</h1>
+    <p class="subtitle">Five things that decide whether data can be trusted &mdash; and how to spot each one.</p>
+    <div class="head-meta">
+      <span class="pill">Name the five quality factors</span>
+      <span class="pill">Find faults in a real extract</span>
+      <span class="pill">Say what each fault costs you</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>accuracy</li>
+          <li>bias</li>
+          <li>integrity</li>
+          <li>relevance</li>
+          <li>reliability</li>
+          <li>outlier</li>
+          <li>missing value</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">Why this lesson is early</span>
+          <p>Every chart you draw this term inherits the quality of the data underneath it. A beautiful visualisation of bad data is worse than no visualisation, because people believe it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="The five factors">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Five factors affecting quality</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Factor</th><th>The question</th><th>Fails when</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Accuracy</b></td><td>Is the value correct?</td><td>A maximum of 85&nbsp;&deg;C in Mildura</td></tr>
+      <tr><td><b>Bias</b></td><td>Does the collection method favour an outcome?</td><td>Only surveying students who already use the canteen</td></tr>
+      <tr><td><b>Integrity</b></td><td>Is the data whole and internally consistent?</td><td>Duplicate rows; three date formats in one column</td></tr>
+      <tr><td><b>Relevance</b></td><td>Does it bear on the question?</td><td>Humidity, when you were asked about rainfall</td></tr>
+      <tr><td><b>Reliability</b></td><td>Can the source be depended on, repeatedly?</td><td>A sensor that drifts; an anonymous blog</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="Accuracy vs reliability">
+    <p class="eyebrow">The pair people confuse</p>
+    <h2>Accurate is not the same as reliable</h2>
+    <div class="cols">
+      <div>
+        <div class="box defn">
+          <span class="lbl">Accurate</span>
+          <p>Close to the true value. A property of <em>this reading</em>.</p>
+        </div>
+        <div class="box defn">
+          <span class="lbl">Reliable</span>
+          <p>Dependable over time. A property of <em>the source</em>.</p>
+        </div>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">Why the distinction matters</span>
+          <p>A thermometer reading 2&nbsp;&deg;C too high every single day is <b>reliable but not accurate</b> &mdash; and because it is reliable, you can correct it.</p>
+          <p>A thermometer that is right on average but wildly wrong on random days is <b>accurate on average and useless</b>, because you cannot tell which days to trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Bias">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Bias is built in before you collect anything</h2>
+    <div class="cols">
+      <div>
+        <p>Bias is not someone lying. It is a collection method that makes one answer more likely than the truth warrants.</p>
+        <ul>
+          <li>Surveying only at lunchtime &mdash; you miss everyone in class</li>
+          <li>An online form &mdash; you miss everyone without reliable internet</li>
+          <li>Weather stations only at airports &mdash; flat, open, often warmer than the suburbs around them</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box question">
+          <span class="lbl">Discuss</span>
+          <p>Five of our six stations are at airports. What would that do to a claim about &ldquo;Victoria&rsquo;s temperature&rdquo;? Is the dataset wrong, or is the claim?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="I do — finding a fault">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> A row built to carry every fault</h2>
+    <div class="cols">
+      <div>
+        <div class="box question">
+          <span class="lbl">A constructed row</span>
+          <p><code>99999 | Unknown Station | Greater Melborne | VIC | 14/03/2025 | 11.2 | 82.4 &deg;C | -3.1 | 180</code></p>
+          <p class="note">No single row in the real extract is this bad. This one is assembled from six faults that are genuinely in there, so we can meet them all at once.</p><p></p>
+        </div>
+        <ol class="steps" id="t4ido">
+          <li><span class="stepno">1</span> <code>82.4 &deg;C</code> &mdash; the unit is inside the value. The column is now text. <b>Integrity.</b></li>
+          <li><span class="stepno">2</span> 82.4 is not a possible Victorian maximum. <b>Accuracy.</b></li>
+          <li><span class="stepno">3</span> Rainfall of <code>-3.1</code> cannot exist. <b>Accuracy.</b></li>
+          <li><span class="stepno">4</span> Humidity of 180 per cent cannot exist. <b>Accuracy.</b></li>
+          <li><span class="stepno">5</span> &ldquo;Melborne&rdquo; is misspelled; it will not match the region table. <b>Integrity.</b></li>
+          <li class="ans"><span class="stepno">&#10003;</span> Station 99999 matches no station at all. <b>Integrity</b> &mdash; a broken relationship.</li>
+        </ol>
+        <button class="reveal-btn" data-target="#t4ido">Find every fault</button>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">Six faults in one row</span>
+          <p>And none of them stop the row loading. That is the whole problem with data quality: nothing announces itself.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — name the factor">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Name the factor</h2>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. The same observation appears twice in the file</p>
+          <p class="a"><b>Integrity</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. A survey about homework, run only in the library at lunch</p>
+          <p class="a"><b>Bias</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. The rainfall column is blank for 42 days</p>
+          <p class="a"><b>Integrity &mdash; completeness</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="box hint">
+          <span class="lbl">Number 3 has a second answer</span>
+          <p>If you then average rainfall and ignore the blanks, you have created an <em>accuracy</em> problem too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="What to do about it">
+    <p class="eyebrow">Practice</p>
+    <h2>You must decide, and say why</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Fault</th><th>Options</th><th>What the study design wants</th></tr>
+      </thead>
+      <tbody>
+      <tr><td>Missing value</td><td>Impute, exclude, or flag</td><td>A decision you can justify</td></tr>
+      <tr><td>Impossible value</td><td>Correct, exclude, or flag</td><td>Never silently keep it</td></tr>
+      <tr><td>Duplicate</td><td>Remove</td><td>Say how you identified it</td></tr>
+      <tr><td>Inconsistent format</td><td>Normalise to one</td><td>State which one and why</td></tr>
+      </tbody>
+    </table>
+    <p class="note">There is rarely one right answer. There is always a wrong one: changing the data without recording that you did.</p>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>Name the five quality factors.</li>
+        <li>Give an example of data that is reliable but not accurate.</li>
+        <li>Our raw extract has 42 blank rainfall values. Give one option for handling them, and one argument against it.</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 4 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
