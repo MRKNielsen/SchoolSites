@@ -9,7 +9,11 @@
    - .reveal-btn → shows .steps li in sequence (data-target="#id")
    - .qcard answer toggles (button.reveal-btn inside .qcard, or data-answer)
    - .ptab / .partpanel part-by-part worked examples
-   - "R" key reveals next step on current slide
+   - Forward nav (→ / space / next) reveals the next hidden step,
+     fragment or answer on the slide before advancing
+   - "R" key does the same reveal without any chance of advancing
+   - A "deck:goto" event ({detail: {slide: index}}) jumps to a slide;
+     the nav drawer's in-lesson search uses it
    ============================================================ */
 (function () {
   "use strict";
@@ -40,6 +44,7 @@
 
   function go(i) {
     if (i < 0 || i >= slides.length) return;
+    if (i !== cur) hideReveals(slides[cur]);
     slides[cur].classList.remove("active");
     cur = i;
     slides[cur].classList.add("active");
@@ -51,11 +56,57 @@
     markMenu();
   }
 
-  /* Frag reveals: forward nav reveals remaining .frag fragments on the
-     current slide before advancing; backward nav un-reveals first. */
+  /* ---- Reveals ------------------------------------------------------
+     Everything still hidden on a slide - .steps items, .frag fragments
+     and .qcard answers - is revealed one piece at a time, in document
+     order, by the right arrow / space / "next" button, before the deck
+     moves on. Buttons and keys share one source of truth (the DOM), so
+     a step revealed by the arrow still leaves its button on the right
+     label. Backward nav un-reveals fragments only: steps and answers
+     stay up, so backing out of a worked example is a single press. */
+
+  const HIDDEN = ".steps > li:not(.shown), .frag:not(.on), [data-answer-for]:not(.shown)";
+  const stepBtns = new Map();   /* <ul|ol class="steps">  -> { btn, label } */
+  const ansBtns = new Map();    /* answer element         -> { btn, label } */
+
   function syncFragBtns(s) {
     const left = s.querySelector(".frag:not(.on)");
     s.querySelectorAll(".reveal-btn[data-frag]").forEach(b => b.classList.toggle("done", !left));
+  }
+  function syncStepBtn(list) {
+    const rec = list && stepBtns.get(list);
+    if (!rec) return;
+    const done = list.querySelector(":scope > li") && !list.querySelector(":scope > li:not(.shown)");
+    rec.btn.textContent = done ? "Reset \u21ba" : rec.label;
+  }
+  function syncAnsBtn(a) {
+    const rec = ansBtns.get(a);
+    if (rec) rec.btn.textContent = a.classList.contains("shown") ? "Hide \u2715" : rec.label;
+  }
+
+  /* A reveal sitting in a part-panel that isn't on screen must not eat
+     an arrow press - the room would see nothing happen. */
+  function onScreen(el) {
+    const p = el.closest(".partpanel");
+    return !p || p.classList.contains("shown");
+  }
+  /* Reveal the next hidden thing on this slide; false when none is left. */
+  function revealNext(s) {
+    const el = Array.from(s.querySelectorAll(HIDDEN)).find(onScreen);
+    if (!el) return false;
+    if (el.matches(".steps > li")) { el.classList.add("shown"); syncStepBtn(el.parentElement); }
+    else if (el.classList.contains("frag")) { el.classList.add("on"); syncFragBtns(s); }
+    else { el.classList.add("shown"); syncAnsBtn(el); }
+    return true;
+  }
+  /* Working and answers start hidden every time a slide is shown, so a
+     slide revisited (or reached from the menu) never gives the answer away. */
+  function hideReveals(s) {
+    s.querySelectorAll(".steps > li.shown").forEach(li => li.classList.remove("shown"));
+    s.querySelectorAll(".steps").forEach(syncStepBtn);
+    s.querySelectorAll("[data-answer-for].shown").forEach(a => { a.classList.remove("shown"); syncAnsBtn(a); });
+    s.querySelectorAll(".frag.on").forEach(f => f.classList.remove("on"));
+    syncFragBtns(s);
   }
   function revealNextFrag(s) {
     const f = s.querySelector(".frag:not(.on)");
@@ -67,7 +118,7 @@
     if (on.length) { on[on.length - 1].classList.remove("on"); syncFragBtns(s); return true; }
     return false;
   }
-  function next() { if (!revealNextFrag(slides[cur])) go(cur + 1); updateFade(); }
+  function next() { if (!revealNext(slides[cur])) go(cur + 1); updateFade(); }
   function prev() { if (!unrevealLastFrag(slides[cur])) go(cur - 1); updateFade(); }
 
   /* Buttons: <button data-nav="prev|next|first|last"> */
@@ -127,25 +178,20 @@
     x0 = null;
   }, { passive: true });
 
-  /* Step reveals: <button class="reveal-btn" data-target="#steps1">Show working</button> */
+  /* Step reveals: <button class="reveal-btn" data-target="#steps1">Show working</button>
+     (data-steps="steps1" is the legacy spelling and is accepted too).
+     State lives in the DOM so the arrow keys and the button agree. */
   function wireSteps(btn) {
-    const target = btn.dataset.target
-      ? document.querySelector(btn.dataset.target)
-      : btn.closest(".slide").querySelector(".steps");
-    if (!target) return;
-    const items = Array.from(target.querySelectorAll("li"));
-    const label = btn.textContent;
-    let shown = 0;
+    const list = btn.dataset.target ? document.querySelector(btn.dataset.target)
+      : btn.dataset.steps ? document.getElementById(btn.dataset.steps)
+      : btn.closest(".slide") && btn.closest(".slide").querySelector(".steps");
+    if (!list) return;
+    stepBtns.set(list, { btn: btn, label: btn.textContent });
     btn.addEventListener("click", () => {
-      if (shown < items.length) {
-        items[shown].classList.add("shown");
-        shown++;
-        if (shown === items.length) btn.textContent = "Reset ↺";
-      } else {
-        items.forEach(li => li.classList.remove("shown"));
-        shown = 0;
-        btn.textContent = label;
-      }
+      const li = list.querySelector(":scope > li:not(.shown)");
+      if (li) li.classList.add("shown");
+      else list.querySelectorAll(":scope > li").forEach(x => x.classList.remove("shown"));
+      syncStepBtn(list);
     });
   }
 
@@ -156,11 +202,9 @@
       ? document.querySelector(btn.dataset.answer)
       : btn.closest(".qcard") && btn.closest(".qcard").querySelector(".a");
     if (!a) return;
-    const orig = btn.textContent;
-    btn.addEventListener("click", () => {
-      const open = a.classList.toggle("shown");
-      btn.textContent = open ? "Hide ✕" : orig;
-    });
+    a.setAttribute("data-answer-for", "");   /* marks it for arrow-key reveal */
+    ansBtns.set(a, { btn: btn, label: btn.textContent });
+    btn.addEventListener("click", () => { a.classList.toggle("shown"); syncAnsBtn(a); });
   }
 
   document.querySelectorAll(".reveal-btn").forEach(btn => {
@@ -169,12 +213,6 @@
     else if (btn.dataset.answer || btn.closest(".qcard")) wireAnswer(btn);
     else wireSteps(btn);
   });
-
-  /* "R" key: reveal next unshown step / frag on the current slide */
-  function revealNext(slide) {
-    const next = slide.querySelector(".steps li:not(.shown), .frag:not(.on)");
-    if (next) next.classList.add(next.classList.contains("frag") ? "on" : "shown");
-  }
 
   /* Part tabs: <button class="ptab" data-part="#p1"> + <div class="partpanel" id="p1"> */
   document.querySelectorAll(".ptab").forEach(tab => {
@@ -223,6 +261,71 @@
       else if ((e.key === "m" || e.key === "M") && !e.target.matches("input, textarea, select")) toggleMenu();
     });
   }
+
+  /* Jump requests from outside the deck — sitenav.js's in-lesson search
+     dispatches deck:goto with a 0-based slide index. preventDefault()
+     tells the sender a deck took it; without that it falls back to the
+     legacy decks' own go(). */
+  document.addEventListener("deck:goto", e => {
+    const i = e.detail && e.detail.slide;
+    if (Number.isInteger(i) && i >= 0 && i < slides.length) { go(i); e.preventDefault(); }
+  });
+
+  /* Countdown timer: <div class="timer" data-minutes="15"></div>
+     Built here so any slide can carry one. − / + change it a minute at a
+     time (also while running); Start/Pause and Reset. At zero it flashes
+     and gives a short beep. It keeps running if you change slide. */
+  document.querySelectorAll(".timer").forEach(el => {
+    let total = Math.max(1, parseInt(el.dataset.minutes, 10) || 10) * 60;
+    let left = total, tick = null;
+    el.innerHTML =
+      '<span class="t-lbl">Timer</span>' +
+      '<button type="button" class="t-btn" data-t="minus" aria-label="One minute less">−</button>' +
+      '<span class="t-time" aria-live="polite"></span>' +
+      '<button type="button" class="t-btn" data-t="plus" aria-label="One minute more">+</button>' +
+      '<button type="button" class="t-btn t-go" data-t="go">Start</button>' +
+      '<button type="button" class="t-btn" data-t="reset">Reset</button>';
+    const shown = el.querySelector(".t-time"), goBtn = el.querySelector(".t-go");
+    const fmt = n => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
+    const draw = () => { shown.textContent = fmt(left); };
+    function beep() {
+      try {
+        const A = window.AudioContext || window.webkitAudioContext, ctx = new A();
+        [0, 0.35, 0.7].forEach(t => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+          g.gain.setValueAtTime(0.25, ctx.currentTime + t);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.3);
+          o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.3);
+        });
+      } catch (e) { /* no audio — the flash is enough */ }
+    }
+    function stop() { clearInterval(tick); tick = null; goBtn.textContent = left ? "Start" : "Done"; }
+    function start() {
+      if (!left) return;
+      el.classList.remove("up"); goBtn.textContent = "Pause";
+      tick = setInterval(() => {
+        left = Math.max(0, left - 1); draw();
+        if (!left) { stop(); el.classList.add("up"); beep(); }
+      }, 1000);
+    }
+    el.addEventListener("click", e => {
+      const b = e.target.closest("[data-t]");
+      if (!b) return;
+      e.stopPropagation(); b.blur();   /* keep Space/arrows for the deck */
+      const t = b.dataset.t;
+      if (t === "go") { tick ? stop() : start(); }
+      else if (t === "reset") { stop(); left = total; el.classList.remove("up"); goBtn.textContent = "Start"; }
+      else {
+        const d = t === "plus" ? 60 : -60;
+        total = Math.min(99 * 60, Math.max(60, total + d));
+        left = tick ? Math.min(99 * 60, Math.max(1, left + d)) : total;
+        el.classList.remove("up"); if (!tick) goBtn.textContent = "Start";
+      }
+      draw();
+    });
+    draw();
+  });
 
   /* Init: honour #n in URL, set chrome */
   const fromHash = parseInt(location.hash.slice(1), 10);

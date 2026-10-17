@@ -15,6 +15,10 @@
    underneath does not also advance a slide — see the capture-phase
    listener at the bottom.
 
+   The search box filters the page tree by title, searches the text of
+   every page ("Site-wide search" below) and, on a slide deck, the
+   lesson itself ("In-lesson search").
+
    Deliberately not root-relative: the site is served from
    /SchoolSites/ on GitHub Pages, so every href is resolved against the
    computed root prefix instead of "/".
@@ -42,6 +46,8 @@
 
   var open = false, built = false, panel, tree, search, handle, wrap;
   var links = [], sections = [];
+  var pagesHead, pagesCount;          /* "Pages" label over the tree while searching */
+  var stale = false;                  /* box prefilled on arrival: filter on first open */
 
   /* ---------- Tiny DOM helper --------------------------------- */
   function el(tag, cls, text) {
@@ -67,6 +73,7 @@
   function linkNode(node, extraClass) {
     var a = el("a", "sn-link" + (extraClass ? " " + extraClass : ""));
     a.href = ROOT + node.h;
+    a.dataset.h = node.h;
     a.appendChild(el("span", "sn-text", node.t));
     if (node.p) a.appendChild(el("span", "sn-note", "PDF"));
     if (node.h === HERE) {
@@ -136,18 +143,31 @@
 
     search = el("input", "sn-search");
     search.type = "search";
-    search.placeholder = "Filter pages…";
-    search.setAttribute("aria-label", "Filter pages");
+    search.placeholder = LESSON ? "Search this lesson & the site…" : "Search the site…";
+    search.setAttribute("aria-label", LESSON ? "Search this lesson and the site" : "Search the site");
     search.autocomplete = "off";
     search.addEventListener("input", filter);
     head.appendChild(search);
     panel.appendChild(head);
+    if (ARRIVED) { search.value = ARRIVED; stale = true; }
+
+    /* One scrolling body, top to bottom while searching: this lesson's
+       slides (decks only), page titles (the tree), page text. */
+    var body = el("div", "sn-body");
+    if (LESSON) body.appendChild(buildLesson());
+    pagesHead = el("p", "sn-lhead sn-hidden");
+    pagesHead.appendChild(el("span", null, "Pages"));
+    pagesCount = el("span", "sn-count");
+    pagesHead.appendChild(pagesCount);
+    body.appendChild(pagesHead);
 
     /* Tree */
     tree = el("nav", "sn-tree");
     tree.setAttribute("aria-label", "All pages");
     (map.tree || []).forEach(function (n) { tree.appendChild(render(n, 0)); });
-    panel.appendChild(tree);
+    body.appendChild(tree);
+    body.appendChild(buildSite());
+    panel.appendChild(body);
 
     /* Footer */
     var foot = el("div", "sn-foot");
@@ -194,13 +214,17 @@
   /* ---------- Filter ------------------------------------------ */
   function filter() {
     var q = search.value.trim().toLowerCase();
+    stale = false;
     tree.querySelectorAll(".sn-empty").forEach(function (n) { n.remove(); });
+    if (LESSON) searchLesson(search.value);
+    pagesHead.classList.toggle("sn-hidden", !q);
 
     if (!q) {
       links.forEach(function (a) { a.classList.remove("sn-hidden"); });
       sections.forEach(function (s) { s.classList.remove("sn-hidden"); s.open = false; });
       tree.querySelectorAll(".sn-group").forEach(function (g) { g.classList.remove("sn-hidden"); });
       revealCurrent();
+      searchSite("");
       return;
     }
 
@@ -227,22 +251,598 @@
       g.classList.toggle("sn-hidden", !any);
     });
 
-    if (!hits) tree.appendChild(el("p", "sn-empty", "Nothing matches “" + search.value.trim() + "”."));
+    pagesCount.textContent = hits === 1 ? "1 page" : hits ? hits + " pages" : "";
+    if (!hits) tree.appendChild(el("p", "sn-empty sn-lempty", "No page titles match."));
+    searchSite(search.value);              /* after the tree: it skips pages shown there */
+  }
+
+  /* Everything the arrow keys can step through, in screen order. */
+  function results() {
+    return Array.prototype.filter.call(panel.querySelectorAll(".sn-hit, .sn-link, .sn-sphead"), function (a) {
+      return !a.classList.contains("sn-hidden") && a.offsetParent !== null;
+    });
+  }
+
+  /* ---------- In-lesson search ---------------------------------
+     A deck shows one slide at a time, so the browser's own Ctrl+F
+     can't see the rest of the lesson. On any page with .slide elements
+     the drawer's search box therefore also searches the text of every
+     slide, listing matches above the page tree; picking one jumps the
+     deck there and highlights the words on the slide.
+
+     - The index is rebuilt each time the drawer opens, not once at
+       load: MathJax swaps text nodes out after load, and reveals change
+       what may be quoted. Forty slides index in a few milliseconds.
+     - A slide matches when every word of the query starts a word on it
+       (or in its data-menu title), so "moon phase" finds "phases of the
+       Moon" and "key" finds "keys" but not "monkey". One-letter words
+       are ignored. Results stay in slide order: the order of a lesson
+       means something, a relevance score doesn't. The snippet prefers
+       the words together, as typed, when the slide has them that way.
+     - Text the class hasn't been shown yet — an unrevealed answer,
+       working step, fragment or part panel — still counts as a match
+       but is never quoted in a snippet. Searching on the projector must
+       not put the answer on the board.
+     - Skipped: typeset maths (its text is assistive MathML noise),
+       buttons, the quiz container, the generated readouts inside the
+       orbit / season / binomial widgets, and anything marked
+       [data-nosearch].
+     - The jump is a "deck:goto" event that deck.js answers. The nine
+       legacy year11-methods decks run their own inline nav with a
+       global go(), which is the fallback — drop it once they're ported.
+     - Highlights use the CSS Custom Highlight API, so the slide's DOM is
+       never modified. They clear when the deck leaves that slide. */
+  var SLIDES = [], LESSON = false, INDEX = null;
+  var lessonBox, lessonCount, lessonHits, watch;
+
+  var SKIP = "script, style, noscript, template, title, desc, button, input, select, textarea, " +
+             "mjx-container, .quiz-container, .start-hint, .orbitsim, .seasonsim, .binomsim, " +
+             ".leversim, .marks, #sitenav, .sn-handle, [data-nosearch]";
+  /* Inline elements that read as a label of their own — text either
+     side gets a separator, so "1" + "The Moon…" isn't "1The". Mirrors
+     LABELS in tools/search-index.js. */
+  var LABELS = ".qn, .lnum, .lbl, .lbl-a, .n, .stepno, .part-label, .pill, .chip, .tag, " +
+               ".phase-tag, .bookref, .dc-num, .dc-kind, .wl-label";
+  var VEILED = ".steps > li:not(.shown), .frag:not(.on):not(.shown):not(.chooser), " +
+               ".partpanel:not(.shown), .qcard .a:not(.shown), .box > .a:not(.shown), " +
+               "[data-answer-for]:not(.shown), " +
+               "[data-step-list] > li:not(.shown), [data-ans-panel]:not(.shown)";  /* legacy */
+  var INLINE = /^(a|abbr|b|bdi|bdo|cite|code|data|dfn|em|i|kbd|mark|q|s|samp|small|span|strong|sub|sup|time|u|var|tspan|textpath)$/;
+  var SEP = " · ";
+  var WORDCH = /[\p{L}\p{N}]/u;
+  var HL = !!(window.CSS && CSS.highlights && typeof window.Highlight === "function");
+
+  /* Case- and punctuation-folding that keeps every offset 1:1 with the
+     original, so a match position is also a DOM position. Curly quotes
+     fold to straight ones — the decks are typeset with &#8217; and
+     nobody types that. */
+  function fold(s) {
+    var low = s.toLowerCase();
+    if (low.length !== s.length)
+      low = s.replace(/[A-Z]/g, function (c) { return c.toLowerCase(); });
+    return low.replace(/[\u2018\u2019\u201B\u02BC]/g, "'")
+              .replace(/[\u201C\u201D]/g, '"')
+              .replace(/[\u2010-\u2015\u2212]/g, "-")
+              .replace(/\u00A0/g, " ");
+  }
+
+  function walker(root) {
+    return document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (n.nodeType === 3) return NodeFilter.FILTER_ACCEPT;
+        if (n.matches(SKIP)) return NodeFilter.FILTER_REJECT;
+        return n.localName === "br" ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+  }
+
+  function blockOf(n) {
+    var p = n.parentNode;
+    while (p && p.nodeType === 1 && INLINE.test(p.localName.toLowerCase()) && !p.matches(LABELS))
+      p = p.parentNode;
+    return p;
+  }
+
+  /* One record per slide (or per page, on arrival from a site search):
+     its text as a single string, plus where each text node starts in
+     it, so a match maps straight back to a Range.
+     Text from different blocks is joined with SEP, so a list doesn't
+     read as one run-on word ("tidesNeap") or match across items. */
+  function textIndex(s, i) {
+    var segs = [], text = "", last = null, gap = false, w = walker(s);
+    for (var n = w.nextNode(); n; n = w.nextNode()) {
+      if (n.nodeType === 1) { gap = true; continue; }            /* <br> */
+      var v = n.nodeValue;
+      if (!/\S/.test(v)) { gap = true; continue; }
+      var b = blockOf(n);
+      if (text) text += b !== last ? SEP : gap ? " " : "";
+      last = b; gap = false;
+      segs.push({ n: n, at: text.length });
+      text += v;
+    }
+    var title = slideTitle(s, i);
+    return { i: i, el: s, text: text, low: fold(text), segs: segs, title: title, tlow: fold(title) };
+  }
+
+  /* Same label the slide-jump menu uses (data-menu), else the heading. */
+  function slideTitle(s, i) {
+    if (s.dataset.menu) return s.dataset.menu;
+    var h = s.querySelector("h1, h2, h3"), t = "";
+    if (h) {
+      var w = walker(h);
+      for (var n = w.nextNode(); n; n = w.nextNode()) if (n.nodeType === 3) t += n.nodeValue;
+      t = t.replace(/\s+/g, " ").trim();
+    }
+    return t || "Slide " + (i + 1);
+  }
+
+  function segAt(rec, off) {
+    var lo = 0, hi = rec.segs.length - 1;
+    while (lo < hi) {
+      var mid = (lo + hi + 1) >> 1;
+      if (rec.segs[mid].at <= off) lo = mid; else hi = mid - 1;
+    }
+    return lo;
+  }
+
+  function veiled(node) {
+    var p = node.parentNode;
+    return !!(p && p.closest && p.closest(VEILED));
+  }
+
+  function rangeFor(rec, a, b) {
+    var s = rec.segs[segAt(rec, a)], e = rec.segs[segAt(rec, b - 1)];
+    var r = document.createRange();
+    r.setStart(s.n, Math.max(0, Math.min(a - s.at, s.n.nodeValue.length)));
+    r.setEnd(e.n, Math.max(0, Math.min(b - e.at, e.n.nodeValue.length)));
+    return r;
+  }
+
+  /* Where t starts a word in low. A term that itself opens with
+     punctuation ("§3", "(b)") is taken wherever it falls. */
+  function occurrences(low, t) {
+    var out = [], free = !WORDCH.test(t.charAt(0));
+    for (var at = low.indexOf(t); at !== -1; ) {
+      if (free || at === 0 || !WORDCH.test(low.charAt(at - 1))) { out.push(at); at = low.indexOf(t, at + t.length); }
+      else at = low.indexOf(t, at + 1);
+    }
+    return out;
+  }
+
+  /* The query's words together and in order — the first place they
+     appear as typed (and, for a slide, that the class can see), or null. */
+  function phraseIn(low, terms, ok) {
+    if (terms.length < 2) return null;
+    var re = new RegExp(terms.map(function (t) {
+      return t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }).join("\\s+"), "g"), m;
+    while ((m = re.exec(low))) {
+      var starts = !WORDCH.test(terms[0].charAt(0)) || m.index === 0 || !WORDCH.test(low.charAt(m.index - 1));
+      if (starts && (!ok || ok(m.index))) return [m.index, m.index + m[0].length];
+    }
+    return null;
+  }
+
+  function termsOf(q) {
+    return fold(q).split(/\s+/).filter(function (t, k, all) {
+      return (t.length > 1 || /\d/.test(t)) && all.indexOf(t) === k;   /* "lesson 3" keeps the 3 */
+    });
+  }
+
+  /* Every occurrence of every term, sorted; null if any term is absent
+     from both the slide and its title. */
+  function matchSlide(rec, terms) {
+    var spans = [];
+    for (var k = 0; k < terms.length; k++) {
+      var t = terms[k], at = occurrences(rec.low, t);
+      if (!at.length && !occurrences(rec.tlow, t).length) return null;
+      at.forEach(function (a) { spans.push([a, a + t.length]); });
+    }
+    return spans.sort(function (a, b) { return a[0] - b[0] || b[1] - a[1]; });
+  }
+
+  function buildLesson() {
+    lessonBox = el("section", "sn-lesson sn-hidden");
+    lessonBox.setAttribute("aria-label", "Matches in this lesson");
+    var h = el("p", "sn-lhead");
+    h.appendChild(el("span", null, "In this lesson"));
+    lessonCount = el("span", "sn-count");
+    lessonCount.setAttribute("aria-live", "polite");
+    h.appendChild(lessonCount);
+    lessonBox.appendChild(h);
+    lessonHits = el("div", "sn-hits");
+    lessonBox.appendChild(lessonHits);
+    return lessonBox;
+  }
+
+  function searchLesson(q) {
+    var terms = termsOf(q);
+    lessonHits.textContent = "";
+    lessonBox.classList.toggle("sn-hidden", !terms.length);
+    if (!terms.length) return;
+    if (!INDEX) INDEX = SLIDES.map(textIndex);
+
+    var n = 0;
+    INDEX.forEach(function (rec) {
+      var spans = matchSlide(rec, terms);
+      if (!spans) return;
+      lessonHits.appendChild(hitButton(rec, spans, terms));
+      n++;
+    });
+    lessonCount.textContent = n === 1 ? "1 slide" : n + " slides";
+    if (!n) lessonHits.appendChild(el("p", "sn-empty sn-lempty", "No slide in this lesson matches."));
+  }
+
+  function hitButton(rec, spans, terms) {
+    var b = el("button", "sn-hit"), here = rec.el.classList.contains("active");
+    b.type = "button";
+    if (here) { b.classList.add("is-here"); b.setAttribute("aria-current", "true"); }
+    b.appendChild(el("span", "sn-hnum", String(rec.i + 1).padStart(2, "0")));
+    var body = el("span", "sn-hbody");
+    var t = el("span", "sn-htitle", rec.title);
+    if (here) t.appendChild(el("span", "sn-here", "this slide"));
+    body.appendChild(t);
+    body.appendChild(snippet(rec, spans, terms));
+    b.appendChild(body);
+    b.addEventListener("click", function () { jump(rec, terms); });
+    return b;
+  }
+
+  /* A line or so round the first match the class can already see,
+     clipped so it never runs on into text that is still hidden. */
+  function snippet(rec, spans, terms) {
+    var out = el("span", "sn-hsnip"), segs = rec.segs, k;
+    var first = phraseIn(rec.low, terms, function (at) { return !veiled(segs[segAt(rec, at)].n); });
+    for (k = 0; k < spans.length && !first; k++)
+      if (!veiled(segs[segAt(rec, spans[k][0])].n)) first = spans[k];
+
+    var anchor;
+    if (first) anchor = first[0];
+    else if (spans.length) {
+      out.appendChild(el("em", "sn-veiled", "In working or an answer not yet revealed"));
+      return out;
+    } else {                                   /* matched on the title alone */
+      for (k = 0; k < segs.length && veiled(segs[k].n); k++);
+      if (k === segs.length) return out;
+      anchor = segs[k].at;
+    }
+
+    var j = segAt(rec, anchor), m = j;
+    while (j > 0 && !veiled(segs[j - 1].n)) j--;
+    while (m < segs.length - 1 && !veiled(segs[m + 1].n)) m++;
+    fillSnip(out, rec.text, spans, anchor, first ? first[1] : anchor,
+             segs[j].at, segs[m].at + segs[m].n.nodeValue.length);
+    return out;
+  }
+
+  /* Fill `out` with the text round [anchor, end), kept inside [lo, hi),
+     snapped to word edges, with every span in the window marked.
+     Shared by the lesson and site snippets. */
+  function fillSnip(out, text, spans, anchor, end, lo, hi) {
+    var a = Math.max(lo, anchor - 40), z = Math.min(hi, end + 80), sp;
+    if (a > lo && (sp = text.indexOf(" ", a)) !== -1 && sp < anchor) a = sp + 1;
+    if (z < hi && (sp = text.lastIndexOf(" ", z)) > end) z = sp;
+    while (a < anchor && /[\s·]/.test(text.charAt(a))) a++;             /* no "…·" */
+    while (z > end && /[\s·]/.test(text.charAt(z - 1))) z--;
+
+    function put(s) { if (s) out.appendChild(document.createTextNode(s.replace(/\s+/g, " "))); }
+    if (a > 0) put("…");
+    var pos = a;
+    spans.forEach(function (s) {
+      if (s[0] < pos || s[1] > z) return;
+      put(text.slice(pos, s[0]));
+      out.appendChild(el("mark", null, text.slice(s[0], s[1])));
+      pos = s[1];
+    });
+    put(text.slice(pos, z));
+    if (z < text.length) put("…");
+  }
+
+  function jump(rec, terms) {
+    hide(true);
+    var f = document.activeElement;
+    if (f && f !== document.body && f.blur) f.blur();
+    var taken = !document.dispatchEvent(new CustomEvent("deck:goto", {
+      cancelable: true, detail: { slide: rec.i }
+    }));
+    if (!taken && typeof window.go === "function") window.go(rec.i);   /* legacy decks */
+    requestAnimationFrame(function () { markSlide(rec, terms); });
+  }
+
+  function markSlide(rec, terms) {
+    clearMarks();
+    if (!HL) return;
+    var h = new Highlight(), lead = null;
+    terms.forEach(function (t) {
+      occurrences(rec.low, t).forEach(function (at) {
+        var r = rangeFor(rec, at, at + t.length);
+        h.add(r);
+        if (!veiled(r.startContainer) && (!lead || at < lead.at)) lead = { r: r, at: at };
+      });
+    });
+    if (!h.size) return;
+    CSS.highlights.set("sn-find", h);
+    if (lead) bringIntoView(rec.el, lead.r);
+    watch = new MutationObserver(function () {
+      if (!rec.el.classList.contains("active")) clearMarks();
+    });
+    watch.observe(rec.el, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  function clearMarks() {
+    if (watch) { watch.disconnect(); watch = null; }
+    if (unarm) { unarm(); unarm = null; }
+    if (HL) CSS.highlights.delete("sn-find");
+  }
+  window.addEventListener("beforeprint", clearMarks);
+
+  /* Scroll the slide itself, and only if the match is out of view.
+     scrollIntoView() would also scroll overflow:hidden ancestors, and a
+     deck page's body is one. */
+  function bringIntoView(s, r) {
+    if (s.scrollHeight <= s.clientHeight + 1) return;
+    var rr = r.getBoundingClientRect(), sr = s.getBoundingClientRect();
+    if (rr.top >= sr.top + sr.height * 0.15 && rr.bottom <= sr.bottom - sr.height * 0.2) return;
+    s.scrollTop += rr.top - sr.top - sr.height * 0.35;
+  }
+
+
+  /* ---------- Site-wide search ---------------------------------
+     The same box searches the text of every page on the site.
+     assets/js/searchindex.js is generated alongside sitemap.js by
+     tools/build-sitemap.js (see tools/search-index.js for what goes in
+     it). It runs to about a megabyte, so it is fetched the first time
+     someone searches, never on page load, and then sits in the cache.
+
+     - Results sit below the page tree under "Found in page text". A
+       page already showing in the tree (its title matched) is left out,
+       and so is the page you're on — the tree and "In this lesson"
+       already cover those.
+     - Matching is the lesson search's: every word must start a word in
+       one slide or section. Pages whose title has every word rank
+       first, then pages with the most matching sections, with nav order
+       breaking ties. Up to three slides per page, 25 pages.
+     - Each hit links to page?q=words#slide; "Arriving from a search"
+       below does the rest.
+     - Unrevealed answers and working are a separate field in the index:
+       they still match, and are never quoted. */
+  var SITE = null, siteState = 0;     /* 0 not asked · 1 loading · 2 ready · -1 unavailable */
+  var siteBox, siteCount, siteHits;
+  var SITE_PAGES = 25, SITE_SECS = 3;
+
+  function buildSite() {
+    siteBox = el("section", "sn-site sn-hidden");
+    siteBox.setAttribute("aria-label", "Matches in page text across the site");
+    var h = el("p", "sn-lhead");
+    h.appendChild(el("span", null, "Found in page text"));
+    siteCount = el("span", "sn-count");
+    h.appendChild(siteCount);
+    siteBox.appendChild(h);
+    siteHits = el("div", "sn-hits");
+    siteBox.appendChild(siteHits);
+    return siteBox;
+  }
+
+  function loadSite() {
+    siteState = 1;
+    var s = document.createElement("script");
+    s.src = ROOT + "assets/js/searchindex.js";
+    s.onload = function () {
+      var ix = window.SEARCHINDEX;
+      if (ix && ix.pages) { SITE = ix.pages.map(prepPage); siteState = 2; }
+      else siteState = -1;
+      if (built && search.value.trim()) filter();
+    };
+    s.onerror = function () { siteState = -1; if (built) filter(); };
+    document.head.appendChild(s);
+  }
+
+  function prepPage(p, order) {
+    return {
+      h: p.h, t: p.t, c: p.c || "", k: p.k || "", f: p.f, order: order, tl: fold(p.t),
+      s: p.s.map(function (s) {
+        var text = s[2] || "";
+        return { a: s[0], title: s[1] || "", text: text,
+                 tl: fold(s[1] || ""), low: fold(text), xl: fold(s[3] || "") };
+      })
+    };
+  }
+
+  /* Does t start a word somewhere in low? (occurrences(), stopping early) */
+  function has(low, t) {
+    var free = !WORDCH.test(t.charAt(0));
+    for (var at = low.indexOf(t); at !== -1; at = low.indexOf(t, at + 1))
+      if (free || at === 0 || !WORDCH.test(low.charAt(at - 1))) return true;
+    return false;
+  }
+
+  function searchSite(q) {
+    var terms = termsOf(q);
+    siteHits.textContent = "";
+    siteCount.textContent = "";
+    siteBox.classList.toggle("sn-hidden", !terms.length || siteState < 0);
+    if (!terms.length || siteState < 0) return;
+    if (siteState === 0) loadSite();
+    if (siteState !== 2) { siteHits.appendChild(el("p", "sn-empty sn-lempty", "Searching…")); return; }
+
+    var inTree = {};
+    links.forEach(function (a) { if (!a.classList.contains("sn-hidden")) inTree[a.dataset.h] = 1; });
+
+    var found = [];
+    SITE.forEach(function (p) {
+      if (p.h === HERE || inTree[p.h]) return;
+      var whole = terms.every(function (t) { return has(p.tl, t); });
+      var secs = [], score = whole ? 1000 : 0;
+      p.s.forEach(function (s) {
+        var titled = 0;
+        for (var k = 0; k < terms.length; k++) {
+          if (has(s.tl, terms[k])) titled++;
+          else if (!has(s.low, terms[k]) && !has(s.xl, terms[k])) return;
+        }
+        secs.push(s);
+        score += titled === terms.length ? 5 : 1;
+      });
+      if (secs.length || whole) found.push({ p: p, secs: secs, score: score });
+    });
+    found.sort(function (a, b) { return b.score - a.score || a.p.order - b.p.order; });
+
+    found.slice(0, SITE_PAGES).forEach(function (r) { siteHits.appendChild(sitePage(r, q, terms)); });
+    siteCount.textContent = found.length === 1 ? "1 page" : found.length + " pages";
+    if (!found.length) siteHits.appendChild(el("p", "sn-empty sn-lempty", "No other page mentions that."));
+    else if (found.length > SITE_PAGES)
+      siteHits.appendChild(el("p", "sn-more", "Showing the first " + SITE_PAGES + " — add a word to narrow it down."));
+  }
+
+  function siteUrl(p, s, q) {
+    var hash = s && s.a !== "" && s.a != null ? "#" + (p.f === "l" ? "slide-" : "") + s.a : "";
+    return ROOT + p.h + "?q=" + encodeURIComponent(q.trim()) + hash;
+  }
+
+  function sitePage(r, q, terms) {
+    var p = r.p, box = el("div", "sn-spage");
+    var head = el("a", "sn-sphead");
+    head.href = siteUrl(p, r.secs[0], q);
+    var dot = el("span", "sn-dot");
+    if (p.k) dot.classList.add("sn-t-" + p.k);
+    head.appendChild(dot);
+    var words = el("span", "sn-sptext");
+    words.appendChild(el("span", "sn-sptitle", p.t));
+    if (p.c) words.appendChild(el("span", "sn-spctx", p.c));
+    head.appendChild(words);
+    box.appendChild(head);
+
+    /* Sections of an ordinary page share a URL when they have no id of
+       their own; one row each is enough. */
+    var seen = {}, shown = 0, more = 0;
+    r.secs.forEach(function (s) {
+      var url = siteUrl(p, s, q);
+      if (seen[url]) return;
+      seen[url] = 1;
+      if (shown < SITE_SECS) { box.appendChild(siteHit(p, s, url, terms)); shown++; }
+      else more++;
+    });
+    if (more) box.appendChild(el("p", "sn-more", "+ " + more + " more " +
+      (p.f === "p" ? (more === 1 ? "section" : "sections") : (more === 1 ? "slide" : "slides"))));
+    return box;
+  }
+
+  function siteHit(p, s, url, terms) {
+    var a = el("a", "sn-hit sn-shit");
+    a.href = url;
+    if (p.f !== "p") a.appendChild(el("span", "sn-hnum", String(s.a).padStart(2, "0")));
+    var body = el("span", "sn-hbody");
+    if (s.title) body.appendChild(el("span", "sn-htitle", s.title));
+
+    var out = el("span", "sn-hsnip"), spans = [];
+    terms.forEach(function (t) {
+      occurrences(s.low, t).forEach(function (at) { spans.push([at, at + t.length]); });
+    });
+    spans.sort(function (x, y) { return x[0] - y[0] || y[1] - x[1]; });
+    var first = phraseIn(s.low, terms) || spans[0];
+    if (first) fillSnip(out, s.text, spans, first[0], first[1], 0, s.text.length);
+    else if (terms.some(function (t) { return has(s.xl, t); }))
+      out.appendChild(el("em", "sn-veiled", "In working or an answer not yet revealed"));
+    else if (s.text) fillSnip(out, s.text, [], 0, 0, 0, s.text.length);   /* title match: opening words */
+    body.appendChild(out);
+    a.appendChild(body);
+    return a;
+  }
+
+  /* ---------- Arriving from a search ---------------------------
+     A site result links to page?q=words#slide. The words are
+     highlighted once MathJax has finished rewriting the text (ranges
+     made before typesetting get cut apart by it): on a deck, on the
+     slide it opened at, cleared when the deck moves on; on any other
+     page, every occurrence, scrolled to the first one at or after the
+     #anchor, cleared by the next click or Escape.
+     q is taken out of the address bar straight away, so a reload or a
+     copied link is clean, and put in the search box, so the drawer
+     reopens on the same search. */
+  var unarm = null;
+  var ARRIVED = (function () {
+    var m = /[?&]q=([^&#]*)/.exec(location.search), q;
+    if (!m) return "";
+    try { q = decodeURIComponent(m[1].replace(/\+/g, " ")); } catch (e) { return ""; }
+    try {
+      var u = new URL(location.href);
+      u.searchParams.delete("q");
+      history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+    } catch (e) { /* leave the address alone */ }
+    return q;
+  })();
+
+  function arrive() {
+    var terms = termsOf(ARRIVED);
+    if (!terms.length || !HL) return;
+    whenSettled(function () {
+      if (!LESSON) { markPage(terms); return; }
+      for (var i = 0; i < SLIDES.length; i++)
+        if (SLIDES[i].classList.contains("active")) { markSlide(textIndex(SLIDES[i], i), terms); return; }
+    });
+  }
+
+  function whenSettled(cb) {
+    function run() {
+      var mj = window.MathJax, p = mj && mj.startup && mj.startup.promise;
+      if (p && typeof p.then === "function") p.then(cb, cb); else cb();
+    }
+    if (document.readyState === "complete") run();
+    else window.addEventListener("load", run);
+  }
+
+  function markPage(terms) {
+    var rec = textIndex(document.body, 0), h = new Highlight(), target = null, anchor = null;
+    try {
+      if (location.hash.length > 1) anchor = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    } catch (e) { /* malformed hash */ }
+    terms.forEach(function (t) {
+      occurrences(rec.low, t).forEach(function (at) {
+        var r = rangeFor(rec, at, at + t.length);
+        h.add(r);
+        if (veiled(r.startContainer)) return;
+        var after = !anchor || anchor.contains(r.startContainer) ||
+          !!(anchor.compareDocumentPosition(r.startContainer) & Node.DOCUMENT_POSITION_FOLLOWING);
+        if (after && (!target || at < target.at)) target = { r: r, at: at };
+      });
+    });
+    if (!h.size) return;
+    clearMarks();
+    CSS.highlights.set("sn-find", h);
+    var host = target && target.r.startContainer.parentElement;
+    if (host && host.scrollIntoView) host.scrollIntoView({ block: "center" });
+
+    function off(e) {
+      if (open || (e.type === "keydown" && e.key !== "Escape")) return;
+      clearMarks();
+    }
+    document.addEventListener("pointerdown", off, true);
+    document.addEventListener("keydown", off, true);
+    unarm = function () {
+      document.removeEventListener("pointerdown", off, true);
+      document.removeEventListener("keydown", off, true);
+    };
   }
 
   /* ---------- Open / close ------------------------------------ */
   function show() {
     if (!built) return;
     open = true;
+    if (LESSON) INDEX = null;          /* re-index: reveals and maths change the slides */
+    if (stale) filter();
+    else if (LESSON && search.value.trim()) searchLesson(search.value);
     document.body.classList.add("sn-open");
     handle.setAttribute("aria-expanded", "true");
     setTimeout(function () { search.focus(); }, 60);
   }
-  function hide() {
+  /* hide(true) leaves focus alone — used by a lesson jump, where the
+     next keypress belongs to the deck, not to the edge handle. (A plain
+     listener call passes an Event, hence the strict check.) */
+  function hide(keepFocus) {
     if (!built) return;
     open = false;
     document.body.classList.remove("sn-open");
     handle.setAttribute("aria-expanded", "false");
+    if (keepFocus === true) return;
     handle.focus({ preventScroll: true });
   }
   function toggle() { open ? hide() : show(); }
@@ -271,19 +871,18 @@
       if (e.key === "Tab") return;
       if (typing(e.target)) {
         if (e.key === "ArrowDown" || e.key === "Enter") {
-          var first = tree.querySelector(".sn-link:not(.sn-hidden)");
+          var first = results()[0];
           if (first) { first.focus(); e.preventDefault(); }
         }
         e.stopPropagation();
         return;
       }
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        var vis = links.filter(function (a) {
-          return !a.classList.contains("sn-hidden") && a.offsetParent !== null;
-        });
+        var vis = results();
         var i = vis.indexOf(document.activeElement);
         var n = e.key === "ArrowDown" ? i + 1 : i - 1;
         if (n >= 0 && n < vis.length) vis[n].focus();
+        else if (n < 0) search.focus();          /* up off the top: back to the box */
         e.preventDefault();
       }
       e.stopPropagation();
@@ -300,6 +899,9 @@
 
   /* ---------- Boot -------------------------------------------- */
   function start() {
+    SLIDES = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    LESSON = SLIDES.length > 1;
+    arrive();
     buildHandle();
     if (window.SITEMAP) { build(window.SITEMAP); return; }
     var s = document.createElement("script");

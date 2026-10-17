@@ -155,6 +155,27 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 .subtitle { font-size: 19px; color: var(--muted); margin-bottom: 6px; }
 .pill { font-size: 14px; color: var(--ink); background: var(--card); border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 13px; }
 .head-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+/* Photograph inside a slide column, with its credit line beneath. Replaces
+   the inline width / border-radius / max-height that was repeated on every
+   <img> in the Year 7 decks. .tall for a portrait specimen shot; .grid4 lays
+   a set of specimen photos out two-up. */
+.photo { display: block; width: 100%; border-radius: 8px; object-fit: cover; max-height: 30vh; }
+.photo.tall { max-height: 46vh; }
+.photo.contain { object-fit: contain; background: var(--card); }
+.credit { font-size: 0.72em; color: var(--muted); margin-top: 4px; }
+.photogrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.photogrid figure { margin: 0; }
+.photogrid .photo { max-height: 20vh; }
+.photogrid figcaption { font-size: 0.74em; color: var(--ink-soft); margin-top: 3px; }
+@media (max-width: 900px) { .photogrid { grid-template-columns: 1fr; } }
+
+/* Above-level marker on a title slide's .head-meta. Filled rather than
+   outlined so it reads first among the pills. */
+.pill-ext {
+  color: #fff; background: var(--accent-dark); border-color: var(--accent-dark);
+  font-family: var(--font-display); font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase; font-size: 12.5px;
+}
 
 /* Booklet/textbook page reference — small chip in the flow, usually
    right after the .eyebrow. Kept in-flow (not fixed) so it can't
@@ -166,6 +187,19 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff);
   border-radius: 999px; padding: 3px 12px;
 }
+/* Leading icon for a .bookref. Opt-in, because what the chip points at
+   varies: bio-ecosystems and Space cite a booklet page, bio also cites a
+   worksheet, and year12-algorithmics uses a bare .bookref for "Adapted
+   from VCAA…" exam provenance — where a book glyph would be plain wrong.
+   So the icon is a modifier, not a blanket ::before on .bookref.
+   Written as a CSS escape rather than a pasted glyph so the stylesheet
+   stays ASCII and the codepoint is unambiguous. */
+.bookref.book::before  { content: "\1F4DA"; margin-right: .45em; }
+.bookref.sheet::before { content: "\1F4DD"; margin-right: .45em; }
+/* A chip that sits on its own line under the thing it annotates, rather
+   than inline above it — replaces the repeated
+   style="display:block;margin-top:6px" in bio-ecosystems decks 8–11. */
+.bookref.stack { display: block; margin-top: 6px; }
 
 /* ---------- Prose defaults inside slides ----------
    The global reset zeroes all margins/padding, which is right for
@@ -184,9 +218,18 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
 /* ---------- Layout ---------- */
 .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: start; }
 .cols.even { grid-template-columns: 1fr 1fr; }
+/* Mirror of the default split, for the case where the figure sits left and
+   the explanation right — a photo needs less width than the prose beside it. */
+.cols.wide-right { grid-template-columns: 1fr 1.15fr; }
+/* Three equal columns — e.g. independent / dependent / controlled variables. */
+.cols.three { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+/* 70/30, for a wide diagram that needs the room with a narrow rail of
+   definitions beside it. Anything much past 70/30 leaves the text column
+   too narrow to set a line in. */
+.cols.figure-wide { grid-template-columns: 7fr 3fr; }
 @media (max-width: 900px) {
   .slide { padding: 5vh 5vw max(5vh, 76px); }
-  .cols, .cols.even { grid-template-columns: 1fr; gap: 18px; }
+  .cols, .cols.even, .cols.wide-right, .cols.figure-wide, .cols.three { grid-template-columns: 1fr; gap: 18px; }
 }
 
 /* ---------- Special slides ---------- */
@@ -207,6 +250,11 @@ h2 { font-weight: 700; font-size: clamp(22px, 3vw, 32px); margin-bottom: 6px; }
   padding: 7px 18px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,.4); font-size: 15px; letter-spacing: .06em; opacity: .85;
 }
+/* A .chip can be a link — e.g. the "open the experiment" pointer on a
+   lab section slide. Section slides are dark, so links there are white. */
+.section-slide a { color: #fff; }
+a.chip { text-decoration: none; }
+a.chip:hover, a.chip:focus-visible { opacity: 1; border-color: #fff; }
 .small { font-size: .9em; }
 .exit-slide { justify-content: center; align-items: center; text-align: center; }
 .exit-wrap { max-width: 820px; }
@@ -360,6 +408,30 @@ table.tbl.vocab td:nth-child(2) { font-style: italic; color: var(--muted); white
 .qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 900px) { .qgrid { grid-template-columns: 1fr; } }
 
+/* ---------- Hidden answer inside a callout box ----------
+   The same reveal component as .qcard .a, for a discussion or starter
+   question that is already a .box and shouldn't be wrapped in a second
+   card. deck.js wires it through data-answer, so the button needs the
+   id rather than a .qcard ancestor:
+
+     <div class="box question"><span class="lbl">Starter</span>
+       <p>…the question…</p>
+       <button class="reveal-btn" data-answer="#d1s2a">Show answer</button>
+       <div class="a" id="d1s2a">…what you're listening for…</div>
+     </div>
+
+   Child selector, not descendant: a .qcard nested inside a box keeps
+   its own rule and must not pick up the box variant as well. Text is
+   --ink rather than --muted because the box already sits on a tinted
+   background, and --muted on tint is too faint to project. */
+.box > .reveal-btn { margin-top: 6px; }
+.box > .a { display: none; border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 9px; color: var(--ink); }
+.box > .a.shown { display: block; animation: slideIn .25s ease; }
+.box > .a b { color: var(--accent-dark); }
+.box > .a > :first-child { margin-top: 0; }
+.box > .a .lbl-a { display: block; font-family: var(--font-display); font-size: .78em; font-weight: 700;
+                   letter-spacing: .04em; text-transform: uppercase; color: var(--pos); margin-bottom: 4px; }
+
 /* ---------- Option chooser ----------
    "Pick the one that fits" cards. Unlike a normal .frag the chooser
    stays visible from the start — revealing it highlights the correct
@@ -436,6 +508,11 @@ table.tbl th { border-bottom: 3px solid var(--accent-dark); color: var(--accent-
 table.tbl td { padding: 6px 12px; border-bottom: 1px solid var(--line); }
 table.tbl td.c, table.tbl th.c { text-align: center; }
 table.tbl.filled th { background: var(--accent-dark); color: #fff; border-bottom: none; }
+/* Colour key dot for a table row that pairs with a figure — e.g. the
+   planet-size table and its to-scale diagram, where the dot is how a
+   student links a row to a circle. */
+.pdot { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+  margin-right: 8px; vertical-align: baseline; border: 1px solid rgba(0,0,0,.15); }
 
 /* Reference grid (e.g. exact trig values): compact, centred, row labels
    picked out, and roomier rows since cells hold stacked fractions. */
@@ -447,6 +524,25 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 /* ---------- Graphs & figures ---------- */
 .graph-card { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius-sm); padding: 12px 12px 6px; box-shadow: var(--shadow); }
 .graph-card svg { width: 100%; height: auto; display: block; }
+/* Squarish figures can overpower a column at full width. .narrow holds the
+   card to 80%, .narrower to 65%, .half to 50%. Prefer these over a
+   per-slide inline max-width.
+   All three are percentages of the containing column, which is itself
+   sized in px — so the figure keeps scaling with browser zoom and with
+   the slide, rather than being pinned to a fixed pixel size. */
+.graph-card.narrow  { max-width: 80%; margin-inline: auto; }
+.graph-card.narrower{ max-width: 65%; margin-inline: auto; }
+.graph-card.half    { max-width: 50%; margin-inline: auto; }
+/* width:100% is what makes the variants work as a direct child of a
+   slide: the slide is a flex column, and auto inline margins on a flex
+   item shrink it to its content — an SVG has none, so the card collapsed
+   to a thumbnail. Inside a .cols cell (grid) this changes nothing. */
+.graph-card.narrow, .graph-card.narrower, .graph-card.half { width: 100%; }
+/* Below tablet width a halved figure gets too small to read — let the
+   narrower variants relax back toward full width. */
+@media (max-width: 900px) {
+  .graph-card.narrow, .graph-card.narrower, .graph-card.half { max-width: 100%; }
+}
 .legend { display: flex; gap: 16px; padding: 8px 4px 2px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .pen { width: 22px; height: 0; border-top: 3px solid; border-radius: 2px; display: inline-block; }
@@ -462,8 +558,11 @@ table.tbl.exact tr:last-child td { border-bottom: 2px solid var(--accent-dark); 
 /* Labels inside inline SVG figures. An SVG has no inherited font, so
    without this every diagram label falls back to the UA serif — which
    is why the Specialist Term 3 decks each carried an inline
-   <style>text{font-family:Segoe UI…}</style> inside every figure. One
-   rule here replaces all of them.
+   <style>text{font-family:Segoe UI…}<\/style> inside every figure. One
+   rule here replaces all of them. (The backslash in that closing tag is
+   deliberate: the sequence is inert in CSS, but an unescaped one ends
+   the element early for anyone inlining this file into a <style> block
+   — which is how the style-guide harnesses load it.)
    Two opt-outs, both necessary. MathJax's SVG output lives inside
    <mjx-container> and brings its own metrics. And a CSS declaration
    beats an SVG presentation attribute at any specificity, so without
@@ -564,10 +663,24 @@ input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
   .slide.overflowing { padding-top: 5vh; -webkit-mask-image: none; mask-image: none; }
   .progress, .chrome, .keyhint, .lessontag, .homebtn, .reveal-btn { display: none; }
   .deck::after { display: none; }
-  .qcard .a { display: block !important; }
+  .qcard .a, .box > .a { display: block !important; }
   .steps li, .frag { opacity: 1 !important; visibility: visible !important; transform: none !important; }
   .partpanel { display: block !important; }
   .teacher, .slidemenu, .menuclose { display: none; }
   .section-slide { background: #fff; color: var(--ink); }
   .section-slide h1, .section-slide h2 { color: var(--ink); }
 }
+
+/* Countdown timer (deck.js builds the buttons): <div class="timer" data-minutes="15"></div> */
+.timer { display: flex; width: fit-content; align-items: center; gap: 10px; margin-top: 14px; padding: 8px 14px;
+  border: 2px solid var(--accent); border-radius: 999px; background: var(--card, #fff); }
+.timer .t-lbl { font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent-dark); }
+.timer .t-time { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 34px; min-width: 3.4em; text-align: center; color: var(--ink); }
+.timer .t-btn { font: inherit; font-weight: 700; font-size: 16px; padding: 6px 14px; border-radius: 999px;
+  border: 1.5px solid var(--accent); background: transparent; color: var(--accent-dark); cursor: pointer; }
+.timer .t-btn[data-t="minus"], .timer .t-btn[data-t="plus"] { width: 38px; padding: 6px 0; font-size: 20px; line-height: 1; }
+.timer .t-go { background: var(--accent); color: #fff; min-width: 5.2em; }
+.timer.up { border-color: #E0533F; animation: timer-flash 1s ease-in-out 6; }
+.timer.up .t-time { color: #E0533F; }
+@keyframes timer-flash { 50% { background: #FDE3DF; } }
+@media print { .timer { display: none; } }

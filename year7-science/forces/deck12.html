@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 12 &#8212; Projectile Motion | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="booklet" content="booklet/Forces_Motion_Lesson_Booklet_Yr7_8">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 12 of 18</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 4 <b>&#183;</b> Lesson 12 of 18</p>
+    <h1>Projectile Motion</h1>
+    <p class="subtitle">Why a dropped ball and a thrown ball land together: two independent motions, time of flight, range, and measuring <em>g</em>.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Lesson 12</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide quiz-slide" data-quiz-before="12" data-quiz-recent="3" data-quiz-exclude="0,11" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 10</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Lesson 12 <b>&#183;</b> Overview</p>
+    <h2>What we&#8217;re learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
+        <ul>
+          <li>describe what makes an object a projectile</li>
+          <li>explain a projectile&#8217;s sideways and downwards motions separately</li>
+          <li>calculate how long a ball launched sideways stays in the air</li>
+          <li>calculate how far it travels, and use a fall to measure <em>g</em></li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
+        <ul>
+          <li>say why a dropped ball and a ball launched sideways land together</li>
+          <li>use \(t = \sqrt{2h \div g}\) to find a time of flight</li>
+          <li>use \(R = v \times t\) to find a range</li>
+          <li>use \(g = 2h \div t^2\) and a slow-motion video to measure gravity</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>Flick one coin off the edge of a desk and drop another from the same height at the same moment. Which one hits the floor first?</p>
+      <button class="reveal-btn" data-answer="#l12s">What to listen for</button>
+      <div class="a" id="l12s"><span class="lbl-a">What we&#8217;re listening for</span>Take a show of hands first. Most people expect the dropped coin to win. Listen for reasons, then try it: they land <strong>together</strong>. Today we find out why.</div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="bookref book">Booklet p.134 &#183; §12 &#183; Key vocabulary</p>
+    <p class="eyebrow">Lesson 12 <b>&#183;</b> Starter</p>
+    <h2><span class="phase-tag youdo">You do</span> Key vocabulary</h2>
+    <p>Copy each definition into the <strong>Key vocabulary</strong> table at the start of Lesson 12 in your booklet.</p>
+    <table class="tbl vocab">
+      <thead><tr><th>Word</th><th>Say it</th><th>Meaning</th></tr></thead>
+      <tbody>
+          <tr><td>Projectile</td><td>pro-JEK-tile</td><td>An object that is thrown or launched and then moves under gravity alone.</td></tr>
+          <tr><td>Trajectory</td><td>tra-JEK-tor-ee</td><td>The curved path a projectile follows.</td></tr>
+          <tr><td>Horizontal</td><td>hor-i-ZON-tal</td><td>Side to side, parallel to the ground.</td></tr>
+          <tr><td>Vertical</td><td>VER-ti-kal</td><td>Straight up and down.</td></tr>
+          <tr><td>Independent motions</td><td>in-de-PEN-dent MOH-shunz</td><td>Two motions that do not affect each other: the sideways motion does not change the falling motion.</td></tr>
+          <tr><td>Time of flight</td><td>time ov flite</td><td>How long a projectile is in the air.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="Part A: reading">
+    <p class="bookref book">Booklet p.134 &#183; Part A &#183; Reading and comprehension</p>
+    <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
+    <h2>Galileo and the Two Motions</h2>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Before you read</span><p>In the 1500s, people thought a cannonball flew in a straight line, then curved, then fell straight down. Do you think that is right?</p></div>
+        <p>Read <em>Galileo and the Two Motions</em> in your booklet. Then answer questions <strong>C1&#8211;C8</strong>.</p>
+      </div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>A ball launched sideways and a ball dropped from the same height land at the same time. Why?</p>
+        <button class="reveal-btn" data-answer="#l12r">Show answer</button>
+        <div class="a" id="l12r"><span class="lbl-a">Answer</span>The two motions are <strong>independent</strong>. Gravity pulls both balls down in exactly the same way; the launched ball&#8217;s sideways speed makes no difference to how quickly it falls.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="What is a projectile?">
+    <p class="bookref book">Booklet p.137 &#183; §12.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>What is a projectile?</h2>
+    <div class="cols wide-right">
+      <div>
+        <div class="box defn"><span class="lbl">Projectile</span><p>An object that has been launched and is then moving with <strong>only gravity</strong> acting on it (we ignore air resistance). Its curved path is its <strong>trajectory</strong>.</p></div>
+        <div class="box question"><span class="lbl">Projectile or not?</span>
+          <p>(a) a netball after it leaves the shooter&#8217;s hands &#160;(b) a plane flying level &#160;(c) a marble rolling off a table &#160;(d) a firework rocket while it is still burning</p>
+          <button class="reveal-btn" data-answer="#l12q1">Show answer</button>
+          <div class="a" id="l12q1"><span class="lbl-a">Answer</span>(a) <strong>yes</strong> &#160;(b) <strong>no</strong> &#8212; its engines keep pushing &#160;(c) <strong>yes</strong>, once it leaves the edge &#160;(d) <strong>no</strong> &#8212; a burning rocket is still being pushed. Only gravity may act on a projectile.</div>
+        </div>
+      </div>
+      <div class="graph-card">
+        <svg viewBox="0 30 700 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ball is launched sideways from the top of a block of height h. Its path curves downwards only, in a half parabola, and it lands a horizontal distance R away. At the start and part-way along, the ball has the same sideways velocity v, and its weight W acts straight down.">
+        <rect x="10" y="250" width="680" height="14" style="fill:var(--accent-warm-soft)"/>
+        <line x1="10" y1="250" x2="690" y2="250" stroke-width="3" style="stroke:var(--ink-soft)"/>
+        <rect x="40" y="90" width="80" height="160" style="fill:var(--line-strong)"/>
+        <path d="M132.0,78.0 L144.0,78.1 L156.0,78.4 L168.0,78.8 L180.0,79.4 L192.0,80.2 L204.0,81.2 L216.0,82.4 L228.0,83.7 L240.0,85.2 L252.0,86.9 L264.0,88.8 L276.0,90.9 L288.0,93.1 L300.0,95.5 L312.0,98.1 L324.0,100.9 L336.0,103.8 L348.0,106.9 L360.0,110.2 L372.0,113.7 L384.0,117.4 L396.0,121.2 L408.0,125.2 L420.0,129.4 L432.0,133.8 L444.0,138.4 L456.0,143.1 L468.0,148.0 L480.0,153.1 L492.0,158.4 L504.0,163.8 L516.0,169.4 L528.0,175.2 L540.0,181.2 L552.0,187.4 L564.0,193.7 L576.0,200.2 L588.0,206.9 L600.0,213.8 L612.0,220.8 L624.0,228.1 L636.0,235.5" fill="none" stroke-width="2.5" stroke-dasharray="7 6" stroke="#2F80ED"/>
+        <circle cx="132" cy="78" r="12" fill="#2F80ED"/>
+        <line x1="146" y1="78" x2="217" y2="78" stroke="#2F80ED" stroke-width="5"/><polygon points="232,78 217,86 217,70" fill="#2F80ED"/>
+        <text x="236" y="84" font-size="18" font-weight="700" fill="#1F5FB0">v</text>
+        <line x1="132" y1="92" x2="132" y2="143" stroke="#E0533F" stroke-width="5"/><polygon points="132,158 124,143 140,143" fill="#E0533F"/>
+        <text x="142" y="154" font-size="18" font-weight="700" fill="#B23A2B">W</text>
+        <circle cx="362" cy="110.8" r="12" fill="#2F80ED" fill-opacity="0.7"/>
+        <line x1="376" y1="110.8" x2="447" y2="110.8" stroke="#2F80ED" stroke-width="5"/><polygon points="462,110.8 447,118.8 447,102.8" fill="#2F80ED"/>
+        <text x="466" y="117" font-size="18" font-weight="700" fill="#1F5FB0">v</text>
+        <line x1="362" y1="124.8" x2="362" y2="175.8" stroke="#E0533F" stroke-width="5"/><polygon points="362,190.8 354,175.8 370,175.8" fill="#E0533F"/>
+        <text x="372" y="187" font-size="18" font-weight="700" fill="#B23A2B">W</text>
+        <circle cx="640" cy="238" r="12" fill="#2F80ED"/>
+        <text x="446" y="64" font-size="15" font-style="italic" fill="#1F5FB0">path: a half parabola, curving down only</text>
+        <line x1="26" y1="88" x2="26" y2="240" stroke-width="2" style="stroke:var(--c-red-600)"/><polygon points="26,78 21,89 31,89" style="fill:var(--c-red-600)"/><polygon points="26,250 21,239 31,239" style="fill:var(--c-red-600)"/><text x="16" y="170" text-anchor="end" font-size="20" font-weight="700" font-style="italic" style="fill:var(--c-red-600)">h</text>
+        <line x1="142" y1="276" x2="630" y2="276" stroke-width="2" style="stroke:var(--accent-dark)"/><polygon points="132,276 143,271 143,281" style="fill:var(--accent-dark)"/><polygon points="640,276 629,271 629,281" style="fill:var(--accent-dark)"/><text x="386" y="298" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--accent-dark)">R (range)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Two independent motions">
+    <p class="bookref book">Booklet p.137 &#183; §12.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>Two independent motions</h2>
+    <div class="cols">
+      <div>
+        <table class="tbl">
+          <tr><th></th><th>Sideways</th><th>Downwards</th></tr>
+          <tr><td><strong>Force</strong></td><td>none (ignoring air)</td><td>gravity (its weight)</td></tr>
+          <tr><td><strong>Speed</strong></td><td>stays the same</td><td>goes up by 9.8&nbsp;m/s every second</td></tr>
+          <tr><td><strong>Distance</strong></td><td>the same every second</td><td>more every second</td></tr>
+        </table>
+        <p>Put a steady sideways motion together with a speeding-up downwards motion and you get a smooth curve: a <strong>parabola</strong>.</p>
+        <p class="note">At every moment the launched ball is at the same height as the dropped ball &#8212; so they land together.</p>
+      </div>
+      <div class="graph-card">
+        <svg viewBox="0 0 560 365" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Positions every 0.1 seconds of a dropped ball and a ball launched sideways at 3 metres per second from 1.25 metres. At every moment the two balls are at the same height, so they land together after about 0.51 seconds. The launched ball moves the same distance sideways in each 0.1 seconds.">
+        <rect x="10" y="330" width="540" height="14" style="fill:var(--accent-warm-soft)"/>
+        <line x1="10" y1="330" x2="550" y2="330" stroke-width="3" style="stroke:var(--ink-soft)"/>
+        <line x1="46" y1="30.0" x2="540" y2="30.0" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <circle cx="60" cy="30.0" r="9" fill="#E0533F"/>
+        <circle cx="110.0" cy="30.0" r="9" fill="#2F80ED"/>
+        <line x1="46" y1="41.8" x2="540" y2="41.8" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <text x="40" y="46.8" text-anchor="end" font-size="14" style="fill:var(--ink-soft)">0.1 s</text>
+        <circle cx="60" cy="41.8" r="9" fill="#E0533F"/>
+        <circle cx="182.0" cy="41.8" r="9" fill="#2F80ED"/>
+        <line x1="46" y1="77.0" x2="540" y2="77.0" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <text x="40" y="82.0" text-anchor="end" font-size="14" style="fill:var(--ink-soft)">0.2 s</text>
+        <circle cx="60" cy="77.0" r="9" fill="#E0533F"/>
+        <circle cx="254.0" cy="77.0" r="9" fill="#2F80ED"/>
+        <line x1="46" y1="135.8" x2="540" y2="135.8" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <text x="40" y="140.8" text-anchor="end" font-size="14" style="fill:var(--ink-soft)">0.3 s</text>
+        <circle cx="60" cy="135.8" r="9" fill="#E0533F"/>
+        <circle cx="326.0" cy="135.8" r="9" fill="#2F80ED"/>
+        <line x1="46" y1="218.2" x2="540" y2="218.2" stroke-width="1" stroke-dasharray="3 4" style="stroke:var(--ink-faint)"/>
+        <text x="40" y="223.2" text-anchor="end" font-size="14" style="fill:var(--ink-soft)">0.4 s</text>
+        <circle cx="60" cy="218.2" r="9" fill="#E0533F"/>
+        <circle cx="398.0" cy="218.2" r="9" fill="#2F80ED"/>
+        <path d="M110.0,30.0 L122.1,30.3 L134.2,31.3 L146.4,33.0 L158.5,35.3 L170.6,38.3 L182.7,42.0 L194.9,46.3 L207.0,51.3 L219.1,57.0 L231.2,63.3 L243.3,70.3 L255.5,78.0 L267.6,86.3 L279.7,95.3 L291.8,105.0 L303.9,115.3 L316.1,126.3 L328.2,138.0 L340.3,150.3 L352.4,163.3 L364.6,177.0 L376.7,191.3 L388.8,206.3 L400.9,222.0 L413.0,238.3 L425.2,255.3 L437.3,273.0 L449.4,291.3 L461.5,310.3 L473.7,330.0" fill="none" stroke-width="1.5" stroke-dasharray="5 5" stroke="#2F80ED"/>
+        <circle cx="60" cy="321" r="9" fill="#E0533F"/>
+        <circle cx="473.7" cy="321" r="9" fill="#2F80ED"/>
+        <text x="40" y="326" text-anchor="end" font-size="14" style="fill:var(--ink-soft)">0.51 s</text>
+        <text x="60" y="18" text-anchor="middle" font-size="16" font-weight="700" fill="#B23A2B">dropped</text>
+        <text x="104" y="18" font-size="16" font-weight="700" fill="#1F5FB0">launched sideways at 3 m/s</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Time of flight">
+    <p class="bookref book">Booklet p.138 &#183; §12.3 &#183; Worked Example 12.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Time of flight</h2>
+    <div class="cols">
+      <div>
+        <p>The time in the air depends <strong>only on the drop height</strong>, not on the sideways speed.</p>
+        <div class="box defn"><span class="lbl">Key equations: launched sideways</span>
+          <p>\(h = \tfrac{1}{2} g t^2 \quad\Rightarrow\quad t = \sqrt{\dfrac{2h}{g}}\)</p>
+          <p>\(R = v \times t \qquad g = \dfrac{2h}{t^2}\)</p>
+          <p class="note">\(g = 9.8\ \text{m/s}^2\)</p>
+        </div>
+        <div class="box question"><span class="lbl">We do</span>
+          <p>A ball rolls off a table 1.0&nbsp;m high. How long does it take to land?</p>
+          <button class="reveal-btn" data-answer="#l12q2">Show answer</button>
+          <div class="a" id="l12q2"><span class="lbl-a">Answer</span>\(2h = 2.0\); &#160;\(2.0 \div 9.8 = 0.204\); &#160;\(t = \sqrt{0.204} \approx 0.45\ \text{s}\)</div>
+        </div>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 12.1</span><p>A ball rolls off a table 1.25&nbsp;m high. How long does it take to land?</p></div>
+        <ol class="steps" id="l12w1">
+          <li><span class="stepno">1</span> \(2h = 2 \times 1.25 = 2.5\)</li>
+          <li><span class="stepno">2</span> \(2.5 \div 9.8 = 0.255\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(t = \sqrt{0.255} \approx 0.51\ \text{s}\)</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l12w1">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: time of flight">
+    <p class="bookref book">Booklet p.138 &#183; We do 12.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Find the time of flight</h2>
+    <div class="box question"><span class="lbl">We do 12.1</span><p>A ball rolls off a table <strong>0.60&nbsp;m</strong> high. Use \(t = \sqrt{2h \div 9.8}\) to find how long it takes to land.</p></div>
+    <p class="note">Write your working in the <strong>We do 12.1</strong> box in your booklet.</p>
+    <ol class="steps" id="l12d1">
+      <li><span class="stepno">1</span> Step 1: \(2h = 2 \times 0.60 = 1.2\)</li>
+      <li><span class="stepno">2</span> Step 2: \(1.2 \div 9.8 = 0.122\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Step 3: \(t = \sqrt{0.122} \approx 0.35\ \text{s}\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l12d1">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="How far does it go?">
+    <p class="bookref book">Booklet p.138 &#183; §12.4 &#183; Worked Example 12.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> How far does it go?</h2>
+    <div class="cols">
+      <div>
+        <p>While the ball falls, it keeps moving sideways at its launch speed. So the sideways distance is</p>
+        <div class="box defn"><span class="lbl">Range</span><p>\(R = v \times t\) &#160; (launch speed &#215; time in the air)</p></div>
+        <div class="box question"><span class="lbl">We do</span>
+          <p>The ball from the last slide (1.0&nbsp;m table, 0.45&nbsp;s in the air) leaves the table at 2.5&nbsp;m/s. How far from the table does it land?</p>
+          <button class="reveal-btn" data-answer="#l12q3">Show answer</button>
+          <div class="a" id="l12q3"><span class="lbl-a">Answer</span>\(R = 2.5 \times 0.45 \approx 1.1\ \text{m}\)</div>
+        </div>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 12.2</span><p>The ball in Worked Example 12.1 leaves the table at 3.0&nbsp;m/s. How far from the table does it land?</p></div>
+        <ol class="steps" id="l12w2">
+          <li><span class="stepno">1</span> Time in the air: \(t = 0.51\ \text{s}\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R = v \times t = 3.0 \times 0.51 \approx 1.5\ \text{m}\)</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l12w2">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: range">
+    <p class="bookref book">Booklet p.138 &#183; We do 12.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> How far does it land?</h2>
+    <div class="box question"><span class="lbl">We do 12.2</span><p>A ball rolls off a table <strong>0.60&nbsp;m</strong> high at <strong>2.5&nbsp;m/s</strong>, and is in the air for <strong>0.35&nbsp;s</strong>. How far from the table does it land?</p></div>
+    <p class="note">Write your working in the <strong>We do 12.2</strong> box in your booklet.</p>
+    <ol class="steps" id="l12d2">
+      <li><span class="stepno">1</span> Range: \(R = v \times t\)</li>
+      <li><span class="stepno">2</span> \(R = 2.5 \times 0.35\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R \approx 0.88\ \text{m}\) from the table</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l12d2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Measuring g">
+    <p class="bookref book">Booklet p.139 &#183; §12.5 &#183; Worked Example 12.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Measuring <em>g</em></h2>
+    <div class="cols">
+      <div>
+        <p>Measure the drop height and the time of flight, and you can calculate the strength of gravity. A slow-motion video gives the time:</p>
+        <div class="box defn"><span class="lbl">From a video</span><p>\(t = \text{number of frames} \div \text{frames per second}\)</p><p>\(g = 2h \div t^2\)</p></div>
+        <div class="box question"><span class="lbl">We do</span>
+          <p>A ball rolls off a 1.0&nbsp;m bench. A video at 240 frames per second shows the fall lasting 108 frames. Find \(t\), then \(g\).</p>
+          <button class="reveal-btn" data-answer="#l12q4">Show answer</button>
+          <div class="a" id="l12q4"><span class="lbl-a">Answer</span>\(t = 108 \div 240 = 0.45\ \text{s}\); &#160;\(g = 2 \times 1.0 \div 0.45^2 = 2.0 \div 0.2025 \approx 9.9\ \text{m/s}^2\)</div>
+        </div>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 12.3</span><p>A ball rolls off a bench 0.80&nbsp;m high. A video at 120 frames per second shows 48 frames between leaving the bench and landing. Find \(t\), then \(g\).</p></div>
+        <ol class="steps" id="l12w3">
+          <li><span class="stepno">1</span> Time: \(t = 48 \div 120 = 0.40\ \text{s}\)</li>
+          <li><span class="stepno">2</span> \(g = 2h \div t^2 = (2 \times 0.80) \div (0.40 \times 0.40) = 1.6 \div 0.16\)</li>
+          <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(g = 10\ \text{m/s}^2\) &#8212; close to the accepted 9.8&nbsp;m/s&#178;</span></li>
+        </ol>
+        <button class="reveal-btn" data-target="#l12w3">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: measuring g">
+    <p class="bookref book">Booklet p.139 &#183; We do 12.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Find \(g\) from a video</h2>
+    <div class="box question"><span class="lbl">We do 12.3</span><p>A ball rolls off a bench <strong>0.44&nbsp;m</strong> high. A video filmed at <strong>240</strong> frames per second shows <strong>72</strong> frames between the ball leaving the bench and landing.</p><p><strong>(a)</strong> Find the time of the fall, \(t\).</p><p><strong>(b)</strong> Use \(g = 2h \div t^2\) to find \(g\).</p></div>
+    <p class="note">Write your working in the <strong>We do 12.3</strong> box in your booklet.</p>
+    <ol class="steps" id="l12d3">
+      <li><span class="stepno">1</span> (a) \(t = 72 \div 240 = 0.30\ \text{s}\)</li>
+      <li><span class="stepno">2</span> (b) \(g = (2 \times 0.44) \div (0.30 \times 0.30) = 0.88 \div 0.09\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(g \approx 9.8\ \text{m/s}^2\) &#8212; spot on the accepted value.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l12d3">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Part C: practice">
+    <p class="bookref book">Booklet pp.140&#8211;142 &#183; Part C &#183; Tasks 12.1&#8211;12.13</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Work through these tasks</span>
+        <ul>
+          <li><strong>Tasks 12.1&#8211;12.3</strong> &#8212; projectiles and the two motions</li>
+          <li><strong>Tasks 12.4&#8211;12.5</strong> &#8212; time of flight</li>
+          <li><strong>Tasks 12.6&#8211;12.7</strong> &#8212; range and launch speed</li>
+          <li><strong>Tasks 12.8&#8211;12.11</strong> &#8212; measuring <em>g</em> and percentage error</li>
+          <li><strong>Tasks 12.12&#8211;12.13</strong> &#8212; explain with two independent motions</li>
+        </ul>
+      </div>
+      <div class="box key"><span class="lbl">Every time</span>
+        <ul>
+          <li>\(t = \sqrt{2h \div g}\), &#160;\(R = v \times t\), &#160;\(g = 2h \div t^2\)</li>
+          <li>Use \(g = 9.8\ \text{m/s}^2\) and ignore air resistance</li>
+          <li>Show your working and include the unit</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timer" data-minutes="15"></div>
+  </section>
+
+  <section class="slide" data-menu="Above level: gravity and height">
+    <p class="bookref book">Booklet p.143 &#183; Part D &#183; like Extensions 12.14&#8211;12.17</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> Change the gravity, change the height</h2>
+    <p class="lede">These go beyond the Year 7 standard: change the gravity and compare heights.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">On Mars, <em>g</em> = 3.7&nbsp;m/s&#178;. A ball rolls off a 1.0&nbsp;m ledge at 2&nbsp;m/s. Find its time of flight and how far it travels. Compare with Earth (0.45&nbsp;s).</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>\(t = \sqrt{2 \times 1.0 \div 3.7} = \sqrt{0.541} \approx 0.74\ \text{s}\)</p>
+          <p>\(R = 2 \times 0.74 \approx 1.5\ \text{m}\)</p>
+          <p><span class="result">Weaker gravity: it falls more slowly, stays in the air longer, and lands further away.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">Ball A rolls off a 0.2&nbsp;m step; ball B rolls off a 1.8&nbsp;m wall. B falls 9 times as far. How many times as long does it take?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>A: \(\sqrt{0.4 \div 9.8} \approx 0.20\ \text{s}\); &#160;B: \(\sqrt{3.6 \div 9.8} \approx 0.61\ \text{s}\)</p>
+          <p>\(0.61 \div 0.20 \approx 3\) &#8212; and \(\sqrt{9} = 3\)</p>
+          <p><span class="result">3 times as long: the time goes with the square root of the height.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Above level: testing the method">
+    <p class="bookref book">Booklet p.144 &#183; Part D &#183; like Extensions 12.18&#8211;12.19</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> How good is the measurement?</h2>
+    <p class="lede">Evaluate the method you will use in Experiment 5.</p>
+    <div class="qgrid">
+      <div class="qcard">
+        <p class="q">A group rolls a ball off a 1.2&nbsp;m bench and measures <em>g</em> = 9.1&nbsp;m/s&#178;. Find the percentage error, and suggest two ways to make the result more accurate.</p>
+        <button class="reveal-btn">Show answer</button>
+        <div class="a">
+          <p>\(|9.1 - 9.8| \div 9.8 \times 100\% = 0.7 \div 9.8 \times 100\% \approx 7.1\%\)</p>
+          <p>Count frames from the exact frame the ball leaves the edge to the frame it lands, at a higher frame rate.</p>
+          <p><span class="result">About 7%. Also: measure the height carefully, and repeat several drops and average.</span></p>
+        </div>
+      </div>
+      <div class="qcard">
+        <p class="q">A fall from 0.8&nbsp;m lasts 0.40&nbsp;s: 12 frames at 30 frames per second, or 96 frames at 240. Miscount by one frame (13, or 97). What value of <em>g</em> does each give?</p>
+        <button class="reveal-btn">Show working</button>
+        <div class="a">
+          <p>30&nbsp;fps: \(t = 13 \div 30 = 0.433\ \text{s}\), so \(g = 1.6 \div 0.188 \approx 8.5\ \text{m/s}^2\)</p>
+          <p>240&nbsp;fps: \(t = 97 \div 240 = 0.404\ \text{s}\), so \(g = 1.6 \div 0.163 \approx 9.8\ \text{m/s}^2\)</p>
+          <p><span class="result">One frame barely matters at a high frame rate &#8212; so film at 120 frames per second or more.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Lesson 12 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>A <strong>projectile</strong> moves with only gravity acting on it; its path is a parabola</li>
+      <li>Sideways: no force, so a <strong>steady</strong> speed. Downwards: gravity, so it <strong>speeds up</strong></li>
+      <li>The two motions are independent &#8212; a dropped ball and a ball launched sideways land together</li>
+      <li>Time of flight \(t = \sqrt{2h \div g}\) depends only on the height; range \(R = v \times t\)</li>
+      <li>Measure <em>g</em> with \(g = 2h \div t^2\) and a slow-motion video &#8212; that is Experiment 5</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>A ball rolls off a 0.45&nbsp;m step at 3&nbsp;m/s. How long is it in the air, and how far from the step does it land?</p>
+      <button class="reveal-btn" data-answer="#l12x">Show answer</button>
+      <div class="a" id="l12x"><span class="lbl-a">Answer</span>\(t = \sqrt{2 \times 0.45 \div 9.8} = \sqrt{0.0918} \approx 0.30\ \text{s}\). &#160;\(R = 3 \times 0.30 \approx 0.9\ \text{m}\).</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 17</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 12 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

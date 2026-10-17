@@ -1,0 +1,1307 @@
+% ============================================================
+%  The Trebuchet Investigation — Investigation Booklet
+%  Forces and Motion, Years 7–8 | Victorian Curriculum F–10 Version 2.0
+%  Lessons 15–18 of the unit: plan (15), launch (16, optional 17),
+%  analyse (18). Same four parts as every experiment lesson in the
+%  Lesson Booklet: A Reading · B Planning · C Results and analysis ·
+%  D Above level.
+%
+%  TWO BUILDS FROM THIS ONE SOURCE (the Ch3G-L pattern)
+%    Trebuchet_Investigation_Yr7_8.tex          student copy — no answers
+%    Trebuchet_Investigation_Yr7_8_Teacher.tex  teacher copy — defines
+%        \teacheranswers (every \defans, plus \teacherappendix) and then
+%        \input's this file, so every box, cell and graph prints its model
+%        answer in red and the teacher notes follow the last student page.
+%  The teacher wrapper and its PDF are gitignored: answer keys never ship
+%  as a plain file (ROADMAP.md, "Staff material"). Keep this file free of
+%  answers. A key missing from the wrapper prints ??key?? in the teacher
+%  copy, so grep the teacher PDF for "??" after a build.
+%
+%  Both copies paginate identically: answers sit inside fixed-height boxes
+%  and cells. The teacher build reads the STUDENT page-fill file
+%  (Trebuchet_Investigation_Yr7_8.abx) and never writes one, so "page 9"
+%  is the same page in both. Build the student copy first.
+%
+%  Build: xelatex three times (contents page refs, then LastPage). Gaps at
+%  the foot of each page are shared out among that page's writing boxes by
+%  fill.py (python3 fill.py, in this folder; needs Pillow and pdftoppm). It
+%  rebuilds the student copy and writes Trebuchet_Investigation_Yr7_8.abx,
+%  which both copies read. Re-run it after any change to the content.
+%
+%  The investigation was rebuilt in Oct 2026. The old version measured g
+%  with g = 2h/t^2 from the release height and the whole flight time. That
+%  formula assumes no vertical speed at the start, and a trebuchet throws
+%  upwards, so it gave about 1.4 m/s^2 however carefully students worked.
+%  It now changes the counterweight mass (a real independent variable) and
+%  measures range plus peak arm spin with a PASCO PS-3223 Wireless
+%  3-Axis Acceleration/Altimeter strapped to the arm. Measuring g survives
+%  only as an above-level drop test of the sensor in Part D, where the
+%  formula does apply because the sensor starts from rest.
+% ============================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% ── Student / teacher switch ─────────────────────────────────────────────────
+% The teacher wrapper defines \teacheranswers (every \defans) before \input-ing
+% this file. Without it this is the student copy and every answer is blank.
+\newif\ifteacher
+\makeatletter
+\newcommand{\defans}[2]{\@namedef{kans@#1}{#2}}
+\newcommand{\getans}[1]{\@ifundefined{kans@#1}{\textbf{??#1??}}{\@nameuse{kans@#1}}}
+\makeatother
+\ifdefined\teacheranswers \teachertrue \teacheranswers \fi
+% Page-fill files always use the student copy's name, so the teacher build
+% reads the student layout and never writes its own.
+\def\abbase{Trebuchet_Investigation_Yr7_8}
+
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}The Trebuchet Investigation}
+\fancyhead[R]{\headingfont\small\ifteacher\textcolor{ScaffoldRed}{\bfseries Teacher copy}\ \textbar{}\ \fi\color{DarkGrey}Forces and Motion \textbar{} Years 7--8}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.0cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+
+% ── TikZ styles (as in the Lesson Booklet) ──
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  DIAGRAMS — all TikZ, no image files
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ── The trebuchet, cocked, with the sensor on the arm ─────────────────────────
+% Arm drawn at 232 degrees (long end down at the back). Long arm 4.6, short
+% arm 1.15 (a 4 : 1 arm, as in the worked example).
+\newcommand{\diagTrebuchetSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, scale=0.95]
+  % floor
+  \fill[ground hatch] (-0.4,-0.32) rectangle (15.4,0);
+  \draw[thick, DarkGrey] (-0.4,0) -- (15.4,0);
+  % base
+  \fill[brown!25] (1.6,0) rectangle (8.0,0.3);
+  \draw[brown!60!black] (1.6,0) rectangle (8.0,0.3);
+  % frame (A-frame seen side on)
+  \draw[line width=3pt, DarkGrey!70, line join=round] (3.4,0.3) -- (5.0,4.4) -- (6.6,0.3);
+  % counterweight at its lowest point (dashed ghost)
+  \draw[densely dashed, DarkGrey!60] (5.0,3.25) -- (5.0,2.79);
+  \draw[densely dashed, DarkGrey!60, rounded corners=1pt] (4.5,1.69) rectangle (5.5,2.79);
+  % long arm and short arm (one beam)
+  \draw[line width=6pt, brown!55!black, line cap=round] (5.71,5.31) -- (2.17,0.77);
+  % release pin at the tip
+  \draw[line width=1.6pt, DarkGrey] (2.17,0.77) -- (1.95,0.49);
+  % sling from the tip to the pouch on the base
+  \draw[thick, DarkGrey] (2.12,0.72) .. controls (3.0,0.42) .. (4.55,0.42);
+  \draw[thick, DarkGrey] (2.20,0.80) .. controls (3.1,0.62) .. (4.55,0.62);
+  % projectile in the pouch (a beanbag)
+  \fill[OrangeDark!70, rounded corners=3pt] (4.5,0.31) rectangle (5.2,0.74);
+  \draw[OrangeDark!80!black, rounded corners=3pt] (4.5,0.31) rectangle (5.2,0.74);
+  % pivot
+  \fill[DarkGrey] (5.0,4.4) circle (0.15);
+  \fill[white] (5.0,4.4) circle (0.05);
+  % counterweight: hook, hanger and slotted masses
+  \draw[thick, DarkGrey] (5.71,5.31) -- (5.71,4.80);
+  \foreach \y in {3.75,3.95,4.15,4.35,4.55} {
+    \fill[GoldDark!65] (5.21,\y) rectangle (6.21,\y+0.2);
+    \draw[GoldDark!90!black] (5.21,\y) rectangle (6.21,\y+0.2);
+  }
+  % sensor strapped to the long arm
+  \begin{scope}[shift={(4.26,3.45)}, rotate=52]
+    \fill[Sky!45] (-0.45,-0.21) rectangle (0.45,0.21);
+    \draw[MidBlue, thick] (-0.45,-0.21) rectangle (0.45,0.21);
+    \draw[NavyBlue, line width=1.2pt] (-0.12,-0.26) -- (-0.12,0.26);
+    \draw[NavyBlue, line width=1.2pt] (0.12,-0.26) -- (0.12,0.26);
+  \end{scope}
+  % long arm length L (dimension above the arm)
+  \draw[dim arrow] (4.38,4.95) -- (1.55,1.31);
+  \node[font=\small\bfseries, text=NavyBlue, rotate=52, fill=white, inner sep=1pt] at (2.97,3.13) {$L$ (long arm)};
+  % counterweight drop h
+  \draw[DarkGrey!50] (6.25,3.75) -- (7.25,3.75);
+  \draw[DarkGrey!50] (5.55,1.69) -- (7.25,1.69);
+  \draw[dim arrow] (7.05,1.69) -- (7.05,3.75);
+  \node[font=\small\bfseries, text=GoldDark, anchor=west] at (7.15,2.72) {$h$};
+  % labels with leaders
+  \node[font=\scriptsize, text=DarkGrey, anchor=west, align=left] (lp) at (6.45,5.45) {pivot (axle) --- the fulcrum};
+  \draw[DarkGrey!70] (lp.west) -- (5.12,4.5);
+  \node[font=\scriptsize, text=GoldDark, anchor=west, align=left] (lc) at (7.45,4.55) {\textbf{counterweight}: a hanger with\\slotted masses (what you change)};
+  \draw[GoldDark!70] (lc.west) -- (6.25,4.3);
+  \node[font=\scriptsize, text=GoldDark, anchor=west, align=left] at (7.45,2.72) {how far the counterweight falls,\\from cocked to hanging at rest};
+  \node[font=\scriptsize, text=MidBlue, anchor=east, align=right] (ls) at (2.6,4.85) {\textbf{sensor}, strapped to the\\long arm near the pivot};
+  \draw[MidBlue!70] (ls.east) -- (4.05,3.62);
+  \node[font=\scriptsize, text=DarkGrey, anchor=east, align=right] (lr) at (1.25,1.55) {release pin\\and trigger};
+  \draw[DarkGrey!70] (lr.east) -- (2.0,0.6);
+  \node[font=\scriptsize, text=OrangeDark, anchor=north, align=center] at (4.0,-0.38) {sling, pouch and projectile};
+  \node[font=\scriptsize, text=DarkGrey, anchor=north] at (1.9,-0.38) {base};
+  % 0 m line and measuring tape
+  \fill[GoldLight] (8.0,0.0) rectangle (8.18,0.08);
+  \draw[line width=2pt, Amber] (8.0,-0.05) -- (8.0,0.35);
+  \draw[line width=1pt, GoldDark] (8.0,0.04) -- (15.2,0.04);
+  \foreach \x/\l in {9.4/1, 10.8/2, 12.2/3, 13.6/4, 15.0/5} {
+    \draw[GoldDark] (\x,0.04) -- (\x,0.22);
+    \node[font=\tiny, text=GoldDark, anchor=south] at (\x,0.2) {\l\,m};
+  }
+  \node[font=\scriptsize\bfseries, text=GoldDark, anchor=north] at (8.1,-0.38) {0\,m line};
+  % flight path and landing point
+  \draw[thick, MidBlue, densely dotted, -{Stealth}] (3.1,5.9) .. controls (6.5,9.6) and (11.5,7.5) .. (13.4,0.45);
+  \fill[OrangeDark!70, rounded corners=2pt] (13.25,0.04) rectangle (13.75,0.28);
+  \node[font=\scriptsize, text=MidBlue, anchor=south west] at (9.6,7.3) {flight path};
+  % range R
+  \draw[dim arrow] (8.0,-0.95) -- (13.5,-0.95);
+  \node[font=\small\bfseries, text=NavyBlue, fill=white, inner sep=2pt] at (10.75,-0.95) {range $R$};
+  \draw[DarkGrey!50] (13.5,0.0) -- (13.5,-1.1);
+  \draw[DarkGrey!50] (8.0,-0.3) -- (8.0,-1.1);
+\end{tikzpicture}
+\end{center}}
+
+% ── Every point on the arm turns together ────────────────────────────────────
+\newcommand{\diagArcs}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, scale=0.82]
+  % arm at the start (pale) and a moment later (dark), turned 35 degrees
+  \draw[line width=5pt, brown!25, line cap=round] (-0.9,0) -- (8,0);
+  \draw[line width=5pt, brown!55!black, line cap=round] ({-0.9*cos(35)},{-0.9*sin(35)}) -- ({8*cos(35)},{8*sin(35)});
+  % arcs
+  \draw[very thick, MidBlue, -{Stealth}] (1.3,0) arc[start angle=0, end angle=35, radius=1.3];
+  \draw[very thick, OrangeDark, -{Stealth}] (8.25,0) arc[start angle=0, end angle=35, radius=8.25];
+  % sensor in both positions
+  \fill[Sky!25] (0.9,-0.18) rectangle (1.7,0.18);
+  \begin{scope}[rotate=35]
+    \fill[Sky!45] (0.9,-0.18) rectangle (1.7,0.18);
+    \draw[MidBlue, thick] (0.9,-0.18) rectangle (1.7,0.18);
+  \end{scope}
+  % tip in both positions
+  \fill[DarkGrey!30] (8,0) circle (0.12);
+  \fill[DarkGrey] ({8*cos(35)},{8*sin(35)}) circle (0.12);
+  % pivot
+  \fill[DarkGrey] (0,0) circle (0.14); \fill[white] (0,0) circle (0.05);
+  \node[font=\scriptsize, text=DarkGrey, anchor=north] at (0,-0.25) {pivot};
+  % labels
+  \node[font=\scriptsize, text=MidBlue, anchor=west, align=left] at (1.65,0.55) {sensor: a short arc};
+  \node[font=\scriptsize, text=OrangeDark, anchor=west, align=left] at (8.45,2.35) {tip of the long arm:\\a long arc --- in the\\same time, so it is\\moving much faster};
+  \node[font=\scriptsize, text=DarkGrey, anchor=west] at (2.2,-0.45) {start};
+  \node[font=\scriptsize, text=DarkGrey, anchor=south east, rotate=35] at (5.3,3.75) {a moment later};
+\end{tikzpicture}
+\end{center}}
+
+% ── What the sensor records during one launch (simulated, 800 g) ──────────────
+% x: 0..1.0 s at 12 cm; y: -7..10 rad/s at 0.36 cm per rad/s
+\newcommand{\diagSpinGraph}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=12cm, y=0.335cm]
+  % grid
+  \foreach \yy in {-6,-4,...,10} \draw[Line] (0,\yy) -- (1.0,\yy);
+  \foreach \xx in {0,0.1,...,1.01} \draw[Line] (\xx,-7) -- (\xx,10);
+  % axes
+  \draw[thick, DarkGrey, -{Stealth}] (0,-7) -- (0,10.6);
+  \draw[thick, DarkGrey, -{Stealth}] (0,0) -- (1.04,0);
+  \foreach \yy in {-6,-4,...,10} \node[font=\scriptsize, text=DarkGrey, anchor=east] at (0,\yy) {\yy};
+  \foreach \xx/\l in {0.2/0.2,0.4/0.4,0.6/0.6,0.8/0.8,1.0/1.0} \node[font=\scriptsize, text=DarkGrey, anchor=north] at (\xx,-7) {\l};
+  \node[font=\small, text=DarkGrey, anchor=north] at (0.5,-8.3) {time (s)};
+  \node[font=\small, text=DarkGrey, rotate=90, anchor=south] at (-0.055,1.5) {spin rate (rad/s)};
+  % the trace
+  \draw[thick, MidBlue, line join=round] plot coordinates {\spintrace};
+  % annotations
+  \fill[OrangeDark] (0.67,9.04) circle (2.2pt);
+  \draw[OrangeDark, thin] (0.67,9.04) -- (0.78,9.5);
+  \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, fill=white, inner sep=1.5pt] at (0.78,9.5) {peak spin $\approx 9.0$ rad/s};
+  \draw[DarkGrey, thin, -{Stealth}] (0.12,4.0) -- (0.195,0.5);
+  \node[font=\scriptsize, text=DarkGrey, anchor=south, fill=white, inner sep=1.5pt, align=center] at (0.12,4.0) {trigger\\released};
+  \node[font=\scriptsize, text=DarkGrey, anchor=north, fill=white, inner sep=1.5pt, align=center] at (0.12,-1.2) {arm still:\\0 rad/s};
+  \node[font=\scriptsize, text=DarkGrey, anchor=west, fill=white, inner sep=1.5pt, align=left] at (0.62,-3.6) {arm swings\\back past\\the bottom};
+\end{tikzpicture}
+\end{center}}
+
+% ── Energy chain for a trebuchet ─────────────────────────────────────────────
+\newcommand{\diagChain}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt, minimum width=3.6cm, minimum height=1.15cm,
+        align=center, text=OrangeDark] (n1) at (0,0) {\textbf{Gravitational PE}\\[-1pt]{\scriptsize\color{DarkGrey}counterweight raised}};
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt, minimum width=3.6cm, minimum height=1.15cm,
+        align=center, text=GoldDark] (n2) at (4.8,0) {\textbf{Kinetic energy}\\[-1pt]{\scriptsize\color{DarkGrey}arm, counterweight, sling}};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt, minimum width=3.6cm, minimum height=1.15cm,
+        align=center, text=TealGreen] (n3) at (9.6,0) {\textbf{Kinetic energy}\\[-1pt]{\scriptsize\color{DarkGrey}projectile in flight}};
+  \node[draw=DarkGrey, fill=LightGrey, rounded corners=4pt, minimum width=3.6cm, minimum height=0.85cm,
+        align=center, text=DarkGrey] (nw) at (4.8,-1.6) {thermal energy and sound {\scriptsize(wasted)}};
+  \draw[-{Stealth}, thick, DarkGrey] (n1) -- (n2);
+  \draw[-{Stealth}, thick, DarkGrey] (n2) -- (n3);
+  \draw[-{Stealth}, thick, DarkGrey] (n2) -- (nw);
+\end{tikzpicture}
+\end{center}}
+
+% ── Axes for a sketched prediction ───────────────────────────────────────────
+% \sketchaxes{y label}{x label}
+\newcommand{\sketchaxes}[2]{%
+  \draw[thick, DarkGrey, -{Stealth}] (0.9,0.8) -- (0.9,4.1);
+  \draw[thick, DarkGrey, -{Stealth}] (0.9,0.8) -- (7.2,0.8);
+  \node[font=\scriptsize, text=DarkGrey, rotate=90, anchor=south] at (0.75,2.45) {#1};
+  \node[font=\scriptsize, text=DarkGrey, anchor=north] at (4.05,0.75) {#2};}
+
+% Figure 3 trace: simulated gyro reading, 800 g counterweight (rigid arm + sling
+% model, 200 Hz, every second sample, small noise added). Peak 9.04 rad/s at 0.67 s.
+\def\spintrace{(0.000,0.08) (0.010,0.02) (0.020,-0.02) (0.030,-0.08) (0.040,-0.03) (0.050,0.01) (0.060,-0.01) (0.070,-0.04) (0.080,0.02) (0.090,0.04) (0.100,0.00) (0.110,0.02) (0.120,-0.01) (0.130,0.08) (0.140,-0.01) (0.150,-0.04) (0.160,0.04) (0.170,0.00) (0.180,-0.11) (0.190,-0.04) (0.200,0.01) (0.210,0.29) (0.220,0.61) (0.230,0.96) (0.240,1.21) (0.250,1.49) (0.260,1.81) (0.270,2.06) (0.280,2.35) (0.290,2.80) (0.300,3.03) (0.310,3.37) (0.320,3.65) (0.330,4.07) (0.340,4.27) (0.350,4.69) (0.360,5.04) (0.370,5.26) (0.380,5.55) (0.390,5.70) (0.400,5.98) (0.410,6.10) (0.420,6.20) (0.430,6.23) (0.440,6.35) (0.450,6.27) (0.460,6.27) (0.470,6.16) (0.480,6.13) (0.490,6.08) (0.500,5.96) (0.510,5.91) (0.520,5.87) (0.530,5.94) (0.540,6.05) (0.550,6.27) (0.560,6.36) (0.570,6.71) (0.580,6.97) (0.590,7.48) (0.600,7.76) (0.610,8.12) (0.620,8.48) (0.630,8.65) (0.640,8.87) (0.650,8.97) (0.660,8.97) (0.670,9.04) (0.680,8.92) (0.690,8.84) (0.700,8.62) (0.710,8.54) (0.720,8.15) (0.730,7.81) (0.740,7.54) (0.750,7.12) (0.760,6.68) (0.770,6.20) (0.780,5.69) (0.790,5.18) (0.800,4.71) (0.810,4.13) (0.820,3.60) (0.830,2.92) (0.840,2.40) (0.850,1.87) (0.860,1.29) (0.870,0.72) (0.880,0.06) (0.890,-0.53) (0.900,-1.03) (0.910,-1.64) (0.920,-2.19) (0.930,-2.76) (0.940,-3.28) (0.950,-3.83) (0.960,-4.34) (0.970,-4.84) (0.980,-5.28) (0.990,-5.73) (1.000,-6.10)}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \ifteacher\else\immediate\openout\abpos=\abbase.abp\fi
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\abbase.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\ifteacher\else\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp\fi}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifteacher\else\ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  INVESTIGATION BOOKLET ADDITIONS
+% ══════════════════════════════════════════════════════════════════════════════
+% One investigation, not numbered lessons: tasks, figures and worked examples
+% run Task 1, 2, 3 ... (no section prefix). Subsections are B1, B2 ... / C1 ...
+\renewcommand{\thetasknum}{\arabic{tasknum}}
+\renewcommand{\thefignum}{\arabic{fignum}}
+\renewcommand{\thewenum}{\arabic{wenum}}
+\newcommand{\partsubs}[1]{\setcounter{subsection}{0}\renewcommand{\thesubsection}{#1\arabic{subsection}}}
+
+% Answer-bearing furniture. Every box, cell and graph carries a key; the
+% teacher copy prints \getans{key} inside it in red, the student copy prints
+% nothing. Heights never depend on the answer, so pagination is identical.
+\newcommand{\anscolor}{\color{ScaffoldRed}}
+% \abox{key}{height} — a writing box
+\newcommand{\abox}[2]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2.5mm, right=2.5mm, top=1.4mm, bottom=1mm, boxrule=1pt, height=\abh{#2},
+    fontupper=\small\anscolor]
+  \ifteacher\getans{#1}\fi
+  \end{tcolorbox}\ablog}
+% \rcqk{key}{question}{height} — comprehension question C1, C2 ...
+\newcommand{\rcqk}[3]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}%
+  \vspace{4pt}%
+  \noindent\textbf{C\thercnum.}\quad #2\par
+  \vspace{2pt}%
+  \abox{#1}{#3}}
+% \cell{key} — a write-in table cell
+\newcommand{\cell}[1]{\ifteacher{\anscolor\small\getans{#1}}\fi}
+% \graphgrid{key}{height} — 5 mm grid for a student graph; the teacher copy
+% draws the model graph over it (TikZ, cm, origin at the grid's bottom left)
+\newcommand{\graphgrid}[2]{%
+  \abnext
+  \ifteacher
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=0mm, right=0mm, top=0mm, bottom=0mm,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}},
+    overlay={\begin{scope}[shift={(interior.south west)}, x=1cm, y=1cm]\getans{#1}\end{scope}}]
+  \end{tcolorbox}%
+  \else
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=0mm, right=0mm, top=0mm, bottom=0mm,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+  \end{tcolorbox}%
+  \fi\ablog}
+% \sketchbox{key}{height}{y label}{x label} — axes to sketch a predicted shape
+\newcommand{\sketchbox}[4]{%
+  \abnext
+  \ifteacher
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=0mm, right=0mm, top=0mm, bottom=0mm,
+    overlay={\begin{scope}[shift={(interior.south west)}, x=1cm, y=1cm]\sketchaxes{#3}{#4}\getans{#1}\end{scope}}]
+  \end{tcolorbox}%
+  \else
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=0mm, right=0mm, top=0mm, bottom=0mm,
+    overlay={\begin{scope}[shift={(interior.south west)}, x=1cm, y=1cm]\sketchaxes{#3}{#4}\end{scope}}]
+  \end{tcolorbox}%
+  \fi\ablog}
+
+% Investigation banner (in place of the Lesson Booklet's experiment header)
+\newtcolorbox{invheader}[2]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Question:}\ \textit{#2}},
+}
+% Safety box (coral)
+\newtcolorbox{safetybox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=OrangeLight, colframe=Coral!60,
+  fonttitle=\headingfont\bfseries, coltitle=OrangeDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% \blankk{width}{key} — a write-in blank inside a sentence (answer smashed)
+\newcommand{\blankk}[2]{\ifteacher\underline{\makebox[#1]{\smash{\anscolor\small\getans{#2}}}}\else\underline{\hspace{#1}}\fi}
+% \drawk{key}{height}{caption} — a white box to draw in, captioned top left
+\newcommand{\drawk}[3]{%
+  \abnext
+  \ifteacher
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=2mm, right=2mm, top=1mm, bottom=1mm, fontupper=\small\color{DarkGrey},
+    overlay={\begin{scope}[shift={(interior.south west)}, x=1cm, y=1cm]\getans{#1}\end{scope}}]
+  #3
+  \end{tcolorbox}%
+  \else
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=2mm, right=2mm, top=1mm, bottom=1mm, fontupper=\small\color{DarkGrey}]
+  #3
+  \end{tcolorbox}%
+  \fi\ablog}
+% side-by-side boxes share a page-fill group so they grow together
+\newcommand{\grpstart}{\edef\abgrp{\number\numexpr\value{abox}+1\relax}}
+\newcommand{\grpend}{\gdef\abgrp{0}}
+% word-bank chip
+\newcommand{\chip}[1]{\tikz[baseline=(c.base)]\node[draw=Amber, fill=GoldLight, rounded corners=3pt, inner sep=3pt, font=\small](c){#1};}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\refstepcounter{section}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  COVER PAGE
+% ══════════════════════════════════════════════════════════════════════════════
+\thispagestyle{plain}
+\ifteacher
+  \def\coverstamp{\node[anchor=north east, fill=ScaffoldRed, text=white, font=\headingfont\bfseries\small,
+    rounded corners=2pt, inner sep=4pt] at ([xshift=-4mm, yshift=-4mm]frame.north east) {TEACHER COPY --- answers in red};}
+\else
+  \def\coverstamp{}
+\fi
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=NavyBlue, colframe=NavyBlue,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt, overlay={\coverstamp}
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Sky}\footnotesize\MakeUppercase{Investigation Booklet \textbullet\ Years 7 and 8}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{36}{42}\selectfont The Trebuchet Investigation}\\[8pt]
+    {\large\color{white!85!NavyBlue}\itshape How does the counterweight change the throw?}\\[14pt]
+    {\headingfont\color{white!72!NavyBlue}\normalsize Forces and Motion \textbar{} Victorian Curriculum F--10 Version 2.0\\[2pt]
+     VC2S8U13 \textbar{} VC2S8U14 \textbar{} VC2S8U15 \textbar{} VC2S8I01--I08}
+  \end{center}
+\end{tcolorbox}
+
+\vspace{10pt}
+
+% Student details
+\begin{tabular}{@{}p{2.3cm} p{6.6cm} p{1.5cm} p{4.4cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{6.4cm}} & \textbf{Class:} & \underline{\hspace{4.2cm}} \\[10pt]
+  \textbf{Teacher:} & \underline{\hspace{6.4cm}} & \textbf{Date:}  & \underline{\hspace{4.2cm}} \\[10pt]
+  \textbf{My group:} & \multicolumn{3}{l}{\underline{\hspace{12.6cm}}} \\
+\end{tabular}
+
+\vspace{12pt}
+
+\begin{infobox}{How this investigation runs}
+You work in a group of four, but everyone fills in their own booklet. The investigation runs over four lessons:
+
+\medskip
+\begin{tabular}{@{}l p{12.6cm}@{}}
+  \textcolor{Teal}{\rule{10pt}{10pt}}\ \textbf{Lesson 15} & \textbf{Plan.} Part A, a reading about the trebuchet. Part B, the science of the swing, the sensor, your prediction, the variables and safety. \\[4pt]
+  \textcolor{Amber}{\rule{10pt}{10pt}}\ \textbf{Lesson 16} & \textbf{Launch.} The first half of Part C: five counterweights, three launches each. \\[4pt]
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Lesson 17} & \textbf{Analyse.} The rest of Part C: graphs, analysis and conclusion. Then Part D. \\[4pt]
+  \textcolor{NavyBlue}{\rule{10pt}{10pt}}\ \textbf{Lesson 18} & \textbf{Test.} An open-booklet test. Bring this booklet: some of the questions are about your own results. \\
+\end{tabular}
+
+\medskip
+Part D is above the Year 7 level. Try it once Parts A to C are finished.
+\end{infobox}
+
+\vspace{8pt}
+
+\begin{ctab}
+\begin{tabular}{|C{1.4cm}|L{8.6cm}|C{2.0cm}|C{1.6cm}|}
+  \thead{Part} & \thead{Title} & \thead{Lesson} & \thead{Page} \\ \hline
+  A & Reading and comprehension --- \emph{Warwolf} & 15 & p.\ \pageref{partA} \\ \hline
+  B & Planning the investigation & 15 & p.\ \pageref{partB} \\ \hline
+  C & Results and analysis & 16--17 & p.\ \pageref{partC} \\ \hline
+  D & Above level & 17 & p.\ \pageref{partD} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  PART A — READING                                                 (Lesson 15)
+% ══════════════════════════════════════════════════════════════════════════════
+\lessonpart{A}{Reading and comprehension}{Teal}\label{partA}
+
+\begin{readingbox}{Reading --- Warwolf}
+\setlength{\parskip}{5pt}
+In the summer of 1304, the army of King Edward I of England surrounded Stirling Castle in Scotland. The castle stands on a steep crag of rock, and its defenders had already held out against Edward's other siege engines. So Edward ordered his engineers to build the biggest siege engine anyone had seen: a counterweight trebuchet called \emph{Warwolf}. Five master carpenters and about fifty workers spent around three months building it.
+
+Before Warwolf was finished, the defenders offered to surrender. Edward refused. He wanted to see his new machine in action, and he would not accept their surrender until Warwolf had thrown its first stones at the walls.
+
+Why were people so impressed by the counterweight trebuchet? Earlier siege engines were powered by teams of people hauling on ropes. A tired team, or one that pulled out of step, pulled with a different force each time, so every shot landed somewhere different. A counterweight trebuchet replaced the people with gravity. A huge box of stones or earth --- several tonnes, on the biggest machines --- was winched up high and then let go. Gravity pulls on the same mass in the same way every time, so a well-built trebuchet could throw stone after stone onto almost the same spot, hammering one part of a wall until it collapsed.
+
+Every stage of a trebuchet is physics you have already studied. Winching the counterweight up stores gravitational potential energy. When it is let go, an unbalanced force acts on it and it falls, turning that store into kinetic energy. The arm is a lever with its pivot close to the counterweight: the counterweight falls a short distance on the short arm, while the end of the long arm sweeps through a huge arc, much faster. A sling on the end of the arm whips the stone faster still. Once the stone is let go, the only forces on it are its weight and air resistance.
+
+Medieval engineers improved their trebuchets by trial and error: a little more weight here, a longer sling there. In this investigation you will be the engineer, but you will work like a scientist. You will change one thing --- the mass of the counterweight --- measure what happens, and use a sensor to see inside the swing.
+\end{readingbox}
+
+\rcreset
+\rcqk{rc1}{Where and when did the siege in the reading take place, and who led the attacking army?}{1.4cm}
+\rcqk{rc2}{The defenders offered to surrender before Warwolf was finished. Why did Edward refuse?}{1.4cm}
+\rcqk{rc3}{Earlier siege engines were powered by teams of people. Explain why a counterweight trebuchet could hit the same spot again and again, when the earlier engines could not.}{1.8cm}
+\rcqk{rc4}{Name the energy store of a raised counterweight, and the store it is turned into as the counterweight falls.}{1.4cm}
+\rcqk{rc5}{The trebuchet's arm is a lever. Which end of the arm moves a short distance, and which end moves fast?}{1.4cm}
+\rcqk{rc6}{In this investigation, what is the one thing you will change?}{1.2cm}
+\rcqk{rc7}{Medieval engineers improved their trebuchets by trial and error. Suggest two ways this investigation will be more scientific than trial and error.}{1.8cm}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  PART B — PLANNING                                                (Lesson 15)
+% ══════════════════════════════════════════════════════════════════════════════
+\lessonpart{B}{Planning the investigation}{Blue}\label{partB}
+\partsubs{B}
+
+\begin{invheader}{The Trebuchet Investigation}{How does the mass of the counterweight affect how far a trebuchet throws, and how fast its arm swings?}
+\small\textbf{Curriculum:} VC2S8U13 \textbullet{} VC2S8U14 \textbullet{} VC2S8U15 \textbullet{} VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06 \textbullet{} VC2S8I07 \textbullet{} VC2S8I08
+\end{invheader}
+
+\subsection{How a Trebuchet Throws}\label{sub:B1}
+
+A trebuchet is a \textbf{Class 1 lever}. Its arm turns on a \textbf{pivot} that sits between the counterweight and the projectile. The \textbf{counterweight} hangs from the end of the short arm. The \textbf{sling} hangs from the end of the long arm, with the projectile in its pouch. In this investigation a \textbf{sensor} is strapped to the arm as well.
+
+\diagTrebuchetSetup
+\figcap[fig:setup]{A desktop trebuchet, cocked and ready. $L$ is the length of the long arm, $h$ is how far the counterweight falls, and the range $R$ is measured from the 0\,m line at the front of the base.}
+
+\subsubsection*{One launch, step by step}
+\begin{enumerate}[itemsep=1pt]
+  \item The trigger is released. Gravity is now an \textbf{unbalanced force} on the counterweight, so it falls.
+  \item As the short arm swings down, the long arm swings up and over the top. The whole arm turns about the pivot.
+  \item The sling is dragged along the base, then lifted and whipped around behind the arm.
+  \item When the sling has swung far enough, its loop slides off the release pin and the projectile flies free.
+  \item In flight, the only forces on the projectile are its \textbf{weight} and \textbf{air resistance}.
+\end{enumerate}
+
+\begin{infobox}{Where the energy goes}
+\diagChain
+Raising the counterweight stores gravitational potential energy, $\text{GPE} = mgh$. If the counterweight always falls the same height $h$, then \textbf{doubling its mass doubles the energy it can give}. Some of the energy is wasted as thermal energy and sound, at the pivot and in the air.
+\end{infobox}
+
+\begin{infobox}{Why the long arm moves fast}
+The pivot is close to the counterweight. While the counterweight falls a short distance, the end of the long arm sweeps through a much longer arc \emph{in the same time}, so it moves much faster. A trebuchet gives away force to gain speed: its mechanical advantage is less than 1.
+\end{infobox}
+
+\subsection{Measuring the Swing with a Sensor}\label{sub:B2}
+
+Your sensor, a PASCO Wireless 3-Axis Acceleration/Altimeter, contains a \textbf{gyroscope}: a tiny chip, like the one that lets a phone know it is being turned. It measures how fast the sensor is turning --- its \textbf{spin rate}. Scientists call this \emph{angular velocity}, and measure it in \textbf{radians per second (rad/s)}. One full turn is about 6.3 radians, so a spin rate of 6.3\,rad/s is about one full turn every second.
+
+\subsubsection*{Every point on the arm turns together}
+The arm is rigid, so every point on it turns through the same angle in the same time. That means the sensor reads the \textbf{same spin rate} wherever it is strapped on the arm --- which is why it can sit safely near the pivot. But points further from the pivot travel around bigger circles in that time, so they \textbf{move faster}.
+
+\diagArcs
+\figcap[fig:arcs]{The whole arm turns through the same angle, but the tip travels a much longer arc than the sensor.}
+
+\begin{infobox}{Speed of the tip of the arm}
+\[ v = \omega \times L \]
+$v$ = speed of the tip of the long arm (m/s) \qquad $\omega$ (say ``omega'') = spin rate from the sensor (rad/s)\\[2pt]
+$L$ = length of the long arm, from the pivot to where the sling hangs, \textbf{in metres}
+\end{infobox}
+
+\needspace{20\baselineskip}
+\diagSpinGraph
+\figcap[fig:spin]{What the sensor recorded during one launch with an 800\,g counterweight.}
+
+\begin{workedex}{Peak spin and tip speed}
+The graph above is from a launch with an 800\,g counterweight. The long arm is 0.40\,m and the short arm is 0.10\,m. Find the peak spin, the speed of the tip, and the speed of the counterweight end of the arm.
+
+\medskip
+\textbf{Peak spin:}\quad the highest point of the hump is about $\mathbf{9.0}$\,rad/s.
+
+\textbf{Tip speed:}\quad $v = \omega \times L = 9.0 \times 0.40 = \mathbf{3.6\ \text{m/s}}$
+
+\textbf{Counterweight end:}\quad $v = 9.0 \times 0.10 = \mathbf{0.9\ \text{m/s}}$. The tip moves $3.6 \div 0.9 = 4$ times as fast --- the same as long arm $\div$ short arm $= 0.40 \div 0.10 = 4$.
+\end{workedex}
+
+\begin{infobox}{Reading the sensor}
+\begin{itemize}[itemsep=1pt, leftmargin=1.2em]
+  \item The sensor measures spin about three axes, $x$, $y$ and $z$. Only one of them shows a big hump when the arm swings --- the one lined up with the pivot's axle. Use that one.
+  \item If the hump points downwards, the reading is negative. That only means the arm turned the other way round compared with the sensor. Use the size of the peak and ignore the minus sign.
+  \item After the peak, the arm slows and swings back. That shows up as a dip below zero --- ignore it.
+\end{itemize}
+\end{infobox}
+
+\needspace{12\baselineskip}
+\task A launch gives a peak spin of 7.5\,rad/s. The trebuchet's long arm is 0.50\,m and its short arm is 0.10\,m.
+\pt{a}Calculate the speed of the tip of the long arm.
+\pt{b}Calculate the speed of the counterweight end of the arm.
+\pt{c}How many times faster does the tip move than the counterweight end?
+\abox{t1}{3.0cm}
+
+\needspace{10\baselineskip}
+\task Two groups strap the same sensor to the same trebuchet arm. Group 1 straps it 5\,cm from the pivot. Group 2 straps it 20\,cm from the pivot. Will their peak spin readings be the same or different? Explain your answer.
+\abox{t2}{2.4cm}
+
+\subsection{Planning a Fair Test}\label{sub:B3}
+
+You will change the \textbf{mass of the counterweight}, using five different masses with three launches at each. On every launch you will measure two things: the \textbf{range}, from the 0\,m line to where the projectile first lands, and the \textbf{peak spin} of the arm, from the sensor. Everything else must stay the same.
+
+\needspace{14\baselineskip}
+\task\label{tk:vars}Complete the table for the variables in this investigation.
+\begin{ctab}
+\begin{tabular}{|SW{3.3cm}|W{4.0cm}|W{5.6cm}|Z{1.9cm}|}
+  \hd & \thead{Variable} & \thead{Name of the variable} & \thead{How we change it or measure it} & \thead{Unit} \\ \hline
+  & \textbf{Independent} \newline (what we change) & \cell{t3-iv} & \cell{t3-ivhow} & \cell{t3-ivu} \\ \hline
+  & \textbf{Dependent 1} \newline (what we measure) & \cell{t3-dv1} & \cell{t3-dv1how} & \cell{t3-dv1u} \\ \hline
+  & \textbf{Dependent 2} \newline (what the sensor measures) & \cell{t3-dv2} & \cell{t3-dv2how} & \cell{t3-dv2u} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Equipment (for each group)}
+\begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{\hspace{0.04\linewidth}}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{}}
+  \textbullet\ Desktop trebuchet with a counterweight hanger & \textbullet\ Tablet or laptop with SPARKvue \\
+  \textbullet\ Slotted masses for five counterweights & \textbullet\ Measuring tape (at least 8\,m) and a metre ruler \\
+  \textbullet\ One beanbag projectile --- the same one every launch & \textbullet\ Masking tape, and a counter to mark the landing spot \\
+  \textbullet\ PASCO acceleration sensor and its strap & \textbullet\ Safety glasses for everyone in the group \\
+\end{tabular}
+
+\begin{infobox}{Group roles --- swap roles after each counterweight}
+\textbf{Operator:} loads, cocks and releases the trebuchet. The only person beside it.\\
+\textbf{Safety officer:} checks the range is clear, then calls ``Launching!'' and, afterwards, ``All clear''.\\
+\textbf{Spotter:} stands well to the side of the range and puts a counter where the projectile first lands.\\
+\textbf{Recorder:} runs SPARKvue, reads the peak spin, and records both results.
+\end{infobox}
+
+\needspace{16\baselineskip}
+\task To make it a fair test, these things must stay the same on every launch. The first row is done for you. Complete the others, and add one more of your own in the last row.
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{5.8cm}|W{5.6cm}|}
+  \hd & \thead{Kept the same} & \thead{If it changed, how could it change the results?} & \thead{How we keep it the same} \\ \hline
+  & \scaf{The projectile} & \scaf{A heavier or lighter projectile would fly a different distance.} & \scaf{Use the same beanbag for every launch.} \\ \hline
+  & The sling and release pin & \cell{t4-a2} & \cell{t4-a3} \\ \hline
+  & How far the arm is pulled back & \cell{t4-b2} & \cell{t4-b3} \\ \hline
+  & Where the sensor is strapped & \cell{t4-c2} & \cell{t4-c3} \\ \hline
+  & Where the range is measured from & \cell{t4-d2} & \cell{t4-d3} \\ \hline
+  & \cell{t4-e1} & \cell{t4-e2} & \cell{t4-e3} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{14\baselineskip}
+\task\label{tk:predict}Make a prediction before you launch.
+\pt{a}Complete the prediction, and give a reason using energy or levers.
+\begin{scaffold}{Prediction}
+I predict that as the mass of the counterweight increases, the range will \blankk{3.2cm}{t5-1} and the peak spin of the arm will \blankk{3.2cm}{t5-2}, because \ldots
+\end{scaffold}
+\abox{t5a}{2.2cm}
+\needspace{10\baselineskip}
+\pt{b}Sketch the shape you expect for each graph. You do not need any numbers.
+\par\vspace{2pt}\noindent\grpstart
+\begin{minipage}[t]{0.485\linewidth}\sketchbox{t5b1}{4.6cm}{range}{counterweight mass}\end{minipage}\hfill
+\begin{minipage}[t]{0.485\linewidth}\sketchbox{t5b2}{4.6cm}{peak spin}{counterweight mass}\end{minipage}\grpend
+\par
+
+
+\subsubsection*{Method}
+\textbf{Setting up}
+\begin{enumerate}[itemsep=1pt]
+  \item Place the trebuchet on the floor, facing down the range. Stick a strip of masking tape on the floor along the front edge of the base. This is the \textbf{0\,m line}. Line the base up with it before every launch.
+  \item Lay the measuring tape on the floor from the 0\,m line, straight down the range.
+  \item Strap the sensor tightly to the long arm, as close to the pivot as you can while it still swings clear of the frame. Swing the arm slowly by hand to check. Do not move the sensor again.
+  \item Turn the sensor on and connect it in SPARKvue. Show a graph of angular velocity against time, at the sample rate your teacher gives you.
+  \item Measure the long arm $L$, the counterweight drop $h$ and the mass of the projectile. Record them in Part C.
+\end{enumerate}
+\textbf{Launching}
+\begin{enumerate}[itemsep=1pt, resume]
+  \item Load the hanger to make the smallest counterweight.
+  \item Pull the long arm down and set the trigger. Put the projectile in the pouch and hook the sling's loop over the release pin. Keep your hands out of the arm's path.
+  \item The safety officer checks that the range is clear and everyone is behind the trebuchet, then calls ``Launching!''
+  \item The recorder presses \textbf{Start}. The operator releases the trigger. Press \textbf{Stop} once the arm has stopped swinging.
+  \item The spotter puts a counter where the projectile \textbf{first} landed. Measure from the 0\,m line to the counter, to the nearest centimetre.
+  \item Read the peak spin from the graph. Record it with the range.
+  \item Launch three times with this counterweight. Then repeat steps 6 to 11 for each of the five counterweights.
+\end{enumerate}
+
+\needspace{9\baselineskip}
+\task\label{tk:repeats}You will launch three times with each counterweight. Give two reasons why three launches are better than one.
+\abox{t6}{1.7cm}
+
+\needspace{16\baselineskip}
+\task\label{tk:risk}Complete the risk assessment. The first row is done for you.
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{5.4cm}|W{6.0cm}|}
+  \hd & \thead{Hazard} & \thead{What could happen} & \thead{How we will control the risk} \\ \hline
+  & \scaf{The arm swings very fast.} & \scaf{It could hit someone's head or hand.} & \scaf{Only the operator stands beside the trebuchet. Everyone else stays behind it.} \\ \hline
+  & The projectile in flight & \cell{t7-a2} & \cell{t7-a3} \\ \hline
+  & The counterweight & \cell{t7-b2} & \cell{t7-b3} \\ \hline
+  & \cell{t7-c1} & \cell{t7-c2} & \cell{t7-c3} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{safetybox}{Safety rules}
+Safety glasses on while launching. \textbullet{} Never stand in front of the trebuchet or beside the range. \textbullet{} Soft beanbag projectiles only. \textbullet{} Collect projectiles only after ``All clear''. \textbullet{} Keep your hands out of the arm's path while it is cocked. \textbullet{} Change the counterweight only while the arm is hanging at rest, never while it is cocked.
+\end{safetybox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  PART C — RESULTS AND ANALYSIS                              (Lessons 16–18)
+% ══════════════════════════════════════════════════════════════════════════════
+\lessonpart{C}{Results and analysis}{Amber}\label{partC}
+\partsubs{C}
+
+\subsection{Before You Launch}\label{sub:C1}
+
+\needspace{14\baselineskip}
+\task\label{tk:fixed}Measure and record these before your first launch. The first row shows you how.
+\begin{ctab}
+\begin{tabular}{|SW{5.4cm}|Z{3.0cm}|W{6.4cm}|}
+  \hd & \thead{Measurement} & \thead{Value (with unit)} & \thead{How we measured it} \\ \hline
+  & \scaf{e.g.\ Height of the pivot above the floor} & \scaf{0.35\,m} & \scaf{Metre ruler, from the floor to the centre of the axle} \\ \hline
+  & Long arm length $L$ \newline (pivot to where the sling hangs) & \cell{t8-L} & \cell{t8-Lhow} \\ \hline
+  & Counterweight drop $h$ \newline (cocked to hanging at rest) & \cell{t8-h} & \cell{t8-hhow} \\ \hline
+  & Mass of the projectile & \cell{t8-m} & \cell{t8-mhow} \\ \hline
+  & Sensor sample rate & \cell{t8-sr} & \cell{t8-srhow} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{14\baselineskip}
+\task\label{tk:roles}Decide who does each job. Swap jobs for every new counterweight, so that everyone does every job at least once. The first row is an example.
+\begin{ctab}
+\begin{tabular}{|SZ{2.9cm}|Z{2.9cm}|Z{2.9cm}|Z{2.9cm}|Z{2.9cm}|}
+  \hd & \thead{Counterweight (g)} & \thead{Operator} & \thead{Safety officer} & \thead{Spotter} & \thead{Recorder} \\ \hline
+  & \scaf{e.g.\ 500} & \scaf{Ava} & \scaf{Ben} & \scaf{Chloe} & \scaf{Dev} \\ \hline
+  & \cell{ro1} & & & & \\ \hline
+  & \cell{ro2} & & & & \\ \hline
+  & \cell{ro3} & & & & \\ \hline
+  & \cell{ro4} & & & & \\ \hline
+  & \cell{ro5} & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{22\baselineskip}
+\subsection{Results}\label{sub:C2}
+
+\needspace{16\baselineskip}
+\task Record the range of every launch, then calculate the mean range for each counterweight. The first row is an example.
+\begin{ctab}
+\begin{tabular}{|SZ{2.9cm}|Z{2.6cm}|Z{2.6cm}|Z{2.6cm}|Z{3.0cm}|}
+  \hd & \thead{Counterweight mass (g)} & \thead{Range, launch 1 (m)} & \thead{Range, launch 2 (m)} & \thead{Range, launch 3 (m)} & \thead{Mean range (m)} \\ \hline
+  & \scaf{e.g.\ 500} & \scaf{1.64} & \scaf{1.71} & \scaf{1.75} & \scaf{1.70} \\ \hline
+  & \cell{r1m} & \cell{r1a} & \cell{r1b} & \cell{r1c} & \cell{r1x} \\ \hline
+  & \cell{r2m} & \cell{r2a} & \cell{r2b} & \cell{r2c} & \cell{r2x} \\ \hline
+  & \cell{r3m} & \cell{r3a} & \cell{r3b} & \cell{r3c} & \cell{r3x} \\ \hline
+  & \cell{r4m} & \cell{r4a} & \cell{r4b} & \cell{r4c} & \cell{r4x} \\ \hline
+  & \cell{r5m} & \cell{r5a} & \cell{r5b} & \cell{r5c} & \cell{r5x} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{16\baselineskip}
+\task Record the peak spin of every launch and its mean. Then find the tip speed with $v = \omega \times L$, using your long arm in metres. The example is for a 0.40\,m arm.
+\begin{ctab}
+\begin{tabular}{|SZ{2.6cm}|Z{2.0cm}|Z{2.0cm}|Z{2.0cm}|Z{2.2cm}|Z{3.0cm}|}
+  \hd & \thead{Counterweight mass (g)} & \thead{Peak spin, launch 1 (rad/s)} & \thead{Peak spin, launch 2 (rad/s)} & \thead{Peak spin, launch 3 (rad/s)} & \thead{Mean peak spin (rad/s)} & \thead{Tip speed \newline $v = \omega \times L$ (m/s)} \\ \hline
+  & \scaf{e.g.\ 500} & \scaf{7.9} & \scaf{8.1} & \scaf{8.0} & \scaf{8.0} & \scaf{$8.0 \times 0.40 = 3.2$} \\ \hline
+  & \cell{w1m} & \cell{w1a} & \cell{w1b} & \cell{w1c} & \cell{w1x} & \cell{w1v} \\ \hline
+  & \cell{w2m} & \cell{w2a} & \cell{w2b} & \cell{w2c} & \cell{w2x} & \cell{w2v} \\ \hline
+  & \cell{w3m} & \cell{w3a} & \cell{w3b} & \cell{w3c} & \cell{w3x} & \cell{w3v} \\ \hline
+  & \cell{w4m} & \cell{w4a} & \cell{w4b} & \cell{w4c} & \cell{w4x} & \cell{w4v} \\ \hline
+  & \cell{w5m} & \cell{w5a} & \cell{w5b} & \cell{w5c} & \cell{w5x} & \cell{w5v} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{Means and odd results}
+\textbf{Mean:} add the three launches and divide by 3. For 1.64, 1.71 and 1.75\,m: \ $(1.64 + 1.71 + 1.75) \div 3 = 5.10 \div 3 = \mathbf{1.70\ \text{m}}$.\\[2pt]
+\textbf{Odd result:} if one launch is very different from the other two --- the sling let go too early, or the projectile hit something --- circle it, write down what happened, and launch again. Leave the odd result out of the mean.
+\end{infobox}
+
+\needspace{10\baselineskip}
+\task\label{tk:odd}Did any launch give a result very different from the others with the same counterweight? Describe it and explain what you think went wrong. Was the peak spin odd for that launch too? What does that tell you?
+\abox{t11}{2.8cm}
+
+\subsection{Graphs}\label{sub:C3}
+
+\needspace{24\baselineskip}
+\task\label{tk:graph1}Draw a line graph of \textbf{mean range} (vertical axis) against \textbf{counterweight mass} (horizontal axis). Start both axes at zero, choose scales that use most of the grid, plot your five points, draw a smooth line of best fit, and give the graph a title.
+\graphgrid{g1}{8.0cm}
+
+\needspace{24\baselineskip}
+\task\label{tk:graph2}Draw a second line graph, of \textbf{tip speed} (vertical axis) against \textbf{counterweight mass} (horizontal axis), in the same way. Start both axes at zero again, so that you can compare the two graphs fairly.
+\graphgrid{g2}{8.0cm}
+
+\subsection{Analysis}\label{sub:C4}
+
+\needspace{14\baselineskip}
+\task\label{tk:pattern}Describe the pattern in your range graph, using numbers from your results.
+\begin{scaffold}{Sentence starter}
+As the counterweight mass increased from \blankk{1.6cm}{t14-1}\,g to \blankk{1.6cm}{t14-2}\,g, the mean range increased / decreased from \blankk{1.6cm}{t14-3}\,m to \blankk{1.6cm}{t14-4}\,m. The line of best fit was straight / curved, which means \ldots
+\end{scaffold}
+\abox{t14}{2.2cm}
+
+\needspace{14\baselineskip}
+\task\label{tk:compare}Compare your heaviest and your lightest counterweights.
+\pt{a}How many times further did the projectile go? Divide the mean range for the heaviest by the mean range for the lightest.
+\pt{b}How many times faster did the tip of the arm move? Divide the two tip speeds in the same way.
+\pt{c}Which changed by more: the range, or the speed of the arm?
+\abox{t15}{3.2cm}
+
+\needspace{14\baselineskip}
+\task\label{tk:explain}Explain \emph{why} a heavier counterweight throws the projectile further. Use at least four of the words in the word bank.
+\begin{center}
+\chip{gravitational potential energy}\ \chip{kinetic energy}\ \chip{unbalanced force}\ \chip{lever}\ \chip{pivot}\ \chip{speed}\ \chip{mass}
+\end{center}
+\abox{t16}{3.6cm}
+
+\needspace{12\baselineskip}
+\task\label{tk:spread}Look at the three launches for each counterweight in your range table.
+\pt{a}Which counterweight had the biggest spread between its three launches? How big was the spread (largest range $-$ smallest range)?
+\pt{b}Were your results repeatable? Explain using your numbers.
+\abox{t17}{3.0cm}
+
+\needspace{16\baselineskip}
+\task\label{tk:errors}Identify sources of error in your investigation, and suggest how to reduce each one. The first row is an example.
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{5.0cm}|W{5.6cm}|}
+  \hd & \thead{Source of error} & \thead{How it affected the results} & \thead{How to reduce it} \\ \hline
+  & \scaf{The spotter judged the landing spot by eye.} & \scaf{Ranges could be a few centimetres out.} & \scaf{Film the landing, or have two spotters agree on the spot.} \\ \hline
+  & \cell{t18-a1} & \cell{t18-a2} & \cell{t18-a3} \\ \hline
+  & \cell{t18-b1} & \cell{t18-b2} & \cell{t18-b3} \\ \hline
+  & \cell{t18-c1} & \cell{t18-c2} & \cell{t18-c3} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{14\baselineskip}
+\task\label{tk:evalpred}Write down the prediction you made before launching. Then say whether your results support it, using numbers as evidence.
+\begin{scaffold}{Sentence starter}
+I predicted that \ldots \quad My results showed that \ldots \quad This supports / does not support my prediction because \ldots
+\end{scaffold}
+\abox{t19}{3.0cm}
+
+\subsection{Conclusion}\label{sub:C5}
+
+\needspace{16\baselineskip}
+\task\label{tk:concl}Write a conclusion that answers the investigation question: \emph{How does the mass of the counterweight affect how far a trebuchet throws, and how fast its arm swings?} Include the pattern you found with numbers, a scientific reason for it, how reliable your results were, and one improvement for next time.
+\begin{scaffold}{Sentence starters}
+This investigation found that \ldots \quad For example, \ldots \quad This happens because \ldots \quad Our results were (were not) reliable because \ldots \quad Next time we would \ldots
+\end{scaffold}
+\abox{t20}{5.4cm}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  PART D — ABOVE LEVEL                                             (Lesson 18)
+% ══════════════════════════════════════════════════════════════════════════════
+\lessonpart{D}{Above level}{Violet}\label{partD}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard. Each one gives you the data it needs, all from one group's investigation with a 25\,g projectile and a long arm of 0.40\,m. Use $g = 9.8$\,N/kg.
+
+\medskip
+\needspace{18\baselineskip}
+\exttask\label{ext:speed}\textbf{Launch speed from range.} When a projectile is launched at about $45^\circ$, its launch speed is roughly
+\[ v_{\text{launch}} \approx \sqrt{g \times R} \qquad \text{where $R$ is the range in metres.} \]
+\pt{a}Complete the table. The first row is done for you.
+\begin{ctab}
+\begin{tabular}{|SZ{2.7cm}|Z{2.2cm}|Z{3.6cm}|Z{2.5cm}|Z{2.6cm}|}
+  \hd & \thead{Counterweight (g)} & \thead{Mean range $R$ (m)} & \thead{Launch speed $\sqrt{g \times R}$ (m/s)} & \thead{Tip speed of the arm (m/s)} & \thead{Launch speed $\div$ tip speed} \\ \hline
+  & \scaf{800} & \scaf{4.18} & \scaf{$\sqrt{9.8 \times 4.18} = 6.4$} & \scaf{3.6} & \scaf{$6.4 \div 3.6 = 1.8$} \\ \hline
+  & 600 & 2.49 & \cell{e1-v6} & 3.3 & \cell{e1-r6} \\ \hline
+  & 1000 & 5.75 & \cell{e1-v10} & 3.8 & \cell{e1-r10} \\ \hline
+\end{tabular}
+\end{ctab}
+\pt{b}The projectile leaves faster than the tip of the arm. Explain how the sling makes this possible. (Hint: think of the sling as an extra piece of arm.)
+\pt{c}With the heavier counterweight the projectile was launched much faster, but the tip of the arm was only a little faster. Suggest why.
+\abox{e1}{3.6cm}
+
+\needspace{14\baselineskip}
+\exttask\label{ext:eff}\textbf{How efficient is the trebuchet?} The 800\,g counterweight falls $h = 0.18$\,m. The 25\,g projectile is launched at 6.4\,m/s.
+\pt{a}Calculate the gravitational potential energy the counterweight gives up: $\text{GPE} = mgh$, with the mass in kilograms.
+\pt{b}Calculate the kinetic energy of the projectile: $\text{KE} = \tfrac{1}{2}mv^2$.
+\pt{c}Calculate the efficiency: useful energy out $\div$ energy in $\times\,100\%$.
+\pt{d}Name two places the rest of the energy went.
+\abox{e2}{4.0cm}
+
+\needspace{12\baselineskip}
+\exttask\label{ext:limit}\textbf{The limit on the arm.} The group's mean peak spin rose from 8.2\,rad/s with 600\,g to only 9.5\,rad/s with 1000\,g.
+\pt{a}Calculate the percentage increase in the peak spin.
+\pt{b}A student says: ``With a counterweight a hundred times heavier, the arm would spin a hundred times faster.'' Explain why this cannot be true. (Hint: could the counterweight ever fall faster than an object simply dropped from the same height?)
+\abox{e3}{3.4cm}
+
+\needspace{24\baselineskip}
+\exttask\label{ext:drop}\textbf{Weightless for half a second.} The sensor also measures acceleration. Sitting still on the bench, it reads about 9.8\,m/s$^2$. Your teacher holds it 1.00\,m above a cushion and lets go. While it falls, the reading drops to almost 0 for 0.45\,s, then jumps when it hits the cushion.
+\pt{a}Draw a labelled free body diagram of the sensor sitting on the bench, and one of the sensor falling.
+\par\vspace{2pt}\noindent\grpstart
+\begin{minipage}[t]{0.485\linewidth}\drawk{e5a1}{4.0cm}{Sitting on the bench}\end{minipage}\hfill
+\begin{minipage}[t]{0.485\linewidth}\drawk{e5a2}{4.0cm}{Falling}\end{minipage}\grpend
+\par
+\pt{b}The sensor can only feel forces from things that touch it. Use your diagrams to explain why it reads almost 0 while it falls, even though gravity is still pulling on it.
+\pt{c}For an object dropped from rest, $g = 2h \div t^2$. Use this to calculate $g$ from the drop.
+\abox{e5}{4.0cm}
+\end{yr8box}
+
+\label{LastStudentPage}
+\ifteacher\ifdefined\teacherappendix
+  \clearpage
+  \teacherappendix
+\fi\fi
+\end{document}

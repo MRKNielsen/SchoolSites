@@ -163,7 +163,7 @@ input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}
 <body>
 <div class="progress" id="progress"></div>
 <div class="lessontag">9C &middot; Multi-stage Experiments</div>
-<div class="keyhint">&larr; &rarr; arrow keys &middot; space to advance</div>
+<div class="keyhint">&rarr; reveals then advances &middot; &larr; back &middot; space to advance</div>
 <div class="chrome">
   <button class="navbtn" id="prevBtn" aria-label="Previous slide">&larr;</button>
   <span class="counter" id="counter">1 / 14</span>
@@ -675,27 +675,33 @@ function renderWork(span){
 document.querySelectorAll('span.work').forEach(renderWork);
 
 /* ===== reveals: steps (self-resetting) ===== */
+/* State lives in the DOM, not a counter, so the buttons and the arrow
+   keys (see advance() below) can be mixed freely without drifting. */
+const stepSyncs=new Map(), ansSyncs=new Map();
 document.querySelectorAll('[data-steps]').forEach(btn=>{
   const list=document.getElementById(btn.dataset.steps);
   const items=[...list.querySelectorAll(':scope > li')];
   const label=btn.textContent;
-  let shown=0;
-  function reset(){items.forEach(li=>li.classList.remove('shown'));shown=0;btn.textContent=label;}
+  list.dataset.stepList='';
+  function sync(){btn.textContent=(items.length&&!list.querySelector(':scope > li:not(.shown)'))?'Reset ↺':label;}
+  function reset(){items.forEach(li=>li.classList.remove('shown'));sync();}
   btn.addEventListener('click',()=>{
-    if(shown<items.length){items[shown].classList.add('shown');shown++;if(shown===items.length)btn.textContent='Reset ↺';}
-    else{reset();}
+    const li=list.querySelector(':scope > li:not(.shown)');
+    if(li)li.classList.add('shown'); else items.forEach(x=>x.classList.remove('shown'));
+    sync();
   });
+  stepSyncs.set(list,sync);
   resetters.push(reset);
 });
 /* ===== reveals: Q&A ===== */
 document.querySelectorAll('[data-ans]').forEach(btn=>{
   const orig=btn.textContent;
   const a=btn.nextElementSibling;
-  function reset(){a.classList.remove('shown');btn.textContent=orig;}
-  btn.addEventListener('click',()=>{
-    const open=a.classList.toggle('shown');
-    btn.textContent=open?orig.replace('Show','Hide'):orig;
-  });
+  a.dataset.ansPanel='';
+  function sync(){btn.textContent=a.classList.contains('shown')?orig.replace('Show','Hide'):orig;}
+  function reset(){a.classList.remove('shown');sync();}
+  btn.addEventListener('click',()=>{a.classList.toggle('shown');sync();});
+  ansSyncs.set(a,sync);
   resetters.push(reset);
 });
 document.getElementById('resetBtn').addEventListener('click',resetAll);
@@ -712,17 +718,28 @@ function go(i){
   if(history.replaceState)history.replaceState(null,'','#slide-'+(cur+1));
 }
 document.getElementById('prevBtn').addEventListener('click',()=>go(cur-1));
-document.getElementById('nextBtn').addEventListener('click',()=>go(cur+1));
+/* Forward nav reveals the next hidden step or answer on the slide
+   before it advances; backward nav always leaves the slide. */
+function revealNextOn(slide){
+  const el=slide.querySelector('[data-step-list] > li:not(.shown), [data-ans-panel]:not(.shown)');
+  if(!el)return false;
+  el.classList.add('shown');
+  const sync=(el.parentElement&&stepSyncs.get(el.parentElement))||ansSyncs.get(el);
+  if(sync)sync();
+  return true;
+}
+function advance(){if(!revealNextOn(slides[cur]))go(cur+1);}
+document.getElementById('nextBtn').addEventListener('click',advance);
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT')return;
-  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();advance();}
   else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
   else if(e.key==='Home')go(0); else if(e.key==='End')go(slides.length-1);
   else if(e.key==='r'||e.key==='R'){resetAll();}
 });
 let tx=null;
 document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
-document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60&&e.target.tagName!=='INPUT')go(cur+(dx<0?1:-1));tx=null;},{passive:true});
+document.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60&&e.target.tagName!=='INPUT'){if(dx<0)advance();else go(cur-1);}tx=null;},{passive:true});
 const mm=location.hash.match(/slide-(\d+)/); go(mm?(+mm[1]-1):0);
 </script>
 <script>

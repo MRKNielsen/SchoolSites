@@ -88,16 +88,89 @@
 </section>
 
 <section class="slide" data-topic="Lesson 1 · Direct proof">
-  <h2>Worked example: direct proof</h2>
-  <div class="box example"><span class="lbl">Example 1</span>
-    <p>Prove that the sum of two odd integers is even.</p>
+  <h2>Direct proof — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p8a1">A · Sum of two odds</button>
+    <button class="ptab" data-part="#p8a2">B · Consecutive integers</button>
+    <button class="ptab" data-part="#p8a3">C · Odd squares and 8</button>
+    <button class="ptab" data-part="#p8a4">D · Three in a row</button>
+    <button class="ptab" data-part="#p8a5">E · Divisibility is transitive</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag"><b>Name the form:</b> let the integers be \(2m+1\) and \(2n+1\) for integers \(m, n\) — this is what "odd" <em>means</em>.</li>
-    <li class="frag"><b>Algebra:</b> \((2m+1) + (2n+1) = 2m + 2n + 2 = 2(m+n+1)\).</li>
-    <li class="frag"><b>Conclude:</b> \(m+n+1\) is an integer, so the sum is twice an integer — even. ∎</li>
-  </ul>
+
+  <div class="partpanel shown" id="p8a1">
+    <div class="box example"><span class="lbl">Example 1A</span>
+      <p>Prove that the sum of two odd integers is even.</p>
+    </div>
+    <ol class="steps" id="s8a1">
+      <li><span class="stepno">1</span> <b>Name the form:</b> let the integers be \(2m+1\) and \(2n+1\) for integers \(m, n\) — this is what "odd" <em>means</em>.</li>
+      <li><span class="stepno">2</span> <b>Algebra:</b> \((2m+1) + (2n+1) = 2m + 2n + 2 = 2(m+n+1)\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(m+n+1\) is an integer, so the sum is twice an integer — even. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8a1">Show the proof</button>
+  </div>
+
+  <div class="partpanel" id="p8a2">
+    <div class="box example"><span class="lbl">Example 1B</span>
+      <p>Prove that the product of any two consecutive integers is even.</p>
+    </div>
+    <ol class="steps" id="s8a2">
+      <li><span class="stepno">1</span> Let the integers be \(n\) and \(n+1\). One of them must be even — but say <em>why</em> rather than asserting it.</li>
+      <li><span class="stepno">2</span> <b>Case 1, \(n\) even:</b> \(n = 2k\), so \(n(n+1) = 2k(n+1)\) — twice an integer.</li>
+      <li><span class="stepno">3</span> <b>Case 2, \(n\) odd:</b> \(n = 2k+1\), so \(n + 1 = 2k+2 = 2(k+1)\) and \(n(n+1) = 2n(k+1)\) — twice an integer.</li>
+      <li class="ans"><span class="stepno">✓</span> Every integer is even or odd, so the cases are exhaustive. The product is even in both. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8a2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Worth noticing</span>
+      <p>"Obviously one of them is even" is the claim you were asked to prove. Splitting into cases is how you earn it.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8a3">
+    <div class="box example"><span class="lbl">Example 1C</span>
+      <p>Prove that if \(n\) is an odd integer, then \(n^2 - 1\) is divisible by 8.</p>
+    </div>
+    <ol class="steps" id="s8a3">
+      <li><span class="stepno">1</span> \(n\) odd means \(n = 2k+1\) for some integer \(k\).</li>
+      <li><span class="stepno">2</span> \(n^2 - 1 = (2k+1)^2 - 1 = 4k^2 + 4k = 4k(k+1)\).</li>
+      <li><span class="stepno">3</span> \(k(k+1)\) is a product of consecutive integers, so it is even (Example 1B) — write \(k(k+1) = 2t\).</li>
+      <li class="ans"><span class="stepno">✓</span> Then \(n^2 - 1 = 4(2t) = 8t\), divisible by 8. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8a3">Show the proof</button>
+    <div class="box key"><span class="lbl">Proofs stack</span>
+      <p>Example 1B was used here as a <b>lemma</b>. Quoting a result you have already proved is legitimate and saves work — name it when you do.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8a4">
+    <div class="box example"><span class="lbl">Example 1D</span>
+      <p>Prove that the sum of any three consecutive integers is divisible by 3.</p>
+    </div>
+    <ol class="steps" id="s8a4">
+      <li><span class="stepno">1</span> <b>Choose the symbol well.</b> Call the middle one \(n\), so the three are \(n-1\), \(n\), \(n+1\).</li>
+      <li><span class="stepno">2</span> Sum \(= (n-1) + n + (n+1) = 3n\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(n\) is an integer, so the sum is three times an integer. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8a4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Why the middle one</span>
+      <p>Starting at \(n\) gives \(3n + 3\) — still fine, but a line longer. Centring the algebra on the middle term makes the cancellation immediate. Choosing the variable well is part of the craft.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8a5">
+    <div class="box example"><span class="lbl">Example 1E</span>
+      <p>Prove that if \(a \mid b\) and \(b \mid c\), then \(a \mid c\). (Here \(a \mid b\) means "\(a\) divides \(b\)".)</p>
+    </div>
+    <ol class="steps" id="s8a5">
+      <li><span class="stepno">1</span> <b>Unpack both definitions.</b> \(a \mid b\) means \(b = ak\) for some integer \(k\); \(b \mid c\) means \(c = b\ell\) for some integer \(\ell\).</li>
+      <li><span class="stepno">2</span> Substitute the first into the second: \(c = (ak)\ell = a(k\ell)\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(k\ell\) is an integer, so \(c\) is a multiple of \(a\), i.e. \(a \mid c\). ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8a5">Show the proof</button>
+    <div class="box key"><span class="lbl">The whole proof is the definitions</span>
+      <p>Nothing here is clever. Every step is "write down what the symbol means", and that is genuinely most of direct proof — the marks are in the translation, not the algebra.</p>
+    </div>
+  </div>
+
   <div class="box key"><span class="lbl">The rhythm of direct proof</span>
     <p>Translate the hypothesis into algebraic form → manipulate → recognise the conclusion's form. Every definition you write down is a mark.</p>
   </div>
@@ -130,32 +203,93 @@
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Contrapositive">
-  <h2>Worked example: proof by contrapositive</h2>
-  <div class="box example"><span class="lbl">Example 2</span>
-    <p>Prove: if \(n^2\) is even, then \(n\) is even.</p>
+  <h2>Proof by contrapositive — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p8b1">A · Even squares</button>
+    <button class="ptab" data-part="#p8b2">B · Divisible by 3 (cases)</button>
+    <button class="ptab" data-part="#p8b3">C · A cubic parity</button>
+    <button class="ptab" data-part="#p8b4">D · Negating an "and"</button>
+    <button class="ptab" data-part="#p8b5">E · Negating an "or"</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Direct attack is awkward — "\(n^2\) even" is hard to use. Contrapositive: <em>if \(n\) is odd, then \(n^2\) is odd</em>.</li>
-    <li class="frag">\(n = 2k+1 \Rightarrow n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1\) — odd. ∎</li>
-    <li class="frag">Since the contrapositive is equivalent, the original is proved.</li>
-  </ul>
-  <div class="box key"><span class="lbl">When to reach for it</span>
-    <p>When the hypothesis is a "negative-flavoured" or hard-to-manipulate condition and its negation is concrete. "Not even" becomes "odd = \(2k+1\)" — algebra you can touch.</p>
-  </div>
-</section>
 
-<section class="slide" data-topic="Lesson 2 · Contrapositive">
-  <h2>Worked example: contrapositive with cases</h2>
-  <div class="box example"><span class="lbl">Example 3</span>
-    <p>Prove: if \(3\) divides \(n^2\), then \(3\) divides \(n\).</p>
+  <div class="partpanel shown" id="p8b1">
+    <div class="box example"><span class="lbl">Example 2A</span>
+      <p>Prove: if \(n^2\) is even, then \(n\) is even.</p>
+    </div>
+    <ol class="steps" id="s8b1">
+      <li><span class="stepno">1</span> Direct attack is awkward — "\(n^2\) even" is hard to use. Contrapositive: <em>if \(n\) is odd, then \(n^2\) is odd</em>.</li>
+      <li><span class="stepno">2</span> \(n = 2k+1 \Rightarrow n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1\) — odd.</li>
+      <li class="ans"><span class="stepno">✓</span> The contrapositive is equivalent to the original, so the original is proved. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8b1">Show the proof</button>
+    <div class="box key"><span class="lbl">When to reach for it</span>
+      <p>When the hypothesis is a "negative-flavoured" or hard-to-manipulate condition and its negation is concrete. "Not even" becomes "odd = \(2k+1\)" — algebra you can touch.</p>
+    </div>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:12px;">
-    <li class="frag">Contrapositive: if \(3 \nmid n\), then \(3 \nmid n^2\). Now "not divisible" is concrete: \(n = 3k+1\) or \(n = 3k+2\).</li>
-    <li class="frag">Case 1: \(n = 3k+1\): \(n^2 = 3(3k^2 + 2k) + 1\). &nbsp; Case 2: \(n = 3k+2\): \(n^2 = 3(3k^2 + 4k + 1) + 1\). Remainder 1 both times.</li>
-    <li class="frag">Either way \(3 \nmid n^2\). ∎ &nbsp; Exhaustive cases are a legitimate technique — just say why they cover everything. (This is the engine inside the \(\sqrt{3}\)-irrational proof.)</li>
-  </ul>
+
+  <div class="partpanel" id="p8b2">
+    <div class="box example"><span class="lbl">Example 2B</span>
+      <p>Prove: if \(3\) divides \(n^2\), then \(3\) divides \(n\).</p>
+    </div>
+    <ol class="steps" id="s8b2">
+      <li><span class="stepno">1</span> Contrapositive: if \(3 \nmid n\), then \(3 \nmid n^2\). Now "not divisible" is concrete: \(n = 3k+1\) or \(n = 3k+2\).</li>
+      <li><span class="stepno">2</span> <b>Case 1</b>, \(n = 3k+1\): \(n^2 = 9k^2 + 6k + 1 = 3(3k^2 + 2k) + 1\).</li>
+      <li><span class="stepno">3</span> <b>Case 2</b>, \(n = 3k+2\): \(n^2 = 9k^2 + 12k + 4 = 3(3k^2 + 4k + 1) + 1\).</li>
+      <li class="ans"><span class="stepno">✓</span> Remainder 1 both times, so \(3 \nmid n^2\) either way. Exhaustive cases are legitimate — just say why they cover everything. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8b2">Show the proof</button>
+    <div class="box hint"><span class="lbl">Where this goes</span>
+      <p>This is the engine inside the proof that \(\sqrt{3}\) is irrational — you will meet it again in Lesson 3.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8b3">
+    <div class="box example"><span class="lbl">Example 2C</span>
+      <p>Prove: if \(n^3 + 5\) is odd, then \(n\) is even.</p>
+    </div>
+    <ol class="steps" id="s8b3">
+      <li><span class="stepno">1</span> "\(n^3 + 5\) is odd" gives you very little to hold. Contrapositive: <em>if \(n\) is odd, then \(n^3 + 5\) is even</em>.</li>
+      <li><span class="stepno">2</span> \(n = 2k+1 \Rightarrow n^3 = 8k^3 + 12k^2 + 6k + 1 = 2(4k^3 + 6k^2 + 3k) + 1\) — odd.</li>
+      <li><span class="stepno">3</span> So \(n^3 + 5\) is odd \(+\) odd \(=\) even. Writing it out: \(n^3 + 5 = 2(4k^3 + 6k^2 + 3k + 3)\).</li>
+      <li class="ans"><span class="stepno">✓</span> The contrapositive holds, so the original does. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8b3">Show the proof</button>
+    <div class="box hint"><span class="lbl">The tell</span>
+      <p>When the hypothesis is a statement <em>about the output</em> of some algebra and the conclusion is about the <em>input</em>, the contrapositive turns the problem the right way round — you get to start from the thing you can substitute for.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8b4">
+    <div class="box example"><span class="lbl">Example 2D</span>
+      <p>Prove: for integers \(a, b\), if \(ab\) is odd then \(a\) and \(b\) are <b>both</b> odd.</p>
+    </div>
+    <ol class="steps" id="s8b4">
+      <li><span class="stepno">1</span> <b>Negate the conclusion carefully.</b> The negation of "\(a\) is odd <em>and</em> \(b\) is odd" is "\(a\) is even <em>or</em> \(b\) is even" — the "and" flips to "or".</li>
+      <li><span class="stepno">2</span> Contrapositive: if \(a\) is even or \(b\) is even, then \(ab\) is even. An "or" hypothesis means two cases.</li>
+      <li><span class="stepno">3</span> <b>Case 1</b>, \(a = 2k\): \(ab = 2(kb)\) — even. <b>Case 2</b>, \(b = 2k\): \(ab = 2(ak)\) — even.</li>
+      <li class="ans"><span class="stepno">✓</span> Even in both cases, so the contrapositive holds and the original is proved. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8b4">Show the proof</button>
+    <div class="box key"><span class="lbl">De Morgan, doing real work</span>
+      <p>\(\neg(P \wedge Q) \equiv \neg P \vee \neg Q\). Negating "both" into "at least one" is where this proof is won or lost — and the cases are allowed to overlap, since "or" is inclusive.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8b5">
+    <div class="box example"><span class="lbl">Example 2E</span>
+      <p>Prove: for real \(x, y\), if \(x + y \geq 2\) then \(x \geq 1\) or \(y \geq 1\).</p>
+    </div>
+    <ol class="steps" id="s8b5">
+      <li><span class="stepno">1</span> A direct attack has nowhere to go: the hypothesis is one inequality and the conclusion is a choice between two.</li>
+      <li><span class="stepno">2</span> <b>Negate the conclusion.</b> The negation of "\(x \geq 1\) or \(y \geq 1\)" is "\(x &lt; 1\) <em>and</em> \(y &lt; 1\)" — now you have <b>two</b> facts to use.</li>
+      <li><span class="stepno">3</span> Contrapositive: if \(x &lt; 1\) and \(y &lt; 1\), then \(x + y &lt; 2\). Adding the two inequalities gives exactly that.</li>
+      <li class="ans"><span class="stepno">✓</span> So \(x + y &lt; 2\), and the contrapositive is proved. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8b5">Show the proof</button>
+    <div class="box key"><span class="lbl">Why this one is easy backwards</span>
+      <p>Negating an "or" conclusion hands you an "and" hypothesis — two usable facts instead of a fork in the road. Whenever the thing you must prove is a disjunction, try the contrapositive first.</p>
+    </div>
+  </div>
 </section>
 
 <section class="slide" data-topic="Lesson 2 · Checkpoint">
@@ -185,16 +319,95 @@
 </section>
 
 <section class="slide" data-topic="Lesson 3 · Contradiction">
-  <h2>Proof by contradiction: \(\sqrt{2}\) is irrational</h2>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:10px;">
-    <li class="frag">Suppose not: \(\sqrt{2} = \dfrac{p}{q}\) with \(p, q\) integers sharing no common factor.</li>
-    <li class="frag">Then \(p^2 = 2q^2\): \(p^2\) even, so \(p\) even (Lesson 2's theorem!) — write \(p = 2m\).</li>
-    <li class="frag">Substitute: \(4m^2 = 2q^2 \Rightarrow q^2 = 2m^2\), so \(q\) is even too.</li>
-    <li class="frag">Now \(p\) and \(q\) share the factor 2 — contradicting our "no common factor" setup. So no such fraction exists. ∎</li>
-  </ul>
-  <div class="box key"><span class="lbl">Anatomy</span>
-    <p>Negate precisely → deduce honestly → hit an impossibility → conclude. Note how the contrapositive result from Lesson 2 was a <b>lemma</b> here — proofs stack.</p>
+  <h2>Proof by contradiction — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p8c1">A · Root 2 is irrational</button>
+    <button class="ptab" data-part="#p8c2">B · Root 3 is irrational</button>
+    <button class="ptab" data-part="#p8c3">C · Infinitely many primes</button>
+    <button class="ptab" data-part="#p8c4">D · Rational + irrational</button>
+    <button class="ptab" data-part="#p8c5">E · An irrational logarithm</button>
+  </div>
+
+  <div class="partpanel shown" id="p8c1">
+    <div class="box example"><span class="lbl">Example 3A</span>
+      <p>Prove that \(\sqrt{2}\) is irrational.</p>
+    </div>
+    <ol class="steps" id="s8c1">
+      <li><span class="stepno">1</span> Suppose not: \(\sqrt{2} = \dfrac{p}{q}\) with \(p, q\) integers sharing no common factor.</li>
+      <li><span class="stepno">2</span> Then \(p^2 = 2q^2\): \(p^2\) is even, so \(p\) is even (Lesson 2's theorem) — write \(p = 2m\).</li>
+      <li><span class="stepno">3</span> Substitute: \(4m^2 = 2q^2 \Rightarrow q^2 = 2m^2\), so \(q\) is even too.</li>
+      <li class="ans"><span class="stepno">✓</span> Now \(p\) and \(q\) share the factor 2 — contradicting the "no common factor" setup. So no such fraction exists. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8c1">Show the proof</button>
+    <div class="box key"><span class="lbl">Anatomy</span>
+      <p>Negate precisely → deduce honestly → hit an impossibility → conclude. Note how the contrapositive result from Lesson 2 was a <b>lemma</b> here — proofs stack.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8c2">
+    <div class="box example"><span class="lbl">Example 3B</span>
+      <p>Prove that \(\sqrt{3}\) is irrational.</p>
+    </div>
+    <ol class="steps" id="s8c2">
+      <li><span class="stepno">1</span> Suppose \(\sqrt{3} = \dfrac{p}{q}\) in lowest terms, so \(p, q\) share no common factor.</li>
+      <li><span class="stepno">2</span> Then \(p^2 = 3q^2\), so \(3 \mid p^2\), and by <b>Example 2B</b> that forces \(3 \mid p\). Write \(p = 3m\).</li>
+      <li><span class="stepno">3</span> Substitute: \(9m^2 = 3q^2 \Rightarrow q^2 = 3m^2\), so \(3 \mid q^2\) and hence \(3 \mid q\).</li>
+      <li class="ans"><span class="stepno">✓</span> Both \(p\) and \(q\) are divisible by 3 — contradicting lowest terms. So \(\sqrt{3}\) is irrational. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8c2">Show the proof</button>
+    <div class="box hint"><span class="lbl">The step students skip</span>
+      <p>\(3 \mid p^2 \Rightarrow 3 \mid p\) is <b>not</b> obvious and must be quoted or proved — that is exactly what Example 2B is for. Notice the same argument would collapse for \(\sqrt{4}\): there, "\(4 \mid p^2 \Rightarrow 4 \mid p\)" is false (take \(p = 2\)), which is the proof correctly refusing to show that \(\sqrt 4\) is irrational.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8c3">
+    <div class="box example"><span class="lbl">Example 3C</span>
+      <p>Prove that there are infinitely many prime numbers. <span class="note">(Euclid, c. 300 BC.)</span></p>
+    </div>
+    <ol class="steps" id="s8c3">
+      <li><span class="stepno">1</span> Suppose not: there are finitely many primes, and they are exactly \(p_1, p_2, \ldots, p_r\).</li>
+      <li><span class="stepno">2</span> <b>Build a witness.</b> Let \(N = p_1 p_2 \cdots p_r + 1\). Note \(N &gt; 1\).</li>
+      <li><span class="stepno">3</span> \(N\) has some prime factor \(p\), and by assumption \(p\) is one of the \(p_i\) — so \(p\) divides the product \(p_1 p_2 \cdots p_r\).</li>
+      <li><span class="stepno">4</span> But \(p\) also divides \(N\), so \(p\) divides the difference \(N - p_1 p_2 \cdots p_r = 1\).</li>
+      <li class="ans"><span class="stepno">✓</span> No prime divides 1, since every prime is at least 2. Contradiction — so the list of primes cannot be finite. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8c3">Show the proof</button>
+    <div class="box hint"><span class="lbl">A myth to avoid</span>
+      <p>This proof does <b>not</b> claim \(N\) is prime — often it isn't. \(2 \cdot 3 \cdot 5 \cdot 7 \cdot 11 \cdot 13 + 1 = 30031 = 59 \times 509\). All the argument needs is that \(N\) has <em>some</em> prime factor, and that no prime on the list can be it.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8c4">
+    <div class="box example"><span class="lbl">Example 3D</span>
+      <p>Prove that the sum of a rational number and an irrational number is irrational.</p>
+    </div>
+    <ol class="steps" id="s8c4">
+      <li><span class="stepno">1</span> Let \(a\) be rational and \(b\) irrational, and suppose for contradiction that \(a + b\) is <b>rational</b>.</li>
+      <li><span class="stepno">2</span> Write \(a = \dfrac{p}{q}\) and \(a + b = \dfrac{r}{s}\) with \(p,q,r,s\) integers, \(q, s \neq 0\).</li>
+      <li><span class="stepno">3</span> Then \(b = (a + b) - a = \dfrac{r}{s} - \dfrac{p}{q} = \dfrac{rq - ps}{sq}\).</li>
+      <li><span class="stepno">4</span> \(rq - ps\) and \(sq\) are integers and \(sq \neq 0\), so this exhibits \(b\) as a ratio of integers — \(b\) is rational.</li>
+      <li class="ans"><span class="stepno">✓</span> That contradicts \(b\) being irrational. So \(a + b\) is irrational. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8c4">Show the proof</button>
+    <div class="box hint"><span class="lbl">Test the neighbouring claims</span>
+      <p>"Irrational + irrational is irrational" is <b>false</b>: \(\sqrt2 + (-\sqrt2) = 0\). "Rational × irrational is irrational" is false too, at \(a = 0\). Only the statement above survives — which is why the hypotheses are worded so tightly.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8c5">
+    <div class="box example"><span class="lbl">Example 3E</span>
+      <p>Prove that \(\log_2 3\) is irrational.</p>
+    </div>
+    <ol class="steps" id="s8c5">
+      <li><span class="stepno">1</span> \(\log_2 3 &gt; 0\), so suppose for contradiction \(\log_2 3 = \dfrac{p}{q}\) with \(p, q\) <b>positive</b> integers.</li>
+      <li><span class="stepno">2</span> By the definition of a logarithm, \(2^{p/q} = 3\). Raise both sides to the power \(q\): \(2^{p} = 3^{q}\).</li>
+      <li><span class="stepno">3</span> Since \(p \geq 1\), the left side is even. Since \(3^q\) is a product of odd numbers, the right side is odd.</li>
+      <li class="ans"><span class="stepno">✓</span> An integer cannot be both even and odd. Contradiction — so \(\log_2 3\) is irrational. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8c5">Show the proof</button>
+    <div class="box key"><span class="lbl">A different flavour of impossibility</span>
+      <p>The \(\sqrt{2}\) proofs end by contradicting a <em>setup condition</em> ("lowest terms") that you chose. This one ends by contradicting a <em>fact about integers</em>. Both are valid endings — a contradiction is a contradiction.</p>
+    </div>
   </div>
 </section>
 
@@ -250,16 +463,88 @@
 </section>
 
 <section class="slide" data-topic="Lesson 4 · Counterexamples">
-  <h2>Disproof by counterexample</h2>
-  <div class="box example"><span class="lbl">Example 4</span>
-    <p>Claim: "for all primes \(p\), \(2^p - 1\) is prime." Disprove it.</p>
+  <h2>Disproof by counterexample — worked examples</h2>
+  <div class="parts">
+    <button class="ptab active" data-part="#p8d1">A · Mersenne primes</button>
+    <button class="ptab" data-part="#p8d2">B · Euler's prime formula</button>
+    <button class="ptab" data-part="#p8d3">C · Divisibility of a product</button>
+    <button class="ptab" data-part="#p8d4">D · Squaring an inequality</button>
+    <button class="ptab" data-part="#p8d5">E · Factorial plus one</button>
   </div>
-  <button class="reveal-btn" data-frag>Reveal ▸</button>
-  <ul class="small" style="margin-top:10px;">
-    <li class="frag">Test small primes: \(p = 2, 3, 5, 7\) give \(3, 7, 31, 127\) — all prime. Suspicious streak…</li>
-    <li class="frag">\(p = 11\): \(2^{11} - 1 = 2047 = 23 \times 89\). One counterexample; claim dead. ∎</li>
-    <li class="frag">Check both parts explicitly: \(11\) is prime (hypothesis ✓), \(2047\) is composite (conclusion ✗).</li>
-  </ul>
+
+  <div class="partpanel shown" id="p8d1">
+    <div class="box example"><span class="lbl">Example 4A</span>
+      <p>Claim: "for all primes \(p\), \(2^p - 1\) is prime." Disprove it.</p>
+    </div>
+    <ol class="steps" id="s8d1">
+      <li><span class="stepno">1</span> Test small primes: \(p = 2, 3, 5, 7\) give \(3, 7, 31, 127\) — all prime. A suspicious streak.</li>
+      <li><span class="stepno">2</span> \(p = 11\): \(2^{11} - 1 = 2047 = 23 \times 89\).</li>
+      <li class="ans"><span class="stepno">✓</span> Check both parts explicitly: \(11\) is prime (hypothesis ✓) and \(2047\) is composite (conclusion ✗). One counterexample; claim dead. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8d1">Show the disproof</button>
+  </div>
+
+  <div class="partpanel" id="p8d2">
+    <div class="box example"><span class="lbl">Example 4B</span>
+      <p>Claim: "\(n^2 + n + 41\) is prime for every non-negative integer \(n\)." Disprove it.</p>
+    </div>
+    <ol class="steps" id="s8d2">
+      <li><span class="stepno">1</span> Testing is discouraging: it is prime at \(n = 0, 1, 2, \ldots\) — in fact for <b>every</b> \(n\) from 0 to 39.</li>
+      <li><span class="stepno">2</span> <b>Stop testing and think.</b> The constant is 41, so try to make 41 a factor: at \(n = 41\), every term is divisible by 41.</li>
+      <li><span class="stepno">3</span> That works, but there is a smaller one. At \(n = 40\): \(40^2 + 40 + 41 = 1600 + 40 + 41 = 1681\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(1681 = 41^2\), which is composite. Hypothesis satisfied (40 is a non-negative integer), conclusion violated. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8d2">Show the disproof</button>
+    <div class="box key"><span class="lbl">Forty examples prove nothing</span>
+      <p>This is the single best argument in the course for why proof exists. A pattern that holds for the first forty cases can still be false — and no amount of further testing would ever have settled it.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8d3">
+    <div class="box example"><span class="lbl">Example 4C</span>
+      <p>Claim: "for all integers \(a, b, c\), if \(a \mid bc\) then \(a \mid b\) or \(a \mid c\)." Disprove it.</p>
+    </div>
+    <ol class="steps" id="s8d3">
+      <li><span class="stepno">1</span> The claim <em>is</em> true when \(a\) is prime, which is why it feels right. So look for a composite \(a\) whose factors can be split between \(b\) and \(c\).</li>
+      <li><span class="stepno">2</span> Take \(a = 6\), \(b = 4\), \(c = 3\). Then \(bc = 12\) and \(6 \mid 12\) ✓ — the hypothesis holds.</li>
+      <li class="ans"><span class="stepno">✓</span> But \(6 \nmid 4\) and \(6 \nmid 3\), so the conclusion fails. Claim disproved. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8d3">Show the disproof</button>
+    <div class="box hint"><span class="lbl">Searching intelligently</span>
+      <p>Hunting at random rarely finds a counterexample. Ask instead <em>why</em> the claim might be true, find the hypothesis that argument secretly needs — here, that \(a\) is prime — and then break exactly that.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8d4">
+    <div class="box example"><span class="lbl">Example 4D</span>
+      <p>Claim: "for all real \(a, b\), if \(a &gt; b\) then \(a^2 &gt; b^2\)." Disprove it.</p>
+    </div>
+    <ol class="steps" id="s8d4">
+      <li><span class="stepno">1</span> Squaring preserves order for non-negative numbers, so any counterexample must use a negative.</li>
+      <li><span class="stepno">2</span> Take \(a = 1\), \(b = -2\). Hypothesis: \(1 &gt; -2\) ✓.</li>
+      <li class="ans"><span class="stepno">✓</span> Conclusion: \(a^2 = 1\) and \(b^2 = 4\), so \(a^2 &lt; b^2\). The claim fails. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8d4">Show the disproof</button>
+    <div class="box key"><span class="lbl">Repair the claim</span>
+      <p>A good follow-up to any disproof is to ask what extra hypothesis would rescue it. Here \(a &gt; b \geq 0\) makes it true, and so does \(|a| &gt; |b|\). Finding the correct statement is worth more than merely killing the wrong one.</p>
+    </div>
+  </div>
+
+  <div class="partpanel" id="p8d5">
+    <div class="box example"><span class="lbl">Example 4E</span>
+      <p>Claim: "\(n! + 1\) is prime for every integer \(n \geq 1\)." Disprove it.</p>
+    </div>
+    <ol class="steps" id="s8d5">
+      <li><span class="stepno">1</span> \(n = 1, 2, 3\) give \(2, 3, 7\) — all prime. \(n = 4\) gives \(25 = 5^2\), and the streak is already over.</li>
+      <li><span class="stepno">2</span> Either counterexample will do. Take \(n = 5\): \(5! + 1 = 120 + 1 = 121\).</li>
+      <li class="ans"><span class="stepno">✓</span> \(121 = 11^2\), composite. Hypothesis satisfied, conclusion violated. ∎</li>
+    </ol>
+    <button class="reveal-btn" data-target="#s8d5">Show the disproof</button>
+    <div class="box hint"><span class="lbl">Presenting a disproof</span>
+      <p>You do not need the <em>smallest</em> counterexample, and you do not need to explain how you found it. One fully checked instance, with the factorisation shown, is a complete answer.</p>
+    </div>
+  </div>
+
   <div class="box key"><span class="lbl">Discipline</span>
     <p>A counterexample must satisfy the hypothesis and violate the conclusion — check both, every time. And remember: examples can <b>disprove</b> a universal claim, never prove one.</p>
   </div>

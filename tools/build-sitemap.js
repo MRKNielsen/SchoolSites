@@ -11,14 +11,29 @@
 
    Re-run this after adding, renaming or removing a page. Nothing else
    needs editing — sitenav.js loads sitemap.js itself.
+
+   It also writes assets/js/searchindex.js, the full-text index behind
+   the drawer's site-wide search (built by tools/search-index.js from
+   the same page list). That one changes whenever page *text* changes,
+   so re-run after editing a page's content as well:
+
+       node tools/build-sitemap.js           # rewrite whatever changed
+       node tools/build-sitemap.js --check   # exit 1 if either is stale
+
+   A run that changes nothing leaves both files byte-identical — the
+   date in sitemap.js only moves when the tree itself does.
    ============================================================ */
 "use strict";
 
 const fs = require("fs");
 const path = require("path");
 
+const searchIndex = require("./search-index");
+
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "assets", "js", "sitemap.js");
+const OUT_SEARCH = path.join(ROOT, "assets", "js", "searchindex.js");
+const CHECK = process.argv.includes("--check");
 
 /* ---------- Configuration ----------------------------------- */
 
@@ -61,6 +76,7 @@ const LABEL_OVERRIDES = {
   "styleguide/deck-demo.html": "Deck system demo",
   "styleguide/deck-template.html": "Deck starter template",
   "tools/staff-crypt.html": "Staff blob tool (encrypt / decrypt)",
+  "tools/page-builder.html": "Page builder (slides & worksheets)",
 };
 
 /* Unit folder names → the label used for the unit itself. Derived from
@@ -345,6 +361,16 @@ function count(nodes) {
   return nodes.reduce((n, x) => n + (x.h ? 1 : 0) + (x.c ? count(x.c) : 0), 0);
 }
 
+/* Keep the previous date when the tree hasn't changed, so re-running
+   after an ordinary content edit doesn't dirty sitemap.js. */
+function previous() {
+  const m = read(OUT).match(/window\.SITEMAP = ([\s\S]*);\s*$/);
+  try { return m ? JSON.parse(m[1]) : null; } catch { return null; }
+}
+const prev = previous();
+const generated = prev && prev.generated && JSON.stringify(prev.tree) === JSON.stringify(tree)
+  ? prev.generated : new Date().toISOString().slice(0, 10);
+
 const out =
 `/* ============================================================
    sitemap.js — GENERATED FILE, DO NOT EDIT BY HAND
@@ -357,12 +383,36 @@ const out =
      x = opaque page (third-party export, no nav injected)
      p = PDF
    ============================================================ */
-window.SITEMAP = ${JSON.stringify({ generated: new Date().toISOString().slice(0, 10), tree }, null, 1)};
+window.SITEMAP = ${JSON.stringify({ generated, tree }, null, 1)};
 `;
 
-fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, out, "utf8");
+const indexed = searchIndex.buildSearchIndex(tree, ROOT);
+const searchOut = searchIndex.render(indexed);
 
-console.log("Wrote " + path.relative(ROOT, OUT));
+/* Compared with CRLF folded, so a Windows checkout isn't always "stale". */
+const current = f => read(f).replace(/\r\n/g, "\n");
+const targets = [[OUT, out], [OUT_SEARCH, searchOut]];
+
+if (CHECK) {
+  const stale = targets.filter(([f, s]) => current(f) !== s).map(([f]) => path.relative(ROOT, f));
+  if (stale.length) {
+    console.log("Out of date: " + stale.join(", ") + "\n  run: node tools/build-sitemap.js");
+    process.exit(1);
+  }
+  console.log("sitemap.js and searchindex.js are current.");
+  process.exit(0);
+}
+
+for (const [f, s] of targets) {
+  const rel = path.relative(ROOT, f);
+  if (current(f) === s) { console.log("Unchanged " + rel); continue; }
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  fs.writeFileSync(f, s, "utf8");
+  console.log("Wrote " + rel);
+}
+
 console.log("  " + count(tree) + " links across " + tree.length + " top-level sections");
+console.log("  search index: " + indexed.length + " pages, " +
+  indexed.reduce((n, p) => n + p.s.length, 0) + " sections, " +
+  Math.round(Buffer.byteLength(searchOut) / 1024) + " KB");
 if (orphans.length) console.log("  " + orphans.length + " page(s) fell through to 'Other pages': " + orphans.join(", "));

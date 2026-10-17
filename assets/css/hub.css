@@ -7,7 +7,9 @@
        <header class="hub-head"> … <div class="timeline"> … </header>
        <main> <div class="grid" id="weeks"> <div class="week" data-start="…">
    For a long unit, wrap each grid in a .chapter with a .ch-head — see
-   "Chapter groups" below.
+   "Chapter groups" below. For a whole course, give each topic its own
+   page and link them from a .topic-grid of buttons — see "Topic
+   buttons" at the end of this file.
    Behaviour (current-week highlight, milestone states, countdown)
    comes from ../js/hub.js.
    ============================================================ */
@@ -108,10 +110,11 @@ ul.periods a { color: #fff; text-decoration: none; }
 ul.periods a:hover { text-decoration: underline; }
 
 /* ---------- Chapter groups ----------
-   A hub whose unit is long enough to need several week grids stacked
-   under their own headings (year10-mathematics/10methods-primer: nine
-   chapters across a full year). A hub with a single grid doesn't need
-   any of this — go straight from <h2> to .grid. */
+   A week grid under its own heading, with the destinations (deck,
+   booklet) as pills on the right — each 10 Methods Primer topic page
+   (year10-mathematics/10methods-primer/unit*.html) is one of these.
+   A hub with a single grid and no links doesn't need any of it — go
+   straight from <h2> to .grid. */
 .chapter { margin-bottom: 2.6rem; }
 .ch-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: .9rem; }
 .ch-head h2 { margin: 0; font-size: 1.25rem; }   /* overrides .hub-page h2 above */
@@ -149,3 +152,45 @@ ul.periods a:hover { text-decoration: underline; }
 .prog { font-size: .8rem; color: rgba(255,255,255,.6); margin: .3rem 0 .8rem; }
 
 .hub-page footer { text-align: center; font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 3rem; }
+
+/* ---------- Topic buttons ----------
+   A course too long for one hub page: the home page is a grid of topic
+   buttons, each opening that topic's own hub page (a .chapter week grid
+   plus a .topic-pager to the neighbouring topics). Reference
+   implementation: year10-mathematics/10methods-primer — index.html and
+   the nine unit*.html / wrapup-*.html pages.
+
+     <nav class="topic-grid" aria-label="Topics">
+       <a class="topic" href="unit1-linear-relations.html">
+         <span class="tp-eyebrow">Unit 1 · Term 1 Weeks 1–5</span>
+         <span class="tp-title">Linear Relations</span>
+         <span class="tp-meta">Chapter 1 · 18 lessons</span>
+       </a> …
+     </nav>                                                         */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.topic {
+  display: flex; flex-direction: column; gap: .2rem; position: relative;
+  background: rgba(24,20,28,.30);
+  -webkit-backdrop-filter: saturate(.5);
+  backdrop-filter: saturate(.5);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-sm);
+  padding: 1rem 2.6rem 1rem 1.15rem;
+  color: #fff; text-decoration: none;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.topic::after {
+  content: "\2192"; position: absolute; right: 1.1rem; top: 50%; transform: translateY(-50%);
+  font-size: 1.3rem; color: rgba(255,255,255,.55); transition: color .15s ease, right .15s ease;
+}
+.topic:hover, .topic:focus-visible { background: rgba(24,20,28,.42); border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+.topic:hover::after, .topic:focus-visible::after { color: var(--c-amber-400); right: .85rem; }
+.tp-eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c-amber-400); }
+.tp-title { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; line-height: 1.2; }
+.tp-meta { font-size: .8rem; color: rgba(255,255,255,.68); }
+
+/* Topic pages have no milestone timeline overlapping the header, so the
+   main column doesn't need the usual gap below it. Previous / next topic
+   run along the foot of the week grid. */
+.hub-page main.topic-main { margin-top: 1.4rem; }
+.topic-pager { display: flex; justify-content: space-between; gap: .6rem; flex-wrap: wrap; margin-top: 1.4rem; }

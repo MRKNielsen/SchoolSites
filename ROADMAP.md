@@ -39,7 +39,11 @@ this repo has seen came from skipping one of these.
       node tools/add-favicon.js --write     # dry-run first without --write
       node tools/check-links.js             # exits 1 on any finding
       ```
-      Never hand-edit `assets/js/sitemap.js`.
+      Never hand-edit `assets/js/sitemap.js` or `searchindex.js`.
+- [ ] **Edited a page's text?** `node tools/build-sitemap.js` — it also
+      rebuilds the site search index, which is otherwise silently stale
+      (old snippets, slide links off by one). `--check` exits 1 if
+      either generated file is out of date.
 - [ ] **Link checker clean?** `node tools/check-links.js`. The class to
       care about is **CASE** — a wrong-case link works on Windows and
       404s on GitHub Pages, so it will not show up in local testing.

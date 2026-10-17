@@ -1,0 +1,118 @@
+/* ============================================================
+   leversim.css — LEVER BALANCE (optional module)
+   Pairs with assets/js/leversim.js. Link both only on decks that
+   use the component. Zero dependencies.
+
+     <div class="leversim" data-effort="50" data-arm="30"></div>
+
+   leversim.js builds the SVG (metre stick on a fulcrum, load,
+   slotted effort masses, arm dimensions), the readout and the
+   controls inside that div, so the deck markup stays a single
+   line. Every colour comes from tokens.css. Load and effort keep
+   the unit's teal / violet so they match the lever figures in
+   the decks, whatever the theme accent.
+   ============================================================ */
+
+.leversim {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 1.2vh 1vw 1.2vh;
+}
+
+.leversim svg { display: block; width: 100%; height: auto; touch-action: none; }
+
+/* ---------- Scene ---------- */
+.ls-bench      { fill: var(--accent-warm-soft); }
+.ls-benchline  { stroke: var(--ink-soft); stroke-width: 3; }
+.ls-fulcrum    { fill: var(--c-red-600); }
+.ls-fulcrumlab { font-family: var(--font-body); font-size: 18px; font-weight: 700; fill: var(--c-red-600); }
+.ls-small      { font-family: var(--font-body); font-size: 13px; font-style: italic; fill: var(--ink-soft); }
+
+.ls-stick   { fill: color-mix(in srgb, var(--c-gold-600) 14%, #fff); stroke: var(--c-gold-600); stroke-width: 1.5; }
+.ls-tick    { stroke: var(--c-gold-600); stroke-width: 1.2; }
+.ls-ticklab { font-family: var(--font-body); font-size: 13px; fill: var(--c-gold-600); text-anchor: middle; }
+
+.ls-load  { fill: color-mix(in srgb, var(--c-teal-600) 16%, #fff); stroke: var(--c-teal-600); stroke-width: 2; }
+.ls-disc  { fill: color-mix(in srgb, var(--c-violet-600) 20%, #fff); stroke: var(--c-violet-600); stroke-width: 1.8; }
+.ls-slot  { stroke: var(--c-violet-600); stroke-width: 1.4; }
+.ls-masslab { font-family: var(--font-body); font-size: 17px; font-weight: 700; text-anchor: middle; }
+.ls-name    { font-family: var(--font-body); font-size: 19px; font-weight: 700; text-anchor: middle; }
+.ls-loadtxt { fill: var(--c-teal-600); }
+.ls-efftxt  { fill: var(--c-violet-600); }
+
+.ls-guide   { stroke: var(--ink-faint); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.ls-dim     { stroke-width: 2; }
+.ls-dim.is-load,    .ls-dimhead.is-load    { stroke: var(--c-teal-600); fill: var(--c-teal-600); }
+.ls-dim.is-effort,  .ls-dimhead.is-effort  { stroke: var(--c-violet-600); fill: var(--c-violet-600); }
+.ls-dimlab  { font-family: var(--font-body); font-size: 19px; font-weight: 700; text-anchor: middle; stroke: none; }
+.ls-dimlab.is-load   { fill: var(--c-teal-600); }
+.ls-dimlab.is-effort { fill: var(--c-violet-600); }
+
+.ls-support    { fill: color-mix(in srgb, var(--ink-soft) 22%, #fff); stroke: var(--ink-faint); stroke-width: 1; }
+.ls-supportlab { font-family: var(--font-body); font-size: 14px; font-style: italic; fill: var(--ink-soft); text-anchor: middle; }
+
+.ls-hit { fill: transparent; }
+.is-draggable { cursor: grab; }
+.is-draggable.is-dragging { cursor: grabbing; }
+
+/* ---------- Readout ---------- */
+.ls-readout {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 8px 22px;
+  font-family: var(--font-body); font-size: 18px; color: var(--ink);
+}
+.ls-readout b { font-variant-numeric: tabular-nums; }
+.ls-stat { white-space: nowrap; }
+
+.ls-verdict {
+  display: inline-block; padding: 4px 14px; border-radius: 999px;
+  font-size: 16px; font-weight: 700;
+  border: 1.5px solid currentColor;
+}
+.ls-verdict.is-held { color: var(--ink-soft); background: var(--paper); }
+.ls-verdict.is-ok   { color: var(--pos); background: color-mix(in srgb, var(--pos) 12%, #fff); }
+.ls-verdict.is-tip  { color: var(--neg); background: var(--neg-soft); }
+
+/* ---------- Controls ----------
+   Row 1: effort-mass buttons, then Let go / Hold on the right.
+   Row 2: the arm slider(s), full width — so the widget still fits
+   when it shares a slide with a column of questions. */
+.ls-controls {
+  display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; align-items: center;
+}
+.ls-masses  { grid-column: 1; grid-row: 1; }
+.ls-hold    { grid-column: 2; grid-row: 1; }
+.ls-sliders { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; gap: 12px; }
+.ls-sliders:has(.ctrl + .ctrl) { grid-template-columns: 1fr 1fr; }
+.ls-controls .ctrl { padding: 8px 14px; }
+.ls-controls input[type="range"] { width: 100%; accent-color: var(--c-violet-600); }
+
+.ls-masses { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.ls-ctrl-lab { font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--ink); margin-right: 4px; }
+
+.ls-btn {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(0.72rem, 1.1vw, 0.9rem);
+  color: var(--c-violet-600); background: transparent;
+  border: 1.5px solid var(--c-violet-600); border-radius: 100px;
+  padding: 0.35em 0.9em; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.ls-btn:hover, .ls-btn[aria-pressed="true"] { background: var(--c-violet-600); color: #fff; }
+.ls-btn:focus-visible { outline: 2px solid var(--c-violet-600); outline-offset: 2px; }
+.ls-btn.ls-hold { color: var(--accent-dark); border-color: var(--accent); }
+.ls-btn.ls-hold:hover, .ls-btn.ls-hold.is-go { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+@media (max-width: 760px) {
+  .ls-sliders:has(.ctrl + .ctrl) { grid-template-columns: 1fr; }
+}
+
+/* Printing a deck: keep the diagram, drop the interactive furniture. */
+@media print {
+  .leversim { break-inside: avoid; }
+  .ls-controls { display: none; }
+}

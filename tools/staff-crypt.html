@@ -69,6 +69,13 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);paddin
   <label class="f"><span>Payload file</span><input type="file" id="encFile" accept=".html,.htm,.txt"></label>
   <label class="f"><span>Staff password</span><input type="password" id="encPw" autocomplete="new-password" placeholder="Staff password"></label>
   <label class="f"><span>Confirm password</span><input type="password" id="encPw2" autocomplete="new-password" placeholder="Type it again"></label>
+  <label class="f"><span>Student password <em style="text-transform:none;letter-spacing:0;font-weight:400">&mdash; optional, leave blank for staff&#8209;only</span></em>
+    <input type="password" id="encPwS" autocomplete="new-password" placeholder="Student password (optional)"></label>
+  <p class="hint">Give a page a student password and it accepts either one, from a single
+    copy of the content. Leave it blank for anything students must not read &mdash;
+    the rubric holds report comments, so it stays staff&#8209;only.
+    <strong>Removing a password later only stops new readers</strong>: the file already
+    published, and every copy in git history, stays readable by whoever has the old one.</p>
   <div class="row">
     <button class="go" id="btnEnc">Encrypt</button>
     <button class="go ghost" id="btnCopy" hidden>Copy the line</button>
@@ -82,7 +89,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);paddin
   <h2>Decrypt</h2>
   <p class="hint">Choose a gated page (<code>solutions.html</code>, <code>rubric.html</code>) and it pulls the blob out, decrypts it, and hands back the plaintext payload to edit.</p>
   <label class="f"><span>Gated page</span><input type="file" id="decFile" accept=".html,.htm,.txt"></label>
-  <label class="f"><span>Staff password</span><input type="password" id="decPw" autocomplete="off" placeholder="Staff password"></label>
+  <label class="f"><span>Password</span><input type="password" id="decPw" autocomplete="off" placeholder="Staff or student password"></label>
   <div class="row">
     <button class="go" id="btnDec">Decrypt</button>
     <button class="go ghost" id="btnDecDl" hidden>Download payload</button>
@@ -145,19 +152,37 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);paddin
     if(pw !== pw2){ say(msg, "The two passwords do not match.", "bad"); return; }
     try{
       var plain = await readFile($("#encFile"));
+      var pwS = $("#encPwS").value;
       say(msg, "Deriving key…", null);
-      var salt = crypto.getRandomValues(new Uint8Array(16));
-      var iv   = crypto.getRandomValues(new Uint8Array(12));
-      var key  = await deriveKey(pw, salt, ITER, "encrypt");
-      var ct   = await crypto.subtle.encrypt({name:"AES-GCM", iv:iv}, key, new TextEncoder().encode(plain));
+
+      /* The payload is encrypted once under a random content key, and that
+         key is wrapped separately under each password the page accepts.
+         One copy of the content, however many passwords — and adding or
+         removing one rewraps ~100 bytes instead of the whole document. */
+      var ckeyRaw = crypto.getRandomValues(new Uint8Array(32));
+      var ckey = await crypto.subtle.importKey("raw", ckeyRaw, {name:"AES-GCM"}, false, ["encrypt"]);
+      var piv = crypto.getRandomValues(new Uint8Array(12));
+      var ct  = await crypto.subtle.encrypt({name:"AES-GCM", iv:piv}, ckey, new TextEncoder().encode(plain));
+
+      var roles = [["staff", pw]];
+      if (pwS) roles.push(["student", pwS]);
+      var keys = [];
+      for (var r = 0; r < roles.length; r++){
+        var salt = crypto.getRandomValues(new Uint8Array(16));
+        var kiv  = crypto.getRandomValues(new Uint8Array(12));
+        var wk   = await deriveKey(roles[r][1], salt, ITER, "encrypt");
+        var wct  = await crypto.subtle.encrypt({name:"AES-GCM", iv:kiv}, wk, ckeyRaw);
+        keys.push({role:roles[r][0], salt:toB64(salt), iv:toB64(kiv), ct:toB64(wct), iter:ITER});
+      }
       encLine = "var BLOB = " + JSON.stringify({
-        salt: toB64(salt), iv: toB64(iv), iter: ITER, ct: toB64(ct)
+        v: 2, iv: toB64(piv), ct: toB64(ct), keys: keys
       }) + ";";
       $("#encOut").value = encLine;
       $("#encOutWrap").hidden = false;
       $("#btnCopy").hidden = false;
       $("#btnDl").hidden = false;
-      say(msg, "Encrypted " + plain.length.toLocaleString() + " characters. Paste the line below over the " +
+      say(msg, "Encrypted " + plain.length.toLocaleString() + " characters for " +
+               (pwS ? "staff and students" : "staff only") + ". Paste the line below over the " +
                "var BLOB line in the gated page, then delete the plaintext payload.", "ok");
     }catch(e){
       say(msg, e.message || "Encryption failed.", "bad");
@@ -186,14 +211,33 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--paper);paddin
       var m = src.match(/var\s+BLOB\s*=\s*(\{[\s\S]*?\})\s*;/);
       if(!m){ say(msg, "No 'var BLOB = {…};' line found in that file.", "bad"); return; }
       var blob = JSON.parse(m[1]);
-      if(!blob.salt || !blob.iv || !blob.ct){ say(msg, "That blob is missing salt, iv or ct.", "bad"); return; }
       say(msg, "Deriving key…", null);
-      var key = await deriveKey(pw, fromB64(blob.salt), blob.iter || ITER, "decrypt");
-      var pt  = await crypto.subtle.decrypt({name:"AES-GCM", iv:fromB64(blob.iv)}, key, fromB64(blob.ct));
+      var pt, who = "staff";
+      if (blob.v === 2){
+        /* try each wrapped key; the one that opens says who just unlocked */
+        var ckeyRaw = null;
+        for (var i = 0; i < blob.keys.length; i++){
+          var k = blob.keys[i];
+          try {
+            ckeyRaw = await crypto.subtle.decrypt({name:"AES-GCM", iv:fromB64(k.iv)},
+              await deriveKey(pw, fromB64(k.salt), k.iter || ITER, "decrypt"), fromB64(k.ct));
+            who = k.role || "staff";
+            break;
+          } catch (e) { ckeyRaw = null; }
+        }
+        if(!ckeyRaw){ say(msg, "Wrong password, or the blob is corrupt.", "bad"); return; }
+        var ck = await crypto.subtle.importKey("raw", ckeyRaw, {name:"AES-GCM"}, false, ["decrypt"]);
+        pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:fromB64(blob.iv)}, ck, fromB64(blob.ct));
+      } else {
+        if(!blob.salt || !blob.iv || !blob.ct){ say(msg, "That blob is missing salt, iv or ct.", "bad"); return; }
+        var key = await deriveKey(pw, fromB64(blob.salt), blob.iter || ITER, "decrypt");
+        pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:fromB64(blob.iv)}, key, fromB64(blob.ct));
+      }
       decOut = new TextDecoder().decode(pt);
       $("#btnDecDl").hidden = false;
-      say(msg, "Decrypted " + decOut.length.toLocaleString() + " characters (" +
-               (blob.iter || ITER).toLocaleString() + " PBKDF2 iterations). Download it below.", "ok");
+      say(msg, "Decrypted " + decOut.length.toLocaleString() + " characters as " + who +
+               (blob.v === 2 ? " (" + blob.keys.length + " password" + (blob.keys.length > 1 ? "s" : "") +
+                " on this page)" : " (single-password page)") + ". Download it below.", "ok");
     }catch(e){
       if(e && e.name === "OperationError"){ say(msg, "Wrong password, or the blob is corrupt.", "bad"); }
       else { say(msg, e.message || "Decryption failed.", "bad"); }

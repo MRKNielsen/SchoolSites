@@ -59,7 +59,15 @@ Optional modules — link only when a deck uses them:
   `window.RETRIEVAL_QUESTIONS = [{deck, q, opts, ans}]`; a slide marked
   `class="slide quiz-slide" data-quiz-before="9" data-quiz-count="5"`
   containing `<div class="quiz-container"></div>` draws that many
-  questions at random from earlier lessons and scores them. quiz.css also
+  questions at random from earlier lessons and scores them. Add
+  `data-quiz-exclude="4"` (comma-separated deck numbers) where a unit has
+  an **optional** lesson inside an otherwise sequential run — without it a
+  class that skipped that lesson gets cold-called on content it never saw.
+  Year 7 Space uses it for Lesson 4. Add `data-quiz-recent="3"` to
+  weight the draw: that many questions come from the most recent lesson
+  left in the pool, the rest from older lessons. Year 7 Forces uses it
+  with `data-quiz-exclude="0"`, because its deck 0 is Lesson 1's
+  prior-knowledge warm-up (`data-quiz-before="1"`). quiz.css also
   styles a standalone quiz page (`<body class="quizapp-page theme-X">`).
 - `assets/css/orbit.css` + `assets/js/orbit.js` — the orbital phase
   visualiser. Markup is one line, `<div class="orbitsim"></div>`; the JS
@@ -70,6 +78,23 @@ Optional modules — link only when a deck uses them:
   `data-start="0..1"`, `data-labels="off"`. ~3.5 KB gzipped, no
   dependencies. Colours come from tokens so it follows the theme;
   controls are hidden in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/seasonsim.css` + `assets/js/seasonsim.js` — the seasons
+  visualiser. Markup is one line, `<div class="seasonsim"></div>`; the JS
+  builds the SVG (Sun, Earth on a circular orbit, and a close-up of Earth
+  with its lit half, equator and tropics), a readout naming the season,
+  date and sub-solar latitude, plus play/scrub/hemisphere controls.
+  Attributes: `data-hemisphere="south|north"` (default south — names the
+  Australian season), `data-start="0..1"` measured **from the December
+  solstice**, `data-labels="off"`. Colours come from tokens; controls are
+  hidden in print. Live in `styleguide/deck-demo.html`.
+  **Two things about it are deliberate and should not be "simplified".**
+  The close-up holds the axis at a *fixed screen angle* and swings the lit
+  half around it — rotating Earth instead so the Sun stays on the left is
+  easier to write and teaches the exact opposite of the mechanism. And the
+  orbit is a **circle**: eccentricity is 0.017, so a circle is very nearly
+  right, and a visibly elliptical orbit with the Sun in the middle is what
+  produces "it's summer because we're closer". Space deck 2 slide 7 was
+  drawn that way and had to be redrawn for precisely that reason.
 - `assets/css/binomsim.css` + `assets/js/binomsim.js` — the binomial →
   normal visualiser for 15F. Markup is one line,
   `<div class="binomsim"></div>`; the JS builds the SVG (exact
@@ -85,6 +110,24 @@ Optional modules — link only when a deck uses them:
   shortcut draws an empty chart at exactly the settings the widget
   exists to demonstrate. Colours come from tokens; sliders are hidden
   in print. Live in `styleguide/deck-demo.html`.
+- `assets/css/leversim.css` + `assets/js/leversim.js` — the lever
+  balance for Year 7 Forces Experiment 4. Markup is one line,
+  `<div class="leversim"></div>`; the JS builds a metre stick on a
+  fulcrum at its 50 cm mark, a load on the left, slotted effort masses
+  on the right (drag them, or use the slider), the two arm dimensions,
+  a readout of mass × arm on each side and a verdict, plus effort-mass
+  buttons and a *Let go* / *Hold it level* toggle. Attributes:
+  `data-load` (g, default 100), `data-loadarm` (cm, default 20),
+  `data-effort`, `data-arm`, `data-masses="50,100,150,200"`,
+  `data-moveload="on"` for a load-arm slider, `data-hold="off"` to
+  start free. **It starts held level on purpose** so students predict
+  before they see the answer. Balanced means within half a centimetre
+  of the exact point, because positions move in whole centimetres (a
+  150 g effort balances at 13 cm, not 13.3); an exact-equality test
+  would never call it balanced. The stick's own weight sits on the
+  fulcrum and is left out, as in the experiment. Labels and dimensions
+  are drawn level at the tipped positions. Colours come from tokens;
+  controls are hidden in print. Live in `styleguide/deck-demo.html`.
 - Slide-jump menu — add `<button class="navbtn menubtn">` inside
   `.chrome` plus a `.slidemenu` overlay containing `.menugrid`, and give
   each slide a `data-menu="…"` title. deck.js builds the contents grid
@@ -94,7 +137,9 @@ Other page types: `assets/css/course.css` (unit landing),
 `assets/css/hub.css` (term/unit hub), `assets/css/solutions.css`
 (answer-key pages), `assets/css/worksheet.css` (printable student
 worksheets), `assets/css/profile.css` (species / case-study reference
-pages), `assets/css/site.css` (plain index pages).
+pages), `assets/css/planner.css` (staff unit-planning documents — one
+wide table, prints A4 landscape), `assets/css/site.css` (plain index
+pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -115,11 +160,20 @@ other without going back through the index.
 - **Opening**: a slim tab pinned to the left edge, or the `N` key.
   Escape closes. There is no always-visible chrome, which is why decks
   can carry it without cluttering a projected slide.
-- **Never edit `assets/js/sitemap.js`** — it is generated. After adding,
-  renaming, moving or deleting a page, run:
+- **Never edit `assets/js/sitemap.js` or `assets/js/searchindex.js`** —
+  both are generated, by the same command. Re-run it after adding,
+  renaming, moving or deleting a page, **and after editing any page's
+  text** (the search index holds the text; the tree only titles):
 
   ```bash
-  node tools/build-sitemap.js     # rebuild the tree
+  node tools/build-sitemap.js           # rebuild the tree + search index
+  node tools/build-sitemap.js --check   # exits 1 if either is stale
+  ```
+
+  A run that changes nothing leaves both files byte-identical, so it is
+  safe to run on every edit. After adding a page, also:
+
+  ```bash
   node tools/add-sitenav.js       # dry run: which pages lack the tag
   node tools/add-sitenav.js --write
   ```
@@ -166,6 +220,56 @@ other without going back through the index.
   advance the deck underneath. `M` still belongs to deck.js's slide-jump
   menu, and `N` stands down while that menu is up. If you add another
   global key anywhere, check it against both.
+- **In-lesson search.** On any page with `.slide` elements the drawer's
+  box reads "Search this lesson & the site…" and also searches the text of
+  every slide in the deck, listing matching slides under *In this
+  lesson* above the filtered page tree (*Pages*). Picking one jumps the
+  deck there and highlights the words via the CSS Custom Highlight API —
+  no DOM changes, cleared when the deck leaves that slide. A browser's
+  Ctrl+F can't do this because only the active slide is displayed.
+  - Every word must match the start of a word on the slide, so "moon
+    phase" finds "phases of the Moon" and "key" doesn't find "monkey".
+    Curly quotes and dashes fold to their keyboard forms.
+  - Result labels are the slide's `data-menu` title, else its first
+    heading — one more reason to give every slide a `data-menu`.
+  - Text in an unrevealed answer, step, `.frag` or part panel still
+    matches but is **never quoted in a snippet** (it reads "In working
+    or an answer not yet revealed"), so searching on the projector
+    can't put the answer on the board. Keep that if you touch it.
+  - Not indexed: typeset maths, buttons, `.quiz-container`, and the
+    orbit / season / binomial / lever widgets (their text is generated and
+    changes as they move). Opt anything else out with `data-nosearch`.
+  - The jump is a `deck:goto` event (`detail: {slide: <0-based
+    index>}`) that deck.js answers with `preventDefault()`. The nine
+    legacy year11-methods decks have no listener, so sitenav.js falls
+    back to their global `go()` — remove that fallback when they're
+    ported.
+- **Site-wide search.** The same box searches the text of every page,
+  under *Found in page text* below the page tree. It reads
+  `assets/js/searchindex.js` (~1.2 MB, ~380 KB gzipped), fetched the
+  first time someone searches and never on page load.
+  - The index is built by `tools/search-index.js`, which
+    `build-sitemap.js` calls: the nav tree's page set, split into one
+    section per slide on a deck and one per h1–h3 / worksheet part
+    elsewhere. It is a small dependency-free tokenizer, not a real
+    HTML parser — if a new page type indexes badly, extend its
+    `SKIP_CLASSES` / `LABELS` lists rather than special-casing pages.
+  - Left out: `styleguide/`, `tools/`, PDFs, the marimo workbook
+    exports, the collated `worksheets-all` booklets (they duplicate
+    every single worksheet), and gated pages — anything carrying
+    `var BLOB` contributes nothing, and `*-payload.html` is never read.
+  - Unrevealed answers, steps, `.frag`s and part panels go into a
+    separate *hidden* field: they match, and are never quoted — the
+    same rule as in-lesson search, for the same projector reason.
+  - Ranking: pages whose title has every word first, then the most
+    matching sections; ties keep nav order. Pages already in the
+    filtered tree and the page you're on are left out of the list.
+  - A hit links to `page.html?q=words#7` (`#slide-7` on a legacy deck,
+    `#id` on an ordinary page when its section has one). On arrival,
+    sitenav.js waits for MathJax, highlights the words — on the slide
+    the deck opened at, or across the page, scrolled to the first one
+    after the anchor — drops `q` from the address bar, and puts the
+    words in the search box so the drawer reopens on the same search.
 - Excluded from the nav: the four bare-name legacy folders
   (`algorithmics/`, `foundation/`, `methods/`, `specialist/` — pre-year-
   prefix duplicates of their `year12-*` equivalents), `*-payload.html`,
@@ -294,6 +398,15 @@ path and not a stack of overlapping objects.
   `.chooser`/`.opts`/`.opt.correct` "pick the one that fits" cards,
   `.textflow`/`.figure-right` for prose wrapping a figure. `.key` on its
   own is a *keyboard cap* — a key-idea callout is `.box.key`.
+- **`.bookref` icons are opt-in modifiers, not baked into the chip.**
+  `.bookref.book` prefixes 📚, `.bookref.sheet` prefixes 📝, and
+  `.bookref.stack` drops the chip onto its own line beneath what it
+  annotates. Never type the emoji into the markup — bio-ecosystems used
+  to, in 108 chips, and Space then had none. The icon has to be a
+  modifier rather than a blanket `::before` because year12-algorithmics
+  uses a bare `.bookref` for "Adapted from VCAA Algorithmics (HESS)
+  Written Examination…" provenance lines, where a book glyph would be
+  wrong; those 29 stay bare deliberately.
 - `.box.country` is the First Nations / Caring for Country callout. Like
   the pedagogy colours it keeps one earth tone across every subject and
   does not follow the theme accent.
@@ -340,8 +453,39 @@ path and not a stack of overlapping objects.
   and an overline `<tspan>` there reads as a detached bar — write a plain
   `√2` in diagram labels. A bare √ is also fine when referring to the
   symbol itself in prose.
+- **A hidden answer inside a callout box** is `.box > .a`, revealed by a
+  `.reveal-btn` carrying `data-answer="#id"` — the same component as
+  `.qcard .a`, for a question that is already a `.box` and shouldn't be
+  wrapped in a second card:
+
+  ```html
+  <div class="box question"><span class="lbl">Starter</span>
+    <p>…the question…</p>
+    <button class="reveal-btn" data-answer="#d1a1">Show answer</button>
+    <div class="a" id="d1a1"><span class="lbl-a">Answer</span>…</div>
+  </div>
+  ```
+
+  `data-answer` is required: without it, and without a `.qcard`
+  ancestor, deck.js treats the button as a *step* reveal and it silently
+  does nothing. The id must be unique in the page. Child selector, so a
+  `.qcard` nested inside a box keeps its own styling. Year 7 Space uses
+  it on every Starter / Think / Discuss box. Two registers worth keeping
+  to: a question with a definite answer gets *Show answer* and a
+  `.lbl-a` of **Answer**; an open discussion gets *What to listen for*
+  and **What we're listening for** — a single "correct" answer under a
+  Discuss question closes down the discussion it exists to open.
 - Reveals: `.steps` + `.reveal-btn data-target`, `.qcard` answers,
   `.ptab`/`.partpanel` part tabs — all wired automatically by deck.js.
+  **Forward nav (→ / space / next) reveals the next hidden thing on the
+  slide before advancing** — a `.steps` line, a `.frag`, or a `.qcard`
+  answer, in document order — so a worked example can be walked through
+  from the presenter remote without touching a button. Reveals inside a
+  `.partpanel` that isn't on screen are skipped, so an arrow press never
+  looks like a no-op. Buttons and keys read the same DOM state, so the
+  two can be mixed freely; `R` reveals without any chance of advancing.
+  Backward nav un-reveals fragments only — steps and answers stay up, so
+  `←` backs out of a long worked example in one press.
   `.frag` reveals on forward navigation and works on SVG groups too, so
   a `<g class="frag">` is a diagram layer. `<g class="vanish">` fades out
   once a later `.frag` appears. Where a diagram layer must pair with
@@ -433,12 +577,23 @@ milestones, and fills `.countdown[data-to]` elements.
 A unit long enough to need **several week grids stacked** wraps each in a
 `.chapter` opening with a `.ch-head` (`h2` + `.ch-meta`, then a `.ch-open`
 pill on the right, or a `.ch-links` span when a chapter has more than one
-destination — e.g. a question booklet beside the deck). Reference
-implementation: `year10-mathematics/10methods-primer/index.html`, nine
-chapters across a full year. A hub with a single grid goes straight from
-`h2` to `.grid` and needs none of it. Period lines carry their own link
-and label styling (`ul.periods a`, `ul.periods li b` — the lead-in code
-or day, in the hub's amber), so don't restate those per page.
+destination — e.g. a question booklet beside the deck). A hub with a
+single grid goes straight from `h2` to `.grid` and needs none of it.
+Period lines carry their own link and label styling (`ul.periods a`,
+`ul.periods li b` — the lead-in code or day, in the hub's amber), so
+don't restate those per page.
+
+A **whole course** is split into **topic pages**: the course home keeps
+its `.hub-head` + milestone `.timeline` and then shows a
+`nav.topic-grid` of `a.topic` buttons (`.tp-eyebrow` unit · weeks,
+`.tp-title`, `.tp-meta` chapter · lesson count); each button opens that
+topic's own hub page — a `.chapter` week grid inside
+`<main class="topic-main">`, with a `nav.topic-pager` to the previous
+and next topic. Reference implementation:
+`year10-mathematics/10methods-primer/` — `index.html` plus
+`unit1-linear-relations.html` … `unit8-probability.html` and
+`wrapup-revision-cat3.html`. A new lesson goes on its topic page; the
+lesson count on the home page's button is typed, so update it too.
 
 ## Species / case-study profile pages
 
@@ -507,6 +662,11 @@ Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
 - Question furniture: `.opts`/`.opt` multiple choice, `.tick` checkbox
   list, `table.wtbl` with `td.fill` blank cells, `.sortcols[data-cols]`
   of `.sortcol`, `.chips`/`.chip` word bank.
+- A figure the question is *about* (an orbit, a row of Moon phases) is an
+  inline SVG in `figure.ws-fig`, with `data-h="xs|sm|md|lg"` capping its
+  printed height. Keep fills greyscale so it survives a black-and-white
+  printer, and draw ink with `currentColor` (the wrapper sets it to
+  `--ink`). `.drawbox` stays the empty space a student draws in.
 - Callouts: `.infobox` (accent), `.fnbox` (First Nations — earth tone,
   theme-independent like `.box.country` in decks), `.y8box` plus the
   inline `.y8` marker for Year 8 extension. Each takes a `.lbl` first
@@ -531,20 +691,36 @@ standalone all-worksheets list, if a unit wants one instead.
 ## Staff-gated pages
 
 Some pages are for teachers only and ship their content as an encrypted
-blob decrypted in the browser with the staff password: `solutions.html`
-(answer key) and `rubric.html` (the Ecosystem Investigation marking tool)
-in year7-science/bio-ecosystems, plus `solutions.html` in
-year7-science/space.
+blob decrypted in the browser with the staff password. In
+year7-science/bio-ecosystems: `solutions.html` (answer key),
+`worksheets-all-solutions.html` (the collated worksheet booklet with
+answers), `portfolio-solutions.html` (the Research Portfolio key) and
+`rubric.html` (the Ecosystem Investigation marking tool). In
+year7-science/space: `solutions.html` and
+`worksheet-revision-solutions.html` (the revision worksheet's answer
+copy, same shell as `worksheets-all-solutions.html`).
 
-**Space's `solutions.html` is not yet encrypted** — it ships the shell
-with a placeholder `var BLOB = {salt:"", iv:"", iter:0, ct:""};`. Encrypt
-`solutions-payload.html` through `tools/staff-crypt.html` and paste the
-emitted line over the placeholder. Until then the page locks but cannot
-unlock. The shell links tokens.css +
+**`portfolio-solutions.html` is not yet encrypted** — it ships the shell
+with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
+locks but cannot unlock. Encrypt `portfolio-solutions-payload.html`
+through `tools/staff-crypt.html` and paste the emitted line over the
+placeholder. Staff password only unless a student one is deliberately
+added — that key answers a task students are meant to research
+themselves. The shell links tokens.css +
 solutions.css and uses the shared `.lockscreen` component; the payload
 lives in a single `var BLOB = {salt, iv, iter, ct};` line
 (PBKDF2-SHA256 → AES-GCM).
 
+- **Run `node tools/check-gated.js` before pushing.** Editing a payload
+  changes nothing on the site until the blob is re-encrypted, and that is
+  a *silent* failure — the payload is right, the deployed page is valid
+  HTML, and nothing complains. The Space answer key sat five days stale
+  across two whole-booklet renumberings this way: the site served an
+  8-section key while the booklet had moved to 10, so every answer past
+  §2 was attached to the wrong question number. The check compares each
+  payload's mtime against its gated page, flags a placeholder (empty
+  `ct`) blob, and diffs the payload's `QN.M` set against the built
+  booklet PDF. Exits 1 if anything is off.
 - **`tools/staff-crypt.html`** does the encrypting and decrypting —
   open it locally, it never sends the password anywhere. Editing a gated
   page means: decrypt → edit the payload → re-encrypt → paste the new
@@ -607,6 +783,26 @@ Build a booklet with `xelatex` run **three times** (TOC, then
 `\LastPage`), from a scratch copy of `booklet/` — the `.aux`/`.log`/
 `.toc` build artefacts are not committed, only the `.tex` and `.pdf`.
 
+**Single-lesson handouts are generated, never hand-copied.**
+
+```bash
+node tools/build-lesson-print.js          # list the sections
+node tools/build-lesson-print.js 1        # write Space_Lesson1_Print.tex
+node tools/build-lesson-print.js --all
+```
+
+It slices the master `.tex` — preamble verbatim, a compact cover in
+place of the titlepage and TOC, then the chosen `\section` block — and
+never modifies the master. A hand-made second `.tex` would drift the
+first time a question was corrected, with nothing to signal it; this
+keeps one source of truth. The emitted file carries a "GENERATED —
+do not edit" header, and is safe to commit alongside its PDF.
+
+The one subtlety: it emits `\setcounter{section}{N-1}` before the body,
+because `\question` numbers off `\thesection`. Without it Lesson 3's
+handout would print Q1.1… instead of Q3.1… and could not be marked
+against the existing answer key.
+
 Booklets have a question apparatus already defined in the preamble —
 `\question{marks}{text}`, `\anslines{n}` (ruled writing lines),
 `\answerbox{height}`, `\markscount{n}`, and the `yr7box` (at the level)
@@ -639,7 +835,22 @@ understanding" at the end of each subsection, questions numbered
 box kept last. Don't number the "Your turn" `scaffold` blocks — they
 drift out of sync when sections are reordered.
 
-`.bookref` chips must be derived from the booklet's `.toc` after a
+**Every `\section` and `\subsection` in the Space booklet carries a
+`\label{sec:N}` / `\label{sub:N.M}`**, and the cover's contents table
+`\pageref`s them. That serves two purposes: the contents table can never
+list a stale page, and a reference sweep reads exact page numbers out of
+the `.aux` —
+
+```bash
+grep -o '\\newlabel{su\?[bc]:[0-9.]*}{{[^}]*}{[0-9]*}' booklet/*.aux
+```
+
+— rather than scraping headings out of `pdftotext` output, which breaks
+on whitespace and on any heading that wraps. Add the same labels to any
+booklet that needs a sweep. Note the `.toc` file only exists when
+`\tableofcontents` is present; the `.aux` is always written.
+
+`.bookref` chips must be derived from the booklet's labels after a
 build, never hand-written. Space's original chips cited pages 38–71 of a
 22-page booklet — the numbers followed a synthetic `(N-1)*6+3` pattern —
 and their `QX.Y` references pointed at numbered questions the booklet

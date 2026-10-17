@@ -18,6 +18,7 @@
        .lines            ruled writing space (data-lines="1".."10")
        .halflines        ruled space in a two-up grid
        .drawbox          blank box for diagrams (data-h="sm|md|lg")
+       .ws-fig           printed SVG figure the question is about (data-h="xs|sm|md|lg")
        .opts / .opt      multiple-choice options
        .wtbl             fill-in table (th + empty td)
        .sortcols         2–3 labelled columns to sort items into
@@ -225,7 +226,31 @@ body.worksheet-page {
   font-size: .78rem; color: var(--muted); font-style: italic;
 }
 .worksheet-page .drawbox[data-h="sm"] { height: 26mm; }
+/* "md" is the default height. Stated explicitly because the header
+   documents sm|md|lg, and a value that works only by falling through to
+   the base rule is the kind of thing that breaks the day someone changes
+   the base. */
+.worksheet-page .drawbox[data-h="md"] { height: 40mm; }
 .worksheet-page .drawbox[data-h="lg"] { height: 62mm; }
+
+/* Printed figure — a diagram the question is ABOUT (an orbit, a labelled
+   cross-section, a row of Moon phases), as opposed to .drawbox, which is
+   empty space for the student to draw in. Inline SVG with a viewBox:
+   data-h caps the printed height and the width follows the aspect ratio.
+   Draw ink with currentColor so it picks up --ink, and keep fills
+   greyscale so the figure survives a black-and-white printer.
+   First use: year7-science/space/worksheet-revision.html. */
+.worksheet-page .ws-fig {
+  margin: 2mm 0 3mm; break-inside: avoid; color: var(--ink);
+}
+.worksheet-page .ws-fig svg {
+  display: block; width: 100%; height: auto; margin: 0 auto; max-height: 70mm;
+}
+.worksheet-page .ws-fig[data-h="xs"] svg { max-height: 22mm; }
+.worksheet-page .ws-fig[data-h="sm"] svg { max-height: 55mm; }
+.worksheet-page .ws-fig[data-h="md"] svg { max-height: 70mm; }
+.worksheet-page .ws-fig[data-h="lg"] svg { max-height: 92mm; }
+.worksheet-page .ws-fig svg text:not([font-family]) { font-family: var(--font-body); }
 
 /* ---------- Multiple choice ---------- */
 .worksheet-page .opts {
@@ -421,6 +446,7 @@ body.worksheet-page {
   .worksheet-page table.wtbl,
   .worksheet-page .sortcols,
   .worksheet-page .drawbox,
+  .worksheet-page .ws-fig,
   .worksheet-page .lines { break-inside: avoid; }
   .worksheet-page a { color: inherit; text-decoration: none; }
 }
@@ -574,6 +600,7 @@ body.worksheet-page {
   .worksheet-page table.wtbl  { margin: 1.5mm 0 2mm; }
   .worksheet-page .sortcols   { margin: 1.5mm 0 2mm; }
   .worksheet-page .drawbox    { margin: 1.5mm 0 2mm; }
+  .worksheet-page .ws-fig     { margin: 1.5mm 0 2mm; }
   .worksheet-page .chips      { margin: 1.5mm 0 2mm; }
   .worksheet-page .opts       { margin: 1mm 0 1.5mm; }
   .worksheet-page .infobox,
