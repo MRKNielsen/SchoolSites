@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026.
+Last full audit: 16 Aug 2026. Last addition: 17 Oct 2026 (Applied Computing Unit 1 dataset + decks T1–T2).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -28,6 +28,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
 | year11-methods | **Built, on debt** | `chapter-9` (7 decks), `chapter-11` (2 decks) — still inline styles |
+| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and decks T1–T2 of 62. No workbooks or assessments yet |
 | year7-mathematics | Stub | — |
 | year8-mathematics | Stub | — |
 | year9-mathematics | Stub | — |
@@ -38,7 +39,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-methods | Stub | — |
 | year12-foundation | Stub | — |
 
-Totals: 68 decks, 11 worksheets, 3 hubs, 2 quizzes, 1 profile page,
+Totals: 68 decks, 11 worksheets, 5 hubs, 2 quizzes, 4 profile pages,
 4 gated pages.
 
 ### Landed — collated worksheet booklets (18 Aug 2026)
@@ -75,6 +76,76 @@ from `solutions.html` by matching its `W<n> Q<m>` qrefs onto each
 worksheet's `.qn`, including the grouped multiple-choice blocks. If the
 answer key changes, the booklet has to be regenerated and re-encrypted —
 it does not update itself.
+
+### Landed — Year 11 Applied Computing scaffold (3 Sep 2026)
+
+`year11-applied-computing` is a new VCE subject built against the
+**Applied Computing Study Design 2025–**, for first teaching in 2027.
+What exists is the frame, not the content:
+
+- Subject landing (`course.css`), Unit 1 and Unit 2 hubs (`hub.css`,
+  16-week grids on the 2027 Victorian term calendar), Unit 1 and Unit 2
+  outlines and a shared problem-solving methodology reference (all
+  `profile.css`).
+- New `theme-computing` in tokens.css (deep cyan-blue `--c-cyber-700`
+  `#0369a1`) plus its `.sn-t-computing` dot in sitenav.css. It is
+  deliberately *not* the Algorithmics teal — the two computing subjects
+  sit next to each other in the Year 11/12 tabs and in the nav drawer,
+  and a near-identical dot makes them unreadable.
+- Uncommented in the root year picker (Year 11 panel).
+
+Two things worth knowing before adding content:
+
+- **The outlines and the PSM page are generated from the study design
+  `.docx`, not typed.** The PSM page's Unit 1 / Unit 2 applicability
+  columns come from the `·` marks in the study design's own
+  specification tables (columns 3 and 4 of a 9-column grid; the activity
+  names sit in vertically-merged cells, so a naive `python-docx` read
+  mis-groups them). If the study design is amended, regenerate rather
+  than hand-patch.
+- **The PSM specification and the key knowledge lists disagree by
+  design.** Ideation is unticked for both Applied Computing units in the
+  specification table but is explicitly listed in Unit 2 AOS 1 key
+  knowledge. That is not an extraction error — don't "fix" it.
+
+Course design decisions recorded: Python as the OOP language (so the
+marimo workbooks and the assessed language are the same), SQL against a
+relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
+Semester 2.
+
+### Landed — Year 11 Applied Computing, Unit 1 AOS 1 dataset and first decks (17 Oct 2026)
+
+**The teaching dataset is built** at `year11-applied-computing/unit-1/data/`.
+Victorian climate observations, calendar year 2025: 4 regions, 6 stations, 2190
+daily observations across three normalised tables.
+
+It is **synthetic**, and deliberately so. Structure mirrors the Bureau of
+Meteorology's daily observations and each station's annual mean maximum, mean
+minimum and rainfall are calibrated to that station's published climate normals,
+so the figures behave realistically — but it is not a Bureau extract and the
+data dictionary says so in its first paragraph. Synthetic was chosen because
+every fault in the dirty extract is then *engineered and documented*, which gives
+the cleaning task a known correct answer and makes it auto-checkable. Real data
+has whatever faults it happens to have.
+
+Ships as: the dirty extract (`observations_raw.csv`, 2208 rows, nine fault
+classes), the same data as a staging table (`climate-raw.db`), the clean
+normalised CSVs, a SQLite database with keys and CHECK constraints
+(`climate.db`), an XLSX for the spreadsheet weeks, and a generated data
+dictionary.
+
+**Two things are deliberately NOT in this repo**, because it is public: the
+cleaning answer key, and the four generator scripts — they reveal every
+injected fault. They live with the staff material and should go into the private
+autograder repo when it exists.
+
+**Decks T1 and T2 are built** (`unit-1/slides/`), on shared assets, theme-computing,
+no inline styles, verified rendering with no slide overflow. A deck template file
+was deliberately not created: the first real deck is the reference, which avoids
+a placeholder file in a repo whose rules forbid them.
+
+Remaining in Unit 1 AOS 1: decks T3–T16, eight marimo workbooks, eight
+worksheets, the booklet and the Outcome 1 task.
 
 ### Source material that exists but isn't ported
 
@@ -325,6 +396,16 @@ re-earn it.
       until Tiers 0–3 are clear.
 - [ ] **year12-methods, year11-specialist, year11-foundation,
       year12-foundation, year10-algorithmics. L each** Nothing exists.
+- [ ] **Year 11 Applied Computing content → `year11-applied-computing`.
+      L** Scaffold landed 3 Sep 2026 (see Part 1); the frame, outlines
+      and PSM reference are done. Outstanding, in teaching order:
+      Unit 1 AOS 1 decks (weeks 1–8) and the database/SQL folio;
+      Unit 1 AOS 2 Python decks (weeks 9–16) and folio; marimo workbooks
+      for both; LaTeX assessment booklets under each unit's `booklet/`;
+      Unit 2 AOS 1 project scaffolding and AOS 2 cyber security decks
+      plus the teacher-provided case study. Unit 1 is the half to build
+      first — it is taught in Semester 1. *(in progress — Kodie, 17 Oct 2026)*
+      Dataset and decks T1–T2 landed 17 Oct 2026; see Part 1.
 
 **Ordering note:** don't take a Tier 4 subject purely because it's next
 alphabetically. Prefer whichever you're actually teaching, or whichever

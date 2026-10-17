@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-08-18",
+ "generated": "2026-10-17",
  "tree": [
   {
    "t": "Home",
@@ -403,6 +403,72 @@ window.SITEMAP = {
      "c": [],
      "h": "year11-algorithmics/index.html",
      "k": "algorithmics"
+    },
+    {
+     "t": "Applied Computing",
+     "c": [
+      {
+       "t": "VCE Applied Computing — Unit 1 Course Hub",
+       "h": "year11-applied-computing/unit-1/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "T1 · The Problem-solving Methodology",
+           "h": "year11-applied-computing/unit-1/slides/U1T01-problem-solving-methodology.html",
+           "k": "computing"
+          },
+          {
+           "t": "T2 · Data and Information",
+           "h": "year11-applied-computing/unit-1/slides/U1T02-data-and-information.html",
+           "k": "computing"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit 1 Outline",
+           "h": "year11-applied-computing/unit-1/outline.html",
+           "k": "computing"
+          }
+         ]
+        }
+       ],
+       "k": "computing"
+      },
+      {
+       "t": "VCE Applied Computing — Unit 2 Course Hub",
+       "h": "year11-applied-computing/unit-2/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit 2 Outline",
+           "h": "year11-applied-computing/unit-2/outline.html",
+           "k": "computing"
+          }
+         ]
+        }
+       ],
+       "k": "computing"
+      },
+      {
+       "t": "Problem-solving Methodology",
+       "h": "year11-applied-computing/psm.html",
+       "k": "computing"
+      }
+     ],
+     "h": "year11-applied-computing/index.html",
+     "k": "computing"
     },
     {
      "t": "Foundation Mathematics",
@@ -818,6 +884,10 @@ window.SITEMAP = {
     {
      "t": "Staff tools",
      "c": [
+      {
+       "t": "Page builder — decks & worksheets",
+       "h": "tools/page-builder.html"
+      },
       {
        "t": "Staff blob tool (encrypt / decrypt)",
        "h": "tools/staff-crypt.html",
