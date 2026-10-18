@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T3 &middot; Data Types and Characteristics | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 3</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>Data Types and Characteristics</h1>
+    <p class="subtitle">What the software thinks your data is &mdash; and why that decides what you can do with it.</p>
+    <div class="head-meta">
+      <span class="pill">Name the main data types</span>
+      <span class="pill">Pick the right type for a field</span>
+      <span class="pill">Judge data against the six characteristics</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>character</li>
+          <li>string</li>
+          <li>integer</li>
+          <li>floating point</li>
+          <li>date/time</li>
+          <li>Boolean</li>
+          <li>structure</li>
+          <li>context</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">The one that catches people</span>
+          <p><em>Integer</em> and <em>floating point</em> are both numbers to you. They are different things to a database, and choosing wrong loses data silently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Why types matter">
+    <p class="eyebrow">Starting point</p>
+    <h2>The software has to be told what a value is</h2>
+    <div class="cols">
+      <div>
+        <p>You look at <code>24.6</code> and see a temperature. A database sees characters until you tell it otherwise.</p>
+        <p>Declare it as text and you can no longer average it. Declare it as a whole number and the <code>.6</code> is thrown away without a word of warning.</p>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">Key idea</span>
+          <p>The data type is a promise about what the value is and what may be done to it. Every later thing you do &mdash; sorting, averaging, validating, charting &mdash; rests on that promise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Text types">
+    <p class="eyebrow">Key knowledge <b>&middot;</b> text</p>
+    <h2>Character and string</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Type</th><th>Holds</th><th>From our dataset</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Character</b></td><td>A single character</td><td><code>V</code> in a state code</td></tr>
+      <tr><td><b>String</b></td><td>A sequence of characters</td><td><code>&quot;Melbourne Airport&quot;</code></td></tr>
+      </tbody>
+    </table>
+    <div class="box hint">
+      <span class="lbl">Watch for</span>
+      <p>A string of digits is still text. <code>&quot;86038&quot;</code> sorts before <code>&quot;9&quot;</code>, because text sorts character by character. That is why station IDs look out of order until you tell the software they are numbers &mdash; or decide, correctly, that they are labels and should stay text.</p>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Numeric types">
+    <p class="eyebrow">Key knowledge <b>&middot;</b> numeric</p>
+    <h2>Integer, floating point, date/time</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Type</th><th>Holds</th><th>From our dataset</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Integer</b></td><td>Whole numbers, no fraction</td><td><code>humidity_9am</code> &mdash; 68</td></tr>
+      <tr><td><b>Floating point</b></td><td>Numbers with a decimal part</td><td><code>max_temp_c</code> &mdash; 24.6</td></tr>
+      <tr><td><b>Date/time</b></td><td>A point in time the software can order and subtract</td><td><code>obs_date</code> &mdash; 2025-03-14</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Date/time is the one students most often store as text. It still <em>looks</em> right &mdash; and then &ldquo;how many days between these two&rdquo; becomes impossible.</p>
+  </section>
+
+  <section class="slide" data-menu="Boolean">
+    <p class="eyebrow">Key knowledge <b>&middot;</b> Boolean</p>
+    <h2>Boolean: exactly two values</h2>
+    <div class="cols">
+      <div>
+        <p>True or false. Nothing else.</p>
+        <p>Our dataset has no Boolean column, but it could: <code>is_rain_day</code> would be true whenever <code>rainfall_mm</code> is above zero.</p>
+      </div>
+      <div>
+        <div class="box question">
+          <span class="lbl">Discuss</span>
+          <p>Would storing <code>is_rain_day</code> be useful, or is it redundant when you already store the rainfall? What does it cost you, and what does it save?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="I do — typing the dataset">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> Choosing a type for every column</h2>
+    <div class="cols">
+      <div>
+        <ol class="steps" id="t3ido">
+          <li><span class="stepno">1</span> <code>station_name</code> &mdash; words, varying length. <b>String.</b></li>
+          <li><span class="stepno">2</span> <code>obs_date</code> &mdash; I will want to sort and subtract these. <b>Date/time</b>, not text.</li>
+          <li><span class="stepno">3</span> <code>max_temp_c</code> &mdash; has a decimal part. <b>Floating point.</b></li>
+          <li><span class="stepno">4</span> <code>humidity_9am</code> &mdash; whole per cent, never fractional. <b>Integer.</b></li>
+          <li class="ans"><span class="stepno">&#10003;</span> <code>station_id</code> &mdash; digits, but I will never average it. <b>Integer as an identifier</b>, and I must remember not to do arithmetic on it.</li>
+        </ol>
+        <button class="reveal-btn" data-target="#t3ido">Work it through</button>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">The question I asked each time</span>
+          <p>Will I ever do arithmetic on this? Will I ever need to order it? Those two answers pick the type almost every time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — pick the type">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Pick the type</h2>
+    <p>Write your answer in the booklet before we reveal it.</p>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. A student's year level (7&ndash;12)</p>
+          <p class="a"><b>Integer</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. Whether a permission form has been returned</p>
+          <p class="a"><b>Boolean</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. A mobile phone number</p>
+          <p class="a"><b>String &mdash; leading zeros matter and you never add them</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="box hint">
+          <span class="lbl">Number 3 is the classic</span>
+          <p>Store <code>0412&hellip;</code> as a number and the leading zero disappears.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Six characteristics">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Characteristics of data and information</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Characteristic</th><th>The question it asks</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Size</b></td><td>How much is there? Will it open in a spreadsheet?</td></tr>
+      <tr><td><b>Structure</b></td><td>Is it organised into fields and records, or a wall of text?</td></tr>
+      <tr><td><b>Relevance</b></td><td>Does it bear on the question actually being asked?</td></tr>
+      <tr><td><b>Accessibility</b></td><td>Can the people who need it get to it, and read it?</td></tr>
+      <tr><td><b>Clarity</b></td><td>Can it be understood without someone explaining it?</td></tr>
+      <tr><td><b>Context</b></td><td>Do you know where it came from and what it measures?</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="We do — judge the dataset">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Judge our own dataset</h2>
+    <p>2190 rows, three tables, a data dictionary. How does it score?</p>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. Size — is it workable?</p>
+          <p class="a"><b>Yes. 2190 rows opens in any spreadsheet and queries instantly</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. Structure — how is it organised?</p>
+          <p class="a"><b>Three related tables, one row per station per day</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. Context — do we know what it measures?</p>
+          <p class="a"><b>Yes, and the data dictionary says it is synthetic. That disclosure is part of context</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="box key">
+          <span class="lbl">Context is the one that bites</span>
+          <p>A column of numbers with no record of where it came from or what it measures is not information. It is a liability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>Name the five data types from today.</li>
+        <li>Why should a phone number be stored as text?</li>
+        <li>Give one characteristic our dataset scores well on, and say why.</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 3 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

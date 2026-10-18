@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T9 &middot; Design Tools | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 9</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>Design Tools</h1>
+    <p class="subtitle">Four ways to show what a data solution will do and look like, before you build it.</p>
+    <div class="head-meta">
+      <span class="pill">Read an IPO chart</span>
+      <span class="pill">Read a query design</span>
+      <span class="pill">Annotate a mock-up</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>design tool</li>
+          <li>IPO chart</li>
+          <li>annotated diagram</li>
+          <li>mock-up</li>
+          <li>query design</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">Why design before building</span>
+          <p>Changing a mock-up takes a pencil. Changing a finished spreadsheet takes an afternoon. Design is where mistakes are cheap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Four tools">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Four design tools for data solutions</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Tool</th><th>Shows</th><th>Use it for</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>IPO chart</b></td><td>Input &rarr; Process &rarr; Output</td><td>What goes in, what happens, what comes out</td></tr>
+      <tr><td><b>Annotated diagram</b></td><td>A sketch with explanatory labels</td><td>How parts connect</td></tr>
+      <tr><td><b>Mock-up</b></td><td>What it will look like</td><td>Layout, colour, type, position</td></tr>
+      <tr><td><b>Query design</b></td><td>Which tables, fields and conditions</td><td>Planning a query before writing SQL</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="IPO charts">
+    <p class="eyebrow">Tool 1</p>
+    <h2>Input, process, output</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Input</th><th>Process</th><th>Output</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><code>observation</code> table<br><code>station</code> table</td><td>Join on <code>station_id</code><br>Group by region<br>Average <code>max_temp_c</code></td><td>One row per region,<br>with its mean maximum</td></tr>
+      </tbody>
+    </table>
+    <p class="note">An IPO chart is deliberately not code. It is the agreement about <em>what</em> happens, written so a non-programmer can check it.</p>
+  </section>
+
+  <section class="slide" data-menu="Query designs">
+    <p class="eyebrow">Tool 4</p>
+    <h2>Planning a query before you write it</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Element</th><th>Decision</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Tables</b></td><td><code>observation</code>, <code>station</code>, <code>region</code></td></tr>
+      <tr><td><b>Join on</b></td><td><code>observation.station_id = station.station_id</code></td></tr>
+      <tr><td><b>Fields shown</b></td><td><code>region_name</code>, mean of <code>max_temp_c</code></td></tr>
+      <tr><td><b>Condition</b></td><td><code>obs_date</code> in 2025</td></tr>
+      <tr><td><b>Group by</b></td><td><code>region_name</code></td></tr>
+      <tr><td><b>Sort</b></td><td>Mean maximum, highest first</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Fill this in and the SQL almost writes itself. We do exactly that in Topic 12.</p>
+  </section>
+
+  <section class="slide" data-menu="I do — reading a mock-up">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> What an annotation has to say</h2>
+    <div class="cols">
+      <div>
+        <div class="box question">
+          <span class="lbl">A weak annotation</span>
+          <p>&ldquo;Title here. Chart. Some text.&rdquo;</p>
+        </div>
+        <ol class="steps" id="t9ido">
+          <li><span class="stepno">1</span> What size is the title, and in what typeface? Not stated &mdash; so the builder guesses.</li>
+          <li><span class="stepno">2</span> Which chart? A bar and a line make different claims about the same numbers.</li>
+          <li><span class="stepno">3</span> What text, and how much? &ldquo;Some&rdquo; is not a design decision.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> A good annotation names size, position, colour, typeface and content &mdash; enough that two people building from it produce the same thing.</li>
+        </ol>
+        <button class="reveal-btn" data-target="#t9ido">Pull it apart</button>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">The test for a design</span>
+          <p>Could somebody else build it from this without asking you a question? If not, it is a sketch, not a design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — improve the annotation">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Make these specific</h2>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. &ldquo;Big heading at the top&rdquo;</p>
+          <p class="a"><b>&ldquo;Heading, 36&nbsp;pt Bitter bold, centred, 20&nbsp;mm from the top&rdquo;</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. &ldquo;Chart of the rainfall&rdquo;</p>
+          <p class="a"><b>&ldquo;Column chart, one column per region, rainfall in mm on the vertical axis&rdquo;</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. &ldquo;Use nice colours&rdquo;</p>
+          <p class="a"><b>&ldquo;One accent colour for all columns; grey axis labels; no colour used to mean two different things&rdquo;</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>What three parts does an IPO chart have?</li>
+        <li>Name two things an annotation must state that &ldquo;title here&rdquo; does not.</li>
+        <li>What goes in the &lsquo;condition&rsquo; row of a query design?</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 9 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

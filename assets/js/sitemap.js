@@ -229,7 +229,7 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 3 — Experiment 1: Friction and Mass",
+           "t": "Lesson 3 — Experiment 1: Everyday Forces",
            "h": "year7-science/forces/deck3.html",
            "k": "science"
           },
@@ -244,7 +244,7 @@ window.SITEMAP = {
            "k": "science"
           },
           {
-           "t": "Lesson 6 — Experiment 2: Newton’s Second Law",
+           "t": "Lesson 6 — Experiment 2: Friction and Mass",
            "h": "year7-science/forces/deck6.html",
            "k": "science"
           },
@@ -673,6 +673,198 @@ window.SITEMAP = {
      "c": [],
      "h": "year11-algorithmics/index.html",
      "k": "algorithmics"
+    },
+    {
+     "t": "Applied Computing",
+     "c": [
+      {
+       "t": "VCE Applied Computing — Unit 1 Course Hub",
+       "h": "year11-applied-computing/unit-1/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "T1 · The Problem-solving Methodology",
+           "h": "year11-applied-computing/unit-1/slides/U1T01-problem-solving-methodology.html",
+           "k": "computing"
+          },
+          {
+           "t": "T2 · Data and Information",
+           "h": "year11-applied-computing/unit-1/slides/U1T02-data-and-information.html",
+           "k": "computing"
+          },
+          {
+           "t": "T3 · Data Types and Characteristics",
+           "h": "year11-applied-computing/unit-1/slides/U1T03-data-types-and-characteristics.html",
+           "k": "computing"
+          },
+          {
+           "t": "T4 · Data Quality",
+           "h": "year11-applied-computing/unit-1/slides/U1T04-data-quality.html",
+           "k": "computing"
+          },
+          {
+           "t": "T5 · Sources and Referencing",
+           "h": "year11-applied-computing/unit-1/slides/U1T05-sources-and-referencing.html",
+           "k": "computing"
+          },
+          {
+           "t": "T6 · The Australian Privacy Principles",
+           "h": "year11-applied-computing/unit-1/slides/U1T06-australian-privacy-principles.html",
+           "k": "computing"
+          },
+          {
+           "t": "T7 · Ethics in Data and AI",
+           "h": "year11-applied-computing/unit-1/slides/U1T07-ethics-in-data-and-ai.html",
+           "k": "computing"
+          },
+          {
+           "t": "T8 · Requirements, Constraints and Scope",
+           "h": "year11-applied-computing/unit-1/slides/U1T08-requirements-constraints-scope.html",
+           "k": "computing"
+          },
+          {
+           "t": "T9 · Design Tools",
+           "h": "year11-applied-computing/unit-1/slides/U1T09-design-tools.html",
+           "k": "computing"
+          },
+          {
+           "t": "T10 · Relational Database Structure",
+           "h": "year11-applied-computing/unit-1/slides/U1T10-relational-database-structure.html",
+           "k": "computing"
+          },
+          {
+           "t": "T11 · Keys and Relationships",
+           "h": "year11-applied-computing/unit-1/slides/U1T11-keys-and-relationships.html",
+           "k": "computing"
+          },
+          {
+           "t": "T12 · SQL I — Selecting and Filtering",
+           "h": "year11-applied-computing/unit-1/slides/U1T12-sql-selecting-and-filtering.html",
+           "k": "computing"
+          },
+          {
+           "t": "T13 · SQL II — Joins",
+           "h": "year11-applied-computing/unit-1/slides/U1T13-sql-joins.html",
+           "k": "computing"
+          },
+          {
+           "t": "T14 · SQL III — Aggregation",
+           "h": "year11-applied-computing/unit-1/slides/U1T14-sql-aggregation.html",
+           "k": "computing"
+          },
+          {
+           "t": "T15 · Spreadsheets and Descriptive Statistics",
+           "h": "year11-applied-computing/unit-1/slides/U1T15-spreadsheets-and-statistics.html",
+           "k": "computing"
+          },
+          {
+           "t": "T16 · Data Visualisation",
+           "h": "year11-applied-computing/unit-1/slides/U1T16-data-visualisation.html",
+           "k": "computing"
+          }
+         ]
+        },
+        {
+         "t": "Worksheets",
+         "g": 1,
+         "c": [
+          {
+           "t": "Worksheet 1 · The methodology, data and information",
+           "h": "year11-applied-computing/unit-1/worksheet1.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 2 · Data quality, sources and privacy",
+           "h": "year11-applied-computing/unit-1/worksheet2.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 3 · Ethics, requirements and design",
+           "h": "year11-applied-computing/unit-1/worksheet3.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 4 · Databases, keys and relationships",
+           "h": "year11-applied-computing/unit-1/worksheet4.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 5 · SQL on paper",
+           "h": "year11-applied-computing/unit-1/worksheet5.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 6 · Descriptive statistics",
+           "h": "year11-applied-computing/unit-1/worksheet6.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 7 · Data visualisation",
+           "h": "year11-applied-computing/unit-1/worksheet7.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 8 · Area of Study 1 — whole revision",
+           "h": "year11-applied-computing/unit-1/worksheet8.html",
+           "k": "computing"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit 1 Outline",
+           "h": "year11-applied-computing/unit-1/outline.html",
+           "k": "computing"
+          },
+          {
+           "t": "Unit 1 Workbooks — Data Analysis",
+           "h": "year11-applied-computing/unit-1/workbooks.html",
+           "k": "computing"
+          },
+          {
+           "t": "Unit 1 Worksheets — Revision",
+           "h": "year11-applied-computing/unit-1/worksheets.html",
+           "k": "computing"
+          }
+         ]
+        }
+       ],
+       "k": "computing"
+      },
+      {
+       "t": "VCE Applied Computing — Unit 2 Course Hub",
+       "h": "year11-applied-computing/unit-2/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit 2 Outline",
+           "h": "year11-applied-computing/unit-2/outline.html",
+           "k": "computing"
+          }
+         ]
+        }
+       ],
+       "k": "computing"
+      },
+      {
+       "t": "Problem-solving Methodology",
+       "h": "year11-applied-computing/psm.html",
+       "k": "computing"
+      }
+     ],
+     "h": "year11-applied-computing/index.html",
+     "k": "computing"
     },
     {
      "t": "Foundation Mathematics",

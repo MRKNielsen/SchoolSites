@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026.
+Last full audit: 16 Aug 2026. Last addition: 17 Oct 2026 (Applied Computing Unit 1 AOS 1 — dataset + all 16 decks).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -23,11 +23,12 @@ Fourteen subject folders exist. Five carry content; nine are identical
 
 | Subject | State | What's there |
 |---|---|---|
-| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric + portfolio answer key, booklet, research portfolio, bandicoot profile) · `space` (10 decks, 10 worksheets + collated booklet, quiz, planner, booklet + single-lesson print, gated solutions) |
+| year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
 | year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
 | year11-methods | **Built, on debt** | `chapter-9` (7 decks), `chapter-11` (2 decks) — still inline styles |
+| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and **all 16 AOS 1 decks** (154 slides). No workbooks, worksheets or assessments yet |
 | year7-mathematics | Stub | — |
 | year8-mathematics | Stub | — |
 | year9-mathematics | Stub | — |
@@ -107,7 +108,7 @@ one static figure in the unit contradicted the widget, both worksheets and
 the answer key — a student shading from the booklet picture would have
 been marked wrong by the key.
 
-Cause worth recording: `\moonphase`'s second argument was documented as
+Cause worth recording: `\\moonphase`'s second argument was documented as
 `{mirror: 1=waxing, -1=waning}`. Waxing and lit-side are opposite in the
 two hemispheres, so a macro keyed on *waxing* silently bakes in a
 hemisphere. It now takes `{lit side: -1 = left, +1 = right}` and the
@@ -118,10 +119,10 @@ Also added a *Which side is lit depends on where you are standing*
 infobox beside the existing misconception box, and the subsection heading
 now reads "as seen from Melbourne".
 
-Rebuilt ×3: still 48 pages, every `\newlabel` page unchanged, all 67 deck
+Rebuilt ×3: still 48 pages, every `\\newlabel` page unchanged, all 67 deck
 `.bookref` chips still correct. `Space_Lesson1_Print.tex` was regenerated
-because it carries the preamble verbatim — it never calls `\moonphase`, so
-its committed PDF is byte-identical in rendered text and did not need
+because it carries the preamble verbatim — it never calls `\\moonphase`,
+so its committed PDF is byte-identical in rendered text and did not need
 rebuilding. **The unit booklet PDF does, and has not been.**
 
 One accessibility fix in passing: the shading question on
@@ -192,8 +193,8 @@ in the Ch3F–3L format: per section a refbox of textbook example numbers
 and question sets with pages, two original worked examples, then five
 hurdle questions on a new page. Diagrams are TikZ macros in the preamble
 (spinner, Venn with shaded-region variant, two-stage tree with an
-outcome/probability column, three-stage coin tree, outcome array with
-a crossed-out diagonal for "without replacement", counting boxes). Gaps
+outcome/probability column, three-stage coin tree, outcome array with a
+crossed-out diagonal for "without replacement", counting boxes). Gaps
 are filled rather than left bare: each worked example and hurdle is
 measured and placed whole, and leftover space becomes Notes lines or
 working lines. All worked and hurdle answers were checked by script.
@@ -230,8 +231,8 @@ the Space index under *Student resources*.
 ### Landed — primer course home split into topic pages (14 Oct 2026)
 
 `10methods-primer/index.html` was nine stacked chapter sections (34 week
-cards, ~4550 px tall). It is now the header and milestone timeline plus
-a 3×3 grid of topic buttons that fits one 1080p window (and 1366×768).
+cards, ~4550 px tall). It is now the header and milestone timeline plus a
+3×3 grid of topic buttons that fits one 1080p window (and 1366×768).
 Each button opens a topic page — `unit1-linear-relations.html` …
 `unit8-probability.html`, `wrapup-revision-cat3.html` — carrying that
 chapter's week cards verbatim (all 132 lesson links checked against the
@@ -262,29 +263,29 @@ the site — it was asked for as a print document.
 New pattern, reusable for any booklet that needs a teacher copy:
 
 - **One source, two builds.** The student `.tex` holds no answers; every
-  blank is `\blank{width}{key}`, `\cell{key}` or `\tans{key}`.
-  `Ch3G-L_Example_Set_Teacher.tex` defines every key with `\defans`
-  inside `\teacheranswers` and `\input`s the student file, which prints
+  blank is `\\blank{width}{key}`, `\\cell{key}` or `\\tans{key}`.
+  `Ch3G-L_Example_Set_Teacher.tex` defines every key with `\\defans`
+  inside `\\teacheranswers` and `\\input`s the student file, which prints
   them in red. The wrapper and its PDF are **gitignored** by path (staff
   material). A missing key prints `??key??` — grep the teacher PDF.
-- **Both copies paginate identically** (teacher answers are `\smash`ed
+- **Both copies paginate identically** (teacher answers are `\\smash`ed
   or zero-height), so "page 14" means the same page in both.
 - **No bare gaps.** Example boxes are typeset, measured, then placed
   whole; if one won't fit, the rest of the page becomes ruled *Notes*
-  lines (`\placeorfill`). Questions do the same with plain lines, and
+  lines (`\\placeorfill`). Questions do the same with plain lines, and
   each section ends with lines to the foot of the page. Writing lines are
-  8 mm everywhere (`\rulepitch`), which is what lets `\tans` sit on them.
+  8 mm everywhere (`\\rulepitch`), which is what lets `\\tans` sit on them.
 
 ### Landed — Year 10 exponential graphs redrawn (9 Oct 2026)
 
 All ten figures in `10methods-primer/Ch3FL_ExponentialsLogs_Slides.html`
 plus the compound-interest graph on slide 14 of
 `Term4_RevisionExam_Slides.html`. The originals came out of the old JS
-deck's graph helper: 310 px wide, no scale, curve labels written on top of
-the curve, coordinate labels colliding with each other (`(3, ?)` sat
-exactly on `V = 30000(0.88)ⁿ`), the `asymptote y = 0` label clipped off
-the right edge, money curves drawn into negative years, and the
-compound/simple graph with no x-axis at all.
+deck's graph helper: 310 px wide, no scale, curve labels written on top
+of the curve, coordinate labels colliding with each other (`(3, ?)` sat
+exactly on `V = 30000(0.88)ⁿ`), the `asymptote y = 0` label clipped off the
+right edge, money curves drawn into negative years, and the compound/simple
+graph with no x-axis at all.
 
 What replaced them, so the next primer redraw can follow suit:
 
@@ -366,7 +367,7 @@ booklet §5.2 bullet, booklet Q5.10 (which asked for "the two reasons", of
 which there is one), worksheet 5 Q7, and both answers in
 `solutions-payload.html`. The booklet gained a matching
 `what counts as a planet` infobox at §5.2. Rebuilt ×3: still 48 pages,
-every `\newlabel` page unchanged, all 67 deck `.bookref` chips still
+every `\\newlabel` page unchanged, all 67 deck `.bookref` chips still
 correct, Q5.10 still Q5.10 at 3 marks.
 
 **Recap slides.** Five of the ten — decks 1, 5, 8, 9 and 10 — claimed
@@ -383,8 +384,8 @@ mentioned. Deck 8 had no exit question at all and now has one.
 Two errors fixed in passing: deck 9 said JWST at L2 is "always in Earth's
 shadow" (it is not, and must not be — it needs its solar panels lit; the
 point of L2 is that Sun, Earth and Moon stay on one side so a single
-shield covers all three), and the ISS gravity figure read 88% in the recap
-against "about 90%" on two slides.
+shield covers all three), and the ISS gravity figure read 88% in the
+recap against "about 90%" on two slides.
 
 Also: deck.css line 561 carried a literal `</style>` inside a comment,
 which silently truncated the file for anything inlining it into a `<style>`
@@ -421,10 +422,10 @@ falling through to the base height — now stated explicitly.
 
 ### Landed — pracs stripped from both unit planners (1 Sep 2026)
 
-Kodie's call: no practical or equipment-dependent activities in either
+Kodies call: no practical or equipment-dependent activities in either
 `planner.html`, or their Word twins. Removed the leaf-starch practical and its
-write-up from Bio week 3, the quadrat survey, the classifying-plants prac, the
-adaptation dice game, the sorting cards, the eutrophication demo; and from
+write-up from Bio week 3, the quadrat survey, the classifying-plants prac,
+the adaptation dice game, the sorting cards, the eutrophication demo; and from
 Space the globe-and-torch and ball-and-lamp modelling, the shadow-stick
 tracking, the solar-system scale model, the diffraction-grating spectroscope,
 the night-sky viewing evening, and the specimen-handling framing of Lesson 4
@@ -438,7 +439,7 @@ gone for good rather than "for now", those pages need the same pass.
 
 ### Landed — Space resequence: Lesson 3 to week 2, Lesson 4 optional (31 Aug 2026)
 
-Kodie's call. Week 1 is now Lessons 1–2, week 2 is Lessons 3–5, and **Lesson 4
+Kodies call. Week 1 is now Lessons 1–2, week 2 is Lessons 3–5, and **Lesson 4
 (Reading the Rocks) is an optional lesson** — badged on the unit index
 (`.deck-card.is-ext` + `Optional · Specimens`), pilled on its own title slide,
 and marked `optional` on the quiz page's topic chip.
@@ -476,8 +477,8 @@ sync automatically. Whichever copy changes, change the other by hand.
 
 **Second use, 31 Aug 2026** — `year7-science/space/planner.html`, themed
 `theme-space`. Four rows matching the week grouping the Space index already
-declares (Week 4 is the above-level extension block), so the planner and the
-index can never disagree. Word twin at
+declares (Week 4 is the above-level extension block), so the planner and
+the index can never disagree. Word twin at
 `7 Science/Space/Space_Unit_Planner_Yr7.docx`.
 
 Other units can reuse the page type as-is: copy a `planner.html`, swap the rows
@@ -492,7 +493,7 @@ group and from a new *Staff only* section on `research-portfolio.html`.
 
 Three things worth knowing before editing it:
 
-- **The portfolio is unmarked and always was.** `\markscount` is a no-op in
+- **The portfolio is unmarked and always was.** `\\markscount` is a no-op in
   `Bio_Research_Portfolio_Yr7_8.tex` and the closing page asks students to
   judge themselves against the seven CAT criteria. So the key gives *model
   responses and criteria*, not a mark scheme, and there is no marks tally to
@@ -551,6 +552,109 @@ worksheet's `.qn`, including the grouped multiple-choice blocks. If the
 answer key changes, the booklet has to be regenerated and re-encrypted —
 it does not update itself.
 
+### Landed — Year 11 Applied Computing scaffold (3 Sep 2026)
+
+`year11-applied-computing` is a new VCE subject built against the
+**Applied Computing Study Design 2025–**, for first teaching in 2027.
+What exists is the frame, not the content:
+
+- Subject landing (`course.css`), Unit 1 and Unit 2 hubs (`hub.css`,
+  16-week grids on the 2027 Victorian term calendar), Unit 1 and Unit 2
+  outlines and a shared problem-solving methodology reference (all
+  `profile.css`).
+- New `theme-computing` in tokens.css (deep cyan-blue `--c-cyber-700`
+  `#0369a1`) plus its `.sn-t-computing` dot in sitenav.css. It is
+  deliberately *not* the Algorithmics teal — the two computing subjects
+  sit next to each other in the Year 11/12 tabs and in the nav drawer,
+  and a near-identical dot makes them unreadable.
+- Uncommented in the root year picker (Year 11 panel).
+
+Two things worth knowing before adding content:
+
+- **The outlines and the PSM page are generated from the study design
+  `.docx`, not typed.** The PSM page's Unit 1 / Unit 2 applicability
+  columns come from the `·` marks in the study design's own
+  specification tables (columns 3 and 4 of a 9-column grid; the activity
+  names sit in vertically-merged cells, so a naive `python-docx` read
+  mis-groups them). If the study design is amended, regenerate rather
+  than hand-patch.
+- **The PSM specification and the key knowledge lists disagree by
+  design.** Ideation is unticked for both Applied Computing units in the
+  specification table but is explicitly listed in Unit 2 AOS 1 key
+  knowledge. That is not an extraction error — don't "fix" it.
+
+Course design decisions recorded: Python as the OOP language (so the
+marimo workbooks and the assessed language are the same), SQL against a
+relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
+Semester 2.
+
+### Landed — Year 11 Applied Computing, Unit 1 AOS 1 dataset and first decks (17 Oct 2026)
+
+**The teaching dataset is built** at `year11-applied-computing/unit-1/data/`.
+Victorian climate observations, calendar year 2025: 4 regions, 6 stations, 2190
+daily observations across three normalised tables.
+
+It is **synthetic**, and deliberately so. Structure mirrors the Bureau of
+Meteorology's daily observations and each station's annual mean maximum, mean
+minimum and rainfall are calibrated to that station's published climate normals,
+so the figures behave realistically — but it is not a Bureau extract and the
+data dictionary says so in its first paragraph. Synthetic was chosen because
+every fault in the dirty extract is then *engineered and documented*, which gives
+the cleaning task a known correct answer and makes it auto-checkable. Real data
+has whatever faults it happens to have.
+
+Ships as: the dirty extract (`observations_raw.csv`, 2208 rows, nine fault
+classes), the same data as a staging table (`climate-raw.db`), the clean
+normalised CSVs, a SQLite database with keys and CHECK constraints
+(`climate.db`), an XLSX for the spreadsheet weeks, and a generated data
+dictionary.
+
+**Two things are deliberately NOT in this repo**, because it is public: the
+cleaning answer key, and the four generator scripts — they reveal every
+injected fault. They live with the staff material and should go into the private
+autograder repo when it exists.
+
+**Decks T1 and T2 are built** (`unit-1/slides/`), on shared assets, theme-computing,
+no inline styles, verified rendering with no slide overflow. A deck template file
+was deliberately not created: the first real deck is the reference, which avoids
+a placeholder file in a repo whose rules forbid them.
+
+Remaining in Unit 1 AOS 1: decks T3–T16, eight marimo workbooks, eight
+worksheets, the booklet and the Outcome 1 task.
+
+### Landed — Unit 1 AOS 1 decks complete (17 Oct 2026)
+
+All sixteen Area of Study 1 decks are built and wired into the hub week
+cards, 154 slides in total. Every key-knowledge dot-point in Outcome 1 is
+covered by exactly one deck.
+
+Built to Kodie's house style throughout: a key-vocabulary starter slide
+opens every lesson, every **I do** worked example is followed by a **We do**
+question, and there are no *You do* blocks. Current chrome on all of them
+(slide-jump menu, "reveals then advances" keyhint, empty `.counter`).
+
+**The decks are generated, not hand-typed.** A small generator held the
+boilerplate so house style is byte-identical across all sixteen; the content
+is authored per deck. The generator lives with the staff material, not in
+this repo — it is a one-off, not a tool anyone needs to maintain.
+
+Two verification steps worth repeating for any later deck set:
+
+- **Every SQL query in T12–T14 was run against `climate.db` before shipping.**
+  Thirteen queries, all returning the rows the slide implies. A deck that
+  teaches a query which does not run is worse than no deck.
+- **Every quoted statistic was recomputed from the dataset.** This caught one
+  error — T15 claimed Mildura had 56 rain days, a figure from before the
+  dataset was recalibrated against Bureau normals. It has 76.
+
+One honesty fix: T4's worked example shows a row carrying six faults at once.
+No real row in the extract is that bad (checked — none carries even three),
+so the slide now says plainly that the row is constructed from six faults
+that are genuinely in the file.
+
+Remaining in Unit 1 AOS 1: eight marimo workbooks, eight worksheets, the
+booklet and the Outcome 1 task.
+
 ### Source material that exists but isn't ported
 
 Everything below already exists on disk in the OneDrive teaching
@@ -559,7 +663,7 @@ makes it cheap relative to the stubs.
 
 | Source | Target | Shape of the job |
 |---|---|---|
-| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces` | Same unit-local shape bio and space had. Mostly a rename job. |
+| `7 Science/Forces` — 6 decks, `experiments.html`, index, unit-local deck.css/js, booklet `.tex`/`.pdf`, 8 SVG figures, Ballista + Trebuchet lab tech sheets, 2 trebuchet investigation docx | `year7-science/forces-motion` | Same unit-local shape bio and space had. Mostly a rename job. |
 | `ClaudeSPM/Specialist Maths Calc` — beamer `.tex` for Ch8 Differentiation, Ch9 Integration, Ch10 Applications, Ch11 Differential Equations, Ch12 Kinematics, plus SAC materials | `year12-specialist/calculus` (or per-chapter units) | LaTeX → HTML deck conversion. No existing HTML to rename. |
 | `Algorithmics` — `AOS1 - AlgoSlides.tex`, `AOS2 - Algorithm Design.tex`, problem sets AOS2PS1–5 + 2 graph extras, `AOS2 Notes W1.tex`, marimo workbooks, SAC1 materials | `year12-algorithmics/unit-3`, `year11-algorithmics` | LaTeX → HTML. Unit 4 is the template to copy. |
 | `ClaudeSPM/SPM Term 3` — `TeacherCompanion-T3.tex`, `PracticeSAC3` + marking scheme, SAC 2 Task A/B solutions | `year12-specialist/term-3` (staff-gated additions) | Existing unit, missing its staff layer. |
@@ -585,7 +689,7 @@ as unfinished.
    class, MathJax config block with the `pageReady` hook if there's maths.
 3. **Booklet** — `.tex` source + built PDF in the unit's `booklet/`,
    embedded via `.pdf-frame`, `.bookref` chips derived from the built
-   `.aux` (never hand-numbered) — `node tools/check-bookrefs.js` verifies them.
+   `.toc` (never hand-numbered).
 4. **Worksheets** — `worksheet.css`, marks totals agreeing across
    `.namebar`, toolbar hint and the index `.wl-marks`.
 5. **Retrieval quiz** — unit-local `questions.js` + `quiz.html`, plus
@@ -628,8 +732,8 @@ label on its own.
       marking tool and its band descriptors are publicly readable, and it
       no longer links `tokens.css`/`solutions.css` (own palette and
       fonts). Possibly deliberate; flagging rather than reverting, since
-      four commits that day were clearly intentional work. If it should
-      be gated again, `space/rubric.html` is now the clean example, or
+      four commits that day were clearly intentional work. If it should be
+      gated again, `space/rubric.html` is now the clean example, or
       `git show e8d6086:year7-science/bio-ecosystems/rubric.html`.
       Noticed 8 Oct 2026 while rebuilding the sitemap for unrelated work.
       Commit `db7b36b` ("Update rubric.html", same day) left it with a bare
@@ -684,11 +788,12 @@ label on its own.
 
 ### Tier 1 — Small fixes (under a session each)
 
-- [x] **Encrypt `year7-science/space/solutions.html`.** Already done and
-      the item had gone stale — the page now carries a real v2 blob with
-      both a staff and a student wrapper, and unlocks. Confirmed by
-      parsing the blob, not by reading this file. **S**
-      *(found already landed 2026-08-25)*
+- [ ] **Encrypt `year7-science/space/solutions.html`.** It ships
+      `var BLOB = {salt:"", iv:"", iter:0, ct:""}` — the page locks but
+      can never unlock, which is worse than not shipping it. The
+      plaintext `solutions-payload.html` is right there (and correctly
+      gitignored). Run it through `tools/staff-crypt.html`, paste the
+      emitted line over the placeholder. **S**
 - [x] **Detheme the SVG figures in `year12-specialist/term-3/slides/`.**
       All eleven decks, not just T3W01–05: 576 elements rethemed, 21
       per-figure `<style>` blocks removed, 27 `style="font-size:…"`
@@ -741,25 +846,6 @@ label on its own.
       blanked, because the root index.html deliberately keeps the
       unpublished subject cards commented out.
 
-- [ ] **Redraw the other primer figures from the old graph helper.**
-      The 9 Oct pass covered exponentials only. The same helper drew
-      the rest of the primer's figures and they show the same faults —
-      seen in `Term4_RevisionExam_Slides.html` slides 9, 10, 34, 35
-      (labels on the parabola, `x = 2` under `TP (2, −9)`, `√5 ≈ 2.236`
-      on the curve) and the tree diagrams on 20 and 38 (branch labels
-      overlapping). Ch1, Ch4, Ch6, Ch7 and Ch8 (~130 SVGs) not yet
-      audited. Follow the conventions in the exponential-graphs Landed
-      note. **M**
-- [ ] **`&amp;amp;` in primer `data-topic` attributes.** The lesson tag
-      reads "CAT 3 &AMP; WRAP-UP" on every topic slide —
-      double-escaped in `Ch3A-E_4A-D_IndicesSurds_Slides.html` (46),
-      `Ch4_2_MeasurementGeometry_Slides.html` (57) and
-      `Term4_RevisionExam_Slides.html` (32). One replace each. **S**
-- [ ] **Primer prose still mixes plain text and MathJax in one
-      expression**, e.g. Ch3FL "x = log₂ 20 = \(\dfrac{\log 20}{\log
-      2}\)" and Term4 "n = \(\dfrac{\log 2}{\log 1.05}\)". Sweep
-      to whole-expression MathJax. **S–M**
-
 ### Tier 2 — Ports with HTML source (one to three sessions each)
 
 These follow a known recipe. Read the "Legacy content" section of
@@ -767,101 +853,19 @@ CLAUDE.md before starting one — the class-rename vocabulary and the two
 traps (strip inline `style=` *before* renaming classes; don't promote a
 Recap slide to `.exit-slide`) are written down there.
 
-- [ ] **Port `7 Science/Forces` → `year7-science/forces`. M** *(in progress — Kodie, 2026-10-06)*
+- [ ] **Port `7 Science/Forces` → `year7-science/forces-motion`. M**
       The cheapest real content win in the repo, and it completes Year 7
       Science's third unit.
-  - [x] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
-        *(deck1 2026-10-06, decks 2–6 2026-10-07 — awaiting Kodie's review)*.
-        Lab slides link the booklet PDF page until `experiments.html` is
-        ported; repoint them then. Chips with no booklet content behind them
-        (the "§N · Extension" slides) were dropped, not re-pointed. Shared
-        `deck.css` gained `.cols.three`.
+  - [ ] 6 decks off the unit-local `deck.css`/`deck.js` onto shared assets
   - [ ] `experiments.html` — decide its page type (likely `course.css`
         section on the landing page, or a `profile.css` reference page)
-  - [x] Unit landing page, `theme-science` *(done 2026-10-06 — lists only what is published; add cards as decks land)*
+  - [ ] Unit landing page, `theme-science`
   - [ ] `booklet/` — `.tex` + PDF + `fonts/`, embedded via `.pdf-frame`
-        — files copied 2026-10-06, linked from the landing page; not yet
-        in a `.pdf-frame` page
-  - [x] **Booklet numbering fixed** *(2026-10-06)*. `\sectiondiv{title}{summary}`
-        now steps the real section counter and is followed by `\label{sec:N}`;
-        every subsection has `\label{sub:N.M}`. Tasks (`\task`, `\task[a]`,
-        `\taskpart{b}`, `\exttask`), questions (`\question{marks}{text}`) and
-        figures (`\figcap`, `\expfigcap` → E-numbered) are all auto-numbered
-        per section and auto-labelled `task:`/`q:`/`fig:`; experiments carry
-        `\label{exp:N}`. Never type a number by hand. The beginner-skills
-        block is §1.1–1.7, so the original Task 1.1/1.2a–c/Extension 1.3 are
-        now Task 1.6/1.7a–c/Extension 1.8; questions were hand-numbered out of
-        order (Q4 before Q3 in §2) and now run Q2.1–2.6 etc. Cover contents
-        table gained a `\pageref` page column; stray `\label{LastPage}`
-        removed (the `lastpage` package already defines it). 52 pp.
-        Deck 1 chips re-derived from the `.aux`.
   - [ ] 8 SVG figures — theme colours to tokens, illustrative hues left alone
-  - [x] Ballista + Trebuchet lab tech sheets as linked PDFs *(in `labs/`, Planning section of the index)*
-  - [x] `.bookref` chips derived from the built `.aux` — 61 refs, all decks ✓
-        (`node tools/check-bookrefs.js year7-science/forces`)
-  - [x] Unit planner `planner.html`, 5 weeks; index grouped by the same weeks *(2026-10-07)*
-  - [x] **Decks 1–9 rebuilt from the Lesson Booklet** *(2026-10-15)*.
-        Each opens with a five-question review quiz (`data-quiz-recent="3"`:
-        three on the lesson before, two older; Lesson 1 draws deck 0, a
-        primary-school prior-knowledge set). Worked examples are the
-        booklet's own, stepped; "Your turn" and Part D slides use
-        *lookalike* questions with hidden worked answers, so the booklet's
-        answers stay off the public site. Decks 1–3 keep the Key vocabulary
-        slides from 14 Oct. Lessons 4/5 now follow the booklet (4 = First
-        and Third Laws, 5 = Second Law); index cards and planner Weeks 2–3
-        match. `legacy-deck2.html` is no longer linked; `legacy-deck3/4`
-        still serve Lessons 10–11.
-  - [ ] Key vocabulary slides (decks 1–3) point students to a "Key
-        vocabulary table at the start of Lesson N" that the Lesson Booklet
-        doesn't have yet, and their chips cite p.2 for §2 and §3 — add the
-        tables to the booklet, then re-derive those chips
+  - [ ] Ballista + Trebuchet lab tech sheets as linked PDFs
+  - [ ] `.bookref` chips derived from the built `.toc`
   - [ ] Trebuchet investigation docx → worksheet pages *(can defer)*
-  - [ ] Quiz + gated solutions *(can defer to a second pass)* — the
-        question bank `questions.js` (Lessons 1–12, 211 questions) landed
-        2026-10-15; a standalone `quiz.html` and the gated answer key are
-        still to do
-  - [x] **Lesson Booklet Lessons 10–12** *(2026-10-15)*: Experiment 4 (lever
-        mechanical advantage, with a set-up diagram), Levers Extension
-        (optional, Year 8: turning effects, arcs and tip speed, energy and
-        launch speed) and Projectile Motion (horizontal launch only; angled
-        launches stay with Lesson 14). 107 pp; pages 2–83 unchanged.
-        `\diagProjectile` redrawn (a sideways launch no longer rises first).
-        Decks 10–12 can now be rebuilt from it.
-  - [ ] Unit Booklet §4 Experiment 4 method can't balance: with the fulcrum
-        at 50 cm and the 100 g load on the 10 cm mark, a 50 g effort needs an
-        80 cm arm, which is off the stick. Lesson 10 of the Lesson Booklet
-        keeps the fulcrum at 50 cm, stands the load on the 30 cm mark and
-        varies the effort mass instead; port that back to the Unit Booklet.
-        Its `\readingFive` also credits Aristotle with "impetus" and
-        cannonballs; Lesson 12's reading replaces it (Tartaglia 1537,
-        Galileo 1638).
-  - [x] **Lesson 3 / Experiment 1 is now friction and mass** *(2026-10-15)*,
-        following the school's *Practical 1: Friction and Mass* sheet: same
-        aim, equipment (wooden block with a hook, spring balance or force
-        sensor, 200 g masses) and method (three results each with 0–1000 g
-        on the block), plus a set-up diagram and a line graph. Booklet
-        Lesson 3 still fills pp. 23–29 with the same writing-box ids, so
-        every other page and every later deck chip is unchanged. Deck 3,
-        its question-bank entries, the unit page card and the planner
-        match. The sheet's second practical (reducing friction on a ramp)
-        is not used anywhere yet.
-  - [ ] Unit Booklet Experiment 1 still tests surface type (bench,
-        sandpaper, fabric, carpet). Port the friction-and-mass version from
-        Lesson 3 of the Lesson Booklet if the Unit Booklet stays in use.
-  - [x] **Decks 10–12 rebuilt from the Lesson Booklet** *(2026-10-15)*, the
-        same way as decks 1–9: review quiz first (Lesson 12's uses
-        `data-quiz-exclude="0,11"`, so a class that skipped the optional
-        Lesson 11 draws its three recent questions from Lesson 10),
-        booklet worked examples stepped, lookalike questions with hidden
-        working, chips checked against the build. Deck 10 carries a new
-        optional module, `leversim.css` + `leversim.js` (lever balance:
-        predict, then let go; documented in CLAUDE.md, live in the deck
-        demo). `questions.js` now has Lessons 10–12 (211 questions).
-        Week 4 cards and planner rows match the booklet. `legacy-deck3`
-        and `legacy-deck4` are no longer linked; `legacy-deck5/6` still
-        serve Lessons 13–18.
-  - [ ] Decks 13–18 rebuilt the same way once their booklet sections exist.
-        Every review quiz after Lesson 11 needs `data-quiz-exclude="0,11"`.
+  - [ ] Quiz + gated solutions *(can defer to a second pass)*
 
 - [ ] **Port `year11-methods` chapter-9 and chapter-11 off inline
       styles. M** Nine decks, the last inline-styled content in the repo.
@@ -938,6 +942,16 @@ re-earn it.
       until Tiers 0–3 are clear.
 - [ ] **year12-methods, year11-specialist, year11-foundation,
       year12-foundation, year10-algorithmics. L each** Nothing exists.
+- [ ] **Year 11 Applied Computing content → `year11-applied-computing`.
+      L** Scaffold landed 3 Sep 2026 (see Part 1); the frame, outlines
+      and PSM reference are done. Outstanding, in teaching order:
+      Unit 1 AOS 1 decks (weeks 1–8) and the database/SQL folio;
+      Unit 1 AOS 2 Python decks (weeks 9–16) and folio; marimo workbooks
+      for both; LaTeX assessment booklets under each unit's `booklet/`;
+      Unit 2 AOS 1 project scaffolding and AOS 2 cyber security decks
+      plus the teacher-provided case study. Unit 1 is the half to build
+      first — it is taught in Semester 1. *(in progress — Kodie, 17 Oct 2026)*
+      Dataset and all 16 AOS 1 decks landed 17 Oct 2026; see Part 1.
 
 **Ordering note:** don't take a Tier 4 subject purely because it's next
 alphabetically. Prefer whichever you're actually teaching, or whichever
@@ -955,16 +969,10 @@ starting a new one.
       site's assets, or whether the workbooks belong as downloads rather
       than committed pages. Weigh against CLAUDE.md's warning that
       re-exporting overwrites edits. **M**
-- [x] **Site search.** 68 decks and growing. The nav drawer maps the site
+- [ ] **Site search.** 68 decks and growing. The nav drawer maps the site
       but doesn't search it. `sitemap.js` is already a generated tree —
       a client-side title/heading index built by the same tool would be a
-      small extension. **M** *(done 2026-10-09)* Went full-text rather
-      than headings: `build-sitemap.js` now also writes
-      `assets/js/searchindex.js` (via `tools/search-index.js`), loaded
-      only when someone searches. The drawer shows this lesson's slides,
-      page titles, then page text, each hit deep-linking to the slide
-      with the words highlighted on arrival. See CLAUDE.md, "Site-wide
-      navigation".
+      small extension. **M**
 - [ ] **Hub pages for the remaining built units.** Only 3 of the built
       units have one. Not every unit needs a week grid, but the ones
       taught to a fixed calendar do. **S each**
@@ -991,7 +999,3 @@ starting a new one.
       exits 1 on any finding, so the action is a handful of lines —
       just gate it on `check-links.js` (not `--all`, until the workbook
       manifests above are dealt with). **S**
-      *(2026-10-09)* The "is sitemap.js current" half now exists too:
-      `node tools/build-sitemap.js --check` exits 1 if `sitemap.js` or
-      `searchindex.js` is stale. The search index goes stale on every
-      text edit, so it is now the likeliest thing to rot — gate on both.

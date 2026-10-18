@@ -569,6 +569,29 @@ body.worksheet-page {
 }
 .worksheet-page .wsa .mcq .let { font-size: 1.2rem; font-weight: 700; }
 
+/* ---------- Scaffold row -------------------------------------------------
+   The first row of a table the student fills in, completed for them in red
+   so the shape of a correct answer is never in doubt.
+
+   Not the same thing as .wsa / .wsa-in. Those are the staff answer overlay
+   and are stripped from the student copy; a scaffold belongs ON the student
+   copy and is always visible. Use it on the first <tr> only — a table with
+   two scaffold rows has stopped being a question.
+
+   A scaffolded cell also drops the fixed fill height, because it carries
+   real text and should size to it rather than leaving 18 mm of air. */
+.worksheet-page .scaffold,
+.worksheet-page table.wtbl td.scaffold {
+  font-family: var(--font-hand); color: var(--neg);
+  font-size: 1.06rem; line-height: 1.2;
+}
+.worksheet-page table.wtbl tr.scaffold td.fill,
+.worksheet-page table.wtbl tr.scaffold td.fill-lg { height: auto; }
+.worksheet-page table.wtbl tr.scaffold td { color: var(--neg); }
+.worksheet-page table.wtbl tr.scaffold td.scaffold-note {
+  font-family: var(--font-body); font-size: .72rem; font-style: italic;
+}
+
 @media print {
   /* A footer must never be the only thing on a page. Without this the
      last sheet of a worksheet could carry nothing but .ws-foot — three

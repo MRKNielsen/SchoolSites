@@ -1,0 +1,1920 @@
+% ============================================================
+%  VCE Applied Computing Unit 1 — Lesson Booklet (one section per topic: A Key knowledge · B Worked examples · C Practice · D Stretch)
+%  Year 11  |  VCE Applied Computing Study Design 2025–
+%  Compile with: pdflatex booklet.tex  (twice for page refs)
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=../../../assets/vendor/fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=../../../assets/vendor/fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{075985}
+\definecolor{MidBlue}    {HTML}{0369A1}
+\definecolor{LightBlue}  {HTML}{E0F2FE}
+\definecolor{TealGreen}  {HTML}{0E7490}
+\definecolor{LightGreen} {HTML}{CFFAFE}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{B6C7D4}
+\definecolor{LightGrey}  {HTML}{F1F7FB}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{075985}
+\definecolor{RowAlt}     {HTML}{EFF8FD}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{0369A1}
+\definecolor{Teal}   {HTML}{0891B2}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{38BDF8}
+\definecolor{Ink}    {HTML}{0F2234}
+\definecolor{Line}   {HTML}{DCE7EF}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}Applied Computing \textbar{} Unit 1}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Area of Study 1 \textbar{} Data analysis}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+% breakable: with 5 cm of writing space per part a We do no longer fits a page.
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.0cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ══════════════════════════════════════════════════════════════════════════════
+%  EMBEDDED DIAGRAM DEFINITIONS  (formerly tikz_diagrams.tex)
+%  Edit any figure here; each \diag... macro is called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+% ============================================================
+%  TikZ Diagram Definitions — Forces and Motion Unit Booklet
+%  Self-contained macros, no external image files.
+%  Requires: tikz with arrows.meta, calc, positioning, patterns
+% ============================================================
+
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+
+% ── D1: Contact vs Non-contact Forces ─────────────────────────────────────────
+\newcommand{\diagForceTypes}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Contact forces box
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (cbox) at (0,0) {};
+  \node[font=\small\bfseries, text=NavyBlue] at (0, 1.65) {Contact Forces};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 1.1)  {\textbullet\ Friction};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.65) {\textbullet\ Normal force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5, 0.20) {\textbullet\ Tension};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.25) {\textbullet\ Applied force};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-0.70) {\textbullet\ Air resistance};
+  \node[anchor=west, text=NavyBlue, font=\small] at (-2.5,-1.15) {\textbullet\ Spring force};
+  % Non-contact forces box
+  \node[draw=red!55!black, fill=red!8, rounded corners=5pt,
+        minimum width=5.6cm, minimum height=3.8cm] (ncbox) at (6.4,0) {};
+  \node[font=\small\bfseries, text=red!55!black] at (6.4, 1.65) {Non-contact Forces};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 1.1)  {\textbullet\ Gravity};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.65) {\textbullet\ Magnetic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9, 0.20) {\textbullet\ Electrostatic force};
+  \node[anchor=west, text=red!55!black, font=\small] at (3.9,-0.25) {\textbullet\ Nuclear force};
+\end{tikzpicture}
+\end{center}}
+
+% ── D2: Free Body Diagrams ────────────────────────────────────────────────────
+\newcommand{\diagFBD}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── LEFT: Balanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (0,3.6) {Balanced Forces};
+  \fill[ground hatch] (-1.5,-1.0) rectangle (1.5,-0.7);
+  \draw[thick, DarkGrey] (-1.5,-0.7) -- (1.5,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (book) at (0,0) {Book};
+  % Normal up
+  \draw[force arrow, TealGreen] (book.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N=10$\,N};
+  % Weight down
+  \draw[force arrow, red!65!black] (book.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W=10$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.2) {Net force $= 0$\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (0,-3.65) {No acceleration};
+
+  % ── RIGHT: Unbalanced ──
+  \node[font=\small\bfseries, text=NavyBlue] at (7.5,3.6) {Unbalanced Forces};
+  \fill[ground hatch] (6.0,-1.0) rectangle (9.0,-0.7);
+  \draw[thick, DarkGrey] (6.0,-0.7) -- (9.0,-0.7);
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=3pt,
+        minimum width=1.8cm, minimum height=1.0cm,
+        font=\small\bfseries, text=NavyBlue] (box) at (7.5,0) {Box};
+  % Normal up
+  \draw[force arrow, TealGreen] (box.north) -- ++(0,1.8)
+        node[right, font=\small\bfseries, text=TealGreen] {$N$};
+  % Weight down
+  \draw[force arrow, red!65!black] (box.south) -- ++(0,-1.8)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Push right (20N, longer)
+  \draw[force arrow, PurpleDark] (box.east) -- ++(2.6,0)
+        node[above, font=\small\bfseries, text=PurpleDark] {Push 20\,N};
+  % Friction left (5N, shorter)
+  \draw[force arrow, OrangeDark] (box.west) -- ++(-1.6,0)
+        node[above, font=\small\bfseries, text=OrangeDark] {Friction 5\,N};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.2) {Net force $= 15$\,N $\rightarrow$};
+  \node[font=\footnotesize\itshape, text=DarkGrey] at (7.5,-3.65) {Accelerates rightward};
+\end{tikzpicture}
+\end{center}}
+
+% ── D3: Newton's First Law ─────────────────────────────────────────────────────
+\newcommand{\diagNewtonOne}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Law statement
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=PurpleDark] at (5.5,2.8)
+        {\textit{``An object at rest stays at rest, and an object in motion stays in}\\[-1pt]
+         \textit{motion, unless acted on by an unbalanced force.''\ (Law of Inertia)}};
+
+  % Ground lines
+  \draw[thick, DarkGrey] (-0.4,0) -- (2.2,0);
+  \draw[thick, DarkGrey] (3.6,0) -- (7.0,0);
+  \draw[thick, DarkGrey] (8.5,0) -- (11.5,0);
+
+  % Ball 1: at rest
+  \shade[ball color=MidBlue!80] (0.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=NavyBlue] at (0.9,1.9) {At rest};
+  \draw[force arrow, TealGreen]   (0.9,0.84) -- (0.9,1.5);
+  \draw[force arrow, red!65!black](0.9,0.0)  -- (0.9,-0.65);
+  \node[font=\scriptsize, text=TealGreen, right]    at (0.9,1.2)  {$N$};
+  \node[font=\scriptsize, text=red!65!black, right] at (0.9,-0.3) {$W$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (0.9,-1.1) {stays at rest};
+
+  % Arrow 1→2
+  \draw[-{Stealth}, thick, DarkGrey!60] (2.4,-2) -- (3.4,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {no force added};
+
+  % Ball 2: rolling
+  \shade[ball color=TealGreen!70] (5.3,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=TealGreen] at (5.3,1.9) {Rolling (no friction)};
+  \draw[force arrow, MidBlue] (5.72,0.42) -- (7.0,0.42)
+        node[above, font=\scriptsize, text=MidBlue] {$v$};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (5.3,-1.1) {keeps moving};
+
+  % Arrow 2→3
+  \draw[-{Stealth}, thick, DarkGrey!60] (7.4,-2) -- (8.3,-2)
+        node[midway, above, font=\scriptsize\itshape, text=DarkGrey] {force applied};
+
+  % Ball 3: stopping
+  \shade[ball color=MidBlue!80] (9.9,0.42) circle (0.42);
+  \node[font=\footnotesize\bfseries, text=red!60!black] at (9.9,1.9) {Unbalanced force};
+  \draw[force arrow, red!65!black] (9.48,0.42) -- (8.4,0.42)
+        node[above, font=\scriptsize, text=red!65!black] {friction};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (9.9,-1.1) {decelerates / stops};
+\end{tikzpicture}
+\end{center}}
+
+% ── D4: Newton's Second Law — F=ma ────────────────────────────────────────────
+\newcommand{\diagFma}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \node[draw=PurpleDark, fill=PurpleLight!50, rounded corners=5pt,
+        minimum width=13cm, minimum height=0.9cm, align=center,
+        font=\small\bfseries, text=PurpleDark]
+        at (5.5,3.6)
+        {Newton's Second Law: \quad $F = m \times a$ \quad $\Rightarrow$ \quad
+         $a = F/m$ \quad $\Rightarrow$ \quad $m = F/a$};
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (0.8,1.5)
+        {\textbf{\color{GoldDark}$F$\ (Force)}\\[4pt]
+         \small\color{DarkGrey}Measured in newtons (N)\\
+         \small\color{DarkGrey}A push or pull\\[2pt]
+         \small\color{GoldDark}$F = m \times a$};
+  \node[font=\large\bfseries, text=DarkGrey] at (3.3,1.5) {$=$};
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (5.5,1.5)
+        {\textbf{\color{MidBlue}$m$\ (Mass)}\\[4pt]
+         \small\color{DarkGrey}Measured in kg\\
+         \small\color{DarkGrey}More mass\,=\,more\\
+         \small\color{DarkGrey}inertia to overcome};
+  \node[font=\large\bfseries, text=DarkGrey] at (7.75,1.5) {$\times$};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=3.6cm, minimum height=3.2cm, align=center]
+        at (10.0,1.5)
+        {\textbf{\color{TealGreen}$a$\ (Acceleration)}\\[4pt]
+         \small\color{DarkGrey}Measured in m/s$^2$\\
+         \small\color{DarkGrey}Bigger $F$ on same\\
+         \small\color{DarkGrey}mass\,=\,bigger $a$};
+\end{tikzpicture}
+\end{center}}
+
+% ── D5: Energy Types and Transformation ───────────────────────────────────────
+\newcommand{\diagEnergy}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Top row: three energy type boxes
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (0.0,3.2)
+        {\textbf{\color{GoldDark}Kinetic Energy (KE)}\\[3pt]
+         \small\color{DarkGrey}Energy of motion\\[2pt]
+         \small\color{GoldDark}$KE = \tfrac{1}{2}mv^2$};
+  \node[draw=MidBlue, fill=LightBlue, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (4.8,3.2)
+        {\textbf{\color{MidBlue}Gravitational PE}\\[3pt]
+         \small\color{DarkGrey}Stored by height\\[2pt]
+         \small\color{MidBlue}$GPE = mgh$};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=5pt,
+        minimum width=4.0cm, minimum height=2.2cm, align=center]
+        at (9.6,3.2)
+        {\textbf{\color{TealGreen}Elastic PE}\\[3pt]
+         \small\color{DarkGrey}Stored by stretching\\[2pt]
+         \small\color{DarkGrey}springs, rubber bands};
+  % Divider label
+  \node[font=\small\bfseries, text=DarkGrey] at (4.8,1.85)
+        {Energy Transformation in a Trebuchet};
+  % Chain: GPE box
+  \node[draw=OrangeDark, fill=OrangeLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=OrangeDark] (n1) at (0.8,0.7)
+        {Gravitational PE\\[-1pt]{\scriptsize\color{DarkGrey}(counterweight up)}};
+  % Chain: KE1 box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=GoldDark] (n2) at (4.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(arm swings)}};
+  % Chain: KE2 box
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=3.0cm, minimum height=1.1cm, align=center,
+        font=\small\bfseries, text=TealGreen] (n3) at (8.8,0.7)
+        {Kinetic Energy\\[-1pt]{\scriptsize\color{DarkGrey}(ball launches)}};
+  % Waste box
+  \node[draw=DarkGrey, fill=LightGrey, rounded corners=4pt,
+        minimum width=2.8cm, minimum height=0.9cm, align=center,
+        font=\small, text=DarkGrey] (nw) at (8.8,-0.75)
+        {$+$ Thermal \& Sound\\[-1pt]{\scriptsize(wasted)}};
+  % Arrows
+  \draw[-{Stealth}, thick, DarkGrey] (n1.east) -- (n2.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n2.east) -- (n3.west);
+  \draw[-{Stealth}, thick, DarkGrey] (n3.south) -- (nw.north);
+\end{tikzpicture}
+\end{center}}
+
+% ── D6: Three Classes of Lever ────────────────────────────────────────────────
+\newcommand{\diagLevers}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % ── Class 1: Fulcrum between E and L ── (effort and load both push down)
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,5.9) {Class 1: Fulcrum between E and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,5.9) {e.g.\ seesaw, crowbar};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,4.2) -- (10.5,4.2);
+  \fill[red!65!black] (5.5,4.2) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize\bfseries, text=red!65!black, right] at (5.75,3.9) {F};
+  \draw[force arrow, MidBlue]   (1.5,5.05) -- (1.5,4.28);
+  \draw[force arrow, TealGreen] (9.5,5.05) -- (9.5,4.28);
+  \node[font=\small\bfseries, text=MidBlue,   above] at (1.5,5.05) {E};
+  \node[font=\small\bfseries, text=TealGreen, above] at (9.5,5.05) {L};
+
+  % ── Class 2: Load between F and E ── (effort lifts upwards)
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,3.25) {Class 2: Load between F and E};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,3.25) {e.g.\ wheelbarrow, nutcracker};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,1.9) -- (10.5,1.9);
+  \fill[red!65!black] (1.0,1.9) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize\bfseries, text=red!65!black, right] at (1.25,1.6) {F};
+  \draw[force arrow, TealGreen] (5.0,2.75) -- (5.0,1.98);
+  \node[font=\small\bfseries, text=TealGreen, above] at (5.0,2.75) {L};
+  \draw[force arrow, MidBlue]   (9.5,1.0) -- (9.5,1.82);
+  \node[font=\small\bfseries, text=MidBlue,   right] at (9.55,1.25) {E};
+
+  % ── Class 3: Effort between F and L ── (effort lifts upwards)
+  \node[anchor=west, font=\small\bfseries, text=NavyBlue] at (-0.3,0.35) {Class 3: Effort between F and L};
+  \node[anchor=east, font=\small\itshape, text=DarkGrey]  at (12.0,0.35) {e.g.\ tweezers, your forearm};
+  \draw[line width=4pt, DarkGrey!60, line cap=round] (1.0,-0.9) -- (10.5,-0.9);
+  \fill[red!65!black] (1.0,-0.9) -- ++(-.22,-.52) -- ++(.44,0) -- cycle;
+  \node[font=\scriptsize\bfseries, text=red!65!black, right] at (1.25,-1.2) {F};
+  \draw[force arrow, TealGreen] (9.5,-0.05) -- (9.5,-0.82);
+  \node[font=\small\bfseries, text=TealGreen, left] at (9.45,-0.3) {L};
+  \draw[force arrow, MidBlue]   (5.0,-1.8) -- (5.0,-0.98);
+  \node[font=\small\bfseries, text=MidBlue,   below] at (5.0,-1.8) {E};
+\end{tikzpicture}
+\end{center}}
+
+% ── D7: Trebuchet as Class 1 Lever ────────────────────────────────────────────
+\newcommand{\diagTrebuchetLever}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.55) rectangle (12.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (12.5,0);
+  % A-frame holding the pivot
+  \draw[line width=3pt, DarkGrey!70, line join=round] (4.9,0) -- (6.2,3.73) -- (7.5,0);
+  % Arm (short end low on the left, long end high on the right)
+  \draw[line width=6pt, brown!55!black, line cap=round] (2.4,2.6) -- (10.5,5.0);
+  % Pivot (fulcrum) sits on the arm
+  \fill[DarkGrey!85] (6.2,3.73) circle (0.17);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=south east] at (6.05,3.95) {Pivot (fulcrum)};
+  % Counterweight hangs from the short end
+  \draw[thick, DarkGrey] (2.4,2.6) -- (2.4,1.95);
+  \node[draw=red!60!black, fill=red!12, rounded corners=3pt,
+        minimum width=1.9cm, minimum height=1.1cm,
+        font=\small\bfseries, text=red!60!black, align=center]
+        at (2.4,1.4) {Counterweight\\(effort)};
+  \draw[force arrow, red!65!black] (2.4,0.85) -- (2.4,0.15);
+  \node[font=\scriptsize, text=red!65!black, right] at (2.45,0.45) {$W$};
+  % Projectile in the sling at the long end
+  \shade[ball color=MidBlue!85] (10.9,5.2) circle (0.38);
+  \node[font=\scriptsize\bfseries, text=MidBlue, anchor=west] at (11.35,5.2) {Projectile (load)};
+  % Arm lengths
+  \draw[dim arrow] (2.4,-0.95) -- (6.2,-0.95)
+        node[midway, below, font=\scriptsize, text=red!60!black] {short arm (effort arm)};
+  \draw[dim arrow] (6.2,-0.95) -- (10.5,-0.95)
+        node[midway, below, font=\scriptsize, text=MidBlue] {long arm (load arm)};
+  \draw[DarkGrey!45, densely dashed] (6.2,-1.1) -- (6.2,-0.6);
+  \draw[DarkGrey!45, densely dashed] (10.5,-1.1) -- (10.5,4.7);
+  \draw[DarkGrey!45, densely dashed] (2.4,-1.1) -- (2.4,-0.6);
+  % MA formula box
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt,
+        font=\small, text=GoldDark, align=center, inner sep=4pt]
+        at (6.2,-2.15)
+        {$\text{MA} = \text{effort arm} \div \text{load arm} = \text{short arm} \div \text{long arm}$ \quad (less than 1)};
+\end{tikzpicture}
+\end{center}}
+
+% ── D8: Projectile Motion ─────────────────────────────────────────────────────
+\newcommand{\diagProjectile}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % Ground
+  \fill[ground hatch] (0,-0.45) rectangle (11.5,0);
+  \draw[thick, DarkGrey] (0,0) -- (11.5,0);
+  % Launch platform
+  \fill[DarkGrey!35] (0,0) rectangle (1.3,3.0);
+  \draw[thick, DarkGrey] (1.3,3.0) -- (0,3.0);
+  % Height brace
+  \draw[dim arrow] (-0.4,0) -- (-0.4,3.0)
+        node[midway, left, font=\small\bfseries, text=red!65!black] {$h$};
+  % Trajectory: launched sideways, so the path only ever curves down (a half parabola)
+  \draw[thick, MidBlue, dashed] plot[domain=0:9.5, samples=60] ({1.3+\x},{3.0-0.033241*\x*\x});
+  \node[font=\scriptsize\itshape, text=MidBlue, anchor=south west] at (6.9,2.05) {trajectory (a parabola)};
+  % Ball at launch
+  \shade[ball color=MidBlue!85] (1.3,3.0) circle (0.32);
+  % Horizontal velocity
+  \draw[force arrow, MidBlue] (1.62,3.0) -- (3.4,3.0)
+        node[above, font=\small\bfseries, text=MidBlue] {$v$ (sideways)};
+  % Weight at launch
+  \draw[force arrow, red!65!black] (1.3,2.68) -- (1.3,1.4)
+        node[right, font=\small\bfseries, text=red!65!black] {$W$};
+  % Ball part-way: same sideways speed, same weight
+  \shade[ball color=MidBlue!60] (5.3,2.468) circle (0.22);
+  \draw[-{Stealth}, thick, MidBlue]       (5.52,2.468) -- ++(0.9,0);
+  \draw[-{Stealth}, thick, red!65!black]  (5.3,2.248)  -- ++(0,-0.8)
+        node[right, font=\scriptsize\bfseries, text=red!65!black] {$W$};
+  % Ball at landing
+  \shade[ball color=MidBlue!85] (10.8,0.32) circle (0.32);
+  % Range brace
+  \draw[dim arrow] (1.3,-0.75) -- (10.8,-0.75)
+        node[midway, below, font=\small\bfseries, text=TealGreen] {$R$ (horizontal range)};
+\end{tikzpicture}
+\end{center}}
+
+% ── New in this update: spring-scale and force-arrow scale diagrams ──────────
+\newcommand{\diagSpringScales}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=.7cm, y=.7cm]
+  % --- Scale A: 0-10 N, pointer at 4 N ---.
+  \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+  \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {A};
+  \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+  \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+  \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+  \foreach \v in {0,1,2,3,4,5,6,7,8,9,10}{
+    \pgfmathsetmacro{\yy}{5.5-\v*0.5}
+    \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+    \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+  }
+  \draw[line width=2pt, red!70!black] (0.1,3.5) -- (1.4,3.5);
+  \node[anchor=west, font=\tiny\bfseries, text=red!70!black] at (1.5,3.5) {};
+  \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--10\,N};
+
+  % --- Scale B: 0-5 N, pointer at 2.5 N ---
+  \begin{scope}[xshift=4cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {B};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,1,2,3,4,5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \foreach \v in {0.5,1.5,2.5,3.5,4.5}{
+      \pgfmathsetmacro{\yy}{5.5-\v*1.0}
+      \draw[line width=0.5pt, DarkGrey] (0.25,\yy) -- (0.45,\yy);
+    }
+    \draw[line width=2pt, red!70!black] (0.1,3.0) -- (1.4,3.0);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--5\,N};
+  \end{scope}
+
+  % --- Scale C: 0-20 N, pointer at 13 N ---
+  \begin{scope}[xshift=8cm]
+    \draw[line width=1pt, Ink] (0,0) rectangle (1.5,6);
+    \node[font=\small\bfseries, text=Ink] at (0.75,6.35) {C};
+    \draw[line width=1pt, Ink] (0.5,6) -- (0.5,6.5);
+    \draw[line width=1pt, Ink] (0.75,-0.5) circle (0.22);
+    \draw[line width=1pt, Ink] (0.75,0) -- (0.75,-0.28);
+    \foreach \v in {0,2,4,6,8,10,12,14,16,18,20}{
+      \pgfmathsetmacro{\yy}{5.5-\v*0.25}
+      \draw[line width=0.7pt, Ink] (0.15,\yy) -- (0.55,\yy);
+      \node[anchor=west, font=\tiny, text=DarkGrey] at (0.62,\yy) {\v};
+    }
+    \draw[line width=2pt, red!70!black] (0.1,2.25) -- (1.4,2.25);
+    \node[anchor=north, font=\tiny, text=DarkGrey] at (0.75,-0.85) {0--20\,N};
+  \end{scope}
+
+  % Instruction note
+  \node[anchor=west, font=\footnotesize\itshape, text=DarkGrey, align=left]
+        at (15.2,3) {Read the value where\\the red pointer sits.\\Check what one small\\division is worth first.};
+\end{tikzpicture}
+\end{center}}
+
+% We do 1.1: one spring scale, 0-5 N with 20 small divisions, pointer on the 9th
+\newcommand{\diagSpringScaleWeDo}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=0.8cm, y=0.8cm]
+  \draw[line width=1pt, Ink] (0,0) rectangle (1.6,6);
+  \draw[line width=1pt, Ink] (0.8,6) -- (0.8,6.5);
+  \draw[line width=1pt, Ink] (0.8,6.65) circle (0.15);
+  \draw[line width=1pt, Ink] (0.8,0) -- (0.8,-0.28);
+  \draw[line width=1pt, Ink] (0.8,-0.5) circle (0.22);
+  \foreach \i in {0,...,20}{
+    \pgfmathsetmacro{\yy}{5.5-\i*0.25}
+    \pgfmathtruncatemacro{\major}{mod(\i,4)==0}
+    \ifnum\major=1
+      \draw[line width=0.8pt, Ink] (0.12,\yy) -- (0.6,\yy);
+      \pgfmathtruncatemacro{\lab}{\i/4}
+      \node[anchor=west, font=\scriptsize, text=Ink] at (0.66,\yy) {\lab};
+    \else
+      \draw[line width=0.5pt, DarkGrey] (0.12,\yy) -- (0.38,\yy);
+    \fi
+  }
+  \draw[line width=2pt, red!70!black] (0.05,3.25) -- (1.55,3.25);
+  \draw[-{Stealth[length=2mm]}, red!70!black] (2.6,3.25) -- (1.7,3.25);
+  \node[anchor=west, font=\scriptsize\bfseries, text=red!70!black] at (2.65,3.25) {pointer};
+  \node[anchor=north, font=\scriptsize, text=DarkGrey] at (0.8,-0.85) {0--5\,N};
+\end{tikzpicture}
+\end{center}}
+
+\newcommand{\diagArrowScale}{%
+\begin{center}
+\begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
+  % Scale key
+  \node[anchor=west, font=\small\bfseries, text=Ink] at (0,3.4) {Scale: 1\,cm represents 5\,N};
+  \draw[line width=1.2pt, Ink] (0,3.0) -- (1,3.0);
+  \draw[line width=0.8pt, Ink] (0,2.88) -- (0,3.12);
+  \draw[line width=0.8pt, Ink] (1,2.88) -- (1,3.12);
+  \node[anchor=west, font=\footnotesize, text=DarkGrey] at (1.2,3.0) {= 1\,cm = 5\,N};
+
+  % 5 N arrow
+  \draw[force arrow, MidBlue] (0,2.0) -- (1,2.0);
+  \node[anchor=west, font=\footnotesize\bfseries, text=MidBlue] at (1.3,2.0) {5\,N \; (1\,cm long)};
+
+  % 10 N arrow
+  \draw[force arrow, TealGreen] (0,1.2) -- (2,1.2);
+  \node[anchor=west, font=\footnotesize\bfseries, text=TealGreen] at (2.3,1.2) {10\,N \; (2\,cm long)};
+
+  % 15 N arrow
+  \draw[force arrow, OrangeDark] (0,0.4) -- (3,0.4);
+  \node[anchor=west, font=\footnotesize\bfseries, text=OrangeDark] at (3.3,0.4) {15\,N \; (3\,cm long)};
+
+  % Worked box on right
+  \node[draw=GoldDark, fill=GoldLight, rounded corners=3pt, inner sep=5pt,
+        font=\footnotesize, text=GoldDark, align=left, anchor=north west]
+        at (8.2,3.3)
+        {\textbf{To find the length:}\\[2pt]
+         length $=$ force $\div$ scale\\[2pt]
+         e.g.\ $15 \div 5 = 3$\,cm};
+\end{tikzpicture}
+\end{center}}
+
+
+% ── Diagrams added with Lessons 4–6 (Newton's laws) ───────────────────────
+% ── Newton's Third Law: two skaters, and a rocket with its exhaust ────────────
+\newcommand{\diagThirdLaw}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  %% ── LEFT: two skaters push apart ──
+  \node[font=\small\bfseries, text=NavyBlue] at (2.7,2.95) {Two skaters push apart};
+  \fill[LightBlue] (0.3,-0.3) rectangle (5.1,0);
+  \draw[thick, Sky] (0.3,0) -- (5.1,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (2.7,-0.55) {ice};
+  \node[draw=NavyBlue, fill=LightBlue, rounded corners=4pt,
+        minimum width=1.4cm, minimum height=2.1cm,
+        font=\small\bfseries, text=NavyBlue] (A) at (2.0,1.1) {A};
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=4pt,
+        minimum width=1.4cm, minimum height=2.1cm,
+        font=\small\bfseries, text=TealGreen] (B) at (3.4,1.1) {B};
+  \draw[force arrow, OrangeDark] (A.west) -- ++(-1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {B pushes A\\60\,N};
+  \draw[force arrow, OrangeDark] (B.east) -- ++(1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {A pushes B\\60\,N};
+
+  %% ── RIGHT: a rocket in space and its exhaust gas ──
+  \node[font=\small\bfseries, text=NavyBlue] at (11.0,2.95) {A rocket and its exhaust gas};
+  % exhaust gas (drawn first)
+  \shade[inner color=Amber!80, outer color=OrangeLight] (9.3,1.1) ellipse (0.6 and 0.42);
+  \node[font=\scriptsize\bfseries, text=GoldDark] at (9.3,1.1) {gas};
+  % fins
+  \fill[NavyBlue!75] (9.95,1.45) -- (9.7,1.85) -- (10.35,1.45) -- cycle;
+  \fill[NavyBlue!75] (9.95,0.75) -- (9.7,0.35) -- (10.35,0.75) -- cycle;
+  % body and nose
+  \draw[NavyBlue, fill=LightBlue, thick] (9.95,0.75) rectangle (11.75,1.45);
+  \fill[NavyBlue] (11.75,0.75) -- (12.25,1.1) -- (11.75,1.45) -- cycle;
+  \node[font=\scriptsize\bfseries, text=NavyBlue] at (10.9,1.1) {rocket};
+  % the pair
+  \draw[force arrow, OrangeDark] (8.7,1.1) -- ++(-1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {rocket pushes\\gas back};
+  \draw[force arrow, OrangeDark] (12.25,1.1) -- ++(1.3,0)
+        node[above, font=\scriptsize\bfseries, text=OrangeDark, align=center] {gas pushes\\rocket forward};
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (10.8,-0.55) {in space --- no air needed};
+\end{tikzpicture}
+\end{center}}
+
+% ── Newton's Second Law: formula triangle ──────────────────────────────────────
+\newcommand{\diagFmaTriangle}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \draw[thick, GoldDark, fill=GoldLight, line join=round] (0,0) -- (3.8,0) -- (1.9,3.0) -- cycle;
+  \draw[thick, GoldDark] (0.76,1.2) -- (3.04,1.2);
+  \draw[thick, GoldDark] (1.9,0) -- (1.9,1.2);
+  \node[text=GoldDark]  at (1.9,1.85) {\LARGE $\boldsymbol{F}$};
+  \node[text=MidBlue]   at (1.22,0.52) {\LARGE $\boldsymbol{m}$};
+  \node[text=TealGreen] at (2.58,0.52) {\LARGE $\boldsymbol{a}$};
+  \node[text=DarkGrey, fill=GoldLight, inner sep=1pt] at (1.9,0.52) {$\times$};
+  % how to use it
+  \node[anchor=west, align=left, text=Ink, font=\normalsize] at (4.8,1.5)
+       {\textbf{Cover} $\boldsymbol{F}$:\quad $F = m \times a$\\[7pt]
+        \textbf{Cover} $\boldsymbol{a}$:\quad $a = F \div m$\\[7pt]
+        \textbf{Cover} $\boldsymbol{m}$:\quad $m = F \div a$};
+  \node[anchor=west, align=left, text=DarkGrey, font=\footnotesize\itshape] at (4.8,-0.1)
+       {Side by side means multiply. One above the other means divide.};
+\end{tikzpicture}
+\end{center}}
+
+
+% ── Diagrams added with Lessons 7–9 (energy, bounce efficiency, levers) ────
+% ── Sankey diagram: arrow width shows the amount of energy ───────────────────
+\newcommand{\diagSankey}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (0,2.65)
+       {An electric motor --- the width of each arrow shows how much energy};
+  % energy in: 100 J (1 cm = 50 J)
+  \fill[MidBlue!18] (0,0) rectangle (3,2);
+  \draw[MidBlue, thick] (3,0) -- (0,0) -- (0,2) -- (3,2);
+  \node[align=center, text=NavyBlue] at (1.5,1.0) {Electrical\\energy in\\\textbf{100\,J}};
+  % useful: 70 J, carries straight on
+  \fill[TealGreen!22] (3,0.6) -- (7.4,0.6) -- (7.4,0.3) -- (8.4,1.3) -- (7.4,2.3) -- (7.4,2.0) -- (3,2.0) -- cycle;
+  \draw[TealGreen, thick] (3,2.0) -- (7.4,2.0) -- (7.4,2.3) -- (8.4,1.3) -- (7.4,0.3) -- (7.4,0.6) -- (4.4,0.6);
+  \node[align=center, text=TealGreen] at (5.6,1.3) {\textbf{Useful:} kinetic energy\\\textbf{70\,J}};
+  % wasted: 30 J, turns downwards
+  \fill[OrangeDark!18] (3,0) arc[start angle=90, end angle=0, radius=0.8] -- (3.8,-1.3) -- (3.55,-1.3)
+        -- (4.1,-2.0) -- (4.65,-1.3) -- (4.4,-1.3) -- (4.4,-0.8) arc[start angle=0, end angle=90, radius=1.4] -- cycle;
+  \draw[OrangeDark, thick] (3,0) arc[start angle=90, end angle=0, radius=0.8] -- (3.8,-1.3) -- (3.55,-1.3)
+        -- (4.1,-2.0) -- (4.65,-1.3) -- (4.4,-1.3) -- (4.4,-0.8) arc[start angle=0, end angle=90, radius=1.4];
+  \node[align=left, text=OrangeDark, anchor=west] at (4.9,-1.35) {\textbf{Wasted:} thermal energy and sound\\\textbf{30\,J}};
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 3: measuring drop height and bounce height ────────────────────
+\newcommand{\diagBounceSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, y=1cm]
+  % floor and wall
+  \fill[ground hatch] (-0.6,-0.3) rectangle (8.8,0);
+  \draw[thick, DarkGrey] (-0.6,0) -- (8.8,0);
+  \fill[ground hatch] (-0.6,0) rectangle (-0.3,4.5);
+  \draw[thick, DarkGrey] (-0.3,0) -- (-0.3,4.5);
+  % metre rulers taped to the wall: 1 unit = 40 cm
+  \fill[GoldLight] (-0.3,0) rectangle (0.25,4.2);
+  \draw[GoldDark] (-0.3,0) rectangle (0.25,4.2);
+  \foreach \y in {0,0.25,...,4.0} \draw[GoldDark] (0.25,\y) -- (0.12,\y);
+  \foreach \y/\l in {0/0,1/40,2/80,3/120,4/160} {
+    \draw[GoldDark, thick] (0.25,\y) -- (0.0,\y);
+    \node[font=\scriptsize, text=GoldDark, anchor=east] at (-0.32,\y) {\l};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, rotate=90] at (-1.45,2.1) {height (cm)};
+  % ball before release (bottom of ball at 120 cm)
+  \shade[ball color=Amber!80] (1.5,3.25) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,3.0) -- (1.5,3.0);
+  % path of the ball
+  \draw[dashed, DarkGrey!70, -{Stealth}] (1.5,2.95) -- (2.4,0.55);
+  \shade[ball color=Amber!80] (2.55,0.25) circle (0.25);
+  \draw[dashed, DarkGrey!70, -{Stealth}] (2.7,0.55) -- (3.45,1.6);
+  \shade[ball color=Amber!80] (3.6,1.9) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,1.65) -- (3.6,1.65);
+  % heights
+  \draw[dim arrow] (7.0,0) -- (7.0,3.0) node[midway, right, font=\small, text=NavyBlue] {drop height $h_1$};
+  \draw[dim arrow] (4.4,0) -- (4.4,1.65) node[midway, right, font=\small, text=TealGreen] {bounce height $h_2$};
+  \draw[DarkGrey!60] (1.75,3.0) -- (7.2,3.0);
+  \draw[DarkGrey!60] (3.85,1.65) -- (4.6,1.65);
+  % reading tip
+  \node[font=\scriptsize\itshape, text=DarkGrey, align=left, anchor=west] at (1.9,4.05)
+       {Read the \textbf{bottom} of the ball, at eye level\\(or film it in slow motion and pause at the top).};
+\end{tikzpicture}
+\end{center}}
+
+% ── Parts of a lever: fulcrum, effort, load and the two arms ─────────────────
+\newcommand{\diagLeverParts}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  % beam
+  \draw[line width=5pt, DarkGrey!60, line cap=round] (0.4,1.0) -- (10.2,1.0);
+  % fulcrum
+  \fill[red!65!black] (3.4,0.88) -- (3.0,0.2) -- (3.8,0.2) -- cycle;
+  \node[font=\small\bfseries, text=red!65!black] at (3.4,-0.1) {Fulcrum (pivot)};
+  % load on the short side
+  \node[draw=TealGreen, fill=LightGreen, rounded corners=3pt, minimum width=1.3cm, minimum height=0.9cm,
+        font=\small\bfseries, text=TealGreen] at (1.0,1.6) {Load};
+  % effort on the long side
+  \draw[force arrow, MidBlue] (9.6,2.6) -- (9.6,1.15);
+  \node[font=\small\bfseries, text=MidBlue, above] at (9.6,2.6) {Effort (your push)};
+  % arms
+  \draw[dim arrow] (1.0,-0.65) -- (3.4,-0.65) node[midway, below, font=\small, text=TealGreen] {load arm};
+  \draw[dim arrow] (3.4,-0.65) -- (9.6,-0.65) node[midway, below, font=\small, text=MidBlue] {effort arm};
+  \draw[DarkGrey!50] (1.0,0.85) -- (1.0,-0.8);
+  \draw[DarkGrey!50] (9.6,0.85) -- (9.6,-0.8);
+\end{tikzpicture}
+\end{center}}
+
+
+% ── Diagrams added with Lessons 10–12 (Experiment 4, levers extension, projectiles) ──
+% ── Experiment 4: a metre stick balanced on a fulcrum at the 50 cm mark ──────
+%    1 unit = 1/0.12 cm of stick, so the 0–100 cm stick runs from x = 0 to 12.
+\newcommand{\diagExpFourSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.2cm, y=1cm]
+  % bench
+  \fill[ground hatch] (-0.3,0.15) rectangle (12.3,0.5);
+  \draw[thick, DarkGrey] (-0.3,0.5) -- (12.3,0.5);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (-0.25,0.3) {bench};
+  % fulcrum: triangular prism under the 50 cm mark
+  \fill[red!65!black] (6.0,1.5) -- (5.6,0.5) -- (6.4,0.5) -- cycle;
+  \node[font=\small\bfseries, text=red!65!black, anchor=west] at (6.5,0.95) {fulcrum at 50\,cm};
+  % metre stick, with a scale every 10 cm
+  \draw[fill=GoldLight, draw=GoldDark] (0,1.5) rectangle (12,1.9);
+  \foreach \c in {0,10,...,100} {
+    \draw[GoldDark] ({0.12*\c},1.9) -- ({0.12*\c},1.76);
+  }
+  \foreach \c in {5,15,...,95} { \draw[GoldDark!70] ({0.12*\c},1.9) -- ({0.12*\c},1.82); }
+  \foreach \c in {10,20,30,40,60,70,80,90} {
+    \node[font=\scriptsize, text=GoldDark] at ({0.12*\c},1.63) {\c};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=north west] at (0.1,1.45) {metre stick};
+  % load: 100 g standing on the 30 cm mark
+  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=1pt] (3.25,1.9) rectangle (3.95,2.75);
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,2.325) {100\,g};
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,3.05) {Load};
+  % effort: one 50 g slotted mass on the 90 cm mark
+  \draw[fill=MidBlue!25, draw=MidBlue, rounded corners=1pt] (10.5,1.9) rectangle (11.1,2.32);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (10.8,2.11) {50\,g};
+  \node[font=\small\bfseries, text=MidBlue] at (10.8,2.62) {Effort};
+  % arms, measured from the fulcrum to the centre of each mass
+  \draw[densely dashed, DarkGrey!60] (3.6,3.3) -- (3.6,3.95);
+  \draw[densely dashed, DarkGrey!60] (6.0,1.9) -- (6.0,3.95);
+  \draw[densely dashed, DarkGrey!60] (10.8,2.87) -- (10.8,3.95);
+  \draw[dim arrow] (3.6,3.8) -- (6.0,3.8) node[midway, above, font=\small, text=TealGreen] {load arm = 20\,cm};
+  \draw[dim arrow] (6.0,3.8) -- (10.8,3.8) node[midway, above, font=\small, text=MidBlue] {effort arm = 40\,cm};
+\end{tikzpicture}
+\end{center}}
+
+% ── Same angle, different arcs: why the long end of an arm moves faster ──────
+\newcommand{\diagArmArcs}{%
+\begin{center}
+\begin{tikzpicture}[font=\small]
+  \def\ang{50}
+  % starting position of the arm (faint)
+  \draw[line width=4pt, DarkGrey!25, line cap=round] (-1.2,0) -- (4.8,0);
+  % turned position of the arm
+  \draw[line width=4pt, brown!55!black, line cap=round] ({-1.2*cos(\ang)},{-1.2*sin(\ang)}) -- ({4.8*cos(\ang)},{4.8*sin(\ang)});
+  % arcs travelled by each end in the same time
+  \draw[very thick, MidBlue, -{Stealth[length=8pt,width=6pt]}] (4.8,0) arc[start angle=0, end angle=\ang, radius=4.8];
+  \draw[very thick, red!65!black, -{Stealth[length=7pt,width=5pt]}] (-1.2,0) arc[start angle=180, end angle={180+\ang}, radius=1.2];
+  % pivot
+  \fill[DarkGrey] (0,0) circle (0.12);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=north] at (0.25,-0.15) {pivot};
+  % angle mark
+  \draw[DarkGrey] (0.8,0) arc[start angle=0, end angle=\ang, radius=0.8];
+  \node[font=\scriptsize, text=DarkGrey, anchor=west] at ({0.9*cos(14)},{0.9*sin(14)}) {same angle};
+  % labels
+  \node[font=\small\bfseries, text=MidBlue, anchor=west, align=left] at (5.0,1.8)
+       {long arm: big arc\\in the same time \(\rightarrow\) fast};
+  \node[font=\small\bfseries, text=red!65!black, anchor=east, align=right] at (-1.35,-0.75)
+       {short arm: small arc\\\(\rightarrow\) slow};
+\end{tikzpicture}
+\end{center}}
+
+% ── Two independent motions: a dropped ball and a ball launched sideways ──────
+%    h = 1.25 m, launch speed 3.0 m/s, positions every 0.1 s (1 m = 4.4 units)
+\newcommand{\diagTwoMotions}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  \fill[ground hatch] (-1.4,-0.3) rectangle (8.6,0);
+  \draw[thick, DarkGrey] (-1.4,0) -- (8.6,0);
+  \foreach \t in {0,1,2,3,4} {
+    \pgfmathsetmacro{\yy}{5.5-4.4*4.9*(\t/10)*(\t/10)}
+    \pgfmathsetmacro{\xx}{1.2+4.4*3.0*(\t/10)}
+    \draw[densely dashed, DarkGrey!45] (-0.4,\yy) -- (8.4,\yy);
+    \ifnum\t>0 \node[font=\scriptsize, text=DarkGrey, anchor=east] at (-0.45,\yy) {0.\t\,s};\fi
+    \shade[ball color=red!70] (0,\yy) circle (0.11);
+    \shade[ball color=MidBlue!85] (\xx,\yy) circle (0.11);
+  }
+  % path of the launched ball
+  \draw[MidBlue, thin, dashed] plot[domain=0:0.505, samples=40] ({1.2+13.2*\x},{5.5-21.56*\x*\x});
+  % both land at t = 0.505 s
+  \shade[ball color=red!70] (0,0.11) circle (0.11);
+  \shade[ball color=MidBlue!85] ({1.2+13.2*0.505},0.11) circle (0.11);
+  \node[font=\scriptsize, text=DarkGrey, anchor=east] at (-0.45,0.15) {0.51\,s};
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (0,5.7) {dropped};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south west] at (1.0,5.7) {launched sideways at 3\,m/s};
+  \draw[thin arrow, MidBlue] (1.4,5.5) -- (2.15,5.5);
+\end{tikzpicture}
+\end{center}}
+
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    fonttitle=\headingfont\bfseries, coltitle=PurpleDark,
+    title={Optional lesson \textbullet{} Year 8 extension},
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ── Experiment 2: pulling a loaded wooden block along the bench with a spring balance ──
+\newcommand{\diagExpTwoSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.18cm, y=1.18cm]
+  % bench
+  \fill[ground hatch] (0,-0.35) rectangle (13,0);
+  \draw[thick, DarkGrey] (0,0) -- (13,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.05,-0.18) {bench top};
+  % wooden block with a hook on its left face
+  \draw[fill=GoldLight, draw=GoldDark, thick] (7.2,0) rectangle (10.2,1.3);
+  \foreach \y in {0.35,0.7,1.0} { \draw[GoldDark!45] (7.35,\y) .. controls (8.2,\y+0.08) and (9.2,\y-0.08) .. (10.05,\y); }
+  \draw[DarkGrey, thick] (7.2,0.65) -- (6.95,0.65);
+  \draw[DarkGrey, thick] (6.85,0.65) circle (0.1);
+  % two 200 g slotted masses on top
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.3) rectangle (9.5,1.62);
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.62) rectangle (9.5,1.94);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.46) {200\,g};
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.78) {200\,g};
+  % spring balance, hooked to the block
+  \draw[fill=white, draw=DarkGrey, thick, rounded corners=3pt] (2.6,0.42) rectangle (6.1,0.88);
+  \foreach \x in {3.0,3.25,...,5.5} { \draw[DarkGrey] (\x,0.42) -- (\x,0.56); }
+  \draw[red!65!black, very thick] (4.6,0.42) -- (4.6,0.88);
+  \draw[DarkGrey, thick] (6.1,0.65) -- (6.75,0.65);
+  \draw[DarkGrey, thick] (2.45,0.65) circle (0.15);
+  % pull and friction
+  \draw[force arrow, red!65!black] (2.25,0.65) -- (0.6,0.65);
+  \draw[force arrow, TealGreen] (10.2,0.12) -- (12.0,0.12);
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (1.4,0.8) {pull steadily};
+  \node[font=\small\bfseries, text=TealGreen, anchor=south] at (11.4,0.25) {friction};
+  \node[font=\small\bfseries, text=DarkGrey, anchor=south west] at (2.55,0.92) {spring balance (or force sensor)};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south] at (8.7,2.0) {200\,g masses};
+  \node[font=\small\bfseries, text=GoldDark, anchor=north] at (8.7,-0.45) {wooden block with a hook};
+\end{tikzpicture}
+\end{center}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+% Diverges from the Year 7 booklets: there, Part A was a short reading that
+% sat under the vocabulary table on the same page. Here Part A is the flipped
+% pre-lesson reading and needs a page of its own, so EVERY part starts on a
+% new page -- and whatever is left of the outgoing page becomes notes space.
+\newcommand{\lessonpart}[3]{%
+  % Part A follows the topic banner on the same page -- no clearpage and no
+  % notesfill, or every topic opens with a banner and then a whole empty
+  % Notes page. Parts B, C and D each start a new page, and whatever is left
+  % of the outgoing page becomes notes space.
+  \par\if#1A\needspace{12\baselineskip}\vspace{6pt}\else\notesfill\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Key knowledge:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\needspace{7\baselineskip}\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 4b. WRITING SPACE: every written question gets at least 5 cm of answer
+%    box. The only exception is a question whose answer is a single word,
+%    which gets 1 cm. Write-in table rows are governed by the S column.
+% 4c. EXCEPTION to 4b: the four key questions of a topic must all fit on
+%    ONE page, so their boxes use \kqbox rather than the 5 cm default.
+%    Adding a fifth question, or a stem over two lines, breaks that --
+%    re-render Part C and check all four labels are on the same page.
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+% ── Flipped learning: the reading comes BEFORE the lesson ────────────────────
+% Each topic opens with a short reading done at home and four key questions
+% answered from it. Lesson time is then spent applying the ideas rather than
+% introducing them, which is the whole point of doing it this way.
+% The question heading sits on its own line; its text starts on the next.
+% One page holds the part bar, the intro line and four questions; this is
+% what is left over to share between the four boxes.
+\newlength{\kqbox}\setlength{\kqbox}{3.6cm}
+\newcounter{kqnum}[section]
+\newcommand{\kqreset}{\setcounter{kqnum}{0}}
+\newcommand{\kq}[2]{%
+  \stepcounter{kqnum}%
+  \needspace{4\baselineskip}%
+  \vspace{4pt}%
+  \noindent\textbf{Key question \thesection.\thekqnum}\par\nobreak\noindent#1\par
+  \vspace{2pt}%
+  \answerbox{#2}}
+% The instruction that sits under every Part A heading.
+\newcommand{\beforelesson}{%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0.5pt,
+    colback=LightGreen, colframe=Teal!45,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{TealGreen}Do this before the lesson.}\ Read the passage,
+  then answer the four key questions from it. You are not expected to get them all
+  right --- they are what the lesson starts from. Bring them with you.
+  \end{tcolorbox}\vspace{2pt}}
+
+% ── Vocabulary now lives inside the pre-reading ─────────────────────────────
+% Every key word appears in bold in the Part A reading, so students write the
+% definitions from what they have just read rather than copying them off a
+% slide. The slide then becomes a check-and-correct at the start of the
+% lesson, and the worksheet asks for the same words from memory days later.
+\newcommand{\vocabintro}{%
+  \noindent Every word below appears in \textbf{bold} in the reading. Write what each one
+  means \emph{in your own words}, from the reading --- the first is done for you.
+  In the lesson you will check them against the slide and correct them in another colour.\par
+  \vspace{2pt}}
+% The four key questions get their own Part too, so the three pieces of
+% pre-lesson work each stand on their own page.
+\newcommand{\kqintro}{%
+  \noindent Answer these from the reading, in your own words. You are not expected to get
+  them all right --- they are what the lesson starts from. Bring them with you.\par
+  \vspace{2pt}}
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  COVER
+% ══════════════════════════════════════════════════════════════════════════════
+\thispagestyle{plain}
+
+\begin{tcolorbox}[
+  enhanced, breakable=false, arc=4mm,
+  colback=NavyBlue, colframe=NavyBlue,
+  left=6mm, right=6mm, top=9mm, bottom=9mm,
+  boxrule=0pt
+]
+  \begin{center}
+    {\headingfont\bfseries\color{Sky}\footnotesize\MakeUppercase{Lesson Booklet \textbullet\ Unit 1, Area of Study 1}}\\[10pt]
+    {\headingfont\bfseries\color{white}\fontsize{38}{42}\selectfont Data Analysis}\\[8pt]
+    {\large\color{white!85!NavyBlue}\itshape Data and information \textbullet\ quality \textbullet\ privacy \textbullet\ databases \textbullet\ SQL \textbullet\ statistics \textbullet\ visualisation}\\[14pt]
+    {\headingfont\color{white!72!NavyBlue}\normalsize VCE Applied Computing \textbar{} Study Design 2025-- \textbar{} Outcome 1}
+  \end{center}
+\end{tcolorbox}
+
+\vspace{10pt}
+
+\begin{tabular}{@{}p{3.5cm} p{6cm} p{2cm} p{3.5cm}@{}}
+  \textbf{Name:}    & \underline{\hspace{5.8cm}} & \textbf{Class:}   & \underline{\hspace{3.3cm}} \\[8pt]
+  \textbf{Teacher:} & \underline{\hspace{5.8cm}} & \textbf{Year:} & \underline{\hspace{3.3cm}} \\
+\end{tabular}
+
+\vspace{10pt}
+
+\begin{infobox}{How to use this booklet}
+There is one section for each topic, and every topic works the same way:
+
+\medskip
+\begin{tabular}{@{}ll@{}}
+  \textcolor{TealGreen}{\rule{10pt}{10pt}}\ \textbf{Part A --- The reading} & the new ideas, read at home before the lesson \\
+  \textcolor{NavyBlue}{\rule{10pt}{10pt}}\ \textbf{Part B --- Key vocabulary} & the words of the topic, defined from that reading \\
+  \textcolor{Teal}{\rule{10pt}{10pt}}\ \textbf{Part C --- Key questions} & four questions the lesson will start from \\
+  \textcolor{Blue}{\rule{10pt}{10pt}}\ \textbf{Part D --- Key knowledge} & the reference you annotate in class \\
+  \textcolor{Amber}{\rule{10pt}{10pt}}\ \textbf{Part E --- Worked examples} & one we do together, then one you do straight after \\
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Part F --- Practice} & questions like the examples, then extension \\
+\end{tabular}
+
+\medskip
+\textbf{Parts A, B and C are done at home, before the lesson}, and they are what make the rest work. The reading carries the new ideas, so the lesson can be spent using them instead of being told them. Every key word for the topic appears in \textbf{bold} in that reading, and you write its definition straight from the passage --- so you arrive already holding the language of the lesson.
+
+\medskip
+You will meet each key word three times on purpose: you define it from the reading, you check it against the slide at the start of the lesson and correct it in another colour, and days later the revision worksheet asks you for it from memory. The fourth lesson of each week is a marimo workbook on the class site. Where a page says \textit{in your booklet}, it means here.
+\end{infobox}
+
+\vspace{8pt}
+
+\begin{ctab}
+\begin{tabular}{|C{1.4cm}|L{9.6cm}|C{1.6cm}|}
+  \thead{Topic} & \thead{Title} & \thead{Page} \\ \hline
+  1 & The problem-solving methodology & p.\ \pageref{sec:1} \\ \hline
+  2 & Data and information & p.\ \pageref{sec:2} \\ \hline
+  3 & Data types and characteristics & p.\ \pageref{sec:3} \\ \hline
+  4 & Data quality & p.\ \pageref{sec:4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\clearpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 1 — THE PROBLEM-SOLVING METHODOLOGY                      (Week 1 · L1)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{The Problem-solving Methodology}{Four stages \textbullet{} requirements \textbullet{} constraints \textbullet{} scope}\label{sec:1}
+\lessoncodes{the problem-solving methodology and its four stages}
+
+\lessonpart{A}{Before the lesson \textemdash\ the reading}{Teal}\label{pre:1}
+\beforelesson
+
+\begin{readingbox}{Reading --- Why Anyone Would Follow a Method}
+Give ten people the same problem and nine of them will start by building something. It feels like progress. It is also the single most reliable way to spend three weeks producing a solution to a problem nobody had.
+
+A \textbf{methodology} is an ordered way of working through a problem, used the same way every time. It is not about being tidy. It is about doing the thinking in an order where mistakes are still cheap. The problem-solving methodology used in this course has four stages, and they always run in that order.
+
+\textbf{Analysis} comes first, and it is the only stage where you are allowed not to know the answer yet. You work out what the problem actually is, and four things have to come out of it. A \textbf{functional requirement} is something the solution must \emph{do} --- show the average rainfall for each region. A \textbf{non-functional requirement} is something it must \emph{be like} --- readable by a Year 7 student, or fast enough to use in a meeting. A \textbf{constraint} is something that limits you: the time you have, the software on the laptops, the law, the skill of the people who will use it. \textbf{Scope} is where the job stops --- what you have decided is not part of this problem. Nothing is built in analysis.
+
+\textbf{Design} decides how. Layouts, charts of what goes in and what comes out, the structure of a database, the plan for a query. Design is still cheap --- changing a sketch takes a pencil.
+
+\textbf{Development} is the build, and the testing that goes with it. By now the expensive decisions have already been made, which is exactly the point.
+
+\textbf{Evaluation} is the one people get wrong. It cannot happen on the day you hand the solution over, because at that moment nobody has used it. Evaluation happens later, after the thing has been in use long enough to judge, and it is judged against the requirements written down in analysis --- not against whether the client seems pleased.
+
+The two stages people confuse are the first two. Analysis decides \emph{what}. Design decides \emph{how}. If you are drawing a layout, you have left analysis behind, whether you meant to or not.
+
+In Unit 1 you will not write a specification. You will be given one and marked on whether you read it correctly: can you separate what it must do from what it must be like, name what is limiting you, and say where the job stops. That is a skill, and it is practised rather than guessed.
+\end{readingbox}
+
+\lessonpart{B}{Key vocabulary}{NavyBlue}
+\vocabintro
+\begin{ctab}
+\begin{tabular}{|SW{4.6cm}|W{11.2cm}|}
+  \hd & \thead{Word} & \thead{What it means, from the reading} \\ \hline
+  & \scaf{\textbf{Methodology}} & \scaf{An ordered way of working through a problem, used the same way every time.} \\ \hline
+  & \textbf{Analysis} & \\ \hline
+  & \textbf{Design} & \\ \hline
+  & \textbf{Development} & \\ \hline
+  & \textbf{Evaluation} & \\ \hline
+  & \textbf{Functional requirement} & \\ \hline
+  & \textbf{Non-functional requirement} & \\ \hline
+  & \textbf{Constraint} & \\ \hline
+  & \textbf{Scope} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{C}{Key questions}{Teal}
+\kqintro
+\kqreset
+\kq{In your own words, what is the difference between the analysis stage and the design stage?}{\kqbox}
+\kq{The reading says evaluation cannot be done on handover day. Explain why not.}{\kqbox}
+\kq{Think of something you have made for any subject. Name one thing you did that belonged to \emph{analysis}, and one that belonged to \emph{development}.}{\kqbox}
+\kq{Which of the four stages do you think gets skipped most often in real life, and what would go wrong as a result?}{\kqbox}
+
+\lessonpart{D}{Key knowledge}{Blue}\label{know:1}
+
+\subsection{Four stages, in order}\label{sub:1.1}
+
+\begin{ctab}
+\begin{tabular}{|W{3.0cm}|W{5.4cm}|W{7.0cm}|}
+  \thead{Stage} & \thead{The question it answers} & \thead{What you produce} \\ \hline
+  \textbf{Analysis} & What is the problem, and what must the solution do? & Requirements, constraints, scope \\ \hline
+  \textbf{Design} & How will it work, and what will it look like? & IPO charts, mock-ups, query designs \\ \hline
+  \textbf{Development} & Build it, and check it works. & The solution itself, and its test results \\ \hline
+  \textbf{Evaluation} & Did it actually solve the problem? & A judgement, against the requirements, later \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsection{The five kinds of constraint}\label{sub:1.2}
+
+The reading told you what a constraint is. Naming its \emph{kind} is the skill the examination asks for.
+
+\begin{ctab}
+\begin{tabular}{|W{2.6cm}|W{12.8cm}|}
+  \thead{Kind} & \thead{Examples} \\ \hline
+  Economic & Cost, and time --- time is the one that bites at school \\ \hline
+  Technical & Processing speed, capacity, equipment available, compatibility, security \\ \hline
+  Social & The level of expertise your users actually have \\ \hline
+  Legal & Intellectual property, ownership of data, privacy of data \\ \hline
+  Usability & Accessibility, usefulness, ease of use \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{skillbox}{Annotate as we go}
+Add your own example beside each kind during the lesson. Yours will stick better than mine.
+\end{skillbox}
+
+\lessonpart{E}{Worked examples}{Amber}\label{wex:1}
+
+\begin{workedex}{Pulling a brief apart}
+\textit{``The sustainability group wants a one-page summary of Victorian rainfall for 2025, built from Bureau of Meteorology records for six weather stations. It must be understandable at a glance by students in Years 7 to 12. It will be built in a spreadsheet, because that is what is on the school laptops. It is due in two weeks. Forecasting is not wanted.''}
+
+\medskip
+\textbf{Functional:} show rainfall for 2025 by region, from the six stations' records.\\
+\textbf{Non-functional:} understandable at a glance by a Year 7 to 12 reader.\\
+\textbf{Constraints:} spreadsheet only (technical); two weeks (economic).\\
+\textbf{Scope:} 2025 only; forecasting is out.
+
+\medskip
+Notice that ``built in a spreadsheet'' is a constraint, not a requirement. The brief is not asking for a spreadsheet --- it is telling you that is all you have.
+\end{workedex}
+
+\begin{wedo}{A second brief}
+\textit{``The canteen wants to know which days sell out of hot food. Use last term's till records. The report has to be one page the manager can read without training, and it must not name any student. It has to be ready before the next ordering round on Friday.''}
+
+\medskip
+\pt{a} One functional requirement:
+\answerbox{5cm}
+\pt{b} One non-functional requirement:
+\answerbox{5cm}
+\pt{c} Two constraints, naming the kind of each:
+\answerbox{5cm}
+\pt{d} One thing that is out of scope:
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{F}{Practice}{Violet}\label{prac:1}
+
+\task Write the stage of the problem-solving methodology each activity belongs to.
+\begin{ctab}
+\begin{tabular}{|SW{8.6cm}|W{3.0cm}|W{3.8cm}|}
+  \hd & \thead{Activity} & \thead{Stage} & \thead{How you know} \\ \hline
+  & \scaf{Interviewing the client about what they need} & \scaf{Analysis} & \scaf{Finding out what the problem is, before a solution exists.} \\ \hline
+  & Writing the SQL that builds the database & & \\ \hline
+  & Sketching a mock-up of the dashboard on paper & & \\ \hline
+  & Testing that a query returns the right rows & & \\ \hline
+  & Asking three months later whether it helped & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task A brief says the solution must be ``user friendly''.
+\pt{a} Explain why that is not yet a requirement.
+\answerbox{5cm}
+\pt{b} Rewrite it as a requirement that could actually be checked.
+\answerbox{5cm}
+
+\task Name the kind of each constraint.
+\begin{ctab}
+\begin{tabular}{|SW{9.4cm}|W{5.8cm}|}
+  \hd & \thead{Constraint as stated in a brief} & \thead{Kind} \\ \hline
+  & \scaf{``You have two lessons to finish this.''} & \scaf{Economic} \\ \hline
+  & ``It must run on a school laptop with nothing installed.'' & \\ \hline
+  & ``The office staff have never written a formula.'' & \\ \hline
+  & ``The source data may not be redistributed.'' & \\ \hline
+  & ``A screen reader has to be able to read the results.'' & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\exttask A solution meets every functional requirement and none of the non-functional ones. Describe what using it would be like, and explain why evaluation would still mark it down.
+\answerbox{5cm}
+
+\exttask Give one requirement that could reasonably be read as either functional or non-functional, and explain the ambiguity.
+\answerbox{5cm}
+
+\notesfill
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 2 — DATA AND INFORMATION                                 (Week 1 · L2)
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\sectiondiv{Data and Information}{What separates them \textbullet{} qualitative and quantitative \textbullet{} identifiers}\label{sec:2}
+\lessoncodes{types and purposes of data and information}
+
+\lessonpart{A}{Before the lesson \textemdash\ the reading}{Teal}\label{pre:2}
+\beforelesson
+
+\begin{readingbox}{Reading --- The Number That Means Nothing}
+Here is a number: \textbf{24.4}. You cannot do anything with it. You do not know what it measures, where it came from, when, or in what units. It is \textbf{data} --- raw, unorganised facts and figures that carry no meaning on their own.
+
+Now: \textit{Mildura's mean maximum temperature in 2025 was 24.4\,\textdegree C.} Nothing about the number changed. What changed is that it has been organised, given a context and made to answer a question. That is \textbf{information}.
+
+The test is simple. Ask whether it answers a question on its own. If you still have to say what it is about, where it came from or what it is measured in, you are holding data. This matters more than it sounds, because almost everything a computer stores is data, and almost everything a person wants is information. The whole of this area of study lives in the gap between the two.
+
+Data comes in two kinds. \textbf{Quantitative} data is counted or measured, and arithmetic on it means something --- temperatures, rainfall, how many days it rained. \textbf{Qualitative} data describes a quality or a category, and arithmetic on it does not --- station names, regions, the state something is in.
+
+Then there is the trap. Some data is stored as digits but is not a number at all. Weather station 76031 is not ten thousand more of anything than station 66031. A postcode, a phone number, a student number: all digits, none of them quantities. These are \textbf{identifiers} --- values that label a thing rather than measure it. A computer will happily average a column of identifiers and hand you a number. The number is meaningless, and nothing in the system will warn you.
+
+It is also worth knowing where data comes from, because the source shapes what you can trust it for. \textbf{Sensor data} is recorded automatically by an instrument --- a thermometer, a rain gauge, a step counter, a door scanner. It arrives in huge quantities, it is consistent, and it carries no opinion; but a sensor measures only what it was pointed at, and it keeps recording when it drifts out of calibration. \textbf{Demographic data} describes people and populations --- age, postcode, language spoken at home, household income. It answers questions sensors cannot, and it is collected from people, which means somebody chose the questions, somebody chose who to ask, and some people did not answer.
+
+The rule worth carrying out of this reading: before you do arithmetic on a column, ask whether adding two of its values together would mean anything. If it would not, you are holding labels, not quantities.
+\end{readingbox}
+
+\lessonpart{B}{Key vocabulary}{NavyBlue}
+\vocabintro
+\begin{ctab}
+\begin{tabular}{|SW{4.6cm}|W{11.2cm}|}
+  \hd & \thead{Word} & \thead{What it means, from the reading} \\ \hline
+  & \scaf{\textbf{Data}} & \scaf{Raw, unorganised facts and figures. On their own they carry no meaning.} \\ \hline
+  & \textbf{Information} & \\ \hline
+  & \textbf{Qualitative} & \\ \hline
+  & \textbf{Quantitative} & \\ \hline
+  & \textbf{Identifier} & \\ \hline
+  & \textbf{Sensor data} & \\ \hline
+  & \textbf{Demographic data} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{C}{Key questions}{Teal}
+\kqintro
+\kqreset
+\kq{What has to be added to data before it becomes information?}{\kqbox}
+\kq{Station 76031 is stored as digits. Explain why it is not quantitative data.}{\kqbox}
+\kq{Give one example of \emph{sensor data} and one of \emph{demographic data} that your school already holds about you.}{\kqbox}
+\kq{The reading says a bare number cannot be checked. Explain why having the context makes data checkable.}{\kqbox}
+
+\lessonpart{D}{Key knowledge}{Blue}\label{know:2}
+
+\subsection{The test}\label{sub:2.1}
+
+\begin{skillbox}{Data or information?}
+\emph{Does this answer a question on its own?} If it needs you to say what it is about, where it came from, or what it is measured in, it is still data.
+\end{skillbox}
+
+\task Write one sentence of your own explaining what has to happen to data before it becomes information.
+\answerbox{5cm}
+
+\subsection{Classifying a field}\label{sub:2.2}
+
+\task For each field of a weather observation, write Q (qualitative) or N (quantitative), and say how you decided.
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{1.6cm}|W{10.0cm}|}
+  \hd & \thead{Field} & \thead{Q or N} & \thead{How you decided} \\ \hline
+  & \scaf{station\_name} & \scaf{Q} & \scaf{A label. Averaging two station names is meaningless.} \\ \hline
+  & max\_temp\_c & & \\ \hline
+  & region\_name & & \\ \hline
+  & rainfall\_mm & & \\ \hline
+  & station\_id & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{E}{Worked examples}{Amber}\label{wex:2}
+
+\begin{workedex}{Turning data into information}
+A sensor logs \textbf{0.0, 1.2, 18.6, 0.0, 7.4} for five days at one station.
+
+\medskip
+As it stands this is data: five numbers, no units, no place, no dates.
+
+\medskip
+Organise it --- these are daily rainfall totals in millimetres at Cape Otway, 1 to 5 May --- and it becomes information: \textit{Cape Otway had rain on three of the five days, and 18.6\,mm of it fell on one day.}
+
+\medskip
+The number 18.6 did not change. It now answers a question.
+\end{workedex}
+
+\begin{wedo}{Your turn}
+A school sensor logs \textbf{8.4, 12.1, 9.7, 8.4, 11.9} for one week.
+
+\medskip
+\pt{a} What is missing before these numbers could be called information?
+\answerbox{5cm}
+\pt{b} Invent the missing context, then write one sentence of information from them.
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{F}{Practice}{Violet}\label{prac:2}
+
+\task Decide whether each item is data or information, and say why.
+\begin{ctab}
+\begin{tabular}{|SW{7.6cm}|W{3.4cm}|W{4.4cm}|}
+  \hd & \thead{Item} & \thead{Data or information} & \thead{Why} \\ \hline
+  & \scaf{(a) 24.4} & \scaf{Data} & \scaf{A bare number with no context.} \\ \hline
+  & (b) Cape Otway had rain on 113 days last year & & \\ \hline
+  & (c) 76031 & & \\ \hline
+  & (d) The wettest month at Cape Otway was July & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task A weather station records \textbf{50.0} in its elevation field.
+\pt{a} Is this data or information? Say why.
+\answerbox{5cm}
+\pt{b} Write a sentence that turns it into information.
+\answerbox{5cm}
+
+\task Sensor data and demographic data fail in different ways.
+\pt{a} Give one thing that can go wrong with sensor data that cannot go wrong with demographic data.
+\answerbox{5cm}
+\pt{b} Give one thing that can go wrong with demographic data that cannot go wrong with sensor data.
+\answerbox{5cm}
+
+\exttask Postcodes, phone numbers and student numbers are all stored as digits. Explain what they have in common with station\_id, and write the rule you would give a junior programmer for deciding whether a numeric field is really a number.
+\answerbox{5cm}
+
+\notesfill
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 3 — DATA TYPES AND CHARACTERISTICS                       (Week 1 · L3)
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\sectiondiv{Data Types and Characteristics}{Choosing a type \textbullet{} integer against floating point \textbullet{} structure and context}\label{sec:3}
+\lessoncodes{types of data, their characteristics, and the data types used to store them}
+
+\lessonpart{A}{Before the lesson \textemdash\ the reading}{Teal}\label{pre:3}
+\beforelesson
+
+\begin{readingbox}{Reading --- The Decision Nobody Tells You About}
+Every time you create a field in a database or a column in a spreadsheet, you make a promise about what can go in it and what can be done with it. That promise is the \emph{data type}, and getting it wrong is one of the few mistakes in this subject that produces no error message at all.
+
+The types you need are few. A \textbf{character} is a single letter, digit or symbol, stored as text --- a grade of A, a flag of Y. A \textbf{string} holds text of any length: names, labels, codes, anything you will never do arithmetic on. An \textbf{integer} holds a whole number with no fractional part --- a count of days, a year, a humidity reading in whole percent. A \textbf{floating point} number holds a number that has a fractional part, which is what every measurement needs: a temperature of 24.4, a rainfall of 0.2, a latitude of $-34.2358$. A \textbf{date/time} holds a point in time, stored so that sorting and filtering by date actually work instead of sorting alphabetically. A \textbf{Boolean} holds one of exactly two values, true or false, and nothing else --- no ``maybe'', no blank.
+
+Integer and floating point are the pair that catches people, because to you they are both just numbers. To a database they are different things. Store 24.4\,\textdegree C in an integer field and the database keeps 24. It does not complain. It does not warn you. The 0.4 is simply gone, and you will not find out until somebody notices your averages are low.
+
+A second silent problem is the difference between zero and empty. A rainfall reading of 0.0 means somebody walked to the gauge, looked, and recorded no rain --- that is a measurement. An empty cell means nobody recorded anything --- that is a gap. If a program quietly fills the gaps with zeros, every average it reports afterwards is dragged down, and the data now claims that days nobody measured were dry.
+
+Two further words describe whether data is usable at all. \textbf{Structure} is the shape data is held in: one row per observation, one column per field, the same type all the way down a column. Structured data can be sorted, filtered and queried by a machine; unstructured data --- a paragraph, a photograph, a voice recording --- has to be read or watched by a person. \textbf{Context} is everything that says what the data is about: the units, the place, the time, who collected it and how. A perfectly structured column with no context cannot be checked, compared or trusted by anyone.
+
+Carry this away: choosing a data type is not a formality, and a column that mixes a number with its unit --- ``24.4\,\textdegree C'' typed as text --- has stopped being a number at all.
+\end{readingbox}
+
+\lessonpart{B}{Key vocabulary}{NavyBlue}
+\vocabintro
+\begin{ctab}
+\begin{tabular}{|SW{4.6cm}|W{11.2cm}|}
+  \hd & \thead{Word} & \thead{What it means, from the reading} \\ \hline
+  & \scaf{\textbf{Character}} & \scaf{A single letter, digit or symbol, stored as text.} \\ \hline
+  & \textbf{String} & \\ \hline
+  & \textbf{Integer} & \\ \hline
+  & \textbf{Floating point} & \\ \hline
+  & \textbf{Date/time} & \\ \hline
+  & \textbf{Boolean} & \\ \hline
+  & \textbf{Structure} & \\ \hline
+  & \textbf{Context} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{C}{Key questions}{Teal}
+\kqintro
+\kqreset
+\kq{What does choosing a data type actually decide about a field?}{\kqbox}
+\kq{Explain why storing 24.4 as an integer is worse than it first looks.}{\kqbox}
+\kq{Explain the difference between a rainfall reading of 0.0 and an empty rainfall cell.}{\kqbox}
+\kq{Structured data can be queried; unstructured data has to be read. Give one example of each from somewhere in your school.}{\kqbox}
+
+\lessonpart{D}{Key knowledge}{Blue}\label{know:3}
+
+\subsection{Choosing the type}\label{sub:3.1}
+
+\begin{ctab}
+\begin{tabular}{|W{3.0cm}|W{5.0cm}|W{7.4cm}|}
+  \thead{Type} & \thead{Holds} & \thead{Use it when} \\ \hline
+  Character & One letter, digit or symbol & A single flag or grade \\ \hline
+  String & Text of any length & Names, labels, identifiers, codes \\ \hline
+  Integer & A whole number & Counts, years, humidity as a percentage \\ \hline
+  Floating point & A number with a fractional part & Measurements: temperature, rainfall, latitude \\ \hline
+  Date/time & A point in time & Anything you will sort or filter by date \\ \hline
+  Boolean & True or false, nothing else & A yes/no fact with no third option \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task A column holds \textbf{24.4\,\textdegree C} --- the number and the unit together, as text. Give two separate problems this causes.
+\answerbox{5cm}
+
+\lessonpart{E}{Worked examples}{Amber}\label{wex:3}
+
+\begin{workedex}{What filling the gaps costs}
+A month has 30 days: 10 wet days totalling 60\,mm, 15 dry days recorded as 0.0, and 5 days with nothing recorded at all.
+
+\medskip
+Mean over the 25 \emph{measured} days: $60 \div 25 = 2.4$\,mm.\\
+Mean if the 5 gaps are filled with zeros: $60 \div 30 = 2.0$\,mm.
+
+\medskip
+The second figure is lower, and it is wrong --- it reports as ``dry'' five days nobody looked at. Notice the direction: filling gaps with zeros always drags a mean \emph{down}.
+\end{workedex}
+
+\begin{wedo}{Your turn}
+A humidity field holds \textbf{0} on one row and is \textbf{empty} on another.
+
+\medskip
+\pt{a} State what each one means.
+\answerbox{5cm}
+\pt{b} A program replaces every empty cell with 0. Say whether the reported mean humidity goes up or down, and explain why.
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{F}{Practice}{Violet}\label{prac:3}
+
+\task Give the data type you would store each value as, and say why.
+\begin{ctab}
+\begin{tabular}{|SW{5.4cm}|W{2.8cm}|W{6.8cm}|}
+  \hd & \thead{Value as recorded} & \thead{Data type} & \thead{Why that type} \\ \hline
+  & \scaf{$-34.2358$} & \scaf{Floating point} & \scaf{A latitude is meaningless without the fractional part.} \\ \hline
+  & VIC & & \\ \hline
+  & 113 & & \\ \hline
+  & 2025-06-01 & & \\ \hline
+  & 0.0 & & \\ \hline
+  & yes --- the gauge was serviced & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task Humidity is recorded as a whole number from 0 to 100. Someone suggests storing it as text so that ``missing'' can be typed in.
+\pt{a} Give one reason that is a bad idea.
+\answerbox{5cm}
+\pt{b} Suggest what should be done with a missing humidity reading instead.
+\answerbox{5cm}
+
+\exttask A field holds a student's year level. Argue for storing it as an integer, then argue for storing it as a string, and say which you would choose and why.
+\answerbox{5cm}
+
+\notesfill
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 4 — DATA QUALITY                                         (Week 2 · L1)
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\sectiondiv{Data Quality}{Five factors \textbullet{} accurate against reliable \textbullet{} bias \textbullet{} outliers}\label{sec:4}
+\lessoncodes{factors affecting the quality of data and information}
+
+\lessonpart{A}{Before the lesson \textemdash\ the reading}{Teal}\label{pre:4}
+\beforelesson
+
+\begin{readingbox}{Reading --- A Beautiful Chart of Bad Data}
+Every chart you draw this term inherits the quality of the data underneath it. That cuts one way only: a careful, well-labelled, handsome visualisation of bad data is \emph{worse} than no visualisation at all, because people believe it.
+
+Five factors decide whether data can be trusted. \textbf{Accuracy} asks whether the value is correct --- a maximum of 85\,\textdegree C in Mildura is not. \textbf{Bias} asks whether the method used to collect the data favoured one answer over the truth. \textbf{Integrity} asks whether the data is whole and internally consistent --- duplicate rows and three date formats in one column both break it. \textbf{Relevance} asks whether the data bears on the question you were actually asked; humidity is irrelevant when you were asked about rainfall, however good the humidity figures are. \textbf{Reliability} asks whether the source can be depended on, over and over.
+
+Two of those are constantly confused. Accurate means close to the true value; it is a property of \emph{this reading}. Reliable means dependable over time; it is a property of \emph{the source}. The difference is not academic. A thermometer that reads exactly 2\,\textdegree C too high every single day is reliable and not accurate --- and because it is reliable you can simply subtract two and use it. A thermometer that is right on average but wildly wrong on random days is accurate on average and completely useless, because you cannot tell which days to trust.
+
+Bias is the one students most often misunderstand, because the word suggests somebody is lying. It does not mean that. Bias is built into the method before a single value is recorded. Survey at lunchtime and you miss everyone in class. Use an online form and you miss everyone without reliable internet. Put your weather stations at airports --- flat, open, paved ground --- and you will read warmer than the suburbs around them.
+
+Two faults turn up in almost every real extract. An \textbf{outlier} is a value far away from the rest of the data: a rainfall reading of 487\,mm in a column where nothing else passes 50. Some outliers are mistakes and some are the most interesting day of the year, so an outlier is a reason to investigate, never a reason to delete. A \textbf{missing value} is a field where nothing was recorded at all --- an empty cell, not a zero. Missing values are easy to overlook precisely because they look like nothing, and every average computed over them is quietly wrong.
+
+Finish on this. Five of the six stations in our dataset are at airports. The dataset is not wrong; every reading is a real reading. What would be wrong is the \emph{claim} that these six numbers describe ``Victoria's temperature''. Most bad data analysis is not bad numbers. It is a true number attached to a claim it cannot support.
+\end{readingbox}
+
+\lessonpart{B}{Key vocabulary}{NavyBlue}
+\vocabintro
+\begin{ctab}
+\begin{tabular}{|SW{4.6cm}|W{11.2cm}|}
+  \hd & \thead{Word} & \thead{What it means, from the reading} \\ \hline
+  & \scaf{\textbf{Accuracy}} & \scaf{Whether the value is correct. A maximum of 85\,\textdegree C in Mildura is not.} \\ \hline
+  & \textbf{Bias} & \\ \hline
+  & \textbf{Integrity} & \\ \hline
+  & \textbf{Relevance} & \\ \hline
+  & \textbf{Reliability} & \\ \hline
+  & \textbf{Outlier} & \\ \hline
+  & \textbf{Missing value} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{C}{Key questions}{Teal}
+\kqintro
+\kqreset
+\kq{Explain the difference between \emph{accurate} and \emph{reliable} in your own words.}{\kqbox}
+\kq{Why is a thermometer that is always 2\,\textdegree C too high more useful than one that is right on average?}{\kqbox}
+\kq{The reading says bias is not someone lying. What is it, then?}{\kqbox}
+\kq{Who is harmed by a beautiful chart of bad data, and why is it worse than no chart at all?}{\kqbox}
+
+\lessonpart{D}{Key knowledge}{Blue}\label{know:4}
+
+\subsection{Five factors}\label{sub:4.1}
+
+\begin{ctab}
+\begin{tabular}{|W{2.6cm}|W{6.0cm}|W{6.8cm}|}
+  \thead{Factor} & \thead{The question} & \thead{Fails when} \\ \hline
+  Accuracy & Is the value correct? & A maximum of 85\,\textdegree C in Mildura \\ \hline
+  Bias & Does the method favour an outcome? & Only surveying students already in the canteen queue \\ \hline
+  Integrity & Is the data whole and consistent? & Duplicate rows; three date formats in one column \\ \hline
+  Relevance & Does it bear on the question? & Humidity, when you were asked about rainfall \\ \hline
+  Reliability & Can the source be depended on? & A sensor that drifts; an anonymous blog \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{skillbox}{Whose fault is it?}
+Five of our six stations are at airports. The \emph{dataset} is not wrong --- every reading is real. What would be wrong is the \emph{claim} that these six numbers describe ``Victoria's temperature''.
+\end{skillbox}
+
+\lessonpart{E}{Worked examples}{Amber}\label{wex:4}
+
+\begin{workedex}{Naming the fault}
+A row of a raw extract reads:
+
+\medskip
+\texttt{99999 | Unknown Station | 2025-03-12 | 82.4\,\textdegree C | -3.1 | 180}
+
+\medskip
+\textbf{82.4\,\textdegree C} --- the unit is inside the value, so the column is now text. \emph{Integrity.}\\
+\textbf{82.4} --- not a possible Victorian maximum. \emph{Accuracy.}\\
+\textbf{$-3.1$} --- rainfall cannot be negative. \emph{Accuracy.}\\
+\textbf{180} --- humidity cannot exceed 100\,\%. \emph{Accuracy.}\\
+\textbf{99999} --- no such station, so the row points at nothing. \emph{Integrity.}
+
+\medskip
+No real row is this bad. This one was built to carry every fault at once.
+\end{workedex}
+
+\begin{wedo}{Your turn}
+A row reads:
+
+\medskip
+\texttt{86338 | \ \ Essendon Airport\ \  | 12/03/2025 | 23.8 | (empty) | 58}
+
+\medskip
+\pt{a} Name two faults in this row.
+\answerbox{5cm}
+\pt{b} For each, name the quality factor it damages.
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{F}{Practice}{Violet}\label{prac:4}
+
+\task Name the group each collection method leaves out, and which way that pushes the result.
+\begin{ctab}
+\begin{tabular}{|SW{5.6cm}|W{4.6cm}|W{4.8cm}|}
+  \hd & \thead{Collection method} & \thead{Who is left out} & \thead{Which way it pushes} \\ \hline
+  & \scaf{A survey run in the canteen queue at lunchtime} & \scaf{Everyone in class, and everyone who brings lunch.} & \scaf{Towards ``students love the canteen''.} \\ \hline
+  & An online form sent by email & & \\ \hline
+  & A phone poll on a weekday, 9\,am to 5\,pm & & \\ \hline
+  & Reviews left voluntarily on a shop's website & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task A column of daily rainfall holds a reading of \textbf{487.0}\,mm.
+\pt{a} Give one reason to think it is an error.
+\answerbox{5cm}
+\pt{b} Give one reason it might be real.
+\answerbox{5cm}
+\pt{c} State what you would do before deciding, and why deleting it immediately would be wrong.
+\answerbox{5cm}
+
+\exttask A council publishes every noise complaint it received, with the street name and the date, and no names. Explain who could still be identified, and which of the five quality factors is \emph{not} the issue here.
+\answerbox{5cm}
+
+\notesfill
+
+\end{document}

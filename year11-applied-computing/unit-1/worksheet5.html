@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worksheet 5 &middot; SQL on paper | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Caveat:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/worksheet.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="worksheet-page theme-computing">
+<div class="ws-bar">
+  <a href="index.html">&#8592; Unit 1 hub</a>
+  <a href="worksheets.html">All worksheets</a>
+  <span class="spacer"></span>
+  <span class="hint">Topics 12&ndash;14 &middot; about 50 minutes</span>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+<div class="sheet">
+  <div class="ws-head">
+    <div class="ws-tag">Unit 1 &middot; Area of Study 1 &middot; Revision</div>
+    <h1><span class="lnum">5</span>SQL on paper</h1>
+    <p class="ws-sub">Revision for Topics 12&ndash;14. Written SQL, no computer &mdash; which is how the examination will ask for it.</p>
+    <div class="namebar">
+      <span>Name</span><span>Class</span><span>Date</span>
+    </div>
+  </div>
+  <div class="infobox"><span class="lbl">How to use this sheet</span>
+  <p>Write your queries out in full, with the clauses on separate lines, exactly as you would type them. Finish every query with a semicolon. If a query will not come, write down which clause you are stuck on &mdash; that is the thing to revise.</p></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Key words</span><span class="part-title">What do these mean?</span><span class="ref">Topics 12&ndash;14</span></div>
+    <p class="part-instr">The first one is done for you. Write the rest <b>from memory</b> &mdash; do not open your booklet yet. When you have written all you can, check them against your booklet and correct them in a different colour. The corrections are the useful part.</p>
+<table class="wtbl"><thead><tr><th>Key word</th><th>What it means &mdash; from memory first</th></tr></thead><tbody><tr class="scaffold"><td><b>SELECT</b></td><td>Names the columns you want back. It runs after FROM and WHERE, not first.</td></tr><tr><td><b>WHERE</b></td><td class="fill-lg"></td></tr><tr><td><b>ORDER BY</b></td><td class="fill-lg"></td></tr><tr><td><b>JOIN</b></td><td class="fill-lg"></td></tr><tr><td><b>ON</b></td><td class="fill-lg"></td></tr><tr><td><b>GROUP BY</b></td><td class="fill-lg"></td></tr><tr><td><b>HAVING</b></td><td class="fill-lg"></td></tr><tr><td><b>aggregate function</b></td><td class="fill-lg"></td></tr><tr><td><b>alias</b></td><td class="fill-lg"></td></tr></tbody></table>  </section>
+  <div class="ws-runhead"><strong>Worksheet 5 &mdash; SQL on paper</strong><span>Part A &middot; Topic 12</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part A</span><span class="part-title">Read the query, write the result</span><span class="ref">Topic 12</span></div>
+    <p class="part-instr">The whole <b>station</b> and <b>region</b> tables are printed below. Work out what each query returns, without a computer.</p>
+    <div class="q"><span class="qn">1</span>
+      <div class="qbody">The two tables:<table class="wtbl"><thead><tr><th>station_id</th><th>station_name</th><th>region_id</th><th>elevation_m</th></tr></thead><tbody><tr><td>86038</td><td>Melbourne Airport</td><td>1</td><td>113.4</td></tr><tr><td>86338</td><td>Essendon Airport</td><td>1</td><td>78.4</td></tr><tr><td>85072</td><td>East Sale Airport</td><td>2</td><td>4.6</td></tr><tr><td>76031</td><td>Mildura Airport</td><td>3</td><td>50.0</td></tr><tr><td>90015</td><td>Cape Otway Lighthouse</td><td>4</td><td>82.0</td></tr><tr><td>87031</td><td>Laverton RAAF</td><td>1</td><td>20.1</td></tr></tbody></table><table class="wtbl"><thead><tr><th>region_id</th><th>region_name</th><th>state</th></tr></thead><tbody><tr><td>1</td><td>Greater Melbourne</td><td>VIC</td></tr><tr><td>2</td><td>Gippsland</td><td>VIC</td></tr><tr><td>3</td><td>Mallee</td><td>VIC</td></tr><tr><td>4</td><td>Western District</td><td>VIC</td></tr></tbody></table>Now write out the full result of each query &mdash; every row, in order.<div class="sub-q"><span class="sl">(a)</span><b>SELECT</b> station_name <b>FROM</b> station <b>WHERE</b> elevation_m &gt; 75 <b>ORDER BY</b> elevation_m <b>DESC</b>;<div class="lines" data-lines="4"></div></div><div class="sub-q"><span class="sl">(b)</span><b>SELECT COUNT</b>(*) <b>FROM</b> station <b>WHERE</b> region_id = 1;<div class="lines" data-lines="2"></div></div><div class="sub-q"><span class="sl">(c)</span><b>SELECT</b> region_id, <b>COUNT</b>(*) <b>FROM</b> station <b>GROUP BY</b> region_id <b>ORDER BY</b> region_id;<div class="lines" data-lines="5"></div></div></div>
+    </div>
+    <div class="q"><span class="qn">2</span>
+      <div class="qbody">In query (a), one station sits at exactly 78.4 m and is included.<div class="sub-q"><span class="sl">(a)</span>If the condition were <b>&gt;=</b> 75 instead of <b>&gt;</b> 75, would the result change for this data? Explain.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(b)</span>Explain why a query that gives the right answer on this data can still be the wrong query.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 5 &mdash; SQL on paper</strong><span>Part B &middot; Topics 12&ndash;14</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part B</span><span class="part-title">Write the query</span><span class="ref">Topics 12&ndash;14</span></div>
+    <p class="part-instr">Write each one out in full, clauses on separate lines, ending in a semicolon.</p>
+<div class="infobox"><span class="lbl">The database &mdash; you will need this on every page</span>
+  <p><b>region</b>(<u>region_id</u>, region_name, state)<br><b>station</b>(<u>station_id</u>, station_name, region_id*, latitude, longitude, elevation_m, opened)<br><b>observation</b>(<u>obs_id</u>, station_id*, obs_date, min_temp_c, max_temp_c, rainfall_mm, humidity_9am)<br>Six stations, four regions, 2190 observations for 2025. Dates are text, <b>YYYY-MM-DD</b>. A <b>*</b> marks a foreign key.</p></div>    <div class="q"><span class="qn">3</span>
+      <div class="qbody">Write the SQL for each.<div class="sub-q"><span class="sl">(a)</span>Every station&rsquo;s name and elevation, highest elevation first.<div class="lines" data-lines="4"></div></div><div class="sub-q"><span class="sl">(b)</span>The five hottest days at station 76031 &mdash; the date and the maximum.<div class="lines" data-lines="5"></div></div><div class="sub-q"><span class="sl">(c)</span>Every station&rsquo;s name together with the name of its region, A to Z by station name.<div class="lines" data-lines="6"></div></div><div class="sub-q"><span class="sl">(d)</span>The number of observations recorded in the region called &ldquo;Greater Melbourne&rdquo;.<div class="lines" data-lines="6"></div></div><div class="sub-q"><span class="sl">(e)</span>For each station, the number of days it recorded any rain at all, wettest-count first.<div class="lines" data-lines="6"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 5 &mdash; SQL on paper</strong><span>Part C &middot; Topics 12&ndash;14</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part C</span><span class="part-title">Find the fault</span><span class="ref">Topics 12&ndash;14</span></div>
+    <p class="part-instr">Each query below is wrong. Say what is wrong with it, and write the corrected clause.</p>
+<div class="infobox"><span class="lbl">The database &mdash; you will need this on every page</span>
+  <p><b>region</b>(<u>region_id</u>, region_name, state)<br><b>station</b>(<u>station_id</u>, station_name, region_id*, latitude, longitude, elevation_m, opened)<br><b>observation</b>(<u>obs_id</u>, station_id*, obs_date, min_temp_c, max_temp_c, rainfall_mm, humidity_9am)<br>Six stations, four regions, 2190 observations for 2025. Dates are text, <b>YYYY-MM-DD</b>. A <b>*</b> marks a foreign key.</p></div>    <div class="q"><span class="qn">4</span>
+      <div class="qbody">Fault-find each query.<table class="wtbl"><thead><tr><th>The query as written</th><th>What is wrong</th><th>The corrected clause</th></tr></thead><tbody><tr class="scaffold"><td>SELECT station_name, region_name FROM station, region;</td><td>No join condition. Every station is paired with every region &mdash; 6 &times; 4 = 24 rows of nonsense.</td><td>FROM station JOIN region ON region.region_id = station.region_id</td></tr><tr><td>SELECT station_id, COUNT(*) FROM observation WHERE COUNT(*) &gt; 100 GROUP BY station_id;</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>SELECT station_name FROM station ORDER elevation_m DESC;</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>SELECT * FROM observation WHERE obs_date BETWEEN 2025-06-01 AND 2025-08-31;</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>SELECT r.region_name, AVG(o.max_temp_c) FROM observation o JOIN region r ON r.region_id = o.station_id GROUP BY r.region_name;</td><td class="fill-lg"></td><td class="fill-lg"></td></tr></tbody></table></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 5 &mdash; SQL on paper</strong><span>Part D &middot; Topic 14</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part D</span><span class="part-title">WHERE and HAVING</span><span class="ref">Topic 14</span></div>
+    <p class="part-instr"><b>WHERE</b> filters rows, before any grouping happens. <b>HAVING</b> filters groups, after they have been formed.</p>
+<div class="infobox"><span class="lbl">The database &mdash; you will need this on every page</span>
+  <p><b>region</b>(<u>region_id</u>, region_name, state)<br><b>station</b>(<u>station_id</u>, station_name, region_id*, latitude, longitude, elevation_m, opened)<br><b>observation</b>(<u>obs_id</u>, station_id*, obs_date, min_temp_c, max_temp_c, rainfall_mm, humidity_9am)<br>Six stations, four regions, 2190 observations for 2025. Dates are text, <b>YYYY-MM-DD</b>. A <b>*</b> marks a foreign key.</p></div>    <div class="q"><span class="qn">5</span>
+      <div class="qbody">A query must answer: <i>which stations had more than 100 wet days?</i> A wet day is a day where rainfall_mm is above zero.<div class="sub-q"><span class="sl">(a)</span>Which of the two conditions goes in <b>WHERE</b>, and which in <b>HAVING</b>? Say why for each.<div class="lines" data-lines="4"></div></div><div class="sub-q"><span class="sl">(b)</span>Write the full query.<div class="lines" data-lines="6"></div></div><div class="sub-q"><span class="sl">(c)</span>Explain what SQLite does if you put <b>COUNT(*) &gt; 100</b> in the WHERE clause, and why.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+    <div class="q"><span class="qn">6</span>
+      <div class="qbody">Write one question about this data that needs <b>both</b> a WHERE and a HAVING, and say what each one is doing.<div class="lines" data-lines="4"></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 5 &mdash; SQL on paper</strong><span>Part E &middot; Topics 9 and 12&ndash;14</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part E</span><span class="part-title">From query design to SQL</span><span class="ref">Topics 9 and 12&ndash;14</span></div>
+    <p class="part-instr">This is the design tool from Topic 9, used for the job it exists for.</p>
+<div class="infobox"><span class="lbl">The database &mdash; you will need this on every page</span>
+  <p><b>region</b>(<u>region_id</u>, region_name, state)<br><b>station</b>(<u>station_id</u>, station_name, region_id*, latitude, longitude, elevation_m, opened)<br><b>observation</b>(<u>obs_id</u>, station_id*, obs_date, min_temp_c, max_temp_c, rainfall_mm, humidity_9am)<br>Six stations, four regions, 2190 observations for 2025. Dates are text, <b>YYYY-MM-DD</b>. A <b>*</b> marks a foreign key.</p></div>    <div class="q"><span class="qn">7</span>
+      <div class="qbody">Fill in the query design for: <i>the mean maximum temperature of each region in winter 2025 (1 June to 31 August), warmest region first.</i><table class="wtbl"><thead><tr><th>Element</th><th>Your decision</th></tr></thead><tbody><tr class="scaffold"><td>Tables</td><td>observation, station, region</td></tr><tr><td>Join conditions</td><td class="fill-lg"></td></tr><tr><td>Fields shown</td><td class="fill-lg"></td></tr><tr><td>Condition</td><td class="fill-lg"></td></tr><tr><td>Group by</td><td class="fill-lg"></td></tr><tr><td>Sort</td><td class="fill-lg"></td></tr></tbody></table></div>
+    </div>
+    <div class="q"><span class="qn">8</span>
+      <div class="qbody">Now write the SQL from your design. It should follow almost mechanically.<div class="lines" data-lines="8"></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Check &mdash; Before you put this away</strong><span>Self-assessment</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Check</span><span class="part-title">Before you put this away</span></div>
+    <p class="part-instr">Tick every box you can honestly say yes to. Anything left unticked is what to go back over.</p>
+    <ul class="tick"><li>I can read a query and write out its result without running it.</li><li>I can write SELECT, WHERE, ORDER BY and LIMIT from memory.</li><li>I can write a two-table and a three-table JOIN with correct ON conditions.</li><li>I can say what happens when the ON clause is missing, and how many rows come back.</li><li>I can use GROUP BY with COUNT and AVG, and alias the result.</li><li>I can say which conditions belong in WHERE and which in HAVING, and why.</li><li>I can turn a completed query design into SQL.</li></ul>
+  </section>
+  <div class="y8box"><span class="lbl">If you finish early &middot; not marked</span>
+<p><b>1.</b> Dates in this database are text. Explain why <b>obs_date BETWEEN '2025-06-01' AND '2025-08-31'</b> works correctly anyway, and give a date format for which it would not.</p><div class="lines" data-lines="4"></div><p><b>2.</b> Write a query that returns every station that recorded <i>no</i> rain at all on 1 January 2025. Then say what it would return if a station had no row for that date at all.</p><div class="lines" data-lines="5"></div>  </div>
+  <div class="ws-foot"><span>Worksheet 5 &middot; SQL on paper</span><span>Unit 1 &middot; Applied Computing</span></div>
+</div>
+
+</body>
+</html>

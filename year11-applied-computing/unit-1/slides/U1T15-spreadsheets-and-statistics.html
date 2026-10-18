@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T15 &middot; Spreadsheets and Descriptive Statistics | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-computing">
+
+<div class="progress"></div>
+<div class="lessontag">Unit 1 &middot; Topic 15</div>
+<a class="homebtn" href="../index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Applied Computing <b>&middot;</b> Unit 1</p>
+    <h1>Spreadsheets and Descriptive Statistics</h1>
+    <p class="subtitle">The four statistics the study design names, and what each one hides.</p>
+    <div class="head-meta">
+      <span class="pill">Calculate the four statistics</span>
+      <span class="pill">Say what each one tells you</span>
+      <span class="pill">Spot when a mean misleads</span>
+    </div>
+    <p class="slide-foot">Unit 1 &middot; Area of Study 1 &middot; Data analysis</p>
+    <p class="start-hint">Press <span class="key">&rarr;</span> to begin.</p>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="eyebrow">Lesson starter</p>
+    <h2>Key vocabulary</h2>
+    <p>Copy these into your booklet now. You will write the definition beside each one as it comes up.</p>
+    <div class="cols">
+      <div>
+        <ul>
+          <li>descriptive statistics</li>
+          <li>mean</li>
+          <li>median</li>
+          <li>mode</li>
+          <li>frequency</li>
+          <li>standard deviation</li>
+          <li>outlier</li>
+          <li>skew</li>
+        </ul>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">Open the workbook</span>
+          <p><code>climate-observations.xlsx</code> from the unit data folder. Two sheets, 2190 rows, header row frozen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Why a spreadsheet as well">
+    <p class="eyebrow">Starting point</p>
+    <h2>The database got you the rows. Now describe them.</h2>
+    <div class="cols">
+      <div>
+        <p>SQL is excellent at selecting, joining and counting. It is weak at the statistics this study names &mdash; SQLite has no median and no standard deviation at all.</p>
+        <p>So the workflow is: query in the database, refine in the spreadsheet, visualise from there.</p>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">That workflow is the Outcome 1 task</span>
+          <p>&ldquo;Importing data from files into a database where data is organised using queries. Data from these queries is then imported into a spreadsheet for further refinement.&rdquo;</p>
+          <p>That is the study design describing what you are about to do.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Structure of a spreadsheet">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Rows, columns and cells</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Element</th><th>Is</th><th>Convention that matters</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Column</b></td><td>One field</td><td>Header label in row 1, named for what it holds and its unit</td></tr>
+      <tr><td><b>Row</b></td><td>One record</td><td>One observation per row. Never two</td></tr>
+      <tr><td><b>Cell</b></td><td>One value</td><td>One value. Not &ldquo;24.6 &deg;C&rdquo;, which is a value and a unit</td></tr>
+      <tr><td><b>Worksheet</b></td><td>One table</td><td>Named, not &ldquo;Sheet1&rdquo;</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Naming conventions for spreadsheets are examinable key knowledge: worksheet names, header labels for rows, header labels for columns.</p>
+  </section>
+
+  <section class="slide" data-menu="The four statistics">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Average, median, count, standard deviation</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Statistic</th><th>Formula</th><th>Tells you</th></tr>
+      </thead>
+      <tbody>
+      <tr><td><b>Average</b> (mean)</td><td><code>=AVERAGE(D2:D2191)</code></td><td>The balance point. Dragged by extremes</td></tr>
+      <tr><td><b>Median</b></td><td><code>=MEDIAN(D2:D2191)</code></td><td>The middle value. Ignores extremes</td></tr>
+      <tr><td><b>Count</b> / frequency</td><td><code>=COUNT(D2:D2191)</code><br><code>=COUNTIF(F2:F2191,"&gt;0")</code></td><td>How many. How many of a kind</td></tr>
+      <tr><td><b>Standard deviation</b></td><td><code>=STDEV.S(D2:D2191)</code></td><td>How spread out. Small means clustered</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="Mean against median">
+    <p class="eyebrow">The comparison that matters</p>
+    <h2>When the two disagree, something is going on</h2>
+    <div class="cols">
+      <div>
+        <p>Rainfall at Cape Otway: most days are zero, a few are enormous.</p>
+        <ul>
+          <li>Mean daily rainfall: about 2.8&nbsp;mm</li>
+          <li>Median daily rainfall: <b>0.0&nbsp;mm</b></li>
+        </ul>
+        <p>Both are correct. They answer different questions.</p>
+      </div>
+      <div>
+        <div class="box key">
+          <span class="lbl">What the gap tells you</span>
+          <p>A mean well above the median means the data is <b>skewed</b> &mdash; a few large values pulling the average up.</p>
+          <p>&ldquo;Average rainfall 2.8&nbsp;mm a day&rdquo; is true and gives entirely the wrong picture of what most days are like.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="I do — choosing the statistic">
+    <p class="eyebrow">Worked example</p>
+    <h2><span class="phase-tag ido">I do</span> &ldquo;What is a typical day at Mildura?&rdquo;</h2>
+    <div class="cols">
+      <div>
+        <ol class="steps" id="t15ido">
+          <li><span class="stepno">1</span> Typical temperature: the distribution is roughly symmetric, so the <b>mean</b> is honest. About 24.4&nbsp;&deg;C.</li>
+          <li><span class="stepno">2</span> Typical rainfall: most days are zero, so the mean is misleading. The <b>median</b> is 0.0.</li>
+          <li><span class="stepno">3</span> How variable? <b>Standard deviation</b> of maximum temperature &mdash; large, because summer and winter differ hugely.</li>
+          <li><span class="stepno">4</span> How often does it rain? <b>COUNTIF</b> above zero: 76 days of 365.</li>
+          <li class="ans"><span class="stepno">&#10003;</span> Four statistics, four different questions. Choosing the wrong one is not a calculation error &mdash; it is a reasoning error.</li>
+        </ol>
+        <button class="reveal-btn" data-target="#t15ido">Work it through</button>
+      </div>
+      <div>
+        <div class="box hint">
+          <span class="lbl">What examiners look for</span>
+          <p>Not the number. The sentence after it that says what the number means, and why you chose that statistic.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do — which statistic?">
+    <p class="eyebrow">Together</p>
+    <h2><span class="phase-tag wedo">We do</span> Which would you use?</h2>
+    <div class="cols">
+      <div>
+        <div class="qcard">
+          <p class="q">1. Typical house price in a suburb with one $12m sale</p>
+          <p class="a"><b><b>Median</b> &mdash; the mean is dragged by the outlier</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="qcard">
+          <p class="q">2. How many days exceeded 35&nbsp;&deg;C</p>
+          <p class="a"><b><b>COUNTIF</b> &mdash; a frequency, not an average</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+      </div>
+      <div>
+        <div class="qcard">
+          <p class="q">3. Whether two stations have similar or wildly different temperatures</p>
+          <p class="a"><b><b>Standard deviation</b> &mdash; means can match while spreads differ</b></p>
+          <button class="reveal-btn">Show</button>
+        </div>
+        <div class="box hint">
+          <span class="lbl">Number 3 is the subtle one</span>
+          <p>Two stations can share a mean of 20&nbsp;&deg;C and feel nothing alike &mdash; one steady, one swinging between 5 and 35.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Validation in a spreadsheet">
+    <p class="eyebrow">Key knowledge</p>
+    <h2>Checking before you calculate</h2>
+    <table class="tbl">
+      <thead>
+        <tr><th>Check</th><th>Formula</th><th>Finds</th></tr>
+      </thead>
+      <tbody>
+      <tr><td>Existence</td><td><code>=COUNTBLANK(F2:F2191)</code></td><td>The 42 missing rainfall values</td></tr>
+      <tr><td>Type</td><td><code>=COUNT(E2:E2191)</code> vs <code>=COUNTA(...)</code></td><td>Values stored as text &mdash; the &ldquo;82.4 &deg;C&rdquo; problem</td></tr>
+      <tr><td>Range</td><td><code>=COUNTIF(E2:E2191,"&gt;50")</code></td><td>Impossible temperatures</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Run all three before any statistic. A mean computed over a column containing text silently ignores the text rows, and your denominator is wrong.</p>
+  </section>
+
+  <section class="slide exit-slide" data-menu="Exit ticket">
+    <div class="exit-wrap">
+      <p class="eyebrow">Exit ticket</p>
+      <h1>Before you go&hellip;</h1>
+      <ol>
+        <li>Name the four descriptive statistics in the study design.</li>
+        <li>Cape Otway's mean daily rainfall is 2.8&nbsp;mm and its median is 0.0. Explain the gap.</li>
+        <li>Which check would find a temperature stored as &ldquo;24.6 &deg;C&rdquo;?</li>
+      </ol>
+    </div>
+  </section>
+
+
+</main>
+
+<div class="keyhint"><span class="key">&rarr;</span> reveals then advances &middot; <span class="key">&larr;</span> back &middot; <span class="key">M</span> menu &middot; <span class="key">R</span> reveal &middot; <span class="key">N</span> site nav</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&larr;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&rarr;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Topic 15 &mdash; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
