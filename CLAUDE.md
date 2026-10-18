@@ -696,9 +696,20 @@ year7-science/bio-ecosystems: `solutions.html` (answer key),
 `worksheets-all-solutions.html` (the collated worksheet booklet with
 answers), `portfolio-solutions.html` (the Research Portfolio key) and
 `rubric.html` (the Ecosystem Investigation marking tool). In
-year7-science/space: `solutions.html` and
+year7-science/space: `solutions.html`,
 `worksheet-revision-solutions.html` (the revision worksheet's answer
-copy, same shell as `worksheets-all-solutions.html`).
+copy, same shell as `worksheets-all-solutions.html`) and `rubric.html`
+(the Astronomy Test marking tool).
+
+**`bio-ecosystems/rubric.html` is currently an exception to all of this.**
+It was rebuilt as a standalone page on 8 Oct 2026: no `tokens.css` or
+`solutions.css`, its own palette and fonts, and **no `var BLOB` and no
+lockscreen at all**, so it is publicly readable. That may be deliberate
+— a rubric is arguably something students should see — but it means the
+page is no longer an example of the pattern described here. Copy
+`space/rubric.html` instead, or the pre-8-Oct version at `e8d6086`.
+`check-gated.js` reports it "ok" because its placeholder test only fires
+on a blob with an empty `ct`, and this page has no blob to test.
 
 **`portfolio-solutions.html` is not yet encrypted** — it ships the shell
 with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
@@ -735,7 +746,30 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   `<script>` elements, so the unlock handler re-creates each one as a
   fresh node. It also swaps `body.solutions-page` for
   `body.rubric-page` on unlock — otherwise the solutions-page rules
-  out-specify the tool's own.
+  out-specify the tool's own. Test the unlock handler's guard on
+  `BLOB.ct`, not on `BLOB`: a placeholder blob is a truthy object, so a
+  bare `!BLOB` check tells the teacher "Incorrect password" when the real
+  fault is that nobody has encrypted the payload yet.
+- **A unit's rubric payload is generated, not hand-written.** The marking,
+  comment, grouping and print engine is shared; only `STRANDS`,
+  `CRITERIA`, `PARTS` and the unit copy differ. `space/rubric-payload.html`
+  was built from bio's by `tools/build_space_rubric.py`, which asserts
+  every splice matched exactly once — so a change to the engine surfaces
+  as a build failure rather than a half-converted file. Points worth
+  knowing if you generate another one:
+  - Every strand needs a **complete band ladder up to its own `maxBand`**.
+    `topCell()` walks down from `maxBand` and `missedBelow()` penalises
+    gaps, so an empty band in the middle silently caps that strand.
+    `maxBand` and `weight` are per-strand, so a 3-mark topic can band on
+    three levels and still be weighted correctly.
+  - Set `weight` to the task's **actual marks** for the questions behind
+    the strand. Space's six sum to 50, so the overall level is weighted
+    exactly as the paper is.
+  - bio ranks strengths on `band/maxBand` alone, which only works when
+    every strand shares a `maxBand`. Where they differ, scale by
+    `√weight`, and rank next steps on the *gap* rather than the same
+    figure — otherwise a low-`maxBand` strand comes out as both a
+    strength and a next step.
 - The marking tool autosaves to `localStorage` so a refresh doesn't lose
   a class's marks. That means student names and marks sit in the
   browser profile: use *Save file* then *Clear all marks* on a shared
