@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-17",
+ "generated": "2026-10-18",
  "tree": [
   {
    "t": "Home",
@@ -764,12 +764,68 @@ window.SITEMAP = {
          ]
         },
         {
+         "t": "Worksheets",
+         "g": 1,
+         "c": [
+          {
+           "t": "Worksheet 1 · The methodology, data and information",
+           "h": "year11-applied-computing/unit-1/worksheet1.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 2 · Data quality, sources and privacy",
+           "h": "year11-applied-computing/unit-1/worksheet2.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 3 · Ethics, requirements and design",
+           "h": "year11-applied-computing/unit-1/worksheet3.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 4 · Databases, keys and relationships",
+           "h": "year11-applied-computing/unit-1/worksheet4.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 5 · SQL on paper",
+           "h": "year11-applied-computing/unit-1/worksheet5.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 6 · Descriptive statistics",
+           "h": "year11-applied-computing/unit-1/worksheet6.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 7 · Data visualisation",
+           "h": "year11-applied-computing/unit-1/worksheet7.html",
+           "k": "computing"
+          },
+          {
+           "t": "Worksheet 8 · Area of Study 1 — whole revision",
+           "h": "year11-applied-computing/unit-1/worksheet8.html",
+           "k": "computing"
+          }
+         ]
+        },
+        {
          "t": "Resources",
          "g": 1,
          "c": [
           {
            "t": "Unit 1 Outline",
            "h": "year11-applied-computing/unit-1/outline.html",
+           "k": "computing"
+          },
+          {
+           "t": "Unit 1 Workbooks — Data Analysis",
+           "h": "year11-applied-computing/unit-1/workbooks.html",
+           "k": "computing"
+          },
+          {
+           "t": "Unit 1 Worksheets — Revision",
+           "h": "year11-applied-computing/unit-1/worksheets.html",
            "k": "computing"
           }
          ]

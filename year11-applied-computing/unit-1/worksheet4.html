@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worksheet 4 &middot; Databases, keys and relationships | Applied Computing Unit 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Caveat:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/worksheet.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="worksheet-page theme-computing">
+<div class="ws-bar">
+  <a href="index.html">&#8592; Unit 1 hub</a>
+  <a href="worksheets.html">All worksheets</a>
+  <span class="spacer"></span>
+  <span class="hint">Topics 10&ndash;11 &middot; about 45 minutes</span>
+  <button type="button" onclick="window.print()">Print / Save as PDF</button>
+</div>
+<div class="sheet">
+  <div class="ws-head">
+    <div class="ws-tag">Unit 1 &middot; Area of Study 1 &middot; Revision</div>
+    <h1><span class="lnum">4</span>Databases, keys and relationships</h1>
+    <p class="ws-sub">Revision for Topics 10&ndash;11. No computer. Everything is on paper, which is where database design belongs anyway.</p>
+    <div class="namebar">
+      <span>Name</span><span>Class</span><span>Date</span>
+    </div>
+  </div>
+  <div class="infobox"><span class="lbl">How to use this sheet</span>
+  <p>Work through it in order. Part A is the problem; Parts B to E are the fix. If you can do Part D from memory you are ready for the database half of the Outcome 1 task.</p></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Key words</span><span class="part-title">What do these mean?</span><span class="ref">Topics 10&ndash;11</span></div>
+    <p class="part-instr">The first one is done for you. Write the rest <b>from memory</b> &mdash; do not open your booklet yet. When you have written all you can, check them against your booklet and correct them in a different colour. The corrections are the useful part.</p>
+<table class="wtbl"><thead><tr><th>Key word</th><th>What it means &mdash; from memory first</th></tr></thead><tbody><tr class="scaffold"><td><b>relational database</b></td><td>Data split into tables that relate to each other, so each fact is stored once.</td></tr><tr><td><b>table</b></td><td class="fill-lg"></td></tr><tr><td><b>record</b></td><td class="fill-lg"></td></tr><tr><td><b>field</b></td><td class="fill-lg"></td></tr><tr><td><b>redundancy</b></td><td class="fill-lg"></td></tr><tr><td><b>normalisation</b></td><td class="fill-lg"></td></tr><tr><td><b>primary key</b></td><td class="fill-lg"></td></tr><tr><td><b>foreign key</b></td><td class="fill-lg"></td></tr><tr><td><b>referential integrity</b></td><td class="fill-lg"></td></tr></tbody></table>  </section>
+  <div class="ws-runhead"><strong>Worksheet 4 &mdash; Databases, keys and relationships</strong><span>Part A &middot; Topic 10</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part A</span><span class="part-title">One big table, and what is wrong with it</span><span class="ref">Topic 10</span></div>
+    <p class="part-instr">Six rows of a flat weather table are printed below. This is how data arrives when nobody has designed anything.</p>
+    <div class="q"><span class="qn">1</span>
+      <div class="qbody">Read the table, then answer underneath.<table class="wtbl"><thead><tr><th>obs_id</th><th>station_id</th><th>station_name</th><th>region_name</th><th>state</th><th>obs_date</th><th>max_temp_c</th></tr></thead><tbody><tr><td>1</td><td>76031</td><td>Mildura Airport</td><td>Mallee</td><td>VIC</td><td>2025-01-01</td><td>32.1</td></tr><tr><td>2</td><td>76031</td><td>Mildura Airport</td><td>Mallee</td><td>VIC</td><td>2025-01-02</td><td>34.8</td></tr><tr><td>3</td><td>76031</td><td>Mildura Airport</td><td>Mallee</td><td>VIC</td><td>2025-01-03</td><td>29.4</td></tr><tr><td>4</td><td>90015</td><td>Cape Otway Lighthouse</td><td>Western District</td><td>VIC</td><td>2025-01-01</td><td>19.2</td></tr><tr><td>5</td><td>90015</td><td>Cape Otway Lighthouse</td><td>Western District</td><td>VIC</td><td>2025-01-02</td><td>20.6</td></tr><tr><td>6</td><td>86038</td><td>Melbourne Airport</td><td>Greater Melbourne</td><td>VIC</td><td>2025-01-01</td><td>27.5</td></tr></tbody></table><div class="sub-q"><span class="sl">(a)</span>Write down every value that appears more than once, and say how many times each appears in these six rows.<div class="lines" data-lines="4"></div></div><div class="sub-q"><span class="sl">(b)</span>The full table has 2190 rows. Work out roughly how many times &ldquo;Mildura Airport&rdquo; would be written out, given each station recorded one row a day for a year.<div class="lines" data-lines="2"></div></div><div class="sub-q"><span class="sl">(c)</span>Name the term for storing the same fact over and over.<div class="lines" data-lines="1"></div></div></div>
+    </div>
+    <div class="q"><span class="qn">2</span>
+      <div class="qbody">Redundancy is not just wasteful. It lets the data contradict itself.<div class="sub-q"><span class="sl">(a)</span>Someone fixes a typo in &ldquo;Mildura Airport&rdquo; on row 2 only. Describe what the table now claims.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(b)</span>Explain why a query counting observations per station would now return the wrong answer, and say in which direction it would be wrong.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 4 &mdash; Databases, keys and relationships</strong><span>Part B &middot; Topic 11</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part B</span><span class="part-title">Choosing a primary key</span><span class="ref">Topic 11</span></div>
+    <p class="part-instr">A primary key must be <b>unique</b> for every record, <b>never empty</b>, and <b>stable</b> &mdash; it should not change over the life of the record.</p>
+    <div class="q"><span class="qn">3</span>
+      <div class="qbody">For each candidate, say whether it would work as the primary key of a <b>station</b> table, and give the test it passes or fails.<table class="wtbl"><thead><tr><th>Candidate key</th><th>Works?</th><th>Which test, and why</th></tr></thead><tbody><tr class="scaffold"><td>station_id</td><td>Yes</td><td>Unique, never empty, and it never changes. All three tests pass.</td></tr><tr><td>station_name</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>region_id</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>latitude</td><td class="fill-lg"></td><td class="fill-lg"></td></tr><tr><td>latitude and longitude together</td><td class="fill-lg"></td><td class="fill-lg"></td></tr></tbody></table></div>
+    </div>
+    <div class="q"><span class="qn">4</span>
+      <div class="qbody">The <b>observation</b> table records one row per station per day.<div class="sub-q"><span class="sl">(a)</span>Explain why <b>obs_date</b> on its own cannot be the primary key.<div class="lines" data-lines="2"></div></div><div class="sub-q"><span class="sl">(b)</span>Name a <b>composite key</b> that would uniquely identify every observation, and explain why it works.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 4 &mdash; Databases, keys and relationships</strong><span>Part C &middot; Topic 11</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part C</span><span class="part-title">Foreign keys</span><span class="ref">Topic 11</span></div>
+    <p class="part-instr">A foreign key lives on the <b>many</b> side of a relationship. Three tables: <b>region</b>(region_id, region_name, state) &middot; <b>station</b>(station_id, station_name, region_id, elevation_m) &middot; <b>observation</b>(obs_id, station_id, obs_date, max_temp_c, rainfall_mm).</p>
+    <div class="q"><span class="qn">5</span>
+      <div class="qbody">Complete the table of relationships.<table class="wtbl"><thead><tr><th>Relationship</th><th>Foreign key &mdash; which field, in which table</th><th>Which table it points at</th></tr></thead><tbody><tr class="scaffold"><td>A station belongs to one region; a region has many stations.</td><td>station.region_id</td><td>region.region_id</td></tr><tr><td>An observation is taken at one station; a station has many observations.</td><td class="fill-lg"></td><td class="fill-lg"></td></tr></tbody></table></div>
+    </div>
+    <div class="q"><span class="qn">6</span>
+      <div class="qbody">Someone suggests putting <b>station_id</b> in the <b>region</b> table instead.<div class="sub-q"><span class="sl">(a)</span>Explain why that cannot work, using the words <i>one</i> and <i>many</i>.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(b)</span>State the rule for which side of a relationship carries the foreign key.<div class="lines" data-lines="2"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 4 &mdash; Databases, keys and relationships</strong><span>Part D &middot; Topics 10&ndash;11</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part D</span><span class="part-title">Normalising the flat table</span><span class="ref">Topics 10&ndash;11</span></div>
+    <p class="part-instr">Split the flat table into tables where each fact is stored once. The flat table&rsquo;s fields are: <b>obs_id, station_id, station_name, region_name, state, obs_date, max_temp_c</b>.</p>
+    <div class="q"><span class="qn">7</span>
+      <div class="qbody">Draw the normalised design. Draw a box for each table. Inside each box list its fields, <u>underline</u> the primary key, and put a <b>*</b> beside each foreign key. Then draw an arrow from each foreign key to the key it points at, and label each arrow <i>one-to-many</i>.<div class="drawbox" data-h="lg">Your design</div></div>
+    </div>
+    <div class="q"><span class="qn">8</span>
+      <div class="qbody">Check your own design.<div class="sub-q"><span class="sl">(a)</span>How many tables did you draw, and what is the one kind of thing each one describes?<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(b)</span>Name one fact that was stored many times in the flat table and is now stored exactly once. Say which table it lives in.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(c)</span>Every table and field name should be lower_snake_case. Write out two of your field names to show you have done this, and say why a naming convention matters even though SQLite does not enforce it.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Worksheet 4 &mdash; Databases, keys and relationships</strong><span>Part E &middot; Topic 11</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Part E</span><span class="part-title">Referential integrity</span><span class="ref">Topic 11</span></div>
+    <p class="part-instr">Referential integrity means the relationships actually hold: every foreign key points at a record that exists. In SQLite it is switched off until you switch it on.</p>
+    <div class="q"><span class="qn">9</span>
+      <div class="qbody">An observation row records <b>station_id = 99999</b>, and no station with that id exists.<div class="sub-q"><span class="sl">(a)</span>Name the term for a record like this.<div class="lines" data-lines="1"></div></div><div class="sub-q"><span class="sl">(b)</span>Explain what happens to that row when you join observation to station, and say whether you would notice.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(c)</span>State what you would have to turn on in SQLite to stop the row being accepted in the first place.<div class="lines" data-lines="2"></div></div></div>
+    </div>
+    <div class="q"><span class="qn">10</span>
+      <div class="qbody">Deleting a region that still has stations in it would break referential integrity.<div class="sub-q"><span class="sl">(a)</span>Explain what would be wrong with the station records afterwards.<div class="lines" data-lines="3"></div></div><div class="sub-q"><span class="sl">(b)</span>Give two different things a database could reasonably do when someone tries that deletion.<div class="lines" data-lines="3"></div></div></div>
+    </div>
+  </section>
+  <div class="ws-runhead"><strong>Check &mdash; Before you put this away</strong><span>Self-assessment</span></div>
+  <section class="part">
+    <div class="part-head"><span class="part-label">Check</span><span class="part-title">Before you put this away</span></div>
+    <p class="part-instr">Tick every box you can honestly say yes to. Anything left unticked is what to go back over.</p>
+    <ul class="tick"><li>I can find the redundancy in a flat table and say what it costs.</li><li>I can explain how redundancy lets a table contradict itself.</li><li>I can test a candidate primary key for uniqueness, emptiness and stability.</li><li>I can name a composite key and say why it is needed.</li><li>I can say which side of a one-to-many relationship carries the foreign key.</li><li>I can normalise a flat table into its tables and draw the relationships.</li><li>I can explain referential integrity, orphan records, and what SQLite does by default.</li></ul>
+  </section>
+  <div class="y8box"><span class="lbl">If you finish early &middot; not marked</span>
+<p><b>1.</b> The flat table has <b>state</b> in every row, and every row says VIC. Argue both sides: should <b>state</b> live in the region table, or is it fine where it is?</p><div class="lines" data-lines="4"></div><p><b>2.</b> A station is renamed. Describe exactly what has to change in the normalised design, and what would have had to change in the flat table.</p><div class="lines" data-lines="3"></div>  </div>
+  <div class="ws-foot"><span>Worksheet 4 &middot; Databases, keys and relationships</span><span>Unit 1 &middot; Applied Computing</span></div>
+</div>
+
+</body>
+</html>
