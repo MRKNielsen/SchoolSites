@@ -770,6 +770,17 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
     `√weight`, and rank next steps on the *gap* rather than the same
     figure — otherwise a low-`maxBand` strand comes out as both a
     strength and a next step.
+  - **Run `node tools/test-space-rubric.js` after every rebuild.** It boots
+    the payload in jsdom the way the unlocked page does and drives it —
+    class entry, tick cycling, bands, comments, groups, print, autosave
+    round-trip. The first Space build shipped with ~12,600 characters
+    spliced out (`persist`, `restore`, `demo` and the CSV/file handling)
+    and threw on boot; the checks at the time only ran the part of the
+    script above the render functions, which is exactly the part that
+    survived. Needs `npm install jsdom`.
+  - Give each unit its **own autosave key**. bio uses
+    `"ecosystem-rubric:v1"`; leaving it unchanged makes two rubrics open in
+    one browser share a localStorage slot and overwrite each other.
 - The marking tool autosaves to `localStorage` so a refresh doesn't lose
   a class's marks. That means student names and marks sit in the
   browser profile: use *Save file* then *Clear all marks* on a shared

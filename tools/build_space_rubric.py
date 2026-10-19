@@ -19,7 +19,9 @@ REPO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 # Sample class for the Demo button: six students across the band range, with a
 # couple of not-attempted marks so the "worst part" and grouping logic have
 # something to show. Band array is one value per strand, s1..s6, in order.
-DEMO = '''  const rows = [
+DEMO_FN = '''function demo(){
+  state.meta = {cls:"7C", teacher:"Mr K Nielsen", task:"Astronomy Test (CAT 5)", date:"Term 4, 2026"};
+  const rows = [
     ["Ava Chen","she",      [3,3,4,3,3,2]],
     ["Ben Novak","he",      [2,2,2,2,2,2]],
     ["Charlie Doust","they",[1,2,1,1,1,1]],
@@ -80,12 +82,52 @@ def swap_const(text, name, opener, new_literal):
 
 
 def span_of(text, start_literal, end_literal):
-    """[start, end) of a run from a literal to the first end-literal after it."""
-    a = text.find(start_literal)
-    assert a != -1, f"start not found: {start_literal[:50]}"
+    """[start, end) of a run from a literal to the first end-literal after it.
+
+    The start literal MUST be unique. It was not, once: `const rows = [`
+    appears three times in bio's payload, this matched the first (inside
+    exportCSV) and the splice deleted ~12,600 characters through to the end
+    of demo() — persist, restore, demo, the CSV import/export and the file
+    handling all went with it. The page then threw "restore is not defined"
+    on boot and rendered chrome with no marking grid.
+    """
+    n = text.count(start_literal)
+    assert n == 1, (f"start literal matched {n} times, expected 1 — pick a "
+                    f"unique anchor: {start_literal[:60]!r}")
+    a = text.index(start_literal)
     b = text.find(end_literal, a)
     assert b != -1, f"end not found after {start_literal[:50]}"
     return a, b + len(end_literal)
+
+
+def function_span(text, name):
+    """[start, end) of `function NAME(...){ ... }`, by brace balance.
+
+    Safer than matching the closing literal, which depends on indentation
+    that is not unique anywhere in this file.
+    """
+    m = re.search(r"\nfunction\s+" + re.escape(name) + r"\s*\(", text)
+    assert m, f"function {name} not found"
+    i = text.index("{", m.end() - 1)
+    d, j, instr = 0, i, None
+    while j < len(text):
+        ch = text[j]
+        if instr:
+            if ch == "\\":
+                j += 2
+                continue
+            if ch == instr:
+                instr = None
+        elif ch in "\"'`":
+            instr = ch
+        elif ch == "{":
+            d += 1
+        elif ch == "}":
+            d -= 1
+            if d == 0:
+                return m.start() + 1, j + 1
+        j += 1
+    raise AssertionError(f"function {name} unbalanced")
 
 
 def sub1(text, pat, rep, flags=0, what="", expect=1):
@@ -115,6 +157,14 @@ def main():
     # ---- save format: this is a new tool, so start its versioning clean
     t = sub1(t, r'const SAVE_VERSION = \d+;', 'const SAVE_VERSION = 1;',
              what="SAVE_VERSION")
+
+    # ---- namespace the autosave key -----------------------------------
+    # bio's key is "ecosystem-rubric:v1". Left as-is, a teacher with both
+    # rubrics open in one browser has them share a single localStorage slot
+    # and silently overwrite each other's marks — the autosave is keyed by
+    # tool, not by page, so same key means same data.
+    t = sub1(t, re.escape('"ecosystem-rubric:v1"'), '"astronomy-rubric:v1"',
+             what="autosave key", expect=2)
     a, b = block(t, "MIGRATIONS", "{")
     t = t[:a] + ('const MIGRATIONS = {};   /* v1 — no prior save format to migrate from */') + t[b:]
 
@@ -193,8 +243,9 @@ def main():
 
     # ---- demo class: bio's rows carry species, 7 bands and bio criterion
     # ids, none of which exist here. Rewrite for Space's 6 strands.
-    a, b = span_of(t, "  const rows = [", "    return st;\n  });\n}\n")
-    t = t[:a] + DEMO + t[b:]
+    # Anchored on the function itself, not on `const rows = [` — see span_of.
+    a, b = function_span(t, "demo")
+    t = t[:a] + DEMO_FN + t[b:]
 
     # ---- rank strengths and next steps by weight as well as by band ----
     # bio ranks on band/maxBand alone, which is fine when every strand has the
@@ -242,6 +293,26 @@ def main():
         assert word not in t, f"bio leftover: {word}"
     assert "Astronomy Test" in t
     print("  no bio leftovers")
+
+    # Every top-level function bio defines must survive, except the ones this
+    # builder removes on purpose. Without this check a splice that swallows
+    # neighbouring code is invisible until the page throws in front of a
+    # class — which is exactly what happened on 19 Oct with `const rows = [`.
+    def top_level_fns(src):
+        js = src[src.index("<script>"):]
+        return set(re.findall(r"\n\s*(?:async\s+)?function\s+([A-Za-z_$][\w$]*)", js))
+
+    INTENTIONALLY_REMOVED = {"matchSpecies"}
+    lost = (top_level_fns(open(SRC, encoding="utf-8").read())
+            - top_level_fns(t) - INTENTIONALLY_REMOVED)
+    assert not lost, ("a splice swallowed code — these functions vanished: "
+                      + ", ".join(sorted(lost)))
+    print(f"  all {len(top_level_fns(t))} engine functions intact")
+
+    # The boot path must be able to find what it calls.
+    for name in ("restore", "persist", "demo", "renderAll", "boot"):
+        assert re.search(r"function\s+" + name + r"\s*\(", t), f"missing {name}()"
+    print("  boot path intact (restore, persist, demo, renderAll, boot)")
 
 
 if __name__ == "__main__":

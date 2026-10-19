@@ -42,6 +42,56 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 7 gated pages.
 
+### Fixed — Space rubric shipped broken, and why the checks missed it (19 Oct 2026)
+
+The first build of `space/rubric-payload.html` was **missing ~12,600
+characters** and threw `ReferenceError: restore is not defined` on boot. The
+page unlocked, drew its tab bar and panel headings, and then stopped — so it
+looked like a rubric with no rubric in it. Kodie found it by opening it.
+
+Cause: a splice in `tools/build_space_rubric.py` anchored on
+`const rows = [`, which occurs **three times** in bio's payload. It matched
+the first (inside `exportCSV`) and deleted everything from there to the end
+of `demo()`, taking `persist`, `restore`, `demo`, `importCSV`, `importJSON`,
+`parseCSV` and `handleFile` with it. `span_of()` asserted that its *end*
+literal was findable but never that its *start* was unique — unlike
+`sub1()`, which did check.
+
+**The checks could not have caught it.** They extracted the script and cut
+it at the render functions to get a DOM-free slice to run under node. Every
+deleted function lived below that cut. The slice passed, and passed
+honestly — it just could not see the half of the file that was gone. A test
+that only exercises the part you kept proves nothing about the part you
+spliced.
+
+Three things now stand between this and a repeat:
+
+- `span_of()` asserts its start literal is unique, and the demo splice is
+  anchored with a new `function_span()` that finds `function demo(` and
+  walks braces instead of matching indentation.
+- The builder diffs the set of top-level functions against bio's and fails
+  if any vanished that it did not mean to remove, then explicitly confirms
+  `restore`, `persist`, `demo`, `renderAll` and `boot` all still exist.
+- **`node tools/test-space-rubric.js`** boots the payload in jsdom exactly
+  as `rubric.html` does after unlocking, then drives it: enters a class,
+  cycles ticks through successful / not-attempted / clear, marks a student
+  out and checks the bands, comment, teaching groups and printable rubric,
+  and round-trips the autosave. Run it after every rebuild. Needs
+  `npm install jsdom`.
+
+Found while fixing it: the autosave key was still bio's
+`"ecosystem-rubric:v1"`, so a teacher with both rubrics open in one browser
+would have had them share a single localStorage slot and silently overwrite
+each other's marks. Now `"astronomy-rubric:v1"`.
+
+Two traps the harness itself hit, noted in its header: `boot()` is async, so
+it must be settled before the UI is driven or `demo()` lands on top of the
+test's class; and `applyRoll()` deliberately keeps the marks of any student
+already listed by name, so a test roll must not reuse the demo's names.
+
+**Kodie must re-encrypt**: the blob pasted in on 19 Oct was made from the
+broken payload. Re-run `tools/staff-crypt.html` against the rebuilt one.
+
 ### Landed — Space CAT 5 rubric & report generator (19 Oct 2026)
 
 `year7-science/space/rubric.html` — the Astronomy Test marking tool, built
