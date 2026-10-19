@@ -190,6 +190,19 @@ def main():
          'one column per criterion, in test order', 'csv help'),
         ('CRITERIA — what the teacher actually ticks, in booklet order.',
          'CRITERIA — what the teacher actually ticks, in test order.', 'criteria comment'),
+        # the masthead back-link still pointed at bio's unit by name
+        ('&#8592; Biodiversity &amp; Ecosystems', '&#8592; Space', 'unit back link'),
+        # the grid's own help text describes where the columns come from
+        ('Columns follow the Student Booklet question by question. Where the '
+         'rubric splits one question across two bands it appears as (i) and (ii) '
+         'under that question number.',
+         'Columns follow the Astronomy Test question by question. Where the '
+         'rubric splits one question across two bands it appears as (i) and (ii) '
+         'under that question number.', 'grid help text'),
+        ('/* label a criterion the way the Student Booklet numbers it: "A3 (i)", "A4a" */',
+         '/* label a criterion the way the test numbers it: "Q4b (i)", "Q7c (ii)" */',
+         'qLabel comment'),
+        ('Biodiversity & Ecosystems unit.', 'Year 7 Space unit.', 'header blurb'),
     ]
     for pat, rep, what in reps:
         t = sub1(t, re.escape(pat), rep.replace("\\", "\\\\"), what=what)
@@ -200,7 +213,10 @@ def main():
                  ("the booklet", "the test"),
                  ("this investigation", "this test"),
                  ("Across this investigation", "Across this test"),
-                 ("-ecosystem-rubric-", "-astronomy-rubric-")]:
+                 # downloaded filenames: "7C-ecosystem-rubric-<date>.json"
+                 # and "7C-ecosystem-marks-<date>.csv"
+                 ("-ecosystem-rubric-", "-astronomy-rubric-"),
+                 ("-ecosystem-marks", "-astronomy-marks")]:
         t = t.replace(a, b)
 
     # ---- strip the per-student species, UI and all -------------------
@@ -289,9 +305,15 @@ def main():
     print(f"  {orig_len:,} -> {len(t):,} bytes")
 
     # ---- sanity checks ------------------------------------------------
-    for word in ("Regent Honeyeater", "Ecosystem Investigation", "matchSpecies(parts"):
-        assert word not in t, f"bio leftover: {word}"
-    assert "Astronomy Test" in t
+    # Sweep for bio wording anywhere outside this builder's own header
+    # comment. The back-link in the masthead read "← Biodiversity &
+    # Ecosystems" in the first two builds — visible on screen, and missed
+    # because the checks only looked for a handful of named strings.
+    body = t[t.index("-->") + 3:]
+    for word in ("Regent Honeyeater", "Ecosystem Investigation", "matchSpecies(parts",
+                 "Biodiversity", "bio-ecosystems", "Student Booklet", "ecosystem"):
+        assert word not in body, f"bio leftover in the payload body: {word!r}"
+    assert "Astronomy Test" in body
     print("  no bio leftovers")
 
     # Every top-level function bio defines must survive, except the ones this
