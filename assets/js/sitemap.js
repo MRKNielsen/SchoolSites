@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-18",
+ "generated": "2026-10-19",
  "tree": [
   {
    "t": "Home",
@@ -453,6 +453,11 @@ window.SITEMAP = {
           {
            "t": "Retrieval Quiz",
            "h": "year7-science/space/quiz.html",
+           "k": "space"
+          },
+          {
+           "t": "Astronomy Test — Rubric & Report Generator | Year 7 Space",
+           "h": "year7-science/space/rubric.html",
            "k": "space"
           },
           {

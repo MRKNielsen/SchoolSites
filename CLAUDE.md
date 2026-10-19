@@ -700,6 +700,20 @@ year7-science/space: `solutions.html` and
 `worksheet-revision-solutions.html` (the revision worksheet's answer
 copy, same shell as `worksheets-all-solutions.html`).
 
+**Neither rubric is gated.** `space/rubric.html` was, for a day, and every
+content fix cost a decrypt / edit / re-encrypt / paste round that could not
+be checked until after it shipped — four of them, three for defects a look
+at the rendered page would have caught at once. Marks and student names live
+in the teacher's browser, never in the page; the lock only covered the
+criteria and band descriptors. Ungated 19 Oct 2026 at Kodie's call;
+`bio-ecosystems/rubric.html` has been ungated since 8 Oct.
+
+**`bio-ecosystems/rubric.html` is a standalone page**, rebuilt 8 Oct 2026:
+no `tokens.css`, its own palette and fonts, no lockscreen. `space/rubric.html`
+is the one to copy — ungated too, but on the design system. For the gated
+shell itself, take `space/rubric.html` at `62a193d`, and note it used the
+older single-layer unlock and could not open a v2 blob (see below).
+
 **`portfolio-solutions.html` is not yet encrypted** — it ships the shell
 with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
 locks but cannot unlock. Encrypt `portfolio-solutions-payload.html`
@@ -721,6 +735,14 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   payload's mtime against its gated page, flags a placeholder (empty
   `ct`) blob, and diffs the payload's `QN.M` set against the built
   booklet PDF. Exits 1 if anything is off.
+- **The blob is v2**: the payload is encrypted once under a random content
+  key, and that key is wrapped under each password in a `keys[]` array. An
+  unlock handler must try each wrapper, derive the KEK, unwrap the content
+  key, then decrypt the payload. The older single-layer
+  `{salt, iv, iter, ct}` form reads `BLOB.salt`/`BLOB.iter`, which are
+  `undefined` in a v2 blob — so it answers "Incorrect password" to every
+  password. `space/worksheet-revision-solutions.html` has the current
+  implementation; copy from there.
 - **`tools/staff-crypt.html`** does the encrypting and decrypting —
   open it locally, it never sends the password anywhere. Editing a gated
   page means: decrypt → edit the payload → re-encrypt → paste the new
@@ -735,7 +757,41 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   `<script>` elements, so the unlock handler re-creates each one as a
   fresh node. It also swaps `body.solutions-page` for
   `body.rubric-page` on unlock — otherwise the solutions-page rules
-  out-specify the tool's own.
+  out-specify the tool's own. Test the unlock handler's guard on
+  `BLOB.ct`, not on `BLOB`: a placeholder blob is a truthy object, so a
+  bare `!BLOB` check tells the teacher "Incorrect password" when the real
+  fault is that nobody has encrypted the payload yet.
+- **A unit's rubric is generated, not hand-written.** The marking,
+  comment, grouping and print engine is shared; only `STRANDS`,
+  `CRITERIA`, `PARTS` and the unit copy differ. `space/rubric.html`
+  is built from bio's payload by `tools/build_space_rubric.py`, which asserts
+  every splice matched exactly once — so a change to the engine surfaces
+  as a build failure rather than a half-converted file. Points worth
+  knowing if you generate another one:
+  - Every strand needs a **complete band ladder up to its own `maxBand`**.
+    `topCell()` walks down from `maxBand` and `missedBelow()` penalises
+    gaps, so an empty band in the middle silently caps that strand.
+    `maxBand` and `weight` are per-strand, so a 3-mark topic can band on
+    three levels and still be weighted correctly.
+  - Set `weight` to the task's **actual marks** for the questions behind
+    the strand. Space's six sum to 50, so the overall level is weighted
+    exactly as the paper is.
+  - bio ranks strengths on `band/maxBand` alone, which only works when
+    every strand shares a `maxBand`. Where they differ, scale by
+    `√weight`, and rank next steps on the *gap* rather than the same
+    figure — otherwise a low-`maxBand` strand comes out as both a
+    strength and a next step.
+  - **Run `node tools/test-space-rubric.js` after every rebuild.** It boots
+    the payload in jsdom the way the unlocked page does and drives it —
+    class entry, tick cycling, bands, comments, groups, print, autosave
+    round-trip. The first Space build shipped with ~12,600 characters
+    spliced out (`persist`, `restore`, `demo` and the CSV/file handling)
+    and threw on boot; the checks at the time only ran the part of the
+    script above the render functions, which is exactly the part that
+    survived. Needs `npm install jsdom`.
+  - Give each unit its **own autosave key**. bio uses
+    `"ecosystem-rubric:v1"`; leaving it unchanged makes two rubrics open in
+    one browser share a localStorage slot and overwrite each other.
 - The marking tool autosaves to `localStorage` so a refresh doesn't lose
   a class's marks. That means student names and marks sit in the
   browser profile: use *Save file* then *Clear all marks* on a shared
