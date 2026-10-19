@@ -173,6 +173,7 @@ th.pgroup.pA{background:var(--tint);color:var(--part-a)}
 th.pgroup.pB{background:var(--part-b-bg);color:var(--part-b)}
 th.pgroup.pC{background:var(--part-c-bg);color:var(--part-c)}
 th.pgroup.pD{background:var(--part-d-bg);color:var(--part-d)}
+th.pgroup.pE{background:var(--tint-soft);color:var(--ink-soft)}
 
 tr.hrow th{background:var(--surface);padding:5px 2px 4px;text-align:center;font-weight:700;
   border-bottom:1px solid var(--rule)}
@@ -751,48 +752,53 @@ const SPECIES = [];   /* Space has no per-student artefact */;
    strand:null are recorded but sit outside the rubric.
    ========================================================================= */
 const CRITERIA = [
- {id:"Q1a",   q:"Q1",      sub:"Earth", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1},
- {id:"Q1b",   q:"Q1",      sub:"Sun",   part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2},
- {id:"Q6a",   q:"Q6a",     sub:"",      part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2},
- {id:"Q6b",   q:"Q6b",     sub:"",      part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3},
- {id:"Q10",   q:"Q10",     sub:"",      part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4},
-
- {id:"Q2a",   q:"Q2a",     sub:"i, ii", part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1},
- {id:"Q2c",   q:"Q2c",     sub:"",      part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1},
- {id:"Q3c",   q:"Q3",      sub:"b, c",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1},
- {id:"Q2b",   q:"Q2b",     sub:"",      part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2},
- {id:"Q3a",   q:"Q3a",     sub:"winter",part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2},
- {id:"Q3b",   q:"Q3a",     sub:"autumn",part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3},
- {id:"Q3d",   q:"Q3d",     sub:"",      part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3},
- {id:"Q11a",  q:"Q11",     sub:"diagram",part:"B",label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3},
- {id:"Q11b",  q:"Q11",     sub:"explain",part:"B",label:"Explains January and July, referring to the diagram",        strand:"s2", band:4},
-
- {id:"Q4a",   q:"Q4a",     sub:"",      part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1},
- {id:"Q4e",   q:"Q4e",     sub:"",      part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1},
- {id:"Q4b",   q:"Q4b",     sub:"i, ii", part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q4c",   q:"Q4c",     sub:"i, ii", part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q5a",   q:"Q5a",     sub:"",      part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2},
- {id:"Q5b",   q:"Q5b",     sub:"",      part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3},
- {id:"Q5c",   q:"Q5c",     sub:"",      part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3},
- {id:"Q4d",   q:"Q4d",     sub:"i, ii", part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4},
-
- {id:"Q7a",   q:"Q7a",     sub:"",      part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1},
- {id:"Q7b",   q:"Q7b",     sub:"",      part:"D", label:"Names two gas giants",                                       strand:"s4", band:1},
- {id:"Q7ci",  q:"Q7c",     sub:"i",     part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2},
- {id:"Q7di",  q:"Q7d",     sub:"i",     part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2},
- {id:"Q7cii", q:"Q7c",     sub:"ii",    part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3},
- {id:"Q7dii", q:"Q7d",     sub:"ii",    part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4},
-
- {id:"Q8a",   q:"Q8a",     sub:"",      part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1},
- {id:"Q8bi",  q:"Q8b",     sub:"season",part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2},
- {id:"Q8bii", q:"Q8b",     sub:"emus",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3},
-
- {id:"Q9a",   q:"Q9a",     sub:"",      part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1},
- {id:"Q9bi",  q:"Q9b",     sub:"1",     part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2},
- {id:"Q9bii", q:"Q9b",     sub:"2",     part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3}
+ {id:"Q1a",   q:"Q1",  sub:"ear", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1},
+ {id:"Q1b",   q:"Q1",  sub:"sun", part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2},
+ {id:"Q2a",   q:"Q2",  sub:"a",   part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1},
+ {id:"Q2b",   q:"Q2",  sub:"b",   part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2},
+ {id:"Q2c",   q:"Q2",  sub:"c",   part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1},
+ {id:"Q3a",   q:"Q3",  sub:"a1",  part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2},
+ {id:"Q3b",   q:"Q3",  sub:"a2",  part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3},
+ {id:"Q3c",   q:"Q3",  sub:"bc",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1},
+ {id:"Q3d",   q:"Q3",  sub:"d",   part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3},
+ {id:"Q4a",   q:"Q4",  sub:"a",   part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1},
+ {id:"Q4b",   q:"Q4",  sub:"b",   part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2},
+ {id:"Q4c",   q:"Q4",  sub:"c",   part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2},
+ {id:"Q4d",   q:"Q4",  sub:"d",   part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4},
+ {id:"Q4e",   q:"Q4",  sub:"e",   part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1},
+ {id:"Q5a",   q:"Q5",  sub:"a",   part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2},
+ {id:"Q5b",   q:"Q5",  sub:"b",   part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3},
+ {id:"Q5c",   q:"Q5",  sub:"c",   part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3},
+ {id:"Q6a",   q:"Q6",  sub:"a",   part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2},
+ {id:"Q6b",   q:"Q6",  sub:"b",   part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3},
+ {id:"Q7a",   q:"Q7",  sub:"a",   part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1},
+ {id:"Q7b",   q:"Q7",  sub:"b",   part:"D", label:"Names two gas giants",                                       strand:"s4", band:1},
+ {id:"Q7ci",  q:"Q7",  sub:"ci",  part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2},
+ {id:"Q7cii", q:"Q7",  sub:"cii", part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3},
+ {id:"Q7di",  q:"Q7",  sub:"di",  part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2},
+ {id:"Q7dii", q:"Q7",  sub:"dii", part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4},
+ {id:"Q8a",   q:"Q8",  sub:"a",   part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1},
+ {id:"Q8bi",  q:"Q8",  sub:"b1",  part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2},
+ {id:"Q8bii", q:"Q8",  sub:"b2",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3},
+ {id:"Q9a",   q:"Q9",  sub:"a",   part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1},
+ {id:"Q9bi",  q:"Q9",  sub:"b1",  part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2},
+ {id:"Q9bii", q:"Q9",  sub:"b2",  part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3},
+ {id:"Q10",   q:"Q10", sub:"",    part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4},
+ {id:"Q11a",  q:"Q11", sub:"dia", part:"B", label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3},
+ {id:"Q11b",  q:"Q11", sub:"exp", part:"B", label:"Explains January and July, referring to the diagram",        strand:"s2", band:4}
 ];
 /* label a criterion the way the test numbers it: "Q4b (i)", "Q7c (ii)" */
 const qLabel = c => c.q + (c.sub ? " (" + c.sub + ")" : "");
+
+/* Column order for the marking grid only. Sorting by question number and
+   then by criterion id reproduces the paper's order exactly, because the
+   ids were written to run in paper order within each question — asserted
+   in tools/test-space-rubric.js so a future renaming cannot break it
+   silently. */
+const qNum = c => parseInt(String(c.q).replace(/^\D+/, ""), 10) || 0;
+const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
+  qNum(CRITERIA[a]) - qNum(CRITERIA[b]) ||
+  (CRITERIA[a].id < CRITERIA[b].id ? -1 : CRITERIA[a].id > CRITERIA[b].id ? 1 : 0));
 
 /* Booklet numbering has changed twice. Saved files carry a version, and each
    step below renames that version's tick ids into the next one's.
@@ -1175,19 +1181,20 @@ function headRowHTML(){
   // row 1: one cell per booklet question, spanning its sub-parts
   let h = "<tr class='hrow'><th class='stu'>Student</th>";
   let i = 0;
-  while(i < CRITERIA.length){
-    const c = CRITERIA[i];
+  while(i < MARK_COLS.length){
+    const c = CRITERIA[MARK_COLS[i]];
     let n = 1;
-    while(i + n < CRITERIA.length && CRITERIA[i+n].q === c.q) n++;
-    const first = i === 0 || CRITERIA[i-1].part !== c.part;
+    while(i + n < MARK_COLS.length && CRITERIA[MARK_COLS[i+n]].q === c.q) n++;
+    const first = i === 0 || CRITERIA[MARK_COLS[i-1]].part !== c.part;
     h += "<th class='q p"+c.part+(first?" pstart":"")+"' colspan='"+n+"'>"+esc(c.q)+"</th>";
     i += n;
   }
   h += "<th class='bandcol' rowspan='2'>Bands</th><th class='lvlcol' rowspan='2'>Level</th></tr>";
   // row 2: the sub-part, for the questions the rubric splits across bands
   h += "<tr class='srow'><th class='stu'></th>";
-  CRITERIA.forEach((c,ci) => {
-    const first = ci===0 || CRITERIA[ci-1].part !== c.part;
+  MARK_COLS.forEach((ci,k) => {
+    const c = CRITERIA[ci];
+    const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
     h += "<th class='qsub p"+c.part+(first?" pstart":"")+"' title='"+esc(qLabel(c)+" — "+c.label)+"'>"
        + (c.sub ? esc(c.sub) : "<span class='dot'>&middot;</span>") + "</th>";
   });
@@ -1196,10 +1203,16 @@ function headRowHTML(){
 }
 function partRowHTML(){
   let h = "<tr class='prow'><th class='stu'></th>";
-  PARTS.forEach(pt => {
-    const n = CRITERIA.filter(c => c.part === pt.id).length;
-    h += "<th class='pgroup p"+pt.id+"' colspan='"+n+"'>"+esc(pt.name)+"</th>";
-  });
+  let i = 0;
+  while(i < MARK_COLS.length){
+    const pid = CRITERIA[MARK_COLS[i]].part;
+    let n = 1;
+    while(i + n < MARK_COLS.length && CRITERIA[MARK_COLS[i+n]].part === pid) n++;
+    const pt = PARTS.find(p => p.id === pid) || {id:pid, name:pid};
+    h += "<th class='pgroup p"+pid+"' colspan='"+n+"' title='"+esc(pt.name)+"'>"
+       + esc(n < 4 ? pt.id : pt.name) + "</th>";
+    i += n;
+  }
   h += "<th colspan='2'></th></tr>";
   return h;
 }
@@ -1220,8 +1233,9 @@ function renderMark(){
   state.students.forEach((st, ri) => {
     if(ri > 0 && ri % HEADER_EVERY === 0) h += headRowHTML().replace("class='hrow'", "class='hrow repeat'");
     h += "<tr class='row'><td class='stu'><span class='nm'>"+esc(st.name)+"</span></td>";
-    CRITERIA.forEach((c,ci) => {
-      const first = ci===0 || CRITERIA[ci-1].part !== c.part;
+    MARK_COLS.forEach((ci,k) => {
+      const c = CRITERIA[ci];
+      const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
       const v = st.q[c.id];
       const cls = v === true ? "on" : v === "x" ? "no" : "";
       const word = v === true ? "successful" : v === "x" ? "not attempted" : "not marked";
@@ -1293,8 +1307,8 @@ function gridKey(e, ri, ci){
   let nr = ri, nc = ci;
   if(k === "ArrowDown") nr = Math.min(ri+1, state.students.length-1);
   else if(k === "ArrowUp") nr = Math.max(ri-1, 0);
-  else if(k === "ArrowRight") nc = Math.min(ci+1, CRITERIA.length-1);
-  else if(k === "ArrowLeft") nc = Math.max(ci-1, 0);
+  else if(k === "ArrowRight") nc = MARK_COLS[Math.min(MARK_COLS.indexOf(ci)+1, MARK_COLS.length-1)];
+  else if(k === "ArrowLeft")  nc = MARK_COLS[Math.max(MARK_COLS.indexOf(ci)-1, 0)];
   else return;
   e.preventDefault();
   const el = $("#markTable").querySelector("[data-r='"+nr+"'][data-c='"+nc+"']");

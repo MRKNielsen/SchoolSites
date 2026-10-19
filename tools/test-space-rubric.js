@@ -72,6 +72,46 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   window.eval('cycleTick(0,0);');
   ok(window.eval('state.students[0].q.Q1a') === undefined, 'click 3 = cleared');
 
+  console.log('\n=== the grid runs in paper order, not strand order ===');
+  const order = window.eval('JSON.stringify(MARK_COLS.map(i => CRITERIA[i].id))');
+  const ids = JSON.parse(order);
+  const want = ['Q1a','Q1b','Q2a','Q2b','Q2c','Q3a','Q3b','Q3c','Q3d',
+                'Q4a','Q4b','Q4c','Q4d','Q4e','Q5a','Q5b','Q5c','Q6a','Q6b',
+                'Q7a','Q7b','Q7ci','Q7cii','Q7di','Q7dii',
+                'Q8a','Q8bi','Q8bii','Q9a','Q9bi','Q9bii','Q10','Q11a','Q11b'];
+  ok(JSON.stringify(ids) === JSON.stringify(want),
+     'columns are Q1\u2192Q11 in paper order');
+  if (JSON.stringify(ids) !== JSON.stringify(want)) console.log('        got: ' + ids.join(' '));
+
+  /* the header must read Q1..Q11 left to right, once each */
+  const qs = $$('#markTable tr.hrow th.q').map(e => e.textContent.trim());
+  ok(JSON.stringify(qs) === JSON.stringify(
+       ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10','Q11']),
+     'header row reads ' + qs.join(' '));
+
+  /* CRITERIA itself must NOT have been reordered — the bands, the printed
+     rubric and the reference table all read it in strand order */
+  /* MARK_COLS must cover every criterion exactly once, whatever order
+     CRITERIA happens to be listed in */
+  const sorted = [...JSON.parse(window.eval('JSON.stringify(MARK_COLS)'))].sort((a,b)=>a-b);
+  ok(JSON.stringify(sorted) === JSON.stringify([...Array(34).keys()]),
+     'MARK_COLS is a permutation of all 34 criteria, no gaps or repeats');
+
+  /* the CSV export should hand back the same order the teacher just marked in */
+  const csvHead = window.eval('CRITERIA.map(c => qLabel(c)).join("|")').split('|');
+  ok(csvHead[0] === 'Q1 (ear)' && csvHead[33] === 'Q11 (exp)',
+     'CSV columns run Q1 \u2192 Q11 too (' + csvHead[0] + ' \u2026 ' + csvHead[33] + ')');
+
+  console.log('\n=== clicking a reordered column hits the right criterion ===');
+  /* column 5 on screen is Q3a; its data-c is the true CRITERIA index */
+  const col5 = $$('#markTable tr.row')[0].querySelectorAll('td.qcell button')[5];
+  const trueIdx = +col5.dataset.c;
+  ok(window.eval(`CRITERIA[${trueIdx}].id`) === 'Q3a',
+     'the 6th column on screen maps to Q3a');
+  window.eval(`cycleTick(0, ${trueIdx});`);
+  ok(window.eval('state.students[0].q.Q3a') === true, 'ticking it marks Q3a, not something else');
+  window.eval(`cycleTick(0, ${trueIdx}); cycleTick(0, ${trueIdx});`);
+
   console.log('\n=== marks drive bands, comments, groups, print ===');
   window.eval('const s=state.students[0]; CRITERIA.forEach(c=>s.q[c.id]=true); recompute(s); regenerate(s,true); renderAll();');
   ok(window.eval('JSON.stringify(STRANDS.map(x=>state.students[0].marks[x.id]))') === '[4,4,4,4,3,3]',

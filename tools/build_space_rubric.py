@@ -180,7 +180,13 @@ def function_span(text, name):
 
 
 def sub1(text, pat, rep, flags=0, what="", expect=1):
-    out, n = re.subn(pat, rep, text, flags=flags)
+    """Replace, treating `rep` as a literal.
+
+    A lambda, not a template string: re.sub parses backslashes in the
+    replacement, so a `\\D` in injected JavaScript raised "bad escape \\D"
+    rather than landing in the file.
+    """
+    out, n = re.subn(pat, lambda m: rep, text, flags=flags)
     assert n == expect, f"{what or pat!r} matched {n} times, expected {expect}"
     return out
 
@@ -254,7 +260,7 @@ def main():
         ('the Year 7/8 Biodiversity & Ecosystems unit.', 'the Year 7 Space unit.', 'header blurb'),
     ]
     for pat, rep, what in reps:
-        t = sub1(t, re.escape(pat), rep.replace("\\", "\\\\"), what=what)
+        t = sub1(t, re.escape(pat), rep, what=what)
 
     # ---- remaining unit wording, all plain substring work -------------
     for a, b in [("the whole booklet", "the whole test"),
@@ -335,6 +341,94 @@ def main():
     a = t.index("    // Part D closer")
     b = t.index("      if(closers[b]) out.push(closers[b]);\n    }\n", a) + len("      if(closers[b]) out.push(closers[b]);\n    }\n")
     t = t[:a] + "    /* bio's Part D closer removed: CAT 5 has no single weighted part. */\n" + t[b:]
+
+    # ---- mark grid in paper order -------------------------------------
+    # CRITERIA stays grouped by strand — that is what the printed rubric and
+    # the reference table want, and what the band logic reads. The marking
+    # grid alone is re-ordered to the paper's own sequence, Q1 to Q11, so
+    # entering marks runs front to back through the script instead of
+    # hopping between questions. data-c stays the true CRITERIA index, so
+    # cycleTick() is untouched; only the headers and arrow-key movement
+    # follow the display order.
+    t = sub1(t, re.escape('const qLabel = c => c.q + (c.sub ? " (" + c.sub + ")" : "");'),
+             '''const qLabel = c => c.q + (c.sub ? " (" + c.sub + ")" : "");
+
+/* Column order for the marking grid only. Sorting by question number and
+   then by criterion id reproduces the paper's order exactly, because the
+   ids were written to run in paper order within each question — asserted
+   in tools/test-space-rubric.js so a future renaming cannot break it
+   silently. */
+const qNum = c => parseInt(String(c.q).replace(/^\\D+/, ""), 10) || 0;
+const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
+  qNum(CRITERIA[a]) - qNum(CRITERIA[b]) ||
+  (CRITERIA[a].id < CRITERIA[b].id ? -1 : CRITERIA[a].id > CRITERIA[b].id ? 1 : 0));''',
+             what="MARK_COLS")
+
+    # header row 1: question numbers, grouped over their sub-parts
+    t = sub1(t, re.escape('''  let i = 0;
+  while(i < CRITERIA.length){
+    const c = CRITERIA[i];
+    let n = 1;
+    while(i + n < CRITERIA.length && CRITERIA[i+n].q === c.q) n++;
+    const first = i === 0 || CRITERIA[i-1].part !== c.part;'''),
+             '''  let i = 0;
+  while(i < MARK_COLS.length){
+    const c = CRITERIA[MARK_COLS[i]];
+    let n = 1;
+    while(i + n < MARK_COLS.length && CRITERIA[MARK_COLS[i+n]].q === c.q) n++;
+    const first = i === 0 || CRITERIA[MARK_COLS[i-1]].part !== c.part;''',
+             what="head row 1")
+
+    # header row 2: the sub-part letters
+    t = sub1(t, re.escape('''  CRITERIA.forEach((c,ci) => {
+    const first = ci===0 || CRITERIA[ci-1].part !== c.part;
+    h += "<th class='qsub p"'''),
+             '''  MARK_COLS.forEach((ci,k) => {
+    const c = CRITERIA[ci];
+    const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
+    h += "<th class='qsub p"''',
+             what="head row 2")
+
+    # part row: parts are no longer contiguous in paper order, so emit one
+    # group per run. Narrow runs show the letter, with the full name on hover.
+    t = sub1(t, re.escape('''  PARTS.forEach(pt => {
+    const n = CRITERIA.filter(c => c.part === pt.id).length;
+    h += "<th class='pgroup p"+pt.id+"' colspan='"+n+"'>"+esc(pt.name)+"</th>";
+  });'''),
+             '''  let i = 0;
+  while(i < MARK_COLS.length){
+    const pid = CRITERIA[MARK_COLS[i]].part;
+    let n = 1;
+    while(i + n < MARK_COLS.length && CRITERIA[MARK_COLS[i+n]].part === pid) n++;
+    const pt = PARTS.find(p => p.id === pid) || {id:pid, name:pid};
+    h += "<th class='pgroup p"+pid+"' colspan='"+n+"' title='"+esc(pt.name)+"'>"
+       + esc(n < 4 ? pt.id : pt.name) + "</th>";
+    i += n;
+  }''',
+             what="part row runs")
+
+    # the cell loop
+    t = sub1(t, re.escape('''    CRITERIA.forEach((c,ci) => {
+      const first = ci===0 || CRITERIA[ci-1].part !== c.part;
+      const v = st.q[c.id];'''),
+             '''    MARK_COLS.forEach((ci,k) => {
+      const c = CRITERIA[ci];
+      const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
+      const v = st.q[c.id];''',
+             what="cell loop")
+
+    # arrow keys follow the paper, not the strand grouping
+    t = sub1(t, re.escape('''  else if(k === "ArrowRight") nc = Math.min(ci+1, CRITERIA.length-1);
+  else if(k === "ArrowLeft") nc = Math.max(ci-1, 0);'''),
+             '''  else if(k === "ArrowRight") nc = MARK_COLS[Math.min(MARK_COLS.indexOf(ci)+1, MARK_COLS.length-1)];
+  else if(k === "ArrowLeft")  nc = MARK_COLS[Math.max(MARK_COLS.indexOf(ci)-1, 0)];''',
+             what="arrow keys")
+
+    # bio had four parts, so Part E inherited no colour
+    t = sub1(t, re.escape('th.pgroup.pD{background:var(--part-d-bg);color:var(--part-d)}'),
+             'th.pgroup.pD{background:var(--part-d-bg);color:var(--part-d)}\n'
+             'th.pgroup.pE{background:var(--tint-soft);color:var(--ink-soft)}',
+             what="part E colour")
 
     # ---- data blocks, last (see the note at the top of main) ----------
     t = swap_const(t, "STRANDS", "[", STRANDS)
