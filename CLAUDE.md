@@ -696,20 +696,23 @@ year7-science/bio-ecosystems: `solutions.html` (answer key),
 `worksheets-all-solutions.html` (the collated worksheet booklet with
 answers), `portfolio-solutions.html` (the Research Portfolio key) and
 `rubric.html` (the Ecosystem Investigation marking tool). In
-year7-science/space: `solutions.html`,
+year7-science/space: `solutions.html` and
 `worksheet-revision-solutions.html` (the revision worksheet's answer
-copy, same shell as `worksheets-all-solutions.html`) and `rubric.html`
-(the Astronomy Test marking tool).
+copy, same shell as `worksheets-all-solutions.html`).
 
-**`bio-ecosystems/rubric.html` is currently an exception to all of this.**
-It was rebuilt as a standalone page on 8 Oct 2026: no `tokens.css` or
-`solutions.css`, its own palette and fonts, and **no `var BLOB` and no
-lockscreen at all**, so it is publicly readable. That may be deliberate
-— a rubric is arguably something students should see — but it means the
-page is no longer an example of the pattern described here. Copy
-`space/rubric.html` instead, or the pre-8-Oct version at `e8d6086`.
-`check-gated.js` reports it "ok" because its placeholder test only fires
-on a blob with an empty `ct`, and this page has no blob to test.
+**Neither rubric is gated.** `space/rubric.html` was, for a day, and every
+content fix cost a decrypt / edit / re-encrypt / paste round that could not
+be checked until after it shipped — four of them, three for defects a look
+at the rendered page would have caught at once. Marks and student names live
+in the teacher's browser, never in the page; the lock only covered the
+criteria and band descriptors. Ungated 19 Oct 2026 at Kodie's call;
+`bio-ecosystems/rubric.html` has been ungated since 8 Oct.
+
+**`bio-ecosystems/rubric.html` is a standalone page**, rebuilt 8 Oct 2026:
+no `tokens.css`, its own palette and fonts, no lockscreen. `space/rubric.html`
+is the one to copy — ungated too, but on the design system. For the gated
+shell itself, take `space/rubric.html` at `62a193d`, and note it used the
+older single-layer unlock and could not open a v2 blob (see below).
 
 **`portfolio-solutions.html` is not yet encrypted** — it ships the shell
 with a placeholder `var BLOB = {v:2, iv:"", ct:"", keys:[]};`, so it
@@ -732,6 +735,14 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   payload's mtime against its gated page, flags a placeholder (empty
   `ct`) blob, and diffs the payload's `QN.M` set against the built
   booklet PDF. Exits 1 if anything is off.
+- **The blob is v2**: the payload is encrypted once under a random content
+  key, and that key is wrapped under each password in a `keys[]` array. An
+  unlock handler must try each wrapper, derive the KEK, unwrap the content
+  key, then decrypt the payload. The older single-layer
+  `{salt, iv, iter, ct}` form reads `BLOB.salt`/`BLOB.iter`, which are
+  `undefined` in a v2 blob — so it answers "Incorrect password" to every
+  password. `space/worksheet-revision-solutions.html` has the current
+  implementation; copy from there.
 - **`tools/staff-crypt.html`** does the encrypting and decrypting —
   open it locally, it never sends the password anywhere. Editing a gated
   page means: decrypt → edit the payload → re-encrypt → paste the new
@@ -750,10 +761,10 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   `BLOB.ct`, not on `BLOB`: a placeholder blob is a truthy object, so a
   bare `!BLOB` check tells the teacher "Incorrect password" when the real
   fault is that nobody has encrypted the payload yet.
-- **A unit's rubric payload is generated, not hand-written.** The marking,
+- **A unit's rubric is generated, not hand-written.** The marking,
   comment, grouping and print engine is shared; only `STRANDS`,
-  `CRITERIA`, `PARTS` and the unit copy differ. `space/rubric-payload.html`
-  was built from bio's by `tools/build_space_rubric.py`, which asserts
+  `CRITERIA`, `PARTS` and the unit copy differ. `space/rubric.html`
+  is built from bio's payload by `tools/build_space_rubric.py`, which asserts
   every splice matched exactly once — so a change to the engine surfaces
   as a build failure rather than a half-converted file. Points worth
   knowing if you generate another one:

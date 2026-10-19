@@ -42,6 +42,49 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 7 gated pages.
 
+### Landed — Space rubric ungated (19 Oct 2026)
+
+`space/rubric.html` is now a plain page: no `var BLOB`, no lockscreen, the
+tool inline. `tools/build_space_rubric.py` writes the finished page rather
+than a payload for staff-crypt, and deletes the old `rubric-payload.html`.
+
+**Why.** Gated, every content fix cost a decrypt / edit / re-encrypt / paste
+round that could not be checked until after it shipped. Four of those in a
+day, three for defects a glance at the rendered page would have caught: a
+broken build that threw on boot, a back link reading "Biodiversity &
+Ecosystems", and a CSV exporting as `-ecosystem-marks.csv`. The marks and
+student names live in `localStorage`, never in the page, so the lock only
+ever covered the criteria and band descriptors — which a student arguably
+benefits from reading. bio's rubric has been ungated since 8 Oct anyway.
+
+Consequences handled:
+
+- `data-nosearch` on `<body>` keeps it out of `searchindex.js`. Its visible
+  text is the CAT 5 mark scheme in outline, and the grid is rebuilt by JS so
+  the indexer would only capture a static shell — the same reasoning that
+  excludes the orbit/season/binomial/lever widgets. Still in the nav tree,
+  still reachable by anyone with the link. Drop the attribute and rebuild
+  the sitemap to make it searchable.
+- The index card moved out of *Staff only* (whose subtitle promises a
+  password) into *Planning & marking*, renamed from *Planning*, with the
+  note that marks stay in your own browser.
+- `check-gated.js` keys off `*-payload.html`, so deleting the payload
+  retires the page from its checks with no change to the tool.
+- `tools/test-space-rubric.js` now loads `rubric.html` whole instead of
+  injecting a decrypted payload — closer to what actually ships.
+
+If it is ever gated again: the shell is at `rubric.html` in `62a193d`, and
+**it will not work as-is** — it used the single-layer `{salt, iv, iter, ct}`
+unlock and cannot open a v2 blob. Take the v2 implementation from
+`worksheet-revision-solutions.html`.
+
+Also fixed in this pass, all found by looking at it rendered rather than
+testing it: the masthead back link said "Biodiversity & Ecosystems"; the CSV
+downloaded as `<class>-ecosystem-marks-<date>.csv`; and a replacement of
+mine had produced "the Year 7/8 Year 7 Space unit". The builder now sweeps
+the whole page body for bio wording instead of checking a handful of named
+strings.
+
 ### Fixed — Space rubric shipped broken, and why the checks missed it (19 Oct 2026)
 
 The first build of `space/rubric-payload.html` was **missing ~12,600

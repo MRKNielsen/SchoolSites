@@ -1,55 +1,45 @@
-/* Boots year7-science/space/rubric-payload.html in a real DOM (jsdom) the
-   same way rubric.html does after unlocking — inject into #content, then
-   re-create each <script> so it runs — and drives it as a teacher would.
+/* Boots year7-science/space/rubric.html in a real DOM (jsdom) and drives it
+   as a teacher would: enters a class, cycles ticks, checks the bands,
+   comment, teaching groups, printable rubric and the autosave round trip.
 
-   This exists because the first build of the payload shipped broken: a
+   The page is not gated, so this loads it whole rather than injecting a
+   decrypted payload. It exists because the first build shipped broken: a
    splice in tools/build_space_rubric.py anchored on `const rows = [`, which
    appears three times, matched the wrong one and deleted ~12,600 characters
-   including persist(), restore() and demo(). The page then threw
+   including persist(), restore() and demo(). The page threw
    "restore is not defined" on boot and rendered chrome with no marking grid.
-   The checks that existed at the time sliced the script above the render
-   functions, so they could not see any of it.
+   The checks at the time sliced the script above the render functions, so
+   they could not see any of it.
 
    Run after every rebuild:   node tools/test-space-rubric.js
    Needs jsdom:               npm install jsdom
 
-   Two things the harness itself got wrong first, worth knowing if it fails:
-   boot() is async (it awaits restore() before falling back to demo()), so
-   settle it before driving the UI; and applyRoll() deliberately keeps the
-   marks of any student already listed by name, so a test roll must not
-   reuse the demo class's names. */
+   Two traps the harness itself hit first: boot() is async (it awaits
+   restore() before falling back to demo()), so settle it before driving the
+   UI; and applyRoll() deliberately keeps the marks of any student already
+   listed by name, so a test roll must not reuse the demo class's names. */
+
 const fs = require('fs');
 const path = require('path');
 
 let JSDOM;
 try { ({ JSDOM } = require('jsdom')); }
-catch (e) {
-  console.error('This harness needs jsdom:  npm install jsdom');
+catch (e) { console.error('This harness needs jsdom:  npm install jsdom'); process.exit(2); }
+
+const PAGE = path.join(__dirname, '..', 'year7-science', 'space', 'rubric.html');
+if (!fs.existsSync(PAGE)) {
+  console.error('No page at ' + PAGE + '\nBuild it:  python tools/build_space_rubric.py');
   process.exit(2);
 }
+const pageHtml = fs.readFileSync(PAGE, 'utf8');
 
-/* resolved from this file, so it runs from anywhere and on Windows */
-const PAYLOAD = path.join(__dirname, '..', 'year7-science', 'space', 'rubric-payload.html');
-if (!fs.existsSync(PAYLOAD)) {
-  console.error('No payload at ' + PAYLOAD + '\n'
-    + 'It is gitignored — rebuild it:  python tools/build_space_rubric.py');
-  process.exit(2);
-}
-const payload = fs.readFileSync(PAYLOAD, 'utf8');
-
-const dom = new JSDOM(`<!DOCTYPE html><html><body class="rubric-page theme-space"><div id="content"></div></body></html>`,
-  { runScripts: 'dangerously', pretendToBeVisual: true, url: 'https://example.org/' });
+/* Load the page itself, scripts and all. External CSS/JS (tokens, sitenav)
+   is not fetched, which affects only how it looks, not what it does. */
+const dom = new JSDOM(pageHtml, { runScripts: 'dangerously', pretendToBeVisual: true,
+                                  url: 'https://example.org/year7-science/space/rubric.html' });
 const { window } = dom;
 window.scrollTo = () => {};
 const errs = []; window.addEventListener('error', e => errs.push(e.message));
-
-const content = window.document.getElementById('content');
-content.innerHTML = payload;
-Array.from(content.querySelectorAll('script')).forEach(old => {
-  const s = window.document.createElement('script');
-  for (const a of old.attributes) s.setAttribute(a.name, a.value);
-  s.textContent = old.textContent; old.parentNode.replaceChild(s, old);
-});
 
 const $ = s => window.document.querySelector(s);
 const $$ = s => Array.from(window.document.querySelectorAll(s));
@@ -106,7 +96,7 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   ok(window.eval('Object.keys(state.students[0].q).length') === 34, 'all 34 ticks came back');
 
   console.log('\n=== the key is namespaced away from bio ===');
-  ok(!payload.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');
+  ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');
 
   console.log('\n' + (fail ? fail + ' CHECK(S) FAILED' : 'ALL CHECKS PASSED'));
   process.exit(fail ? 1 : 0);

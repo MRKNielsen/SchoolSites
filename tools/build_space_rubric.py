@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
-"""Build year7-science/space/rubric-payload.html from the bio-ecosystems
-rubric engine plus the Space CAT 5 data.
+"""Build year7-science/space/rubric.html from the bio-ecosystems rubric
+engine plus the Space CAT 5 data.
 
 The engine is data-driven (STRANDS / CRITERIA / PARTS / DEFAULT_BANDS), so
 this swaps those blocks and the unit-specific copy, and leaves the marking,
 comment, grouping and print code untouched. Every replacement asserts it
 matched exactly once, so a change to the bio engine surfaces here rather
 than producing a silently half-converted file.
+
+**This page is NOT staff-gated** (Kodie's call, 19 Oct 2026). It was, for
+about a day, and every content fix then cost a decrypt / edit / re-encrypt /
+paste round that could not be checked until after it shipped — four of them,
+three for defects that a look at the rendered page would have caught in
+seconds. The marks and student names live in the teacher's browser, never in
+the page; what the lock protected was the criteria and band descriptors.
+bio-ecosystems/rubric.html is ungated too, since 8 Oct.
+
+So this writes the finished page directly rather than a `*-payload.html` for
+staff-crypt. If it is ever gated again, bring back the shell from git
+(`rubric.html` at 62a193d) and have this emit the payload again — and read
+the v2 note in CLAUDE.md first, because the shell that shipped on 19 Oct
+used the older single-layer unlock and could not open a v2 blob.
 """
 import os, re, sys
 
@@ -15,6 +29,41 @@ from space_rubric_data import STRANDS, CRITERIA, PARTS
 
 REPO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                     "year7-science")
+
+# The page the tool is wrapped in. tokens.css carries the palette the tool's
+# own style block maps onto; sitenav + favicon go on every page type per
+# CLAUDE.md. No solutions.css — that was only ever there for the lockscreen.
+PAGE_HEAD = '''<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astronomy Test &mdash; Rubric &amp; Report Generator | Year 7 Space</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<!-- data-nosearch keeps the tool out of assets/js/searchindex.js. Its visible
+     text is the CAT 5 mark scheme in outline, and the grid is rebuilt by JS
+     anyway, so what the indexer would capture is a static shell rather than
+     what anyone actually sees — the same reason the orbit/season/binomial/
+     lever widgets are excluded. Delete the attribute and rebuild the sitemap
+     to make it searchable. -->
+<body class="rubric-page theme-space" data-nosearch>
+'''
+
+PAGE_FOOT = '''
+</body>
+</html>
+'''
 
 # Sample class for the Demo button: six students across the band range, with a
 # couple of not-attempted marks so the "worst part" and grouping logic have
@@ -44,7 +93,7 @@ DEMO_FN = '''function demo(){
 }
 '''
 SRC  = os.path.join(REPO, "bio-ecosystems/rubric-payload.html")
-DST  = os.path.join(REPO, "space/rubric-payload.html")
+DST  = os.path.join(REPO, "space/rubric.html")
 
 
 def block(text, name, opener):
@@ -202,7 +251,7 @@ def main():
         ('/* label a criterion the way the Student Booklet numbers it: "A3 (i)", "A4a" */',
          '/* label a criterion the way the test numbers it: "Q4b (i)", "Q7c (ii)" */',
          'qLabel comment'),
-        ('Biodiversity & Ecosystems unit.', 'Year 7 Space unit.', 'header blurb'),
+        ('the Year 7/8 Biodiversity & Ecosystems unit.', 'the Year 7 Space unit.', 'header blurb'),
     ]
     for pat, rep, what in reps:
         t = sub1(t, re.escape(pat), rep.replace("\\", "\\\\"), what=what)
@@ -292,24 +341,38 @@ def main():
     t = swap_const(t, "CRITERIA", "[", CRITERIA)
     t = swap_const(t, "PARTS", "[", PARTS)
 
-    hdr = ("<!-- GENERATED from bio-ecosystems/rubric-payload.html by\n"
-           "     tools/build-space-rubric.js equivalent (outputs/build_space_rubric.py).\n"
-           "     The marking, comment, grouping and print engine is shared with bio;\n"
-           "     only STRANDS, CRITERIA, PARTS and the unit copy differ. Re-run the\n"
-           "     builder rather than hand-editing the engine, or the two will drift. -->\n")
-    t = hdr + t
+    hdr = ("<!-- GENERATED — do not edit this file.\n"
+           "     Built from bio-ecosystems/rubric-payload.html by\n"
+           "     tools/build_space_rubric.py; the data lives in\n"
+           "     tools/space_rubric_data.py. The marking, comment, grouping and\n"
+           "     print engine is shared with bio; only STRANDS, CRITERIA, PARTS\n"
+           "     and the unit copy differ. Edit the data or the builder and\n"
+           "     re-run it, then: node tools/test-space-rubric.js -->\n")
+    tool = hdr + t
+    page = PAGE_HEAD + tool + PAGE_FOOT
 
     os.makedirs(os.path.dirname(DST), exist_ok=True)
-    open(DST, "w", encoding="utf-8", newline="").write(t)
+    open(DST, "w", encoding="utf-8", newline="").write(page)
     print(f"wrote {DST}")
-    print(f"  {orig_len:,} -> {len(t):,} bytes")
+    print(f"  tool {orig_len:,} -> {len(tool):,} chars, page {len(page.encode()):,} bytes")
+
+    # the gated pair is retired — leave no stale payload for check-gated to
+    # chase, and no stale encrypted page pretending to be the real one
+    stale = os.path.join(REPO, "space/rubric-payload.html")
+    if os.path.exists(stale):
+        os.remove(stale)
+        print("  removed the old rubric-payload.html (page is no longer gated)")
+
+    t = page
 
     # ---- sanity checks ------------------------------------------------
     # Sweep for bio wording anywhere outside this builder's own header
     # comment. The back-link in the masthead read "← Biodiversity &
     # Ecosystems" in the first two builds — visible on screen, and missed
     # because the checks only looked for a handful of named strings.
-    body = t[t.index("-->") + 3:]
+    # slice past the generated header, whose own text names bio as the source
+    MARK = "node tools/test-space-rubric.js -->"
+    body = t[t.index(MARK) + len(MARK):]
     for word in ("Regent Honeyeater", "Ecosystem Investigation", "matchSpecies(parts",
                  "Biodiversity", "bio-ecosystems", "Student Booklet", "ecosystem"):
         assert word not in body, f"bio leftover in the payload body: {word!r}"
