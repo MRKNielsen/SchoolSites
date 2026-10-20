@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-19",
+ "generated": "2026-10-20",
  "tree": [
   {
    "t": "Home",
@@ -456,6 +456,11 @@ window.SITEMAP = {
            "k": "space"
           },
           {
+           "t": "Revision 1 — Ready for the CAT",
+           "h": "year7-science/space/revision1.html",
+           "k": "space"
+          },
+          {
            "t": "Astronomy Test — Rubric & Report Generator | Year 7 Space",
            "h": "year7-science/space/rubric.html",
            "k": "space"
@@ -473,6 +478,11 @@ window.SITEMAP = {
           {
            "t": "Revision Worksheet · Lessons 1–7",
            "h": "year7-science/space/worksheet-revision.html",
+           "k": "space"
+          },
+          {
+           "t": "Revision Worksheet 1 · Ready for the CAT",
+           "h": "year7-science/space/worksheet-revision1.html",
            "k": "space"
           },
           {

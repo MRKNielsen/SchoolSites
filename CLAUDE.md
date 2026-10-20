@@ -938,6 +938,29 @@ unnumbered "Part B" heading so `\subsection` numbering just continues
 Still on inline styles: year11-methods ch9/11. When touching one, port it
 to the shared assets rather than extending its inline styles.
 
+**A slide *export* is a different job from a unit-local deck.** Year 7
+Space's `revision1.html` came in with 688 inline `style=` attributes, 53
+hardcoded hexes, 24 inline SVGs, its own 1920x1080 scaling script and
+`.slide` as the only class — so there was nothing to rename. Map by the
+*role* the inline style encodes instead (`grid-template-columns:1fr 1fr`
+&rarr; `.cols.even`, a card with its own background &rarr; `.box`, a card
+whose first child is a bare number &rarr; `.step`+`.n`, a trailing
+"Booklet §…" &rarr; `.bookref.book`, `data-notes` &rarr; `<details
+class="teacher">`). `tools/revision1_build.py` is the worked example.
+Three things that bite:
+
+- **Check `</section>` counts.** An export's section bodies often already
+  carry their closing tag; adding another closes `<main>` early and
+  flattens every slide into one scrolling column.
+- **Labels positioned over a figure** must move *into* the SVG as `<text>`,
+  not just lose their positioning — otherwise they fall out of the picture
+  and stack underneath it. The export's container size usually equals the
+  viewBox, so the coordinates transfer unchanged and then scale with the
+  figure.
+- **Assert no text was lost.** Compare every visible string in the source
+  against the output and fail the build on a miss. A structural transform
+  that silently drops content looks fine until someone teaches from it.
+
 Porting a unit-local deck set is mostly a rename job, and the vocabulary
 repeats across units: `.kicker`→`.eyebrow`, `h1.slide-title`→`h2`,
 `.body-text`/`.bullets`→ bare `<p>`/`<ul>`, `.callout`→`.box.key`,

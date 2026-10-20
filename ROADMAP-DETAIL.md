@@ -42,6 +42,74 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 7 gated pages.
 
+### Landed — CAT revision lesson 1 + its worksheet (20 Oct 2026)
+
+`year7-science/space/revision1.html` (26 slides) and
+`worksheet-revision1.html`, the fill-in sheet that goes with them, plus the
+original `Space_CAT_Revision_Worksheet.pdf` kept beside it as a download.
+Both linked from a new **Revision** section on the unit index, placed so a
+second revision lesson drops in beside the first.
+
+**The deck was a port, not a drop-in.** The source was a slide export: 688
+inline `style=` attributes, 53 hardcoded hexes, 24 inline SVGs, its own
+1920x1080 scaling script, and `.slide` as the only class — everything else
+styled by element. `tools/revision1_build.py` maps by the *role* the inline
+style encodes rather than renaming classes, because there were no classes to
+rename. Result: 0 inline styles, 0 per-page `<style>`, and the only hexes
+left are illustrative (Sun gold, lit/unlit Moon, planet hues), which is what
+CLAUDE.md asks for.
+
+Three things the port had to get right, each of which broke first:
+
+- **The source bodies already ended with `</section>`.** Adding another
+  closed `<main>` early and flattened all 26 slides into one scrolling
+  column — every slide's teacher notes stacked on top of each other. Caught
+  by counting openers against closers: 26 against 51.
+- **Figure labels were absolutely positioned over the SVGs** in canvas
+  coordinates. Stripping that positioning — which the rest of the port does
+  — dropped them out of the pictures and left them as loose sentences
+  underneath. The container is `width:Wpx;height:Hpx` and the figure's
+  viewBox is `0 0 W H`, so the coordinates transfer straight into the SVG as
+  `<text>`, which also makes them scale with the figure.
+- **Labels coloured for a dark slide vanish on paper.** In the worksheet
+  every figure label is ink with a white halo (`paint-order="stroke"`), so
+  it reads on blank paper and on a dark fill alike.
+
+A text-coverage check fails the build if any visible string from the source
+is missing from the output — the lesson from the rubric, where a splice
+quietly deleted 12,600 characters and the checks could not see it. The one
+deliberate exception is the cover, hand-authored to the house title-slide
+pattern (`.eyebrow`, `h1`, `.subtitle`, `.head-meta` pills, `.start-hint`).
+
+The worksheet reuses the deck's figures rather than redrawing them
+(`tools/revision1_figs.py` lifts and greyscales them), so sheet and slides
+cannot drift apart. It deliberately carries **no sheet total**: the source
+marks some tasks and not others, because the unmarked ones are practice, and
+a total over a mixed sheet would mean nothing. Every other worksheet in this
+unit does carry one.
+
+Checked: the Moon phase figure is **southern hemisphere** — the lit arc
+sweep flags put waxing on the left — matching the booklet figure corrected
+on 15 Oct and the `orbit.js` default.
+
+New shared component: `.part-title .pt-meta` in worksheet.css, the quiet
+note after a task title saying how the task is done ("pairs", "on your own",
+"show all working").
+
+Rebuild with:
+
+```bash
+python tools/revision1_build.py       # the deck
+python tools/revision1_figs.py        # lift + greyscale its figures
+python tools/revision1_worksheet.py   # the worksheet
+node tools/build-sitemap.js && node tools/check-links.js
+```
+
+**Not verified:** I have looked at the title slide, slides 2–5, 12–13 and the
+worksheet's first four tasks rendered. The remaining slides are built by the
+same mapping and the text check proves nothing was lost, but nobody has seen
+them on a projector yet.
+
 ### Landed — Space rubric ungated (19 Oct 2026)
 
 `space/rubric.html` is now a plain page: no `var BLOB`, no lockscreen, the
