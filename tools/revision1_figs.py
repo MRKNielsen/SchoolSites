@@ -55,7 +55,12 @@ def figures():
     t = open(DECK, encoding='utf-8').read()
     secs = re.findall(r'<section class="slide.*?</section>', t, re.S)
     out = {}
-    want = {'daynight': 8, 'orbit4': 10, 'moon6': 13, 'tides': 15}
+    # 'model' is the worked diagram from the model-answer slide. It is used
+    # only by the answer copy, where it replaces the student sheet's empty
+    # .drawbox — so the marking copy shows the diagram the slides showed
+    # rather than a second drawing of it.
+    want = {'daynight': 8, 'orbit4': 10, 'moon6': 13, 'tides': 15,
+            'model': 25}
     for name, n in want.items():
         svgs = re.findall(r'<svg.*?</svg>', secs[n - 1], flags=re.S)
         if not svgs:
