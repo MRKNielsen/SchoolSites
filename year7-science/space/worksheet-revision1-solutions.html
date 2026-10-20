@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision Worksheet 1 &middot; Ready for the CAT &mdash; Answers | Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Caveat:wght@500;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/solutions.css">
+<link rel="stylesheet" href="../../assets/css/worksheet.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="solutions-page theme-space">
+
+<div class="hero" id="hero">
+  <a class="back-btn" href="index.html">&#8592; Back to unit</a>
+  <div class="unit-tag">Teacher Copy &middot; Confidential</div>
+  <h1>Revision Worksheet 1 &mdash; Answers</h1>
+  <p class="sub">The Revision 1 worksheet with model answers and marking guidance written into it, ready to print as a marking copy.</p>
+  <div class="meta-row">
+    <span>Revision 1</span><span>&middot;</span>
+    <span>11 parts</span><span>&middot;</span>
+    <span>34 marks where the CAT awards them</span><span>&middot;</span>
+    <span>Victorian Curriculum F&ndash;10 v2.0</span>
+  </div>
+  <div class="teacher-note">
+    <strong>How to use:</strong> answers come from the Revision 1 slides, so this copy marks what the class was actually shown. Model wording is not the only acceptable wording &mdash; award marks for any response carrying the same point. Red italic notes give the mark split and the common errors. The blank student copy is at <em>worksheet-revision1.html</em>.
+  </div>
+</div>
+
+<div class="lockscreen" id="lock">
+  <div class="lock-icon">&#128273;</div>
+  <h2>Staff access only</h2>
+  <p>This page contains the answers. Enter the staff password to view it.</p>
+  <form id="unlockForm">
+    <input id="pw" type="password" autocomplete="off" placeholder="Password" autofocus />
+    <button type="submit">Unlock</button>
+  </form>
+  <p class="err" id="err"></p>
+</div>
+<div id="content"></div>
+
+<script>
+var BLOB = {v:2, iv:"", ct:"", keys:[]};
+(function(){
+  var b64 = function(s){var bin=atob(s);var a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;};
+  /* v2 blob: the payload is encrypted once under a random content key, and
+     that key is wrapped separately under each password the page accepts.
+     Try each wrapper; the first that opens gives us both the content key
+     and which audience just unlocked. Reading BLOB.salt/BLOB.iter here --
+     the old single-layer shape -- answers "Incorrect password" to every
+     password, because neither exists on a v2 blob. */
+  async function derive(pw, salt, iter){
+    var baseKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw),
+      {name:"PBKDF2"}, false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      {name:"PBKDF2", salt:b64(salt), iterations:iter, hash:"SHA-256"},
+      baseKey, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+  }
+  async function unlock(pw){
+    if(!BLOB.ct) throw new Error("no payload");
+    for (var i = 0; i < BLOB.keys.length; i++){
+      var k = BLOB.keys[i], raw;
+      try {
+        raw = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(k.iv)},
+                                          await derive(pw, k.salt, k.iter), b64(k.ct));
+      } catch (e) { continue; }
+      var ckey = await crypto.subtle.importKey("raw", raw, {name:"AES-GCM"},
+                                               false, ["decrypt"]);
+      var pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(BLOB.iv)},
+                                           ckey, b64(BLOB.ct));
+      return { role: k.role, html: new TextDecoder().decode(pt) };
+    }
+    throw new Error("bad password");
+  }
+
+  /* Unlocked with the student password: this is revision material, not a
+     confidential teacher document, so drop the staff framing. The content
+     is identical -- only the labelling changes. */
+  function softenForStudents(){
+    var tag = document.querySelector(".unit-tag");
+    if (tag) tag.textContent = "Answer key";
+    document.querySelectorAll(".ws-tag").forEach(function(t){
+      t.textContent = "Year 7\u20138 Science \u00b7 Space \u00b7 Answer key";
+    });
+  }
+
+  var form=document.getElementById("unlockForm");
+  form.addEventListener("submit",async function(e){
+    e.preventDefault();
+    var err=document.getElementById("err");
+    err.textContent="";
+    try{
+      var res=await unlock(document.getElementById("pw").value);
+      document.getElementById("content").innerHTML=res.html;
+      document.body.dataset.role=res.role;
+      if(res.role==="student") softenForStudents();
+      document.getElementById("lock").style.display="none";
+      document.getElementById("hero").style.display="none";
+      /* the payload is worksheet markup, so hand the page over to
+         worksheet.css -- solutions.css ships a * reset that would
+         otherwise out-specify the sheet layout (same trick as rubric.html) */
+      document.body.className="worksheet-page theme-space";
+      window.scrollTo(0,0);
+    }catch(ex){
+      err.textContent = BLOB.ct
+        ? "Incorrect password. Try again."
+        : "This page has no answers in it yet \u2014 the payload has not been encrypted.";
+      document.getElementById("pw").value="";
+      document.getElementById("pw").focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
