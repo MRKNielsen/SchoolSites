@@ -62,15 +62,50 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   ok(window.eval('state.students.length') === 3, '3 fresh students replace the demo');
   ok(window.eval('Object.keys(state.students[0].q).length') === 0,
      'new names start blank (applyRoll keeps marks only for names already listed)');
-  ok($$('#p-mark td.qcell').length === 3*34, `grid is ${3*34} cells (3 students x 34 criteria)`);
+  ok($$('#p-mark td.qcell input.qin').length === 3*34, `grid is ${3*34} cells (3 students x 34 criteria)`);
 
-  console.log('\n=== ticking works ===');
-  window.eval('cycleTick(0,0);');
-  ok(window.eval('state.students[0].q.Q1a') === true, 'click 1 = successful');
-  window.eval('cycleTick(0,0);');
-  ok(window.eval('state.students[0].q.Q1a') === 'x', 'click 2 = not attempted');
-  window.eval('cycleTick(0,0);');
-  ok(window.eval('state.students[0].q.Q1a') === undefined, 'click 3 = cleared');
+  console.log('\n=== entering marks ===');
+  ok(window.eval('setMark(0,0,1)') === true && window.eval('state.students[0].q.Q1a') === 1, 'a mark in range is stored');
+  ok(window.eval('setMark(0,0,"")') === true && window.eval('state.students[0].q.Q1a') === undefined, 'blank clears it');
+  const q1b = window.eval('CRITERIA.findIndex(c => c.id === "Q1b")');
+  ok(window.eval(`setMark(0,${q1b},"1.5")`) === true && window.eval('state.students[0].q.Q1b') === 1.5, 'half marks accepted (1.5 / 2)');
+  ok(window.eval(`setMark(0,${q1b},"1½")`) === true && window.eval('state.students[0].q.Q1b') === 1.5, '"1½" reads as 1.5');
+  ok(window.eval(`setMark(0,${q1b},3)`) === false && window.eval('state.students[0].q.Q1b') === 1.5, 'over the max is refused and the old mark kept');
+  ok(window.eval(`setMark(0,${q1b},"1.25")`) === false, 'quarter marks refused');
+  ok(window.eval(`setMark(0,${q1b},"abc")`) === false, 'text refused');
+  window.eval(`setMark(0,${q1b},"")`);
+
+  console.log('\n=== half the marks or more counts as demonstrated ===');
+  const ix = id => window.eval(`CRITERIA.findIndex(c => c.id === "${id}")`);
+  const done = id => window.eval(`isDone(state.students[0], "${id}")`);
+  window.eval(`setMark(0,${ix('Q7a')},2)`);   ok(done('Q7a') === true,  'Q7a 2/4 counts');
+  window.eval(`setMark(0,${ix('Q7a')},1.5)`); ok(done('Q7a') === false, 'Q7a 1.5/4 does not');
+  window.eval(`setMark(0,${ix('Q6a')},1)`);   ok(done('Q6a') === true,  'Q6a 1/2 counts');
+  window.eval(`setMark(0,${ix('Q2a')},0.5)`); ok(done('Q2a') === true,  'Q2a ½/1 counts (half)');
+  window.eval(`setMark(0,${ix('Q4a')},0)`);   ok(done('Q4a') === false, 'a 0 does not');
+
+  console.log('\n=== blank is "not attempted" only once marking has reached it ===');
+  const na = (r, id) => window.eval(`isNotAtt(state.students[${r}], "${id}")`);
+  ok(na(0,'Q10') === false, 'blank Q10, nobody has a Q10 mark yet -> not marked, not "not attempted"');
+  ok(na(1,'Q7a') === false, 'student with no marks at all -> not marked');
+  window.eval(`setMark(1,${ix('Q10')},2)`);
+  ok(na(0,'Q10') === true, 'once someone has a Q10 mark, a started student\'s blank Q10 is not attempted');
+  ok(na(2,'Q10') === false, '...but a student not yet started still reads as not marked');
+  ok(window.eval('state.students[2].marks.s1') === null, 'an unstarted student has no band, not band 0');
+  ok(window.eval('state.students[1].marks.s4') === 0, 'a started student\'s untouched strand in a marked column is band 0');
+
+  console.log('\n=== typing in the grid keeps the input (no re-render under the caret) ===');
+  window.eval('renderAll();');
+  const inpQ2b = $$('#markTable tr.row')[2].querySelector(`input[data-c="${ix('Q2b')}"]`);
+  inpQ2b.value = '1'; inpQ2b.dispatchEvent(new window.Event('input'));
+  const same = $$('#markTable tr.row')[2].querySelector(`input[data-c="${ix('Q2b')}"]`) === inpQ2b;
+  ok(same && window.eval('state.students[2].q.Q2b') === 1, 'input event stores the mark and the same input element survives');
+  ok(/1<\/b><span>\/50/.test($('#tot-2').innerHTML), 'Mark column updated in place: ' + $('#tot-2').textContent);
+  inpQ2b.value = '7'; inpQ2b.dispatchEvent(new window.Event('input'));
+  ok(inpQ2b.classList.contains('bad') && window.eval('state.students[2].q.Q2b') === 1, 'an out-of-range entry is flagged and not stored');
+  inpQ2b.dispatchEvent(new window.Event('blur'));
+  ok(inpQ2b.value === '1' && !inpQ2b.classList.contains('bad'), 'leaving the cell puts the stored mark back');
+  ok($$('#p-mark th.qsub .qmax').map(e=>e.textContent).join('') .startsWith('/1/2/1/1/1'), 'column heads show what each part is out of');
 
   console.log('\n=== the grid runs in paper order, not strand order ===');
   const order = window.eval('JSON.stringify(MARK_COLS.map(i => CRITERIA[i].id))');
@@ -104,22 +139,23 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
 
   console.log('\n=== clicking a reordered column hits the right criterion ===');
   /* column 5 on screen is Q3a; its data-c is the true CRITERIA index */
-  const col5 = $$('#markTable tr.row')[0].querySelectorAll('td.qcell button')[5];
+  const col5 = $$('#markTable tr.row')[0].querySelectorAll('td.qcell input')[5];
   const trueIdx = +col5.dataset.c;
   ok(window.eval(`CRITERIA[${trueIdx}].id`) === 'Q3a',
      'the 6th column on screen maps to Q3a');
-  window.eval(`cycleTick(0, ${trueIdx});`);
-  ok(window.eval('state.students[0].q.Q3a') === true, 'ticking it marks Q3a, not something else');
-  window.eval(`cycleTick(0, ${trueIdx}); cycleTick(0, ${trueIdx});`);
+  window.eval(`setMark(0, ${trueIdx}, 1);`);
+  ok(window.eval('state.students[0].q.Q3a') === 1, 'marking it marks Q3a, not something else');
+  window.eval(`setMark(0, ${trueIdx}, "");`);
 
   console.log('\n=== marks drive bands, comments, groups, print ===');
-  window.eval('const s=state.students[0]; CRITERIA.forEach(c=>s.q[c.id]=true); recompute(s); regenerate(s,true); renderAll();');
+  window.eval('const s=state.students[0]; CRITERIA.forEach(c=>s.q[c.id]=c.max); refreshClass(); regenerate(s,true); renderAll();');
   ok(window.eval('JSON.stringify(STRANDS.map(x=>state.students[0].marks[x.id]))') === '[4,4,4,4,3,3]',
      'full marks -> top band on every strand');
   const cmt = window.eval('state.students[0].comment');
   ok(cmt.length > 80 && !/undefined|\{their\}|NaN/.test(cmt), `comment ${cmt.length} chars, clean`);
   window.eval('renderPrint(); renderGroups();');
   ok(/Priya/.test($('#p-print').textContent), 'printable rubric names the student');
+  ok(window.eval('rawTotal(state.students[0])') === 50 && /50 \/ 50 marks/.test($('#p-print').textContent), 'full marks total 50 / 50 on the print');
   ok($('#p-groups').textContent.trim().length > 40, 'teaching groups populated');
 
   console.log('\n=== autosave round-trips (700ms debounce) ===');
@@ -127,13 +163,28 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   await sleep(1100);
   const saved = JSON.parse((await window.storage.get('astronomy-rubric:v1')).value);
   ok(saved.students.length === 3, `autosave holds ${saved.students.length} students`);
-  ok(saved.version === 1, `save format v${saved.version}`);
+  ok(saved.version === 2, `save format v${saved.version}`);
 
   window.eval('state.students = []; renderAll();');
   const got = await window.eval('restore()');
   window.eval('renderAll();');
   ok(got === true && window.eval('state.students.length') === 3, 'restored 3 students');
-  ok(window.eval('Object.keys(state.students[0].q).length') === 34, 'all 34 ticks came back');
+  ok(window.eval('Object.keys(state.students[0].q).length') === 34, 'all 34 marks came back');
+  ok(window.eval('state.students[0].q.Q7a') === 4, 'as numbers (Q7a = 4)');
+
+  console.log('\n=== a tick-era (v1) save still opens ===');
+  window.eval(`importJSON(JSON.stringify({version:1, meta:{}, students:[
+    {name:"Old Tick", pron:"they", q:{Q1a:true, Q7a:true, Q10:"x"}, override:{}, comment:"", edited:false}]}))`);
+  ok(window.eval('JSON.stringify(state.students[0].q.Q1a)+","+state.students[0].q.Q7a') === '1,4', 'ticks become full marks (Q1a 1, Q7a 4)');
+  ok(window.eval('"Q10" in state.students[0].q') === false, '"x" becomes blank (not attempted)');
+  ok(window.eval('state.students[0].q.Q2a') === 0, 'an empty tick-era cell (attempted, not successful) becomes 0');
+
+  console.log('\n=== CSV round trip ===');
+  window.eval(`importCSV("Name,Pronoun,Q1 (ear) /1,Q7 (a) /4,Q10\\nAva,she,1,2.5,\\nBen,he,y,9,0")`);
+  ok(window.eval('state.students.length') === 2, 'two students imported');
+  ok(window.eval('state.students[0].q.Q7a') === 2.5 && window.eval('"Q10" in state.students[0].q') === false, 'numbers read, blank stays blank');
+  ok(window.eval('state.students[1].q.Q1a') === 1 && window.eval('state.students[1].q.Q10') === 0, 'a "y" is full marks, 0 is 0');
+  ok(window.eval('"Q7a" in state.students[1].q') === false, 'an out-of-range 9/4 is left blank, not stored');
 
   console.log('\n=== the key is namespaced away from bio ===');
   ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');

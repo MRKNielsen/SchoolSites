@@ -187,6 +187,25 @@ th.qsub .dot{color:var(--rule-strong);font-style:normal}
 th.q.pstart, th.qsub.pstart, td.qcell.pstart{border-left:2px solid var(--rule-strong)}
 tr.hrow th.bandcol, tr.hrow th.lvlcol{border-bottom:2px solid var(--rule-strong);vertical-align:bottom}
 
+/* mark entry (Space): a number box per criterion, coloured by what it earns */
+.qin{width:28px;height:24px;margin:4px auto;display:block;padding:0;box-sizing:border-box;
+  text-align:center;font:inherit;font-size:13px;font-variant-numeric:tabular-nums;
+  border:1px solid var(--rule-strong);border-radius:4px;background:var(--surface);color:var(--ink)}
+.qin:hover{border-color:var(--myrtle)}
+.qin:focus{outline:2px solid var(--myrtle);outline-offset:0;border-color:var(--myrtle)}
+.qin.on{background:color-mix(in srgb, var(--myrtle) 18%, var(--surface));border-color:var(--myrtle);font-weight:700}
+.qin.low{background:var(--surface);border-color:var(--ink-faint)}
+.qin.no{background:var(--red-soft);border-color:var(--red)}
+.qin.bad{outline:2px solid var(--red);outline-offset:0;background:var(--red-soft);color:var(--red)}
+.legend .qin{display:inline-block;margin:0;width:22px;height:18px;font-size:11px;line-height:16px;vertical-align:middle}
+th.qsub .qmax{display:block;font-style:normal;font-weight:400;font-size:10px;color:var(--ink-faint);margin-top:1px}
+td.totcol,th.totcol{padding:6px 10px 6px 8px;min-width:66px;white-space:nowrap;text-align:right;border-left:2px solid var(--rule-strong);font-variant-numeric:tabular-nums}
+th.totcol{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft)}
+tr.hrow th.totcol{border-bottom:2px solid var(--rule-strong);vertical-align:bottom}
+td.totcol b{font-size:13px} td.totcol span{font-size:11px;color:var(--ink-faint)}
+td.bandcol{border-left:1px solid var(--rule)}
+.ckmax{color:var(--ink-faint);font-size:.92em;white-space:nowrap}
+
 td.qcell{width:30px;min-width:30px;text-align:center;padding:0}
 .qbtn{width:20px;height:20px;margin:6px auto;display:block;padding:0;position:relative;
   border:1px solid var(--rule-strong);border-radius:4px;background:var(--surface)}
@@ -487,10 +506,10 @@ table.rub td.na{background:repeating-linear-gradient(135deg,var(--hatch-a),var(-
   </div>
 
   <div class="card">
-    <div class="card-head"><div><h2>Data</h2><p>CSV opens in Excel or Google Sheets — one row per student, one column per criterion, in test order. Put a 1 (or y) where the student was successful and an x where the question was not attempted. The Override columns are optional and accept 0–4.</p></div></div>
+    <div class="card-head"><div><h2>Data</h2><p>CSV opens in Excel or Google Sheets — one row per student, one column per criterion, in test order. Each question column holds the mark, out of the figure in its heading; leave it blank where the part was not attempted. The Override columns are optional and accept 0–4.</p></div></div>
     <div class="card-body">
       <div class="iobar" style="flex-wrap:wrap">
-        <button class="btn ghost small" id="btnCsvOut">Export ticks as CSV</button>
+        <button class="btn ghost small" id="btnCsvOut">Export marks as CSV</button>
         <button class="btn ghost small" id="btnCsvTemplate">Download blank CSV template</button>
         <button class="btn ghost small" id="btnLoad2">Import CSV or JSON</button>
         <button class="btn danger small" id="btnClearMarks">Clear all marks</button>
@@ -503,11 +522,11 @@ table.rub td.na{background:repeating-linear-gradient(135deg,var(--hatch-a),var(-
 <section class="panel" id="p-mark" role="tabpanel" aria-labelledby="tab-mark" tabindex="0">
   <div class="card">
     <div class="card-head">
-      <div><h2>Marking grid</h2><p>Columns follow the Astronomy Test question by question. Where the rubric splits one question across two bands it appears as (i) and (ii) under that question number. Click once for a successful answer, twice for not attempted, three times to clear. Bands are worked out from the ticks: a cell counts only when every question behind it is done, and each missing question below the top cell pulls the award down a band.</p></div>
+      <div><h2>Marking grid</h2><p>Columns follow the Astronomy Test question by question. Where the rubric splits one question across two bands it appears as (i) and (ii) under that question number. Type the mark for each part &mdash; the figure under each column is what it is out of, and half marks are fine (<code>1.5</code>). Enter <b>0</b> when a part was attempted but earned nothing, and leave it <b>blank</b> when it was not attempted. Enter moves down the column, the arrow keys move between cells. Bands are worked out from the marks: a part counts towards its rubric cell at half its marks or more, a cell counts only when every part behind it does, and each missing part below the top cell pulls the award down a band.</p></div>
       <div class="legend">
-        <div><span class="qbtn on lg"></span> successful</div>
-        <div><span class="qbtn no lg"></span> not attempted</div>
-        <div><span class="qbtn lg"></span> not marked</div>
+        <div><span class="qin on">2</span> half marks or more</div>
+        <div><span class="qin low">0</span> under half</div>
+        <div><span class="qin no"></span> blank &middot; not attempted</div>
         <div><span class="sw" style="background:var(--band0)"></span>0</div>
         <div><span class="sw" style="background:var(--band1)"></span>1</div>
         <div><span class="sw" style="background:var(--band2)"></span>2</div>
@@ -752,40 +771,40 @@ const SPECIES = [];   /* Space has no per-student artefact */;
    strand:null are recorded but sit outside the rubric.
    ========================================================================= */
 const CRITERIA = [
- {id:"Q1a",   q:"Q1",  sub:"ear", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1},
- {id:"Q1b",   q:"Q1",  sub:"sun", part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2},
- {id:"Q2a",   q:"Q2",  sub:"a",   part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1},
- {id:"Q2b",   q:"Q2",  sub:"b",   part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2},
- {id:"Q2c",   q:"Q2",  sub:"c",   part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1},
- {id:"Q3a",   q:"Q3",  sub:"a1",  part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2},
- {id:"Q3b",   q:"Q3",  sub:"a2",  part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3},
- {id:"Q3c",   q:"Q3",  sub:"bc",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1},
- {id:"Q3d",   q:"Q3",  sub:"d",   part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3},
- {id:"Q4a",   q:"Q4",  sub:"a",   part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1},
- {id:"Q4b",   q:"Q4",  sub:"b",   part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q4c",   q:"Q4",  sub:"c",   part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q4d",   q:"Q4",  sub:"d",   part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4},
- {id:"Q4e",   q:"Q4",  sub:"e",   part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1},
- {id:"Q5a",   q:"Q5",  sub:"a",   part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2},
- {id:"Q5b",   q:"Q5",  sub:"b",   part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3},
- {id:"Q5c",   q:"Q5",  sub:"c",   part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3},
- {id:"Q6a",   q:"Q6",  sub:"a",   part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2},
- {id:"Q6b",   q:"Q6",  sub:"b",   part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3},
- {id:"Q7a",   q:"Q7",  sub:"a",   part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1},
- {id:"Q7b",   q:"Q7",  sub:"b",   part:"D", label:"Names two gas giants",                                       strand:"s4", band:1},
- {id:"Q7ci",  q:"Q7",  sub:"ci",  part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2},
- {id:"Q7cii", q:"Q7",  sub:"cii", part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3},
- {id:"Q7di",  q:"Q7",  sub:"di",  part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2},
- {id:"Q7dii", q:"Q7",  sub:"dii", part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4},
- {id:"Q8a",   q:"Q8",  sub:"a",   part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1},
- {id:"Q8bi",  q:"Q8",  sub:"b1",  part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2},
- {id:"Q8bii", q:"Q8",  sub:"b2",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3},
- {id:"Q9a",   q:"Q9",  sub:"a",   part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1},
- {id:"Q9bi",  q:"Q9",  sub:"b1",  part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2},
- {id:"Q9bii", q:"Q9",  sub:"b2",  part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3},
- {id:"Q10",   q:"Q10", sub:"",    part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4},
- {id:"Q11a",  q:"Q11", sub:"dia", part:"B", label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3},
- {id:"Q11b",  q:"Q11", sub:"exp", part:"B", label:"Explains January and July, referring to the diagram",        strand:"s2", band:4}
+ {id:"Q1a",   q:"Q1",  sub:"ear", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1, max:1},
+ {id:"Q1b",   q:"Q1",  sub:"sun", part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2, max:2},
+ {id:"Q2a",   q:"Q2",  sub:"a",   part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1, max:1},
+ {id:"Q2b",   q:"Q2",  sub:"b",   part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2, max:1},
+ {id:"Q2c",   q:"Q2",  sub:"c",   part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1, max:1},
+ {id:"Q3a",   q:"Q3",  sub:"a1",  part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2, max:1},
+ {id:"Q3b",   q:"Q3",  sub:"a2",  part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3, max:1},
+ {id:"Q3c",   q:"Q3",  sub:"bc",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1, max:2},
+ {id:"Q3d",   q:"Q3",  sub:"d",   part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3, max:1},
+ {id:"Q4a",   q:"Q4",  sub:"a",   part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1, max:1},
+ {id:"Q4b",   q:"Q4",  sub:"b",   part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2, max:2},
+ {id:"Q4c",   q:"Q4",  sub:"c",   part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2, max:2},
+ {id:"Q4d",   q:"Q4",  sub:"d",   part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4, max:2},
+ {id:"Q4e",   q:"Q4",  sub:"e",   part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1, max:1},
+ {id:"Q5a",   q:"Q5",  sub:"a",   part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2, max:1},
+ {id:"Q5b",   q:"Q5",  sub:"b",   part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3, max:1},
+ {id:"Q5c",   q:"Q5",  sub:"c",   part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3, max:1},
+ {id:"Q6a",   q:"Q6",  sub:"a",   part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2, max:2},
+ {id:"Q6b",   q:"Q6",  sub:"b",   part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3, max:2},
+ {id:"Q7a",   q:"Q7",  sub:"a",   part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1, max:4},
+ {id:"Q7b",   q:"Q7",  sub:"b",   part:"D", label:"Names two gas giants",                                       strand:"s4", band:1, max:2},
+ {id:"Q7ci",  q:"Q7",  sub:"ci",  part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2, max:2},
+ {id:"Q7cii", q:"Q7",  sub:"cii", part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3, max:1},
+ {id:"Q7di",  q:"Q7",  sub:"di",  part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2, max:1},
+ {id:"Q7dii", q:"Q7",  sub:"dii", part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4, max:2},
+ {id:"Q8a",   q:"Q8",  sub:"a",   part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1, max:1},
+ {id:"Q8bi",  q:"Q8",  sub:"b1",  part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2, max:1},
+ {id:"Q8bii", q:"Q8",  sub:"b2",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3, max:1},
+ {id:"Q9a",   q:"Q9",  sub:"a",   part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1, max:1},
+ {id:"Q9bi",  q:"Q9",  sub:"b1",  part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2, max:1},
+ {id:"Q9bii", q:"Q9",  sub:"b2",  part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3, max:1},
+ {id:"Q10",   q:"Q10", sub:"",    part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4, max:2},
+ {id:"Q11a",  q:"Q11", sub:"dia", part:"B", label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3, max:2},
+ {id:"Q11b",  q:"Q11", sub:"exp", part:"B", label:"Explains January and July, referring to the diagram",        strand:"s2", band:4, max:2}
 ];
 /* label a criterion the way the test numbers it: "Q4b (i)", "Q7c (ii)" */
 const qLabel = c => c.q + (c.sub ? " (" + c.sub + ")" : "");
@@ -806,8 +825,8 @@ const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
      2 → 3  Part A renumbered in the FINAL booklet (old A1+A2 merged into A1,
             so A3→A2, A4→A3, A5a/b→A4a/b, A6→A5, A7→A6)
      3 → 4  B2 (ii) removed, so B2i becomes B2                               */
-const SAVE_VERSION = 1;
-const MIGRATIONS = {};   /* v1 — no prior save format to migrate from */;
+const SAVE_VERSION = 2;
+const MIGRATIONS = {1:{}};   /* 1 → 2  ticks became marks: same ids, values converted in importJSON */;
 /* rename every key in one pass, so swaps like A3i→A2i and A4i→A3i cannot collide */
 function migrateTicks(q, fromVersion){
   let cur = q || {};
@@ -837,12 +856,38 @@ const EV = {}, EVALL = {};
 STRANDS.forEach(s => { EV[s.id] = {1:[],2:[],3:[],4:[]}; EVALL[s.id] = []; });
 CRITERIA.forEach(c => { if(c.strand){ EV[c.strand][c.band].push(c.id); EVALL[c.strand].push(c.id); } });
 
-/* A tick is one of three things:
-     true   — demonstrated successfully
-     "x"    — not attempted
-     absent — attempted but not yet successful, or not marked                */
-const isDone   = (st, id) => st.q[id] === true;
-const isNotAtt = (st, id) => st.q[id] === "x";
+/* A mark is a number out of the criterion's `max` (from the paper), or blank.
+     number — attempted; 0 is attempted with nothing creditable
+     blank  — not attempted, once the student has a mark somewhere AND
+              someone in the class has a mark in that column; until then it
+              is simply not marked yet
+   A criterion counts as demonstrated for its rubric cell once it earns at
+   least PASS of its marks: 1/2 and 2/4 count, 1/3 does not. */
+const PASS = 0.5;
+const MAXOF = {}; CRITERIA.forEach(c => MAXOF[c.id] = c.max);
+const MAX_TOTAL = CRITERIA.reduce((n,c) => n + c.max, 0);
+const fmtMark = v => String(Math.round(v * 2) / 2);
+const hasMark = (st, id) => typeof st.q[id] === "number";
+const started = st => CRITERIA.some(c => hasMark(st, c.id));
+let COLS_MARKED = new Set();
+function refreshClass(){
+  COLS_MARKED = new Set();
+  state.students.forEach(st => CRITERIA.forEach(c => { if(hasMark(st, c.id)) COLS_MARKED.add(c.id); }));
+  state.students.forEach(recompute);
+}
+const isDone   = (st, id) => hasMark(st, id) && st.q[id] > 0 && st.q[id] >= MAXOF[id] * PASS;
+const isNotAtt = (st, id) => !hasMark(st, id) && COLS_MARKED.has(id) && started(st);
+function rawTotal(st){ return CRITERIA.reduce((n,c) => n + (hasMark(st, c.id) ? st.q[c.id] : 0), 0); }
+/* "", "1", "1.5", "1,5", "1½", "½" -> number | null (blank) | NaN (invalid) */
+function parseMark(raw, max){
+  let s = String(raw == null ? "" : raw).trim().replace(",", ".");
+  if(s === "") return null;
+  s = s.replace(/^½$/, "0.5").replace(/½$/, ".5");
+  if(!/^(\d+(\.\d+)?|\.\d+)$/.test(s)) return NaN;
+  const v = parseFloat(s);
+  if(v < 0 || v > max || Math.abs(v * 2 - Math.round(v * 2)) > 1e-9) return NaN;
+  return v;
+}
 
 /* A rubric cell is met when every criterion behind it is done. */
 function cellMet(st, s, b){
@@ -862,7 +907,10 @@ function missedBelow(st, s, top){
   for(let b = 1; b < top; b++) EV[s.id][b].forEach(id => { if(!isDone(st, id)) n++; });
   return n;
 }
-function strandTouched(st, s){ return EVALL[s.id].some(id => st.q[id] !== undefined); }
+function strandTouched(st, s){
+  return EVALL[s.id].some(id => hasMark(st, id))
+      || (started(st) && EVALL[s.id].some(id => COLS_MARKED.has(id)));
+}
 
 /* Everything known about one strand. band 0 = not demonstrated. */
 function strandResult(st, s){
@@ -902,7 +950,8 @@ function tally(st){
   PARTS.forEach(pt => byPart[pt.id] = CRITERIA.filter(c => c.part === pt.id && isNotAtt(st, c.id)).length);
   let worst = null;
   PARTS.forEach(pt => { if(byPart[pt.id] > 0 && (!worst || byPart[pt.id] > byPart[worst])) worst = pt.id; });
-  return {done, notAtt, total: CRITERIA.length, worstPart: worst, byPart};
+  return {done, notAtt, total: CRITERIA.length, worstPart: worst, byPart,
+          score: rawTotal(st), outOf: MAX_TOTAL};
 }
 
 /* ---- overall level. mean sits on 0..4: 0 is nothing demonstrated,
@@ -1189,14 +1238,15 @@ function headRowHTML(){
     h += "<th class='q p"+c.part+(first?" pstart":"")+"' colspan='"+n+"'>"+esc(c.q)+"</th>";
     i += n;
   }
-  h += "<th class='bandcol' rowspan='2'>Bands</th><th class='lvlcol' rowspan='2'>Level</th></tr>";
+  h += "<th class='totcol' rowspan='2'>Mark</th><th class='bandcol' rowspan='2'>Bands</th><th class='lvlcol' rowspan='2'>Level</th></tr>";
   // row 2: the sub-part, for the questions the rubric splits across bands
   h += "<tr class='srow'><th class='stu'></th>";
   MARK_COLS.forEach((ci,k) => {
     const c = CRITERIA[ci];
     const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
     h += "<th class='qsub p"+c.part+(first?" pstart":"")+"' title='"+esc(qLabel(c)+" — "+c.label)+"'>"
-       + (c.sub ? esc(c.sub) : "<span class='dot'>&middot;</span>") + "</th>";
+       + (c.sub ? esc(c.sub) : "<span class='dot'>&middot;</span>")
+       + "<span class='qmax'>/"+fmtMark(c.max)+"</span></th>";
   });
   h += "</tr>";
   return h;
@@ -1213,8 +1263,61 @@ function partRowHTML(){
        + esc(n < 4 ? pt.id : pt.name) + "</th>";
     i += n;
   }
-  h += "<th colspan='2'></th></tr>";
+  h += "<th colspan='3'></th></tr>";
   return h;
+}
+
+function qinClass(st, c){
+  return hasMark(st, c.id) ? (isDone(st, c.id) ? "on" : "low") : (isNotAtt(st, c.id) ? "no" : "");
+}
+function totHTML(st){
+  return started(st) ? "<b>"+fmtMark(rawTotal(st))+"</b><span>/"+MAX_TOTAL+"</span>" : "<span>&middot;</span>";
+}
+function bandsHTML(st){
+  return STRANDS.map(s => {
+    const m = st.marks[s.id], r = st.res[s.id] || {};
+    const ov = r.overridden;
+    const tip = s.name + " — band " + (m===null ? 0 : m)
+      + (r.missed ? " (top cell " + r.top + ", " + r.missed + " developing question" + (r.missed===1?"":"s") + " missing)" : "")
+      + (ov ? " — overridden" : "");
+    return "<span class='bnum b"+(m===null?"nil":m)+(ov?" ov":"")+(r.missed?" pen":"")+"' title='"+esc(tip)+"'>"
+           +(m===null?"·":m)+"</span>";
+  }).join("");
+}
+function lvlHTML(st){
+  const pct = pctOf(st), lv = overallLevel(pct);
+  return "<span class='chip b"+lv.key+"' title='"+esc(lv.name)+"'>"
+       + (pct===null?"—":lv.mean.toFixed(1)) + "</span>";
+}
+/* update everything in the grid that a mark can change, without touching the
+   inputs themselves (so focus and the caret survive) */
+function refreshSummaries(){
+  const t = $("#markTable");
+  if(!t) return;
+  state.students.forEach((st, ri) => {
+    const a = t.querySelector("#tot-"+ri), b = t.querySelector("#bc-"+ri), l = t.querySelector("#lv-"+ri);
+    if(a) a.innerHTML = totHTML(st);
+    if(b) b.innerHTML = bandsHTML(st);
+    if(l) l.innerHTML = lvlHTML(st);
+  });
+  t.querySelectorAll(".qcell .qin").forEach(inp => {
+    const st = state.students[+inp.dataset.r], c = CRITERIA[+inp.dataset.c];
+    if(!st || !c || inp.classList.contains("bad")) return;
+    inp.className = "qin " + qinClass(st, c);
+  });
+  updateMarkTally();
+}
+function updateMarkTally(){
+  const n = markedCount();
+  const el = $("#tallyMark");
+  if(el) el.textContent = state.students.length ? n + "/" + (state.students.length * CRITERIA.length) : "";
+}
+function renderMast(){
+  $("#mastMeta").innerHTML = [
+    esc([state.meta.cls, state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
+    esc(state.meta.date || ""),
+    state.students.length ? state.students.length + " students · " + markedCount() + " marks entered" : ""
+  ].filter(Boolean).join("<br>");
 }
 
 function renderMark(){
@@ -1236,37 +1339,26 @@ function renderMark(){
     MARK_COLS.forEach((ci,k) => {
       const c = CRITERIA[ci];
       const first = k===0 || CRITERIA[MARK_COLS[k-1]].part !== c.part;
-      const v = st.q[c.id];
-      const cls = v === true ? "on" : v === "x" ? "no" : "";
-      const word = v === true ? "successful" : v === "x" ? "not attempted" : "not marked";
+      const v = hasMark(st, c.id) ? fmtMark(st.q[c.id]) : "";
       h += "<td class='qcell p"+c.part+(first?" pstart":"")+"'>"
-         + "<button type='button' class='qbtn "+cls+"' data-r='"+ri+"' data-c='"+ci+"'"
-         + " aria-label='"+esc(st.name+" — "+qLabel(c)+" "+c.label+" — "+word)+"'></button></td>";
+         + "<input type='text' inputmode='decimal' autocomplete='off' spellcheck='false' maxlength='4'"
+         + " class='qin "+qinClass(st, c)+"' data-r='"+ri+"' data-c='"+ci+"' value='"+v+"'"
+         + " aria-label='"+esc(st.name+" — "+qLabel(c)+" "+c.label+" — out of "+fmtMark(c.max))+"'></td>";
     });
-    const bands = STRANDS.map(s => {
-      const m = st.marks[s.id], r = st.res[s.id] || {};
-      const ov = r.overridden;
-      const tip = s.name + " — band " + (m===null ? 0 : m)
-        + (r.missed ? " (top cell " + r.top + ", " + r.missed + " developing question" + (r.missed===1?"":"s") + " missing)" : "")
-        + (ov ? " — overridden" : "");
-      return "<span class='bnum b"+(m===null?"nil":m)+(ov?" ov":"")+(r.missed?" pen":"")+"' title='"+esc(tip)+"'>"
-             +(m===null?"·":m)+"</span>";
-    }).join("");
-    const pct = pctOf(st), lv = overallLevel(pct);
-    h += "<td class='bandcol'>"+bands+"</td>";
-    h += "<td class='lvlcol'><span class='chip b"+lv.key+"' title='"+esc(lv.name)+"'>"
-       + (pct===null?"—":lv.mean.toFixed(1)) + "</span></td></tr>";
+    h += "<td class='totcol' id='tot-"+ri+"'>"+totHTML(st)+"</td>";
+    h += "<td class='bandcol' id='bc-"+ri+"'>"+bandsHTML(st)+"</td>";
+    h += "<td class='lvlcol' id='lv-"+ri+"'>"+lvlHTML(st)+"</td></tr>";
   });
   h += "</tbody>";
   t.innerHTML = h;
 
-  t.querySelectorAll(".qcell .qbtn").forEach(btn => {
-    btn.onclick = () => cycleTick(+btn.dataset.r, +btn.dataset.c);
-    btn.onkeydown = e => gridKey(e, +btn.dataset.r, +btn.dataset.c);
+  t.querySelectorAll(".qcell .qin").forEach(inp => {
+    inp.oninput = () => enterMark(inp);
+    inp.onblur = () => leaveMark(inp);
+    inp.onfocus = () => inp.select();
+    inp.onkeydown = e => gridKey(e, +inp.dataset.r, +inp.dataset.c);
   });
-
-  const done = state.students.reduce((n,st) => n + CRITERIA.filter(c => isDone(st,c.id)).length, 0);
-  $("#tallyMark").textContent = done + "/" + (state.students.length * CRITERIA.length);
+  updateMarkTally();
   renderCritKey();
 }
 
@@ -1279,6 +1371,7 @@ function renderCritKey(){
     CRITERIA.filter(c => c.part === pt.id).forEach(c => {
       const s = c.strand ? strandById(c.strand) : null;
       h += "<li><span class='ckcode'>"+esc(qLabel(c))+"</span> "+esc(c.label)
+         + " <span class='ckmax'>("+fmtMark(c.max)+" mark"+(c.max===1?"":"s")+")</span>"
          + (s ? "<span class='ckmap'>&rarr; "+esc(s.sub)+", band "+c.band+"</span>"
               : "<span class='ckmap ckoff'>&rarr; not in the rubric</span>")
          + "</li>";
@@ -1288,19 +1381,47 @@ function renderCritKey(){
   el.innerHTML = h;
 }
 
-/* click once = successful, twice = not attempted, three times = clear */
-function cycleTick(ri, ci){
+/* Store one mark. value: number, or null / "" for blank. Returns false (and
+   stores nothing) when the value is not a half-mark step from 0 to max. */
+function setMark(ri, ci, value){
   const st = state.students[ri], c = CRITERIA[ci];
-  if(!st || !c) return;
-  const v = st.q[c.id];
-  if(v === undefined) st.q[c.id] = true;
-  else if(v === true) st.q[c.id] = "x";
-  else delete st.q[c.id];
-  recompute(st);
-  regenerate(st, false);
-  renderMark(); renderComments(); renderGroups(); renderPrint(); persist();
-  const el = $("#markTable").querySelector("[data-r='"+ri+"'][data-c='"+ci+"']");
-  if(el) el.focus();
+  if(!st || !c) return false;
+  const v = (value === null || value === "") ? null
+          : typeof value === "number" ? value : parseMark(value, c.max);
+  if(Number.isNaN(v) || (typeof v === "number" && Number.isNaN(parseMark(String(v), c.max)))) return false;
+  if(v === null) delete st.q[c.id]; else st.q[c.id] = v;
+  refreshClass();
+  refreshSummaries();
+  scheduleHeavy();
+  return true;
+}
+/* typing in a cell: store as soon as it is valid, flag it while it is not */
+function enterMark(inp){
+  const ri = +inp.dataset.r, ci = +inp.dataset.c, c = CRITERIA[ci];
+  const v = parseMark(inp.value, c.max);
+  if(Number.isNaN(v)){
+    inp.classList.add("bad");
+    inp.title = qLabel(c) + " is out of " + fmtMark(c.max) + " — enter 0 to " + fmtMark(c.max) + " in half marks, or leave blank";
+    return;
+  }
+  inp.classList.remove("bad"); inp.title = "";
+  setMark(ri, ci, v);
+}
+/* leaving a cell that still holds an invalid entry puts the stored mark back */
+function leaveMark(inp){
+  if(!inp.classList.contains("bad")) return;
+  const st = state.students[+inp.dataset.r], c = CRITERIA[+inp.dataset.c];
+  toast(qLabel(c) + " is out of " + fmtMark(c.max) + " — that entry was not kept");
+  inp.value = st && hasMark(st, c.id) ? fmtMark(st.q[c.id]) : "";
+  inp.classList.remove("bad"); inp.title = "";
+}
+let heavyTimer = null;
+function scheduleHeavy(){
+  clearTimeout(heavyTimer);
+  heavyTimer = setTimeout(() => {
+    regenerateAll(false);
+    renderComments(); renderGroups(); renderPrint(); persist(); renderMast();
+  }, 350);
 }
 function gridKey(e, ri, ci){
   const k = e.key;
@@ -1309,6 +1430,7 @@ function gridKey(e, ri, ci){
   else if(k === "ArrowUp") nr = Math.max(ri-1, 0);
   else if(k === "ArrowRight") nc = MARK_COLS[Math.min(MARK_COLS.indexOf(ci)+1, MARK_COLS.length-1)];
   else if(k === "ArrowLeft")  nc = MARK_COLS[Math.max(MARK_COLS.indexOf(ci)-1, 0)];
+  else if(k === "Enter") nr = e.shiftKey ? Math.max(ri-1, 0) : Math.min(ri+1, state.students.length-1);
   else return;
   e.preventDefault();
   const el = $("#markTable").querySelector("[data-r='"+nr+"'][data-c='"+nc+"']");
@@ -1338,7 +1460,7 @@ function renderComments(){
       + ['they','she','he'].map(p => '<option value="'+p+'"'+(p===st.pron?" selected":"")+'>'+p+'</option>').join("")
       + '</select></label>'
     + '</div>'
-    + '<div class="field"><span>Bands — worked out from the ticks and the developmental penalty; change one only if you disagree</span>'
+    + '<div class="field"><span>Bands — worked out from the marks and the developmental penalty; change one only if you disagree</span>'
     + '<div class="ovrow">' + STRANDS.map(sd => {
         const rr = st.res[sd.id] || {}, der = rr.derived, ov = st.override[sd.id];
         const isov = Number.isInteger(ov);
@@ -1508,7 +1630,7 @@ function sheetHTML(st, withComment, scale){
      + '<span class="olab">Overall</span>'
      + '<span class="olvl b'+(lv.key < 0 ? "nil" : lv.key)+'">'+esc(lv.name)+'</span>'
      + (pct===null ? '' : '<span class="omean">mean band '+lv.mean.toFixed(1)+' of 4</span>')
-     + '<span class="omean">'+tl.done+' of '+tl.total+' questions successful'
+     + '<span class="omean">'+fmtMark(tl.score)+' / '+tl.outOf+' marks'
      + (tl.notAtt ? ' &middot; '+tl.notAtt+' not attempted' : '')+'</span>'
      + '<span class="ofoot">'+esc([m.cls, m.teacher].filter(Boolean).join(" · "))+'</span>'
      + '</div>';
@@ -1566,11 +1688,8 @@ function renderRef(){
 
 /* ============================ RENDER: all ============================ */
 function renderAll(){
-  $("#mastMeta").innerHTML = [
-    esc([state.meta.cls, state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
-    esc(state.meta.date || ""),
-    state.students.length ? state.students.length + " students · " + markedCount() + " ticks" : ""
-  ].filter(Boolean).join("<br>");
+  refreshClass();
+  renderMast();
   renderSetup(); renderMark(); renderComments(); renderGroups(); renderPrint(); renderRef();
 }
 
@@ -1605,14 +1724,14 @@ function saveJSON(){
 function csvCell(v){ const s = String(v==null?"":v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function exportCSV(blank){
   const head = ["Name","Species","Pronoun",
-    ...CRITERIA.map(c => qLabel(c)),
+    ...CRITERIA.map(c => qLabel(c) + " /" + fmtMark(c.max)),
     ...STRANDS.map(s => "Override " + s.id),
     "Comment"];
   const rows = [head.map(csvCell).join(",")];
   const src = state.students.length ? state.students : [newStudent("")];
   src.forEach(st => rows.push([
     csvCell(st.name), csvCell(st.species), csvCell(st.pron),
-    ...CRITERIA.map(c => blank ? "" : (isDone(st,c.id) ? "1" : isNotAtt(st,c.id) ? "x" : "")),
+    ...CRITERIA.map(c => blank || !hasMark(st,c.id) ? "" : fmtMark(st.q[c.id])),
     ...STRANDS.map(s => blank ? "" : (Number.isInteger(st.override[s.id]) ? st.override[s.id] : "")),
     csvCell(blank ? "" : st.comment)
   ].join(",")));
@@ -1662,7 +1781,7 @@ function importCSV(text){
     Object.keys(after).forEach(id => { backMap[id] = backMap[id] || []; backMap[id].push(after[id]); });
   }
   const idxQ = CRITERIA.map(c => {
-    const want = [norm(qLabel(c)), norm(c.id)];
+    const want = [norm(qLabel(c) + " /" + fmtMark(c.max)), norm(qLabel(c)), norm(c.id)];
     (backMap[c.id] || []).forEach(o => want.push(norm(o)));
     for(const w of want){ const i = headN.indexOf(w); if(i >= 0) return i; }
     return -1;
@@ -1670,7 +1789,7 @@ function importCSV(text){
   const idxOv   = STRANDS.map(s => find(h => h === "override "+s.id || h.startsWith(s.id+" ") || h === s.id));
   if(idxName < 0){ toast("The file needs a Name column"); return; }
   const anyQ = idxQ.some(i => i >= 0);
-  const out = [];
+  const out = [], badCells = [];
   rows.slice(1).forEach(r => {
     const name = (r[idxName]||"").trim(); if(!name) return;
     const st = newStudent(name,
@@ -1680,8 +1799,11 @@ function importCSV(text){
     CRITERIA.forEach((c,i) => {
       if(idxQ[i] < 0) return;
       const raw = String(r[idxQ[i]]||"").trim();
-      if(/^(x|n|no|na|blank|not attempted|-)$/i.test(raw)) st.q[c.id] = "x";
-      else if(TRUEY(raw)) st.q[c.id] = true;
+      if(/^(x|n|no|na|blank|not attempted|-)$/i.test(raw)) return;
+      const v = parseMark(raw, c.max);
+      if(typeof v === "number" && !Number.isNaN(v)) st.q[c.id] = v;   /* NaN is a number too */
+      else if(TRUEY(raw)) st.q[c.id] = c.max;
+      else if(Number.isNaN(v)) badCells.push(name + " " + qLabel(c) + " (" + raw + ")");
     });
     STRANDS.forEach((sd,i) => {
       const v = idxOv[i] >= 0 ? parseInt((r[idxOv[i]]||"").trim(),10) : NaN;
@@ -1693,8 +1815,11 @@ function importCSV(text){
     out.push(st);
   });
   state.students = out;
+  refreshClass(); state.students.forEach(s => regenerate(s, false));
   renderAll(); persist();
-  toast("Imported "+out.length+" student"+(out.length===1?"":"s")+(anyQ?"":" — no question columns found, so no ticks were set"));
+  if(badCells.length) setTimeout(() => toast(badCells.length + " cell" + (badCells.length===1?"":"s")
+    + " out of range and left blank: " + badCells.slice(0,3).join(", ") + (badCells.length > 3 ? "…" : "")), 2400);
+  toast("Imported "+out.length+" student"+(out.length===1?"":"s")+(anyQ?"":" — no question columns found, so no marks were set"));
 }
 function importJSON(text){
   const d = JSON.parse(text);
@@ -1707,11 +1832,13 @@ function importJSON(text){
     const st = newStudent(o.name||"", o.pron||"they");
     const mq = migrateTicks(o.q, fileVersion);
     Object.keys(mq).forEach(id => {
-      if(!CRITERIA.some(c => c.id === id)) return;
+      if(!(id in MAXOF)) return;
       const v = mq[id];
-      if(v === "x"){ if(st.q[id] !== true) st.q[id] = "x"; }
-      else if(v) st.q[id] = true;
+      if(typeof v === "number"){ if(!Number.isNaN(parseMark(String(v), MAXOF[id]))) st.q[id] = v; }
+      else if(v === true) st.q[id] = MAXOF[id];
     });
+    if(fileVersion < 2 && Object.keys(mq).some(id => id in MAXOF))
+      CRITERIA.forEach(c => { if(mq[c.id] === undefined) st.q[c.id] = 0; });
     if(o.override) STRANDS.forEach(sd => {
       const v = o.override[sd.id];
       if(Number.isInteger(v) && v >= 0 && v <= maxBandOf(sd)) st.override[sd.id] = v;
@@ -1723,9 +1850,9 @@ function importJSON(text){
     });
     recompute(st);
     st.comment = o.comment || ""; st.edited = !!o.edited;
-    if(!st.comment) regenerate(st,true);
     return st;
   });
+  refreshClass(); state.students.forEach(s => { if(!s.comment) regenerate(s, true); });
   $("#f-length").value = state.opts.length; $("#f-person").value = state.opts.person; $("#f-steps").value = String(state.opts.steps);
   renderAll(); persist();
   toast("Opened "+state.students.length+" student"+(state.students.length===1?"":"s"));
@@ -1769,8 +1896,7 @@ async function restore(){
 ["cls","teacher","task","date"].forEach(k => {
   const el = $("#f-"+(k==="cls"?"class":k));
   el.oninput = () => { state.meta[k] = el.value; renderPrint(); persist();
-    $("#mastMeta").innerHTML = [esc([state.meta.cls,state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
-      esc(state.meta.date||""), state.students.length ? state.students.length+" students · "+markedCount()+" ticks" : ""].filter(Boolean).join("<br>"); };
+    renderMast(); };
 });
 $("#btnApplyRoll").onclick = applyRoll;
 $("#btnEmpty").onclick = () => {
@@ -1785,7 +1911,7 @@ $("#fileIn").onchange = e => { const f = e.target.files[0]; if(f) handleFile(f);
 $("#btnCsvOut").onclick = () => exportCSV(false);
 $("#btnCsvTemplate").onclick = () => exportCSV(true);
 $("#btnClearMarks").onclick = () => {
-  if(!confirm("Clear every tick and override for all students? Comments will be rebuilt as blank.")) return;
+  if(!confirm("Clear every mark and override for all students? Comments will be rebuilt as blank.")) return;
   state.students.forEach(s => { s.q = {}; s.override = {}; recompute(s); s.edited = false; regenerate(s,true); });
   renderAll(); persist(); toast("Marks cleared");
 };
@@ -1812,18 +1938,22 @@ function demo(){
     ["Eli Marsh","he",      [2,1,3,2,3,1]],
     ["Frankie Hale","they", [3,4,3,3,3,3]]
   ];
+  /* a few parts left blank, so the completion line has something to say */
+  const skip = {"Charlie Doust":["Q11b","Q7dii","Q4d"], "Eli Marsh":["Q10"]};
   state.students = rows.map(r => {
     const st = newStudent(r[0], r[1]);
-    /* a few questions left blank, so the completion line has something to say */
-    if(r[0] === "Charlie Doust"){ st.q.Q11b = "x"; st.q.Q7dii = "x"; st.q.Q4d = "x"; }
-    if(r[0] === "Eli Marsh"){ st.q.Q10 = "x"; }
     STRANDS.forEach((sd,i) => {
       const target = Math.min(r[2][i], maxBandOf(sd));
-      for(let b=1;b<=target;b++) EV[sd.id][b].forEach(id => { if(st.q[id] !== "x") st.q[id] = true; });
+      EVALL[sd.id].forEach(id => {
+        if((skip[r[0]] || []).includes(id)) return;
+        const mx = MAXOF[id], band = CRITERIA.find(c => c.id === id).band;
+        /* full marks below the band reached, a pass at it, under half above it */
+        st.q[id] = band < target ? mx : band === target ? Math.ceil(mx * PASS) : (mx >= 2 ? 0.5 : 0);
+      });
     });
-    recompute(st); regenerate(st,true);
     return st;
   });
+  refreshClass(); state.students.forEach(st => regenerate(st, true));
 }
 
 

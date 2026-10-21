@@ -40,7 +40,90 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-foundation | Stub | — |
 
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
-7 gated pages.
+8 gated pages.
+
+### Landed — Space rubric takes marks, not ticks (21 Oct 2026)
+
+`year7-science/space/rubric.html` — each grid cell is now a number box for
+that part's mark, out of the figure under its column heading. Blank = not
+attempted, 0 = attempted and wrong, half marks allowed (`1.5`, `1½`). Enter
+moves down the column. A new **Mark** column shows each student's total out
+of 50, and the printed sheet's overall line gives the score.
+
+Bands still come from the evidence: a part counts towards its rubric cell at
+half its marks or more (Kodie's call). Allocations are read off
+`CAT_5_Astronomy_Test_2026_FINAL.pdf` and recorded, with the reasoning for
+each split, above `CRITERIA` in `tools/space_rubric_data.py`.
+
+- **The paper's Q7 header says "(11 marks)"** but its parts sum to
+  4+1+1+1+1+1+1+2 = 12, and 12 is what makes the paper total 50. The tool
+  uses 12. Fix the header on the paper.
+- **Q11's diagram/explanation split isn't on the paper**; 2 + 2 is assumed.
+  Change `max` on Q11a/Q11b if the marking key says otherwise.
+
+Save format v2; v1 tick files and autosaves convert on open. CSV columns
+hold the mark (headings now read e.g. `Q7 (a) /4`); a `y` reads as full
+marks. 58 checks in `tools/test-space-rubric.js`, all passing, and the grid
+and print view checked rendered in Chromium. bio's rubric is unchanged.
+
+### Landed — red answer copy for Revision Worksheet 1 (21 Oct 2026)
+
+`year7-science/space/worksheet-revision1-solutions.html` — the Revision 1
+sheet with answers written into its own furniture, in the same red overlay
+as the other Space answer copies. 51 written-in answers, 19 written-on line
+blocks, 42 marking notes carrying the mark split and the common errors.
+Linked from **Staff only** on the unit index.
+
+**Both copies come out of one file now.** `tools/revision1_worksheet.py`
+grew an `ANSWERS` flag and `--student` / `--answers` / `--both`; the
+question wording exists once, so the key cannot drift from the sheet the
+way a hand-copied one does. The student copy rebuilds byte-identical,
+which the build asserts, along with the overlay never leaking into it.
+
+Answers are the deck's own — every one lifted from the matching answer
+slide (4, 7, 9, 11, 14, 16, 19, 21, 23, 25) and the source slide named in a
+comment — so the key marks what the class was actually shown rather than a
+second derivation of it.
+
+Two checks, because one of them is the one that failed last time:
+
+- `verify()` **strips the overlay back off and requires the student
+  sheet's markup exactly.** Counting filled slots would not catch an
+  answer that ate a question, a question missing from one copy, or a
+  `data-lines` changed under an answer. It also names the deliberate
+  blanks: the exit self-rating column is the student's own judgement.
+- `tools/test-revision1-worksheet.py` breaks each defect class in turn and
+  **requires `verify()` to raise** — 7 of 7 caught. A check nobody has
+  seen fail is not evidence; that is exactly how the rubric shipped with
+  12,600 characters missing and a green build.
+
+**Fixed while building it: `revision1.html` slide 25 drew the orbit as a
+3:1 ellipse with the Sun at its centre** — on the model-answer slide whose
+fourth mark is *"says explicitly that it is not caused by distance"*. It is
+now a circle (r=155) with both Earth positions exactly on it, asserted by
+computing each Earth's distance to the Sun. This is the second time this
+figure has been drawn that way in this repo (Space deck 2 slide 7 was the
+first), so CLAUDE.md's circular-orbit rule now says plainly that it covers
+every hand-drawn orbit, not just `seasonsim`. The figure also gained
+per-position captions, lost a duplicated loose caption in favour of a
+`.figcap`, and took `.graph-card.narrow` so the squarer aspect does not
+make the slide taller than it was.
+
+Also fixed: the one `style="color:#C2410C"` the port left behind, now
+`var(--cas)` — the system's Year 8 / extension colour, matching `.y8box`.
+
+`check-gated.js` flags the new page as **PLACEHOLDER** until Kodie encrypts
+`worksheet-revision1-solutions-payload.html` through `tools/staff-crypt.html`
+and pastes the emitted line over the placeholder. The shell keeps any real
+`var BLOB` already present, so rebuilding afterwards does not wipe it.
+
+Rebuild with `python tools/revision1_figs.py && python
+tools/revision1_worksheet.py --both && python
+tools/test-revision1-worksheet.py`.
+
+**Not verified:** parts 1, 3, 7, 8 and 10 of the answer copy have been
+looked at rendered. Parts 2, 4, 5, 6, 9 are built by the same helpers and
+the round trip proves their wording, but nobody has seen them on paper.
 
 ### Landed — CAT revision lesson 1 + its worksheet (20 Oct 2026)
 

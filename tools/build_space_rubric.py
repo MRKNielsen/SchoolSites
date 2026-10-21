@@ -78,18 +78,22 @@ DEMO_FN = '''function demo(){
     ["Eli Marsh","he",      [2,1,3,2,3,1]],
     ["Frankie Hale","they", [3,4,3,3,3,3]]
   ];
+  /* a few parts left blank, so the completion line has something to say */
+  const skip = {"Charlie Doust":["Q11b","Q7dii","Q4d"], "Eli Marsh":["Q10"]};
   state.students = rows.map(r => {
     const st = newStudent(r[0], r[1]);
-    /* a few questions left blank, so the completion line has something to say */
-    if(r[0] === "Charlie Doust"){ st.q.Q11b = "x"; st.q.Q7dii = "x"; st.q.Q4d = "x"; }
-    if(r[0] === "Eli Marsh"){ st.q.Q10 = "x"; }
     STRANDS.forEach((sd,i) => {
       const target = Math.min(r[2][i], maxBandOf(sd));
-      for(let b=1;b<=target;b++) EV[sd.id][b].forEach(id => { if(st.q[id] !== "x") st.q[id] = true; });
+      EVALL[sd.id].forEach(id => {
+        if((skip[r[0]] || []).includes(id)) return;
+        const mx = MAXOF[id], band = CRITERIA.find(c => c.id === id).band;
+        /* full marks below the band reached, a pass at it, under half above it */
+        st.q[id] = band < target ? mx : band === target ? Math.ceil(mx * PASS) : (mx >= 2 ? 0.5 : 0);
+      });
     });
-    recompute(st); regenerate(st,true);
     return st;
   });
+  refreshClass(); state.students.forEach(st => regenerate(st, true));
 }
 '''
 SRC  = os.path.join(REPO, "bio-ecosystems/rubric-payload.html")
@@ -189,6 +193,378 @@ def sub1(text, pat, rep, flags=0, what="", expect=1):
     out, n = re.subn(pat, lambda m: rep, text, flags=flags)
     assert n == expect, f"{what or pat!r} matched {n} times, expected {expect}"
     return out
+
+
+# ===================================================================
+# Marks instead of ticks (21 Oct 2026, Kodie's call)
+# ===================================================================
+# bio's grid takes a tick per criterion. Space's grid takes the MARK, out of
+# the criterion's `max` from the paper:
+#     blank  = not attempted      0 = attempted, nothing creditable
+# The bands are still worked out from evidence: a criterion counts for its
+# rubric cell once it earns at least PASS (half) of its marks.
+#
+# "Blank = not attempted" needs one guard, or a half-marked class reads as a
+# class that skipped half the paper. A blank only counts as not attempted
+# once the student has at least one mark AND somebody in the class has a mark
+# in that column — so marking question-by-question down the class (Q1 for
+# everyone, then Q2) and student-by-student both read correctly part way.
+# That makes not-attempted a CLASS-level fact, so every edit recomputes every
+# student (refreshClass); at 30 x 34 that is nothing.
+#
+# The grid's inputs are never re-rendered while a teacher types — only the
+# Mark / Bands / Level cells and each input's colour are updated in place
+# (refreshSummaries). Re-rendering the table on each keystroke or on blur
+# destroys the input the teacher is tabbing into.
+
+MARKS_SEMANTICS = r'''/* A mark is a number out of the criterion's `max` (from the paper), or blank.
+     number — attempted; 0 is attempted with nothing creditable
+     blank  — not attempted, once the student has a mark somewhere AND
+              someone in the class has a mark in that column; until then it
+              is simply not marked yet
+   A criterion counts as demonstrated for its rubric cell once it earns at
+   least PASS of its marks: 1/2 and 2/4 count, 1/3 does not. */
+const PASS = 0.5;
+const MAXOF = {}; CRITERIA.forEach(c => MAXOF[c.id] = c.max);
+const MAX_TOTAL = CRITERIA.reduce((n,c) => n + c.max, 0);
+const fmtMark = v => String(Math.round(v * 2) / 2);
+const hasMark = (st, id) => typeof st.q[id] === "number";
+const started = st => CRITERIA.some(c => hasMark(st, c.id));
+let COLS_MARKED = new Set();
+function refreshClass(){
+  COLS_MARKED = new Set();
+  state.students.forEach(st => CRITERIA.forEach(c => { if(hasMark(st, c.id)) COLS_MARKED.add(c.id); }));
+  state.students.forEach(recompute);
+}
+const isDone   = (st, id) => hasMark(st, id) && st.q[id] > 0 && st.q[id] >= MAXOF[id] * PASS;
+const isNotAtt = (st, id) => !hasMark(st, id) && COLS_MARKED.has(id) && started(st);
+function rawTotal(st){ return CRITERIA.reduce((n,c) => n + (hasMark(st, c.id) ? st.q[c.id] : 0), 0); }
+/* "", "1", "1.5", "1,5", "1½", "½" -> number | null (blank) | NaN (invalid) */
+function parseMark(raw, max){
+  let s = String(raw == null ? "" : raw).trim().replace(",", ".");
+  if(s === "") return null;
+  s = s.replace(/^½$/, "0.5").replace(/½$/, ".5");
+  if(!/^(\d+(\.\d+)?|\.\d+)$/.test(s)) return NaN;
+  const v = parseFloat(s);
+  if(v < 0 || v > max || Math.abs(v * 2 - Math.round(v * 2)) > 1e-9) return NaN;
+  return v;
+}
+'''
+
+SET_MARK = r'''/* Store one mark. value: number, or null / "" for blank. Returns false (and
+   stores nothing) when the value is not a half-mark step from 0 to max. */
+function setMark(ri, ci, value){
+  const st = state.students[ri], c = CRITERIA[ci];
+  if(!st || !c) return false;
+  const v = (value === null || value === "") ? null
+          : typeof value === "number" ? value : parseMark(value, c.max);
+  if(Number.isNaN(v) || (typeof v === "number" && Number.isNaN(parseMark(String(v), c.max)))) return false;
+  if(v === null) delete st.q[c.id]; else st.q[c.id] = v;
+  refreshClass();
+  refreshSummaries();
+  scheduleHeavy();
+  return true;
+}
+/* typing in a cell: store as soon as it is valid, flag it while it is not */
+function enterMark(inp){
+  const ri = +inp.dataset.r, ci = +inp.dataset.c, c = CRITERIA[ci];
+  const v = parseMark(inp.value, c.max);
+  if(Number.isNaN(v)){
+    inp.classList.add("bad");
+    inp.title = qLabel(c) + " is out of " + fmtMark(c.max) + " — enter 0 to " + fmtMark(c.max) + " in half marks, or leave blank";
+    return;
+  }
+  inp.classList.remove("bad"); inp.title = "";
+  setMark(ri, ci, v);
+}
+/* leaving a cell that still holds an invalid entry puts the stored mark back */
+function leaveMark(inp){
+  if(!inp.classList.contains("bad")) return;
+  const st = state.students[+inp.dataset.r], c = CRITERIA[+inp.dataset.c];
+  toast(qLabel(c) + " is out of " + fmtMark(c.max) + " — that entry was not kept");
+  inp.value = st && hasMark(st, c.id) ? fmtMark(st.q[c.id]) : "";
+  inp.classList.remove("bad"); inp.title = "";
+}
+let heavyTimer = null;
+function scheduleHeavy(){
+  clearTimeout(heavyTimer);
+  heavyTimer = setTimeout(() => {
+    regenerateAll(false);
+    renderComments(); renderGroups(); renderPrint(); persist(); renderMast();
+  }, 350);
+}'''
+
+CELL_FNS = r'''function qinClass(st, c){
+  return hasMark(st, c.id) ? (isDone(st, c.id) ? "on" : "low") : (isNotAtt(st, c.id) ? "no" : "");
+}
+function totHTML(st){
+  return started(st) ? "<b>"+fmtMark(rawTotal(st))+"</b><span>/"+MAX_TOTAL+"</span>" : "<span>&middot;</span>";
+}
+function bandsHTML(st){
+  return STRANDS.map(s => {
+    const m = st.marks[s.id], r = st.res[s.id] || {};
+    const ov = r.overridden;
+    const tip = s.name + " — band " + (m===null ? 0 : m)
+      + (r.missed ? " (top cell " + r.top + ", " + r.missed + " developing question" + (r.missed===1?"":"s") + " missing)" : "")
+      + (ov ? " — overridden" : "");
+    return "<span class='bnum b"+(m===null?"nil":m)+(ov?" ov":"")+(r.missed?" pen":"")+"' title='"+esc(tip)+"'>"
+           +(m===null?"·":m)+"</span>";
+  }).join("");
+}
+function lvlHTML(st){
+  const pct = pctOf(st), lv = overallLevel(pct);
+  return "<span class='chip b"+lv.key+"' title='"+esc(lv.name)+"'>"
+       + (pct===null?"—":lv.mean.toFixed(1)) + "</span>";
+}
+/* update everything in the grid that a mark can change, without touching the
+   inputs themselves (so focus and the caret survive) */
+function refreshSummaries(){
+  const t = $("#markTable");
+  if(!t) return;
+  state.students.forEach((st, ri) => {
+    const a = t.querySelector("#tot-"+ri), b = t.querySelector("#bc-"+ri), l = t.querySelector("#lv-"+ri);
+    if(a) a.innerHTML = totHTML(st);
+    if(b) b.innerHTML = bandsHTML(st);
+    if(l) l.innerHTML = lvlHTML(st);
+  });
+  t.querySelectorAll(".qcell .qin").forEach(inp => {
+    const st = state.students[+inp.dataset.r], c = CRITERIA[+inp.dataset.c];
+    if(!st || !c || inp.classList.contains("bad")) return;
+    inp.className = "qin " + qinClass(st, c);
+  });
+  updateMarkTally();
+}
+function updateMarkTally(){
+  const n = markedCount();
+  const el = $("#tallyMark");
+  if(el) el.textContent = state.students.length ? n + "/" + (state.students.length * CRITERIA.length) : "";
+}
+function renderMast(){
+  $("#mastMeta").innerHTML = [
+    esc([state.meta.cls, state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
+    esc(state.meta.date || ""),
+    state.students.length ? state.students.length + " students · " + markedCount() + " marks entered" : ""
+  ].filter(Boolean).join("<br>");
+}
+
+function renderMark(){'''
+
+MARKS_CSS = '''
+/* mark entry (Space): a number box per criterion, coloured by what it earns */
+.qin{width:28px;height:24px;margin:4px auto;display:block;padding:0;box-sizing:border-box;
+  text-align:center;font:inherit;font-size:13px;font-variant-numeric:tabular-nums;
+  border:1px solid var(--rule-strong);border-radius:4px;background:var(--surface);color:var(--ink)}
+.qin:hover{border-color:var(--myrtle)}
+.qin:focus{outline:2px solid var(--myrtle);outline-offset:0;border-color:var(--myrtle)}
+.qin.on{background:color-mix(in srgb, var(--myrtle) 18%, var(--surface));border-color:var(--myrtle);font-weight:700}
+.qin.low{background:var(--surface);border-color:var(--ink-faint)}
+.qin.no{background:var(--red-soft);border-color:var(--red)}
+.qin.bad{outline:2px solid var(--red);outline-offset:0;background:var(--red-soft);color:var(--red)}
+.legend .qin{display:inline-block;margin:0;width:22px;height:18px;font-size:11px;line-height:16px;vertical-align:middle}
+th.qsub .qmax{display:block;font-style:normal;font-weight:400;font-size:10px;color:var(--ink-faint);margin-top:1px}
+td.totcol,th.totcol{padding:6px 10px 6px 8px;min-width:66px;white-space:nowrap;text-align:right;border-left:2px solid var(--rule-strong);font-variant-numeric:tabular-nums}
+th.totcol{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft)}
+tr.hrow th.totcol{border-bottom:2px solid var(--rule-strong);vertical-align:bottom}
+td.totcol b{font-size:13px} td.totcol span{font-size:11px;color:var(--ink-faint)}
+td.bandcol{border-left:1px solid var(--rule)}
+.ckmax{color:var(--ink-faint);font-size:.92em;white-space:nowrap}
+'''
+
+
+def check_marks():
+    """Every criterion has a `max`; each strand's maxes sum to its weight;
+    the paper sums to 50. Read from the data literals, so a typo in
+    space_rubric_data.py fails the build rather than mis-weighting a strand."""
+    crit = re.findall(r'\{id:"(\w+)".*?strand:"(s\d)".*?max:([\d.]+)\}', CRITERIA)
+    n_rows = len(re.findall(r'\{id:"', CRITERIA))
+    assert len(crit) == n_rows, f"{n_rows - len(crit)} criteria have no max"
+    weights = dict(re.findall(r'id:"(s\d)", maxBand:\d, weight:(\d+)', STRANDS))
+    tot = {}
+    for _, s_id, mx in crit:
+        tot[s_id] = tot.get(s_id, 0) + float(mx)
+    for s_id, w in weights.items():
+        assert tot.get(s_id) == float(w), f"strand {s_id}: criteria sum to {tot.get(s_id)}, weight is {w}"
+    assert sum(tot.values()) == 50, f"paper sums to {sum(tot.values())}, not 50"
+    print(f"  marks: {len(crit)} criteria, strands {'+'.join(str(int(tot[k])) for k in sorted(tot))} = 50")
+
+
+def to_marks(t):
+    """Swap the tick engine for mark entry. Every splice asserts it matched."""
+    t = sub1(t, r"/\* A tick is one of three things:.*?const isNotAtt = \(st, id\) => st\.q\[id\] === \"x\";",
+             MARKS_SEMANTICS.rstrip("\n"), flags=re.S, what="tick semantics")
+    t = sub1(t, re.escape('function strandTouched(st, s){ return EVALL[s.id].some(id => st.q[id] !== undefined); }'),
+             'function strandTouched(st, s){\n'
+             '  return EVALL[s.id].some(id => hasMark(st, id))\n'
+             '      || (started(st) && EVALL[s.id].some(id => COLS_MARKED.has(id)));\n}',
+             what="strandTouched")
+    t = sub1(t, re.escape("  return {done, notAtt, total: CRITERIA.length, worstPart: worst, byPart};"),
+             "  return {done, notAtt, total: CRITERIA.length, worstPart: worst, byPart,\n"
+             "          score: rawTotal(st), outOf: MAX_TOTAL};", what="tally score")
+
+    # save format v2: values are numbers. v1 files held true / "x".
+    t = sub1(t, r'const SAVE_VERSION = 1;', 'const SAVE_VERSION = 2;', what="SAVE_VERSION 2")
+    t = sub1(t, re.escape('const MIGRATIONS = {};   /* v1 — no prior save format to migrate from */'),
+             'const MIGRATIONS = {1:{}};   /* 1 → 2  ticks became marks: same ids, values converted in importJSON */',
+             what="MIGRATIONS v1")
+
+    # ---- grid ----------------------------------------------------------
+    t = sub1(t, re.escape('''  h += "<th class='bandcol' rowspan='2'>Bands</th><th class='lvlcol' rowspan='2'>Level</th></tr>";'''),
+             '''  h += "<th class='totcol' rowspan='2'>Mark</th><th class='bandcol' rowspan='2'>Bands</th><th class='lvlcol' rowspan='2'>Level</th></tr>";''',
+             what="head totcol")
+    t = sub1(t, re.escape('''       + (c.sub ? esc(c.sub) : "<span class='dot'>&middot;</span>") + "</th>";'''),
+             '''       + (c.sub ? esc(c.sub) : "<span class='dot'>&middot;</span>")
+       + "<span class='qmax'>/"+fmtMark(c.max)+"</span></th>";''', what="head max")
+    t = sub1(t, re.escape('''  h += "<th colspan='2'></th></tr>";'''),
+             '''  h += "<th colspan='3'></th></tr>";''', what="part row span")
+    t = sub1(t, re.escape("\nfunction renderMark(){"), "\n" + CELL_FNS, what="cell helpers")
+    t = sub1(t, re.escape('''      const v = st.q[c.id];
+      const cls = v === true ? "on" : v === "x" ? "no" : "";
+      const word = v === true ? "successful" : v === "x" ? "not attempted" : "not marked";
+      h += "<td class='qcell p"+c.part+(first?" pstart":"")+"'>"
+         + "<button type='button' class='qbtn "+cls+"' data-r='"+ri+"' data-c='"+ci+"'"
+         + " aria-label='"+esc(st.name+" — "+qLabel(c)+" "+c.label+" — "+word)+"'></button></td>";'''),
+             '''      const v = hasMark(st, c.id) ? fmtMark(st.q[c.id]) : "";
+      h += "<td class='qcell p"+c.part+(first?" pstart":"")+"'>"
+         + "<input type='text' inputmode='decimal' autocomplete='off' spellcheck='false' maxlength='4'"
+         + " class='qin "+qinClass(st, c)+"' data-r='"+ri+"' data-c='"+ci+"' value='"+v+"'"
+         + " aria-label='"+esc(st.name+" — "+qLabel(c)+" "+c.label+" — out of "+fmtMark(c.max))+"'></td>";''',
+             what="cell input")
+    a, b = span_of(t, "    const bands = STRANDS.map(s => {\n      const m = st.marks[s.id], r = st.res[s.id] || {};",
+                   '''+ (pct===null?"—":lv.mean.toFixed(1)) + "</span></td></tr>";''')
+    t = t[:a] + '''    h += "<td class='totcol' id='tot-"+ri+"'>"+totHTML(st)+"</td>";
+    h += "<td class='bandcol' id='bc-"+ri+"'>"+bandsHTML(st)+"</td>";
+    h += "<td class='lvlcol' id='lv-"+ri+"'>"+lvlHTML(st)+"</td></tr>";''' + t[b:]
+    t = sub1(t, re.escape('''  t.querySelectorAll(".qcell .qbtn").forEach(btn => {
+    btn.onclick = () => cycleTick(+btn.dataset.r, +btn.dataset.c);
+    btn.onkeydown = e => gridKey(e, +btn.dataset.r, +btn.dataset.c);
+  });
+
+  const done = state.students.reduce((n,st) => n + CRITERIA.filter(c => isDone(st,c.id)).length, 0);
+  $("#tallyMark").textContent = done + "/" + (state.students.length * CRITERIA.length);'''),
+             '''  t.querySelectorAll(".qcell .qin").forEach(inp => {
+    inp.oninput = () => enterMark(inp);
+    inp.onblur = () => leaveMark(inp);
+    inp.onfocus = () => inp.select();
+    inp.onkeydown = e => gridKey(e, +inp.dataset.r, +inp.dataset.c);
+  });
+  updateMarkTally();''', what="grid wiring")
+    a, b = function_span(t, "cycleTick")
+    t = t[:a] + SET_MARK + t[b:]
+    t = sub1(t, re.escape("/* click once = successful, twice = not attempted, three times = clear */\n"),
+             "", what="cycleTick comment")
+    # Enter goes down the column (marking one question for the whole class),
+    # Shift+Enter back up. Arrows move between cells, as before.
+    t = sub1(t, re.escape('''  else if(k === "ArrowLeft")  nc = MARK_COLS[Math.max(MARK_COLS.indexOf(ci)-1, 0)];
+  else return;'''),
+             '''  else if(k === "ArrowLeft")  nc = MARK_COLS[Math.max(MARK_COLS.indexOf(ci)-1, 0)];
+  else if(k === "Enter") nr = e.shiftKey ? Math.max(ri-1, 0) : Math.min(ri+1, state.students.length-1);
+  else return;''', what="Enter key")
+
+    t = sub1(t, re.escape('''        <div><span class="qbtn on lg"></span> successful</div>
+        <div><span class="qbtn no lg"></span> not attempted</div>
+        <div><span class="qbtn lg"></span> not marked</div>'''),
+             '''        <div><span class="qin on">2</span> half marks or more</div>
+        <div><span class="qin low">0</span> under half</div>
+        <div><span class="qin no"></span> blank &middot; not attempted</div>''', what="legend")
+    t = sub1(t, re.escape('Click once for a successful answer, twice for not attempted, three times to clear. '
+                          'Bands are worked out from the ticks: a cell counts only when every question behind it is done, '
+                          'and each missing question below the top cell pulls the award down a band.'),
+             'Type the mark for each part &mdash; the figure under each column is what it is out of, and half marks are fine '
+             '(<code>1.5</code>). Enter <b>0</b> when a part was attempted but earned nothing, and leave it <b>blank</b> when it '
+             'was not attempted. Enter moves down the column, the arrow keys move between cells. Bands are worked out from the '
+             'marks: a part counts towards its rubric cell at half its marks or more, a cell counts only when every part behind '
+             'it does, and each missing part below the top cell pulls the award down a band.', what="grid help")
+
+    # ---- reference tab: say what each criterion is out of
+    t = sub1(t, re.escape('''      h += "<li><span class='ckcode'>"+esc(qLabel(c))+"</span> "+esc(c.label)'''),
+             '''      h += "<li><span class='ckcode'>"+esc(qLabel(c))+"</span> "+esc(c.label)
+         + " <span class='ckmax'>("+fmtMark(c.max)+" mark"+(c.max===1?"":"s")+")</span>"''', what="crit key max")
+
+    # ---- print sheet: the score, not a count of ticks
+    t = sub1(t, re.escape('''     + '<span class="omean">'+tl.done+' of '+tl.total+' questions successful\''''),
+             '''     + '<span class="omean">'+fmtMark(tl.score)+' / '+tl.outOf+' marks\'''', what="overall score")
+
+    # ---- mast / tallies / copy
+    t = sub1(t, re.escape('''function renderAll(){
+  $("#mastMeta").innerHTML = [
+    esc([state.meta.cls, state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
+    esc(state.meta.date || ""),
+    state.students.length ? state.students.length + " students · " + markedCount() + " ticks" : ""
+  ].filter(Boolean).join("<br>");'''),
+             '''function renderAll(){
+  refreshClass();
+  renderMast();''', what="renderAll")
+    t = sub1(t, re.escape('''    $("#mastMeta").innerHTML = [esc([state.meta.cls,state.meta.teacher].filter(Boolean).join(" · ")) || "Set your class on the Class tab",
+      esc(state.meta.date||""), state.students.length ? state.students.length+" students · "+markedCount()+" ticks" : ""].filter(Boolean).join("<br>"); };'''),
+             '''    renderMast(); };''', what="meta mast")
+    for a, b2, what in [
+        ('Export ticks as CSV', 'Export marks as CSV', 'csv button'),
+        ('Clear every tick and override', 'Clear every mark and override', 'clear confirm'),
+        ('so no ticks were set', 'so no marks were set', 'import toast'),
+        ('Bands — worked out from the ticks and', 'Bands — worked out from the marks and', 'override label'),
+        ('Put a 1 (or y) where the student was successful and an x where the question was not attempted.',
+         'Each question column holds the mark, out of the figure in its heading; leave it blank where the part was not attempted.',
+         'csv help'),
+    ]:
+        t = sub1(t, re.escape(a), b2, what=what)
+
+    # ---- CSV out: the mark itself; headings carry the "out of"
+    t = sub1(t, re.escape('    ...CRITERIA.map(c => qLabel(c)),\n'),
+             '    ...CRITERIA.map(c => qLabel(c) + " /" + fmtMark(c.max)),\n', what="csv head")
+    t = sub1(t, re.escape('''    ...CRITERIA.map(c => blank ? "" : (isDone(st,c.id) ? "1" : isNotAtt(st,c.id) ? "x" : "")),'''),
+             '''    ...CRITERIA.map(c => blank || !hasMark(st,c.id) ? "" : fmtMark(st.q[c.id])),''', what="csv cells")
+    # CSV in: numbers; y/✓ (a tick-era sheet) is full marks; x is blank
+    t = sub1(t, re.escape('    const want = [norm(qLabel(c)), norm(c.id)];'),
+             '    const want = [norm(qLabel(c) + " /" + fmtMark(c.max)), norm(qLabel(c)), norm(c.id)];', what="csv match")
+    t = sub1(t, re.escape('''      if(/^(x|n|no|na|blank|not attempted|-)$/i.test(raw)) st.q[c.id] = "x";
+      else if(TRUEY(raw)) st.q[c.id] = true;'''),
+             '''      if(/^(x|n|no|na|blank|not attempted|-)$/i.test(raw)) return;
+      const v = parseMark(raw, c.max);
+      if(typeof v === "number" && !Number.isNaN(v)) st.q[c.id] = v;   /* NaN is a number too */
+      else if(TRUEY(raw)) st.q[c.id] = c.max;
+      else if(Number.isNaN(v)) badCells.push(name + " " + qLabel(c) + " (" + raw + ")");''', what="csv parse")
+    t = sub1(t, re.escape('''  const anyQ = idxQ.some(i => i >= 0);
+  const out = [];'''),
+             '''  const anyQ = idxQ.some(i => i >= 0);
+  const out = [], badCells = [];''', what="csv badCells")
+    t = sub1(t, re.escape('''  state.students = out;
+  renderAll(); persist();
+  toast("Imported "+out.length'''),
+             '''  state.students = out;
+  refreshClass(); state.students.forEach(s => regenerate(s, false));
+  renderAll(); persist();
+  if(badCells.length) setTimeout(() => toast(badCells.length + " cell" + (badCells.length===1?"":"s")
+    + " out of range and left blank: " + badCells.slice(0,3).join(", ") + (badCells.length > 3 ? "…" : "")), 2400);
+  toast("Imported "+out.length''', what="csv refresh")
+
+    # JSON in: v2 numbers as-is; v1 ticks -> true is full marks, "x" blank,
+    # and a criterion left empty on a student who had any tick becomes 0 —
+    # in the tick era an empty cell meant "attempted, not successful".
+    t = sub1(t, re.escape('''    const mq = migrateTicks(o.q, fileVersion);
+    Object.keys(mq).forEach(id => {
+      if(!CRITERIA.some(c => c.id === id)) return;
+      const v = mq[id];
+      if(v === "x"){ if(st.q[id] !== true) st.q[id] = "x"; }
+      else if(v) st.q[id] = true;
+    });'''),
+             '''    const mq = migrateTicks(o.q, fileVersion);
+    Object.keys(mq).forEach(id => {
+      if(!(id in MAXOF)) return;
+      const v = mq[id];
+      if(typeof v === "number"){ if(!Number.isNaN(parseMark(String(v), MAXOF[id]))) st.q[id] = v; }
+      else if(v === true) st.q[id] = MAXOF[id];
+    });
+    if(fileVersion < 2 && Object.keys(mq).some(id => id in MAXOF))
+      CRITERIA.forEach(c => { if(mq[c.id] === undefined) st.q[c.id] = 0; });''', what="json values")
+    t = sub1(t, re.escape('''    if(!st.comment) regenerate(st,true);
+    return st;
+  });'''),
+             '''    return st;
+  });
+  refreshClass(); state.students.forEach(s => { if(!s.comment) regenerate(s, true); });''', what="json refresh")
+
+    t = sub1(t, re.escape("\ntd.qcell{width:30px;"), MARKS_CSS + "\ntd.qcell{width:30px;", what="marks css")
+    return t
 
 
 def main():
@@ -435,6 +811,10 @@ const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
     t = swap_const(t, "CRITERIA", "[", CRITERIA)
     t = swap_const(t, "PARTS", "[", PARTS)
 
+    # ---- marks, not ticks (after the data, which carries each `max`) --
+    check_marks()
+    t = to_marks(t)
+
     hdr = ("<!-- GENERATED — do not edit this file.\n"
            "     Built from bio-ecosystems/rubric-payload.html by\n"
            "     tools/build_space_rubric.py; the data lives in\n"
@@ -481,7 +861,7 @@ const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
         js = src[src.index("<script>"):]
         return set(re.findall(r"\n\s*(?:async\s+)?function\s+([A-Za-z_$][\w$]*)", js))
 
-    INTENTIONALLY_REMOVED = {"matchSpecies"}
+    INTENTIONALLY_REMOVED = {"matchSpecies", "cycleTick"}   # cycleTick -> setMark (marks, not ticks)
     lost = (top_level_fns(open(SRC, encoding="utf-8").read())
             - top_level_fns(t) - INTENTIONALLY_REMOVED)
     assert not lost, ("a splice swallowed code — these functions vanished: "

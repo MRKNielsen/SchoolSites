@@ -94,7 +94,14 @@ Optional modules — link only when a deck uses them:
   orbit is a **circle**: eccentricity is 0.017, so a circle is very nearly
   right, and a visibly elliptical orbit with the Sun in the middle is what
   produces "it's summer because we're closer". Space deck 2 slide 7 was
-  drawn that way and had to be redrawn for precisely that reason.
+  drawn that way and had to be redrawn for precisely that reason, and
+  `revision1.html` slide 25 — the *model answer* for "explain why the
+  seasons are opposite" — shipped with a 3:1 ellipse and the Sun at its
+  centre until Oct 2026. **This applies to every hand-drawn orbit in the
+  repo, not just the widget.** Draw the orbit as a `<circle>` with the
+  Sun at its centre and every Earth position exactly on it, and assert
+  it: compute each Earth's distance to the Sun and fail the build if
+  they differ. `revision1_figs.py`'s model figure is the worked example.
 - `assets/css/binomsim.css` + `assets/js/binomsim.js` — the binomial →
   normal visualiser for 15F. Markup is one line,
   `<div class="binomsim"></div>`; the JS builds the SVG (exact
@@ -680,6 +687,51 @@ Reference implementation: `year7-science/bio-ecosystems/worksheet1.html`.
   means decrypting, splicing, and re-encrypting via
   `tools/staff-crypt.html` (see "Staff-gated pages").
 
+### Red answer copies
+
+A worksheet's answer copy is **the same worksheet with answers written
+into its own furniture** — blanks filled, ruled lines written on, table
+cells completed, the chosen option ringed, boxes ticked — so it reads as
+a completed sheet rather than a key beside one. The components are the
+"red answer overlay" block in worksheet.css: `.wsa-in` (written into a
+blank, cell or sort column), `.lines.filled` / `.halflines.filled`
+(written on the rules; keep `data-lines` so `--n` still sets the minimum
+height, and the block grows if the answer runs long), `.opt.chosen`,
+`.tick li.ticked`, `.wsa-note` (marking guidance — the one thing outside
+the student's furniture, because a student never wrote it) and `.wsa` as
+a fallback. Red is `--neg`; the handwriting is `--font-hand` (Caveat, so
+the gated shell must load it). The sheet takes `.sheet.staff` and a
+`.staff-flag` chip beside the title.
+
+**Generate both copies from one source.** `tools/revision1_worksheet.py`
+is the pattern: the question wording exists once, a module-level
+`ANSWERS` flag switches `blank()` / `lines()` / `cell()` / `note()` /
+`drawbox()` between the two, and `--student` / `--answers` / `--both`
+pick the output. A hand-copied key drifts the first time a question is
+corrected, with nothing to signal it.
+
+Two checks make that claim real, and both matter:
+
+- **The round trip.** `verify()` strips the overlay back off the answer
+  copy and asserts the result equals the student sheet's question markup
+  *exactly*. That catches an answer that ate the question wording, a
+  question dropped from one copy, and a `data-lines` that changed under
+  an answer — none of which a count of filled slots would see. It also
+  asserts every slot is filled, naming the deliberate exceptions (the
+  exit self-rating column is the student's own judgement and stays
+  blank).
+- **That the check can fail.** `tools/test-revision1-worksheet.py` breaks
+  each defect class in turn and requires `verify()` to raise. The rubric
+  build once shipped with ~12,600 characters spliced out and a passing
+  check, because the check only exercised the part that survived.
+
+Pull the answers from the deck's own answer slides rather than
+re-deriving them, so the key marks what the class was actually shown,
+and say in a comment which slide each part came from. Where the student
+sheet has a `.drawbox`, the answer copy replaces it with the deck's
+model figure in a `figure.ws-fig` — on a marking copy it is no longer
+space to draw in, it *is* a figure.
+
 On the unit landing page each worksheet is linked directly under its
 lesson: wrap the `.deck-card` and a `.dc-wslink` in a `.deck-item`
 (course.css). The wrapper is required because `.deck-card` is itself an
@@ -696,9 +748,14 @@ year7-science/bio-ecosystems: `solutions.html` (answer key),
 `worksheets-all-solutions.html` (the collated worksheet booklet with
 answers), `portfolio-solutions.html` (the Research Portfolio key) and
 `rubric.html` (the Ecosystem Investigation marking tool). In
-year7-science/space: `solutions.html` and
+year7-science/space: `solutions.html`,
 `worksheet-revision-solutions.html` (the revision worksheet's answer
-copy, same shell as `worksheets-all-solutions.html`).
+copy, same shell as `worksheets-all-solutions.html`) and
+`worksheet-revision1-solutions.html` (the Revision 1 sheet's answer
+copy, generated — see "Red answer copies" above). The last one's shell
+is written by `tools/revision1_worksheet.py --answers`, which keeps any
+`var BLOB` line already in the file, so a rebuild after encryption does
+not throw the blob away.
 
 **Neither rubric is gated.** `space/rubric.html` was, for a day, and every
 content fix cost a decrypt / edit / re-encrypt / paste round that could not
@@ -783,12 +840,26 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
     strength and a next step.
   - **Run `node tools/test-space-rubric.js` after every rebuild.** It boots
     the payload in jsdom the way the unlocked page does and drives it —
-    class entry, tick cycling, bands, comments, groups, print, autosave
-    round-trip. The first Space build shipped with ~12,600 characters
+    class entry, mark entry, bands, comments, groups, print, autosave
+    round-trip, CSV and tick-era file import. The first Space build shipped with ~12,600 characters
     spliced out (`persist`, `restore`, `demo` and the CSV/file handling)
     and threw on boot; the checks at the time only ran the part of the
     script above the render functions, which is exactly the part that
     survived. Needs `npm install jsdom`.
+  - **Space's grid takes marks, bio's takes ticks.** Each Space criterion
+    carries `max` (its marks on the paper) and the teacher types the mark:
+    blank = not attempted, 0 = attempted with nothing creditable. A
+    criterion counts towards its rubric cell at **half its marks or more**
+    (`PASS`), so the band logic is otherwise bio's. A blank only reads as
+    "not attempted" once that student has a mark somewhere *and* someone in
+    the class has a mark in that column — otherwise a class marked
+    question-by-question reads, part way through, as a class that skipped
+    half the paper. `to_marks()` in the builder does the conversion and
+    `check_marks()` fails the build unless each strand's maxes sum to its
+    weight and the paper to 50. The grid's inputs are updated in place,
+    never re-rendered while typing — a re-render on input or blur destroys
+    the cell the teacher is tabbing into. Save format v2; v1 tick files
+    still open (tick = full marks, `x` = blank, empty = 0).
   - Give each unit its **own autosave key**. bio uses
     `"ecosystem-rubric:v1"`; leaving it unchanged makes two rubrics open in
     one browser share a localStorage slot and overwrite each other.

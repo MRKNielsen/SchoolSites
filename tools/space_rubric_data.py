@@ -152,7 +152,19 @@ STRANDS = r'''[
 ]'''
 
 # ---------------------------------------------------------------- criteria
-# One tickable row per observable. band must exist for every level up to the
+# One marking-grid column per observable. `max` is what that column is out of
+# on the paper (CAT_5_Astronomy_Test_2026_FINAL.pdf), and the builder asserts
+# every strand's maxes sum to its weight and the paper to 50. Where one paper
+# part is split across two columns, the split follows the part's own marks:
+#   Q1 (3)   Earth 2 labels at ½ = 1, Sun 4 labels at ½ = 2
+#   Q3a (2)  winter 1 + autumn 1 (one mark per table row)
+#   Q3c      the paper's (b) and (c), 1 + 1
+#   Q4b/c    (i) + (ii), 1 + 1 each
+#   Q7       printed "(11 marks)" but its parts are 4+1+1+1+1+1+1+2 = 12, and
+#            12 is what makes the paper total 50. b and c(i) are two names each.
+#   Q8b, Q9b 2 marks, one per column
+#   Q11 (4)  the paper gives no split; diagram 2 + explanation 2 is assumed.
+# One row per observable. band must exist for every level up to the
 # strand's maxBand, or that strand can never award the levels above the hole.
 #
 # `q` is the question number ALONE and `sub` is the sub-part, because the mark
@@ -170,40 +182,40 @@ STRANDS = r'''[
 # by part. MARK_COLS re-sorts into paper order anyway, so the grid stays right
 # even if these rows are later regrouped.
 CRITERIA = r'''[
- {id:"Q1a",   q:"Q1",  sub:"ear", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1},
- {id:"Q1b",   q:"Q1",  sub:"sun", part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2},
- {id:"Q2a",   q:"Q2",  sub:"a",   part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1},
- {id:"Q2b",   q:"Q2",  sub:"b",   part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2},
- {id:"Q2c",   q:"Q2",  sub:"c",   part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1},
- {id:"Q3a",   q:"Q3",  sub:"a1",  part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2},
- {id:"Q3b",   q:"Q3",  sub:"a2",  part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3},
- {id:"Q3c",   q:"Q3",  sub:"bc",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1},
- {id:"Q3d",   q:"Q3",  sub:"d",   part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3},
- {id:"Q4a",   q:"Q4",  sub:"a",   part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1},
- {id:"Q4b",   q:"Q4",  sub:"b",   part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q4c",   q:"Q4",  sub:"c",   part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2},
- {id:"Q4d",   q:"Q4",  sub:"d",   part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4},
- {id:"Q4e",   q:"Q4",  sub:"e",   part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1},
- {id:"Q5a",   q:"Q5",  sub:"a",   part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2},
- {id:"Q5b",   q:"Q5",  sub:"b",   part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3},
- {id:"Q5c",   q:"Q5",  sub:"c",   part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3},
- {id:"Q6a",   q:"Q6",  sub:"a",   part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2},
- {id:"Q6b",   q:"Q6",  sub:"b",   part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3},
- {id:"Q7a",   q:"Q7",  sub:"a",   part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1},
- {id:"Q7b",   q:"Q7",  sub:"b",   part:"D", label:"Names two gas giants",                                       strand:"s4", band:1},
- {id:"Q7ci",  q:"Q7",  sub:"ci",  part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2},
- {id:"Q7cii", q:"Q7",  sub:"cii", part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3},
- {id:"Q7di",  q:"Q7",  sub:"di",  part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2},
- {id:"Q7dii", q:"Q7",  sub:"dii", part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4},
- {id:"Q8a",   q:"Q8",  sub:"a",   part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1},
- {id:"Q8bi",  q:"Q8",  sub:"b1",  part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2},
- {id:"Q8bii", q:"Q8",  sub:"b2",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3},
- {id:"Q9a",   q:"Q9",  sub:"a",   part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1},
- {id:"Q9bi",  q:"Q9",  sub:"b1",  part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2},
- {id:"Q9bii", q:"Q9",  sub:"b2",  part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3},
- {id:"Q10",   q:"Q10", sub:"",    part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4},
- {id:"Q11a",  q:"Q11", sub:"dia", part:"B", label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3},
- {id:"Q11b",  q:"Q11", sub:"exp", part:"B", label:"Explains January and July, referring to the diagram",        strand:"s2", band:4}
+ {id:"Q1a",   q:"Q1",  sub:"ear", part:"A", label:"Labels the crust and the mantle",                            strand:"s1", band:1, max:1},
+ {id:"Q1b",   q:"Q1",  sub:"sun", part:"A", label:"Labels the Sun’s four unlabelled layers",                     strand:"s1", band:2, max:2},
+ {id:"Q2a",   q:"Q2",  sub:"a",   part:"B", label:"Reads daylight and darkness off the diagram",                strand:"s2", band:1, max:1},
+ {id:"Q2b",   q:"Q2",  sub:"b",   part:"B", label:"Uses the tilt to say which country is in summer",            strand:"s2", band:2, max:1},
+ {id:"Q2c",   q:"Q2",  sub:"c",   part:"B", label:"States the time for one rotation on the axis",               strand:"s2", band:1, max:1},
+ {id:"Q3a",   q:"Q3",  sub:"a1",  part:"B", label:"Locates Melbourne’s winter on the orbit",                     strand:"s2", band:2, max:1},
+ {id:"Q3b",   q:"Q3",  sub:"a2",  part:"B", label:"Locates Melbourne’s autumn on the orbit",                     strand:"s2", band:3, max:1},
+ {id:"Q3c",   q:"Q3",  sub:"bc",  part:"B", label:"States the orbital period and the tilt angle",               strand:"s2", band:1, max:2},
+ {id:"Q3d",   q:"Q3",  sub:"d",   part:"B", label:"Rejects the “closest to the Sun” explanation",                strand:"s2", band:3, max:1},
+ {id:"Q4a",   q:"Q4",  sub:"a",   part:"C", label:"States the Moon’s orbital period",                            strand:"s3", band:1, max:1},
+ {id:"Q4b",   q:"Q4",  sub:"b",   part:"C", label:"Phase at position X, and its Melbourne view",                strand:"s3", band:2, max:2},
+ {id:"Q4c",   q:"Q4",  sub:"c",   part:"C", label:"Phase at position Y, and its Melbourne view",                strand:"s3", band:2, max:2},
+ {id:"Q4d",   q:"Q4",  sub:"d",   part:"C", label:"Works back from a pictured phase to its orbital position",   strand:"s3", band:4, max:2},
+ {id:"Q4e",   q:"Q4",  sub:"e",   part:"C", label:"Explains that we see reflected sunlight",                    strand:"s3", band:1, max:1},
+ {id:"Q5a",   q:"Q5",  sub:"a",   part:"C", label:"Identifies spring tides at the aligned position",            strand:"s3", band:2, max:1},
+ {id:"Q5b",   q:"Q5",  sub:"b",   part:"C", label:"Two high tides a day come from Earth’s rotation",            strand:"s3", band:3, max:1},
+ {id:"Q5c",   q:"Q5",  sub:"c",   part:"C", label:"States what raises the near-side tidal bulge",               strand:"s3", band:3, max:1},
+ {id:"Q6a",   q:"Q6",  sub:"a",   part:"A", label:"Finds how many times wider Earth is than the Moon",          strand:"s1", band:2, max:2},
+ {id:"Q6b",   q:"Q6",  sub:"b",   part:"A", label:"Calculates the light travel time from the Sun, with working",strand:"s1", band:3, max:2},
+ {id:"Q7a",   q:"Q7",  sub:"a",   part:"D", label:"Lists the eight planets in order from the Sun",              strand:"s4", band:1, max:4},
+ {id:"Q7b",   q:"Q7",  sub:"b",   part:"D", label:"Names two gas giants",                                       strand:"s4", band:1, max:2},
+ {id:"Q7ci",  q:"Q7",  sub:"ci",  part:"D", label:"Locates the asteroid belt",                                  strand:"s4", band:2, max:2},
+ {id:"Q7cii", q:"Q7",  sub:"cii", part:"D", label:"Explains why the belt never formed a planet",                strand:"s4", band:3, max:1},
+ {id:"Q7di",  q:"Q7",  sub:"di",  part:"D", label:"States how many times farther out Uranus is",                strand:"s4", band:2, max:1},
+ {id:"Q7dii", q:"Q7",  sub:"dii", part:"D", label:"Converts AU to kilometres, with working",                    strand:"s4", band:4, max:2},
+ {id:"Q8a",   q:"Q8",  sub:"a",   part:"E", label:"Contrasts dark and western constellations",                  strand:"s5", band:1, max:1},
+ {id:"Q8bi",  q:"Q8",  sub:"b1",  part:"E", label:"Names the season the Emu’s position signals",                 strand:"s5", band:2, max:1},
+ {id:"Q8bii", q:"Q8",  sub:"b2",  part:"E", label:"Links it to the emus’ breeding cycle",                       strand:"s5", band:3, max:1},
+ {id:"Q9a",   q:"Q9",  sub:"a",   part:"E", label:"Identifies what counts as space debris",                     strand:"s6", band:1, max:1},
+ {id:"Q9bi",  q:"Q9",  sub:"b1",  part:"E", label:"One reason a 1 cm fragment is dangerous",                    strand:"s6", band:2, max:1},
+ {id:"Q9bii", q:"Q9",  sub:"b2",  part:"E", label:"A second, genuinely different reason",                       strand:"s6", band:3, max:1},
+ {id:"Q10",   q:"Q10", sub:"",    part:"A", label:"Explains the Moon’s 300° temperature range",                  strand:"s1", band:4, max:2},
+ {id:"Q11a",  q:"Q11", sub:"dia", part:"B", label:"Draws a labelled diagram of the tilt at two orbital points", strand:"s2", band:3, max:2},
+ {id:"Q11b",  q:"Q11", sub:"exp", part:"B", label:"Explains January and July, referring to the diagram",        strand:"s2", band:4, max:2}
 ]'''
 
 PARTS = r'''[
