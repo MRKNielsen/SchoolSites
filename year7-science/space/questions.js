@@ -48,7 +48,7 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 7, q:"Wurundjeri-Woiwurrung people of the Kulin Nation use which of the following to signal seasonal changes on Country?", opts:["Only rainfall","Star positions, the flowering of plants, and animal behaviour together","European calendar months only","Ocean temperature"], ans:1 },
 
 /* ── LESSON 3: The Moon — Phases & Tides ─────────────────────────── */
-  { deck: 3, q:"How long does the Moon take to complete one orbit around Earth?", opts:["24 hours","7 days","29.5 days","365 days"], ans:2 },
+  { deck: 3, q:"How long does the Moon take to complete one orbit around Earth?", opts:["7 days","27.3 days","29.5 days","365 days"], ans:1 },
   { deck: 3, q:"What causes the Moon's phases?", opts:["Earth's shadow falling on the Moon","Our changing view of the lit half of the Moon as it orbits Earth","Clouds covering the Moon","The Moon moving closer and further from Earth"], ans:1 },
   { deck: 3, q:"A full Moon occurs when...", opts:["Earth is between the Sun and Moon","The Moon is between Earth and the Sun","The Moon is on the opposite side of Earth from the Sun — fully lit as seen from Earth","The Sun is between Earth and the Moon"], ans:2 },
   { deck: 3, q:"During a new Moon, what do we see from Earth?", opts:["A bright full circle","The dark side of the Moon faces us — nearly invisible","A half circle","A thin crescent"], ans:1 },
