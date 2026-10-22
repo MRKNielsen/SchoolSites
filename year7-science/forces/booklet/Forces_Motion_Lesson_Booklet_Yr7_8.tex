@@ -1207,14 +1207,27 @@
 
 % Two short tasks side by side, each with its own working box
 % \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
 \newcommand{\taskpair}[4]{%
-  \par\needspace{9\baselineskip}\vspace{4pt}\noindent
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
   \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
   \begin{minipage}[t]{0.485\linewidth}
-    \task #1\par\vspace{2pt}\answerbox{#2}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.485\linewidth}
-    \task #3\par\vspace{2pt}\answerbox{#4}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
   \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
 
 % Answer boxes never split across a page (a half box on its own page is useless)
