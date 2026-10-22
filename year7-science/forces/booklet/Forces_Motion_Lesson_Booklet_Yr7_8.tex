@@ -42,6 +42,15 @@
 \usepackage{mdframed}
 \usepackage{setspace}
 \usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Forces and Motion — Lesson Booklet},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
 
 % ── Colour Palette ───────────────────────────────────────────────────────────
 % Remapped to the slide-deck palette (names kept so body + diagrams cascade)
@@ -301,6 +310,8 @@
 \newcommand{\sectiondiv}[2]{%
   \needspace{5\baselineskip}%
   \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
   \begin{tcolorbox}[
     enhanced, breakable=false, arc=3.5mm,
     colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
@@ -1294,6 +1305,7 @@
 \renewcommand{\talt}{}
 \renewcommand{\tmid}{}
 \begin{document}
+\pdfbookmark[1]{Cover and contents}{cover}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt}
 
@@ -1348,20 +1360,20 @@ Experiments 2--4 follow the same four parts: a reading about the science, planni
 \begin{ctab}
 \begin{tabular}{|C{1.4cm}|L{9.6cm}|C{1.6cm}|}
   \thead{Lesson} & \thead{Title} & \thead{Page} \\ \hline
-  \talt 1 & What is a Force? & p.\ \pageref{sec:1} \\ \hline
-        2 & Force Diagrams and Net Force & p.\ \pageref{sec:2} \\ \hline
-  \talt 3 & Experiment 1 --- Everyday Forces & p.\ \pageref{sec:3} \\ \hline
-        4 & Newton's First and Third Laws & p.\ \pageref{sec:4} \\ \hline
-  \talt 5 & Newton's Second Law: $F = ma$ & p.\ \pageref{sec:5} \\ \hline
-        6 & Experiment 2 --- Friction and Mass & p.\ \pageref{sec:6} \\ \hline
-  \talt 7 & Energy and Transformation & p.\ \pageref{sec:7} \\ \hline
-        8 & Experiment 3 --- Bounce Efficiency & p.\ \pageref{sec:8} \\ \hline
-  \talt 9 & Simple Machines and Levers & p.\ \pageref{sec:9} \\ \hline
-       10 & Experiment 4 --- Lever Mechanical Advantage & p.\ \pageref{sec:10} \\ \hline
-  \talt 11 & Levers Extension \textit{(optional)} & p.\ \pageref{sec:11} \\ \hline
-       12 & Projectile Motion & p.\ \pageref{sec:12} \\ \hline
-  \talt 13 & Experiment 5 --- Measuring $g$ & p.\ \pageref{sec:13} \\ \hline
-       14 & Optimising Range \textit{(optional)} & p.\ \pageref{sec:14} \\ \hline
+  \talt 1 & \hyperlink{lesson.1.1}{What is a Force?} & \hyperlink{lesson.1.1}{p.\ \pageref{sec:1}} \\ \hline
+        2 & \hyperlink{lesson.2.1}{Force Diagrams and Net Force} & \hyperlink{lesson.2.1}{p.\ \pageref{sec:2}} \\ \hline
+  \talt 3 & \hyperlink{lesson.3.1}{Experiment 1 --- Everyday Forces} & \hyperlink{lesson.3.1}{p.\ \pageref{sec:3}} \\ \hline
+        4 & \hyperlink{lesson.4.1}{Newton's First and Third Laws} & \hyperlink{lesson.4.1}{p.\ \pageref{sec:4}} \\ \hline
+  \talt 5 & \hyperlink{lesson.5.1}{Newton's Second Law: $F = ma$} & \hyperlink{lesson.5.1}{p.\ \pageref{sec:5}} \\ \hline
+        6 & \hyperlink{lesson.6.1}{Experiment 2 --- Friction and Mass} & \hyperlink{lesson.6.1}{p.\ \pageref{sec:6}} \\ \hline
+  \talt 7 & \hyperlink{lesson.7.1}{Energy and Transformation} & \hyperlink{lesson.7.1}{p.\ \pageref{sec:7}} \\ \hline
+        8 & \hyperlink{lesson.8.1}{Experiment 3 --- Bounce Efficiency} & \hyperlink{lesson.8.1}{p.\ \pageref{sec:8}} \\ \hline
+  \talt 9 & \hyperlink{lesson.9.1}{Simple Machines and Levers} & \hyperlink{lesson.9.1}{p.\ \pageref{sec:9}} \\ \hline
+       10 & \hyperlink{lesson.10.1}{Experiment 4 --- Lever Mechanical Advantage} & \hyperlink{lesson.10.1}{p.\ \pageref{sec:10}} \\ \hline
+  \talt 11 & \hyperlink{lesson.11.1}{Levers Extension \textit{(optional)}} & \hyperlink{lesson.11.1}{p.\ \pageref{sec:11}} \\ \hline
+       12 & \hyperlink{lesson.12.1}{Projectile Motion} & \hyperlink{lesson.12.1}{p.\ \pageref{sec:12}} \\ \hline
+  \talt 13 & \hyperlink{lesson.13.1}{Experiment 5 --- Measuring $g$} & \hyperlink{lesson.13.1}{p.\ \pageref{sec:13}} \\ \hline
+       14 & \hyperlink{lesson.14.1}{Optimising Range \textit{(optional)}} & \hyperlink{lesson.14.1}{p.\ \pageref{sec:14}} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -2503,7 +2515,7 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 5 — NEWTON'S SECOND LAW                                 (Week 2 · P2)
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Newton's Second Law: $F = ma$}{Acceleration \textbullet{} Force, mass and acceleration \textbullet{} Rearranging $F = ma$ \textbullet{} Using the net force}\label{sec:5}
+\sectiondiv{Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma}}{Acceleration \textbullet{} Force, mass and acceleration \textbullet{} Rearranging $F = ma$ \textbullet{} Using the net force}\label{sec:5}
 \lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
 
 \vocabhead
@@ -4581,7 +4593,7 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 13 — EXPERIMENT 5: MEASURING g                             (Week 5 · P1)
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Experiment 5: Measuring $g$}{Prediction \textbullet{} Ball roll-off \textbullet{} Slow-motion video \textbullet{} Percentage error}\label{sec:13}\label{exp:5}
+\sectiondiv{Experiment 5: Measuring \texorpdfstring{$g$}{g}}{Prediction \textbullet{} Ball roll-off \textbullet{} Slow-motion video \textbullet{} Percentage error}\label{sec:13}\label{exp:5}
 \lessoncodes{VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06}
 
 \vocabhead
