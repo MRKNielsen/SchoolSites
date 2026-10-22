@@ -42,6 +42,26 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — Space rubric Analysis tab (22 Oct 2026)
+
+A new **Analysis** tab in `year7-science/space/rubric.html`, built from the
+marks already in the grid (nothing new is stored):
+
+- tiles: students marked, class mean, median, range, % of parts not attempted
+- spread of totals in five-mark bins, with the class mean marked; hover a bar
+  for who is in it
+- bands by strand (and overall level) as 100% stacked bars, with a table view
+- question by question in paper order or lowest-facility first: mean,
+  facility (blank counts 0), % demonstrated (≥ half), % not attempted, and
+  flags for under 50% facility (*Reteach*) and 25%+ skipped (*Often skipped*)
+- *Print analysis* (3 A4 pages for a full class) and a question-analysis CSV
+
+Content in `tools/space_rubric_analysis.py`; `add_analysis()` in the builder
+splices it, every splice asserted. Chart colours are new tokens
+`--c-chart-band-0..4` (see tokens.css for why the cell tints can't be reused).
+Eight new checks in `test-space-rubric.js`; rendered and checked in Chromium
+at desktop and phone width, and in print.
+
 ### Landed — Space rubric takes marks, not ticks (21 Oct 2026)
 
 `year7-science/space/rubric.html` — each grid cell is now a number box for

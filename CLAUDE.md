@@ -860,6 +860,14 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
     never re-rendered while typing — a re-render on input or blur destroys
     the cell the teacher is tabbing into. Save format v2; v1 tick files
     still open (tick = full marks, `x` = blank, empty = 0).
+  - **Space has an Analysis tab** (`tools/space_rubric_analysis.py`,
+    spliced by `add_analysis()`): summary tiles, spread of totals, bands by
+    strand, and question-by-question facility with reteach / skipped flags.
+    It reads the grid and stores nothing, using the same "marked" rules as
+    the grid. Its band charts use `--c-chart-band-0..4` from tokens.css, not
+    the `--c-band-*` cell tints. Those are pale backgrounds that can't be
+    told apart as bars (bands 0–2 within dE 3.3). Every segment carries its
+    count, because bands 0–1 are under 3:1 contrast against the page.
   - Give each unit its **own autosave key**. bio uses
     `"ecosystem-rubric:v1"`; leaving it unchanged makes two rubrics open in
     one browser share a localStorage slot and overwrite each other.
