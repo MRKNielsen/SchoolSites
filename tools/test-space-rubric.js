@@ -186,6 +186,26 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   ok(window.eval('state.students[1].q.Q1a') === 1 && window.eval('state.students[1].q.Q10') === 0, 'a "y" is full marks, 0 is 0');
   ok(window.eval('"Q7a" in state.students[1].q') === false, 'an out-of-range 9/4 is left blank, not stored');
 
+  console.log('\n=== pronouns survive the class list and the CSV ===');
+  /* Both paths once dropped every pronoun to "they": the roll read the wrong
+     column, and the CSV import passed bio's species argument where Space's
+     newStudent(name, pron) expects the pronoun. */
+  window.eval('state.students = []; renderAll();');
+  $('#f-roll').value = 'Ana Ruiz, she\nBo Tran, he\nCam Ng, they\nDee Park, her\nEd Hu';
+  window.eval('applyRoll();');
+  ok(window.eval('state.students.map(s=>s.pron).join(",")') === 'she,he,they,she,they',
+     'roll: she, he, they, "her" -> she (not he), none -> they');
+  window.eval(`importCSV("Name,Pronoun,Q10\\nAna Ruiz,she,2\\nBo Tran,He,1\\nCam Ng,they,")`);
+  ok(window.eval('state.students.map(s=>s.pron).join(",")') === 'she,he,they',
+     'CSV: pronouns load (she, He -> he, they)');
+  window.eval(`importCSV("Name,Species,Pronoun\\nOld File,Greater Bilby,she")`);
+  ok(window.eval('state.students[0].pron') === 'she', 'an old CSV with a Species column still loads its pronoun');
+  let csvOut = '';
+  window.eval('download = (n, text) => { window.__csv = text; };');
+  window.eval('exportCSV(true);');
+  csvOut = window.eval('window.__csv') || '';
+  ok(/^Name,Pronoun,/.test(csvOut) && !/Species/i.test(csvOut), 'template header is Name,Pronoun,... with no Species column');
+
   console.log('\n=== the key is namespaced away from bio ===');
   ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');
 

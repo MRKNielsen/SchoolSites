@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 14 &#8212; Optimising Range | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="booklet" content="booklet/Forces_Motion_Lesson_Booklet_Yr7_8">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 14 of 18</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 5 <b>&#183;</b> Lesson 14 of 18</p>
+    <h1>Optimising Range</h1>
+    <p class="subtitle">An optional Year 8 extension: why 45&#176; goes furthest on flat ground, complementary angles, the range equation, and why real launches are set lower.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Lesson 14</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide quiz-slide" data-quiz-before="14" data-quiz-recent="3" data-quiz-exclude="0,11" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 13</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Lesson 14 <b>&#183;</b> Overview &#183; optional Year 8 extension</p>
+    <h2>What we&#8217;re learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
+        <ul>
+          <li>explain how the launch angle shares a projectile&#8217;s speed between up and along</li>
+          <li>find the angle that gives the maximum range</li>
+          <li>use the range equation with given sine values</li>
+          <li>explain why real launches are set lower than 45&#176;</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
+        <ul>
+          <li>use \(R_{\max} = v^2 \div g\) at 45&#176;</li>
+          <li>find the complementary angle that gives the same range</li>
+          <li>use \(R = v^2 \times \sin(2\theta) \div g\)</li>
+          <li>give reasons a trebuchet or long jumper launches lower</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>You want to throw a ball as far as possible across a flat oval. Do you throw it flat, steeply upwards, or somewhere in between? Why?</p>
+      <button class="reveal-btn" data-answer="#l14s">What to listen for</button>
+      <div class="a" id="l14s"><span class="lbl-a">What we&#8217;re listening for</span>Flat: lands too soon. Straight up: goes nowhere. The best is in between &#8212; today we find exactly where, and why real throwers don&#8217;t always use it.</div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="bookref book">Booklet p.154 &#183; §14 &#183; Key vocabulary</p>
+    <p class="eyebrow">Lesson 14 <b>&#183;</b> Starter</p>
+    <h2><span class="phase-tag youdo">You do</span> Key vocabulary</h2>
+    <p>Copy each definition into the <strong>Key vocabulary</strong> table at the start of Lesson 14 in your booklet.</p>
+    <table class="tbl vocab">
+      <thead><tr><th>Word</th><th>Say it</th><th>Meaning</th></tr></thead>
+      <tbody>
+          <tr><td>Launch angle</td><td>LAWNCH ANG-gl</td><td>The angle between the ground and the direction a projectile is launched in.</td></tr>
+          <tr><td>Range</td><td>raynj</td><td>The horizontal distance a projectile travels before it lands.</td></tr>
+          <tr><td>Maximum range</td><td>MAK-si-mum raynj</td><td>The furthest a projectile can go for a given launch speed &#8212; at 45&#176; on flat ground with no air.</td></tr>
+          <tr><td>Complementary angles</td><td>kom-ple-MEN-ta-ree ANG-glz</td><td>Two angles that add up to 90&#176;, such as 30&#176; and 60&#176;.</td></tr>
+          <tr><td>Launch height</td><td>LAWNCH hite</td><td>How high above the landing ground a projectile is when it is launched.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="Part A: reading">
+    <p class="bookref book">Booklet p.154 &#183; Part A &#183; Reading and comprehension</p>
+    <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
+    <h2>Why Long Jumpers Don&#8217;t Take Off at 45&#176;</h2>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Before you read</span><p>If 45&#176; is the best angle, why does a long jumper look like they take off almost flat?</p></div>
+        <p>Read <em>Why Long Jumpers Don&#8217;t Take Off at 45&#176;</em> in your booklet. Then answer questions <strong>C1&#8211;C4</strong>.</p>
+      </div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>Why do long jumpers take off at about 20&#176;?</p>
+        <button class="reveal-btn" data-answer="#l14r">Show answer</button>
+        <div class="a" id="l14r"><span class="lbl-a">Answer</span>Nobody can spring upwards as fast as they can sprint. A flatter take-off keeps almost all the run-up speed, and the extra speed matters more than getting the angle to 45&#176;.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Launching at an angle">
+    <p class="bookref book">Booklet p.156 &#183; §14.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>Launching at an angle</h2>
+    <div class="cols wide-right">
+      <div class="graph-card">
+          <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Five trajectories for the same launch speed at 15, 30, 45, 60 and 75 degrees. 45 degrees lands furthest; 30 and 60 land together, and so do 15 and 75.">
+            <line x1="20" y1="230" x2="410" y2="230" stroke-width="2.5" style="stroke:var(--c-line-cool)"/>
+            <polyline points="40.0,230.0 44.3,228.9 48.7,227.8 53.0,226.8 57.3,225.8 61.7,224.9 66.0,224.1 70.4,223.3 74.7,222.6 79.0,221.9 83.4,221.3 87.7,220.7 92.0,220.2 96.4,219.8 100.7,219.4 105.1,219.1 109.4,218.8 113.7,218.6 118.1,218.5 122.4,218.4 126.7,218.4 131.1,218.4 135.4,218.5 139.7,218.6 144.1,218.8 148.4,219.1 152.8,219.4 157.1,219.8 161.4,220.2 165.8,220.7 170.1,221.3 174.4,221.9 178.8,222.6 183.1,223.3 187.4,224.1 191.8,224.9 196.1,225.8 200.5,226.8 204.8,227.8 209.1,228.9 213.5,230.0" fill="none" stroke="#D98A0B" stroke-width="3"/>
+            <text x="127" y="212" text-anchor="middle" font-size="14" font-weight="700" fill="#D98A0B">15&#176;</text>
+            <polyline points="40.0,230.0 47.5,225.8 55.0,221.8 62.5,218.0 70.0,214.4 77.6,211.0 85.1,207.9 92.6,205.0 100.1,202.2 107.6,199.8 115.1,197.5 122.6,195.4 130.1,193.6 137.6,191.9 145.2,190.5 152.7,189.3 160.2,188.4 167.7,187.6 175.2,187.1 182.7,186.7 190.2,186.6 197.7,186.7 205.3,187.1 212.8,187.6 220.3,188.4 227.8,189.3 235.3,190.5 242.8,191.9 250.3,193.6 257.8,195.4 265.3,197.5 272.9,199.8 280.4,202.2 287.9,205.0 295.4,207.9 302.9,211.0 310.4,214.4 317.9,218.0 325.4,221.8 332.9,225.8 340.5,230.0" fill="none" stroke="#18A999" stroke-width="3"/>
+            <text x="190" y="181" text-anchor="middle" font-size="14" font-weight="700" fill="#18A999">30&#176;</text>
+            <polyline points="40.0,230.0 48.7,221.5 57.3,213.5 66.0,205.9 74.7,198.8 83.4,192.1 92.0,185.8 100.7,179.9 109.4,174.5 118.1,169.5 126.7,164.9 135.4,160.8 144.1,157.1 152.8,153.9 161.4,151.1 170.1,148.7 178.8,146.7 187.4,145.2 196.1,144.1 204.8,143.5 213.5,143.3 222.1,143.5 230.8,144.1 239.5,145.2 248.2,146.7 256.8,148.7 265.5,151.1 274.2,153.9 282.9,157.1 291.5,160.8 300.2,164.9 308.9,169.5 317.6,174.5 326.2,179.9 334.9,185.8 343.6,192.1 352.2,198.8 360.9,205.9 369.6,213.5 378.3,221.5 386.9,230.0" fill="none" stroke="#E0533F" stroke-width="3"/>
+            <text x="213" y="137" text-anchor="middle" font-size="14" font-weight="700" fill="#E0533F">45&#176;</text>
+            <polyline points="40.0,230.0 47.5,217.3 55.0,205.3 62.5,193.9 70.0,183.2 77.6,173.1 85.1,163.6 92.6,154.9 100.1,146.7 107.6,139.3 115.1,132.4 122.6,126.2 130.1,120.7 137.6,115.8 145.2,111.6 152.7,108.0 160.2,105.1 167.7,102.8 175.2,101.2 182.7,100.2 190.2,99.9 197.7,100.2 205.3,101.2 212.8,102.8 220.3,105.1 227.8,108.0 235.3,111.6 242.8,115.8 250.3,120.7 257.8,126.2 265.3,132.4 272.9,139.3 280.4,146.7 287.9,154.9 295.4,163.6 302.9,173.1 310.4,183.2 317.9,193.9 325.4,205.3 332.9,217.3 340.5,230.0" fill="none" stroke="#2F80ED" stroke-width="3"/>
+            <text x="190" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#2F80ED">60&#176;</text>
+            <polyline points="40.0,230.0 44.3,214.2 48.7,199.2 53.0,185.1 57.3,171.7 61.7,159.2 66.0,147.5 70.4,136.5 74.7,126.4 79.0,117.1 83.4,108.6 87.7,100.9 92.0,94.0 96.4,88.0 100.7,82.7 105.1,78.3 109.4,74.6 113.7,71.8 118.1,69.8 122.4,68.6 126.7,68.2 131.1,68.6 135.4,69.8 139.7,71.8 144.1,74.6 148.4,78.3 152.8,82.7 157.1,88.0 161.4,94.0 165.8,100.9 170.1,108.6 174.4,117.1 178.8,126.4 183.1,136.5 187.4,147.5 191.8,159.2 196.1,171.7 200.5,185.1 204.8,199.2 209.1,214.2 213.5,230.0" fill="none" stroke="#7C5CE0" stroke-width="3"/>
+            <text x="127" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#7C5CE0">75&#176;</text>
+            <text x="213" y="250" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">5.1 m</text>
+            <text x="341" y="250" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">8.8 m</text>
+            <text x="387" y="250" text-anchor="middle" font-size="13" style="fill:var(--ink-soft)">10.2 m</text>
+            <text x="210" y="272" text-anchor="middle" font-size="13" font-style="italic" style="fill:var(--ink-soft)">all launched at 10 m/s from the ground; no air resistance</text>
+          </svg>
+      </div>
+      <div>
+        <p>The launch speed is shared between two directions:</p>
+        <ul>
+          <li><strong>up</strong> &#8212; decides how long the ball stays in the air</li>
+          <li><strong>along</strong> &#8212; decides how far it goes each second</li>
+        </ul>
+        <div class="box key"><span class="lbl">The pattern</span><p>45&#176; goes furthest. Complementary angles (30&#176; and 60&#176;, 15&#176; and 75&#176;) land in the same place.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Maximum range">
+    <p class="bookref book">Booklet p.156 &#183; §14.2 &#183; Worked Example 14.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> The maximum range</h2>
+    <div class="cols">
+      <div class="box defn"><span class="lbl">Range on flat ground (no air)</span>
+        <p>\[R = \frac{v^2 \times \sin(2\theta)}{g} \qquad R_{\max} = \frac{v^2}{g} \text{ at } 45^\circ\]</p>
+        <p>\(v\) = launch speed (m/s), \(\theta\) = launch angle, \(g = 9.8\ \text{m/s}^2\)</p>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 14.1</span><p>A ball is launched at <strong>20&nbsp;m/s</strong>. Find its maximum range on flat ground.</p></div>
+    <ol class="steps" id="l14w1">
+      <li><span class="stepno">1</span> Maximum range is at 45&#176;, so use \(R_{\max} = v^2 \div g\)</li>
+      <li><span class="stepno">2</span> \(R_{\max} = (20 \times 20) \div 9.8 = 400 \div 9.8\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R_{\max} \approx 40.8\ \text{m}\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14w1">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: maximum range">
+    <p class="bookref book">Booklet p.157 &#183; We do 14.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Find the maximum range</h2>
+    <div class="box question"><span class="lbl">We do 14.1</span><p>A ball is launched at <strong>14&nbsp;m/s</strong>. Find its maximum range on flat ground.</p></div>
+    <p class="note">Write your working in the <strong>We do 14.1</strong> box in your booklet.</p>
+    <ol class="steps" id="l14d1">
+      <li><span class="stepno">1</span> Use \(R_{\max} = v^2 \div g\)</li>
+      <li><span class="stepno">2</span> \(R_{\max} = (14 \times 14) \div 9.8 = 196 \div 9.8\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R_{\max} = 20\ \text{m}\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14d1">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Complementary angles">
+    <p class="bookref book">Booklet pp.156&#8211;157 &#183; §14.2 &#183; Worked Example 14.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Two angles, one landing spot</h2>
+    <div class="box question"><span class="lbl">Worked Example 14.2</span><p>A ball launched at <strong>25&#176;</strong> lands 6.6&nbsp;m away. Which other launch angle, at the same speed, lands in the same place? Which of the two keeps the ball in the air longer?</p></div>
+    <ol class="steps" id="l14w2">
+      <li><span class="stepno">1</span> Same range: the angles must add to 90&#176;, so \(90 - 25 = 65^\circ\)</li>
+      <li><span class="stepno">2</span> The 65&#176; launch goes much higher.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">65&#176; lands in the same place and stays in the air longer.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14w2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="We do: complementary angles">
+    <p class="bookref book">Booklet p.157 &#183; We do 14.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Find the matching angle</h2>
+    <div class="box question"><span class="lbl">We do 14.2</span><p>A ball launched at <strong>35&#176;</strong> lands 9.4&nbsp;m away.</p><p><strong>(a)</strong> Which other launch angle, at the same speed, lands in the same place?</p><p><strong>(b)</strong> Which of the two launches keeps the ball in the air longer? Explain.</p></div>
+    <p class="note">Write your working in the <strong>We do 14.2</strong> box in your booklet.</p>
+    <ol class="steps" id="l14d2">
+      <li><span class="stepno">1</span> (a) \(90 - 35 = 55^\circ\)</li>
+      <li><span class="stepno">2</span> (b) The 55&#176; launch sends more of the speed upwards, so it climbs higher.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">55&#176; keeps the ball in the air longer.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14d2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="The range equation">
+    <p class="bookref book">Booklet pp.156&#8211;157 &#183; §14.2 &#183; Worked Example 14.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2><span class="phase-tag ido">I do</span> Using the range equation</h2>
+    <div class="box question"><span class="lbl">Worked Example 14.3</span><p>A ball is launched at <strong>12&nbsp;m/s</strong> at <strong>30&#176;</strong>. Find its range. Use \(\sin 60^\circ = 0.87\).</p></div>
+    <ol class="steps" id="l14w3">
+      <li><span class="stepno">1</span> Double the angle: \(2 \times 30^\circ = 60^\circ\), so \(\sin(2\theta) = 0.87\)</li>
+      <li><span class="stepno">2</span> \(R = (12 \times 12 \times 0.87) \div 9.8 = 125.3 \div 9.8\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R \approx 12.8\ \text{m}\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14w3">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="We do: range equation">
+    <p class="bookref book">Booklet p.158 &#183; We do 14.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Use the range equation</h2>
+    <div class="box question"><span class="lbl">We do 14.3</span><p>A ball is launched at <strong>10&nbsp;m/s</strong> at <strong>15&#176;</strong>. Use \(\sin 30^\circ = 0.5\).</p><p><strong>(a)</strong> Find \(\sin(2\theta)\).</p><p><strong>(b)</strong> Find the range.</p></div>
+    <p class="note">Write your working in the <strong>We do 14.3</strong> box in your booklet.</p>
+    <ol class="steps" id="l14d3">
+      <li><span class="stepno">1</span> (a) \(2 \times 15^\circ = 30^\circ\), so \(\sin(2\theta) = \sin 30^\circ = 0.5\)</li>
+      <li><span class="stepno">2</span> (b) \(R = (10 \times 10 \times 0.5) \div 9.8 = 50 \div 9.8\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(R \approx 5.1\ \text{m}\) &#8212; the same as at 75&#176;</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14d3">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Real launches">
+    <p class="bookref book">Booklet p.158 &#183; §14.3</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Theory</p>
+    <h2>Why real launches are set lower than 45&#176;</h2>
+    <div class="cols three">
+      <div class="box key"><span class="lbl">Launch height</span><p>A stone released high above the ground has extra time to fall, so a flatter launch, with more sideways speed, goes further.</p></div>
+      <div class="box key"><span class="lbl">Air resistance</span><p>The air slows the stone the whole way. A steep, high path spends longer in the air, so it loses more.</p></div>
+      <div class="box key"><span class="lbl">Speed</span><p>People (and some machines) launch faster at a flatter angle &#8212; like the long jumper.</p></div>
+    </div>
+    <div class="box question"><span class="lbl">Discuss</span><p>Our trebuchet releases its projectile well above the floor. Should we set it to release above or below 45&#176;?</p></div>
+  </section>
+
+  <section class="slide" data-menu="Part C: practice">
+    <p class="bookref book">Booklet pp.159&#8211;161 &#183; Part C &#183; Tasks 14.1&#8211;14.9</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Practice</p>
+    <h2><span class="phase-tag youdo">You do</span> Practice in your booklet</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Work through these tasks</span>
+        <ul>
+          <li><strong>Tasks 14.1&#8211;14.2</strong> &#8212; the range table, and the pattern in it</li>
+          <li><strong>Tasks 14.3&#8211;14.4</strong> &#8212; maximum range</li>
+          <li><strong>Tasks 14.5&#8211;14.6</strong> &#8212; complementary angles, and launching straight up</li>
+          <li><strong>Task 14.7</strong> &#8212; doubling the speed</li>
+          <li><strong>Task 14.8</strong> &#8212; the long jumper</li>
+          <li><strong>Task 14.9</strong> &#8212; graph range against launch angle</li>
+        </ul>
+      </div>
+      <div class="box key"><span class="lbl">Every time</span>
+        <ul>
+          <li>\(R = v^2 \times \sin(2\theta) \div g\); \(R_{\max} = v^2 \div g\)</li>
+          <li>Double the angle <em>before</em> you use the sine value</li>
+          <li>Use \(g = 9.8\ \text{m/s}^2\) and include the unit</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timer" data-minutes="15"></div>
+  </section>
+
+  <section class="slide" data-menu="Above level: the real trebuchet">
+    <p class="bookref book">Booklet p.162 &#183; Part D &#183; Extension 14.11</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> Theory against reality</h2>
+    <div class="box question"><span class="lbl">Extension 14.11</span><p>A trebuchet releases a stone at <strong>18&nbsp;m/s</strong>.</p><p><strong>(a)</strong> Find the maximum range on flat ground, ignoring air resistance.</p><p><strong>(b)</strong> The stone actually lands 26&nbsp;m away. Give two reasons why the real range is shorter.</p></div>
+    <ol class="steps" id="l14x1">
+      <li><span class="stepno">1</span> (a) \(R_{\max} = (18 \times 18) \div 9.8 = 324 \div 9.8 \approx 33\ \text{m}\)</li>
+      <li><span class="stepno">2</span> (b) Air resistance slows the stone the whole way.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">The release angle may not be 45&#176;, and the sling may not release at the exact moment or full speed.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l14x1">Show reasoning</button>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Lesson 14 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>The launch angle shares the speed between <strong>up</strong> (time in the air) and <strong>along</strong></li>
+      <li>On flat ground with no air, 45&#176; gives the maximum range: \(R_{\max} = v^2 \div g\)</li>
+      <li>Complementary angles (adding to 90&#176;) give the same range</li>
+      <li>\(R = v^2 \times \sin(2\theta) \div g\)</li>
+      <li>Launch height, air resistance and speed make real launches best below 45&#176;</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>Doubling the launch speed from 10&nbsp;m/s to 20&nbsp;m/s multiplies the maximum range by how much?</p>
+      <button class="reveal-btn" data-answer="#l14x">Show answer</button>
+      <div class="a" id="l14x"><span class="lbl-a">Answer</span>\(100 \div 9.8 \approx 10.2\ \text{m}\) and \(400 \div 9.8 \approx 40.8\ \text{m}\) &#8212; <strong>four times</strong>, because the speed is squared.</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 16</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 14 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

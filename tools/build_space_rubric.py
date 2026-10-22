@@ -582,8 +582,37 @@ def main():
     t = t[:a] + 'const SPECIES = [];   /* Space has no per-student artefact */' + t[b:]
     t = sub1(t, r'\n *if\(parts\[1\]\) st\.species = matchSpecies\(parts\[1\]\);',
              '', what="roll species column")
-    t = sub1(t, r'if\(parts\[2\]\) st\.pron =', 'if(parts[1]) st.pron =',
-             what="roll pronoun column")
+    # The pronoun moves from column 3 to column 2. The WHOLE line is replaced:
+    # an earlier build swapped only the `if(parts[2])` guard and left the two
+    # tests reading parts[2], so every pronoun typed into the roll came out
+    # "they". bio's prefix tests also read "her" as "he" (/^(he|him)/ matches
+    # "her"), so Space normalises through pronOf() with whole-word matches.
+    t = sub1(t, re.escape('    if(parts[2]) st.pron = /^(he|him)/i.test(parts[2]) ? "he" : '
+                          '/^(she|her)/i.test(parts[2]) ? "she" : "they";'),
+             '    if(parts[1]) st.pron = pronOf(parts[1]);', what="roll pronoun column")
+    t = sub1(t, re.escape("\nfunction applyRoll(){"),
+             '\n/* "she", "her", "She/her" -> she; "he", "him", "his" -> he; anything else -> they */\n'
+             'function pronOf(v){\n'
+             '  const w = String(v || "").trim().toLowerCase().split(/[^a-z]+/)[0];\n'
+             '  return ["she","her","hers"].includes(w) ? "she" : ["he","him","his"].includes(w) ? "he" : "they";\n'
+             '}\nfunction applyRoll(){', what="pronOf helper")
+
+    # ---- CSV: no Species column; pronouns land in the pronoun parameter --
+    # bio's import called newStudent(name, species, pron). Space's newStudent
+    # is (name, pron), so the species argument ("") was read as the pronoun
+    # and every imported student became "they". An old file that still has a
+    # Species column is fine: the column is simply ignored.
+    t = sub1(t, re.escape('  const head = ["Name","Species","Pronoun",'),
+             '  const head = ["Name","Pronoun",', what="csv head species")
+    t = sub1(t, re.escape('    csvCell(st.name), csvCell(st.species), csvCell(st.pron),'),
+             '    csvCell(st.name), csvCell(st.pron),', what="csv row species")
+    t = sub1(t, re.escape('''    const st = newStudent(name,
+      idxSp >= 0 ? matchSpecies((r[idxSp]||"").trim()) : "",
+      idxPr >= 0 ? (r[idxPr]||"they").trim().toLowerCase() : "they");
+    if(!["he","she","they"].includes(st.pron)) st.pron = "they";'''),
+             '    const st = newStudent(name, idxPr >= 0 ? pronOf(r[idxPr]) : "they");',
+             what="csv newStudent pronoun")
+    t = sub1(t, re.escape('  const idxSp   = find(h => h.startsWith("species"));\n'), '', what="csv idxSp")
 
     # ---- save format: this is a new tool, so start its versioning clean
     t = sub1(t, r'const SAVE_VERSION = \d+;', 'const SAVE_VERSION = 1;',

@@ -1193,6 +1193,11 @@ function renderSetup(){
   }
 }
 
+/* "she", "her", "She/her" -> she; "he", "him", "his" -> he; anything else -> they */
+function pronOf(v){
+  const w = String(v || "").trim().toLowerCase().split(/[^a-z]+/)[0];
+  return ["she","her","hers"].includes(w) ? "she" : ["he","him","his"].includes(w) ? "he" : "they";
+}
 function applyRoll(){
   const lines = $("#f-roll").value.split("\n").map(l => l.trim()).filter(Boolean);
   const old = new Map(state.students.map(s => [s.name.toLowerCase(), s]));
@@ -1204,7 +1209,7 @@ function applyRoll(){
     const prev = old.get(name.toLowerCase());
     const st = prev || newStudent(name);
     st.name = name;
-    if(parts[1]) st.pron = /^(he|him)/i.test(parts[2]) ? "he" : /^(she|her)/i.test(parts[2]) ? "she" : "they";
+    if(parts[1]) st.pron = pronOf(parts[1]);
     recompute(st);
     next.push(st);
   });
@@ -1723,14 +1728,14 @@ function saveJSON(){
 }
 function csvCell(v){ const s = String(v==null?"":v); return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
 function exportCSV(blank){
-  const head = ["Name","Species","Pronoun",
+  const head = ["Name","Pronoun",
     ...CRITERIA.map(c => qLabel(c) + " /" + fmtMark(c.max)),
     ...STRANDS.map(s => "Override " + s.id),
     "Comment"];
   const rows = [head.map(csvCell).join(",")];
   const src = state.students.length ? state.students : [newStudent("")];
   src.forEach(st => rows.push([
-    csvCell(st.name), csvCell(st.species), csvCell(st.pron),
+    csvCell(st.name), csvCell(st.pron),
     ...CRITERIA.map(c => blank || !hasMark(st,c.id) ? "" : fmtMark(st.q[c.id])),
     ...STRANDS.map(s => blank ? "" : (Number.isInteger(st.override[s.id]) ? st.override[s.id] : "")),
     csvCell(blank ? "" : st.comment)
@@ -1763,7 +1768,6 @@ function importCSV(text){
   const head = rows[0].map(h => h.trim().toLowerCase());
   const find = pred => head.findIndex(pred);
   const idxName = find(h => h.startsWith("name"));
-  const idxSp   = find(h => h.startsWith("species"));
   const idxPr   = find(h => h.startsWith("pronoun"));
   const idxCm   = find(h => h.startsWith("comment"));
   const norm = t => String(t||"").toLowerCase().replace(/[^a-z0-9]/g,"");
@@ -1792,10 +1796,7 @@ function importCSV(text){
   const out = [], badCells = [];
   rows.slice(1).forEach(r => {
     const name = (r[idxName]||"").trim(); if(!name) return;
-    const st = newStudent(name,
-      idxSp >= 0 ? matchSpecies((r[idxSp]||"").trim()) : "",
-      idxPr >= 0 ? (r[idxPr]||"they").trim().toLowerCase() : "they");
-    if(!["he","she","they"].includes(st.pron)) st.pron = "they";
+    const st = newStudent(name, idxPr >= 0 ? pronOf(r[idxPr]) : "they");
     CRITERIA.forEach((c,i) => {
       if(idxQ[i] < 0) return;
       const raw = String(r[idxQ[i]]||"").trim();

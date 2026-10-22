@@ -66,6 +66,14 @@ hold the mark (headings now read e.g. `Q7 (a) /4`); a `y` reads as full
 marks. 58 checks in `tools/test-space-rubric.js`, all passing, and the grid
 and print view checked rendered in Chromium. bio's rubric is unchanged.
 
+**Fixed 22 Oct — pronouns.** Both ways in dropped every pronoun to "they":
+the class-list roll still read bio's third column, and the CSV import still
+passed bio's species argument into Space's `newStudent(name, pron)`. Both now
+go through `pronOf()` (whole-word: "her" no longer reads as "he"). The CSV
+template and export lose the Species column; an old file that has one still
+imports. Four new checks in `test-space-rubric.js`, confirmed to fail against
+the old code. bio's own roll has the same "her" → "he" quirk (bio unchanged).
+
 ### Landed — red answer copy for Revision Worksheet 1 (21 Oct 2026)
 
 `year7-science/space/worksheet-revision1-solutions.html` — the Revision 1

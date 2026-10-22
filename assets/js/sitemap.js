@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-20",
+ "generated": "2026-10-21",
  "tree": [
   {
    "t": "Home",
@@ -277,6 +277,16 @@ window.SITEMAP = {
            "t": "Lesson 12 — Projectile Motion",
            "h": "year7-science/forces/deck12.html",
            "k": "science"
+          },
+          {
+           "t": "Lesson 13 — Experiment 5: Measuring g",
+           "h": "year7-science/forces/deck13.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 14 — Optimising Range",
+           "h": "year7-science/forces/deck14.html",
+           "k": "science"
           }
          ]
         },
@@ -284,31 +294,6 @@ window.SITEMAP = {
          "t": "Resources",
          "g": 1,
          "c": [
-          {
-           "t": "Lesson 2 — Newton’s Laws of Motion",
-           "h": "year7-science/forces/legacy-deck2.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 3 — Energy & Transformation",
-           "h": "year7-science/forces/legacy-deck3.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 4 — Simple Machines & Levers",
-           "h": "year7-science/forces/legacy-deck4.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 5 — Projectile Motion",
-           "h": "year7-science/forces/legacy-deck5.html",
-           "k": "science"
-          },
-          {
-           "t": "Lesson 6 — The Trebuchet Investigation",
-           "h": "year7-science/forces/legacy-deck6.html",
-           "k": "science"
-          },
           {
            "t": "Unit Planner",
            "h": "year7-science/forces/planner.html",
