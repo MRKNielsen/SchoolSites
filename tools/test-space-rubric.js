@@ -186,6 +186,46 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   ok(window.eval('state.students[1].q.Q1a') === 1 && window.eval('state.students[1].q.Q10') === 0, 'a "y" is full marks, 0 is 0');
   ok(window.eval('"Q7a" in state.students[1].q') === false, 'an out-of-range 9/4 is left blank, not stored');
 
+  console.log('\n=== pronouns survive the class list and the CSV ===');
+  /* Both paths once dropped every pronoun to "they": the roll read the wrong
+     column, and the CSV import passed bio's species argument where Space's
+     newStudent(name, pron) expects the pronoun. */
+  window.eval('state.students = []; renderAll();');
+  $('#f-roll').value = 'Ana Ruiz, she\nBo Tran, he\nCam Ng, they\nDee Park, her\nEd Hu';
+  window.eval('applyRoll();');
+  ok(window.eval('state.students.map(s=>s.pron).join(",")') === 'she,he,they,she,they',
+     'roll: she, he, they, "her" -> she (not he), none -> they');
+  window.eval(`importCSV("Name,Pronoun,Q10\\nAna Ruiz,she,2\\nBo Tran,He,1\\nCam Ng,they,")`);
+  ok(window.eval('state.students.map(s=>s.pron).join(",")') === 'she,he,they',
+     'CSV: pronouns load (she, He -> he, they)');
+  window.eval(`importCSV("Name,Species,Pronoun\\nOld File,Greater Bilby,she")`);
+  ok(window.eval('state.students[0].pron') === 'she', 'an old CSV with a Species column still loads its pronoun');
+  let csvOut = '';
+  window.eval('download = (n, text) => { window.__csv = text; };');
+  window.eval('exportCSV(true);');
+  csvOut = window.eval('window.__csv') || '';
+  ok(/^Name,Pronoun,/.test(csvOut) && !/Species/i.test(csvOut), 'template header is Name,Pronoun,... with no Species column');
+
+  console.log('\n=== analysis tab ===');
+  window.eval('state.students = []; renderAll();');
+  ok(/Nothing to analyse yet/.test($('#anPane').textContent), 'no marks -> empty state, not a broken chart');
+  $('#f-roll').value = 'An One\nBea Two\nCy Three';
+  window.eval('applyRoll();');
+  const q7a = window.eval('CRITERIA.findIndex(c => c.id === "Q7a")');
+  const q10 = window.eval('CRITERIA.findIndex(c => c.id === "Q10")');
+  window.eval(`setMark(0,${q7a},4); setMark(1,${q7a},1); setMark(0,${q10},2); renderAnalysis();`);
+  /* Q7a: 4 + 1 + (Cy unmarked, left out) over 2 marked students x 4 = 5/8 = 63% */
+  const aq = JSON.parse(window.eval('JSON.stringify(questionStats(state.students.filter(started)).map(r => [r.c.id, r.fac, r.donePct, r.naPct]))'));
+  const r7 = aq.find(r => r[0] === 'Q7a'), r10 = aq.find(r => r[0] === 'Q10');
+  ok(Math.abs(r7[1] - 5/8) < 1e-9 && r7[2] === 50, 'Q7a facility 5/8 over the 2 marked students; 50% demonstrated (4/4 yes, 1/4 no)');
+  ok(r10[1] === 0.5 && r10[3] === 50, 'Q10: Bea left it blank -> counts 0 in facility (2/4) and 50% not attempted');
+  ok(aq.find(r => r[0] === 'Q1a')[1] === null, 'a part nobody has marked yet has no facility');
+  ok(/1 of 3 students have no marks yet/.test($('#anPane').textContent), 'note says who is left out');
+  ok($$('#anPane .an-hist .hit').length === 10, 'histogram has ten five-mark bins');
+  ok($$('#anPane .an-stack').length === 7, 'six strand rows plus overall level');
+  const csvA = (() => { window.eval('download = (n, text) => { window.__acsv = text; };'); window.eval('exportAnalysisCSV();'); return window.eval('window.__acsv') || ''; })();
+  ok(csvA.split('\n').length === 35 && /^Question,Part,/.test(csvA), 'analysis CSV: header + 34 rows in paper order');
+
   console.log('\n=== the key is namespaced away from bio ===');
   ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');
 

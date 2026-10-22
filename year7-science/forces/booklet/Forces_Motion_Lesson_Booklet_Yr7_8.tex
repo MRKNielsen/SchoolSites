@@ -813,6 +813,29 @@
 \end{tikzpicture}
 \end{center}}
 
+% ── Lesson 14: trajectories for one launch speed at five launch angles ───────
+\newcommand{\diagRangeAngles}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.25cm, y=1.25cm]
+  \fill[ground hatch] (-0.3,-0.3) rectangle (11.2,0);
+  \draw[thick, DarkGrey] (-0.3,0) -- (11.2,0);
+  % v = 10 m/s, g = 9.8: y = x tan(a) - 0.049 x^2 / cos^2(a)
+  \foreach \a/\c/\r in {15/Amber/5.10, 30/TealGreen/8.84, 45/red!70!black/10.20, 60/MidBlue/8.84, 75/Violet/5.10}{
+    \draw[thick, \c] plot[domain=0:\r, samples=60] (\x,{\x*tan(\a) - 0.049*\x*\x/(cos(\a)*cos(\a))});
+  }
+  \node[font=\scriptsize\bfseries, text=Amber]        at (2.55,0.58)  {15$^\circ$};
+  \node[font=\scriptsize\bfseries, text=TealGreen]    at (4.42,1.52)  {30$^\circ$};
+  \node[font=\scriptsize\bfseries, text=red!70!black] at (5.1,2.8)  {45$^\circ$};
+  \node[font=\scriptsize\bfseries, text=MidBlue]      at (4.42,4.05) {60$^\circ$};
+  \node[font=\scriptsize\bfseries, text=Violet]       at (2.55,5.0)  {75$^\circ$};
+  \foreach \r/\lab in {5.10/5.1, 8.84/8.8, 10.20/10.2}{
+    \draw[DarkGrey] (\r,0) -- (\r,-0.12);
+    \node[font=\scriptsize, text=DarkGrey, below] at (\r,-0.12) {\lab\,m};
+  }
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0,-0.75) {All five balls are launched at 10\,m/s from ground level. Air resistance is ignored.};
+\end{tikzpicture}
+\end{center}}
+
 \newcommand{\diagArrowScale}{%
 \begin{center}
 \begin{tikzpicture}[font=\footnotesize, x=1cm, y=1cm]
@@ -1337,6 +1360,8 @@ Experiments 2--4 follow the same four parts: a reading about the science, planni
        10 & Experiment 4 --- Lever Mechanical Advantage & p.\ \pageref{sec:10} \\ \hline
   \talt 11 & Levers Extension \textit{(optional)} & p.\ \pageref{sec:11} \\ \hline
        12 & Projectile Motion & p.\ \pageref{sec:12} \\ \hline
+  \talt 13 & Experiment 5 --- Measuring $g$ & p.\ \pageref{sec:13} \\ \hline
+       14 & Optimising Range \textit{(optional)} & p.\ \pageref{sec:14} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4547,6 +4572,416 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 \pt{b}Name two variables you would keep the same.
 \answerbox{2.0cm}
 \pt{c}Predict what you would find, and give a reason.
+\answerbox{2.0cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 13 — EXPERIMENT 5: MEASURING g                             (Week 5 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Experiment 5: Measuring $g$}{Prediction \textbullet{} Ball roll-off \textbullet{} Slow-motion video \textbullet{} Percentage error}\label{sec:13}\label{exp:5}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Frame rate}} & \scaf{How many pictures (frames) a camera takes every second, in frames per second (fps).} \\ \hline
+  & \textbf{Accepted value} & \\ \hline
+  & \textbf{Percentage error} & \\ \hline
+  & \textbf{Anomaly} & \\ \hline
+  & \textbf{Systematic error} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:13}
+
+\begin{readingbox}{Reading --- Too Fast to Time}
+Drop a ball from the height of a table and it hits the floor in less than half a second. That is far too quick to time with a stopwatch: by the time your thumb reacts, the fall is almost over. For most of history, nobody could measure a fall directly.
+
+Galileo found a way around the problem in the early 1600s. Instead of dropping balls, he rolled them down long, gently sloping ramps. The slope slowed the motion down enough to time it, using a water clock: water dripped steadily into a cup while the ball rolled, and he weighed the water afterwards. From his ramps he showed that a falling object keeps speeding up at a steady rate.
+
+Today you carry a better timer in your pocket. Many phones film in slow motion at 120 or 240 frames per second. Every frame is a snapshot taken a fixed, tiny time after the last one, so counting frames is like using a stopwatch that ticks 240 times a second.
+
+In this experiment you will roll a ball off a table, film its fall in slow motion, count the frames, and use the time to measure the strength of gravity, $g$ --- then compare your answer with the accepted value of 9.8\,m/s$^2$.
+\end{readingbox}
+
+\rcreset
+\rcq{Why can't you time a ball falling from a table with a stopwatch?}{1.5cm}
+\rcq{Describe how Galileo slowed the motion down, and how he timed it.}{1.6cm}
+\rcq{Explain why counting video frames works like a very fast stopwatch.}{1.5cm}
+\rcq{In this experiment, what will you measure, and what will you calculate from it?}{1.4cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Planning the experiment}{Blue}\label{theory:13}
+
+\begin{expheader}{5}{Measuring $g$ with a Ball Rolling off a Table}{To measure the acceleration due to gravity, $g$, by timing a ball's fall from a table with slow-motion video.}
+\medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06
+\end{expheader}
+
+\subsection{The Set-up}\label{sub:13.1}
+
+A short ramp sits on the edge of a table. A ball released from the same mark every time rolls down the ramp, along the table and off the edge. A phone on a tripod films the fall from the side, in slow motion. You measure the height $h$ of the table top above the floor once, with a metre rule.
+
+\diagProjectile
+\expfigcap{The ball leaves the table edge and falls a height $h$. Film from the side so you can see the moment it leaves the edge and the moment it lands.}
+
+\subsection{Time from a Video}\label{sub:13.2}
+
+\begin{infobox}{From frames to $g$}
+\textbf{Time of the fall:} \quad $t = \text{number of frames} \div \text{frame rate}$\\[2pt]
+\textbf{Gravity:} \quad $g = 2h \div t^2$ \quad (square $t$ first: $t^2 = t \times t$)
+\end{infobox}
+
+\begin{workedex}{Finding $g$ from frames}
+A table is 0.78\,m high. Filmed at 240 frames per second, the ball takes 96 frames to fall from the edge to the floor. Find $t$, then $g$.
+
+\medskip
+\textbf{Time:}\quad $t = 96 \div 240 = 0.40$\,s
+
+\textbf{Gravity:}\quad $g = (2 \times 0.78) \div (0.40 \times 0.40) = 1.56 \div 0.16 = \mathbf{9.75\ \text{m/s}^2}$
+\end{workedex}
+
+\begin{wedo}{Finding $g$ from frames}
+A table is 0.72\,m high. Filmed at 120 frames per second, the ball takes 46 frames to fall from the edge to the floor.
+\pt{a}Find the time of the fall, $t$, to two decimal places.
+\answerbox{1.6cm}
+\pt{b}Use $g = 2h \div t^2$ to find $g$.
+\answerbox{1.8cm}
+\end{wedo}
+
+\subsection{How Close Did You Get?}\label{sub:13.3}
+
+\begin{infobox}{Percentage error}
+\[ \text{percentage error} = \frac{\text{your value} - \text{accepted value}}{\text{accepted value}} \times 100\% \]
+Ignore any minus sign. For $g$, the accepted value is 9.8\,m/s$^2$. A smaller percentage error means a more accurate result.
+\end{infobox}
+
+\begin{workedex}{Percentage error}
+A group's mean value of $g$ is 9.2\,m/s$^2$. Find the percentage error.
+
+\medskip
+\textbf{Difference:}\quad $9.8 - 9.2 = 0.6$
+
+\textbf{Percentage error:}\quad $0.6 \div 9.8 \times 100\% \approx \mathbf{6\%}$
+\end{workedex}
+
+\begin{wedo}{Percentage error}
+Another group's mean value of $g$ is 10.3\,m/s$^2$.
+\pt{a}Find the difference from the accepted value of 9.8\,m/s$^2$.
+\answerbox{1.4cm}
+\pt{b}Find the percentage error.
+\answerbox{1.6cm}
+\end{wedo}
+
+\subsection{Making it a Fair Test}\label{sub:13.4}
+
+You will do \textbf{five trials} and calculate $g$ for each one. Keep everything the same every time: the same ball, the same ramp, the same release mark, the same table and the same camera position. A trial that is clearly different from the others is an \textbf{anomaly}: mark it, and leave it out of the mean.
+
+\needspace{9\baselineskip}
+\begin{scaffold}{Prediction --- before you begin}
+Will your value of $g$ be exactly 9.8\,m/s$^2$, a little more, or a little less? Give one reason.
+\answerbox{2cm}
+\end{scaffold}
+
+\subsubsection*{Equipment}
+Table \quad Short ramp (or a ruler with a groove) \quad Ball bearing or marble \quad Metre rule \quad Phone with slow-motion video, on a tripod or propped steady \quad Sticky tape
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Measure the height of the table top above the floor, $h$, in metres. Record it.
+  \item Tape the ramp to the table so its bottom end is about 20\,cm from the edge. Mark a release point on the ramp.
+  \item Set the phone to film in slow motion, side-on to the table edge, so the whole fall is in the picture. Record the frame rate.
+  \item Release the ball from the mark --- do not push it. Film it rolling off the edge and landing.
+  \item In the video, count the frames from the last frame the ball touches the table to the first frame it touches the floor.
+  \item Repeat steps 4--5 for five trials.
+\end{enumerate}
+
+\begin{infobox}{Safety}
+Catch the ball after it lands, or put a box on the floor to stop it rolling away --- a ball bearing underfoot is easy to slip on. Keep the phone and tripod clear of walkways.
+\end{infobox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Results and analysis}{Amber}\label{prac:13}
+
+\subsubsection*{Results}
+\textit{Table height} $h =$ \underline{\hspace{2cm}}\,m \qquad \textit{Frame rate} $=$ \underline{\hspace{2cm}}\,fps
+
+\begin{ctab}
+\begin{tabular}{|SZ{1.4cm}|Z{2.0cm}|Z{2.6cm}|Z{2.2cm}|Z{3.2cm}|Z{2.2cm}|}
+  \hd & \thead{Trial} & \thead{Frames} & \thead{$t$ = frames $\div$ fps (s)} & \thead{$t^2$ (s$^2$)} & \thead{$g = 2h \div t^2$ (m/s$^2$)} & \thead{Anomaly?} \\ \hline
+  & \scaf{e.g.} & \scaf{96} & \scaf{0.40} & \scaf{0.16} & \scaf{$1.56 \div 0.16 = 9.75$} & \scaf{no} \\ \hline
+  & 1 & & & & & \\ \hline
+  & 2 & & & & & \\ \hline
+  & 3 & & & & & \\ \hline
+  & 4 & & & & & \\ \hline
+  & 5 & & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\textbf{Mean $g$ (leave out any anomalies):} \underline{\hspace{3cm}}\,m/s$^2$
+
+\needspace{10\baselineskip}
+\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment. (Hint: here the same thing is measured again and again, so think about what you \emph{kept} the same.)
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\task Calculate the percentage error of your mean value of $g$. Use $\text{percentage error} = (\text{your value} - 9.8) \div 9.8 \times 100\%$, ignoring any minus sign.
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\task
+\pt{a}Did any trial look like an anomaly? Say which, and suggest what might have gone wrong.
+\answerbox{2.0cm}
+\pt{b}Why is it better to use the mean of five trials than a single trial?
+\answerbox{2.0cm}
+
+\taskpair{A table is 0.90\,m high. At 240 frames per second, a fall takes 103 frames. Find $t$, then $g$.}{2.6cm}
+         {A group measured $g = 8.9$\,m/s$^2$. Calculate their percentage error.}{2.6cm}
+
+\needspace{10\baselineskip}
+\task Counting one frame too many makes $t$ too big. Will that make the calculated $g$ too big or too small? Explain using $g = 2h \div t^2$.
+\answerbox{2.4cm}
+
+\needspace{10\baselineskip}
+\task Identify two sources of error in this experiment. For each one, suggest a change to the method that would reduce it.
+\pt{a}First source of error and how to reduce it:
+\answerbox{2.0cm}
+\pt{b}Second source of error and how to reduce it:
+\answerbox{2.0cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:13}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard: judge the precision of the method, or extend it.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask A camera films at 30 frames per second; a slow-motion camera films at 240 frames per second.
+\pt{a}How much time passes between frames for each camera?
+\answerbox{1.8cm}
+\pt{b}A fall lasts about 0.4\,s. Explain why the 30\,fps camera would give a much less precise value of $g$.
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\exttask Air resistance pushes up on the falling ball. Predict whether it makes the measured $g$ a little too big or a little too small, and explain why a small, heavy ball bearing is used instead of a table-tennis ball.
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\exttask In one trial the ball fell for 0.40\,s and landed 0.60\,m from the table edge. The sideways speed does not change during the fall.
+\pt{a}Find the ball's sideways speed as it left the table.
+\answerbox{1.8cm}
+\pt{b}A faster roll makes the ball land further away. Explain why it does not change the time of the fall, or the value of $g$.
+\answerbox{2.0cm}
+
+\needspace{12\baselineskip}
+\exttask Design a fair test to check that the height of the table changes the time of the fall but not the value of $g$.
+\pt{a}Name the independent and dependent variables.
+\answerbox{2.0cm}
+\pt{b}Name two variables you would keep the same.
+\answerbox{2.0cm}
+\pt{c}Predict what you would find for $t$ and for $g$, and give a reason.
+\answerbox{2.0cm}
+\end{yr8box}
+
+\newpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 14 — OPTIMISING RANGE (OPTIONAL, YEAR 8)                   (Week 5 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Optimising Range (Optional)}{Year 8 extension \textbullet{} Launching at an angle \textbullet{} The best angle \textbullet{} Real launches}\label{sec:14}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Launch angle}} & \scaf{The angle between the ground and the direction a projectile is launched in.} \\ \hline
+  & \textbf{Range} & \\ \hline
+  & \textbf{Maximum range} & \\ \hline
+  & \textbf{Complementary angles} & \\ \hline
+  & \textbf{Launch height} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:14}
+
+\begin{readingbox}{Reading --- Why Long Jumpers Don't Take Off at 45$^\circ$}
+Ask a physics student how to throw something as far as possible and they will probably say ``at 45 degrees''. On flat ground, with no air, they are right: a ball launched at 45$^\circ$ goes further than at any other angle with the same speed. Launch it flatter and it hits the ground too soon. Launch it steeper and it spends its speed going up instead of along.
+
+So why do the world's best long jumpers take off at only about 20$^\circ$? Because a jumper's speed is not the same at every angle. A sprinter can run at more than 10\,m/s, but nobody can spring \emph{upwards} that fast. To leave the board at 45$^\circ$, a jumper would have to slow right down. A flatter take-off keeps almost all the speed of the run-up, and that matters more than the angle.
+
+Shot-putters also launch lower than 45$^\circ$, at about 35--40$^\circ$. They release the shot from above head height, so it has further to fall, and they can push harder at a flatter angle.
+
+Medieval engineers had to solve the same problem with trebuchets. The stone leaves the sling high above the ground, and air resistance slows it the whole way. The best release angle for a real trebuchet is usually a little below 45$^\circ$ --- and the only way to find it is to test.
+\end{readingbox}
+
+\rcreset
+\rcq{On flat ground with no air, what launch angle gives the longest range?}{1.2cm}
+\rcq{Explain why a launch that is too flat, or too steep, does not go as far.}{1.6cm}
+\rcq{Why do long jumpers take off at about 20$^\circ$ instead of 45$^\circ$?}{1.6cm}
+\rcq{Give two reasons why a real trebuchet is usually set to release below 45$^\circ$.}{1.6cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:14}
+
+\subsection{Launching at an Angle}\label{sub:14.1}
+
+In Lesson~12 every ball was launched \emph{sideways}. Now the ball is launched upwards at an angle. Its speed is shared between two directions: part of it carries the ball \emph{up} (which decides how long it stays in the air) and part carries it \emph{along} (which decides how far it travels each second). A steep angle gives a long time in the air but little sideways speed; a flat angle gives plenty of sideways speed but a short time.
+
+\diagRangeAngles
+\figcap[fig:range-angles]{One launch speed, five launch angles. 45$^\circ$ goes furthest. 30$^\circ$ and 60$^\circ$ land in the same place, and so do 15$^\circ$ and 75$^\circ$.}
+
+\subsection{The Best Angle}\label{sub:14.2}
+
+\begin{infobox}{Range on flat ground (ignoring air resistance)}
+\[ R = \frac{v^2 \times \sin(2\theta)}{g} \qquad\qquad R_{\max} = \frac{v^2}{g} \ \text{ at } \theta = 45^\circ \]
+$R$ = range (m) \quad $v$ = launch speed (m/s) \quad $\theta$ = launch angle \quad $g = 9.8$\,m/s$^2$\\[2pt]
+Two angles that add to 90$^\circ$ (\textbf{complementary angles}, such as 30$^\circ$ and 60$^\circ$) give the same range. You will be given any $\sin$ values you need.
+\end{infobox}
+
+\begin{workedex}{Maximum range}
+A ball is launched at 20\,m/s. Find its maximum range on flat ground.
+
+\medskip
+\textbf{Maximum range is at 45$^\circ$:}\quad $R_{\max} = v^2 \div g = (20 \times 20) \div 9.8 = 400 \div 9.8 \approx \mathbf{40.8\ \text{m}}$
+\end{workedex}
+
+\begin{wedo}{Maximum range}
+A ball is launched at 14\,m/s. Find its maximum range on flat ground.
+\answerbox{2.6cm}
+\end{wedo}
+
+\begin{workedex}{Complementary angles}
+A ball launched at 25$^\circ$ lands 6.6\,m away. Which other launch angle, at the same speed, lands in the same place? Which of the two keeps the ball in the air longer?
+
+\medskip
+\textbf{Same range:}\quad the angles must add to 90$^\circ$, so $90 - 25 = \mathbf{65^\circ}$
+
+\textbf{Longer in the air:}\quad the \textbf{65$^\circ$} launch --- it goes much higher, so it takes longer to come down.
+\end{workedex}
+
+\begin{wedo}{Complementary angles}
+A ball launched at 35$^\circ$ lands 9.4\,m away.
+\pt{a}Which other launch angle, at the same speed, lands in the same place?
+\answerbox{1.4cm}
+\pt{b}Which of the two launches keeps the ball in the air longer? Explain.
+\answerbox{1.8cm}
+\end{wedo}
+
+\begin{workedex}{Using the range equation}
+A ball is launched at 12\,m/s at 30$^\circ$. Find its range. Use $\sin 60^\circ = 0.87$.
+
+\medskip
+\textbf{Double the angle:}\quad $2 \times 30^\circ = 60^\circ$, so $\sin(2\theta) = 0.87$
+
+\textbf{Range:}\quad $R = (12 \times 12 \times 0.87) \div 9.8 = 125.3 \div 9.8 \approx \mathbf{12.8\ \text{m}}$
+\end{workedex}
+
+\begin{wedo}{Using the range equation}
+A ball is launched at 10\,m/s at 15$^\circ$. Use $\sin 30^\circ = 0.5$.
+\pt{a}Find $\sin(2\theta)$.
+\answerbox{1.4cm}
+\pt{b}Find the range.
+\answerbox{1.8cm}
+\end{wedo}
+
+\subsection{Real Launches}\label{sub:14.3}
+
+\begin{infobox}{Why real launches are set lower than 45$^\circ$}
+\textbf{Launch height:} a stone released high above the ground has extra time to fall, so a flatter launch, with more sideways speed, goes further.\\[2pt]
+\textbf{Air resistance:} the air slows the stone the whole way. A steep, high path spends longer in the air, so it loses more.\\[2pt]
+\textbf{Speed:} for people (and some machines) the launch speed is higher at a flatter angle.
+\end{infobox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:14}
+
+Work through every task. Show your working for calculations, and always include the unit.
+
+\needspace{12\baselineskip}
+\task A ball is launched at 15\,m/s from flat ground. Complete the table using $R = v^2 \times \sin(2\theta) \div g$, with $v^2 = 225$ and $g = 9.8$. Give each range to one decimal place.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SZ{2.4cm}|Z{2.2cm}|Z{2.2cm}|Z{6.0cm}|}
+  \hd & \thead{Launch angle $\theta$} & \thead{$2\theta$} & \thead{$\sin(2\theta)$} & \thead{Range $R$ (m)} \\ \hline
+  & \scaf{15$^\circ$} & \scaf{30$^\circ$} & \scaf{0.50} & \scaf{$225 \times 0.50 \div 9.8 = 11.5$} \\ \hline
+  & 30$^\circ$ & 60$^\circ$ & 0.87 & \\ \hline
+  & 45$^\circ$ & 90$^\circ$ & 1.00 & \\ \hline
+  & 60$^\circ$ & 120$^\circ$ & 0.87 & \\ \hline
+  & 75$^\circ$ & 150$^\circ$ & 0.50 & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Look at the ranges you calculated for a launch speed of 15\,m/s: 30$^\circ$, 45$^\circ$, 60$^\circ$ and 75$^\circ$.
+\pt{a}Which angle gives the maximum range?
+\answerbox{1.4cm}
+\pt{b}Which pairs of angles give the same range? What do the angles in each pair add up to?
+\answerbox{1.8cm}
+
+\taskpair{A javelin is thrown at 25\,m/s. Find its maximum range on flat ground, ignoring air resistance.}{2.4cm}
+         {A ball's maximum range is 10.2\,m when launched at 10\,m/s. What angle was it launched at?}{2.4cm}
+
+\needspace{10\baselineskip}
+\task A ball is kicked at 20$^\circ$ and lands 13\,m away. At what other angle could it be kicked, at the same speed, to land in the same place? Which kick would be harder for a goalkeeper to catch before it lands, and why?
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task A ball is launched straight up, at 90$^\circ$. Explain why its range is zero, even though it is in the air for a long time.
+\answerbox{2.2cm}
+
+\needspace{10\baselineskip}
+\task A student says: \emph{``Doubling the launch speed doubles the range.''} Use $R_{\max} = v^2 \div g$ with $v = 10$\,m/s and $v = 20$\,m/s to test the claim. Is the student right?
+\answerbox{2.6cm}
+
+\needspace{10\baselineskip}
+\task Explain why a long jumper takes off at about 20$^\circ$ rather than 45$^\circ$. Use the words \emph{launch angle} and \emph{speed}.
+\answerbox{2.4cm}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results from Task~\ref{task:14.1}. Put \textbf{launch angle} on the horizontal axis (0 to 90$^\circ$) and \textbf{range (m)} on the vertical axis. Add the points (0$^\circ$, 0\,m) and (90$^\circ$, 0\,m), then draw a smooth curve. Give your graph a title.
+
+\vspace{3pt}
+\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.0cm,
+  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+\end{tcolorbox}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:14}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard: they use the range equation, or ask you to reason about real launches.
+
+\medskip
+\needspace{10\baselineskip}
+\exttask Your graph from Task~\ref{task:14.9} is symmetrical about 45$^\circ$.
+\pt{a}Use the graph to estimate the range at 40$^\circ$ and at 50$^\circ$.
+\answerbox{1.8cm}
+\pt{b}Explain why being a few degrees away from 45$^\circ$ makes only a small difference to the range.
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\exttask A trebuchet releases a stone at 18\,m/s.
+\pt{a}Find the maximum range on flat ground, ignoring air resistance.
+\answerbox{1.8cm}
+\pt{b}The stone actually lands 26\,m away. Give two reasons why the real range is shorter.
+\answerbox{2.0cm}
+
+\needspace{10\baselineskip}
+\exttask Two balls are launched at the same speed, one at 30$^\circ$ and one at 60$^\circ$. Both are launched from the top of a 2\,m wall onto the ground below. Predict which one lands further away now, and explain why.
+\answerbox{2.6cm}
+
+\needspace{12\baselineskip}
+\exttask Design a fair test, using a ramp launcher that can be set to different angles, to find the best launch angle for a ball launched from a table top.
+\pt{a}Name the independent and dependent variables.
+\answerbox{2.0cm}
+\pt{b}Name two variables you would keep the same.
+\answerbox{2.0cm}
+\pt{c}Predict the best angle, and give a reason.
 \answerbox{2.0cm}
 \end{yr8box}
 

@@ -26,6 +26,7 @@ import os, re, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from space_rubric_data import STRANDS, CRITERIA, PARTS
+from space_rubric_analysis import ANALYSIS_TAB, ANALYSIS_PANEL, ANALYSIS_CSS, ANALYSIS_JS
 
 REPO = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                     "year7-science")
@@ -567,6 +568,35 @@ def to_marks(t):
     return t
 
 
+def add_analysis(t):
+    """Class analysis tab: summary tiles, spread of totals, bands by strand,
+    question-by-question facility. Reads the grid's marks; stores nothing.
+    The content lives in space_rubric_analysis.py."""
+    t = sub1(t, re.escape('aria-controls="p-groups" aria-selected="false">Teaching groups</button>\n'),
+             'aria-controls="p-groups" aria-selected="false">Teaching groups</button>\n' + ANALYSIS_TAB,
+             what="analysis tab button")
+    t = sub1(t, re.escape("<!-- ============ PRINT ============ -->"),
+             ANALYSIS_PANEL + "<!-- ============ PRINT ============ -->", what="analysis panel")
+    t = sub1(t, re.escape("\n/* back-to-unit link in the masthead */"),
+             ANALYSIS_CSS + "\n/* back-to-unit link in the masthead */", what="analysis css")
+    t = sub1(t, re.escape("\nfunction renderAll(){"), ANALYSIS_JS + "\nfunction renderAll(){", what="analysis js")
+    t = sub1(t, re.escape("  renderSetup(); renderMark(); renderComments(); renderGroups(); renderPrint(); renderRef();"),
+             "  renderSetup(); renderMark(); renderComments(); renderGroups(); renderPrint(); renderRef(); renderAnalysis();",
+             what="renderAll analysis")
+    t = sub1(t, re.escape("    renderComments(); renderGroups(); renderPrint(); persist(); renderMast();"),
+             "    renderComments(); renderGroups(); renderPrint(); persist(); renderMast(); renderAnalysis();",
+             what="heavy render analysis")
+    t = sub1(t, re.escape('$("#btnPrint").onclick = () => window.print();'),
+             '$("#btnPrint").onclick = () => window.print();\n'
+             '$("#btnAnPrint").onclick = () => { showTab("analysis"); window.print(); };\n'
+             '$("#btnAnCsv").onclick = exportAnalysisCSV;', what="analysis buttons")
+    # band labels are edited on the Class tab; the analysis legend uses them
+    t = sub1(t, re.escape("    renderGroups(); renderPrint(); renderRef(); persist();   // not renderSetup"),
+             "    renderGroups(); renderPrint(); renderRef(); renderAnalysis(); persist();   // not renderSetup",
+             what="band label edit")
+    return t
+
+
 def main():
     t = open(SRC, encoding="utf-8").read()
     orig_len = len(t)
@@ -582,8 +612,37 @@ def main():
     t = t[:a] + 'const SPECIES = [];   /* Space has no per-student artefact */' + t[b:]
     t = sub1(t, r'\n *if\(parts\[1\]\) st\.species = matchSpecies\(parts\[1\]\);',
              '', what="roll species column")
-    t = sub1(t, r'if\(parts\[2\]\) st\.pron =', 'if(parts[1]) st.pron =',
-             what="roll pronoun column")
+    # The pronoun moves from column 3 to column 2. The WHOLE line is replaced:
+    # an earlier build swapped only the `if(parts[2])` guard and left the two
+    # tests reading parts[2], so every pronoun typed into the roll came out
+    # "they". bio's prefix tests also read "her" as "he" (/^(he|him)/ matches
+    # "her"), so Space normalises through pronOf() with whole-word matches.
+    t = sub1(t, re.escape('    if(parts[2]) st.pron = /^(he|him)/i.test(parts[2]) ? "he" : '
+                          '/^(she|her)/i.test(parts[2]) ? "she" : "they";'),
+             '    if(parts[1]) st.pron = pronOf(parts[1]);', what="roll pronoun column")
+    t = sub1(t, re.escape("\nfunction applyRoll(){"),
+             '\n/* "she", "her", "She/her" -> she; "he", "him", "his" -> he; anything else -> they */\n'
+             'function pronOf(v){\n'
+             '  const w = String(v || "").trim().toLowerCase().split(/[^a-z]+/)[0];\n'
+             '  return ["she","her","hers"].includes(w) ? "she" : ["he","him","his"].includes(w) ? "he" : "they";\n'
+             '}\nfunction applyRoll(){', what="pronOf helper")
+
+    # ---- CSV: no Species column; pronouns land in the pronoun parameter --
+    # bio's import called newStudent(name, species, pron). Space's newStudent
+    # is (name, pron), so the species argument ("") was read as the pronoun
+    # and every imported student became "they". An old file that still has a
+    # Species column is fine: the column is simply ignored.
+    t = sub1(t, re.escape('  const head = ["Name","Species","Pronoun",'),
+             '  const head = ["Name","Pronoun",', what="csv head species")
+    t = sub1(t, re.escape('    csvCell(st.name), csvCell(st.species), csvCell(st.pron),'),
+             '    csvCell(st.name), csvCell(st.pron),', what="csv row species")
+    t = sub1(t, re.escape('''    const st = newStudent(name,
+      idxSp >= 0 ? matchSpecies((r[idxSp]||"").trim()) : "",
+      idxPr >= 0 ? (r[idxPr]||"they").trim().toLowerCase() : "they");
+    if(!["he","she","they"].includes(st.pron)) st.pron = "they";'''),
+             '    const st = newStudent(name, idxPr >= 0 ? pronOf(r[idxPr]) : "they");',
+             what="csv newStudent pronoun")
+    t = sub1(t, re.escape('  const idxSp   = find(h => h.startsWith("species"));\n'), '', what="csv idxSp")
 
     # ---- save format: this is a new tool, so start its versioning clean
     t = sub1(t, r'const SAVE_VERSION = \d+;', 'const SAVE_VERSION = 1;',
@@ -814,6 +873,7 @@ const MARK_COLS = CRITERIA.map((c, i) => i).sort((a, b) =>
     # ---- marks, not ticks (after the data, which carries each `max`) --
     check_marks()
     t = to_marks(t)
+    t = add_analysis(t)
 
     hdr = ("<!-- GENERATED — do not edit this file.\n"
            "     Built from bio-ecosystems/rubric-payload.html by\n"

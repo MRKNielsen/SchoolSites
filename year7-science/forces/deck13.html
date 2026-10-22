@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../assets/vendor/mathjax/tex-svg.js" async></script>
+<title>Lesson 13 &#8212; Experiment 5: Measuring g | Forces &amp; Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/deck.css">
+<link rel="stylesheet" href="../../assets/css/quiz.css">
+<link rel="stylesheet" href="../../assets/css/sitenav.css">
+<script src="../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<meta name="booklet" content="booklet/Forces_Motion_Lesson_Booklet_Yr7_8">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-science">
+
+<div class="progress"></div>
+<div class="lessontag">Forces &amp; Motion &#183; Lesson 13 of 18</div>
+<a class="homebtn" href="index.html">&#8962; Unit home</a>
+
+<main class="deck">
+  <section class="slide title-slide active" data-menu="Title">
+    <p class="eyebrow">Year 7 Science <b>&#183;</b> Forces &amp; Motion <b>&#183;</b> Week 5 <b>&#183;</b> Lesson 13 of 18</p>
+    <h1>Experiment 5: Measuring <em>g</em></h1>
+    <p class="subtitle">Time a ball rolling off a table with slow-motion video, calculate the strength of gravity, and judge how accurate your result is.</p>
+    <div class="head-meta">
+      <span class="pill">Unit: Forces &amp; Motion</span>
+      <span class="pill">Year 7&#8211;8</span>
+      <span class="pill">Booklet Lesson 13</span>
+    </div>
+    <p class="start-hint">Press <span class="key">&#8594;</span> to begin.</p>
+  </section>
+
+  <section class="slide quiz-slide" data-quiz-before="13" data-quiz-recent="3" data-quiz-exclude="0,11" data-quiz-count="5" data-menu="Review quiz">
+    <p class="eyebrow">Quick review <b>&#183;</b> mostly Lesson 12</p>
+    <h2>Warm-up quiz</h2>
+    <p class="lede">Answer from memory first. Talk it over with your partner, then click your answer.</p>
+    <div class="quiz-container"></div>
+  </section>
+
+  <section class="slide" data-menu="Learning intentions">
+    <p class="eyebrow">Lesson 13 <b>&#183;</b> Overview</p>
+    <h2>What we&#8217;re learning today</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">We are learning to&#8230;</span>
+        <ul>
+          <li>plan a fair test that measures the strength of gravity, <em>g</em></li>
+          <li>time a fall by counting the frames of a slow-motion video</li>
+          <li>calculate <em>g</em> for each trial and find a mean</li>
+          <li>judge how accurate a result is with percentage error</li>
+        </ul>
+      </div>
+      <div class="box try"><span class="lbl">I can&#8230;</span>
+        <ul>
+          <li>use \(t = \text{frames} \div \text{frame rate}\)</li>
+          <li>use \(g = 2h \div t^2\) to calculate <em>g</em></li>
+          <li>spot an anomaly and leave it out of the mean</li>
+          <li>calculate a percentage error and suggest how to reduce errors</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box question"><span class="lbl">Starter</span>
+      <p>Try to time a coin falling off your desk with a stopwatch. How long does it take? Do you trust your answer?</p>
+      <button class="reveal-btn" data-answer="#l13s">What to listen for</button>
+      <div class="a" id="l13s"><span class="lbl-a">What we&#8217;re listening for</span>Answers will vary wildly: a desk-height fall takes under half a second, about the same as your reaction time. Today we use slow-motion video to get a time we <strong>can</strong> trust.</div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Key vocabulary">
+    <p class="bookref book">Booklet p.145 &#183; §13 &#183; Key vocabulary</p>
+    <p class="eyebrow">Lesson 13 <b>&#183;</b> Starter</p>
+    <h2><span class="phase-tag youdo">You do</span> Key vocabulary</h2>
+    <p>Copy each definition into the <strong>Key vocabulary</strong> table at the start of Lesson 13 in your booklet.</p>
+    <table class="tbl vocab">
+      <thead><tr><th>Word</th><th>Say it</th><th>Meaning</th></tr></thead>
+      <tbody>
+          <tr><td>Frame rate</td><td>frame rate</td><td>How many pictures (frames) a camera takes every second, in frames per second (fps).</td></tr>
+          <tr><td>Accepted value</td><td>ak-SEP-tid VAL-yoo</td><td>The value scientists agree on after many careful measurements. For <em>g</em> it is 9.8&nbsp;m/s\(^2\).</td></tr>
+          <tr><td>Percentage error</td><td>per-SEN-tij ER-or</td><td>How far a result is from the accepted value, as a percentage of the accepted value.</td></tr>
+          <tr><td>Anomaly</td><td>a-NOM-a-lee</td><td>A result that does not fit the pattern of the others.</td></tr>
+          <tr><td>Systematic error</td><td>sis-te-MAT-ik ER-or</td><td>An error that pushes every result the same way, such as a ruler that starts at the wrong place.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="slide" data-menu="Part A: reading">
+    <p class="bookref book">Booklet p.145 &#183; Part A &#183; Reading and comprehension</p>
+    <p class="eyebrow">Part A <b>&#183;</b> Reading and comprehension</p>
+    <h2>Too Fast to Time</h2>
+    <div class="cols">
+      <div>
+        <div class="box key"><span class="lbl">Before you read</span><p>Galileo had no stopwatch and no video. How could he possibly study something that falls in under a second?</p></div>
+        <p>Read <em>Too Fast to Time</em> in your booklet. Then answer questions <strong>C1&#8211;C4</strong>.</p>
+      </div>
+      <div class="box question"><span class="lbl">Check after reading</span>
+        <p>Why is counting video frames like using a very fast stopwatch?</p>
+        <button class="reveal-btn" data-answer="#l13r">Show answer</button>
+        <div class="a" id="l13r"><span class="lbl-a">Answer</span>Each frame is taken a fixed, tiny time after the last one &#8212; at 240&nbsp;fps, every 1/240 of a second. Counting frames counts those tiny, equal steps of time.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="The set-up">
+    <p class="bookref book">Booklet p.147 &#183; §13.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>The set-up</h2>
+    <div class="cols wide-right">
+      <div class="graph-card">
+        <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ball rolls down a short ramp on a table, off the edge, and falls a height h to the floor. A phone on a tripod films the fall from the side.">
+          <rect x="20" y="268" width="390" height="8" style="fill:var(--c-line-cool)"/>
+          <rect x="30" y="110" width="150" height="10" rx="2" style="fill:var(--ink-soft)"/>
+          <rect x="40" y="120" width="8" height="148" style="fill:var(--ink-soft)"/>
+          <rect x="162" y="120" width="8" height="148" style="fill:var(--ink-soft)"/>
+          <polygon points="40,110 40,80 110,110" style="fill:var(--accent-warm-soft);stroke:var(--accent-warm)" stroke-width="2"/>
+          <circle cx="52" cy="76" r="7" style="fill:var(--accent-dark)"/>
+          <path d="M180,104 Q240,112 270,262" fill="none" stroke-width="2.5" stroke-dasharray="6 5" style="stroke:var(--accent)"/>
+          <circle cx="270" cy="261" r="7" style="fill:var(--accent-dark)"/>
+          <line x1="198" y1="112" x2="198" y2="266" stroke="#B23A2B" stroke-width="1.5"/>
+          <polygon points="198,112 193,122 203,122" fill="#B23A2B"/><polygon points="198,266 193,256 203,256" fill="#B23A2B"/>
+          <text x="206" y="196" font-size="18" font-weight="700" fill="#B23A2B">h</text>
+          <rect x="340" y="150" width="34" height="56" rx="6" style="fill:var(--ink)"/>
+          <circle cx="348" cy="170" r="5" style="fill:var(--card)"/>
+          <line x1="357" y1="206" x2="337" y2="266" stroke-width="2" style="stroke:var(--ink-soft)"/><line x1="357" y1="206" x2="377" y2="266" stroke-width="2" style="stroke:var(--ink-soft)"/>
+          <text x="357" y="140" text-anchor="middle" font-size="14" font-weight="600" style="fill:var(--ink)">phone, slow-mo</text>
+          <text x="60" y="64" font-size="14" font-weight="600" style="fill:var(--ink)">ramp</text>
+        </svg>
+      </div>
+      <div>
+        <ul>
+          <li>Release the ball from the <strong>same mark</strong> every time &#8212; never push it.</li>
+          <li>Measure the table height \(h\) once, in metres.</li>
+          <li>Film <strong>side-on</strong>, in slow motion, with the whole fall in the picture.</li>
+          <li>Count frames from the <strong>last</strong> frame on the table to the <strong>first</strong> frame on the floor.</li>
+        </ul>
+        <p><a class="chip" href="booklet/Forces_Motion_Lesson_Booklet_Yr7_8.pdf#page=145">Open Experiment 5 in the booklet &#8594;</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Finding g from frames">
+    <p class="bookref book">Booklet p.147 &#183; §13.2 &#183; Worked Example 13.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2><span class="phase-tag ido">I do</span> From frames to <em>g</em></h2>
+    <div class="cols">
+      <div class="box defn"><span class="lbl">Two steps</span>
+        <p><strong>Time:</strong> \(t = \text{frames} \div \text{frame rate}\)</p>
+        <p><strong>Gravity:</strong> \(g = 2h \div t^2\) &#160; (square \(t\) first)</p>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 13.1</span><p>A table is <strong>0.78&nbsp;m</strong> high. Filmed at <strong>240&nbsp;fps</strong>, the ball takes <strong>96 frames</strong> to fall. Find \(t\), then \(g\).</p></div>
+    <ol class="steps" id="l13w1">
+      <li><span class="stepno">1</span> Time: \(t = 96 \div 240 = 0.40\ \text{s}\)</li>
+      <li><span class="stepno">2</span> Square it: \(t^2 = 0.40 \times 0.40 = 0.16\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(g = (2 \times 0.78) \div 0.16 = 1.56 \div 0.16 = 9.75\ \text{m/s}^2\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l13w1">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: g from frames">
+    <p class="bookref book">Booklet p.148 &#183; We do 13.1</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Find <em>g</em> from the frames</h2>
+    <div class="box question"><span class="lbl">We do 13.1</span><p>A table is <strong>0.72&nbsp;m</strong> high. Filmed at <strong>120&nbsp;fps</strong>, the ball takes <strong>46 frames</strong> to fall from the edge to the floor.</p><p><strong>(a)</strong> Find the time of the fall, \(t\), to two decimal places.</p><p><strong>(b)</strong> Use \(g = 2h \div t^2\) to find \(g\).</p></div>
+    <p class="note">Write your working in the <strong>We do 13.1</strong> box in your booklet.</p>
+    <ol class="steps" id="l13d1">
+      <li><span class="stepno">1</span> (a) \(t = 46 \div 120 \approx 0.38\ \text{s}\)</li>
+      <li><span class="stepno">2</span> (b) \(t^2 = 0.38 \times 0.38 = 0.1444\), and \(2h = 2 \times 0.72 = 1.44\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">\(g = 1.44 \div 0.1444 \approx 10.0\ \text{m/s}^2\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l13d1">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Percentage error">
+    <p class="bookref book">Booklet p.148 &#183; §13.3 &#183; Worked Example 13.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2><span class="phase-tag ido">I do</span> How close did you get?</h2>
+    <div class="cols">
+      <div class="box defn"><span class="lbl">Percentage error</span>
+        <p>\[\text{percentage error} = \frac{\text{your value} - \text{accepted value}}{\text{accepted value}} \times 100\%\]</p>
+        <p>Ignore any minus sign. For <em>g</em>, the accepted value is \(9.8\ \text{m/s}^2\). Smaller is more accurate.</p>
+      </div>
+      <div>
+        <div class="box question"><span class="lbl">Worked Example 13.2</span><p>A group&#8217;s mean value of <em>g</em> is \(9.2\ \text{m/s}^2\). Find the percentage error.</p></div>
+    <ol class="steps" id="l13w2">
+      <li><span class="stepno">1</span> Difference: \(9.8 - 9.2 = 0.6\)</li>
+      <li><span class="stepno">2</span> Divide by the accepted value: \(0.6 \div 9.8 \times 100\%\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Percentage error \(\approx 6\%\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l13w2">Show working</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="We do: percentage error">
+    <p class="bookref book">Booklet p.148 &#183; We do 13.2</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Work through together</p>
+    <h2><span class="phase-tag wedo">We do</span> Calculate the percentage error</h2>
+    <div class="box question"><span class="lbl">We do 13.2</span><p>Another group&#8217;s mean value of <em>g</em> is \(10.3\ \text{m/s}^2\).</p><p><strong>(a)</strong> Find the difference from the accepted value of \(9.8\ \text{m/s}^2\).</p><p><strong>(b)</strong> Find the percentage error.</p></div>
+    <p class="note">Write your working in the <strong>We do 13.2</strong> box in your booklet.</p>
+    <ol class="steps" id="l13d2">
+      <li><span class="stepno">1</span> (a) Difference: \(10.3 - 9.8 = 0.5\)</li>
+      <li><span class="stepno">2</span> (b) \(0.5 \div 9.8 \times 100\%\)</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Percentage error \(\approx 5\%\)</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l13d2">Show working</button>
+  </section>
+
+  <section class="slide" data-menu="Fair test and prediction">
+    <p class="bookref book">Booklet p.148 &#183; §13.4</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>Making it a fair test</h2>
+    <div class="cols">
+      <div class="box key"><span class="lbl">Keep it the same</span>
+        <ul>
+          <li>the same ball, ramp and release mark</li>
+          <li>the same table, so the same height \(h\)</li>
+          <li>the same camera position and frame rate</li>
+        </ul>
+        <p>Do <strong>five trials</strong>. A trial that is clearly different is an <strong>anomaly</strong> &#8212; mark it and leave it out of the mean.</p>
+      </div>
+      <div class="box question"><span class="lbl">Predict</span>
+        <p>Will your <em>g</em> be exactly \(9.8\ \text{m/s}^2\), a little more, or a little less? Write your prediction and a reason in your booklet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Method and safety">
+    <p class="bookref book">Booklet p.147 &#183; Part B &#183; Equipment and method</p>
+    <p class="eyebrow">Part B <b>&#183;</b> Planning the experiment</p>
+    <h2>Method and safety</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Method</span>
+        <ol>
+          <li>Measure the table height \(h\) in metres.</li>
+          <li>Tape the ramp about 20&nbsp;cm from the edge; mark a release point.</li>
+          <li>Film side-on in slow motion; record the frame rate.</li>
+          <li>Release the ball &#8212; don&#8217;t push. Film the fall.</li>
+          <li>Count the frames of the fall.</li>
+          <li>Repeat for five trials.</li>
+        </ol>
+      </div>
+      <div class="box flag"><span class="lbl">Safety</span><p>Catch the ball, or put a box on the floor to stop it rolling away &#8212; a ball bearing underfoot is easy to slip on. Keep the phone and tripod clear of walkways.</p></div>
+    </div>
+  </section>
+
+  <section class="slide" data-menu="Part C: practice">
+    <p class="bookref book">Booklet pp.150&#8211;151 &#183; Part C &#183; Tasks 13.1&#8211;13.7</p>
+    <p class="eyebrow">Part C <b>&#183;</b> Results and analysis</p>
+    <h2><span class="phase-tag youdo">You do</span> Results and analysis in your booklet</h2>
+    <div class="cols">
+      <div class="box try"><span class="lbl">Work through these tasks</span>
+        <ul>
+          <li><strong>Results table</strong> &#8212; frames, \(t\), \(t^2\) and \(g\) for each trial; the mean</li>
+          <li><strong>Task 13.1</strong> &#8212; the variables you kept the same</li>
+          <li><strong>Tasks 13.2 and 13.5</strong> &#8212; percentage error</li>
+          <li><strong>Tasks 13.3 and 13.6</strong> &#8212; anomalies, means and miscounted frames</li>
+          <li><strong>Task 13.4</strong> &#8212; another group&#8217;s <em>g</em></li>
+          <li><strong>Task 13.7</strong> &#8212; sources of error and how to reduce them</li>
+        </ul>
+      </div>
+      <div class="box key"><span class="lbl">Every time</span>
+        <ul>
+          <li>\(t = \text{frames} \div \text{fps}\), then \(g = 2h \div t^2\)</li>
+          <li>Square \(t\) before you divide</li>
+          <li>Leave anomalies out of the mean</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timer" data-minutes="15"></div>
+  </section>
+
+  <section class="slide" data-menu="Above level: frame rates">
+    <p class="bookref book">Booklet p.152 &#183; Part D &#183; Extension 13.8</p>
+    <p class="eyebrow">Part D <b>&#183;</b> Above level</p>
+    <h2><span class="phase-tag wedo">We do</span> Why film at 240 frames per second?</h2>
+    <div class="box question"><span class="lbl">Extension 13.8</span><p>A camera films at <strong>30&nbsp;fps</strong>; a slow-motion camera films at <strong>240&nbsp;fps</strong>.</p><p><strong>(a)</strong> How much time passes between frames for each camera?</p><p><strong>(b)</strong> A fall lasts about 0.4&nbsp;s. Explain why the 30&nbsp;fps camera would give a much less precise value of <em>g</em>.</p></div>
+    <ol class="steps" id="l13x1">
+      <li><span class="stepno">1</span> (a) 30&nbsp;fps: \(1 \div 30 \approx 0.033\ \text{s}\). 240&nbsp;fps: \(1 \div 240 \approx 0.004\ \text{s}\).</li>
+      <li><span class="stepno">2</span> (b) At 30&nbsp;fps the whole fall is only about 12 frames, so being one frame out changes \(t\) by about 8%.</li>
+      <li class="ans"><span class="stepno">&#10003;</span> <span class="result">Because \(t\) is squared in \(g = 2h \div t^2\), that becomes about a 16% error in <em>g</em> &#8212; at 240&nbsp;fps one frame is only about 1%.</span></li>
+    </ol>
+    <button class="reveal-btn" data-target="#l13x1">Show reasoning</button>
+  </section>
+
+  <section class="slide" data-menu="Recap">
+    <p class="eyebrow">Lesson 13 <b>&#183;</b> Recap</p>
+    <h2>What we covered</h2>
+    <ul>
+      <li>A fall from a table is too quick for a stopwatch &#8212; slow-motion video gives the time</li>
+      <li>\(t = \text{frames} \div \text{frame rate}\), then \(g = 2h \div t^2\)</li>
+      <li>Repeat trials, leave out anomalies, and find the mean</li>
+      <li>Percentage error compares your result with the accepted value of \(9.8\ \text{m/s}^2\)</li>
+      <li>This is the same method you will use on the trebuchet</li>
+    </ul>
+    <div class="box question"><span class="lbl">Exit question</span>
+      <p>A 0.80&nbsp;m fall takes 100 frames at 240&nbsp;fps. Find <em>g</em>.</p>
+      <button class="reveal-btn" data-answer="#l13x">Show answer</button>
+      <div class="a" id="l13x"><span class="lbl-a">Answer</span>\(t = 100 \div 240 \approx 0.417\ \text{s}\), \(t^2 \approx 0.174\). &#160;\(g = 1.6 \div 0.174 \approx 9.2\ \text{m/s}^2\).</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back &#183; <span class="key">R</span> reveal &#183; <span class="key">M</span> menu</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter">1 / 15</span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+  <button class="navbtn menubtn" aria-label="Slide menu">&#9776;</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">&times;</button>
+  <h2>Lesson 13 &#8212; slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="questions.js"></script>
+<script src="../../assets/js/quiz.js" defer></script>
+<script src="../../assets/js/deck.js" defer></script>
+</body>
+</html>

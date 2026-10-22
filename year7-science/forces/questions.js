@@ -1,10 +1,10 @@
 /* ============================================================
    Forces & Motion — Year 7 Spaced Retrieval Question Bank
-   212 multiple-choice questions tagged by lesson (0–12).
+   234 multiple-choice questions tagged by lesson (0–14).
    Format: { deck: N, q: "question text", opts: ["A","B","C","D"], ans: 0-indexed-int }
    Deck 0 is Lesson 1's warm-up on primary-school ideas, so every
    later deck excludes it (data-quiz-exclude="0").
-   Decks 2–12 draw 3 questions from the lesson before and 2 from older
+   Decks 2–14 draw 3 questions from the lesson before and 2 from older
    lessons (data-quiz-recent="3"). Content follows the Lesson Booklet.
    Lesson 11 is optional, so later decks also exclude deck 11
    (data-quiz-exclude="0,11") and draw their 3 from Lesson 10.
@@ -247,5 +247,31 @@ window.RETRIEVAL_QUESTIONS = [
   { deck: 12, q: "A fall lasts 60 frames on a video filmed at 120 frames per second. How long is the fall?", opts: ["0.2 s", "0.5 s", "2 s", "7200 s"], ans: 1 },
   { deck: 12, q: "Which equation finds g from a drop height and a fall time?", opts: ["g = 2h ÷ t²", "g = h × t", "g = t² ÷ 2h", "g = 2h × t"], ans: 0 },
   { deck: 12, q: "Why should a fall be filmed at 120 frames per second or more?", opts: ["Phones can't film any slower", "It makes gravity stronger", "The ball falls faster on camera", "Each frame is a shorter time, so a miscount matters less"], ans: 3 },
-  { deck: 12, q: "Launching a ball sideways faster from the same table makes it…", opts: ["stay in the air longer", "land in the same spot", "land further away, in the same time", "land closer, in less time"], ans: 2 }
+  { deck: 12, q: "Launching a ball sideways faster from the same table makes it…", opts: ["stay in the air longer", "land in the same spot", "land further away, in the same time", "land closer, in less time"], ans: 2 },
+
+  /* ── LESSON 13: Experiment 5 — Measuring g ───────────────────────────── */
+  { deck: 13, q: "Why can't you time a ball falling off a table with a stopwatch?", opts: ["Stopwatches only measure minutes", "The fall is shorter than your reaction time", "The ball is too small to see", "Gravity changes during the fall"], ans: 1 },
+  { deck: 13, q: "A phone films at 240 frames per second. How much time passes between frames?", opts: ["240 s", "0.24 s", "1/240 of a second", "2.4 s"], ans: 2 },
+  { deck: 13, q: "A fall lasts 96 frames at 240 fps. What is the time of the fall?", opts: ["0.40 s", "2.5 s", "0.24 s", "4.0 s"], ans: 0 },
+  { deck: 13, q: "Which equation gives g from the table height h and the fall time t?", opts: ["g = h × t", "g = 2h ÷ t²", "g = t ÷ h", "g = h ÷ 2t"], ans: 1 },
+  { deck: 13, q: "A table is 0.80 m high and the fall takes 0.40 s. What is g?", opts: ["2 m/s²", "4 m/s²", "10 m/s²", "20 m/s²"], ans: 2 },
+  { deck: 13, q: "What is the accepted value of g on Earth?", opts: ["9.8 m/s²", "1.6 m/s²", "98 m/s²", "0.98 m/s²"], ans: 0 },
+  { deck: 13, q: "A group measures g = 9.2 m/s². About what is their percentage error?", opts: ["0.6%", "60%", "9%", "6%"], ans: 3 },
+  { deck: 13, q: "One trial's g is very different from the other four. What should you do with it?", opts: ["Double it", "Mark it as an anomaly and leave it out of the mean", "Use only that trial", "Change it to 9.8"], ans: 1 },
+  { deck: 13, q: "Why do five trials instead of one?", opts: ["The mean of several trials is more reliable", "It makes g bigger", "It makes the ball fall faster", "One trial is never allowed"], ans: 0 },
+  { deck: 13, q: "Counting one frame too many makes t too big. What does that do to the calculated g?", opts: ["Makes it too big", "No change", "Makes it too small", "Makes it zero"], ans: 2 },
+  { deck: 13, q: "Why is a small heavy ball bearing better than a table-tennis ball for this experiment?", opts: ["It is easier to see", "Air resistance affects it much less", "It bounces higher", "It rolls slower"], ans: 1 },
+  { deck: 13, q: "Rolling the ball off faster makes it land further away. What happens to its fall time?", opts: ["It gets longer", "It gets shorter", "It doubles", "It stays the same"], ans: 3 },
+
+  /* ── LESSON 14 (optional): Optimising Range ──────────────────────────── */
+  { deck: 14, q: "On flat ground with no air resistance, which launch angle gives the longest range?", opts: ["30°", "45°", "60°", "90°"], ans: 1 },
+  { deck: 14, q: "Which pair of launch angles gives the same range at the same speed?", opts: ["30° and 45°", "20° and 40°", "30° and 60°", "45° and 90°"], ans: 2 },
+  { deck: 14, q: "Complementary angles always add up to…", opts: ["45°", "90°", "180°", "360°"], ans: 1 },
+  { deck: 14, q: "A ball is launched at 20 m/s. What is its maximum range on flat ground? (R = v² ÷ g)", opts: ["2 m", "20 m", "40.8 m", "400 m"], ans: 2 },
+  { deck: 14, q: "Doubling the launch speed multiplies the maximum range by…", opts: ["2", "4", "half", "it stays the same"], ans: 1 },
+  { deck: 14, q: "A ball launched straight up (90°) has a range of…", opts: ["zero", "its maximum", "the same as 45°", "the same as 0°"], ans: 0 },
+  { deck: 14, q: "Of a 30° and a 60° launch at the same speed, which stays in the air longer?", opts: ["30°", "Both the same", "It depends on the mass", "60°"], ans: 3 },
+  { deck: 14, q: "Why do long jumpers take off at about 20° rather than 45°?", opts: ["Rules forbid 45°", "Air resistance is zero at 20°", "They keep more of their run-up speed at a flatter angle", "Gravity is weaker at 20°"], ans: 2 },
+  { deck: 14, q: "A stone is released from high above the ground. Compared with flat ground, the best launch angle is…", opts: ["a little below 45°", "exactly 45°", "above 45°", "90°"], ans: 0 },
+  { deck: 14, q: "In R = v² × sin(2θ) ÷ g, for a launch at 15° you use…", opts: ["sin 15°", "sin 30°", "sin 7.5°", "sin 45°"], ans: 1 },
 ];
