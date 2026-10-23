@@ -1229,6 +1229,22 @@
   \begin{minipage}[t]{0.485\linewidth}
     \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
   \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
 
 % Answer boxes never split across a page (a half box on its own page is useless)
 % ── Page filling ────────────────────────────────────────────────────────────
@@ -3458,10 +3474,8 @@ A ball is dropped from 100\,cm and bounces back up to 62\,cm. Find the efficienc
 
 \begin{wedo}{Calculating bounce efficiency}
 A tennis ball is dropped from 80\,cm and bounces back up to 44\,cm.
-\pt{a}Find the efficiency of the bounce.
-\answerbox{1.8cm}
-\pt{b}What percentage of the energy is wasted, and where does it go?
-\answerbox{1.8cm}
+\ptpair{a}{Find the efficiency of the bounce.}{1.8cm}
+       {b}{What percentage of the energy is wasted, and where does it go?}{1.8cm}
 \end{wedo}
 
 \subsection{Making it a Fair Test}\label{sub:8.2}
