@@ -149,7 +149,7 @@ def arm_end_template():
     L0, w = 470.0, 40.0
     g = fillet(box(0, -w / 2, L0, w / 2), 2)
     holes = [(50.0, 0, PILOT_D), (400.0, 0, PILOT_D)]
-    eng = [np.array([[0.8, -w / 2 + 1], [0.8, w / 2 - 1]])]
+    eng = [np.array([[2.0, -w / 2 + 2.5], [2.0, w / 2 - 2.5]])]
     for x, d in ((50.0, HANG_BOLT_D), (400.0, AXLE_D)):
         t = np.linspace(0, 2 * np.pi, 60)
         eng.append(np.c_[x + d / 2 * np.cos(t), d / 2 * np.sin(t)])
@@ -162,7 +162,7 @@ def arm_tip_template():
     L0, w = 140.0, 20.0
     g = fillet(box(-L0, -w / 2, 0, w / 2), 2)
     holes = [(-30.0, 0, PILOT_D), (-100.0, 0, PILOT_D)]
-    eng = [np.array([[-0.8, -w / 2 + 1], [-0.8, w / 2 - 1]])]
+    eng = [np.array([[-2.0, -w / 2 + 2.5], [-2.0, w / 2 - 2.5]])]
     eng += text_polys('TIP', -22, -3.5, 6) + text_polys('sling eye', -82, -3.5, 5)
     eng += text_polys('trigger', -136, -3.5, 5)
     return Part('arm_tip_template', g, holes, eng)
@@ -180,22 +180,18 @@ def doubler_template(kind):
     return Part('doubler_' + kind, g, holes, eng)
 
 def test_coupon():
-    w, h = 150.0, 60.0
+    w, h = 172.0, 64.0
     g = fillet(box(0, 0, w, h), 3)
     holes, eng = [], []
-    for i, d in enumerate([19.8, 20.2, 20.6, 21.0]):
-        holes.append((18 + i * 30, 40, d))
-        eng += text_polys(f'{d:.1f}', 18 + i * 30, 22, 5, 'center')
-    # three slot widths for the trigger tabs (18 mm stack) and one tab
-    for i, sw in enumerate([18.2, 18.6, 19.0]):
-        s = box(12 + i * 30 - 2, 4, 12 + i * 30 + sw - 2, 14)
-        g = g.difference(s)
-    for i, d in enumerate([10.3, 10.5, 10.8]):
-        holes.append((120 + 0 * i, 0, 0)) if False else None
-    for i, d in enumerate([10.3, 10.6]):
-        holes.append((132, 15 + i * 26, d))
-        eng += text_polys(f'{d:.1f}', 132, 5 + i * 26 + (0 if i == 0 else 16), 4, 'center')
-    eng += text_polys('FIT TEST', 75, 52, 6, 'center')
+    for i, d in enumerate([19.8, 20.2, 20.6, 21.0]):     # axle / bearing holes
+        holes.append((18 + i * 30, 44, d))
+        eng += text_polys(f'{d:.1f}', 18 + i * 30, 23, 5, 'center')
+    for i, sw in enumerate([18.2, 18.6, 19.0]):          # slots for the 18 mm trigger stack
+        g = g.difference(box(10 + i * 30, 5, 10 + i * 30 + sw, 15))
+    for i, d in enumerate([10.3, 10.6]):                 # trigger pin
+        holes.append((140, 18 + i * 26, d))
+        eng += text_polys(f'{d:.1f}', 158, 16 + i * 26, 4.5, 'center')
+    eng += text_polys('FIT', 158, 56, 4.5, 'center')
     return Part('test_coupon', g, holes, eng)
 
 def pouch():
@@ -296,6 +292,10 @@ def check(parts, w=SHEET_W, h=SHEET_H):
     sheet = box(0, 0, w, h)
     for p in parts:
         assert sheet.contains(p.outline), f'{p.name} off the sheet'
+        inner = p.solid().buffer(-1.5)
+        for pl in p.engrave:
+            for x, y in pl:
+                assert inner.contains(Point(x, y)), f'engraving on {p.name} falls off the part at ({x:.0f}, {y:.0f})'
     for i in range(len(parts)):
         for j in range(i + 1, len(parts)):
             a, b = parts[i].solid(), parts[j].solid()
@@ -318,8 +318,8 @@ if __name__ == '__main__':
               f'Trebuchet laser parts - sheet {n} of 4 - 6 mm ply - {labels[n]}')
         print('sheet', n, [p.name for p in parts])
     c = test_coupon().transformed(0, 5, 5)
-    check([c], 160, 70)
-    write('00_Test_coupon_cut_first', [c], 'Fit test coupon - cut first', 160, 70)
+    check([c], 182, 74)
+    write('00_Test_coupon_cut_first', [c], 'Fit test coupon - cut first', 182, 74)
     pts = []
     for i in range(6):
         pts.append(pouch().transformed(0, 80 + (i % 3) * 160, 55 + (i // 3) * 100))
