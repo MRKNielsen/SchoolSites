@@ -252,15 +252,15 @@ window.RETRIEVAL_QUESTIONS = [
   /* ── LESSON 13: Experiment 5 — Measuring g ───────────────────────────── */
   { deck: 13, q: "Why can't you time a ball dropped from head height with a stopwatch?", opts: ["Stopwatches only measure minutes", "The fall is shorter than your reaction time", "The ball is too small to see", "Gravity changes during the fall"], ans: 1 },
   { deck: 13, q: "How does a motion sensor measure how far away an object is?", opts: ["It shines a light and measures the colour", "It sends out pulses of sound and times their echoes", "It weighs the object", "It counts video frames"], ans: 1 },
-  { deck: 13, q: "A container speeds up from 0.2 m/s to 4.1 m/s in 0.40 s. What is its acceleration?", opts: ["9.75 m/s²", "1.56 m/s²", "10.25 m/s²", "3.9 m/s²"], ans: 0 },
+  { deck: 13, q: "A falling weight speeds up from 0.2 m/s to 4.1 m/s in 0.40 s. What is its acceleration?", opts: ["9.75 m/s²", "1.56 m/s²", "10.25 m/s²", "3.9 m/s²"], ans: 0 },
   { deck: 13, q: "Which part of the velocity–time graph shows the object falling?", opts: ["The flat part before it is let go", "The straight part sloping up", "The sudden drop back to zero", "The flat part after it lands"], ans: 1 },
-  { deck: 13, q: "In Experiment 5, what is the independent variable (the thing you change)?", opts: ["The acceleration", "The mass of the container", "The cushion", "The time of fall"], ans: 1 },
+  { deck: 13, q: "In Experiment 5, what is the independent variable (the thing you change)?", opts: ["The acceleration", "The mass of the weight", "The cushion", "The time of fall"], ans: 1 },
   { deck: 13, q: "What is the accepted value of g on Earth?", opts: ["9.8 m/s²", "1.6 m/s²", "98 m/s²", "0.98 m/s²"], ans: 0 },
   { deck: 13, q: "A group measures g = 9.2 m/s². About what is their percentage error?", opts: ["0.6%", "60%", "9%", "6%"], ans: 3 },
   { deck: 13, q: "One trial's acceleration is very different from the other two. What should you do with it?", opts: ["Double it", "Mark it as an anomaly and leave it out of the mean", "Use only that trial", "Change it to 9.8"], ans: 1 },
-  { deck: 13, q: "Why do three trials for each container instead of one?", opts: ["The mean of several trials is more reliable", "It makes g bigger", "It makes the container fall faster", "One trial is never allowed"], ans: 0 },
-  { deck: 13, q: "Three containers of the same size but different mass are dropped. What should their accelerations be?", opts: ["The heaviest has the biggest", "The lightest has the biggest", "All about the same, close to 9.8 m/s²", "All zero"], ans: 2 },
-  { deck: 13, q: "The empty container's acceleration is a little smaller than the full one's. What is the most likely reason?", opts: ["Gravity is weaker on light objects", "Air resistance affects a light object more", "The sensor cannot see light objects", "Sand makes things fall faster"], ans: 1 },
+  { deck: 13, q: "Why do three trials for each weight instead of one?", opts: ["The mean of several trials is more reliable", "It makes g bigger", "It makes the weight fall faster", "One trial is never allowed"], ans: 0 },
+  { deck: 13, q: "A 50 g, a 100 g and a 200 g weight are dropped. What should their accelerations be?", opts: ["The heaviest has the biggest", "The lightest has the biggest", "All about the same, close to 9.8 m/s²", "All zero"], ans: 2 },
+  { deck: 13, q: "The 50 g weight's acceleration is a little smaller than the 200 g weight's. What is the most likely reason?", opts: ["Gravity is weaker on light objects", "Air resistance affects a light object more", "The sensor cannot see light objects", "Heavy weights are pushed down by the air"], ans: 1 },
   { deck: 13, q: "Your calculated acceleration and the software's slope for the same drop should be…", opts: ["very different", "close to each other", "both zero", "added together"], ans: 1 },
 
   /* ── LESSON 14 (optional): Optimising Range ──────────────────────────── */

@@ -1160,8 +1160,8 @@
   % motion sensor, pointing straight down
   \draw[fill=NavyBlue, draw=NavyBlue, rounded corners=2pt] (5.15,6.0) rectangle (6.25,6.75);
   \fill[MidGrey] (5.3,5.96) rectangle (6.1,6.06);
-  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (6.45,7.1) {motion sensor};
-  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west, align=left] at (6.45,6.55)
+  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (6.45,7.3) {motion sensor};
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=north west, align=left] at (6.45,7.0)
        {sends pulses of sound down\\and times their echoes};
   % cable to the logger
   \draw[DarkGrey!70, thick] (5.15,6.4) .. controls (4.2,6.2) and (2.4,5.2) .. (1.9,4.1);
@@ -1169,11 +1169,13 @@
   \foreach \r in {0.25,0.45,0.65} {
     \draw[MidBlue!70, thick] ($(5.7,5.96)+(-130:\r)$) arc[start angle=-130, end angle=-50, radius=\r];
   }
-  % the object, held with its bottom 40 cm below the sensor
-  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=2pt] (5.3,4.4) rectangle (6.1,5.15);
-  \node[font=\scriptsize\bfseries, text=TealGreen, anchor=east] at (5.2,4.78) {object};
-  \draw[dim arrow] (7.0,5.96) -- (7.0,4.4) node[midway, right, font=\small, text=DarkGrey] {40\,cm};
-  \draw[densely dashed, DarkGrey!50] (6.15,4.4) -- (7.1,4.4);
+  % the weight, held with its bottom 40 cm below the sensor
+  \draw[fill=MidGrey!70, draw=DarkGrey] (5.35,4.4) rectangle (6.05,4.95);
+  \draw[fill=MidGrey!40, draw=DarkGrey] (5.7,4.95) ellipse (0.35 and 0.09);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=west] at (6.15,4.68) {weight};
+  \draw[dim arrow] (4.95,5.96) -- (4.95,4.4) node[midway, left, font=\small, text=DarkGrey] {40\,cm};
+  \draw[densely dashed, DarkGrey!50] (4.85,4.4) -- (5.3,4.4);
+  \draw[densely dashed, DarkGrey!50] (4.85,5.96) -- (5.15,5.96);
   % its fall
   \draw[densely dashed, TealGreen, -{Stealth[length=6pt]}] (5.7,4.3) -- (5.7,0.55);
   \node[font=\scriptsize\itshape, text=TealGreen, anchor=west] at (5.8,2.4) {falls};
@@ -4737,7 +4739,7 @@ Galileo disagreed. A famous story says he dropped two balls of different mass fr
 
 A motion sensor can measure a fall for you. Like a bat hunting in the dark, it sends out short pulses of sound, too high for us to hear, and times how long each echo takes to come back. It does this 50 times a second, so it knows how fast a falling object is moving at every moment.
 
-In this experiment you will drop three objects of different mass under a motion sensor, find each one's acceleration from its graph, and test Galileo's idea. You will also compare your results with the accepted value of $g$, 9.8\,m/s$^2$.
+In this experiment you will drop three weights of different mass under a motion sensor, find each one's acceleration from its graph, and test Galileo's idea. You will also compare your results with the accepted value of $g$, 9.8\,m/s$^2$.
 \end{readingbox}
 
 \rcreset
@@ -4755,10 +4757,10 @@ In this experiment you will drop three objects of different mass under a motion 
 
 \subsection{The Set-up}\label{sub:13.1}
 
-A motion sensor is clamped to a stand at the edge of the bench, as high as it will go, pointing straight down at a cushion on the floor. You hold an object with its bottom 40\,cm below the sensor, then let it go. (The sensor cannot measure anything closer than about 15\,cm, so the object starts well below it.) As the object falls, the data logger draws a graph of its velocity against time.
+A motion sensor is clamped to a stand at the edge of the bench, as high as it will go, pointing straight down at a cushion on the floor. You hold a weight with its bottom 40\,cm below the sensor, then let it go. (The sensor cannot measure anything closer than about 15\,cm, so the weight starts well below it.) As the weight falls, the data logger draws a graph of its velocity against time.
 
 \diagMotionSensorSetup
-\expfigcap{The sensor points straight down at a cushion, so the object does not bounce back up towards it.}
+\expfigcap{The sensor points straight down at a cushion, so the weight does not bounce back up towards it.}
 
 \subsection{Acceleration from a Graph}\label{sub:13.2}
 
@@ -4776,7 +4778,7 @@ While the object falls, its speed goes up steadily, so the line on the graph is 
 \end{infobox}
 
 \begin{workedex}{Acceleration from a graph}
-The graph for a falling container shows a starting velocity of 0.2\,m/s, a final velocity of 4.1\,m/s and a time of fall of 0.40\,s. The software gives a slope of 9.7\,m/s$^2$. Find the acceleration, and check it.
+The graph for a falling 100\,g weight shows a starting velocity of 0.2\,m/s, a final velocity of 4.1\,m/s and a time of fall of 0.40\,s. The software gives a slope of 9.7\,m/s$^2$. Find the acceleration, and check it.
 
 \medskip
 \textbf{Change in speed:}\quad $4.1 - 0.2 = 3.9$\,m/s
@@ -4820,33 +4822,33 @@ Another group's mean value of $g$ is 10.3\,m/s$^2$.
 
 \subsection{Making it a Fair Test}\label{sub:13.4}
 
-You will drop three objects that are the same size and shape but have different masses --- for example, three identical containers: one empty, one half full of sand and one full of sand. The \textbf{mass} is what you change (the independent variable). The \textbf{acceleration} is what you measure (the dependent variable). Keep everything else the same: the same sensor settings, the same starting point 40\,cm below the sensor, letting go without pushing, and the same cushion.
+You will drop three weights: a 50\,g weight, a 100\,g weight and a 200\,g weight. They are small and heavy for their size, so air resistance has very little effect on them. The \textbf{mass} is what you change (the independent variable). The \textbf{acceleration} is what you measure (the dependent variable). Keep everything else the same: the same sensor settings, the same starting point 40\,cm below the sensor, letting go without pushing, and the same cushion.
 
-Do \textbf{three trials} for each object. A trial that is clearly different from the others is an \textbf{anomaly}: mark it, and leave it out of the mean.
+Do \textbf{three trials} for each weight. A trial that is clearly different from the others is an \textbf{anomaly}: mark it, and leave it out of the mean.
 
 \needspace{9\baselineskip}
 \begin{scaffold}{Prediction --- before you begin}
-Which object will have the greatest acceleration: the lightest, the middle one or the heaviest? Or will they all be about the same? Give a reason.
+Which weight will have the greatest acceleration: the 50\,g, the 100\,g or the 200\,g weight? Or will they all be about the same? Give a reason.
 \answerbox{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
-Motion sensor and data logger (or a computer with the logging software) \quad Stand, rod and right-angle clamp \quad Three identical containers with lids, and some sand \quad Electronic balance \quad Cushion or no-bounce pad \quad Metre rule \quad Sticky tape
+Motion sensor and data logger (or a computer with the logging software) \quad Stand, rod and right-angle clamp \quad 50\,g, 100\,g and 200\,g weights \quad Cushion or no-bounce pad \quad Metre rule
 
 \needspace{18\baselineskip}% keep the whole method on one page
 \subsubsection*{Method}
 \begin{enumerate}[itemsep=2pt]
-  \item Leave one container empty, fill one half full of sand and fill one to the top. Tape the lids shut. Measure the mass of each one and record it in kilograms (grams $\div$ 1000).
+  \item Write the mass of each weight in kilograms in the second results table (grams $\div$ 1000, so 50\,g $=$ 0.05\,kg).
   \item Clamp the motion sensor to the stand at the edge of the bench, as high as it will go, pointing straight down. Put the cushion on the floor directly underneath it.
   \item Connect the sensor to the data logger. Set the switch on top of the sensor to long range (the stick figure), set the logger to take 50 readings per second, and show a graph of velocity against time.
-  \item Hold the empty container under the sensor so that its bottom is 40\,cm below the sensor. Keep your hand at the side, out of the way of the sound pulses.
+  \item Hold the 50\,g weight flat, directly under the sensor, so that its bottom is 40\,cm below the sensor. Keep your hand at the side, out of the way of the sound pulses.
   \item Start recording, then let go --- do not push it. Stop recording once it has landed on the cushion.
   \item From the graph, read the starting velocity, the final velocity and the time of fall. Ask the software for the slope of the straight part of the line. Record all four.
-  \item Repeat steps 4--6 until you have three trials, then do the same for the other two containers.
+  \item Repeat steps 4--6 until you have three trials, then do the same for the 100\,g and 200\,g weights.
 \end{enumerate}
 
 \begin{infobox}{Safety}
-Stand the base of the stand well onto the bench so it cannot tip over. Tape the lids on firmly --- spilt sand makes the floor slippery. Keep feet and heads out from under the falling object, and never stand on a chair or desk to reach the sensor.
+Stand the base of the stand well onto the bench so it cannot tip over. The weights are heavy metal: keep feet and heads out from under the falling weight, and only pick it up once it has landed. Never stand on a chair or desk to reach the sensor.
 \end{infobox}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -4856,27 +4858,27 @@ Stand the base of the stand well onto the bench so it cannot tip over. Tape the 
 
 \begin{ctab}
 \begin{tabular}{|SZ{2.3cm}|Z{2.0cm}|Z{2.0cm}|Z{1.9cm}|Z{3.6cm}|Z{2.3cm}|}
-  \hd & \thead{Container, trial} & \thead{Starting velocity (m/s)} & \thead{Final velocity (m/s)} & \thead{Time of fall (s)} & \thead{Acceleration $=$ change in speed $\div$ time (m/s$^2$)} & \thead{Slope from the software (m/s$^2$)} \\ \hline
-  & \scaf{e.g.\ empty, 1} & \scaf{0.1} & \scaf{4.3} & \scaf{0.45} & \scaf{$(4.3 - 0.1) \div 0.45 = 9.3$} & \scaf{9.4} \\ \hline
-  & Empty, 1 & & & & & \\ \hline
-  & Empty, 2 & & & & & \\ \hline
-  & Empty, 3 & & & & & \\ \hline
-  & Half full, 1 & & & & & \\ \hline
-  & Half full, 2 & & & & & \\ \hline
-  & Half full, 3 & & & & & \\ \hline
-  & Full, 1 & & & & & \\ \hline
-  & Full, 2 & & & & & \\ \hline
-  & Full, 3 & & & & & \\ \hline
+  \hd & \thead{Weight, trial} & \thead{Starting velocity (m/s)} & \thead{Final velocity (m/s)} & \thead{Time of fall (s)} & \thead{Acceleration $=$ change in speed $\div$ time (m/s$^2$)} & \thead{Slope from the software (m/s$^2$)} \\ \hline
+  & \scaf{e.g.\ 50\,g, 1} & \scaf{0.1} & \scaf{4.3} & \scaf{0.45} & \scaf{$(4.3 - 0.1) \div 0.45 = 9.3$} & \scaf{9.4} \\ \hline
+  & 50\,g, 1 & & & & & \\ \hline
+  & 50\,g, 2 & & & & & \\ \hline
+  & 50\,g, 3 & & & & & \\ \hline
+  & 100\,g, 1 & & & & & \\ \hline
+  & 100\,g, 2 & & & & & \\ \hline
+  & 100\,g, 3 & & & & & \\ \hline
+  & 200\,g, 1 & & & & & \\ \hline
+  & 200\,g, 2 & & & & & \\ \hline
+  & 200\,g, 3 & & & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
 \begin{ctab}
 \begin{tabular}{|SZ{2.8cm}|Z{2.4cm}|Z{5.4cm}|Z{4.4cm}|}
-  \hd & \thead{Container} & \thead{Mass (kg)} & \thead{Mean acceleration (m/s$^2$), leaving out any anomalies} & \thead{Percentage error (\%)} \\ \hline
-  & \scaf{e.g.\ empty} & \scaf{0.05} & \scaf{$(9.3 + 9.5 + 9.4) \div 3 = 9.4$} & \scaf{$(9.8 - 9.4) \div 9.8 \times 100 \approx 4$} \\ \hline
-  & Empty & & & \\ \hline
-  & Half full & & & \\ \hline
-  & Full & & & \\ \hline
+  \hd & \thead{Weight} & \thead{Mass (kg)} & \thead{Mean acceleration (m/s$^2$), leaving out any anomalies} & \thead{Percentage error (\%)} \\ \hline
+  & \scaf{e.g.\ 50\,g} & \scaf{0.05} & \scaf{$(9.3 + 9.5 + 9.4) \div 3 = 9.4$} & \scaf{$(9.8 - 9.4) \div 9.8 \times 100 \approx 4$} \\ \hline
+  & 50\,g & & & \\ \hline
+  & 100\,g & & & \\ \hline
+  & 200\,g & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4905,7 +4907,7 @@ Stand the base of the stand well onto the bench so it cannot tip over. Tape the 
 \pt{b}Why is it better to use the mean of three trials than a single trial?
 \answerbox{2.0cm}
 
-\taskpair{A falling container speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration.}{2.6cm}
+\taskpair{A falling weight speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration.}{2.6cm}
          {A group's mean acceleration was 9.5\,m/s$^2$. Calculate their percentage error.}{2.6cm}
 
 \needspace{10\baselineskip}
@@ -4934,7 +4936,7 @@ These questions go beyond the Year 7 standard: judge the precision of the method
 \answerbox{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask Air resistance pushes up on a falling object. The empty container often has a slightly smaller acceleration than the full one. Use the idea of net force to explain why. (Hint: the containers are the same size, so the air resistance on each is about the same.)
+\exttask Air resistance pushes up on a falling object. The 50\,g weight often has a slightly smaller acceleration than the 200\,g weight. Use the idea of net force to explain why. (Hint: the air resistance on each one is about the same size, but the pull of gravity on the 50\,g weight is much smaller.)
 \answerbox{2.8cm}
 
 \needspace{12\baselineskip}
