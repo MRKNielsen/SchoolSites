@@ -1,11 +1,11 @@
 % ============================================================
 %  Forces and Motion — Lesson Booklet (one section per lesson: A Reading · B Theory · C Practice · D Above level)
 %  Years 7–8  |  Victorian Curriculum F–10 Version 2.0
-%  Compile with: pdflatex booklet.tex  (twice for page refs)
+%  Compile with: xelatex, three times (see CLAUDE.md) --- fill.py does this and sizes the answer boxes
 % ============================================================
 \documentclass[11pt,a4paper]{article}
 
-% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+% ── Fonts (compile with XeLaTeX) ────────────────────────────────────────────
 \usepackage{fontspec}
 % Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
 \setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
@@ -1134,6 +1134,91 @@
   {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
   \end{tcolorbox}\vspace{2pt}}
 
+
+% ── Motion sensor set-up for Experiment 5 ────────────────────────────────────
+\newcommand{\diagMotionSensorSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=0.74cm]
+  % floor
+  \fill[ground hatch] (-0.4,-0.3) rectangle (10.2,0);
+  \draw[thick, DarkGrey] (-0.4,0) -- (10.2,0);
+  % bench, its right-hand edge at x = 4
+  \fill[LightGrey, draw=DarkGrey] (-0.2,3.25) rectangle (4.0,3.45);
+  \fill[DarkGrey!70] (0.0,0) rectangle (0.15,3.25);
+  \fill[DarkGrey!70] (3.7,0) rectangle (3.85,3.25);
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (2.0,3.05) {bench};
+  % data logger on the bench
+  \draw[fill=white, draw=DarkGrey, rounded corners=1pt] (0.3,3.45) rectangle (1.9,4.45);
+  \draw[MidBlue, thick] (0.45,3.62) -- (0.75,3.62) -- (1.45,4.25) -- (1.52,3.62) -- (1.75,3.62);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=south] at (1.1,4.45) {data logger};
+  % stand: base, upright rod, right-angle clamp and an arm reaching over the edge
+  \fill[DarkGrey] (2.4,3.45) rectangle (3.6,3.62);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,3.62) -- (3.0,6.95);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,6.6) -- (5.7,6.6);
+  \fill[DarkGrey] (2.86,6.46) rectangle (3.14,6.74);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (2.85,6.1) {stand};
+  % motion sensor, pointing straight down
+  \draw[fill=NavyBlue, draw=NavyBlue, rounded corners=2pt] (5.15,6.0) rectangle (6.25,6.75);
+  \fill[MidGrey] (5.3,5.96) rectangle (6.1,6.06);
+  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (6.45,7.1) {motion sensor};
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west, align=left] at (6.45,6.55)
+       {sends pulses of sound down\\and times their echoes};
+  % cable to the logger
+  \draw[DarkGrey!70, thick] (5.15,6.4) .. controls (4.2,6.2) and (2.4,5.2) .. (1.9,4.1);
+  % sound pulses
+  \foreach \r in {0.25,0.45,0.65} {
+    \draw[MidBlue!70, thick] ($(5.7,5.96)+(-130:\r)$) arc[start angle=-130, end angle=-50, radius=\r];
+  }
+  % the object, held with its bottom 40 cm below the sensor
+  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=2pt] (5.3,4.4) rectangle (6.1,5.15);
+  \node[font=\scriptsize\bfseries, text=TealGreen, anchor=east] at (5.2,4.78) {object};
+  \draw[dim arrow] (7.0,5.96) -- (7.0,4.4) node[midway, right, font=\small, text=DarkGrey] {40\,cm};
+  \draw[densely dashed, DarkGrey!50] (6.15,4.4) -- (7.1,4.4);
+  % its fall
+  \draw[densely dashed, TealGreen, -{Stealth[length=6pt]}] (5.7,4.3) -- (5.7,0.55);
+  \node[font=\scriptsize\itshape, text=TealGreen, anchor=west] at (5.8,2.4) {falls};
+  % cushion
+  \draw[fill=GoldLight, draw=GoldDark, rounded corners=3pt] (4.8,0) rectangle (6.6,0.32);
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=west] at (6.7,0.2) {cushion (no-bounce pad)};
+\end{tikzpicture}
+\end{center}}
+
+% ── A velocity–time graph for one drop under the motion sensor ───────────────
+% \diagVelocityTime{numbers} labels the axes with values (Lesson 12);
+% \diagVelocityTime{parts} labels what each part of the line means (Lesson 13).
+\newcommand{\diagVelocityTime}[1]{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=11cm, y=0.8cm]
+  % grid and axes: time 0–0.7 s, velocity 0–5 m/s
+  \foreach \t in {0.1,0.2,...,0.71} \draw[Line] (\t,0) -- (\t,5);
+  \foreach \v in {1,...,5} \draw[Line] (0,\v) -- (0.7,\v);
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0.73,0) node[right, font=\small, text=DarkGrey] {time (s)};
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0,5.4) node[above, font=\small, text=DarkGrey] {velocity (m/s)};
+  \foreach \t/\l in {0/0,0.1/0.1,0.2/0.2,0.3/0.3,0.4/0.4,0.5/0.5,0.6/0.6,0.7/0.7} \node[font=\scriptsize, text=DarkGrey, below] at (\t,0) {\l};
+  \foreach \v in {0,...,5} \node[font=\scriptsize, text=DarkGrey, left] at (0,\v) {\v};
+  % the line: held still, falling, landing
+  \draw[line width=1.6pt, MidBlue] (0,0) -- (0.10,0) -- (0.55,4.4) -- (0.565,0.05) -- (0.7,0.05);
+  \fill[TealGreen] (0.10,0) circle (2pt);
+  \fill[OrangeDark] (0.55,4.4) circle (2pt);
+  \def\vtmode{#1}\def\vtnumbers{numbers}%
+  \ifx\vtmode\vtnumbers
+    \draw[densely dashed, DarkGrey!60] (0,4.4) -- (0.55,4.4);
+    \draw[densely dashed, DarkGrey!60] (0.55,0) -- (0.55,4.4);
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=south east, align=right] at (0.10,0.15) {let go\\0\,m/s};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {just before\\it lands: 4.4\,m/s};
+  \else
+    \node[font=\scriptsize, text=DarkGrey, align=center, anchor=south] at (0.05,0.2) {held\\still};
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=north west, align=left] at (0.11,-0.45) {starting velocity\\(the moment it is let go)};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {final velocity\\(just before it lands)};
+    \node[font=\scriptsize, text=MidBlue, anchor=north west, align=left, fill=white, inner sep=1.5pt] at (0.03,4.75) {falling: a straight line, because\\the speed goes up steadily};
+    \draw[MidBlue, -{Stealth[length=4pt]}] (0.16,3.9) -- (0.29,2.05);
+    \node[font=\scriptsize, text=DarkGrey, anchor=west, align=left] at (0.58,0.9) {lands on\\the cushion};
+    \draw[dim arrow] (0.10,-1.35) -- (0.55,-1.35) node[midway, below, font=\scriptsize, text=DarkGrey] {time of fall};
+    \draw[densely dashed, DarkGrey!50] (0.10,-0.5) -- (0.10,-1.45);
+    \draw[densely dashed, DarkGrey!50] (0.55,-0.5) -- (0.55,-1.45);
+  \fi
+\end{tikzpicture}
+\end{center}}
 
 % ── Experiment 2: pulling a loaded wooden block along the bench with a spring balance ──
 \newcommand{\diagExpTwoSetup}{%
@@ -4383,7 +4468,7 @@ About a hundred years later, Galileo Galilei worked out what really happens, and
 
 The result that surprises people most is this. Launch one ball sideways and drop an identical ball from the same height at the same moment: they hit the ground at the same time. The launched ball lands far away, but its sideways speed makes no difference to how quickly gravity pulls it down.
 
-That is why, in this unit, you can measure the strength of gravity just by timing how long a launched ball takes to fall. Galileo's idea replaced a model that had been trusted for a century --- a good example of science changing when someone finds better evidence and better reasoning.
+That is why a launched ball and a dropped ball speed up downwards at exactly the same rate --- a rate you will measure in Experiment~5. Galileo's idea replaced a model that had been trusted for a century --- a good example of science changing when someone finds better evidence and better reasoning.
 \end{readingbox}
 
 \rcreset
@@ -4472,27 +4557,34 @@ A ball rolls off a table 0.60\,m high at 2.5\,m/s, and is in the air for 0.35\,s
 
 \subsection{Measuring $g$}\label{sub:12.5}
 
-Rearranging $h = \tfrac{1}{2}gt^2$ gives $g = 2h \div t^2$. Measure the drop height and the time of flight, and you can calculate the strength of gravity. A slow-motion video gives the time:
-\[ t = \text{number of frames} \div \text{frames per second} \]
+The table in Section~\ref{sub:12.2} says that a falling object's speed goes up by 9.8\,m/s every second. That number is $g$. You could find it from a drop height and a fall time, using $g = 2h \div t^2$ from the key equations box. Experiment~5 measures it more directly, by watching a falling object speed up. A \textbf{motion sensor} above the object measures how fast it is moving 50 times every second, and draws a \textbf{velocity--time graph}. (Velocity is speed in one direction --- here, downwards.) While the object falls, the line on the graph is straight and slopes up, because its speed goes up by the same amount every second.
 
-\begin{workedex}{Finding $g$ from a video}
-A ball rolls off a bench 0.80\,m high. A video filmed at 120 frames per second shows 48 frames between the ball leaving the bench and landing. Find $t$, then $g$.
+\diagVelocityTime{numbers}
+\figcap[fig:velocity-time]{A velocity--time graph for a ball dropped under a motion sensor. The ball is held still, let go at 0.10\,s, and lands at 0.55\,s.}
+
+\begin{infobox}{Acceleration from a velocity--time graph}
+\textbf{Time of fall} $=$ time it lands $-$ time it is let go\\[2pt]
+\textbf{Change in speed} $=$ final velocity $-$ starting velocity\\[2pt]
+\textbf{Acceleration} $=$ change in speed $\div$ time of fall \qquad (for a falling object, this is $g$)
+\end{infobox}
+
+\begin{workedex}{Finding $g$ from a velocity--time graph}
+Use the graph in Figure~\ref{fig:velocity-time} to find the ball's acceleration.
 
 \medskip
-\textbf{Time:}\quad $t = 48 \div 120 = 0.40$\,s
+\textbf{Read the graph:}\quad starting velocity $= 0$\,m/s, \quad final velocity $= 4.4$\,m/s
 
-\textbf{Gravity:}\quad $g = 2h \div t^2 = (2 \times 0.80) \div (0.40 \times 0.40) = 1.6 \div 0.16 = \mathbf{10\ \text{m/s}^2}$
+\textbf{Time of fall:}\quad $0.55 - 0.10 = 0.45$\,s
 
-\medskip
-This is close to the accepted value of 9.8\,m/s$^2$.
+\textbf{Change in speed:}\quad $4.4 - 0 = 4.4$\,m/s
+
+\textbf{Acceleration:}\quad $4.4 \div 0.45 \approx \mathbf{9.8\ \text{m/s}^2}$ \quad --- the accepted value of $g$.
 \end{workedex}
 
-\begin{wedo}{Finding $g$ from a video}
-A ball rolls off a bench 0.44\,m high. A video filmed at 240 frames per second shows 72 frames between the ball leaving the bench and landing.
-\pt{a}Find the time of the fall, $t$.
-\answerbox{1.6cm}
-\pt{b}Use $g = 2h \div t^2$ to find $g$.
-\answerbox{1.8cm}
+\begin{wedo}{Finding $g$ from a velocity--time graph}
+A motion sensor's graph for a falling tennis ball shows a starting velocity of 0.2\,m/s and a final velocity of 3.1\,m/s. The fall took 0.30\,s.
+\ptpair{a}{Find the change in speed.}{1.8cm}
+       {b}{Find the acceleration.}{1.8cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -4536,7 +4628,7 @@ Work through every task. Use $g = 9.8$\,m/s$^2$ and ignore air resistance. Show 
          {A ball launched sideways lands 2.4\,m away after 0.60\,s. Find its launch speed.}{2.4cm}
 
 \taskpair{A ball falls 2.0\,m in 0.64\,s. Calculate $g$.}{2.4cm}
-         {A video filmed at 240 frames per second shows a fall lasting 60 frames. Find the time of the fall.}{2.4cm}
+         {A motion sensor shows a falling ball speed up from 1.0\,m/s to 4.0\,m/s in 0.31\,s. Find its acceleration.}{2.4cm}
 
 \needspace{10\baselineskip}
 \task A marble rolls off a desk 0.45\,m high at 2.0\,m/s.
@@ -4600,10 +4692,10 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 \answerbox{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask In Worked Example~\ref{we:12.3}, the fall lasted 48 frames at 120 frames per second.
-\pt{a}Suppose the student miscounted and recorded 49 frames. Calculate the new value of $g$.
+\exttask On a velocity--time graph, the acceleration is the slope (steepness) of the line. A falling ball's line passes through the points (0.10\,s, 1.2\,m/s) and (0.40\,s, 4.1\,m/s).
+\pt{a}Find the slope of the line: the change in velocity divided by the change in time.
 \answerbox{2.0cm}
-\pt{b}By how much did one frame change the answer? Explain why Experiment~5 and the trebuchet investigation film at 120 frames per second or more.
+\pt{b}Describe how the line would look for the same ball dropped on the Moon, where $g = 1.6$\,m/s$^2$.
 \answerbox{2.0cm}
 
 \needspace{12\baselineskip}
@@ -4620,75 +4712,85 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 13 — EXPERIMENT 5: MEASURING g                             (Week 5 · P1)
 % ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Experiment 5: Measuring \texorpdfstring{$g$}{g}}{Prediction \textbullet{} Ball roll-off \textbullet{} Slow-motion video \textbullet{} Percentage error}\label{sec:13}\label{exp:5}
+\sectiondiv{Experiment 5: Measuring \texorpdfstring{$g$}{g}}{Prediction \textbullet{} Motion sensor \textbullet{} Velocity--time graphs \textbullet{} Percentage error}\label{sec:13}\label{exp:5}
 \lessoncodes{VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06}
 
 \vocabhead
 \begin{ctab}
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
-  & \scaf{\textbf{Frame rate}} & \scaf{How many pictures (frames) a camera takes every second, in frames per second (fps).} \\ \hline
+  & \scaf{\textbf{Motion sensor}} & \scaf{A device that sends out pulses of sound and times their echoes, to measure how far away an object is many times a second.} \\ \hline
+  & \textbf{Velocity} & \\ \hline
   & \textbf{Accepted value} & \\ \hline
   & \textbf{Percentage error} & \\ \hline
   & \textbf{Anomaly} & \\ \hline
-  & \textbf{Systematic error} & \\ \hline
 \end{tabular}
 \end{ctab}
 
 % ─── PART A ───────────────────────────────────────────────────────────────────
 \lessonpart{A}{Reading and comprehension}{Teal}\label{read:13}
 
-\begin{readingbox}{Reading --- Too Fast to Time}
-Drop a ball from the height of a table and it hits the floor in less than half a second. That is far too quick to time with a stopwatch: by the time your thumb reacts, the fall is almost over. For most of history, nobody could measure a fall directly.
+\begin{readingbox}{Reading --- The Hammer and the Feather}
+A ball dropped from head height hits the floor in about half a second --- too quick to time with a stopwatch. For almost two thousand years, people trusted the Greek thinker Aristotle, who taught that heavy objects fall faster than light ones.
 
-Galileo found a way around the problem in the early 1600s. Instead of dropping balls, he rolled them down long, gently sloping ramps. The slope slowed the motion down enough to time it, using a water clock: water dripped steadily into a cup while the ball rolled, and he weighed the water afterwards. From his ramps he showed that a falling object keeps speeding up at a steady rate.
+Galileo disagreed. A famous story says he dropped two balls of different mass from the Leaning Tower of Pisa, and they landed together. Without air in the way, heavy and light objects speed up at exactly the same rate. In 1971 the astronaut David Scott tested this on the Moon, where there is no air: he dropped a hammer and a feather, and they hit the ground at the same moment.
 
-Today you carry a better timer in your pocket. Many phones film in slow motion at 120 or 240 frames per second. Every frame is a snapshot taken a fixed, tiny time after the last one, so counting frames is like using a stopwatch that ticks 240 times a second.
+A motion sensor can measure a fall for you. Like a bat hunting in the dark, it sends out short pulses of sound, too high for us to hear, and times how long each echo takes to come back. It does this 50 times a second, so it knows how fast a falling object is moving at every moment.
 
-In this experiment you will roll a ball off a table, film its fall in slow motion, count the frames, and use the time to measure the strength of gravity, $g$ --- then compare your answer with the accepted value of 9.8\,m/s$^2$.
+In this experiment you will drop three objects of different mass under a motion sensor, find each one's acceleration from its graph, and test Galileo's idea. You will also compare your results with the accepted value of $g$, 9.8\,m/s$^2$.
 \end{readingbox}
 
 \rcreset
-\rcq{Why can't you time a ball falling from a table with a stopwatch?}{1.5cm}
-\rcq{Describe how Galileo slowed the motion down, and how he timed it.}{1.6cm}
-\rcq{Explain why counting video frames works like a very fast stopwatch.}{1.5cm}
-\rcq{In this experiment, what will you measure, and what will you calculate from it?}{1.4cm}
+\rcq{Why is a ball dropped from head height hard to time with a stopwatch?}{1.4cm}
+\rcq{What did Aristotle teach about falling objects, and what did Galileo say instead?}{1.7cm}
+\rcq{What happened when David Scott dropped a hammer and a feather on the Moon? Why would the same test not work on Earth?}{1.7cm}
+\rcq{Explain how a motion sensor works out how far away an object is.}{1.5cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:13}
 
-\begin{expheader}{5}{Measuring $g$ with a Ball Rolling off a Table}{To measure the acceleration due to gravity, $g$, by timing a ball's fall from a table with slow-motion video.}
+\begin{expheader}{5}{Measuring $g$ with a Motion Sensor}{To measure the acceleration due to gravity, $g$, with a motion sensor, and to find out whether the mass of a falling object changes it.}
 \medskip\small\textbf{Curriculum:} VC2S8U14 \textbullet{} VC2S8I02 \textbullet{} VC2S8I03 \textbullet{} VC2S8I04 \textbullet{} VC2S8I05 \textbullet{} VC2S8I06
 \end{expheader}
 
 \subsection{The Set-up}\label{sub:13.1}
 
-A short ramp sits on the edge of a table. A ball released from the same mark every time rolls down the ramp, along the table and off the edge. A phone on a tripod films the fall from the side, in slow motion. You measure the height $h$ of the table top above the floor once, with a metre rule.
+A motion sensor is clamped to a stand at the edge of the bench, as high as it will go, pointing straight down at a cushion on the floor. You hold an object with its bottom 40\,cm below the sensor, then let it go. (The sensor cannot measure anything closer than about 15\,cm, so the object starts well below it.) As the object falls, the data logger draws a graph of its velocity against time.
 
-\diagProjectile
-\expfigcap{The ball leaves the table edge and falls a height $h$. Film from the side so you can see the moment it leaves the edge and the moment it lands.}
+\diagMotionSensorSetup
+\expfigcap{The sensor points straight down at a cushion, so the object does not bounce back up towards it.}
 
-\subsection{Time from a Video}\label{sub:13.2}
+\subsection{Acceleration from a Graph}\label{sub:13.2}
 
-\begin{infobox}{From frames to $g$}
-\textbf{Time of the fall:} \quad $t = \text{number of frames} \div \text{frame rate}$\\[2pt]
-\textbf{Gravity:} \quad $g = 2h \div t^2$ \quad (square $t$ first: $t^2 = t \times t$)
+While the object falls, its speed goes up steadily, so the line on the graph is straight. You read three things off it: the \textbf{starting velocity} (the moment it is let go), the \textbf{final velocity} (just before it lands) and the \textbf{time of fall} between them.
+
+\par\noindent\begin{minipage}{\linewidth}% keep the graph and its caption together
+\diagVelocityTime{parts}
+\expfigcap{What one drop looks like on the velocity--time graph.}
+\end{minipage}\par
+
+\begin{infobox}{From the graph to $g$}
+\textbf{Change in speed} $=$ final velocity $-$ starting velocity\\[2pt]
+\textbf{Acceleration} $=$ change in speed $\div$ time of fall\\[2pt]
+\textbf{Check it:} ask the software for the \emph{slope} of the straight part of the line. It should be close to your answer.
 \end{infobox}
 
-\begin{workedex}{Finding $g$ from frames}
-A table is 0.78\,m high. Filmed at 240 frames per second, the ball takes 96 frames to fall from the edge to the floor. Find $t$, then $g$.
+\begin{workedex}{Acceleration from a graph}
+The graph for a falling container shows a starting velocity of 0.2\,m/s, a final velocity of 4.1\,m/s and a time of fall of 0.40\,s. The software gives a slope of 9.7\,m/s$^2$. Find the acceleration, and check it.
 
 \medskip
-\textbf{Time:}\quad $t = 96 \div 240 = 0.40$\,s
+\textbf{Change in speed:}\quad $4.1 - 0.2 = 3.9$\,m/s
 
-\textbf{Gravity:}\quad $g = (2 \times 0.78) \div (0.40 \times 0.40) = 1.56 \div 0.16 = \mathbf{9.75\ \text{m/s}^2}$
+\textbf{Acceleration:}\quad $3.9 \div 0.40 = \mathbf{9.75\ \text{m/s}^2}$
+
+\textbf{Check:}\quad the software's slope, 9.7\,m/s$^2$, is very close, so the graph was read well.
 \end{workedex}
 
-\begin{wedo}{Finding $g$ from frames}
-A table is 0.72\,m high. Filmed at 120 frames per second, the ball takes 46 frames to fall from the edge to the floor.
-\pt{a}Find the time of the fall, $t$, to two decimal places.
+\begin{wedo}{Acceleration from a graph}
+Another drop shows a starting velocity of 0.1\,m/s, a final velocity of 4.5\,m/s and a time of fall of 0.45\,s.
+\pt{a}Find the change in speed.
 \answerbox{1.6cm}
-\pt{b}Use $g = 2h \div t^2$ to find $g$.
+\pt{b}Find the acceleration, to one decimal place.
 \answerbox{1.8cm}
 \end{wedo}
 
@@ -4718,71 +4820,96 @@ Another group's mean value of $g$ is 10.3\,m/s$^2$.
 
 \subsection{Making it a Fair Test}\label{sub:13.4}
 
-You will do \textbf{five trials} and calculate $g$ for each one. Keep everything the same every time: the same ball, the same ramp, the same release mark, the same table and the same camera position. A trial that is clearly different from the others is an \textbf{anomaly}: mark it, and leave it out of the mean.
+You will drop three objects that are the same size and shape but have different masses --- for example, three identical containers: one empty, one half full of sand and one full of sand. The \textbf{mass} is what you change (the independent variable). The \textbf{acceleration} is what you measure (the dependent variable). Keep everything else the same: the same sensor settings, the same starting point 40\,cm below the sensor, letting go without pushing, and the same cushion.
+
+Do \textbf{three trials} for each object. A trial that is clearly different from the others is an \textbf{anomaly}: mark it, and leave it out of the mean.
 
 \needspace{9\baselineskip}
 \begin{scaffold}{Prediction --- before you begin}
-Will your value of $g$ be exactly 9.8\,m/s$^2$, a little more, or a little less? Give one reason.
+Which object will have the greatest acceleration: the lightest, the middle one or the heaviest? Or will they all be about the same? Give a reason.
 \answerbox{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
-Table \quad Short ramp (or a ruler with a groove) \quad Ball bearing or marble \quad Metre rule \quad Phone with slow-motion video, on a tripod or propped steady \quad Sticky tape
+Motion sensor and data logger (or a computer with the logging software) \quad Stand, rod and right-angle clamp \quad Three identical containers with lids, and some sand \quad Electronic balance \quad Cushion or no-bounce pad \quad Metre rule \quad Sticky tape
 
+\needspace{18\baselineskip}% keep the whole method on one page
 \subsubsection*{Method}
 \begin{enumerate}[itemsep=2pt]
-  \item Measure the height of the table top above the floor, $h$, in metres. Record it.
-  \item Tape the ramp to the table so its bottom end is about 20\,cm from the edge. Mark a release point on the ramp.
-  \item Set the phone to film in slow motion, side-on to the table edge, so the whole fall is in the picture. Record the frame rate.
-  \item Release the ball from the mark --- do not push it. Film it rolling off the edge and landing.
-  \item In the video, count the frames from the last frame the ball touches the table to the first frame it touches the floor.
-  \item Repeat steps 4--5 for five trials.
+  \item Leave one container empty, fill one half full of sand and fill one to the top. Tape the lids shut. Measure the mass of each one and record it in kilograms (grams $\div$ 1000).
+  \item Clamp the motion sensor to the stand at the edge of the bench, as high as it will go, pointing straight down. Put the cushion on the floor directly underneath it.
+  \item Connect the sensor to the data logger. Set the switch on top of the sensor to long range (the stick figure), set the logger to take 50 readings per second, and show a graph of velocity against time.
+  \item Hold the empty container under the sensor so that its bottom is 40\,cm below the sensor. Keep your hand at the side, out of the way of the sound pulses.
+  \item Start recording, then let go --- do not push it. Stop recording once it has landed on the cushion.
+  \item From the graph, read the starting velocity, the final velocity and the time of fall. Ask the software for the slope of the straight part of the line. Record all four.
+  \item Repeat steps 4--6 until you have three trials, then do the same for the other two containers.
 \end{enumerate}
 
 \begin{infobox}{Safety}
-Catch the ball after it lands, or put a box on the floor to stop it rolling away --- a ball bearing underfoot is easy to slip on. Keep the phone and tripod clear of walkways.
+Stand the base of the stand well onto the bench so it cannot tip over. Tape the lids on firmly --- spilt sand makes the floor slippery. Keep feet and heads out from under the falling object, and never stand on a chair or desk to reach the sensor.
 \end{infobox}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Results and analysis}{Amber}\label{prac:13}
 
 \subsubsection*{Results}
-\textit{Table height} $h =$ \underline{\hspace{2cm}}\,m \qquad \textit{Frame rate} $=$ \underline{\hspace{2cm}}\,fps
 
 \begin{ctab}
-\begin{tabular}{|SZ{1.4cm}|Z{2.0cm}|Z{2.6cm}|Z{2.2cm}|Z{3.2cm}|Z{2.2cm}|}
-  \hd & \thead{Trial} & \thead{Frames} & \thead{$t$ = frames $\div$ fps (s)} & \thead{$t^2$ (s$^2$)} & \thead{$g = 2h \div t^2$ (m/s$^2$)} & \thead{Anomaly?} \\ \hline
-  & \scaf{e.g.} & \scaf{96} & \scaf{0.40} & \scaf{0.16} & \scaf{$1.56 \div 0.16 = 9.75$} & \scaf{no} \\ \hline
-  & 1 & & & & & \\ \hline
-  & 2 & & & & & \\ \hline
-  & 3 & & & & & \\ \hline
-  & 4 & & & & & \\ \hline
-  & 5 & & & & & \\ \hline
+\begin{tabular}{|SZ{2.3cm}|Z{2.0cm}|Z{2.0cm}|Z{1.9cm}|Z{3.6cm}|Z{2.3cm}|}
+  \hd & \thead{Container, trial} & \thead{Starting velocity (m/s)} & \thead{Final velocity (m/s)} & \thead{Time of fall (s)} & \thead{Acceleration $=$ change in speed $\div$ time (m/s$^2$)} & \thead{Slope from the software (m/s$^2$)} \\ \hline
+  & \scaf{e.g.\ empty, 1} & \scaf{0.1} & \scaf{4.3} & \scaf{0.45} & \scaf{$(4.3 - 0.1) \div 0.45 = 9.3$} & \scaf{9.4} \\ \hline
+  & Empty, 1 & & & & & \\ \hline
+  & Empty, 2 & & & & & \\ \hline
+  & Empty, 3 & & & & & \\ \hline
+  & Half full, 1 & & & & & \\ \hline
+  & Half full, 2 & & & & & \\ \hline
+  & Half full, 3 & & & & & \\ \hline
+  & Full, 1 & & & & & \\ \hline
+  & Full, 2 & & & & & \\ \hline
+  & Full, 3 & & & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
-\textbf{Mean $g$ (leave out any anomalies):} \underline{\hspace{3cm}}\,m/s$^2$
+\begin{ctab}
+\begin{tabular}{|SZ{2.8cm}|Z{2.4cm}|Z{5.4cm}|Z{4.4cm}|}
+  \hd & \thead{Container} & \thead{Mass (kg)} & \thead{Mean acceleration (m/s$^2$), leaving out any anomalies} & \thead{Percentage error (\%)} \\ \hline
+  & \scaf{e.g.\ empty} & \scaf{0.05} & \scaf{$(9.3 + 9.5 + 9.4) \div 3 = 9.4$} & \scaf{$(9.8 - 9.4) \div 9.8 \times 100 \approx 4$} \\ \hline
+  & Empty & & & \\ \hline
+  & Half full & & & \\ \hline
+  & Full & & & \\ \hline
+\end{tabular}
+\end{ctab}
 
 \needspace{10\baselineskip}
-\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment. (Hint: here the same thing is measured again and again, so think about what you \emph{kept} the same.)
+\task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
 \answerbox{2.4cm}
 
 \needspace{10\baselineskip}
-\task Calculate the percentage error of your mean value of $g$. Use $\text{percentage error} = (\text{your value} - 9.8) \div 9.8 \times 100\%$, ignoring any minus sign.
-\answerbox{2.4cm}
+\task
+\pt{a}Look at your mean accelerations. Does the mass of a falling object change its acceleration? Use numbers from your results.
+\answerbox{2.2cm}
+\pt{b}Was your prediction correct?
+\answerbox{1.6cm}
+
+\needspace{10\baselineskip}
+\task
+\pt{a}For each trial, compare the acceleration you calculated with the slope from the software. Are they close?
+\answerbox{1.8cm}
+\pt{b}Suggest one reason why the two values might be slightly different.
+\answerbox{1.8cm}
 
 \needspace{10\baselineskip}
 \task
 \pt{a}Did any trial look like an anomaly? Say which, and suggest what might have gone wrong.
 \answerbox{2.0cm}
-\pt{b}Why is it better to use the mean of five trials than a single trial?
+\pt{b}Why is it better to use the mean of three trials than a single trial?
 \answerbox{2.0cm}
 
-\taskpair{A table is 0.90\,m high. At 240 frames per second, a fall takes 103 frames. Find $t$, then $g$.}{2.6cm}
-         {A group measured $g = 8.9$\,m/s$^2$. Calculate their percentage error.}{2.6cm}
+\taskpair{A falling container speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration.}{2.6cm}
+         {A group's mean acceleration was 9.5\,m/s$^2$. Calculate their percentage error.}{2.6cm}
 
 \needspace{10\baselineskip}
-\task Counting one frame too many makes $t$ too big. Will that make the calculated $g$ too big or too small? Explain using $g = 2h \div t^2$.
+\task An apple and a bowling ball are dropped from the same height at the same moment. Which one lands first? Use your results to explain your answer.
 \answerbox{2.4cm}
 
 \needspace{10\baselineskip}
@@ -4796,34 +4923,25 @@ Catch the ball after it lands, or put a box on the floor to stop it rolling away
 \lessonpart{D}{Above level}{Violet}\label{ext:13}
 
 \begin{yr8box}
-These questions go beyond the Year 7 standard: judge the precision of the method, or extend it.
+These questions go beyond the Year 7 standard: judge the precision of the method, explain your results with forces, or extend the investigation.
 
 \medskip
 \needspace{10\baselineskip}
-\exttask A camera films at 30 frames per second; a slow-motion camera films at 240 frames per second.
-\pt{a}How much time passes between frames for each camera?
-\answerbox{1.8cm}
-\pt{b}A fall lasts about 0.4\,s. Explain why the 30\,fps camera would give a much less precise value of $g$.
+\exttask The motion sensor takes 50 readings every second.
+\ptpair{a}{How much time passes between one reading and the next?}{1.8cm}
+       {b}{A fall lasts about 0.45\,s. About how many readings does the sensor take during the fall?}{1.8cm}
+\pt{c}Explain why a sensor that took only 5 readings a second would give a much less precise value of $g$.
 \answerbox{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask Air resistance pushes up on the falling ball. Predict whether it makes the measured $g$ a little too big or a little too small, and explain why a small, heavy ball bearing is used instead of a table-tennis ball.
-\answerbox{2.6cm}
-
-\needspace{10\baselineskip}
-\exttask In one trial the ball fell for 0.40\,s and landed 0.60\,m from the table edge. The sideways speed does not change during the fall.
-\pt{a}Find the ball's sideways speed as it left the table.
-\answerbox{1.8cm}
-\pt{b}A faster roll makes the ball land further away. Explain why it does not change the time of the fall, or the value of $g$.
-\answerbox{2.0cm}
+\exttask Air resistance pushes up on a falling object. The empty container often has a slightly smaller acceleration than the full one. Use the idea of net force to explain why. (Hint: the containers are the same size, so the air resistance on each is about the same.)
+\answerbox{2.8cm}
 
 \needspace{12\baselineskip}
-\exttask Design a fair test to check that the height of the table changes the time of the fall but not the value of $g$.
-\pt{a}Name the independent and dependent variables.
-\answerbox{2.0cm}
-\pt{b}Name two variables you would keep the same.
-\answerbox{2.0cm}
-\pt{c}Predict what you would find for $t$ and for $g$, and give a reason.
+\exttask Design a fair test to find out whether the \emph{size} of a falling object changes its acceleration.
+\ptpair{a}{Name the independent and dependent variables.}{2.0cm}
+       {b}{Name two variables you would keep the same. One of them should be the variable you changed today.}{2.0cm}
+\pt{c}Predict what you would find, and give a reason.
 \answerbox{2.0cm}
 \end{yr8box}
 
