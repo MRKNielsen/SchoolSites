@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-27",
+ "generated": "2026-10-29",
  "tree": [
   {
    "t": "Home",
@@ -305,8 +305,43 @@ window.SITEMAP = {
            "k": "science"
           },
           {
+           "t": "Solution Set — Forces and Motion",
+           "h": "year7-science/forces/solutions.html",
+           "k": "science"
+          },
+          {
            "t": "Trebuchet Investigation",
            "h": "year7-science/forces/trebuchet-investigation.html",
+           "k": "science"
+          }
+         ]
+        }
+       ],
+       "k": "science"
+      },
+      {
+       "t": "The Particle Model",
+       "h": "year7-science/particle-model/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "Lesson 1 — States of Matter",
+           "h": "year7-science/particle-model/deck1.html",
+           "k": "science"
+          }
+         ]
+        },
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Unit Planner",
+           "h": "year7-science/particle-model/planner.html",
            "k": "science"
           }
          ]

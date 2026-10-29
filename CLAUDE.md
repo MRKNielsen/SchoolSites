@@ -748,6 +748,8 @@ year7-science/bio-ecosystems: `solutions.html` (answer key),
 `worksheets-all-solutions.html` (the collated worksheet booklet with
 answers), `portfolio-solutions.html` (the Research Portfolio key) and
 `rubric.html` (the Ecosystem Investigation marking tool). In
+year7-science/forces: `solutions.html` (booklet answer key, generated --- see
+"Forces solution set" below). In
 year7-science/space: `solutions.html`,
 `worksheet-revision-solutions.html` (the revision worksheet's answer
 copy, same shell as `worksheets-all-solutions.html`) and
@@ -756,6 +758,41 @@ copy, generated — see "Red answer copies" above). The last one's shell
 is written by `tools/revision1_worksheet.py --answers`, which keeps any
 `var BLOB` line already in the file, so a rebuild after encryption does
 not throw the blob away.
+
+### Forces solution set: one answer source, two outputs
+
+The Forces Lesson Booklet's answers live **once**, in the gitignored
+`year7-science/forces/booklet/teacher-answers/` (`L01.tex` ... `L14.tex`, one
+`\defans{key}{answer}` per slot, plus `common.tex` drawing styles,
+`appendix.tex` teacher notes and `web-notes.html`). Two things are built
+from them:
+
+- **Red teacher PDF** (`Forces_Motion_Lesson_Booklet_Yr7_8_Teacher.tex` + `.pdf`,
+  gitignored): the Trebuchet / Ch3G-L pattern. The wrapper defines
+  `\teacheranswers` and `\input`s the student `.tex`; every box, cell,
+  drawing space and graph grid prints its answer in red, then a page of notes
+  on the modelled experiment data. Answers shrink to fit
+  (`\small` / `\footnotesize` / `\scriptsize`); `grep ANSOVERFLOW` the log.
+- **Gated web key** `forces/solutions.html`: `python3 tools/forces_solutions.py`
+  writes the shell and the gitignored `solutions-payload.html` (question text
+  from the booklet source via pandoc, answers from the same `\defans`, drawings
+  and graphs compiled from the same TikZ to SVG with dvisvgm). An existing
+  `var BLOB` line is kept. It refuses to run if the student and teacher `.akp`
+  logs disagree on any page, or if any key lacks an answer (or vice versa).
+  Then encrypt through `tools/staff-crypt.html` and paste the BLOB line in.
+  `node tools/test-gated-roundtrip.js <page> <payload>` checks the unlock code
+  end to end with a throwaway password.
+
+Every answer slot in the student `.tex` carries a **literal key** (`6.t3b` =
+Task 6.3(b) when the keys were set, `6.x9` Extension, `6.c2` comprehension,
+`6.wd1a` We do, `6.pred`, `6.v3` vocab row, `6.res-r2c3` results cell). Keys
+never change when the booklet is renumbered, so answers never drift; the
+printed labels in the web key come from the build's `.akp` log, not the key.
+New furniture needs a new key and a new `\defans`. Build order: student copy
+(three passes; `fill.py Forces_Motion_Lesson_Booklet_Yr7_8` after content
+changes), teacher copy (three passes, reads the student `.abx`), then the
+generator. The experiment results (Exps 2--5) are **modelled** from each
+method's physics with realistic scatter --- the appendix says how.
 
 **Neither rubric is gated.** `space/rubric.html` was, for a day, and every
 content fix cost a decrypt / edit / re-encrypt / paste round that could not
@@ -969,7 +1006,8 @@ that are easy to lose:
   first version used the pale box-frame grey and the dots disappeared on
   a school photocopier.
 
-Older booklets (Forces, Space, bio-ecosystems) predate this and still
+The Forces Lesson Booklet was converted on 30 Oct 2026 (keyed `\abox` /
+`\wbox`, see "Forces solution set" below). Space and bio-ecosystems predate this and still
 have plain boxes — convert one when you're next working in it, not as a
 sweep.
 
