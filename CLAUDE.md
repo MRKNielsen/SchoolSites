@@ -944,6 +944,35 @@ Booklets have a question apparatus already defined in the preamble —
 / `yr8box` (above the level) containers. Use these rather than inventing
 new markup.
 
+**Years 7–10 booklets rule every written-response box in dotted thirds**
+(standard from Oct 2026, Kodie's call). Lines are 3 mm apart and run
+dotted, dotted, solid (the baseline), repeating, and finish on one dotted
+line — so each 9 mm writing row reads dotted / dotted / baseline. That
+covers comprehension questions, We do boxes, Part C tasks and side-by-side
+pairs, and Part D extensions. **Mathematical working space is the
+exception and stays plain** — a calculation is set out in lines of
+working, not written on handwriting rules — so it uses `\workbox{height}`.
+`\drawbox` and write-in tables stay unruled too. Judge per box, not per
+question: in a calculate-then-explain question, part (a) is a `\workbox`
+and part (b) an `\answerbox`. The reference implementation is `\linedbox`
+in
+`year7-science/particle-model/booklet/Particle_Model_Lesson_Booklet_Yr7.tex`,
+with `\let\workbox\answerbox` (keeping the plain box) and then
+`\let\answerbox\linedbox`, so every existing `\answerbox` call picks up the
+ruling. Copy that block into a new booklet's preamble. Two things it gets right
+that are easy to lose:
+
+- **The rows are counted from the box's final height in TeX**, not drawn
+  at fixed positions, so the ruling still fills the box after `fill.py`
+  has grown it. Rows are centred with at least 3 mm clear top and bottom.
+- **Keep the dots dark** (`DarkGrey!70`, 0.9 pt on / 1.6 pt off). The
+  first version used the pale box-frame grey and the dots disappeared on
+  a school photocopier.
+
+Older booklets (Forces, Space, bio-ecosystems) predate this and still
+have plain boxes — convert one when you're next working in it, not as a
+sweep.
+
 **Question numbers are automatic — never write one by hand.** `\question`
 steps a `qnum` counter that resets at each `\section`, printing
 `Q<section>.<n>`, so inserting, deleting or reordering content renumbers

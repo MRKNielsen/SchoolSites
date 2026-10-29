@@ -1203,8 +1203,15 @@ is better than a card promising a tool that doesn't exist — that
 principle already cost twelve placeholder pages in Aug 2026, don't
 re-earn it.
 
-- [ ] **Year 7 Chemistry (Mixtures) → `year7-science/mixtures`. L**
-      Six Stile PDFs and one revision page to work from — enough to
+- [ ] **Year 7 Chemistry (Mixtures) → `year7-science/particle-model`. L**
+      *(in progress — Kodie, 2026-10-27)* Rescoped as **The Particle Model**
+      for 2027: 10 weeks × 3 lessons, VC2S8U05 + VC2S8U06, two assessed
+      investigations (solubility vs temperature in W8, recovering salt
+      from rock salt in W10), each closed by an open-booklet test. Built on
+      the Forces pattern. **Booklet complete** for every taught lesson
+      (1–21, 25–27; 2026-10-29); deck 1 built, decks 2–27 and the two
+      investigation booklets still to do. `planner.html` holds the full
+      30-lesson sequence. Six Stile PDFs and one revision page to work from — enough to
       scaffold a unit outline, not enough to port. Would complete Year 7
       Science as a full-year program (Bio · Space · Forces · Mixtures)
       and absorbs six of the Handwriting Tasks.

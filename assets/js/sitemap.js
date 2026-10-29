@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-21",
+ "generated": "2026-10-27",
  "tree": [
   {
    "t": "Home",
@@ -286,6 +286,11 @@ window.SITEMAP = {
           {
            "t": "Lesson 14 — Optimising Range",
            "h": "year7-science/forces/deck14.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 15 — Planning the Trebuchet Investigation",
+           "h": "year7-science/forces/deck15.html",
            "k": "science"
           }
          ]
