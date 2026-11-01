@@ -145,8 +145,9 @@ Other page types: `assets/css/course.css` (unit landing),
 (answer-key pages), `assets/css/worksheet.css` (printable student
 worksheets), `assets/css/profile.css` (species / case-study reference
 pages), `assets/css/planner.css` (staff unit-planning documents — one
-wide table, prints A4 landscape), `assets/css/site.css` (plain index
-pages).
+wide table, prints A4 landscape), `assets/css/rubric.css` (the rubric
+marker, with `assets/js/rubric.js` — see "Rubric marker"),
+`assets/css/site.css` (plain index pages).
 
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
@@ -803,8 +804,9 @@ criteria and band descriptors. Ungated 19 Oct 2026 at Kodie's call;
 `bio-ecosystems/rubric.html` has been ungated since 8 Oct.
 
 **`bio-ecosystems/rubric.html` is a standalone page**, rebuilt 8 Oct 2026:
-no `tokens.css`, its own palette and fonts, no lockscreen. `space/rubric.html`
-is the one to copy — ungated too, but on the design system. For the gated
+no `tokens.css`, its own palette and fonts, no lockscreen, and its own copy
+of the engine. A new unit's rubric is a **rubric file** on the shared engine,
+not a copy of either page — see "Rubric marker" below. For the gated
 shell itself, take `space/rubric.html` at `62a193d`, and note it used the
 older single-layer unlock and could not open a v2 blob (see below).
 
@@ -855,68 +857,167 @@ lives in a single `var BLOB = {salt, iv, iter, ct};` line
   `BLOB.ct`, not on `BLOB`: a placeholder blob is a truthy object, so a
   bare `!BLOB` check tells the teacher "Incorrect password" when the real
   fault is that nobody has encrypted the payload yet.
-- **A unit's rubric is generated, not hand-written.** The marking,
-  comment, grouping and print engine is shared; only `STRANDS`,
-  `CRITERIA`, `PARTS` and the unit copy differ. `space/rubric.html`
-  is built from bio's payload by `tools/build_space_rubric.py`, which asserts
-  every splice matched exactly once — so a change to the engine surfaces
-  as a build failure rather than a half-converted file. Points worth
-  knowing if you generate another one:
-  - Every strand needs a **complete band ladder up to its own `maxBand`**.
-    `topCell()` walks down from `maxBand` and `missedBelow()` penalises
-    gaps, so an empty band in the middle silently caps that strand.
-    `maxBand` and `weight` are per-strand, so a 3-mark topic can band on
-    three levels and still be weighted correctly.
-  - Set `weight` to the task's **actual marks** for the questions behind
-    the strand. Space's six sum to 50, so the overall level is weighted
-    exactly as the paper is.
-  - bio ranks strengths on `band/maxBand` alone, which only works when
-    every strand shares a `maxBand`. Where they differ, scale by
-    `√weight`, and rank next steps on the *gap* rather than the same
-    figure — otherwise a low-`maxBand` strand comes out as both a
-    strength and a next step.
-  - **Run `node tools/test-space-rubric.js` after every rebuild.** It boots
-    the payload in jsdom the way the unlocked page does and drives it —
-    class entry, mark entry, bands, comments, groups, print, autosave
-    round-trip, CSV and tick-era file import. The first Space build shipped with ~12,600 characters
-    spliced out (`persist`, `restore`, `demo` and the CSV/file handling)
-    and threw on boot; the checks at the time only ran the part of the
-    script above the render functions, which is exactly the part that
-    survived. Needs `npm install jsdom`.
-  - **Space's grid takes marks, bio's takes ticks.** Each Space criterion
-    carries `max` (its marks on the paper) and the teacher types the mark:
-    blank = not attempted, 0 = attempted with nothing creditable. A
-    criterion counts towards its rubric cell at **half its marks or more**
-    (`PASS`), so the band logic is otherwise bio's. A blank only reads as
-    "not attempted" once that student has a mark somewhere *and* someone in
-    the class has a mark in that column — otherwise a class marked
-    question-by-question reads, part way through, as a class that skipped
-    half the paper. `to_marks()` in the builder does the conversion and
-    `check_marks()` fails the build unless each strand's maxes sum to its
-    weight and the paper to 50. The grid's inputs are updated in place,
-    never re-rendered while typing — a re-render on input or blur destroys
-    the cell the teacher is tabbing into. Save format v2; v1 tick files
-    still open (tick = full marks, `x` = blank, empty = 0).
-  - **Space has an Analysis tab** (`tools/space_rubric_analysis.py`,
-    spliced by `add_analysis()`): summary tiles, spread of totals, bands by
-    strand, and question-by-question facility with reteach / skipped flags.
-    It reads the grid and stores nothing, using the same "marked" rules as
-    the grid. Its band charts use `--c-chart-band-0..4` from tokens.css, not
-    the `--c-band-*` cell tints. Those are pale backgrounds that can't be
-    told apart as bars (bands 0–2 within dE 3.3). Every segment carries its
-    count, because bands 0–1 are under 3:1 contrast against the page.
-  - Give each unit its **own autosave key**. bio uses
-    `"ecosystem-rubric:v1"`; leaving it unchanged makes two rubrics open in
-    one browser share a localStorage slot and overwrite each other.
-- The marking tool autosaves to `localStorage` so a refresh doesn't lose
-  a class's marks. That means student names and marks sit in the
-  browser profile: use *Save file* then *Clear all marks* on a shared
-  machine.
-- Its palette is mapped onto tokens in one `body.rubric-page` block —
-  band ramp (`--c-band-0..4`) and rubric part hues (`--c-part-b/c/d`)
-  are primitives in tokens.css. Like the pedagogy colours these stay
-  constant across subjects so a printed rubric reads the same whichever
-  subject issued it; Part A follows the theme accent.
+- The Space rubric is no longer a gated page, a payload or a build
+  output — see "Rubric marker" below for how it is put together now.
+
+## Rubric marker (shared engine + one file per rubric)
+
+Since Nov 2026 the marker is one engine and any number of rubric files.
+The marking grid, bands, comments, teaching groups, analysis, printable
+rubrics, CSV and autosave are `assets/js/rubric.js` + `assets/css/rubric.css`;
+everything specific to one assessment is a **rubric file**. Two pages run it:
+
+- `year7-science/space/rubric.html` — a shell (`<div id="rubric-app">`) that
+  loads `rubric-data.js` beside it (`window.RUBRIC = {…};`) and then the
+  engine. **To change the Space rubric, edit `rubric-data.js`.** There is no
+  build step any more: `tools/build_space_rubric.py` and its data/analysis
+  modules were retired when the engine was split out, because re-running
+  them would have rebuilt the old all-in-one page over the new one.
+- `tools/rubric-marker.html` — the generic marker. `assets/js/rubric-open.js`
+  lets a teacher open a rubric `.json` (or a unit's `rubric-data.js`, read as
+  data and never executed), or a saved class, then loads the engine. It
+  remembers the last rubric, lists classes autosaved under `rubric-marker:`
+  keys, offers the site's rubrics (`data-examples`) and a starter to adapt
+  (`tools/rubric-starter.json`, whose `_about` key documents the format).
+
+A new unit's rubric = a `rubric-data.js` beside a copy of
+`space/rubric.html` (change the `<title>`, theme class and back link), or
+just a `.json` opened in the generic marker. The engine is a classic script,
+not a module: the tests drive it through its globals.
+
+**`tools/rubric-builder.html` writes rubric files** (`assets/js/rubric-builder.js`),
+so nobody has to hand-edit JSON. Four tabs: *Task* (titles, nouns, theme,
+band labels, pass mark, paper total), *Strands* (row heading, curriculum
+code, highest band, and per band the descriptor, the two comment phrases and
+the evidence label), *Questions* (parts of the paper, one row per
+mark-bearing question tagged to a strand and band, a paste box that reads a
+booklet's `Q3.2 (2 marks)` lines, and an evidence-by-band grid that shows
+gaps in red) and *Check & export* (download `.json`, download a
+`rubric-data.js` for a unit folder, or *Open in marker*). Things it gets
+right that are easy to lose:
+
+- **Its state is the rubric file.** Fields it has no form for (`save`,
+  `demo`, `levels`, `back`, `_about` …) ride along untouched, so opening a
+  rubric and exporting it gives the same rubric back —
+  `tools/test-rubric-builder.js` asserts it for Space and the starter.
+- **Validation is the marker's own.** The page loads `rubric.js` with
+  `window.RUBRIC_NO_BOOT = true`, which defines the engine without building
+  a marker, and calls `validateRubric()` on what it would export. Messages
+  are rewritten to name strands by number and heading and questions by
+  number, never by internal id.
+- **Ids are stable.** Criteria keep the ids they were opened with (saved
+  classes are keyed on them); new ones get an id minted from the question
+  number on export, with `.` turned into `_` so `Q1.1` never becomes `Q11`.
+  Strand `weight`, where present, is rewritten to the strand's marks; `total`
+  is left alone, because it is the teacher's statement of what the paper is
+  out of and the check exists to catch the difference.
+- **Typing never rebuilds the box being typed in.** Inputs carry
+  `data-f="path"` and are bound by one delegated listener; only structural
+  changes rebuild a tab, with focus and caret put back.
+- **Hand-offs:** *Open in marker* writes the rubric to
+  `rubric-marker:last`, which the marker opens first; the marker's *Edit in
+  builder* writes `rubric-builder:incoming`, used once, and the draft it
+  displaces stays one click away. The draft autosaves to
+  `rubric-builder:draft`.
+- **Curriculum** comes from `assets/js/vc2-curriculum.js` (`window.VC2`),
+  generated by `tools/build-curriculum.py` from VCAA's scope-and-sequence
+  Word charts — never edit it by hand. Without it the builder still works
+  and codes are typed. Linking a code shows the content description and the
+  level's achievement standard a sentence at a time, to click into a
+  descriptor. **The Victorian Curriculum is © VCAA, licensed CC BY-NC 3.0
+  AU**: fine for this free site, with attribution. Any rubric with a `VC2…`
+  code gets an `attribution` line on export, which the marker shows under
+  its Rubric reference table. Don't strip it.
+
+**The rubric file** (`"format": "rubric-marker/1"`) holds `id`, `title`,
+four `bands` labels, `parts`, `strands` (each with a `bands[]` descriptor,
+`can`, `next` and `start` comment phrases, `maxBand` 1–4, optional `weight`
+and curriculum `code`) and `criteria` (each a question or part-question:
+`q`, `sub`, `part`, `max` marks, `strand`, `band`). Optional: `task`,
+`context`, `eyebrow`, `subtitle`, `back`, `theme`, `noun` (what the comment
+calls the task and its items: Space says "test"/"question"), `columnOrder`
+(`listed`, the default, or `question`), `pass` (default 0.5), `total`,
+`levels`/`gloss` (overall-level wording), `storageKey`, `fileStem`, `save`
+(`version`, `marksSince`, `migrations`) and `demo`.
+
+**`validateRubric()` checks a rubric before anything is built from it**, and
+a rubric that fails shows a list of problems instead of a marker. It carries
+every rule the Space and bio rubrics taught:
+
+- Every strand needs a **complete band ladder up to its own `maxBand`** —
+  at least one criterion per band. `topCell()` walks down from `maxBand` and
+  `missedBelow()` penalises gaps, so an empty band silently caps the strand.
+- A strand's `weight` is its **actual marks** on the paper. Give it and it
+  must equal the sum of its criteria's `max`; leave it out and it is summed.
+  `total`, if given, must equal the paper's marks. Space's six strands sum
+  to 50, so the overall level is weighted exactly as the paper is.
+- Ids are plain (`[A-Za-z0-9_-]`), unique, and every `part`/`strand`
+  reference resolves; `max` is a whole or half mark; `band` sits within the
+  strand's `maxBand`; `can`/`next`/descriptors exist for every band.
+- Everything else in a rubric is text the engine escapes. A rubric file
+  is a document someone emailed, so markup in it must stay text.
+  `tools/test-rubric-marker.js` puts an `<img onerror>` in every field
+  and checks none reaches the page.
+
+How the engine behaves (unchanged from the Space page it came from):
+
+- Strengths rank on `band/maxBand` scaled by `√weight`; next steps on the
+  *gap*, not the same figure — otherwise a low-`maxBand` strand comes out as
+  both a strength and a next step.
+- **Marks, not ticks.** The teacher types each criterion's mark: blank = not
+  attempted, 0 = attempted with nothing creditable. A criterion counts
+  towards its rubric cell at `pass` of its marks or more. A blank only reads
+  as "not attempted" once that student has a mark somewhere *and* someone in
+  the class has a mark in that column — otherwise a class marked
+  question-by-question reads, part way through, as a class that skipped
+  half the paper. The grid's inputs are updated in place, never re-rendered
+  while typing — a re-render on input or blur destroys the cell the teacher
+  is tabbing into. A tick-only task is a rubric whose criteria are all
+  `max: 1`. Files saved before `save.marksSince` held ticks and still open
+  (tick = full marks, `x` = blank, empty = 0); Space's is 2.
+- **The Analysis tab** — summary tiles, spread of totals (ten bins whatever
+  the total), bands by strand, and item-by-item facility with reteach /
+  skipped flags — reads the grid and stores nothing. Its band charts use
+  `--c-chart-band-0..4` from tokens.css, not the `--c-band-*` cell tints:
+  those are pale backgrounds that can't be told apart as bars (bands 0–2
+  within dE 3.3). Every segment carries its count, because bands 0–1 are
+  under 3:1 contrast against the page.
+- Part colours go by **position** (`partCls()`: first part `pA` …), not by
+  id, so any rubric's parts are coloured.
+- **Saved files carry their rubric** (`rubric` + `rubricId`), so a class can
+  be reopened in the generic marker with nothing else to hand. A page with a
+  different rubric built in **refuses** such a file rather than silently
+  dropping every mark whose id it lacks; the generic marker switches to the
+  file's rubric. Old Space saves (no rubric inside) still open on the Space page.
+- Each rubric autosaves under its **own `storageKey`** (default
+  `rubric-marker:<id>`). Space keeps `"astronomy-rubric:v1"` so classes
+  already part-marked survive the split; bio uses `"ecosystem-rubric:v1"`.
+  Never change a live rubric's key or `save.version` without a migration.
+- Autosave means student names and marks sit in the browser profile: use
+  *Save file* then *Clear all marks* on a shared machine.
+- The palette is mapped onto tokens in one `body.rubric-page` block in
+  rubric.css — band ramp (`--c-band-0..4`) and part hues
+  (`--c-part-b/c/d`) are primitives in tokens.css. Like the pedagogy colours
+  these stay constant across subjects so a printed rubric reads the same
+  whichever subject issued it; Part A follows the theme accent.
+
+**Tests — run both after any change to the engine or a rubric file.**
+
+```bash
+node tools/test-space-rubric.js    # the Space page, driven as a teacher would
+node tools/test-rubric-marker.js   # validation, escaping, another rubric, the generic page
+node tools/test-rubric-builder.js  # builder round trips, building through the form, paste, picker
+python3 tools/build-curriculum.py --check   # vc2-curriculum.js matches the charts in tools/vcaa/
+```
+
+The first inlines the page's own local scripts into jsdom and drives class
+entry, mark entry, bands, comments, groups, print, autosave round-trip, CSV
+and tick-era import. The first Space build once shipped with ~12,600
+characters spliced out and a passing check, because the check only ran the
+part that survived — so the second breaks **every validation rule on
+purpose** and requires each to fail. Both need jsdom, installed **outside**
+the repo root (e.g. `npm install --prefix ~/jsdeps jsdom`, then
+`NODE_PATH=~/jsdeps/node_modules`), since `node_modules` in the repo breaks git here.
 
 ## PDFs
 

@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-10-29",
+ "generated": "2026-11-01",
  "tree": [
   {
    "t": "Home",
@@ -1323,6 +1323,14 @@ window.SITEMAP = {
       {
        "t": "Page builder (slides & worksheets)",
        "h": "tools/page-builder.html"
+      },
+      {
+       "t": "Rubric builder (write a rubric)",
+       "h": "tools/rubric-builder.html"
+      },
+      {
+       "t": "Rubric marker (open any rubric)",
+       "h": "tools/rubric-marker.html"
       },
       {
        "t": "Staff blob tool (encrypt / decrypt)",
