@@ -914,6 +914,16 @@ right that are easy to lose:
 - **Typing never rebuilds the box being typed in.** Inputs carry
   `data-f="path"` and are bound by one delegated listener; only structural
   changes rebuild a tab, with focus and caret put back.
+- **Editing a rubric in use.** The builder remembers the rubric as opened
+  (`rubric-builder:baseline`) and looks for a class marked on it in this
+  browser (the marker's autosave under its `storageKey`, same site). The
+  Check tab's *Marks already entered* card lists every change that alters
+  marks — removed questions, changed maximums, questions moved to another
+  strand or band, removed strands, lowered top bands, a changed id — with how
+  many entered marks each touches, using the marker's own `rubricDiff()`.
+  A banner on the other tabs counts them, removing a question with marks
+  asks first, and such a change bumps `version`. Renumbering is always safe:
+  marks follow the criterion id, which the builder never changes.
 - **Hand-offs:** *Open in marker* writes the rubric to
   `rubric-marker:last`, which the marker opens first; the marker's *Edit in
   builder* writes `rubric-builder:incoming`, used once, and the draft it
@@ -1024,6 +1034,18 @@ How the engine behaves (unchanged from the Space page it came from):
   different rubric built in **refuses** such a file rather than silently
   dropping every mark whose id it lacks; the generic marker switches to the
   file's rubric. Old Space saves (no rubric inside) still open on the Space page.
+- **A mark is never dropped when a rubric changes.** A saved class carries
+  the rubric it was marked against; opening it against a different version
+  (same id) runs `rubricDiff()` and lists the changes that alter marks on
+  the Class and Mark tabs. A mark this version can't hold — its question was
+  removed, or it is over a lowered maximum — and a band override for a
+  removed strand or above a lowered top band go into the student's `parked`
+  list instead: kept in every save, shown with a reason, downloadable as CSV,
+  and **tried first on every load**, so they go straight back if the
+  question returns. *Discard set-aside marks* and *Clear all marks* are the
+  only ways to remove them. Unedited comments are rebuilt for the new
+  version; hand-edited ones are left alone. Before Nov 2026 those marks were
+  skipped without a word.
 - Each rubric autosaves under its **own `storageKey`** (default
   `rubric-marker:<id>`). Space keeps `"astronomy-rubric:v1"` so classes
   already part-marked survive the split; bio uses `"ecosystem-rubric:v1"`.

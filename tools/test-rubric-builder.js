@@ -162,7 +162,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     /* hand it to the marker */
     const final = B.check().d;
     const ENGINE = fs.readFileSync(path.join(ROOT, 'assets/js/rubric.js'), 'utf8');
-    const m = new JSDOM('<body class="rubric-page"><div id="rubric-app"></div><script>window.RUBRIC=' + JSON.stringify(final) + '</script><script>' + ENGINE + '</script>',
+    const m = new JSDOM('<body class="rubric-page"><div id="rubric-app"></div><script>window.scrollTo = function(){}; window.RUBRIC=' + JSON.stringify(final) + '</script><script>' + ENGINE + '</script>',
       { runScripts: 'dangerously', pretendToBeVisual: true, url: 'https://e.test/m.html' });
     m.window.scrollTo = () => {}; await sleep(200);
     ok(m.window.document.querySelector('#markTable') && !m.window.document.querySelector('.rb-problems'), 'the marker boots on the built rubric');
@@ -413,6 +413,62 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(!/statistical/.test(txt('at')), 'At holds Level 10 Algebra sentences, not Statistics');
     B.doc.strands[0].code = 'VC2M7N01'; B.render();
     ok(/Level 6/.test(txt('towards')) && $$('.bstrand[data-strand="0"] .bcol.towards .chipbtn').length > 0, 'VC2M7N01: Towards is the Level 6 Number standard');
+  }
+
+  console.log('\n=== editing a rubric that is in use ===');
+  {
+    const saved = {version: 2, rubricId: SPACE.id, rubric: SPACE, meta: {cls: '7C'}, students: [
+      {name: 'Ana Ruiz', pron: 'she', q: {Q2c: 1, Q7a: 4, Q1a: 1}, override: {}},
+      {name: 'Bo Tran', pron: 'he', q: {Q2c: 1, Q7a: 2}, override: {}},
+      {name: 'Cam Ng', pron: 'they', q: {}, override: {}}]};
+    const { w, B, $, $$ } = await open({ noCurriculum: true, storage: {'astronomy-rubric:v1': JSON.stringify(saved)} });
+    B.adopt(SPACE);
+    const cls = B.classInUse();
+    ok(cls && cls.cls === '7C' && cls.marked === 2 && cls.marks === 5, 'finds 7C’s marks for this rubric in this browser (2 students, 5 marks)');
+    B.showTab('check');
+    ok(/7C<\/b> has 5 marks for 2 students/.test($('#bImpactWrap').innerHTML) && /Nothing you’ve changed affects those marks/.test($('#bImpactWrap').textContent),
+       'Check says so, and that nothing yet affects them');
+    /* renumbering is safe */
+    B.showTab('questions');
+    type(w, $('[data-f="criteria.0.q"]'), 'Q1.1');
+    ok(B.impact().items.length === 0 && B.exportRubric().version === 1, 'renumbering a question affects no marks and keeps the version');
+    type(w, $('[data-f="criteria.0.q"]'), 'Q1');
+    /* removing a question with marks asks first, with the count */
+    let asked = '';
+    w.confirm = m => { asked = m; return true; };
+    const i2c = B.doc.criteria.findIndex(c => c.id === 'Q2c');
+    click(w, $$('[data-act="q-del"]')[i2c]);
+    ok(/Q2c has marks for 2 students in 7C/.test(asked) && /set those marks aside, not delete/.test(asked) && !B.doc.criteria.some(c => c.id === 'Q2c'),
+       'removing Q2c warns that 2 students in 7C have marks, then removes it');
+    /* lowering a maximum */
+    const i7a = B.doc.criteria.findIndex(c => c.id === 'Q7a');
+    type(w, $(`[data-f="criteria.${i7a}.max"]`), '2');
+    await sleep(300);
+    ok(/<b>2 of your changes affect them<\/b>/.test($('#bUse').innerHTML), 'off the Check tab, a banner says 2 changes affect the marks');
+    const items = B.impact().items;
+    const rem = items.find(x => x.kind === 'removed'), mx = items.find(x => x.kind === 'max');
+    ok(rem && rem.level === 'warn' && /2 students in 7C have a mark for it/.test(rem.text), 'impact: Q2c removed — 2 students’ marks set aside');
+    ok(mx && mx.level === 'warn' && /1 mark already entered is over 2 and will be set aside/.test(mx.text)
+       && /1 mark entered out of 4 will now be read as out of 2/.test(mx.text),
+       'impact: Q7a out of 2 — Ana’s 4 set aside, Bo’s 2 now reads as full marks');
+    ok(B.exportRubric().version === 2, 'a change that alters entered marks bumps the rubric to version 2');
+    /* end to end: the marker on the edited rubric with 7C’s autosave */
+    const out = B.check();
+    ok(out.errors.length === 1 && /The paper total is 50/.test(out.errors[0]), 'only the stated total needs fixing (' + (out.errors[0] || '') + ')');
+    const fixed = Object.assign(B.exportRubric(), {total: 47});
+    const ENGINE = fs.readFileSync(path.join(ROOT, 'assets/js/rubric.js'), 'utf8');
+    const m = new JSDOM('<body class="rubric-page"><div id="rubric-app"></div><script>window.scrollTo = function(){}; window.RUBRIC=' + JSON.stringify(fixed)
+      + ';window.RUBRIC_OPEN_SAVE=' + JSON.stringify(JSON.stringify(saved)) + '</script><script>' + ENGINE + '</script>',
+      { runScripts: 'dangerously', pretendToBeVisual: true, url: 'https://e.test/m2.html' });
+    m.window.scrollTo = () => {}; await sleep(200);
+    ok(m.window.eval('state.students.reduce((n, s) => n + s.parked.length, 0)') === 3 && m.window.eval('state.students[1].q.Q7a') === 2,
+       'the marker on the edited rubric sets aside exactly the 3 marks the builder warned about');
+    /* changing the id when in use */
+    B.showTab('task');
+    click(w, $('.badv summary'));
+    type(w, $('[data-f="id"]'), 'space-cat5-2027');
+    const idx = B.impact().items.find(x => x.kind === 'id');
+    ok(idx && idx.level === 'warn' && /7C’s marks stay saved under the old id/.test(idx.text), 'changing the id warns that 7C’s marks stay with the old id');
   }
 
   console.log('\n' + (fail ? fail + ' CHECK(S) FAILED' : 'ALL CHECKS PASSED'));

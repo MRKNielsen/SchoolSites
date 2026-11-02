@@ -55,6 +55,8 @@ let notice = "";           // a line shown above the tabs (restored draft etc.)
 let pickFor = null;        // strand index the curriculum picker attaches to, or "new"
 let lastText = null;       // last descriptor/phrase field focused, for snippet inserts
 let paste = null;          // booklet paste panel: {text, rows}
+let baseline = null;       // the rubric as it was opened, to compare edits against
+const BASELINE = "rubric-builder:baseline";
 
 function blank(){
   return {
@@ -140,6 +142,11 @@ function exportRubric(src){
     if("weight" in s) s.weight = marks;
   });
   if(d.strands.some(s => s.code && /^VC2/.test(s.code)) && !d.attribution) d.attribution = ATTRIBUTION;
+  /* a change that alters what entered marks mean gets a new version number,
+     so a class marked on the old one can be told what changed */
+  if(baseline && typeof rubricDiff === "function"
+     && rubricDiff(baseline, d).some(x => x.kind !== "id" && MARK_CHANGES.includes(x.kind)))
+    d.version = (Number(baseline.version) || 1) + 1;
   return d;
 }
 /* the marker's messages name ids; a teacher thinks in strand names and question numbers */
@@ -158,6 +165,76 @@ function check(){
   const d = exportRubric();
   const r = (typeof validateRubric === "function") ? validateRubric(d) : {errors: ["The marking engine didn’t load, so the rubric can’t be checked."], warnings: []};
   return {errors: r.errors.map(e => friendly(e, d)), warnings: r.warnings.map(e => friendly(e, d)).concat(defaultWarnings()), d};
+}
+
+/* ============================ RUBRICS IN USE ============================
+   A class marked on this rubric in this browser: the marker autosaves under
+   the rubric's storageKey on the same site, so the builder can see it. Looked
+   up under both the opened rubric's key and the edited one's. */
+const keyOf = r => r && (r.storageKey || (r.id ? "rubric-marker:" + r.id : ""));
+const hasMark = (s, id) => s && s.q && (typeof s.q[id] === "number" || s.q[id] === true);
+function classInUse(){
+  const keys = [...new Set([keyOf(baseline), keyOf(doc)].filter(Boolean))];
+  for(const k of keys){
+    const raw = store.get(k);
+    if(!raw) continue;
+    try{
+      const d = JSON.parse(raw), students = Array.isArray(d.students) ? d.students : [];
+      const marked = students.filter(s => Object.keys(s.q || {}).length || (s.parked || []).length);
+      if(marked.length) return {key: k, cls: (d.meta || {}).cls || "", students, marked: marked.length,
+        marks: students.reduce((n, s) => n + Object.keys(s.q || {}).length, 0), rubric: d.rubric || null};
+    }catch(e){}
+  }
+  return null;
+}
+const sName = sid => { const i = doc.strands.findIndex(x => x.id === sid);
+  return i < 0 ? "a removed strand" : "strand " + (i + 1) + (doc.strands[i].name ? " (“" + doc.strands[i].name.slice(0, 40) + (doc.strands[i].name.length > 40 ? "…" : "") + "”)" : ""); };
+/* each change since the rubric was opened (or since the class was marked),
+   with what it does to the marks in this browser */
+function impact(){
+  const cls = classInUse(), ref = (cls && cls.rubric) || baseline;
+  if(!ref || typeof rubricDiff !== "function") return {cls, items: []};
+  const st = cls ? cls.students : [];
+  const n = (pred) => st.filter(pred).length;
+  const pl = (k, w) => k + " " + w + (k === 1 ? "" : "s");
+  const items = rubricDiff(ref, exportRubric()).filter(x => MARK_CHANGES.includes(x.kind)).map(x => {
+    let text = describeChange(x, sName), level = "info";
+    if(x.kind === "removed"){
+      const k = n(s => hasMark(s, x.id));
+      if(k){ level = "warn"; text += " " + pl(k, "student") + " in " + (cls.cls || "the class") + " have a mark for it; the marker will set " + (k === 1 ? "it" : "them") + " aside, not delete " + (k === 1 ? "it" : "them") + "."; }
+    } else if(x.kind === "max"){
+      const over = n(s => typeof (s.q || {})[x.id] === "number" && s.q[x.id] > x.to);
+      const k = n(s => hasMark(s, x.id));
+      if(over){ level = "warn"; text += " " + pl(over, "mark") + " already entered " + (over === 1 ? "is" : "are") + " over " + x.to + " and will be set aside."; }
+      if(k - over > 0){ if(level !== "warn") level = "caution"; text += " " + pl(k - over, "mark") + " entered out of " + x.from + " will now be read as out of " + x.to + " — check " + (k - over === 1 ? "it" : "them") + "."; }
+    } else if(x.kind === "moved"){
+      const k = n(s => hasMark(s, x.id));
+      if(k){ level = "caution"; text += " " + pl(k, "mark") + " already entered will count towards the new band."; }
+    } else if(x.kind === "strand-removed"){
+      const k = n(s => s.override && Number.isInteger(s.override[x.id]));
+      if(k){ level = "warn"; text += " " + pl(k, "band override") + " for it will be set aside."; }
+    } else if(x.kind === "maxband"){
+      const k = x.to < x.from ? n(s => s.override && Number.isInteger(s.override[x.id]) && s.override[x.id] > x.to) : 0;
+      if(k){ level = "warn"; text += " " + pl(k, "band override") + " above band " + x.to + " will be set aside."; }
+    } else if(x.kind === "id"){
+      level = cls ? "warn" : "caution";
+      text += cls ? " " + (cls.cls || "The class") + "’s marks stay saved under the old id; this version starts empty." : "";
+    }
+    return {kind: x.kind, id: x.id, level, text};
+  });
+  return {cls, items};
+}
+function impactHTML(){
+  const {cls, items} = impact();
+  if(!cls && !items.length) return "";
+  const head = cls
+    ? "<b>" + esc(cls.cls || "A class") + "</b> has " + cls.marks + " mark" + (cls.marks === 1 ? "" : "s") + " for " + cls.marked + " student" + (cls.marked === 1 ? "" : "s") + " on this rubric, saved in this browser."
+    : "Compared with the rubric as you opened it — for any class already marked on it:";
+  const body = items.length
+    ? '<ul class="bchk bimpact">' + items.map(x => '<li class="' + x.level + '">' + esc(x.text) + '</li>').join("") + '</ul>'
+      + '<p class="hint">Nothing is lost: the marker sets aside any mark this version can’t hold, keeps it in every save, and puts it back if the question returns. Renumbering a question is always safe — marks follow the question, not its number.</p>'
+    : '<p class="bok">Nothing you’ve changed affects those marks.</p>';
+  return '<div class="card bimpact-card"><div class="card-head"><div><h2>Marks already entered</h2><p>' + head + '</p></div></div><div class="card-body" id="bImpact">' + body + '</div></div>';
 }
 
 /* ============================ CURRICULUM ============================ */
@@ -532,6 +609,7 @@ function renderCheck(){
   return `<div class="card"><div class="card-head"><div><h2>${esc(d.title || "Untitled rubric")}</h2><p>${d.strands.length} strand${d.strands.length === 1 ? "" : "s"} · ${d.criteria.length} ${esc(d.criteria.length === 1 ? d.noun.item : (d.noun.items || d.noun.item + "s"))} · ${total} marks</p></div>
     <span class="iobar flush"><button class="btn" data-act="marker">Open in marker</button></span></div>
   <div class="card-body" id="bCheckList">${checkListHTML(r)}</div></div>
+  <div id="bImpactWrap">${impactHTML()}</div>
   <div class="card"><div class="card-head"><div><h2>Evidence by band</h2></div></div><div class="card-body" id="bCov">${coverageHTML()}</div></div>
   <div class="card"><div class="card-head"><div><h2>Save the rubric</h2><p>The builder keeps a draft in this browser as you go. To keep the rubric, share it, or open it on another computer, download it.</p></div></div>
   <div class="card-body"><div class="iobar" style="flex-wrap:wrap">
@@ -551,7 +629,7 @@ function render(){
   const sel = f && "selectionStart" in a ? [a.selectionStart, a.selectionEnd] : null;
   const y = window.scrollY;
   $("#bPanel").innerHTML = RENDER[tab]();
-  $("#bNotice").innerHTML = notice ? '<div class="note bnote">' + notice + '</div>' : "";
+  $("#bNotice").innerHTML = (notice ? '<div class="note bnote">' + notice + '</div>' : "") + '<div id="bUse"></div>';
   $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === tab)));
   document.body.className = document.body.className.replace(/\btheme-\S+/g, "").trim() + (doc.theme ? " theme-" + doc.theme : "");
   if(f){
@@ -573,6 +651,15 @@ function derived(){
     if(tq) tq.textContent = doc.criteria.length || "";
     if(tc){ tc.textContent = r.errors.length ? r.errors.length + " to fix" : "ready"; tc.classList.toggle("bad", !!r.errors.length); }
     const cl = $("#bCheckList"); if(cl) cl.innerHTML = checkListHTML(r);
+    const iw = $("#bImpactWrap"); if(iw) iw.innerHTML = impactHTML();
+    /* off the Check tab, a one-line reminder while edits would touch entered marks */
+    const use = $("#bUse");
+    if(use){
+      const im = tab === "check" ? null : impact();
+      const warn = im ? im.items.filter(x => x.level !== "info").length : 0;
+      use.innerHTML = im && im.cls ? '<div class="note bnote buse">' + esc(im.cls.cls || "A class") + ' has marks on this rubric in this browser. '
+        + (warn ? '<b>' + warn + ' of your changes affect them</b> — see <button class="btn ghost small" data-act="goto-check">Check &amp; export</button>.' : 'Nothing you’ve changed affects them yet.') + '</div>' : "";
+    }
     const cv = $("#bCov"); if(cv) cv.innerHTML = coverageHTML();
     const meta = $("#bMeta");
     if(meta){ const t = doc.criteria.reduce((n, c) => n + (+c.max || 0), 0); meta.textContent = (doc.title || "Untitled") + " · " + t + " marks"; }
@@ -757,7 +844,13 @@ const ACT = {
     c.sub = c.sub ? (/^[a-h]$/.test(c.sub) ? String.fromCharCode(c.sub.charCodeAt(0) + 1) : c.sub + "2") : "b";
     if(!doc.criteria[i].sub) doc.criteria[i].sub = "a";
     doc.criteria.splice(i + 1, 0, c); render(); },
-  "q-del"(i){ doc.criteria.splice(i, 1); render(); },
+  "q-del"(i){
+    const c = doc.criteria[i], cls = c.id && !c._new ? classInUse() : null;
+    const k = cls ? cls.students.filter(s => hasMark(s, c.id)).length : 0;
+    if(k && !confirm(qTag(c) + " has marks for " + k + " student" + (k === 1 ? "" : "s") + " in " + (cls.cls || "a class") + " saved in this browser. Remove it? The marker will set those marks aside, not delete them.")) return;
+    doc.criteria.splice(i, 1); render();
+  },
+  "goto-check"(){ tab = "check"; render(); window.scrollTo(0, 0); },
   "q-up"(i){ if(i > 0){ [doc.criteria[i-1], doc.criteria[i]] = [doc.criteria[i], doc.criteria[i-1]]; render(); } },
   "q-sort"(){ doc.criteria.sort((a, b) => { const x = qSortKey(a), y = qSortKey(b); return x[0] - y[0] || (x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0); }); render(); toast("Sorted by question number"); },
   "paste"(){ paste = paste || {text: "", rows: []}; render(); const t = $("#bPasteText"); if(t) t.focus(); },
@@ -779,12 +872,13 @@ const ACT = {
   },
   "bank"(){ openBank(); },
   "new"(){ if(!confirm("Start a new, empty rubric? Download this one first if you want to keep it.")) return;
-    doc = blank(); notice = ""; tab = "task"; render(); toast("New rubric"); },
+    doc = blank(); baseline = null; store.del(BASELINE); notice = ""; tab = "task"; render(); toast("New rubric"); },
   "open"(){ $("#bFile").click(); },
   "fork"(){
     if(!confirm("Make a copy of this rubric with a new id? Classes saved against the original will not open in the copy.")) return;
     ["storageKey","save","demo","fileStem","back"].forEach(k => delete doc[k]);
-    doc.id = ""; doc.title = (doc.title || "") + " (copy)"; notice = "This is now a new rubric, separate from the one it was copied from."; render();
+    doc.id = ""; doc.title = (doc.title || "") + " (copy)"; baseline = null; store.del(BASELINE);
+    notice = "This is now a new rubric, separate from the one it was copied from."; render();
   },
   "marker"(){
     const r = check();
@@ -797,7 +891,11 @@ const ACT = {
     if(r.errors.length) toast("Downloaded — but it has " + r.errors.length + " problem" + (r.errors.length === 1 ? "" : "s") + " to fix before the marker will use it"); },
   "dl-js"(){ const r = check(); download("rubric-data.js", dataJS(r.d), "text/javascript"); },
   "copy"(){ const r = check(); try{ navigator.clipboard.writeText(JSON.stringify(r.d, null, 2)).then(() => toast("Copied")); }catch(e){ toast("Couldn’t copy"); } },
-  "restore-prev"(){ const p = store.get(PREVIOUS); if(p){ try{ doc = tidy(JSON.parse(p)); }catch(e){} } store.del(PREVIOUS); notice = ""; render(); toast("Back to your previous draft"); },
+  "restore-prev"(){
+    const p = store.get(PREVIOUS); if(p){ try{ doc = tidy(JSON.parse(p)); }catch(e){} }
+    const pb = store.get(PREVIOUS + "-baseline"); baseline = null; try{ baseline = pb ? JSON.parse(pb) : null; }catch(e){}
+    baseline ? store.set(BASELINE, JSON.stringify(baseline)) : store.del(BASELINE);
+    store.del(PREVIOUS); store.del(PREVIOUS + "-baseline"); notice = ""; render(); toast("Back to your previous draft"); },
   "dismiss"(){ notice = ""; render(); },
   "example"(i){ loadScriptRubric(EXAMPLES[+i].src); }
 };
@@ -897,7 +995,9 @@ function fromText(text){
   throw new Error("not a rubric");
 }
 function adopt(d, msg){
-  const cur = store.get(DRAFT);
+  const cur = store.get(DRAFT), curBase = store.get(BASELINE);
+  baseline = clone(d); store.set(BASELINE, JSON.stringify(baseline));
+  if(cur) curBase ? store.set(PREVIOUS + "-baseline", curBase) : store.del(PREVIOUS + "-baseline");
   doc = tidy(clone(d));
   notice = msg || "";
   tab = "task"; render();
@@ -944,7 +1044,7 @@ function wire(){
 window.rubricBuilder = {
   get doc(){ return doc; }, set doc(d){ doc = tidy(d); render(); },
   exportRubric, check, parseBooklet, autoEvidence: (sid, b) => autoEvidence(doc, sid, b), render, act: (n, i) => ACT[n](i),
-  showTab: t => { tab = t; render(); }, adopt
+  showTab: t => { tab = t; render(); }, adopt, impact, classInUse, get baseline(){ return baseline; }
 };
 
 /* ============================ BOOT ============================ */
@@ -955,12 +1055,16 @@ store.del(INCOMING);
 const draft = store.get(DRAFT);
 if(incoming){
   try{ const d = JSON.parse(incoming); doc = tidy(d);
+    const curBase = store.get(BASELINE);
+    curBase ? store.set(PREVIOUS + "-baseline", curBase) : store.del(PREVIOUS + "-baseline");
+    baseline = JSON.parse(incoming); store.set(BASELINE, incoming);
     if(draft && draft !== incoming){ store.set(PREVIOUS, draft);
       notice = "Opened “" + esc(d.title) + "” from the marker. <button class=\"btn ghost small\" data-act=\"restore-prev\">Back to the draft you had before</button>"; }
     else notice = "Opened “" + esc(d.title) + "” from the marker.";
   }catch(e){ doc = null; }
 }
 if(!doc && draft){
+  try{ const b = store.get(BASELINE); baseline = b ? JSON.parse(b) : null; }catch(e){ baseline = null; }
   try{ doc = tidy(JSON.parse(draft)); notice = "Carrying on with the draft saved in this browser. <button class=\"btn ghost small\" data-act=\"new\">Start a new rubric</button>"; }catch(e){ doc = null; }
 }
 if(!doc){

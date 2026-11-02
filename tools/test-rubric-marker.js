@@ -47,7 +47,7 @@ const ok = (c, m) => { console.log((c ? '  OK   ' : '  FAIL ') + m); if (!c) fai
 /* a bare page running the engine on a given rubric (and optionally a save) */
 async function boot(rubric, extra) {
   const html = '<!DOCTYPE html><html><body class="rubric-page"><div id="rubric-app"></div>'
-    + '<script>window.RUBRIC = ' + JSON.stringify(rubric).replace(/</g, '\\u003c') + ';'
+    + '<script>window.scrollTo = function(){}; window.RUBRIC = ' + JSON.stringify(rubric).replace(/</g, '\\u003c') + ';'
     + (extra || '') + '</script><script>' + ENGINE + '</script></body></html>';
   const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true,
                                 url: 'https://example.org/t/' + Math.random().toString(36).slice(2) + '.html' });
@@ -234,6 +234,56 @@ async function boot(rubric, extra) {
     await sleep(700);
     ok(w.eval('state.students.map(s => s.name).join()') === 'Pat Kim,Lee Ray', 'a saved class opens with its students (not the demo)');
     ok(w.eval('state.students[0].marks.eval') === 3, '...and their marks');
+  }
+
+  console.log('\n=== a changed rubric never loses a mark ===');
+  {
+    /* a class marked on the Space rubric as issued */
+    const save = {version: 2, rubricId: SPACE.id, rubric: SPACE, meta: {cls: '7X'}, students: [
+      {name: 'Ana Ruiz', pron: 'she', q: {Q1a: 1, Q2a: 1, Q2c: 1, Q7a: 4, Q9a: 1}, override: {s6: 2}, comment: 'Kept as written.', edited: true},
+      {name: 'Bo Tran', pron: 'he', q: {Q2c: 0, Q7a: 2}, override: {}}]};
+    /* version 2: Q2c removed, Q7a now out of 2, strand s6 (and its Q9 parts) removed */
+    const v2 = clone(SPACE); v2.version = 2;
+    v2.criteria = v2.criteria.filter(c => c.id !== 'Q2c' && c.strand !== 's6');
+    v2.criteria.find(c => c.id === 'Q7a').max = 2;
+    v2.strands = v2.strands.filter(st => st.id !== 's6');
+    v2.strands.find(st => st.id === 's2').weight = 11; v2.strands.find(st => st.id === 's4').weight = 10; v2.total = 44;
+    const { w, $, errs } = await boot(v2, 'window.RUBRIC_OPEN_SAVE = ' + JSON.stringify(JSON.stringify(save)) + ';');
+    ok(w.eval('RUBRIC_OK') && errs.length === 0, 'the edited rubric is valid and opens the old save cleanly');
+    const ana = JSON.parse(w.eval('JSON.stringify(state.students[0])'));
+    ok(ana.q.Q1a === 1 && ana.q.Q2a === 1 && !('Q2c' in ana.q) && !('Q7a' in ana.q), 'marks the new version can hold are placed; the others are not forced in');
+    const parked = ana.parked.map(p => p.kind === 'override' ? 'ov:' + p.strand + '=' + p.value : p.id + '=' + p.value).sort().join(' ');
+    ok(parked === 'Q2c=1 Q7a=4 Q9a=1 ov:s6=2', 'Ana’s removed / over-max marks and her override are set aside: ' + parked);
+    ok(/over the new maximum — now out of 2/.test(ana.parked.find(p => p.id === 'Q7a').why), '...each with its reason (Q7a: over the new maximum — now out of 2)');
+    const bo = JSON.parse(w.eval('JSON.stringify(state.students[1])'));
+    ok(bo.q.Q7a === 2 && bo.parked.map(p => p.id).join() === 'Q2c', 'Bo’s 2 fits the new maximum and stays; his 0 for removed Q2c is set aside, not lost');
+    ok(w.eval('state.students[0].comment') === 'Kept as written.', 'a hand-edited comment is left alone');
+    const note = $('#p-setup .parkedNote').textContent;
+    ok(/marked against an earlier version/.test(note) && /Q2 \(c\) was removed/.test(note) && /Q7 \(a\) is now out of 2 \(was 4\)/.test(note),
+       'the Class tab says what changed: "Q2 (c) was removed", "Q7 (a) is now out of 2 (was 4)"');
+    ok(/5 marks for 2 students/.test(note) && /set aside, not deleted/.test(note), 'and how many marks are set aside (5 for 2 students)');
+    ok($('#p-mark .parkedNote').textContent === note, 'the same notice sits on the Mark tab');
+    /* saved, the set-aside marks travel with the class */
+    w.eval('download = (n, t) => { window.__s = t; }; saveJSON();');
+    const s2 = JSON.parse(w.eval('window.__s'));
+    ok(s2.students[0].parked.length === 4 && s2.rubric.version === 2, 'Save file keeps the set-aside marks, with the rubric now version 2');
+    /* the question comes back: reopen on the original rubric */
+    const back = await boot(SPACE, 'window.RUBRIC_OPEN_SAVE = ' + JSON.stringify(w.eval('window.__s')) + ';');
+    const ana2 = JSON.parse(back.w.eval('JSON.stringify(state.students[0])'));
+    ok(ana2.q.Q2c === 1 && ana2.q.Q7a === 4 && ana2.q.Q9a === 1 && ana2.override.s6 === 2 && ana2.parked.length === 0,
+       'reopened on the original rubric, every set-aside mark and the override are back in place');
+    ok(back.w.eval('state.students[1].q.Q2c') === 0, '...including Bo’s 0 (attempted, nothing creditable), which is a mark too');
+    /* discard, and Clear all marks */
+    w.confirm = () => true;
+    $('#p-setup [data-parked="discard"]').dispatchEvent(new w.MouseEvent('click', {bubbles: true}));
+    ok(w.eval('state.students.every(s => s.parked.length === 0)') && $('#p-setup .parkedNote').textContent === '', 'Discard clears them, after a confirm');
+    const again = await boot(v2, 'window.RUBRIC_OPEN_SAVE = ' + JSON.stringify(JSON.stringify(save)) + ';');
+    again.w.confirm = () => true;
+    again.w.document.querySelector('#btnClearMarks').click();
+    ok(again.w.eval('state.students.every(s => s.parked.length === 0)'), 'Clear all marks clears set-aside marks too (nothing left on a shared machine)');
+    /* the same rubric, unchanged: no notice at all */
+    const same = await boot(SPACE, 'window.RUBRIC_OPEN_SAVE = ' + JSON.stringify(JSON.stringify(save)) + ';');
+    ok(same.$('#p-setup .parkedNote').textContent === '' && same.w.eval('state.students[0].q.Q7a') === 4, 'a class opened on the rubric it was marked with shows no notice');
   }
 
   console.log('\n' + (fail ? fail + ' CHECK(S) FAILED' : 'ALL CHECKS PASSED'));

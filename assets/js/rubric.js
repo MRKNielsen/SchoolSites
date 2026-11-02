@@ -160,6 +160,56 @@ function normaliseRubric(src){
   return R;
 }
 
+/* What changed between two versions of a rubric, as far as marks already
+   entered are concerned. Criteria and strands are matched by id — the
+   builder keeps ids when a question is renumbered, so a renumber is just a
+   new label. Used by the marker (a class saved against an older version)
+   and by tools/rubric-builder.html (edits to a rubric in use). */
+function rubricDiff(a, b){
+  const out = [];
+  if(!a || !b) return out;
+  if(a.id !== b.id) out.push({kind:"id", from:a.id, to:b.id});
+  const lab = c => String(c.q || "") + (c.sub ? " (" + c.sub + ")" : "");
+  const ca = new Map((a.criteria || []).map(c => [c.id, c])), cb = new Map((b.criteria || []).map(c => [c.id, c]));
+  ca.forEach((c, id) => {
+    const n = cb.get(id);
+    if(!n){ out.push({kind:"removed", id, label:lab(c)}); return; }
+    if(Number(n.max) !== Number(c.max)) out.push({kind:"max", id, label:lab(n), from:Number(c.max), to:Number(n.max)});
+    const sa = c.strand || null, sb = n.strand || null;
+    if(sa !== sb || (sb && Number(c.band) !== Number(n.band)))
+      out.push({kind:"moved", id, label:lab(n), from:[sa, sa ? Number(c.band) : null], to:[sb, sb ? Number(n.band) : null]});
+    if(lab(n) !== lab(c)) out.push({kind:"renumbered", id, label:lab(n), from:lab(c), to:lab(n)});
+  });
+  cb.forEach((c, id) => { if(!ca.has(id)) out.push({kind:"added", id, label:lab(c)}); });
+  const mbOf = s => s.maxBand == null ? 4 : Number(s.maxBand);
+  const sa = new Map((a.strands || []).map(s => [s.id, s])), sb = new Map((b.strands || []).map(s => [s.id, s]));
+  sa.forEach((s, id) => {
+    const n = sb.get(id);
+    if(!n) out.push({kind:"strand-removed", id, label:s.name});
+    else if(mbOf(s) !== mbOf(n)) out.push({kind:"maxband", id, label:n.name, from:mbOf(s), to:mbOf(n)});
+  });
+  sb.forEach((s, id) => { if(!sa.has(id)) out.push({kind:"strand-added", id, label:s.name}); });
+  return out;
+}
+/* the changes that can alter what a mark already entered means */
+const MARK_CHANGES = ["id","removed","max","moved","strand-removed","maxband"];
+function describeChange(x, strandName){
+  const sn = id => strandName ? strandName(id) : "strand " + id;
+  const short = t => { t = String(t || ""); return t.length > 50 ? t.slice(0, 48) + "…" : t; };
+  switch(x.kind){
+    case "id": return "The rubric's id changed (" + x.from + " → " + x.to + "), so classes saved under the old id will not open with it.";
+    case "removed": return x.label + " was removed.";
+    case "added": return x.label + " was added.";
+    case "max": return x.label + " is now out of " + x.to + " (was " + x.from + ").";
+    case "moved": return x.label + " now counts for " + (x.to[0] ? sn(x.to[0]) + ", band " + x.to[1] : "no strand") + " (was " + (x.from[0] ? sn(x.from[0]) + ", band " + x.from[1] : "no strand") + ").";
+    case "renumbered": return x.from + " is now numbered " + x.to + ".";
+    case "strand-removed": return "The strand “" + short(x.label) + "” was removed.";
+    case "strand-added": return "A strand “" + short(x.label) + "” was added.";
+    case "maxband": return "“" + short(x.label) + "” now goes up to band " + x.to + " (was " + x.from + ").";
+  }
+  return "";
+}
+
 const RUBRIC_CHECK = RUBRIC ? validateRubric(RUBRIC) : {errors:["No rubric was loaded on this page."], warnings:[]};
 const RUBRIC_OK = RUBRIC_CHECK.errors.length === 0;
 const R = RUBRIC_OK ? normaliseRubric(RUBRIC) : null;
@@ -302,7 +352,7 @@ function recompute(st){
 }
 function newStudent(name, pron){
   const st = {id:uid(), name:name||"", pron:pron||"they",
-              q:{}, override:{}, marks:{}, res:{}, comment:"", edited:false};
+              q:{}, override:{}, marks:{}, res:{}, comment:"", edited:false, parked:[]};
   recompute(st);
   return st;
 }
@@ -1254,9 +1304,58 @@ function wireAnalysisTip(){
   document.addEventListener("scroll", hide, true);
 }
 
+/* Marks set aside, and what changed in the rubric — on the Class and Mark tabs */
+function parkedHTML(){
+  const note = state.changeNote, rows = [];
+  state.students.forEach(s => (s.parked || []).forEach(p => rows.push([s.name, p])));
+  if(!note && !rows.length) return "";
+  const nStu = new Set(rows.map(r => r[0])).size;
+  let h = '<div class="note parked"><strong>' + (note ? "This class was marked against an earlier version of this rubric." : "Some marks are set aside.") + '</strong>';
+  if(note){
+    const sname = sid => { const i = STRANDS.findIndex(x => x.id === sid); return i < 0 ? "strand " + sid : "strand " + (i + 1); };
+    h += '<ul>' + note.changes.slice(0, 8).map(x => '<li>' + esc(describeChange(x, sname)) + '</li>').join("")
+       + (note.changes.length > 8 ? '<li>… and ' + (note.changes.length - 8) + ' more</li>' : "") + '</ul>'
+       + '<p>Bands and every comment you had not edited have been worked out again for this version.</p>';
+  }
+  if(rows.length){
+    h += '<p>' + rows.length + ' mark' + (rows.length === 1 ? '' : 's') + ' for ' + nStu + ' student' + (nStu === 1 ? '' : 's')
+       + ' could not be placed in this version, so ' + (rows.length === 1 ? 'it is' : 'they are') + ' <b>set aside, not deleted</b>: kept in every save, and put back automatically if the question returns.</p>'
+       + '<details><summary>Show set-aside marks</summary><table class="an-t"><thead><tr><th>Student</th><th>What</th><th class="n">Mark</th><th>Why</th></tr></thead><tbody>'
+       + rows.map(([n, p]) => '<tr><td>' + esc(n) + '</td><td>' + esc(p.kind === "override" ? "Band override, strand " + p.strand : p.label)
+         + '</td><td class="n">' + esc(p.value === true ? "tick" : p.value) + '</td><td>' + esc(p.why) + '</td></tr>').join("")
+       + '</tbody></table></details>'
+       + '<div class="iobar"><button class="btn ghost small" data-parked="csv">Download set-aside marks (CSV)</button>'
+       + '<button class="btn danger small" data-parked="discard">Discard set-aside marks</button></div>';
+  } else h += '<div class="iobar"><button class="btn ghost small" data-parked="ok">OK</button></div>';
+  return h + '</div>';
+}
+function renderParked(){
+  const h = parkedHTML();
+  $$(".parkedNote").forEach(el => el.innerHTML = h);
+}
+function onParked(e){
+  const b = e.target.closest && e.target.closest("[data-parked]");
+  if(!b) return;
+  const what = b.dataset.parked;
+  if(what === "ok"){ state.changeNote = null; renderParked(); return; }
+  if(what === "csv"){
+    const lines = [["Student","Question or strand","Mark","Why"].map(csvCell).join(",")];
+    state.students.forEach(s => (s.parked || []).forEach(p => lines.push([s.name, p.kind === "override" ? "override " + p.strand : p.label,
+      p.value === true ? "tick" : p.value, p.why].map(csvCell).join(","))));
+    download((state.meta.cls||"class")+"-"+R.fileStem+"-set-aside-"+stamp()+".csv", lines.join("\n"), "text/csv;charset=utf-8");
+    return;
+  }
+  if(what === "discard"){
+    if(!confirm("Discard every set-aside mark? They cannot be recovered afterwards unless you have a saved file from before.")) return;
+    state.students.forEach(s => s.parked = []); state.changeNote = null;
+    renderParked(); persist(); toast("Set-aside marks discarded");
+  }
+}
+
 function renderAll(){
   refreshClass();
   renderMast();
+  renderParked();
   renderSetup(); renderMark(); renderComments(); renderGroups(); renderPrint(); renderRef(); renderAnalysis();
 }
 
@@ -1391,25 +1490,53 @@ function importJSON(text){
     return false;
   }
   const fileVersion = Number(d.version) || 1;
+  /* marked against an earlier version of this rubric? (same id, different content) */
+  const changes = fileRubric && JSON.stringify(fileRubric) !== JSON.stringify(RUBRIC)
+    ? rubricDiff(fileRubric, RUBRIC).filter(x => MARK_CHANGES.includes(x.kind)) : [];
+  const oldLabel = {};
+  if(fileRubric && Array.isArray(fileRubric.criteria)) fileRubric.criteria.forEach(c => oldLabel[c.id] = String(c.q || c.id) + (c.sub ? " (" + c.sub + ")" : ""));
+  state.changeNote = changes.length ? {changes, from: fileRubric.version, to: RUBRIC.version} : null;
   state.meta = Object.assign({cls:"",teacher:"",task:R.task,date:""}, d.meta||{});
   if(typeof d.band0 === "string" && d.band0) state.band0 = d.band0;
   if(Array.isArray(d.bandLabels) && d.bandLabels.length === 4) state.bandLabels = d.bandLabels;
   if(d.opts) state.opts = Object.assign(state.opts, d.opts);
   state.students = (d.students||[]).map(o => {
     const st = newStudent(o.name||"", o.pron||"they");
-    const mq = migrateTicks(o.q, fileVersion);
+    /* Never drop a mark. One that this version of the rubric cannot hold —
+       its question is gone, or it is over a lowered maximum — is set aside
+       in st.parked: kept in every save, listed on screen, and put back
+       automatically if the question returns (parked marks are tried first). */
+    const parked = [];
+    const prev = {};
+    (Array.isArray(o.parked) ? o.parked : []).forEach(p => {
+      if(p && p.kind === "override") return;
+      if(p && typeof p.id === "string") prev[p.id] = p;
+    });
+    const mq = Object.assign({}, ...Object.keys(prev).map(id => ({[id]: prev[id].value})), migrateTicks(o.q, fileVersion));
     Object.keys(mq).forEach(id => {
-      if(!(id in MAXOF)) return;
       const v = mq[id];
-      if(typeof v === "number"){ if(!Number.isNaN(parseMark(String(v), MAXOF[id]))) st.q[id] = v; }
+      const label = (prev[id] && prev[id].label) || oldLabel[id] || id;
+      if(!(id in MAXOF)){
+        if(typeof v === "number" || v === true) parked.push({kind:"mark", id, label, value:v, why:"not in this version of the rubric"});
+        return;
+      }
+      if(typeof v === "number"){
+        if(!Number.isNaN(parseMark(String(v), MAXOF[id]))) st.q[id] = v;
+        else parked.push({kind:"mark", id, label, value:v, why:"over the new maximum — now out of " + fmtMark(MAXOF[id])});
+      }
       else if(v === true) st.q[id] = MAXOF[id];
     });
     if(fileVersion < MARKS_SINCE && Object.keys(mq).some(id => id in MAXOF))
       CRITERIA.forEach(c => { if(mq[c.id] === undefined) st.q[c.id] = 0; });
-    if(o.override) STRANDS.forEach(sd => {
-      const v = o.override[sd.id];
-      if(Number.isInteger(v) && v >= 0 && v <= maxBandOf(sd)) st.override[sd.id] = v;
+    const ovs = Object.assign({}, ...(Array.isArray(o.parked) ? o.parked : []).filter(p => p && p.kind === "override").map(p => ({[p.strand]: p.value})), o.override || {});
+    Object.keys(ovs).forEach(sid => {
+      const v = ovs[sid], sd = strandById(sid);
+      if(!Number.isInteger(v)) return;
+      if(sd && v >= 0 && v <= maxBandOf(sd)) st.override[sid] = v;
+      else parked.push({kind:"override", strand:sid, value:v,
+        why: sd ? "band override above the strand's new top band (" + maxBandOf(sd) + ")" : "band override for a strand that is no longer in the rubric"});
     });
+    st.parked = parked;
     /* files saved before ticks existed stored a band per strand — keep them as overrides */
     if(!o.q && o.marks) STRANDS.forEach(sd => {
       const v = o.marks[sd.id];
@@ -1420,9 +1547,13 @@ function importJSON(text){
     return st;
   });
   refreshClass(); state.students.forEach(s => { if(!s.comment) regenerate(s, true); });
+  /* a changed rubric means changed bands: rebuild every comment not edited by hand */
+  if(state.changeNote) state.students.forEach(s => regenerate(s, false));
   $("#f-length").value = state.opts.length; $("#f-person").value = state.opts.person; $("#f-steps").value = String(state.opts.steps);
   renderAll(); persist();
-  toast("Opened "+state.students.length+" student"+(state.students.length===1?"":"s"));
+  const np = state.students.reduce((n, s) => n + s.parked.length, 0);
+  toast("Opened "+state.students.length+" student"+(state.students.length===1?"":"s")
+    + (np ? " — " + np + " mark" + (np===1?"":"s") + " set aside, see the Class tab" : ""));
   return true;
 }
 function handleFile(file){
@@ -1444,8 +1575,8 @@ let persistTimer = null;
 function saveData(){
   return {version:SAVE_VERSION, rubricId:R.id,
     meta:state.meta, band0:state.band0, bandLabels:state.bandLabels, opts:state.opts,
-    students: state.students.map(s => ({name:s.name, pron:s.pron,
-      q:s.q, override:s.override, comment:s.comment, edited:s.edited})),
+    students: state.students.map(s => Object.assign({name:s.name, pron:s.pron,
+      q:s.q, override:s.override, comment:s.comment, edited:s.edited}, s.parked && s.parked.length ? {parked:s.parked} : {})),
     rubric: RUBRIC};
 }
 function persist(){
@@ -1545,6 +1676,7 @@ function shellHTML(){
 
 <!-- ============ CLASS ============ -->
 <section class="panel" id="p-setup" role="tabpanel" aria-labelledby="tab-setup" tabindex="0">
+  <div class="parkedNote"></div>
   <div class="note">
     Nothing is sent anywhere and nothing is stored on a server. Use <strong>Save file</strong> before you close the tab, then <strong>Open file</strong> to pick up where you left off.
   </div>
@@ -1600,6 +1732,7 @@ function shellHTML(){
 
 <!-- ============ MARK ============ -->
 <section class="panel" id="p-mark" role="tabpanel" aria-labelledby="tab-mark" tabindex="0">
+  <div class="parkedNote"></div>
   <div class="card">
     <div class="card-head">
       <div><h2>Marking grid</h2><p>Columns follow the ${esc(R.title)} ${esc(NOUN.item)} by ${esc(NOUN.item)}. Where the rubric splits one ${esc(NOUN.item)} across bands, each part has its own column under that ${esc(NOUN.item)} number. Type the mark for each part &mdash; the figure under each column is what it is out of, and half marks are fine (<code>1.5</code>). Enter <b>0</b> when a part was attempted but earned nothing, and leave it <b>blank</b> when it was not attempted. Enter moves down the column, the arrow keys move between cells. Bands are worked out from the marks: a part counts towards its rubric cell at ${R.pass === 0.5 ? "half its marks" : Math.round(R.pass * 100) + "% of its marks"} or more, a cell counts only when every part behind it does, and each missing part below the top cell pulls the award down a band.</p></div>
@@ -1723,6 +1856,7 @@ function downloadRubric(){
 }
 function wireUp(){
   $$(".tab").forEach(t => t.onclick = () => showTab(t.dataset.panel));
+  (document.getElementById("rubric-app") || document.body).addEventListener("click", onParked);
   wireAnalysisTip();
   ["cls","teacher","task","date"].forEach(k => {
     const el = $("#f-"+(k==="cls"?"class":k));
@@ -1742,8 +1876,9 @@ function wireUp(){
   $("#btnCsvOut").onclick = () => exportCSV(false);
   $("#btnCsvTemplate").onclick = () => exportCSV(true);
   $("#btnClearMarks").onclick = () => {
-    if(!confirm("Clear every mark and override for all students? Comments will be rebuilt as blank.")) return;
-    state.students.forEach(s => { s.q = {}; s.override = {}; recompute(s); s.edited = false; regenerate(s,true); });
+    if(!confirm("Clear every mark and override for all students, including any set aside? Comments will be rebuilt as blank.")) return;
+    state.students.forEach(s => { s.q = {}; s.override = {}; s.parked = []; recompute(s); s.edited = false; regenerate(s,true); });
+    state.changeNote = null;
     renderAll(); persist(); toast("Marks cleared");
   };
   $("#f-length").onchange = e => { state.opts.length = e.target.value; regenerateAll(false); renderComments(); renderPrint(); persist(); };

@@ -42,6 +42,27 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — rubrics in use are protected (2 Nov 2026)
+
+Until now, editing a rubric after a class was part-marked could lose marks
+silently: on load the marker skipped any mark whose question was gone or that
+exceeded a lowered maximum, and any override for a removed strand. Now the
+marker sets those aside (`parked` on the student, kept in saves, shown with
+the reason, restored automatically when the question returns) and says what
+changed between the version the class was marked on and this one. The
+builder spots a class marked on the rubric in this browser and lists, on the
+Check tab, every change that would touch its marks, with counts; removing a
+question with marks asks first; such changes bump the rubric's `version`.
+`rubricDiff()` lives in rubric.js so both tools agree. Tests: marker 72
+checks (a v1 class opened on a v2 rubric loses nothing and round-trips back),
+builder 108 (the builder's warning counts match what the marker then sets
+aside).
+
+Still open from the same request: the **Forces rubric** needs the Lesson 18
+Trebuchet Investigation Test paper and key (staff-only, not in the repo) and
+the **Particle Model rubrics** need their investigation booklets, still to be
+written.
+
 ### Landed — default statements + statement bank in the builder (2 Nov 2026)
 
 Kodie asked for default statements; he chose band descriptors, comment
