@@ -250,7 +250,9 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(/No lower level/.test($('.bstrand[data-strand="1"] .bcol.towards').textContent)
        && /top of the F–10 curriculum/.test($('.bstrand[data-strand="1"] .bcol.above').textContent),
        'with only one level in the data, Towards and Above say why they are empty');
+    ok(/^Can explain how forces act/.test(B.doc.strands[1].bands[2].d), 'a strand started from the curriculum arrives with default descriptors');
     const box = $('[data-f="strands.1.bands.2.d"]');
+    type(w, box, '');      /* clear the default, then write into it */
     box.dispatchEvent(new w.FocusEvent('focusin', { bubbles: true }));
     click(w, snips[1]);
     ok(B.doc.strands[1].bands[2].d === 'They describe models.', 'clicking a sentence puts it in the last box written in');
@@ -300,6 +302,87 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     const pi = cds.find(c => c.code === 'VC2M7M03'), trig = cds.find(c => c.code === 'VC2M10ASP03');
     ok(pi && /between π and the circumference/.test(pi.text), 'equations survive: "between π and the circumference"');
     ok(trig && /y=sin\(x\), y=cos\(x\) and y=tan\(x\)/.test(trig.text), '...and "y=sin(x), y=cos(x) and y=tan(x)" (brackets from the equation delimiter)');
+  }
+
+  console.log('\n=== default statements, real data ===');
+  if (fs.existsSync(VC_FILE)) {
+    const { w, B, $ } = await open();
+    B.doc = { format: 'rubric-marker/1', id: 'd', title: 'D', bands: ['Towards', 'At', 'At', 'Above'], parts: [{ id: 'A', name: 'A' }], strands: [], criteria: [] };
+    B.showTab('strands');
+    click(w, $('[data-act="pick"][data-i="new"]'));
+    choose(w, w.document.querySelector('#pkSub'), 'science');
+    type(w, w.document.querySelector('#pkQ'), 'VC2S8U14');
+    click(w, w.document.querySelector('.bpick-row [data-pick]'));
+    const s = B.doc.strands[0];
+    ok(s.code === 'VC2S8U14' && /^Balanced and unbalanced forces/.test(s.name), 'a strand from the picker takes the content description as its draft heading');
+    ok(/^Can identify sources of light/.test(s.bands[0].d), 'band 1 (Towards) is drafted from Level 5–6: "' + s.bands[0].d.slice(0, 50) + '…"');
+    ok(/^Can demonstrate how simple machines/.test(s.bands[1].d) && /represent and explain the effects of forces/.test(s.bands[1].d), 'band 2 (At) from Level 7–8, every Physical sciences sentence');
+    ok(/use Newton’s laws/.test(s.bands[3].d), 'band 4 (Above) from Level 9–10');
+    ok(!/They |Students |By the end/.test(s.bands.map(b => b.d).join(' ')), 'VCAA’s “They …” becomes “Can …” — no stray “They” or “By the end of”');
+    ok(s.can[1] === 'demonstrate how simple machines can be used for a purpose', '“Ava can now …” takes the base form, lower-case, no full stop');
+    ok(s.next[0] === s.can[1] && /\{their\}/.test(s.next[3]), 'a band’s next step is the band above’s “can now”; the top band gets an extension step');
+    ok(/^identify sources of light/.test(s.start), 'band 0’s first step comes from the Towards sentences');
+    let r = B.check();
+    ok(r.warnings.some(x => /Strand 1 still has default wording in 14 boxes \(row heading/.test(x)), 'Check lists boxes still holding defaults: "' + (r.warnings.find(x => /default wording/.test(x)) || '').slice(0, 70) + '…"');
+    ok(r.warnings.some(x => /bands 2 and 3 have the same descriptor/.test(x)), 'and says when two At bands share one descriptor');
+    type(w, $('[data-f="strands.0.bands.2.d"]'), 'Represents a force diagram and predicts the motion of an object from it.');
+    r = B.check();
+    ok(!r.warnings.some(x => /same descriptor/.test(x)) && r.warnings.some(x => /default wording in 13 boxes/.test(x)), 'editing band 3 clears that warning and the count drops');
+    /* Fill never overwrites */
+    type(w, $('[data-f="strands.0.name"]'), 'Explains motion with forces');
+    type(w, $('[data-f="strands.0.bands.0.d"]'), '');
+    click(w, $('[data-act="defaults"][data-i="0"]'));
+    ok(B.doc.strands[0].name === 'Explains motion with forces' && /^Can identify sources of light/.test(B.doc.strands[0].bands[0].d)
+       && /^Represents a force diagram/.test(B.doc.strands[0].bands[2].d), 'Fill puts back only the emptied box and leaves typed text alone');
+    /* 10A: no standard, its content descriptions stand in */
+    B.doc.strands.push({ id: 's2', name: '', code: 'VC2M10AA01', start: '', bands: [1, 2, 3, 4].map(() => ({ q: '', d: '' })), can: ['', '', '', ''], next: ['', '', '', ''] });
+    B.render(); click(w, $('[data-act="defaults"][data-i="1"]'));
+    const t = B.doc.strands[1];
+    ok(/^Can /.test(t.bands[1].d) && t.bands[1].d.length > 30 && /^Can /.test(t.bands[0].d), 'a Level 10A code still gets drafts (At from 10A content descriptions, Towards from Level 10)');
+  }
+
+  console.log('\n=== statement bank ===');
+  {
+    const { w, B, $ } = await open({ noCurriculum: true, storage: { 'rubric-builder:draft': JSON.stringify(STARTER) } });
+    B.showTab('strands');
+    click(w, $('[data-act="bank"]'));
+    ok(!$('#bPick').hidden && /bank is empty/.test($('#bkList').textContent), 'the bank opens, empty at first, saying what it is for');
+    $('#bkText').value = 'identify the independent, dependent and controlled variables'; $('#bkTag').value = 'Inquiry';
+    click(w, $('[data-bank="add"]'));
+    $('#bkText').value = 'communicate findings using scientific vocabulary'; $('#bkTag').value = 'Communicating';
+    click(w, $('[data-bank="add"]'));
+    const saved = JSON.parse(w.localStorage.getItem('rubric-builder:bank'));
+    ok(saved.length === 2 && saved[0].tag === 'Communicating', 'statements are saved in this browser, newest first');
+    type(w, $('#bkQ'), 'inquiry');
+    ok(w.document.querySelectorAll('#bkList .bpick-row').length === 1, 'search finds by tag');
+    click(w, $('[data-bank="close"]'));
+    const can = $('[data-f="strands.0.can.1"]');
+    type(w, can, '');
+    can.dispatchEvent(new w.FocusEvent('focusin', { bubbles: true }));
+    click(w, $('[data-act="bank"]'));
+    type(w, $('#bkQ'), 'variables');
+    click(w, $('[data-bank="use"]'));
+    ok(B.doc.strands[0].can[1] === 'identify the independent, dependent and controlled variables', 'Insert puts it in the box last written in');
+    click(w, $('[data-act="bank"]'));
+    ok(/variables you were last/.test($('#bPick').textContent) === false && $('#bkText').value === 'identify the independent, dependent and controlled variables',
+       'opening the bank offers the box you were writing in as a new statement');
+    w.eval('URL.createObjectURL = b => { window.__blob = b; return "blob:x"; }; URL.revokeObjectURL = () => {};');
+    type(w, $('#bkQ'), '');
+    click(w, $('[data-bank="export"]'));
+    const exp = JSON.parse(await new Promise(res => { const fr = new w.FileReader(); fr.onload = () => res(fr.result); fr.readAsText(w.__blob); }));
+    ok(exp.format === 'rubric-statement-bank/1' && exp.statements.length === 2, 'Export gives a bank file of 2 statements');
+    /* import into a fresh browser */
+    const { w: w2, $: $2 } = await open({ noCurriculum: true });
+    click(w2, $2('[data-act="bank"]'));
+    const fi = $2('#bkFile');
+    Object.defineProperty(fi, 'files', { value: [new w2.File([JSON.stringify(exp)], 'bank.json')] });
+    fi.dispatchEvent(new w2.Event('change'));
+    await sleep(200);
+    ok(JSON.parse(w2.localStorage.getItem('rubric-builder:bank') || '[]').length === 2, 'Import adds a colleague’s bank');
+    fi.dispatchEvent(new w2.Event('change')); await sleep(200);
+    ok(JSON.parse(w2.localStorage.getItem('rubric-builder:bank')).length === 2, 'importing the same bank twice adds no duplicates');
+    click(w2, $2('[data-bank="del"]'));
+    ok(JSON.parse(w2.localStorage.getItem('rubric-builder:bank')).length === 1, 'a statement can be deleted');
   }
 
   console.log('\n=== Towards / At / Above, real data ===');

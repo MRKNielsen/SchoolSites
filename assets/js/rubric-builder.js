@@ -152,12 +152,12 @@ function friendly(msg, d){
     return c ? "Question " + (qTag(c) || "(unnumbered)") : m;
   }).replace(/strand (s\d+)'s maxBand/g, (m, id) => {
     const i = d.strands.findIndex(s => s.id === id); return i < 0 ? m : "strand " + (i + 1) + "'s top band";
-  }).replace(/^total is/, "The paper total is");
+  }).replace(/^total is/, "The paper total is").replace(/^[a-z]/, c => c.toUpperCase());
 }
 function check(){
   const d = exportRubric();
   const r = (typeof validateRubric === "function") ? validateRubric(d) : {errors: ["The marking engine didn’t load, so the rubric can’t be checked."], warnings: []};
-  return {errors: r.errors.map(e => friendly(e, d)), warnings: r.warnings.map(e => friendly(e, d)), d};
+  return {errors: r.errors.map(e => friendly(e, d)), warnings: r.warnings.map(e => friendly(e, d)).concat(defaultWarnings()), d};
 }
 
 /* ============================ CURRICULUM ============================ */
@@ -178,7 +178,7 @@ let stdWhole = false;      // show whole standards, not just the linked strand's
    standard of the level above. Each column is narrowed to the linked code's
    sub-strand (Science) or strand (Mathematics), using the tags
    tools/build-curriculum.py gives each sentence. */
-function ladder(k){
+function ladder(k, whole = stdWhole){
   const subj = VC.subjects.find(x => x.id === k.subjectId);
   const i = subj.levels.findIndex(l => l.level === k.level);
   const col = (lv, role) => {
@@ -186,13 +186,13 @@ function ladder(k){
     const tagged = Array.isArray(lv.standard) && lv.standard.length ? lv.standard : null;
     if(!tagged && !lv.achievement){
       /* Level 10A: no achievement standard, so its content descriptions for the strand stand in */
-      const cds = CD.filter(c => c.subjectId === k.subjectId && c.level === lv.level && (stdWhole || c.strand === k.strand));
+      const cds = CD.filter(c => c.subjectId === k.subjectId && c.level === lv.level && (whole || c.strand === k.strand));
       return {role, level: lv.level, items: cds.map(c => c.text.charAt(0).toUpperCase() + c.text.slice(1) + "."),
-              note: "VCAA sets no achievement standard for Level " + lv.level + "; these are its content descriptions" + (stdWhole ? "." : " for " + k.strand + ".")};
+              note: "VCAA sets no achievement standard for Level " + lv.level + "; these are its content descriptions" + (whole ? "." : " for " + k.strand + ".")};
     }
     let items = tagged ? tagged : sentences(lv.achievement).map(t => ({text: t.trim()}));
     let note = "";
-    if(tagged && !stdWhole){
+    if(tagged && !whole){
       const bySub = items.filter(x => x.strand === k.strand && x.sub === k.substrand);
       const byStrand = items.filter(x => x.strand === k.strand);
       if(bySub.length) items = bySub;
@@ -203,6 +203,88 @@ function ladder(k){
   };
   return [col(subj.levels[i - 1], "towards"), col(subj.levels[i], "at"), col(subj.levels[i + 1], "above")];
 }
+/* ============================ DEFAULT STATEMENTS ============================
+   Drafts for an empty strand, from its curriculum code's Towards / At /
+   Above sentences. They are starting points: every one is flagged on the
+   Check tab until it has been edited, and "Fill" never touches a box that
+   already has text. The wording stays VCAA's — "They represent and explain …"
+   becomes "Can represent and explain …" for a descriptor and "represent and
+   explain …" for "Ava can now …" — so no verb has to be conjugated by rule. */
+const TOP_NEXT = "apply this in less familiar contexts, explaining {their} reasoning fully";
+function baseForm(t){
+  return String(t || "").trim()
+    .replace(/^By the end of Levels? [^,]+,\s*students\s+/i, "")
+    .replace(/^(They|Students)\s+/, "")
+    .replace(/[.;:\s]+$/, "")
+    .replace(/^./, c => c.toLowerCase());
+}
+/* which column feeds each band: 1 Towards, top Above, the rest At */
+function roleOfBand(b, mb){
+  if(mb === 1) return "at";
+  if(b === 1) return "towards";
+  if(b === mb && mb >= 3) return "above";
+  return "at";
+}
+function defaultsFor(s){
+  if(!VC) return null;
+  const k = codesOf(s).map(byCode).filter(Boolean)[0];
+  if(!k) return null;
+  const cols = ladder(k, false), by = {};
+  cols.forEach(c => by[c.role] = c.items);
+  /* a column with nothing in it (no lower level, top of F-10) borrows At */
+  const items = role => (by[role] && by[role].length ? by[role] : by.at) || [];
+  const mb = +s.maxBand || 4;
+  const out = {name: k.text.charAt(0).toUpperCase() + k.text.slice(1), bands: [], can: [], next: [], start: ""};
+  for(let b = 1; b <= mb; b++){
+    const its = items(roleOfBand(b, mb));
+    out.bands[b-1] = its.length ? "Can " + its.map(baseForm).join("; ") + "." : "";
+    out.can[b-1] = its.length ? baseForm(its[0]) : "";
+  }
+  for(let b = 1; b <= mb; b++) out.next[b-1] = b < mb ? (out.can[b] || "") : TOP_NEXT;
+  out.start = baseForm((items("towards")[0]) || "");
+  return out;
+}
+/* fill the empty boxes of strand i; returns how many were filled */
+function fillDefaults(i){
+  const s = doc.strands[i], d = defaultsFor(s);
+  if(!d) return 0;
+  let n = 0;
+  const put = (get, set, v) => { if(v && !String(get() || "").trim()){ set(v); n++; } };
+  put(() => s.name, v => s.name = v, d.name);
+  d.bands.forEach((v, j) => put(() => s.bands[j].d, x => s.bands[j].d = x, v));
+  d.can.forEach((v, j) => put(() => s.can[j], x => s.can[j] = x, v));
+  d.next.forEach((v, j) => put(() => s.next[j], x => s.next[j] = x, v));
+  put(() => s.start, v => s.start = v, d.start);
+  return n;
+}
+/* reminders for the Check tab: defaults left as they were, and two bands
+   saying the same thing (the curriculum has one At standard; what lifts work
+   from one At band to the next is the teacher's call) */
+function defaultWarnings(){
+  const w = [];
+  doc.strands.forEach((s, i) => {
+    const mb = +s.maxBand || 4, name = "Strand " + (i + 1);
+    const d = defaultsFor(s);
+    if(d){
+      const left = [];
+      if(s.name && s.name === d.name) left.push("row heading — the whole content description; shorten it to what students do");
+      for(let b = 1; b <= mb; b++){
+        if(s.bands[b-1].d && s.bands[b-1].d === d.bands[b-1]) left.push("band " + b + " descriptor");
+        if(s.can[b-1] && s.can[b-1] === d.can[b-1]) left.push("band " + b + " “can now”");
+        if(s.next[b-1] && s.next[b-1] === d.next[b-1]) left.push("band " + b + " next step");
+      }
+      if(s.start && s.start === d.start) left.push("band 0 first step");
+      if(left.length) w.push(name + " still has default wording in " + left.length + " box" + (left.length === 1 ? "" : "es") + " (" + left.slice(0, 4).join(", ") + (left.length > 4 ? "…" : "") + "). Make it specific to this task.");
+    }
+    for(let b = 1; b < mb; b++){
+      const a = (s.bands[b-1].d || "").trim();
+      if(a && a === (s.bands[b].d || "").trim())
+        w.push(name + ": bands " + b + " and " + (b + 1) + " have the same descriptor. Say what lifts work from one to the other.");
+    }
+  });
+  return w;
+}
+
 /* the band a column's sentences go to by default */
 function bandFor(role, s){
   const mb = +s.maxBand || 4;
@@ -236,6 +318,7 @@ function shell(){
     <span class="tabbar-spacer"></span>
     <span class="iobar">
       <button class="btn ghost small" data-act="new">New</button>
+      <button class="btn ghost small" data-act="bank">Statement bank</button>
       <button class="btn ghost small" data-act="open">Open…</button>
       <button class="btn small" data-act="marker">Open in marker</button>
       <input type="file" id="bFile" accept=".json,.js,application/json" hidden>
@@ -335,7 +418,8 @@ function strandCard(s, i){
     const k = known[0], cols = ladder(k);
     const name = {towards: "Towards", at: "At", above: "Above"};
     h += `<div class="bladder"><div class="bladder-h"><b>Achievement standards</b>
-        <button class="chipbtn" data-act="std-whole" aria-pressed="${stdWhole}">${stdWhole ? "Showing whole standards — show just " + esc(k.substrand) : "Showing " + esc(k.substrand) + " — show whole standards"}</button></div>
+        <span class="iobar flush"><button class="btn ghost small" data-act="defaults" data-i="${i}" title="Drafts from the Towards / At / Above sentences; boxes with text are left alone">Fill empty boxes with defaults</button>
+        <button class="chipbtn" data-act="std-whole" aria-pressed="${stdWhole}">${stdWhole ? "Showing whole standards — show just " + esc(k.substrand) : "Showing " + esc(k.substrand) + " — show whole standards"}</button></span></div>
       <div class="bladder-cols">` + cols.map(c => {
         const b = bandFor(c.role, s);
         return `<div class="bcol ${c.role}"><h4>${name[c.role]}${c.level ? ` <span>Level ${esc(c.level)}</span>` : ""}${c.items.length ? ` <em>→ band ${b}</em>` : ""}</h4>`
@@ -577,6 +661,79 @@ function nextQ(){
 }
 const qSortKey = c => [parseFloat(String(c.q).replace(/^\D+/, "")) || 0, String(c.sub || "")];
 
+/* ============================ STATEMENT BANK ============================
+   A teacher's own saved statements, for any rubric: kept in this browser
+   (rubric-builder:bank) and moved between people and machines as a .json
+   file. Each is {text, tag}; tag is free text ("Inquiry", "Year 8 forces"). */
+const BANK = "rubric-builder:bank";
+let bank = [];
+try{ bank = JSON.parse(store.get(BANK) || "[]"); if(!Array.isArray(bank)) bank = []; }catch(e){ bank = []; }
+bank = bank.filter(x => x && typeof x.text === "string" && x.text.trim());
+const saveBank = () => store.set(BANK, JSON.stringify(bank));
+let bankQ = "";
+function bankAdd(text, tag){
+  text = String(text || "").trim(); tag = String(tag || "").trim();
+  if(!text) return false;
+  if(bank.some(x => x.text === text)){ toast("Already in the bank"); return false; }
+  bank.unshift({text, tag}); saveBank(); return true;
+}
+function openBank(){
+  const p = document.getElementById("bPick");
+  const cur = lastText && document.contains(lastText) ? lastText.value.trim() : "";
+  const q = bankQ.toLowerCase().split(/\s+/).filter(Boolean);
+  const list = bank.map((x, j) => [x, j]).filter(([x]) => q.every(w => (x.text + " " + x.tag).toLowerCase().includes(w)));
+  p.innerHTML = `<div class="bpick-in card" role="dialog" aria-modal="true" aria-label="Statement bank">
+  <div class="card-head"><div><h2>Statement bank</h2><p>Your own statements, for any rubric. Kept in this browser; export to share or move them.</p></div><button class="btn ghost small" data-bank="close">Close</button></div>
+  <div class="card-body">
+    <div class="bbank-add">
+      <label class="field"><span>New statement</span><textarea id="bkText" rows="2" placeholder="e.g. identify the independent, dependent and controlled variables in an investigation">${esc(cur)}</textarea></label>
+      <div class="iobar"><label class="field bare inline"><span>Tag</span><input id="bkTag" placeholder="e.g. Inquiry"></label>
+      <button class="btn small" data-bank="add">Add to bank</button></div>
+      ${cur ? '<p class="hint">Filled in from the box you were last writing in.</p>' : ""}
+    </div>
+    <div class="grid3"><label class="field"><span>Search</span><input id="bkQ" value="${esc(bankQ)}" placeholder="word or tag"></label></div>
+    <div class="bpick-list" id="bkList">${list.length ? list.map(([x, j]) =>
+      `<div class="bpick-row"><span class="t">${esc(x.text)}${x.tag ? ` <span class="ckcode cur">${esc(x.tag)}</span>` : ""}</span>
+       <button class="btn small" data-bank="use" data-j="${j}">Insert</button><button class="btn danger small" data-bank="del" data-j="${j}" aria-label="Delete">&#10005;</button></div>`).join("")
+      : `<p class="hint">${bank.length ? "Nothing matches." : "The bank is empty. Add statements you reuse — inquiry skills, communication, working mathematically — and insert them into any rubric."}</p>`}</div>
+    <div class="iobar"><button class="btn ghost small" data-bank="export" ${bank.length ? "" : "disabled"}>Export bank (.json)</button>
+      <button class="btn ghost small" data-bank="import">Import a bank…</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>
+    <p class="hint">Insert puts a statement into the box you were last writing in. Comment boxes read best without a full stop or capital.</p>
+  </div></div>`;
+  p.hidden = false;
+  const qi = document.getElementById("bkQ");
+  qi.oninput = () => { bankQ = qi.value; const pos = qi.selectionStart; openBank(); const n = document.getElementById("bkQ"); n.focus(); n.setSelectionRange(pos, pos); };
+  document.getElementById("bkFile").onchange = e => {
+    const f = e.target.files[0]; e.target.value = ""; if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try{
+        const d = JSON.parse(r.result), items = Array.isArray(d) ? d : d.statements;
+        if(!Array.isArray(items)) throw 0;
+        let n = 0; items.slice().reverse().forEach(x => { if(x && typeof x.text === "string" && !bank.some(y => y.text === x.text.trim())){ bank.unshift({text: x.text.trim(), tag: String(x.tag || "")}); n++; } });
+        saveBank(); openBank(); toast(n + " statement" + (n === 1 ? "" : "s") + " added");
+      }catch(err){ toast("That isn’t a statement bank file"); }
+    };
+    r.readAsText(f);
+  };
+}
+function onBank(e){
+  const b = e.target.closest("[data-bank]");
+  if(!b) return false;
+  const what = b.dataset.bank, j = +b.dataset.j;
+  if(what === "close"){ closePicker(); return true; }
+  if(what === "add"){ if(bankAdd(document.getElementById("bkText").value, document.getElementById("bkTag").value)){ openBank(); toast("Added to the bank"); } return true; }
+  if(what === "del"){ bank.splice(j, 1); saveBank(); openBank(); return true; }
+  if(what === "use"){
+    const t = bank[j].text;
+    if(!(lastText && document.contains(lastText))){ toast("Click in a box on the Strands tab first, then insert"); return true; }
+    closePicker(); insertSnippet(t, null, null); toast("Inserted"); return true;
+  }
+  if(what === "export"){ download("statement-bank.json", JSON.stringify({format: "rubric-statement-bank/1", statements: bank}, null, 2), "application/json"); return true; }
+  if(what === "import"){ document.getElementById("bkFile").click(); return true; }
+  return true;
+}
+
 const ACT = {
   "s-add"(){ doc.strands.push(newStrand(doc.strands)); render(); scrollToLast(".bstrand"); },
   "s-del"(i){
@@ -616,6 +773,11 @@ const ACT = {
   "pick"(i){ pickFor = i === "new" ? "new" : +i; openPicker(); },
   "snip"(i, el){ insertSnippet(el.dataset.t, i, el.dataset.b ? +el.dataset.b : null); },
   "std-whole"(){ stdWhole = !stdWhole; render(); },
+  "defaults"(i){
+    const n = fillDefaults(i); render();
+    toast(n ? n + " empty box" + (n === 1 ? "" : "es") + " filled from the curriculum — each needs editing to fit the task" : "Nothing to fill — every box already has text");
+  },
+  "bank"(){ openBank(); },
   "new"(){ if(!confirm("Start a new, empty rubric? Download this one first if you want to keep it.")) return;
     doc = blank(); notice = ""; tab = "task"; render(); toast("New rubric"); },
   "open"(){ $("#bFile").click(); },
@@ -703,6 +865,7 @@ function list(){
   document.getElementById("pkList").innerHTML = h || '<p class="hint">No content descriptions match.</p>';
 }
 function onPick(e){
+  if(onBank(e)) return;
   const b = e.target.closest("[data-pick]"), p = document.getElementById("bPick");
   if(!b){ if(e.target === p) closePicker(); return; }
   const what = b.dataset.pick;
@@ -710,9 +873,11 @@ function onPick(e){
   const c = byCode(b.dataset.code);
   if(pickFor === "new"){
     const s = newStrand(doc.strands); s.code = c.code;
-    doc.strands.push(s); closePicker(); tab = "strands"; render(); scrollToLast(".bstrand");
+    doc.strands.push(s);
+    const filled = fillDefaults(doc.strands.length - 1);
+    closePicker(); tab = "strands"; render(); scrollToLast(".bstrand");
     const nm = $$('[data-f$=".name"]').pop(); if(nm) nm.focus();
-    toast(c.code + " linked — write the row heading in your own words, then the bands");
+    toast(c.code + " linked, " + filled + " boxes drafted from the curriculum — now make each one fit the task");
     return;
   }
   const s = doc.strands[pickFor], codes = codesOf(s);

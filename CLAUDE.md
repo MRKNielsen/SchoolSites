@@ -934,6 +934,23 @@ right that are easy to lose:
   falls in a column, its content descriptions for the strand stand in, and
   the column says so. The data keeps Levels 5 and up (`MIN_LEVEL`) so that
   Level 7 and Levels 7–8 have a "towards".
+- **Default statements.** *Fill empty boxes with defaults* on a linked
+  strand (and automatically for a strand started from the picker) drafts the
+  heading, every band descriptor, both comment phrases and the band 0 first
+  step from the Towards / At / Above sentences: band 1 from Towards, the top
+  band from Above, the bands between from At. VCAA's wording is kept and only
+  reframed — "They represent …" becomes "Can represent …" (descriptor) and
+  "represent …" ("Ava can now …") — because conjugating verbs by rule goes
+  wrong. Fill **never overwrites** a box with text. Two At bands get the same
+  At wording on purpose: the curriculum has one At standard, and what lifts
+  work from one At band to the next is the teacher's call, so the Check tab
+  says so rather than the builder inventing a difference. Every box still
+  holding its default is listed there too (warnings, not errors).
+- **Statement bank.** A teacher's own reusable statements
+  (`rubric-builder:bank` in localStorage, `{text, tag}`), inserted into the
+  box last written in. Exported and imported as a
+  `rubric-statement-bank/1` file to share with colleagues; importing skips
+  duplicates. It is per browser, not part of any rubric.
 - **Sentence tagging.** Each standard is stored a sentence at a time with its
   strand and sub-strand. Mathematics' chart already splits the standard by
   strand. Science's doesn't, so `tag_standard()` places each paragraph by the

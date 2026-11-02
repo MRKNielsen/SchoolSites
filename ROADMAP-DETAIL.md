@@ -42,6 +42,17 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — default statements + statement bank in the builder (2 Nov 2026)
+
+Kodie asked for default statements; he chose band descriptors, comment
+phrases, the band 0 first step and a reusable bank. A strand linked to a code
+can be filled from its Towards / At / Above sentences (automatically when
+started from the picker); only empty boxes are filled. Wording stays VCAA's,
+reframed as "Can …" / "… can now …". Untouched defaults, and two bands with
+the same descriptor, are listed as warnings on the Check tab. The bank keeps
+a teacher's own statements in the browser and moves between people as a
+`.json` file. `test-rubric-builder.js` now 97 checks.
+
 ### Landed — Towards / At / Above standards in the builder (2 Nov 2026)
 
 Kodie asked whether the achievement standards could be grouped into Towards,
