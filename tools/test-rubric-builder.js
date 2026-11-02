@@ -250,12 +250,12 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(/No lower level/.test($('.bstrand[data-strand="1"] .bcol.towards').textContent)
        && /top of the F–10 curriculum/.test($('.bstrand[data-strand="1"] .bcol.above').textContent),
        'with only one level in the data, Towards and Above say why they are empty');
-    ok(/^Can explain how forces act/.test(B.doc.strands[1].bands[2].d), 'a strand started from the curriculum arrives with default descriptors');
+    ok(B.doc.strands[1].bands[1].d === 'Can explain how forces act.', 'a strand started from the curriculum arrives with a one-skill default descriptor');
     const box = $('[data-f="strands.1.bands.2.d"]');
     type(w, box, '');      /* clear the default, then write into it */
     box.dispatchEvent(new w.FocusEvent('focusin', { bubbles: true }));
     click(w, snips[1]);
-    ok(B.doc.strands[1].bands[2].d === 'They describe models.', 'clicking a sentence puts it in the last box written in');
+    ok(B.doc.strands[1].bands[2].d === 'Can describe models.', 'clicking a skill puts it in the last box written in, as “Can … .”');
     const out = B.exportRubric();
     ok(/© VCAA, licensed CC BY-NC/.test(out.attribution || ''), 'a rubric using VC2 codes carries VCAA\'s attribution line');
   }
@@ -315,30 +315,86 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     click(w, w.document.querySelector('.bpick-row [data-pick]'));
     const s = B.doc.strands[0];
     ok(s.code === 'VC2S8U14' && /^Balanced and unbalanced forces/.test(s.name), 'a strand from the picker takes the content description as its draft heading');
-    ok(/^Can identify sources of light/.test(s.bands[0].d), 'band 1 (Towards) is drafted from Level 5–6: "' + s.bands[0].d.slice(0, 50) + '…"');
-    ok(/^Can demonstrate how simple machines/.test(s.bands[1].d) && /represent and explain the effects of forces/.test(s.bands[1].d), 'band 2 (At) from Level 7–8, every Physical sciences sentence');
-    ok(/use Newton’s laws/.test(s.bands[3].d), 'band 4 (Above) from Level 9–10');
-    ok(!/They |Students |By the end/.test(s.bands.map(b => b.d).join(' ')), 'VCAA’s “They …” becomes “Can …” — no stray “They” or “By the end of”');
-    ok(s.can[1] === 'demonstrate how simple machines can be used for a purpose', '“Ava can now …” takes the base form, lower-case, no full stop');
+    ok(s.bands[0].d === '', 'band 1 (Towards) is left blank: nothing at Level 5–6 is about forces, and a default about light would be wrong');
+    ok(s.bands[1].d === 'Can represent and explain the effects of forces acting on objects.', 'band 2 (At) is the one Level 7–8 skill about forces');
+    ok(s.bands[2].d === '', 'band 3 is left blank rather than repeating band 2 — only one At skill matches');
+    ok(s.bands[3].d === 'Can use Newton’s laws to describe and predict the motion of objects in a system.', 'band 4 (Above) is the Level 9–10 skill about motion');
+    ok(s.bands.every(b => B.splitSkills(b.d).length <= 1), 'every default descriptor is a single skill');
+    ok(s.can[1] === 'represent and explain the effects of forces acting on objects', '“Ava can now …” takes the base form, lower-case, no full stop');
     ok(s.next[0] === s.can[1] && /\{their\}/.test(s.next[3]), 'a band’s next step is the band above’s “can now”; the top band gets an extension step');
-    ok(/^identify sources of light/.test(s.start), 'band 0’s first step comes from the Towards sentences');
+    ok(s.start === 'represent and explain the effects of forces acting on objects', 'band 0’s first step falls back to the At skill when Towards has nothing');
+    B.doc.criteria.push({ id: 'Q1', q: 'Q1', part: 'A', strand: 's1', band: 2, max: 1 });
     let r = B.check();
-    ok(r.warnings.some(x => /Strand 1 still has default wording in 14 boxes \(row heading/.test(x)), 'Check lists boxes still holding defaults: "' + (r.warnings.find(x => /default wording/.test(x)) || '').slice(0, 70) + '…"');
-    ok(r.warnings.some(x => /bands 2 and 3 have the same descriptor/.test(x)), 'and says when two At bands share one descriptor');
-    type(w, $('[data-f="strands.0.bands.2.d"]'), 'Represents a force diagram and predicts the motion of an object from it.');
-    r = B.check();
-    ok(!r.warnings.some(x => /same descriptor/.test(x)) && r.warnings.some(x => /default wording in 13 boxes/.test(x)), 'editing band 3 clears that warning and the count drops');
+    B.doc.criteria.pop();
+    ok(r.errors.some(x => /band 1: descriptor \(d\) is empty/.test(x)) && r.errors.some(x => /band 3: descriptor \(d\) is empty/.test(x)),
+       'the blank bands are listed for the teacher to write');
+    ok(r.warnings.some(x => /Strand 1 still has default wording in \d+ boxes \(row heading/.test(x)), 'Check lists boxes still holding defaults: "' + (r.warnings.find(x => /default wording/.test(x)) || '').slice(0, 70) + '…"');
     /* Fill never overwrites */
     type(w, $('[data-f="strands.0.name"]'), 'Explains motion with forces');
-    type(w, $('[data-f="strands.0.bands.0.d"]'), '');
+    type(w, $('[data-f="strands.0.bands.2.d"]'), 'Represents a force diagram and predicts the motion of an object from it.');
+    type(w, $('[data-f="strands.0.bands.1.d"]'), '');
     click(w, $('[data-act="defaults"][data-i="0"]'));
-    ok(B.doc.strands[0].name === 'Explains motion with forces' && /^Can identify sources of light/.test(B.doc.strands[0].bands[0].d)
+    ok(B.doc.strands[0].name === 'Explains motion with forces' && /^Can represent and explain/.test(B.doc.strands[0].bands[1].d)
        && /^Represents a force diagram/.test(B.doc.strands[0].bands[2].d), 'Fill puts back only the emptied box and leaves typed text alone');
     /* 10A: no standard, its content descriptions stand in */
     B.doc.strands.push({ id: 's2', name: '', code: 'VC2M10AA01', start: '', bands: [1, 2, 3, 4].map(() => ({ q: '', d: '' })), can: ['', '', '', ''], next: ['', '', '', ''] });
     B.render(); click(w, $('[data-act="defaults"][data-i="1"]'));
     const t = B.doc.strands[1];
-    ok(/^Can /.test(t.bands[1].d) && t.bands[1].d.length > 30 && /^Can /.test(t.bands[0].d), 'a Level 10A code still gets drafts (At from 10A content descriptions, Towards from Level 10)');
+    ok(t.bands[1].d === 'Can investigate the concept of a polynomial.' && t.bands[2].d === 'Can apply the factor and remainder theorems to solve problems.',
+       'a Level 10A code: the two At bands take its two skills, in order (from 10A’s content descriptions, as it has no standard)');
+  }
+
+  console.log('\n=== discrete skills ===');
+  {
+    const { w, B, $, $$ } = await open();
+    const sp = B.splitSkills;
+    const kodie = 'Can use integers to represent points on a number line and on the Cartesian plane; solve problems using the properties of prime, composite, square and triangular numbers; order common fractions, giving reasons, and add and subtract fractions with related denominators; use all 4 operations with decimals and connect decimal representations of measurements to the metric system; solve problems involving finding a fraction, decimal or percentage of a quantity and use estimation to find approximate solutions to problems involving rational numbers and percentages; use mathematical modelling to solve financial and other practical problems involving percentages and rational numbers, formulating and solving the problem, and justifying choices.';
+    const k = sp(kodie);
+    ok(k.length === 9 && k[2] === 'order common fractions, giving reasons' && k[3] === 'add and subtract fractions with related denominators'
+       && k[5] === 'connect decimal representations of measurements to the metric system',
+       'Kodie’s Level 6 Number descriptor splits into its 9 skills');
+    const cases = [
+      ['They solve problems using the properties of prime, composite, square and triangular numbers.', 1, 'a list of nouns stays whole'],
+      ['Students use place value to write and order decimals including decimals greater than one.', 1, 'verbs sharing an object stay whole (write and order decimals)'],
+      ['They represent and explain the effects of forces acting on objects.', 1, 'a verb pair on one object stays whole'],
+      ['Students conduct repeated chance experiments, list the possible outcomes, estimate likelihoods and make comparisons between those with and without equally likely outcomes.', 4, 'a plural noun ("experiments") is not mistaken for a verb'],
+      ['They compare the variation in distributions of random samples of the same and different size from a given population with respect to shape, measures of central tendency and range.', 1, '"measures" after a bare comma is a noun'],
+      ['They represent linear, quadratic and exponential functions numerically, graphically and algebraically, and use them to model situations and solve practical problems.', 2, 'a purpose clause ("to model … and solve …") stays one skill'],
+      ['Reads daylight and darkness off a diagram, and states the rotation period, the orbital period and the tilt angle.', 2, 'a teacher’s own descriptor ("…, and states …") splits too'],
+    ];
+    cases.forEach(([t, n, why]) => ok(sp(t).length === n, why + ' (' + sp(t).length + ')'));
+    /* the warning: more skills than questions behind the band */
+    B.doc = { format: 'rubric-marker/1', id: 'w', title: 'W', bands: ['Towards', 'At', 'At', 'Above'], parts: [{ id: 'A', name: 'A' }],
+      strands: [{ id: 's1', name: 'Number', start: 'x', maxBand: 1, bands: [{ q: '', d: kodie }], can: ['x'], next: ['x'] }],
+      criteria: [{ id: 'Q1', q: 'Q1', part: 'A', strand: 's1', band: 1, max: 2 }, { id: 'Q2', q: 'Q2', part: 'A', strand: 's1', band: 1, max: 2 }] };
+    let r = B.check();
+    ok(r.warnings.some(x => /band 1: the descriptor names 9 separate skills, but only 2 questions give evidence/.test(x)), 'a 9-skill descriptor with 2 questions behind it is flagged');
+    B.doc.strands[0].bands[0].d = 'Reads daylight and darkness off a diagram, and states the rotation period.';
+    r = B.check();
+    ok(!r.warnings.some(x => /separate skills/.test(x)), '...but 2 skills evidenced by 2 questions is fine');
+    /* choosing which skill of a code the strand assesses */
+    B.doc = { format: 'rubric-marker/1', id: 'f', title: 'F', bands: ['Towards', 'At', 'At', 'Above'], parts: [{ id: 'A', name: 'A' }],
+      strands: [{ id: 's1', name: '', code: 'VC2M8A02', start: '', bands: [1, 2, 3, 4].map(() => ({ q: '', d: '' })), can: ['', '', '', ''], next: ['', '', '', ''] }], criteria: [] };
+    B.showTab('strands');
+    const chips = $$('.bfocus [data-act="focus"]');
+    ok(chips.length === 3 && /^Graph linear relations/.test(chips[0].textContent) && /^Verify solutions/.test(chips[2].textContent),
+       'VC2M8A02 is offered as its 3 skills (graph · solve · verify)');
+    click(w, chips[0]);
+    ok(JSON.stringify(B.doc.strands[0].focus) === JSON.stringify(['graph linear relations on the Cartesian plane using digital tools where appropriate']), 'choosing a skill sets the strand’s focus');
+    click(w, $('[data-act="defaults"][data-i="0"]'));
+    ok(/^Graph linear relations on the Cartesian plane/.test(B.doc.strands[0].name) && B.doc.strands[0].bands[1].d === 'Can graph linear relations.',
+       'with one skill chosen, the heading is that skill and band 2 is the matching At skill');
+    /* one strand per skill */
+    B.doc.strands = [{ id: 's1', name: '', code: 'VC2M8A02', start: '', bands: [1, 2, 3, 4].map(() => ({ q: '', d: '' })), can: ['', '', '', ''], next: ['', '', '', ''] }];
+    B.showTab('strands');
+    w.confirm = () => true;
+    click(w, $('[data-act="split-strand"][data-i="0"]'));
+    const st = B.doc.strands;
+    ok(st.length === 3 && st.every(x => x.code === 'VC2M8A02' && x.focus.length === 1) && new Set(st.map(x => x.id)).size === 3,
+       'One strand per skill makes 3 strands with the same code, one skill each, distinct ids');
+    ok(/^Graph/.test(st[0].name) && /^Solve linear equations/.test(st[1].name) && /^Verify solutions/.test(st[2].name), 'each headed by its own skill');
+    ok(st[2].bands[0].d === 'Can verify their solutions through substitution.', 'and drafted against its own skill (verify ← Level 7’s “verify their solutions”)');
+    ok(B.exportRubric().strands.every(x => Array.isArray(x.focus)) && B.check().errors.every(e => !/focus/.test(e)), 'focus is saved with the rubric, and the marker accepts it');
   }
 
   console.log('\n=== statement bank ===');
@@ -401,7 +457,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(/→ band 1/.test(txt('towards')) && /→ band 2/.test(txt('at')) && /→ band 4/.test(txt('above')),
        'with bands Towards / At / At / Above, the columns go to bands 1, 2 and 4');
     click(w, [...col('towards').querySelectorAll('.chipbtn')].find(b => /sources of light/.test(b.textContent)));
-    ok(/^They identify sources of light/.test(B.doc.strands[0].bands[0].d), 'clicking a Towards sentence, with no box in use, fills band 1’s descriptor');
+    ok(B.doc.strands[0].bands[0].d === 'Can identify sources of light.', 'clicking a Towards skill, with no box in use, fills band 1’s descriptor as “Can … .”');
     click(w, $('[data-act="std-whole"]'));
     ok(/plate tectonics/.test(txt('at')), 'the toggle shows whole standards');
     click(w, $('[data-act="std-whole"]'));

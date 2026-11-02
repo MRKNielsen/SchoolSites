@@ -944,11 +944,34 @@ right that are easy to lose:
   falls in a column, its content descriptions for the strand stand in, and
   the column says so. The data keeps Levels 5 and up (`MIN_LEVEL`) so that
   Level 7 and Levels 7–8 have a "towards".
+- **Discrete skills — one per descriptor.** VCAA writes several skills into
+  one sentence, and content descriptions bundle them too (VC2M8A02 is three:
+  graph linear relations; solve linear equations and inequalities; verify
+  solutions by substitution). A band is awarded only when every question
+  behind it is done, so a descriptor must say what those questions show.
+  `splitSkills()` breaks text at a comma, semicolon or "and" **only where
+  the next word starts a new verb phrase and the piece before has its own
+  object**: noun lists ("prime, composite, square and triangular numbers"),
+  shared objects ("write and order decimals", "add and subtract fractions")
+  and purpose clauses ("use them to model situations and solve problems")
+  stay whole; a plural noun is never taken for a verb ("experiments",
+  "measures of central tendency"). The Towards / At / Above columns show
+  skills, not sentences. A linked code with several skills offers them as
+  chips — the strand's `focus` (saved in the rubric, ignored by the marker)
+  — and *One strand per skill* splits it into a strand each. The Check tab
+  flags a descriptor naming more skills than it has questions behind it.
+  `VERBS` in rubric-builder.js is the list the splitter knows; a skill that
+  fails to split usually means a missing verb.
 - **Default statements.** *Fill empty boxes with defaults* on a linked
   strand (and automatically for a strand started from the picker) drafts the
   heading, every band descriptor, both comment phrases and the band 0 first
-  step from the Towards / At / Above sentences: band 1 from Towards, the top
-  band from Above, the bands between from At. VCAA's wording is kept and only
+  step — **one skill per band**, the skill in its column closest to the
+  strand's focus (or code), scored on shared distinctive words scaled by the
+  skill's length: band 1 from Towards, the top band from Above, two At bands
+  from the two closest At skills in curriculum order (a second pick must be
+  at least half as close, or it is left blank). Where a level has nothing on
+  the topic (Levels 5–6 have no forces), the band is **left blank** for the
+  teacher rather than filled with something off-topic. VCAA's wording is kept and only
   reframed — "They represent …" becomes "Can represent …" (descriptor) and
   "represent …" ("Ava can now …") — because conjugating verbs by rule goes
   wrong. Fill **never overwrites** a box with text. Two At bands get the same

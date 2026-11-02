@@ -42,6 +42,19 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — one skill per descriptor in the builder (2 Nov 2026)
+
+Kodie spotted default descriptors carrying six or more skills — e.g. the
+whole Level 6 Number standard joined with semicolons. Two causes: the
+defaults joined every sentence for the sub-strand, and VCAA's sentences (and
+content descriptions) bundle skills themselves. Now `splitSkills()` breaks
+text into discrete skills (his Level 6 example gives exactly nine; the rules
+were checked against every one of the 195 standard sentences), the columns
+show skills, each default band takes the single closest skill (blank where a
+level has nothing relevant), a code's own skills can be chosen as the
+strand's focus or split into a strand each, and the Check tab flags a
+descriptor with more skills than questions behind it. Builder tests 125.
+
 ### Landed — rubrics in use are protected (2 Nov 2026)
 
 Until now, editing a rubric after a class was part-marked could lose marks

@@ -141,6 +141,7 @@ function exportRubric(src){
     const marks = d.criteria.filter(c => c.strand === s.id).reduce((t, c) => t + c.max, 0);
     if("weight" in s) s.weight = marks;
   });
+  d.strands.forEach(s => { if(Array.isArray(s.focus) && !s.focus.length) delete s.focus; });
   if(d.strands.some(s => s.code && /^VC2/.test(s.code)) && !d.attribution) d.attribution = ATTRIBUTION;
   /* a change that alters what entered marks mean gets a new version number,
      so a class marked on the old one can be told what changed */
@@ -255,6 +256,85 @@ let stdWhole = false;      // show whole standards, not just the linked strand's
    standard of the level above. Each column is narrowed to the linked code's
    sub-strand (Science) or strand (Mathematics), using the tags
    tools/build-curriculum.py gives each sentence. */
+/* How closely a sentence matches the linked content description(s): the
+   distinctive words they share, each weighted by how few of the column's
+   sentences use it. Common curriculum verbs (explain, describe …) don't
+   count — every sentence has them. Score 0 = nothing in common. */
+const STOPW = new Set(("the and for with that this from into their them they students student use using uses used including include includes "
+  + "level end by of to in on a an as is are be can or its it at how what when which why who between different other such these those than "
+  + "through about also both more most each ways way may will within range variety selected select appropriate "
+  + "explain explains describe identify represent represented investigate investigated model models analyse apply compare "
+  + "demonstrate predict design construct relate related observe solve problem problems simple key processes process").split(" "));
+const stemsOf = t => new Set((String(t || "").toLowerCase().match(/[a-z]+/g) || [])
+  .filter(w => w.length > 2 && !STOPW.has(w)).map(w => w.replace(/s$/, "").slice(0, 6)).filter(w => !STOPW.has(w)));
+/* ---- discrete skills ----
+   VCAA writes several skills into one sentence ("substitute into formulas,
+   find unknown values, …, expand binomial expressions and factorise …").
+   A band is awarded only when every question behind it is done, so a
+   descriptor has to name what its questions show: one skill, usually. Split
+   at a comma, semicolon or "and" ONLY where the next word starts a new verb
+   phrase, and only once the piece before it has an object — so "prime,
+   composite, square and triangular numbers" stays whole, and so do paired
+   verbs on one object ("add and subtract fractions", "represent and explain
+   the effects of forces"). Participles ("giving reasons", "justifying
+   choices") qualify the skill before them and stay attached. */
+const VERBS = new Set(("use apply solve find order add subtract multiply divide connect round convert compare represent describe explain "
+  + "identify recognise interpret investigate calculate estimate measure locate list sketch graph plot factorise expand manipulate "
+  + "substitute simplify establish determine design construct create conduct plan analyse evaluate discuss examine distinguish "
+  + "classify model relate provide demonstrate undertake observe make propose predict select document communicate write sequence "
+  + "formulate refine justify verify choose name state label read assign record collect generate organise process summarise "
+  + "transform reflect translate rotate prove define perform implement explore experiment test describe sort continue extend "
+  + "count partition share approximate interpret pose plan report state rearrange inform decide critique develop express judge "
+  + "illustrate assess build draw").split(/\s+/));
+/* "states", "labels" (a teacher's descriptor: "…, and states the period")
+   count as verbs only after "and" — after a bare comma, "measures of
+   central tendency" is a noun */
+const isBase = w => VERBS.has(w);
+const isVerb = (w, andJoin) => isBase(w) || (andJoin && w.length > 3 && ((/s$/.test(w) && VERBS.has(w.slice(0, -1))) || (/es$/.test(w) && VERBS.has(w.slice(0, -2)))));
+function splitSkills(text){
+  let t = String(text || "").trim()
+    .replace(/^By the end of Levels? [^,]+,\s*students\s+/i, "").replace(/^(They|Students|Can)\s+/i, "").replace(/[.;:\s]+$/, "");
+  const out = [];
+  t.split(/\s*;\s*/).forEach(part => {
+    const re = /(,\s+and\s+|,\s+|\s+and\s+)([A-Za-z]+)/g;
+    let start = 0, m;
+    while((m = re.exec(part))){
+      const next = m[2].toLowerCase(), andJoin = /and/.test(m[1]);
+      if(!isVerb(next, andJoin)) continue;
+      const left = part.slice(start, m.index);
+      const words = (left.toLowerCase().match(/[a-z]+/g) || []);
+      if(!words.some(w => !isBase(w) && w !== "and")) continue;         // no object yet: "add and subtract"
+      /* shared object: "write and order decimals". Base forms only — a plural
+         noun ("experiments", "graphs") is not a verb waiting for an object */
+      if(isBase(words[words.length - 1])) continue;
+      /* "use them to model situations and solve problems": after "to <verb>",
+         a plain "and" carries on the same purpose */
+      if(m[1].trim() === "and" && /\bto ([a-z]+)/.test(left.toLowerCase()) && isBase(left.toLowerCase().match(/\bto ([a-z]+)/)[1])) continue;
+      out.push(left); start = m.index + m[1].length;
+    }
+    out.push(part.slice(start));
+  });
+  return out.map(x => x.replace(/^[\s,]+|[\s,]+$/g, "").replace(/^and\s+/i, "").replace(/^(they|students)\s+/i, "").replace(/^./, c => c.toLowerCase())).filter(x => x.length > 2);
+}
+
+function rankItems(texts, ref){
+  const R = stemsOf(ref), S = texts.map(stemsOf), n = texts.length, df = {};
+  S.forEach(set => set.forEach(w => df[w] = (df[w] || 0) + 1));
+  /* divided by √(the skill's own word count), so a long skill doesn't win
+     just by sharing more words than a short, exact one */
+  return texts.map((text, j) => ({text, score: [...S[j]].filter(w => R.has(w)).reduce((t, w) => t + Math.log((n + 1) / df[w]), 0) / Math.sqrt(Math.max(1, S[j].size))}));
+}
+
+/* A content description can bundle several skills too (VC2M8A02: graph
+   linear relations; solve linear equations and inequalities; verify
+   solutions by substitution). strand.focus lists the ones this strand
+   assesses; empty means the whole description. */
+const codeSkills = known => [].concat(...known.map(k => splitSkills(k.text)));
+function strandRef(s, known){
+  const f = Array.isArray(s.focus) ? s.focus.filter(Boolean) : [];
+  return f.length ? f.join(" ") : known.map(x => x.text).join(" ");
+}
+
 function ladder(k, whole = stdWhole){
   const subj = VC.subjects.find(x => x.id === k.subjectId);
   const i = subj.levels.findIndex(l => l.level === k.level);
@@ -264,7 +344,7 @@ function ladder(k, whole = stdWhole){
     if(!tagged && !lv.achievement){
       /* Level 10A: no achievement standard, so its content descriptions for the strand stand in */
       const cds = CD.filter(c => c.subjectId === k.subjectId && c.level === lv.level && (whole || c.strand === k.strand));
-      return {role, level: lv.level, items: cds.map(c => c.text.charAt(0).toUpperCase() + c.text.slice(1) + "."),
+      return {role, level: lv.level, items: rankItems([].concat(...cds.map(c => splitSkills(c.text))), ref),
               note: "VCAA sets no achievement standard for Level " + lv.level + "; these are its content descriptions" + (whole ? "." : " for " + k.strand + ".")};
     }
     let items = tagged ? tagged : sentences(lv.achievement).map(t => ({text: t.trim()}));
@@ -276,8 +356,10 @@ function ladder(k, whole = stdWhole){
       else if(byStrand.length){ items = byStrand; note = "Nothing at this level for " + k.substrand + " alone; showing all of " + k.strand + "."; }
       else note = "Nothing at this level for " + k.strand + "; showing the whole standard.";
     }
-    return {role, level: lv.level, items: items.map(x => x.text), note};
+    return {role, level: lv.level, items: rankItems([].concat(...items.map(x => splitSkills(x.text))), ref), note};
   };
+  /* rank against every linked code the strand carries (k is the first) */
+  const ref = (k.ref || k.text);
   return [col(subj.levels[i - 1], "towards"), col(subj.levels[i], "at"), col(subj.levels[i + 1], "above")];
 }
 /* ============================ DEFAULT STATEMENTS ============================
@@ -302,29 +384,54 @@ function roleOfBand(b, mb){
   if(b === mb && mb >= 3) return "above";
   return "at";
 }
+/* One skill per band: each band's default is the single sentence in its
+   column that best matches the linked content description. A level with
+   nothing relevant (Levels 5–6 have no forces; nothing sits above 9–10)
+   leaves the band blank for the teacher, rather than filling it with a
+   sentence about something else. Earlier versions put the whole sub-strand
+   into every band — five skills in one descriptor, which no single band of
+   questions can evidence. */
 function defaultsFor(s){
   if(!VC) return null;
-  const k = codesOf(s).map(byCode).filter(Boolean)[0];
-  if(!k) return null;
-  const cols = ladder(k, false), by = {};
-  cols.forEach(c => by[c.role] = c.items);
-  /* a column with nothing in it (no lower level, top of F-10) borrows At */
-  const items = role => (by[role] && by[role].length ? by[role] : by.at) || [];
+  const known = codesOf(s).map(byCode).filter(Boolean);
+  if(!known.length) return null;
+  const k = Object.assign({}, known[0], {ref: strandRef(s, known)});
+  const cols = ladder(k, false), by = {}, lvl = {};
+  cols.forEach(c => { by[c.role] = c.items; lvl[c.role] = c.level; });
+  /* the n closest skills in a column, back in curriculum order */
+  /* a second pick has to be at least half as close as the first, or the
+     band is left for the teacher rather than filled with a near-miss */
+  const top = (role, n) => {
+    const r = (by[role] || []).map((x, j) => Object.assign({j}, x)).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+    return r.filter((x, q) => q === 0 || x.score >= r[0].score / 2).slice(0, n).sort((a, b) => a.j - b.j).map(x => x.text);
+  };
+  const best = role => top(role, 1)[0] || "";
   const mb = +s.maxBand || 4;
-  const out = {name: k.text.charAt(0).toUpperCase() + k.text.slice(1), bands: [], can: [], next: [], start: ""};
+  /* one chosen skill makes a proper row heading; otherwise the description, flagged on Check */
+  const focus = Array.isArray(s.focus) ? s.focus.filter(Boolean) : [];
+  const head = focus.length === 1 ? focus[0] : k.text;
+  const out = {name: head.charAt(0).toUpperCase() + head.slice(1), bands: [], can: [], next: [], start: "", gaps: [], picks: {}};
+  const roles = Array.from({length: mb}, (_, j) => roleOfBand(j + 1, mb));
+  /* two At bands take the two closest At skills, so they progress rather than repeat */
+  const atBands = roles.map((r, j) => r === "at" ? j + 1 : 0).filter(Boolean), atPicks = top("at", atBands.length);
   for(let b = 1; b <= mb; b++){
-    const its = items(roleOfBand(b, mb));
-    out.bands[b-1] = its.length ? "Can " + its.map(baseForm).join("; ") + "." : "";
-    out.can[b-1] = its.length ? baseForm(its[0]) : "";
+    const role = roles[b-1];
+    const t = role === "at" ? (atPicks[atBands.indexOf(b)] || "") : best(role);
+    out.bands[b-1] = t ? "Can " + t + "." : "";
+    out.can[b-1] = t;
+    if(t) out.picks[t] = (out.picks[t] ? out.picks[t] + ", " : "band ") + b;
+    else out.gaps.push("band " + b + (role === "at" && atPicks.length ? " (only " + atPicks.length + " At skill" + (atPicks.length === 1 ? "" : "s") + " match" + (atPicks.length === 1 ? "es" : "") + ")"
+      : lvl[role] ? " (nothing at Level " + lvl[role] + " matches)" : " (no level " + (role === "towards" ? "below" : "above") + ")"));
   }
   for(let b = 1; b <= mb; b++) out.next[b-1] = b < mb ? (out.can[b] || "") : TOP_NEXT;
-  out.start = baseForm((items("towards")[0]) || "");
+  out.start = best("towards") || best("at");
   return out;
 }
 /* fill the empty boxes of strand i; returns how many were filled */
 function fillDefaults(i){
   const s = doc.strands[i], d = defaultsFor(s);
   if(!d) return 0;
+  fillDefaults.gaps = d.gaps;
   let n = 0;
   const put = (get, set, v) => { if(v && !String(get() || "").trim()){ set(v); n++; } };
   put(() => s.name, v => s.name = v, d.name);
@@ -352,6 +459,14 @@ function defaultWarnings(){
       }
       if(s.start && s.start === d.start) left.push("band 0 first step");
       if(left.length) w.push(name + " still has default wording in " + left.length + " box" + (left.length === 1 ? "" : "es") + " (" + left.slice(0, 4).join(", ") + (left.length > 4 ? "…" : "") + "). Make it specific to this task.");
+    }
+    /* a band is awarded only when every question behind it is done, so a
+       descriptor listing several separate skills can't match its evidence */
+    for(let b = 1; b <= mb; b++){
+      const k = splitSkills(s.bands[b-1].d).length;
+      const q = doc.criteria.filter(c => c.strand === s.id && +c.band === b).length;
+      if(k > 1 && k > q)
+        w.push(name + ", band " + b + ": the descriptor names " + k + " separate skills, but " + (q ? "only " + q + " question" + (q === 1 ? " gives" : "s give") : "no question gives yet") + " evidence for it. Every question behind a band must be done for it to be awarded, so the descriptor should say what those questions show — trim it, or split the skills across bands or strands.");
     }
     for(let b = 1; b < mb; b++){
       const a = (s.bands[b-1].d || "").trim();
@@ -492,19 +607,29 @@ function strandCard(s, i){
   if(known.length){
     h += `<div class="bcur">` + known.map(k => `<div class="bcd"><span class="ckcode cur">${esc(k.code)}</span> ${esc(k.text)} <span class="hint">${esc(k.subject)} · Level ${esc(k.level)} · ${esc(k.substrand || k.strand)}</span>
       <button class="chipbtn" data-act="snip" data-t="${esc(k.text)}">use text</button></div>`).join("");
-    const k = known[0], cols = ladder(k);
+    const cs = codeSkills(known), focus = Array.isArray(s.focus) ? s.focus : [];
+    if(cs.length > 1){
+      h += `<div class="bfocus"><span class="bfocus-h">${cs.length} skills in ${esc(known.map(x => x.code).join(", "))} — which does this strand assess?</span>`
+        + cs.map(t => `<button class="chipbtn" data-act="focus" data-i="${i}" data-t="${esc(t)}" aria-pressed="${focus.includes(t)}">${esc(cap(t))}</button>`).join("")
+        + `<span class="hint">${focus.length ? "The standards below are ranked against the chosen skill" + (focus.length === 1 ? "" : "s") + "." : "None chosen: ranked against the whole description."}</span>`
+        + `<button class="btn ghost small" data-act="split-strand" data-i="${i}">One strand per skill (${cs.length} strands)</button></div>`;
+    }
+    const k = Object.assign({}, known[0], {ref: strandRef(s, known)}), cols = ladder(k), picks = (defaultsFor(s) || {}).picks || {};
     const name = {towards: "Towards", at: "At", above: "Above"};
     h += `<div class="bladder"><div class="bladder-h"><b>Achievement standards</b>
         <span class="iobar flush"><button class="btn ghost small" data-act="defaults" data-i="${i}" title="Drafts from the Towards / At / Above sentences; boxes with text are left alone">Fill empty boxes with defaults</button>
         <button class="chipbtn" data-act="std-whole" aria-pressed="${stdWhole}">${stdWhole ? "Showing whole standards — show just " + esc(k.substrand) : "Showing " + esc(k.substrand) + " — show whole standards"}</button></span></div>
       <div class="bladder-cols">` + cols.map(c => {
         const b = bandFor(c.role, s);
+        const top = Math.max(0, ...c.items.map(x => x.score));
         return `<div class="bcol ${c.role}"><h4>${name[c.role]}${c.level ? ` <span>Level ${esc(c.level)}</span>` : ""}${c.items.length ? ` <em>→ band ${b}</em>` : ""}</h4>`
           + (c.note ? `<p class="hint">${esc(c.note)}</p>` : "")
-          + c.items.map(t => `<button class="chipbtn" data-act="snip" data-i="${i}" data-b="${b}" data-t="${esc(t)}">${esc(t)}</button>`).join("")
+          + (c.items.length && !top ? `<p class="hint bnomatch">Nothing at this level matches ${esc(known.map(x => x.code).join(", "))} — the default leaves band ${b} for you to write.</p>` : "")
+          + c.items.map(x => { const pk = !stdWhole && picks[x.text];
+              return `<button class="chipbtn${pk ? " best" : ""}" data-act="snip" data-i="${i}" data-b="${b}" data-t="${esc(x.text)}"${pk ? ' title="Closest to the linked content description"' : ""}>${esc(cap(x.text))}${pk ? ` <span class="bpick-tag">default · ${esc(pk)}</span>` : ""}</button>`; }).join("")
           + `</div>`;
       }).join("") + `</div>
-      <p class="hint">VCAA writes one achievement standard per level, so <b>Towards</b> and <b>Above</b> are the standards for the levels either side of ${esc(k.code)}’s. Click a sentence to add it to that band’s descriptor — or to the box you’re writing in, if it’s on this strand — then make it specific to the task.</p></div>`;
+      <p class="hint">VCAA writes one achievement standard per level, so <b>Towards</b> and <b>Above</b> are the standards for the levels either side of ${esc(k.code)}’s. Each sentence is broken into its separate skills, because a band can only be awarded for what its questions show. Click a skill to add it to that band’s descriptor — or to the box you’re writing in, if it’s on this strand — then make it specific to the task.</p></div>`;
     h += `</div>`;
   } else if(codes.length && VC){
     h += `<p class="hint">${esc(codes.join(", "))} isn’t in the curriculum data here (Science 7–10, Mathematics 7–10A). It will still be shown on the rubric.</p>`;
@@ -712,6 +837,8 @@ function insertSnippet(t, si, band){
   /* the box being written in, if it is on this strand; else the band's descriptor */
   const own = lastText && document.contains(lastText) && (si == null || (lastText.closest(".bstrand") || {dataset: {}}).dataset.strand === String(si));
   const el = own ? lastText : (si != null && band ? app.querySelector(`[data-f="strands.${si}.bands.${band - 1}.d"]`) : null);
+  /* a skill dropped into an empty descriptor reads as one: "Can … ." */
+  if(el && /\.d$/.test(el.dataset.f || "") && !el.value.trim() && /^[a-z]/.test(t)) t = "Can " + t + ".";
   if(!el){ try{ navigator.clipboard.writeText(t); }catch(e){} toast("Click in a descriptor or comment box first — copied instead"); return; }
   const a = el.selectionStart != null ? el.selectionStart : el.value.length, b = el.selectionEnd != null ? el.selectionEnd : a;
   const before = el.value.slice(0, a), sp = before && !/\s$/.test(before) ? " " : "";
@@ -866,9 +993,28 @@ const ACT = {
   "pick"(i){ pickFor = i === "new" ? "new" : +i; openPicker(); },
   "snip"(i, el){ insertSnippet(el.dataset.t, i, el.dataset.b ? +el.dataset.b : null); },
   "std-whole"(){ stdWhole = !stdWhole; render(); },
+  "focus"(i, el){
+    const s = doc.strands[i], t = el.dataset.t, f = Array.isArray(s.focus) ? s.focus : [];
+    s.focus = f.includes(t) ? f.filter(x => x !== t) : [...f, t];
+    if(!s.focus.length) delete s.focus;
+    render();
+  },
+  /* a strand per skill of its code: the first keeps this strand, the rest
+     are new strands straight after it, each drafted from its own skill */
+  "split-strand"(i){
+    const s = doc.strands[i], cs = codeSkills(codesOf(s).map(byCode).filter(Boolean));
+    if(cs.length < 2) return;
+    if(!confirm("Make " + cs.length + " strands from " + s.code + ", one per skill? This strand keeps the first skill; " + (cs.length - 1) + " new strand" + (cs.length === 2 ? "" : "s") + " follow it.")) return;
+    s.focus = [cs[0]];
+    const added = [];
+    const add = cs.slice(1).map(t => { const n = newStrand(doc.strands.concat(added)); n.code = s.code; n.focus = [t]; added.push(n); return n; });
+    doc.strands.splice(i + 1, 0, ...add);
+    let filled = 0; for(let j = i; j <= i + add.length; j++) filled += fillDefaults(j);
+    render(); toast(cs.length + " strands, one skill each" + (filled ? " — " + filled + " empty boxes drafted" : "") + ". Tag each strand’s questions on the Questions tab.");
+  },
   "defaults"(i){
     const n = fillDefaults(i); render();
-    toast(n ? n + " empty box" + (n === 1 ? "" : "es") + " filled from the curriculum — each needs editing to fit the task" : "Nothing to fill — every box already has text");
+    toast(n ? n + " empty box" + (n === 1 ? "" : "es") + " filled from the curriculum — each needs editing to fit the task." + (fillDefaults.gaps && fillDefaults.gaps.length ? " Left for you: " + fillDefaults.gaps.join(", ") + "." : "") : "Nothing to fill — every box already has text");
   },
   "bank"(){ openBank(); },
   "new"(){ if(!confirm("Start a new, empty rubric? Download this one first if you want to keep it.")) return;
@@ -975,7 +1121,7 @@ function onPick(e){
     const filled = fillDefaults(doc.strands.length - 1);
     closePicker(); tab = "strands"; render(); scrollToLast(".bstrand");
     const nm = $$('[data-f$=".name"]').pop(); if(nm) nm.focus();
-    toast(c.code + " linked, " + filled + " boxes drafted from the curriculum — now make each one fit the task");
+    toast(c.code + " linked, " + filled + " boxes drafted from the curriculum — now make each one fit the task." + (fillDefaults.gaps && fillDefaults.gaps.length ? " Left for you: " + fillDefaults.gaps.join(", ") + "." : ""));
     return;
   }
   const s = doc.strands[pickFor], codes = codesOf(s);
@@ -1041,7 +1187,7 @@ function wire(){
 }
 
 /* expose for tests and the console */
-window.rubricBuilder = {
+window.rubricBuilder = {splitSkills, defaultsFor: i => defaultsFor(doc.strands[i]),
   get doc(){ return doc; }, set doc(d){ doc = tidy(d); render(); },
   exportRubric, check, parseBooklet, autoEvidence: (sid, b) => autoEvidence(doc, sid, b), render, act: (n, i) => ACT[n](i),
   showTab: t => { tab = t; render(); }, adopt, impact, classInUse, get baseline(){ return baseline; }
