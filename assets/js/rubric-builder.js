@@ -170,6 +170,47 @@ const byCode = code => CD.find(c => c.code === code);
 const codesOf = s => String(s.code || "").split(/[\s,;]+/).filter(Boolean);
 /* the achievement standard, a sentence at a time, as insertable snippets */
 const sentences = t => String(t || "").replace(/\s+/g, " ").match(/[^.!?]+[.!?]+(\s|$)/g) || (t ? [t] : []);
+let stdWhole = false;      // show whole standards, not just the linked strand's sentences
+
+/* Towards / At / Above, from the continuum. VCAA writes one achievement
+   standard per level (or pair of levels) and nothing graded inside it, so
+   the honest "towards" is the standard of the level below and "above" the
+   standard of the level above. Each column is narrowed to the linked code's
+   sub-strand (Science) or strand (Mathematics), using the tags
+   tools/build-curriculum.py gives each sentence. */
+function ladder(k){
+  const subj = VC.subjects.find(x => x.id === k.subjectId);
+  const i = subj.levels.findIndex(l => l.level === k.level);
+  const col = (lv, role) => {
+    if(!lv) return {role, level: null, items: [], note: role === "towards" ? "No lower level in the curriculum data here." : "Level " + k.level + " is the top of the F–10 curriculum."};
+    const tagged = Array.isArray(lv.standard) && lv.standard.length ? lv.standard : null;
+    if(!tagged && !lv.achievement){
+      /* Level 10A: no achievement standard, so its content descriptions for the strand stand in */
+      const cds = CD.filter(c => c.subjectId === k.subjectId && c.level === lv.level && (stdWhole || c.strand === k.strand));
+      return {role, level: lv.level, items: cds.map(c => c.text.charAt(0).toUpperCase() + c.text.slice(1) + "."),
+              note: "VCAA sets no achievement standard for Level " + lv.level + "; these are its content descriptions" + (stdWhole ? "." : " for " + k.strand + ".")};
+    }
+    let items = tagged ? tagged : sentences(lv.achievement).map(t => ({text: t.trim()}));
+    let note = "";
+    if(tagged && !stdWhole){
+      const bySub = items.filter(x => x.strand === k.strand && x.sub === k.substrand);
+      const byStrand = items.filter(x => x.strand === k.strand);
+      if(bySub.length) items = bySub;
+      else if(byStrand.length){ items = byStrand; note = "Nothing at this level for " + k.substrand + " alone; showing all of " + k.strand + "."; }
+      else note = "Nothing at this level for " + k.strand + "; showing the whole standard.";
+    }
+    return {role, level: lv.level, items: items.map(x => x.text), note};
+  };
+  return [col(subj.levels[i - 1], "towards"), col(subj.levels[i], "at"), col(subj.levels[i + 1], "above")];
+}
+/* the band a column's sentences go to by default */
+function bandFor(role, s){
+  const mb = +s.maxBand || 4;
+  if(role === "towards") return 1;
+  if(role === "above") return mb;
+  const at = doc.bands.findIndex((b, j) => j < mb && /\bat\b/i.test(b));
+  return at >= 0 ? at + 1 : Math.max(1, mb - 1);
+}
 
 /* ============================ RENDER ============================ */
 function shell(){
@@ -291,9 +332,18 @@ function strandCard(s, i){
   if(known.length){
     h += `<div class="bcur">` + known.map(k => `<div class="bcd"><span class="ckcode cur">${esc(k.code)}</span> ${esc(k.text)} <span class="hint">${esc(k.subject)} · Level ${esc(k.level)} · ${esc(k.substrand || k.strand)}</span>
       <button class="chipbtn" data-act="snip" data-t="${esc(k.text)}">use text</button></div>`).join("");
-    const std = known[0].std;
-    if(std) h += `<details class="bstd"><summary>Achievement standard, Level ${esc(known[0].level)} — click a sentence to put it in the last box you were writing in</summary><div class="bsnips">`
-      + sentences(std).map(t => `<button class="chipbtn" data-act="snip" data-t="${esc(t.trim())}">${esc(t.trim())}</button>`).join("") + `</div></details>`;
+    const k = known[0], cols = ladder(k);
+    const name = {towards: "Towards", at: "At", above: "Above"};
+    h += `<div class="bladder"><div class="bladder-h"><b>Achievement standards</b>
+        <button class="chipbtn" data-act="std-whole" aria-pressed="${stdWhole}">${stdWhole ? "Showing whole standards — show just " + esc(k.substrand) : "Showing " + esc(k.substrand) + " — show whole standards"}</button></div>
+      <div class="bladder-cols">` + cols.map(c => {
+        const b = bandFor(c.role, s);
+        return `<div class="bcol ${c.role}"><h4>${name[c.role]}${c.level ? ` <span>Level ${esc(c.level)}</span>` : ""}${c.items.length ? ` <em>→ band ${b}</em>` : ""}</h4>`
+          + (c.note ? `<p class="hint">${esc(c.note)}</p>` : "")
+          + c.items.map(t => `<button class="chipbtn" data-act="snip" data-i="${i}" data-b="${b}" data-t="${esc(t)}">${esc(t)}</button>`).join("")
+          + `</div>`;
+      }).join("") + `</div>
+      <p class="hint">VCAA writes one achievement standard per level, so <b>Towards</b> and <b>Above</b> are the standards for the levels either side of ${esc(k.code)}’s. Click a sentence to add it to that band’s descriptor — or to the box you’re writing in, if it’s on this strand — then make it specific to the task.</p></div>`;
     h += `</div>`;
   } else if(codes.length && VC){
     h += `<p class="hint">${esc(codes.join(", "))} isn’t in the curriculum data here (Science 7–10, Mathematics 7–10A). It will still be shown on the rubric.</p>`;
@@ -487,8 +537,10 @@ function onInput(e){
     if(!s) c.strand = null; else if(!(+c.band >= 1 && +c.band <= (+s.maxBand || 4))) c.band = 1; }
   if(el.dataset.rerender && e.type === "change") render(); else derived();
 }
-function insertSnippet(t){
-  const el = lastText && document.contains(lastText) ? lastText : null;
+function insertSnippet(t, si, band){
+  /* the box being written in, if it is on this strand; else the band's descriptor */
+  const own = lastText && document.contains(lastText) && (si == null || (lastText.closest(".bstrand") || {dataset: {}}).dataset.strand === String(si));
+  const el = own ? lastText : (si != null && band ? app.querySelector(`[data-f="strands.${si}.bands.${band - 1}.d"]`) : null);
   if(!el){ try{ navigator.clipboard.writeText(t); }catch(e){} toast("Click in a descriptor or comment box first — copied instead"); return; }
   const a = el.selectionStart != null ? el.selectionStart : el.value.length, b = el.selectionEnd != null ? el.selectionEnd : a;
   const before = el.value.slice(0, a), sp = before && !/\s$/.test(before) ? " " : "";
@@ -562,7 +614,8 @@ const ACT = {
     paste = null; render(); toast(n + " question" + (n === 1 ? "" : "s") + " added — now tag each to a strand and band");
   },
   "pick"(i){ pickFor = i === "new" ? "new" : +i; openPicker(); },
-  "snip"(i, el){ insertSnippet(el.dataset.t); },
+  "snip"(i, el){ insertSnippet(el.dataset.t, i, el.dataset.b ? +el.dataset.b : null); },
+  "std-whole"(){ stdWhole = !stdWhole; render(); },
   "new"(){ if(!confirm("Start a new, empty rubric? Download this one first if you want to keep it.")) return;
     doc = blank(); notice = ""; tab = "task"; render(); toast("New rubric"); },
   "open"(){ $("#bFile").click(); },

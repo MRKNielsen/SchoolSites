@@ -36,7 +36,7 @@ in the charts that a plain text dump gets wrong, and this handles:
     Number part under Number …), which are joined back in document order.
     Both are read by the row labels, not by position.
 """
-import json, re, sys, zipfile, glob, os
+import json, re, sys, zipfile, glob, os, math
 import xml.etree.ElementTree as ET
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +46,7 @@ M = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
 SUBJECTS = {"S": ("science", "Science"), "M": ("mathematics", "Mathematics")}
 ATTRIBUTION = ("Victorian Curriculum F–10 Version 2.0 content elements are © VCAA, "
                "licensed CC BY-NC 3.0 AU. The curriculum can be accessed at https://f10.vcaa.vic.edu.au.")
+MIN_LEVEL = 5   # Levels 5-6 are kept as the "towards" standard for Level 7 / Levels 7-8
 CODE = re.compile(r"^VC2[A-Z]{1,2}\d{1,2}A?[A-Z]{1,3}\d{2}$")
 
 
@@ -104,13 +105,21 @@ def cells(tr):
 
 
 def level_key(label):
-    """7, 8, 9, 10, 10A — and a band "7–8" sorts by its first level"""
+    """F, 1 … 10, 10A — and a band "7–8" sorts by its first level"""
+    if label.startswith("F"):
+        return (0, "")
     m = re.match(r"(\d+)(A?)", label)
     return (int(m.group(1)), m.group(2))
 
 
 def level_label(t):
-    m = re.match(r"Levels? (\d+A?)(?: and (\d+A?))?$", t.strip())
+    t = t.strip()
+    if t == "Foundation":
+        return "F"
+    m = re.match(r"Foundation to Level (\d+)$", t)
+    if m:
+        return "F–" + m.group(1)
+    m = re.match(r"Levels? (\d+A?)(?: and (\d+A?))?$", t)
     if not m:
         return None
     return m.group(1) + ("–" + m.group(2) if m.group(2) else "")
@@ -127,7 +136,7 @@ def parse(path):
 
     def lev(label):
         if label not in levels:
-            levels[label] = {"achievement": "", "strands": {}}
+            levels[label] = {"label": label, "achievement": "", "parts": [], "strands": {}}
             order.append(label)
         return levels[label]
 
@@ -141,12 +150,12 @@ def parse(path):
         if block.tag != W + "tbl":
             continue
         rows = block.findall(W + "tr")
-        colmap = {}        # grid column -> level label
+        colmap = {}        # grid column -> level label; None = below MIN_LEVEL, skipped
         for col, span, paras, _ in cells(rows[0]):
             lab = level_label(paras[0]) if paras else None
             if lab:
                 for k in range(col, col + span):
-                    colmap[k] = lab
+                    colmap[k] = lab if level_key(lab)[0] >= MIN_LEVEL else None
         if not colmap:
             raise SystemExit(f"{os.path.basename(path)}: a table has no level header row")
         section, strand, sub = None, strand_heading, None
@@ -172,9 +181,11 @@ def parse(path):
             for col, span, paras, cont in cs:
                 if cont or not paras:
                     continue
-                lab = colmap.get(col)
-                if lab is None:
+                if col not in colmap:
                     raise SystemExit(f"{os.path.basename(path)}: a cell at grid column {col} has no level")
+                lab = colmap[col]
+                if lab is None or paras[0].startswith("No content"):
+                    continue
                 if section == "as":
                     if re.match(r"Achievement standards?$", paras[0]) or paras[0].startswith("No achievement standard"):
                         continue
@@ -185,6 +196,11 @@ def parse(path):
                     # document order they are the whole standard
                     if text not in L["achievement"]:
                         L["achievement"] = (L["achievement"] + "\n\n" + text).strip()
+                        # the strand is known for Mathematics (one table per
+                        # strand); Science's standard sits above every strand
+                        # row, so its paragraphs are placed by tag_standard()
+                        for para in paras:
+                            L["parts"].append((strand if section_strand_known(strand_heading) else None, para))
                 elif section == "cd":
                     if re.match(r"Students learn (that|to):?$", paras[0]):
                         continue
@@ -213,21 +229,146 @@ def parse(path):
                         raise SystemExit(f"{os.path.basename(path)} {lab}: text with no code after it: {pending[0][:60]!r}")
     if not subject:
         raise SystemExit(f"{os.path.basename(path)}: no content descriptions found")
+    for lab in order:
+        levels[lab]["standard"] = tag_standard(levels[lab])
     return {
         "id": subject[0], "name": subject[1], "source": os.path.basename(path),
         "levels": [{
             "level": lab,
             "achievement": levels[lab]["achievement"],
+            "standard": levels[lab]["standard"],
             "strands": [{"name": st, "substrands": [{"name": ss, "cds": cds} for ss, cds in subs.items()]}
                         for st, subs in levels[lab]["strands"].items()],
         } for lab in sorted((l for l in order if levels[l]["strands"]), key=level_key)],
     }
 
 
+def section_strand_known(strand_heading):
+    """Mathematics names the strand above each table; Science does not"""
+    return bool(strand_heading)
+
+
+# Hand corrections to tag_standard(), after reading every Science sentence
+# (Nov 2026). Keyed on (level, start of the sentence); each must match exactly
+# one sentence or the build stops, so a reworded chart cannot slip past.
+SUB_OVERRIDES = {
+    # shares "reactions"/"products" with the carbon-cycle descriptions, but it
+    # is the chemistry of VC2S10U08/U09
+    ("9–10", "They predict the products of reactions"): "Chemical sciences",
+}
+
+
+STOP = set("""the and for with that this from into their them they students student use using
+including include includes level end by of to in on a an as is are be can or its it at
+how what when which why who between different other such these those than through about
+also both more most each them ways way""".split())
+
+
+def stems(text):
+    return {w[:6] for w in re.findall(r"[a-z]+", text.lower()) if len(w) > 2 and w not in STOP}
+
+
+def sentences(text):
+    return [t.strip() for t in re.split(r"(?<=[.!?])\s+(?=[A-Z‘“(])", text) if t.strip()]
+
+
+def scores(sentence_stems, groups):
+    """how much each group's content descriptions share with the sentence:
+    each shared stem counts log(n/df) over the groups, so words every group
+    uses ('scientific', 'data') count for next to nothing"""
+    n = len(groups)
+    df = {}
+    for g in groups.values():
+        for w in g:
+            df[w] = df.get(w, 0) + 1
+    return {k: sum(math.log((n + 1) / df[w]) for w in sentence_stems & g) for k, g in groups.items()}
+
+
+def best(sentence_stems, groups):
+    sc = scores(sentence_stems, groups)
+    top = max(sc, key=lambda k: sc[k])
+    return top, sc[top]
+
+
+def in_order(sents, groups):
+    """Assign each sentence a group, never going back to an earlier group
+    (VCAA's standards run through the sub-strands in table order), choosing
+    the assignment with the highest total score. A sentence with nothing in
+    common with any group stays with the one before it."""
+    keys = list(groups)
+    S = [scores(stems(t), groups) for t in sents]
+    m = len(keys)
+    dp = [[0.0] * m for _ in sents]
+    back = [[0] * m for _ in sents]
+    for i, sc in enumerate(S):
+        for j, k in enumerate(keys):
+            if i == 0:
+                dp[i][j] = sc[k] - j * 1e-6          # tie: the earliest group
+            else:
+                # tie: the latest earlier group, i.e. stay with the sentence before
+                kk = max(range(j + 1), key=lambda q: (dp[i - 1][q], q))
+                back[i][j] = kk
+                dp[i][j] = dp[i - 1][kk] + sc[k]
+    j = max(range(m), key=lambda q: (dp[-1][q], -q))
+    out = []
+    for i in range(len(sents) - 1, -1, -1):
+        out.append(keys[j])
+        j = back[i][j]
+    return out[::-1]
+
+
+def tag_standard(L):
+    """[{strand, sub, text}] — the achievement standard a sentence at a time,
+    each tagged with the strand (and sub-strand) it speaks to, so the builder
+    can show only the sentences for the strand a rubric row is linked to.
+
+    Mathematics: the chart already splits the standard by strand; sub-strand
+    is the strand. Science: each paragraph is placed in the strand whose
+    content descriptions (same level) it shares most words with, then each
+    sentence in a sub-strand by in_order(): the standard runs through the
+    sub-strands in table order, so a sentence never goes back to an earlier
+    one. Without that rule, Level 9-10's "predict the products of reactions"
+    went to Biological and "trends in patterns of global climate change" to
+    Chemical. The result was read in full by hand (Nov 2026) and is anchored
+    by tools/test-rubric-builder.js."""
+    strands = L["strands"]
+    out = []
+    for strand, para in L["parts"]:
+        if strand is None:
+            strand, _ = best(stems(para), {st: set().union(*(stems(c["text"]) for subs in strands[st].values() for c in subs))
+                                            for st in strands})
+        subs = strands.get(strand, {})
+        groups = {ss: set().union(*(stems(c["text"]) for c in cds)) for ss, cds in subs.items()}
+        sents = sentences(para)
+        tags = in_order(sents, groups) if len(groups) > 1 else [next(iter(groups), strand)] * len(sents)
+        out += [{"strand": strand, "sub": sub, "text": t} for t, sub in zip(sents, tags)]
+    for (lev, start), sub in SUB_OVERRIDES.items():
+        if lev != L["label"]:
+            continue
+        hits = [x for x in out if x["text"].startswith(start)]
+        if len(hits) != 1 or sub not in strands.get(hits[0]["strand"], {}):
+            raise SystemExit(f"SUB_OVERRIDES: {lev} {start!r} matched {len(hits)} sentences (or {sub!r} is not a sub-strand of its strand)")
+        hits[0]["sub"] = sub
+    return out
+
+
 def build(paths):
-    subjects = sorted((parse(p) for p in paths), key=lambda s: s["name"])
+    parsed = [parse(p) for p in paths]
+    sources = sorted(s.pop("source") for s in parsed)
+    # one learning area can come in two charts (Foundation-6 and 7-10)
+    merged = {}
+    for s in parsed:
+        m = merged.setdefault(s["id"], {"id": s["id"], "name": s["name"], "levels": []})
+        have = {l["level"] for l in m["levels"]}
+        dup = have & {l["level"] for l in s["levels"]}
+        if dup:
+            raise SystemExit(f"{s['name']}: level {sorted(dup)[0]} is in two charts")
+        m["levels"] += s["levels"]
+    subjects = sorted(merged.values(), key=lambda s: s["name"])
+    for s in subjects:
+        s["levels"].sort(key=lambda l: level_key(l["level"]))
     data = {"version": "Victorian Curriculum F–10 Version 2.0", "attribution": ATTRIBUTION,
-            "sources": [s.pop("source") for s in subjects], "subjects": subjects}
+            "sources": sources, "subjects": subjects}
     n = sum(len(ss["cds"]) for s in subjects for l in s["levels"] for st in l["strands"] for ss in st["substrands"])
     head = ("/* GENERATED by tools/build-curriculum.py — do not edit.\n"
             "   Victorian Curriculum F–10 Version 2.0 content descriptions and achievement\n"

@@ -245,8 +245,11 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     click(w, $('.bpick-row [data-pick]'));
     ok(B.doc.strands.length === 2 && B.doc.strands[1].code === 'VC2S8U07', 'picking makes a new strand linked to VC2S8U07');
     ok(/investigate the effects of forces/.test($('.bstrand[data-strand="1"] .bcur').textContent), 'the strand shows the content description');
-    const snips = $$('.bstrand[data-strand="1"] .bstd .chipbtn');
-    ok(snips.length === 3, 'the achievement standard is offered a sentence at a time (' + snips.length + ')');
+    const snips = $$('.bstrand[data-strand="1"] .bladder .bcol.at .chipbtn');
+    ok(snips.length === 3, 'the level\'s achievement standard is offered a sentence at a time under At (' + snips.length + ')');
+    ok(/No lower level/.test($('.bstrand[data-strand="1"] .bcol.towards').textContent)
+       && /top of the F–10 curriculum/.test($('.bstrand[data-strand="1"] .bcol.above').textContent),
+       'with only one level in the data, Towards and Above say why they are empty');
     const box = $('[data-f="strands.1.bands.2.d"]');
     box.dispatchEvent(new w.FocusEvent('focusin', { bubbles: true }));
     click(w, snips[1]);
@@ -269,11 +272,64 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     /* VCAA sets no standard for Level 10A ("No achievement standard for Level 10A") */
     ok(V.subjects.every(s => s.levels.every(l => l.level === '10A' ? l.achievement === '' : l.achievement.length > 200)),
        'every level has its achievement standard (10A has none, as in the chart)');
-    ok(V.subjects.find(s => s.id === 'mathematics').levels.map(l => l.level).join() === '7,8,9,10,10A'
-       && V.subjects.find(s => s.id === 'science').levels.map(l => l.level).join() === '7–8,9–10', 'levels in order: 7, 8, 9, 10, 10A and 7–8, 9–10');
+    ok(V.subjects.find(s => s.id === 'mathematics').levels.map(l => l.level).join() === '5,6,7,8,9,10,10A'
+       && V.subjects.find(s => s.id === 'science').levels.map(l => l.level).join() === '5–6,7–8,9–10',
+       'levels in order: 5 … 10, 10A and 5–6, 7–8, 9–10 (Levels 5–6 are the "towards" standard for 7 and 7–8)');
+    /* every sentence tagged, and the tags are real strands / sub-strands of its level */
+    const tagsOk = V.subjects.every(s => s.levels.every(l => (l.standard || []).every(x =>
+      l.strands.some(st => st.name === x.strand && st.substrands.some(ss => ss.name === x.sub)))));
+    ok(tagsOk, 'every achievement-standard sentence is tagged with a strand and sub-strand of its own level');
+    ok(V.subjects.every(s => s.levels.every(l => (l.standard || []).map(x => x.text).join(' ').replace(/\s+/g, ' ')
+       === l.achievement.replace(/\s+/g, ' '))), 'the tagged sentences are the whole standard, in order, nothing lost');
+    /* anchors from reading every Science sentence by hand */
+    const tagOf = (lev, start) => { const l = V.subjects.find(s => s.id === 'science').levels.find(x => x.level === lev);
+      const x = l.standard.find(y => y.text.startsWith(start)); return x && x.sub; };
+    const anchors = [
+      ['5–6', 'They identify sources of light', 'Physical sciences'],
+      ['5–6', 'They discuss examples that illustrate', 'Use and influence of science'],
+      ['7–8', 'They use the particle and kinetic theories', 'Chemical sciences'],
+      ['7–8', 'They distinguish between renewable and non-renewable', 'Earth and space sciences'],
+      ['7–8', 'They represent and explain the effects of forces', 'Physical sciences'],
+      ['7–8', 'They identify assumptions and sources of error', 'Evaluating'],
+      ['9–10', 'They predict the products of reactions', 'Chemical sciences'],
+      ['9–10', 'They describe trends in patterns of global climate change', 'Earth and space sciences'],
+      ['9–10', 'They use Newton’s laws', 'Physical sciences'],
+    ];
+    ok(anchors.every(([l, t, sub]) => tagOf(l, t) === sub),
+       'hand-checked sentences carry the right sub-strand (' + anchors.filter(([l, t, sub]) => tagOf(l, t) !== sub).map(a => a[0] + ' ' + a[1]).join('; ') + ')');
     const pi = cds.find(c => c.code === 'VC2M7M03'), trig = cds.find(c => c.code === 'VC2M10ASP03');
     ok(pi && /between π and the circumference/.test(pi.text), 'equations survive: "between π and the circumference"');
     ok(trig && /y=sin\(x\), y=cos\(x\) and y=tan\(x\)/.test(trig.text), '...and "y=sin(x), y=cos(x) and y=tan(x)" (brackets from the equation delimiter)');
+  }
+
+  console.log('\n=== Towards / At / Above, real data ===');
+  if (fs.existsSync(VC_FILE)) {
+    const { w, B, $, $$ } = await open();
+    B.doc = { format: 'rubric-marker/1', id: 't', title: 'T', bands: ['Towards', 'At', 'At', 'Above'], parts: [{ id: 'A', name: 'A' }],
+      strands: [{ id: 's1', name: 'Forces', code: 'VC2S8U14', start: '', bands: [{ q: '', d: '' }, { q: '', d: '' }, { q: '', d: '' }, { q: '', d: '' }], can: ['', '', '', ''], next: ['', '', '', ''] }],
+      criteria: [] };
+    B.showTab('strands');
+    const col = r => $('.bstrand[data-strand="0"] .bcol.' + r), txt = r => col(r).textContent;
+    ok(/Level 5–6/.test(txt('towards')) && /Level 7–8/.test(txt('at')) && /Level 9–10/.test(txt('above')),
+       'VC2S8U14 (forces, 7–8): Towards is Level 5–6, At 7–8, Above 9–10');
+    ok(/sources of light/.test(txt('towards')) && !/particles/.test(txt('towards')), 'Towards holds Level 5–6 Physical sciences sentences only');
+    ok(/effects of forces/.test(txt('at')) && !/plate tectonics/.test(txt('at')), 'At holds Level 7–8 Physical sciences sentences only');
+    ok(/Newton’s laws/.test(txt('above')), 'Above holds Level 9–10 Physical sciences (Newton’s laws)');
+    ok(/→ band 1/.test(txt('towards')) && /→ band 2/.test(txt('at')) && /→ band 4/.test(txt('above')),
+       'with bands Towards / At / At / Above, the columns go to bands 1, 2 and 4');
+    click(w, [...col('towards').querySelectorAll('.chipbtn')].find(b => /sources of light/.test(b.textContent)));
+    ok(/^They identify sources of light/.test(B.doc.strands[0].bands[0].d), 'clicking a Towards sentence, with no box in use, fills band 1’s descriptor');
+    click(w, $('[data-act="std-whole"]'));
+    ok(/plate tectonics/.test(txt('at')), 'the toggle shows whole standards');
+    click(w, $('[data-act="std-whole"]'));
+    /* Mathematics: strand-split standards, and 10A's missing standard */
+    B.doc.strands[0].code = 'VC2M10A04'; B.render();
+    ok(/Level 9/.test(txt('towards')) && /Level 10\b/.test(txt('at')) && /Level 10A/.test(txt('above')), 'VC2M10A04 (Algebra, Level 10): Towards 9, At 10, Above 10A');
+    ok(/no achievement standard for Level 10A/.test(txt('above')) && /polynomial/.test(txt('above')),
+       'Above says 10A has no standard and offers its Algebra content descriptions instead');
+    ok(!/statistical/.test(txt('at')), 'At holds Level 10 Algebra sentences, not Statistics');
+    B.doc.strands[0].code = 'VC2M7N01'; B.render();
+    ok(/Level 6/.test(txt('towards')) && $$('.bstrand[data-strand="0"] .bcol.towards .chipbtn').length > 0, 'VC2M7N01: Towards is the Level 6 Number standard');
   }
 
   console.log('\n' + (fail ? fail + ' CHECK(S) FAILED' : 'ALL CHECKS PASSED'));

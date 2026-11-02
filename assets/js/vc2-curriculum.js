@@ -2,12 +2,14 @@
    Victorian Curriculum F–10 Version 2.0 content descriptions and achievement
    standards, for the curriculum picker in tools/rubric-builder.html.
    Victorian Curriculum F–10 Version 2.0 content elements are © VCAA, licensed CC BY-NC 3.0 AU. The curriculum can be accessed at https://f10.vcaa.vic.edu.au.
-   Sources: Mathematics Levels 7-10A_28-07-2023.docx; Science Levels 7-10_01-06-2024.docx. */
+   Sources: Mathematics Foundation-Level 6_28-07-2023.docx; Mathematics Levels 7-10A_28-07-2023.docx; Science Foundation-Level 6_01-06-2024.docx; Science Levels 7-10_01-06-2024.docx. */
 window.VC2 = {
  "version": "Victorian Curriculum F–10 Version 2.0",
  "attribution": "Victorian Curriculum F–10 Version 2.0 content elements are © VCAA, licensed CC BY-NC 3.0 AU. The curriculum can be accessed at https://f10.vcaa.vic.edu.au.",
  "sources": [
+  "Mathematics Foundation-Level 6_28-07-2023.docx",
   "Mathematics Levels 7-10A_28-07-2023.docx",
+  "Science Foundation-Level 6_01-06-2024.docx",
   "Science Levels 7-10_01-06-2024.docx"
  ],
  "subjects": [
@@ -16,8 +18,633 @@ window.VC2 = {
    "name": "Mathematics",
    "levels": [
     {
+     "level": "5",
+     "achievement": "By the end of Level 5, students use place value to write and order decimals including decimals greater than one. They express natural numbers as products of factors and identify multiples and divisors. Students order and represent, add and subtract fractions with the same or related denominators. They represent common percentages and connect them to their fraction and decimal equivalents. Students use their proficiency with multiplication facts and efficient mental and written calculation strategies to multiply large numbers by one- and two-digit numbers and divide by one-digit numbers. They check the reasonableness of their calculations using estimation. Students use mathematical modelling to solve financial and other practical problems, formulating and solving problems, choosing arithmetic operations and interpreting results in terms of the situation.\n\nStudents apply properties of numbers and operations to find unknown values in numerical equations involving multiplication and division. They design and use algorithms to identify and explain patterns in the factors and multiples of numbers.\n\nStudents choose and use appropriate metric units to measure the attributes of length, mass and capacity, and to solve problems involving perimeter and area. Students convert between 12- and 24-hour time. They estimate, construct and measure angles in degrees.\n\nStudents connect objects to their two-dimensional nets. Students use grid coordinates to locate and move positions. They perform and describe the results of transformations and identify any symmetries.\n\nStudents plan and conduct statistical investigations that collect nominal and ordinal categorical and discrete numerical data with and without digital tools. Students identify the mode and interpret the shape of distributions of data in context. They interpret and compare data represented in line graphs.\n\nStudents conduct repeated chance experiments, list the possible outcomes, estimate likelihoods and make comparisons between those with and without equally likely outcomes.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 5, students use place value to write and order decimals including decimals greater than one."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They express natural numbers as products of factors and identify multiples and divisors."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students order and represent, add and subtract fractions with the same or related denominators."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They represent common percentages and connect them to their fraction and decimal equivalents."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students use their proficiency with multiplication facts and efficient mental and written calculation strategies to multiply large numbers by one- and two-digit numbers and divide by one-digit numbers."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They check the reasonableness of their calculations using estimation."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students use mathematical modelling to solve financial and other practical problems, formulating and solving problems, choosing arithmetic operations and interpreting results in terms of the situation."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students apply properties of numbers and operations to find unknown values in numerical equations involving multiplication and division."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They design and use algorithms to identify and explain patterns in the factors and multiples of numbers."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students choose and use appropriate metric units to measure the attributes of length, mass and capacity, and to solve problems involving perimeter and area."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students convert between 12- and 24-hour time."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They estimate, construct and measure angles in degrees."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students connect objects to their two-dimensional nets."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students use grid coordinates to locate and move positions."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They perform and describe the results of transformations and identify any symmetries."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students plan and conduct statistical investigations that collect nominal and ordinal categorical and discrete numerical data with and without digital tools."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students identify the mode and interpret the shape of distributions of data in context."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They interpret and compare data represented in line graphs."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students conduct repeated chance experiments, list the possible outcomes, estimate likelihoods and make comparisons between those with and without equally likely outcomes."
+      }
+     ],
+     "strands": [
+      {
+       "name": "Number",
+       "substrands": [
+        {
+         "name": "Number",
+         "cds": [
+          {
+           "code": "VC2M5N01",
+           "text": "interpret, compare and order numbers with more than 2 decimal places, including numbers greater than one, using place value understanding; represent these on a number line"
+          },
+          {
+           "code": "VC2M5N02",
+           "text": "express natural numbers as products of their factors, recognise multiples and determine if one number is divisible by another"
+          },
+          {
+           "code": "VC2M5N03",
+           "text": "compare and order common unit fractions with the same and related denominators, including mixed numerals, applying knowledge of factors and multiples; represent these fractions on a number line"
+          },
+          {
+           "code": "VC2M5N04",
+           "text": "recognise that 100% represents the complete whole and use percentages to describe, represent and compare relative size; connect familiar percentages to their decimal and fraction equivalents"
+          },
+          {
+           "code": "VC2M5N05",
+           "text": "solve problems involving addition and subtraction of fractions with the same or related denominators, using different strategies"
+          },
+          {
+           "code": "VC2M5N06",
+           "text": "solve problems involving multiplication of larger numbers by one- or two-digit numbers, choosing efficient mental and written calculation strategies and using digital tools where appropriate; check the reasonableness of answers"
+          },
+          {
+           "code": "VC2M5N07",
+           "text": "solve problems involving division, choosing efficient mental and written strategies and using digital tools where appropriate; interpret any remainder according to the context and express results as a whole number, decimal or fraction"
+          },
+          {
+           "code": "VC2M5N08",
+           "text": "check and explain the reasonableness of solutions to problems, including financial contexts using estimation strategies appropriate to the context"
+          },
+          {
+           "code": "VC2M5N09",
+           "text": "use mathematical modelling to solve practical problems involving additive and multiplicative situations, including simple financial planning contexts; formulate the problems, choosing operations and efficient mental and written calculation strategies, and using digital tools where appropriate; interpret and communicate solutions in terms of the situation"
+          },
+          {
+           "code": "VC2M5N10",
+           "text": "follow a mathematical algorithm involving branching and repetition (iteration); create and use algorithms involving a sequence of steps and decisions and digital tools to experiment with factors, multiples and divisibility; identify, interpret and describe emerging patterns"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Algebra",
+       "substrands": [
+        {
+         "name": "Algebra",
+         "cds": [
+          {
+           "code": "VC2M5A01",
+           "text": "recognise and explain the connection between multiplication and division as inverse operations and use this to develop families of number facts"
+          },
+          {
+           "code": "VC2M5A02",
+           "text": "find unknown values in numerical equations involving multiplication and division using the properties of numbers and operations"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Measurement",
+       "substrands": [
+        {
+         "name": "Measurement",
+         "cds": [
+          {
+           "code": "VC2M5M01",
+           "text": "choose appropriate metric units when measuring the length, mass and capacity of objects; use smaller units or a combination of units to obtain a more accurate measure"
+          },
+          {
+           "code": "VC2M5M02",
+           "text": "solve practical problems involving the perimeter and area of regular and irregular shapes using appropriate metric units"
+          },
+          {
+           "code": "VC2M5M03",
+           "text": "compare 12- and 24-hour time systems and solve practical problems involving the conversion between them"
+          },
+          {
+           "code": "VC2M5M04",
+           "text": "estimate, construct and measure angles in degrees, using appropriate tools, including a protractor, and relate these measures to angle names"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Space",
+       "substrands": [
+        {
+         "name": "Space",
+         "cds": [
+          {
+           "code": "VC2M5SP01",
+           "text": "connect objects to their nets and build objects from their nets using spatial and geometric reasoning"
+          },
+          {
+           "code": "VC2M5SP02",
+           "text": "construct a grid coordinate system that uses coordinates to locate positions within a space; use coordinates and directional language to describe position and movement"
+          },
+          {
+           "code": "VC2M5SP03",
+           "text": "describe and perform translations, reflections and rotations of shapes, using dynamic geometry software where appropriate; recognise what changes and what remains the same, and identify any symmetries"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Statistics",
+       "substrands": [
+        {
+         "name": "Statistics",
+         "cds": [
+          {
+           "code": "VC2M5ST01",
+           "text": "acquire, validate and represent data for nominal and ordinal categorical and discrete numerical variables to address a question of interest or purpose using software including spreadsheets; discuss and report on data distributions in terms of highest frequency (mode) and shape, in the context of the data"
+          },
+          {
+           "code": "VC2M5ST02",
+           "text": "interpret line graphs representing change over time; discuss the relationships that are represented and conclusions that can be made"
+          },
+          {
+           "code": "VC2M5ST03",
+           "text": "plan and conduct statistical investigations by posing questions or identifying a problem and collecting relevant data; choose appropriate displays and interpret the data; communicate findings within the context of the investigation"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Probability",
+       "substrands": [
+        {
+         "name": "Probability",
+         "cds": [
+          {
+           "code": "VC2M5P01",
+           "text": "list the possible outcomes of chance experiments involving equally likely outcomes and compare to those that are not equally likely"
+          },
+          {
+           "code": "VC2M5P02",
+           "text": "conduct repeated chance experiments, including those with and without equally likely outcomes, and observe and record the results; use frequency to compare outcomes and estimate their likelihoods"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "level": "6",
+     "achievement": "By the end of Level 6, students use integers to represent points on a number line and on the Cartesian plane. They solve problems using the properties of prime, composite, square and triangular numbers. Students order common fractions, giving reasons, and add and subtract fractions with related denominators. They use all 4 operations with decimals and connect decimal representations of measurements to the metric system. Students solve problems involving finding a fraction, decimal or percentage of a quantity and use estimation to find approximate solutions to problems involving rational numbers and percentages. They use mathematical modelling to solve financial and other practical problems involving percentages and rational numbers, formulating and solving the problem, and justifying choices.\n\nStudents find unknown values in numerical equations involving combinations of arithmetic operations. They identify and explain rules used to create growing patterns. They design and use algorithms to generate sets of numbers, using a rule.\n\nStudents interpret and use timetables, and measure, calculate and compare elapsed time. They convert between common units of length, mass and capacity. They use the formula for the area of a rectangle and angle properties to solve problems.\n\nStudents identify the parallel cross-section for right prisms. They create tessellating patterns using combinations of transformations. They locate an ordered pair in any one of the 4 quadrants on the Cartesian plane.\n\nStudents compare distributions of discrete and continuous numerical and ordinal categorical data sets as part of their statistical investigations, using digital tools. They critique arguments presented in the media based on statistics.\n\nStudents assign probabilities using common fractions, decimals and percentages. They conduct simulations using digital tools, to generate and record the outcomes from many trials of a chance experiment. They compare observed frequencies to the expected frequencies of the outcomes of chance experiments.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 6, students use integers to represent points on a number line and on the Cartesian plane."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They solve problems using the properties of prime, composite, square and triangular numbers."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students order common fractions, giving reasons, and add and subtract fractions with related denominators."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They use all 4 operations with decimals and connect decimal representations of measurements to the metric system."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students solve problems involving finding a fraction, decimal or percentage of a quantity and use estimation to find approximate solutions to problems involving rational numbers and percentages."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They use mathematical modelling to solve financial and other practical problems involving percentages and rational numbers, formulating and solving the problem, and justifying choices."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students find unknown values in numerical equations involving combinations of arithmetic operations."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They identify and explain rules used to create growing patterns."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They design and use algorithms to generate sets of numbers, using a rule."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students interpret and use timetables, and measure, calculate and compare elapsed time."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They convert between common units of length, mass and capacity."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They use the formula for the area of a rectangle and angle properties to solve problems."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students identify the parallel cross-section for right prisms."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They create tessellating patterns using combinations of transformations."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They locate an ordered pair in any one of the 4 quadrants on the Cartesian plane."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students compare distributions of discrete and continuous numerical and ordinal categorical data sets as part of their statistical investigations, using digital tools."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They critique arguments presented in the media based on statistics."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students assign probabilities using common fractions, decimals and percentages."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They conduct simulations using digital tools, to generate and record the outcomes from many trials of a chance experiment."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They compare observed frequencies to the expected frequencies of the outcomes of chance experiments."
+      }
+     ],
+     "strands": [
+      {
+       "name": "Number",
+       "substrands": [
+        {
+         "name": "Number",
+         "cds": [
+          {
+           "code": "VC2M6N01",
+           "text": "recognise situations, including financial contexts, that use integers; locate and represent integers on a number line and as coordinates on the Cartesian plane"
+          },
+          {
+           "code": "VC2M6N02",
+           "text": "identify and describe the properties of prime, composite, square and triangular numbers and use these properties to solve problems and simplify calculations"
+          },
+          {
+           "code": "VC2M6N03",
+           "text": "apply knowledge of equivalence to compare, order and represent common fractions, including halves, thirds and quarters, on the same number line and justify their order"
+          },
+          {
+           "code": "VC2M6N04",
+           "text": "apply knowledge of place value to add and subtract decimals, using digital tools where appropriate; use estimation and rounding to check the reasonableness of answers"
+          },
+          {
+           "code": "VC2M6N05",
+           "text": "solve problems involving addition and subtraction of fractions using knowledge of equivalent fractions"
+          },
+          {
+           "code": "VC2M6N06",
+           "text": "multiply and divide decimals by multiples of powers of 10 without a calculator, applying knowledge of place value and proficiency with multiplication facts, using estimation and rounding to check the reasonableness of answers"
+          },
+          {
+           "code": "VC2M6N07",
+           "text": "solve problems that require finding a familiar fraction, decimal or percentage of a quantity, including percentage discounts, choosing efficient calculation strategies with and without digital tools"
+          },
+          {
+           "code": "VC2M6N08",
+           "text": "approximate numerical solutions to problems involving rational numbers and percentages, using appropriate estimation strategies"
+          },
+          {
+           "code": "VC2M6N09",
+           "text": "use mathematical modelling to solve practical problems involving rational numbers and percentages, including in financial contexts; formulate the problems, choosing operations and using efficient mental and written calculation strategies, and using digital tools where appropriate; interpret and communicate solutions in terms of the situation, justifying the choices made"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Algebra",
+       "substrands": [
+        {
+         "name": "Algebra",
+         "cds": [
+          {
+           "code": "VC2M6A01",
+           "text": "recognise and use rules that generate visually growing patterns and number patterns involving rational numbers"
+          },
+          {
+           "code": "VC2M6A02",
+           "text": "find unknown values in numerical equations involving brackets and combinations of arithmetic operations, using the properties of numbers and operations"
+          },
+          {
+           "code": "VC2M6A03",
+           "text": "design and use algorithms involving a sequence of steps and decisions that use rules to generate sets of numbers; identify, interpret and explain emerging patterns"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Measurement",
+       "substrands": [
+        {
+         "name": "Measurement",
+         "cds": [
+          {
+           "code": "VC2M6M01",
+           "text": "convert between common metric units of length, mass and capacity; choose and use decimal representations of metric measurements relevant to the context of a problem"
+          },
+          {
+           "code": "VC2M6M02",
+           "text": "establish the formula for the area of a rectangle and use it to solve practical problems"
+          },
+          {
+           "code": "VC2M6M03",
+           "text": "measure, calculate and compare elapsed time; interpret and use timetables and itineraries to plan activities and determine the duration of events and journeys"
+          },
+          {
+           "code": "VC2M6M04",
+           "text": "identify the relationships between angles on a straight line, angles at a point and vertically opposite angles; use these to determine unknown angles, communicating reasoning"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Space",
+       "substrands": [
+        {
+         "name": "Space",
+         "cds": [
+          {
+           "code": "VC2M6SP01",
+           "text": "compare the parallel cross-sections of objects and recognise their relationships to right prisms"
+          },
+          {
+           "code": "VC2M6SP02",
+           "text": "locate points in the 4 quadrants of the Cartesian plane; describe changes to the coordinates when a point is moved to a different position in the plane"
+          },
+          {
+           "code": "VC2M6SP03",
+           "text": "recognise and use combinations of transformations to create tessellations and other geometric patterns, using dynamic geometry software where appropriate"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Statistics",
+       "substrands": [
+        {
+         "name": "Statistics",
+         "cds": [
+          {
+           "code": "VC2M6ST01",
+           "text": "interpret and compare data sets for ordinal and nominal categorical, discrete and continuous numerical variables using comparative displays or visualisations and digital tools; compare distributions in terms of mode, range and shape"
+          },
+          {
+           "code": "VC2M6ST02",
+           "text": "identify statistically informed arguments presented in traditional and digital media; discuss and critique methods, data representations and conclusions"
+          },
+          {
+           "code": "VC2M6ST03",
+           "text": "plan and conduct statistical investigations by posing and refining questions to collect categorical or numerical data by observation or survey, or identifying a problem and collecting relevant data; analyse and interpret the data and communicate findings within the context of the investigation"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Probability",
+       "substrands": [
+        {
+         "name": "Probability",
+         "cds": [
+          {
+           "code": "VC2M6P01",
+           "text": "describe probabilities using fractions, decimals and percentages; recognise that probabilities lie on numerical scales of 0–‍1 or 0%–100%; use estimation to assign probabilities that events occur in a given context, using common fractions, percentages and decimals"
+          },
+          {
+           "code": "VC2M6P02",
+           "text": "conduct repeated chance experiments and run simulations with an increasing number of trials using digital tools; compare observations with expected results and discuss the effect on variation of increasing the number of trials"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
      "level": "7",
      "achievement": "By the end of Level 7, students represent natural numbers in expanded form and as products of prime factors, using exponent notation. They solve problems involving squares of numbers and square roots of perfect square numbers. Students solve problems involving addition and subtraction of integers. They use all 4 operations in calculations involving positive fractions and decimals, choosing efficient mental and written calculation strategies. Students choose between equivalent representations of rational numbers and percentages to assist in calculations and make simple estimates to judge the reasonableness of results. They use mathematical modelling to solve practical problems involving rational numbers, percentages and ratios in spatial, financial and other applied contexts, justifying choices of representation.\n\nStudents use algebraic expressions to represent situations, describe the relationships between variables from authentic data and substitute values into formulas to determine unknown values. They solve linear equations with natural number solutions and verify their solutions through substitution. Students create tables of values relating to algebraic expressions and formulas, and describe how the values change.\n\nStudents apply knowledge of angle relationships and the sum of angles in a triangle to solve problems, giving reasons. They establish and use formulas for the areas of triangles and parallelograms and the volumes of rectangular and triangular prisms to solve problems. They describe the relationships between the radius, diameter and circumference of a circle.\n\nStudents classify polygons according to their features and design an algorithm to sort and classify shapes. They represent objects two-dimensionally in different ways, describing the usefulness of these representations. They use coordinates to describe transformations of points in the plane.\n\nStudents plan and conduct statistical investigations involving discrete and continuous numerical data, using appropriate displays. They interpret data in terms of the shape of distribution and summary statistics, identifying possible outliers. They decide which measure of central tendency is most suitable and explain their reasoning.\n\nStudents list sample spaces for single-step experiments, assign probabilities to outcomes of events and predict relative frequencies for related events. They conduct repeated single-step chance experiments and run simulations using digital tools, giving reasons for differences between predicted and observed results.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 7, students represent natural numbers in expanded form and as products of prime factors, using exponent notation."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They solve problems involving squares of numbers and square roots of perfect square numbers."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students solve problems involving addition and subtraction of integers."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They use all 4 operations in calculations involving positive fractions and decimals, choosing efficient mental and written calculation strategies."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students choose between equivalent representations of rational numbers and percentages to assist in calculations and make simple estimates to judge the reasonableness of results."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They use mathematical modelling to solve practical problems involving rational numbers, percentages and ratios in spatial, financial and other applied contexts, justifying choices of representation."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students use algebraic expressions to represent situations, describe the relationships between variables from authentic data and substitute values into formulas to determine unknown values."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They solve linear equations with natural number solutions and verify their solutions through substitution."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students create tables of values relating to algebraic expressions and formulas, and describe how the values change."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students apply knowledge of angle relationships and the sum of angles in a triangle to solve problems, giving reasons."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They establish and use formulas for the areas of triangles and parallelograms and the volumes of rectangular and triangular prisms to solve problems."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They describe the relationships between the radius, diameter and circumference of a circle."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students classify polygons according to their features and design an algorithm to sort and classify shapes."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They represent objects two-dimensionally in different ways, describing the usefulness of these representations."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They use coordinates to describe transformations of points in the plane."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students plan and conduct statistical investigations involving discrete and continuous numerical data, using appropriate displays."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They interpret data in terms of the shape of distribution and summary statistics, identifying possible outliers."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They decide which measure of central tendency is most suitable and explain their reasoning."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students list sample spaces for single-step experiments, assign probabilities to outcomes of events and predict relative frequencies for related events."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They conduct repeated single-step chance experiments and run simulations using digital tools, giving reasons for differences between predicted and observed results."
+      }
+     ],
      "strands": [
       {
        "name": "Number",
@@ -208,6 +835,113 @@ window.VC2 = {
     {
      "level": "8",
      "achievement": "By the end of Level 8, students recognise irrational numbers as numbers that cannot develop from the division of integer values by natural numbers and terminating or recurring decimals. They apply the exponent laws to calculations with numbers involving positive integer exponents. Students solve problems involving the 4 operations with integers and positive rational numbers. They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts.\n\nStudents apply algebraic properties to simplify, rearrange, expand and factorise linear expressions. They graph linear relations and solve linear equations with rational solutions and one-variable inequalities, graphically and algebraically. Students plot linear and non-linear relations on the Cartesian plane, with and without the use of digital tools. Students use mathematical modelling to solve problems using linear relations, interpreting and reviewing the model in context. They make and test conjectures involving linear relations by developing algorithms and using digital tools.\n\nStudents use appropriate metric units when solving measurement problems involving the perimeter and area of composite shapes, and volume of right prisms. They use Pythagoras’ theorem to solve measurement problems involving unknown lengths of right-angled triangles. Students use formulas to solve problems involving the area and circumference of circles. They solve problems of duration involving 12- and 24-hour cycles across multiple time zones.\n\nStudents use 3 dimensions to locate and describe position. They identify conditions for congruency and similarity in triangles and other common shapes, and design and test algorithms to test for congruency and similarity. Students apply the properties of quadrilaterals to solve problems.\n\nStudents conduct statistical investigations and explain the implications of obtaining data through sampling. Students analyse and describe the distribution of data. They compare the variation in distributions of random samples of the same and different size from a given population with respect to shape, measures of central tendency and range.\n\nStudents represent the possible combinations of 2 events with tables and diagrams, and determine related probabilities to solve practical problems. They conduct experiments or simulations using digital tools to determine related probabilities of compound events.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 8, students recognise irrational numbers as numbers that cannot develop from the division of integer values by natural numbers and terminating or recurring decimals."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They apply the exponent laws to calculations with numbers involving positive integer exponents."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "Students solve problems involving the 4 operations with integers and positive rational numbers."
+      },
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students apply algebraic properties to simplify, rearrange, expand and factorise linear expressions."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They graph linear relations and solve linear equations with rational solutions and one-variable inequalities, graphically and algebraically."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students plot linear and non-linear relations on the Cartesian plane, with and without the use of digital tools."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students use mathematical modelling to solve problems using linear relations, interpreting and reviewing the model in context."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They make and test conjectures involving linear relations by developing algorithms and using digital tools."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students use appropriate metric units when solving measurement problems involving the perimeter and area of composite shapes, and volume of right prisms."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They use Pythagoras’ theorem to solve measurement problems involving unknown lengths of right-angled triangles."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students use formulas to solve problems involving the area and circumference of circles."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They solve problems of duration involving 12- and 24-hour cycles across multiple time zones."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students use 3 dimensions to locate and describe position."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They identify conditions for congruency and similarity in triangles and other common shapes, and design and test algorithms to test for congruency and similarity."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students apply the properties of quadrilaterals to solve problems."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students conduct statistical investigations and explain the implications of obtaining data through sampling."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students analyse and describe the distribution of data."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They compare the variation in distributions of random samples of the same and different size from a given population with respect to shape, measures of central tendency and range."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students represent the possible combinations of 2 events with tables and diagrams, and determine related probabilities to solve practical problems."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They conduct experiments or simulations using digital tools to determine related probabilities of compound events."
+      }
+     ],
      "strands": [
       {
        "name": "Number",
@@ -390,6 +1124,108 @@ window.VC2 = {
     {
      "level": "9",
      "achievement": "By the end of Level 9, students recognise and use rational and irrational numbers to solve problems.\n\nStudents extend and apply the exponent laws with positive integers and the zero exponent to variables. They expand binomial products and factorise monic quadratic expressions. They find the distance between 2 points on the Cartesian plane, sketch linear graphs and find the gradient and midpoint of a line segment. Students use mathematical modelling to solve problems involving change, including simple interest in financial contexts and change in other applied contexts, choosing to use linear and quadratic functions. They graph quadratic functions and use null factor law to solve monic quadratic equations with integer roots algebraically. Students investigate and describe the effects of variation of parameters on functions and relations, using digital tools where appropriate, and make connections between their graphical and algebraic representations.\n\nStudents apply formulas to solve problems involving the surface area and volume of right prisms, cylinders and composite shapes. They solve problems involving ratio, similarity and scale in two-dimensional situations. They determine percentage errors in measurements. Students apply Pythagoras’ theorem and use trigonometric ratios to solve problems involving right-angled triangles. They use mathematical modelling to solve practical problems involving direct and indirect proportion, ratio and scale, evaluating the model and communicating their methods and findings. Students express small and large numbers in scientific notation.\n\nStudents apply the enlargement transformation to images of shapes and objects, and interpret results. They design, use and test algorithms based on geometric constructions or theorems.\n\nStudents compare and analyse the distributions of multiple numerical data sets, choose representations, describe features of these data sets using summary statistics and the shape of distributions, and consider the effect of outliers. They explain how sampling techniques and representation can be used to support or question conclusions or to promote a point of view.\n\nStudents determine sets of outcomes for two-step chance experiments and represent these in various ways. They assign probabilities to the outcomes of two-step chance experiments. They design and conduct experiments or simulations for combined events using digital tools.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 9, students recognise and use rational and irrational numbers to solve problems."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students extend and apply the exponent laws with positive integers and the zero exponent to variables."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They expand binomial products and factorise monic quadratic expressions."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They find the distance between 2 points on the Cartesian plane, sketch linear graphs and find the gradient and midpoint of a line segment."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students use mathematical modelling to solve problems involving change, including simple interest in financial contexts and change in other applied contexts, choosing to use linear and quadratic functions."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They graph quadratic functions and use null factor law to solve monic quadratic equations with integer roots algebraically."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students investigate and describe the effects of variation of parameters on functions and relations, using digital tools where appropriate, and make connections between their graphical and algebraic representations."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students apply formulas to solve problems involving the surface area and volume of right prisms, cylinders and composite shapes."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They solve problems involving ratio, similarity and scale in two-dimensional situations."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They determine percentage errors in measurements."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students apply Pythagoras’ theorem and use trigonometric ratios to solve problems involving right-angled triangles."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They use mathematical modelling to solve practical problems involving direct and indirect proportion, ratio and scale, evaluating the model and communicating their methods and findings."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students express small and large numbers in scientific notation."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students apply the enlargement transformation to images of shapes and objects, and interpret results."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They design, use and test algorithms based on geometric constructions or theorems."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students compare and analyse the distributions of multiple numerical data sets, choose representations, describe features of these data sets using summary statistics and the shape of distributions, and consider the effect of outliers."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They explain how sampling techniques and representation can be used to support or question conclusions or to promote a point of view."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students determine sets of outcomes for two-step chance experiments and represent these in various ways."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They assign probabilities to the outcomes of two-step chance experiments."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They design and conduct experiments or simulations for combined events using digital tools."
+      }
+     ],
      "strands": [
       {
        "name": "Number",
@@ -552,6 +1388,113 @@ window.VC2 = {
     {
      "level": "10",
      "achievement": "By the end of Level 10, students recognise the effect of approximations of real numbers in repeated calculations.\n\nStudents use mathematical modelling to solve problems involving growth and decay in financial and other applied situations, applying linear, quadratic and exponential functions as appropriate, and solve related equations, numerically and graphically. They make and test conjectures involving functions and relations using digital tools. Students substitute into formulas, find unknown values, manipulate linear and quadratic algebraic expressions, expand binomial expressions and factorise monic and simple non-monic quadratic expressions, with and without the use of digital tools. They solve problems involving linear equations and inequalities, quadratic equations and pairs of simultaneous linear equations and related graphs, algebraically and graphically, with and without the use of digital tools, and justify solutions. They represent linear, quadratic and exponential functions numerically, graphically and algebraically, and use them to model situations and solve practical problems. Students can design and implement simple algorithms using pseudocode or other general purpose programming language.\n\nStudents solve measurement problems involving surface area and volume of composite objects. They interpret and use logarithmic scales representing small or large quantities or change in applied contexts. Students apply Pythagoras’ theorem and trigonometry to solve practical problems involving right-angled triangles. They identify the impact of measurement errors on the accuracy of results. Students use mathematical modelling to solve practical problems involving direct and inverse proportion and scaling, evaluating and modifying models, and reporting assumptions, methods and findings.\n\nStudents use deductive reasoning, theorems and algorithms to solve spatial problems. They interpret networks used to represent practical situations and describe connectedness.\n\nStudents compare univariate data sets by referring to summary statistics and the shape of their displays. They plan and conduct statistical investigations involving bivariate data, including where the independent variable is time. They represent the distribution of data involving 2 variables, using tables and scatterplots, and comment on possible association. They analyse inferences and conclusions in the media, noting potential sources of bias. Students compare the distribution of continuous numerical data, using various displays, and discuss distributions in terms of centre, spread, shape and outliers.\n\nStudents apply conditional probability to solve problems involving compound events. They design and conduct simulations involving conditional probability, using digital tools.",
+     "standard": [
+      {
+       "strand": "Number",
+       "sub": "Number",
+       "text": "By the end of Level 10, students recognise the effect of approximations of real numbers in repeated calculations."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students use mathematical modelling to solve problems involving growth and decay in financial and other applied situations, applying linear, quadratic and exponential functions as appropriate, and solve related equations, numerically and graphically."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They make and test conjectures involving functions and relations using digital tools."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students substitute into formulas, find unknown values, manipulate linear and quadratic algebraic expressions, expand binomial expressions and factorise monic and simple non-monic quadratic expressions, with and without the use of digital tools."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They solve problems involving linear equations and inequalities, quadratic equations and pairs of simultaneous linear equations and related graphs, algebraically and graphically, with and without the use of digital tools, and justify solutions."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "They represent linear, quadratic and exponential functions numerically, graphically and algebraically, and use them to model situations and solve practical problems."
+      },
+      {
+       "strand": "Algebra",
+       "sub": "Algebra",
+       "text": "Students can design and implement simple algorithms using pseudocode or other general purpose programming language."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students solve measurement problems involving surface area and volume of composite objects."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They interpret and use logarithmic scales representing small or large quantities or change in applied contexts."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students apply Pythagoras’ theorem and trigonometry to solve practical problems involving right-angled triangles."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "They identify the impact of measurement errors on the accuracy of results."
+      },
+      {
+       "strand": "Measurement",
+       "sub": "Measurement",
+       "text": "Students use mathematical modelling to solve practical problems involving direct and inverse proportion and scaling, evaluating and modifying models, and reporting assumptions, methods and findings."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "Students use deductive reasoning, theorems and algorithms to solve spatial problems."
+      },
+      {
+       "strand": "Space",
+       "sub": "Space",
+       "text": "They interpret networks used to represent practical situations and describe connectedness."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students compare univariate data sets by referring to summary statistics and the shape of their displays."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They plan and conduct statistical investigations involving bivariate data, including where the independent variable is time."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They represent the distribution of data involving 2 variables, using tables and scatterplots, and comment on possible association."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "They analyse inferences and conclusions in the media, noting potential sources of bias."
+      },
+      {
+       "strand": "Statistics",
+       "sub": "Statistics",
+       "text": "Students compare the distribution of continuous numerical data, using various displays, and discuss distributions in terms of centre, spread, shape and outliers."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "Students apply conditional probability to solve problems involving compound events."
+      },
+      {
+       "strand": "Probability",
+       "sub": "Probability",
+       "text": "They design and conduct simulations involving conditional probability, using digital tools."
+      }
+     ],
      "strands": [
       {
        "name": "Number",
@@ -738,6 +1681,7 @@ window.VC2 = {
     {
      "level": "10A",
      "achievement": "",
+     "standard": [],
      "strands": [
       {
        "name": "Number",
@@ -912,8 +1856,381 @@ window.VC2 = {
    "name": "Science",
    "levels": [
     {
+     "level": "5–6",
+     "achievement": "By the end of Level 6, students describe examples of advances in science achieved by scientists who work individually and in teams, building on the work of others. They discuss examples that illustrate how individuals and communities use scientific knowledge, skills and data to inform their actions and make decisions.\n\nStudents explain how natural and human-induced changes in the physical conditions of a habitat affect the survival of organisms. They provide examples of how organisms have changed over time and explain how the structural features and behaviours of organisms enable them to survive. They relate the movement and arrangement of the particles present in solids, liquids and gases to their observable properties, and model the particles in different mixtures. They classify and compare reversible and irreversible changes to substances. They model key processes that change Earth’s surface. They identify natural hazards and propose human actions that can reduce their impacts. They model the relationship between the Sun and planets of the solar system and explain how the relative positions of Earth and the Sun relate to the observable phenomena of variable day and night length. They identify sources of light and model different pathways of light to explain observed phenomena. They distinguish between electrical insulators and conductors, and identify the role of circuit components in the transfer and transformation of electrical energy.\n\nStudents make reasoned predictions, describe patterns and test relationships when investigating observable phenomena. They plan different scientific investigations including fair tests, describe how risks and ethical issues associated with investigations have been managed, and identify cultural considerations when planning fieldwork. They use equipment to generate and record data, including repeat trials. They construct representations to organise and process data and information, and describe patterns, trends and relationships. They compare their methods and findings with those of others including identification of possible sources of error, suggest improvements to their own and others’ investigations, pose questions for further investigation and select evidence to develop reasoned conclusions. They communicate ideas, findings, patterns, trends and relationships for a specific purpose and audience, including using various presentation formats, scientific vocabulary and digital tools where appropriate.",
+     "standard": [
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "By the end of Level 6, students describe examples of advances in science achieved by scientists who work individually and in teams, building on the work of others."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Use and influence of science",
+       "text": "They discuss examples that illustrate how individuals and communities use scientific knowledge, skills and data to inform their actions and make decisions."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "Students explain how natural and human-induced changes in the physical conditions of a habitat affect the survival of organisms."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They provide examples of how organisms have changed over time and explain how the structural features and behaviours of organisms enable them to survive."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They relate the movement and arrangement of the particles present in solids, liquids and gases to their observable properties, and model the particles in different mixtures."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They classify and compare reversible and irreversible changes to substances."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They model key processes that change Earth’s surface."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They identify natural hazards and propose human actions that can reduce their impacts."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They model the relationship between the Sun and planets of the solar system and explain how the relative positions of Earth and the Sun relate to the observable phenomena of variable day and night length."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They identify sources of light and model different pathways of light to explain observed phenomena."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They distinguish between electrical insulators and conductors, and identify the role of circuit components in the transfer and transformation of electrical energy."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Questioning and predicting",
+       "text": "Students make reasoned predictions, describe patterns and test relationships when investigating observable phenomena."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They plan different scientific investigations including fair tests, describe how risks and ethical issues associated with investigations have been managed, and identify cultural considerations when planning fieldwork."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They use equipment to generate and record data, including repeat trials."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Processing, modelling and analysing",
+       "text": "They construct representations to organise and process data and information, and describe patterns, trends and relationships."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Evaluating",
+       "text": "They compare their methods and findings with those of others including identification of possible sources of error, suggest improvements to their own and others’ investigations, pose questions for further investigation and select evidence to develop reasoned conclusions."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Communicating",
+       "text": "They communicate ideas, findings, patterns, trends and relationships for a specific purpose and audience, including using various presentation formats, scientific vocabulary and digital tools where appropriate."
+      }
+     ],
+     "strands": [
+      {
+       "name": "Science as a Human Endeavour",
+       "substrands": [
+        {
+         "name": "Nature and development of science",
+         "cds": [
+          {
+           "code": "VC2S6H01",
+           "text": "scientific knowledge changes over time, often resulting from collaboration or by building on the work of others, and leads to advances in science"
+          }
+         ]
+        },
+        {
+         "name": "Use and influence of science",
+         "cds": [
+          {
+           "code": "VC2S6H02",
+           "text": "scientific knowledge, skills and data can be used by individuals and communities to identify problems, consider responses and make decisions"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Science Understanding",
+       "substrands": [
+        {
+         "name": "Biological sciences",
+         "cds": [
+          {
+           "code": "VC2S6U02",
+           "text": "organisms have evolved over time, as seen in fossils and scientific records; the structural features and behaviours of living organisms enable them to thrive in their environments"
+          },
+          {
+           "code": "VC2S6U01",
+           "text": "habitats can be described by their physical conditions; changing the physical conditions of a habitat, including by human activity, may affect the growth and survival of organisms"
+          }
+         ]
+        },
+        {
+         "name": "Chemical sciences",
+         "cds": [
+          {
+           "code": "VC2S6U03",
+           "text": "the observable properties of matter (solids, liquids and gases) can be explained by modelling the motion and arrangement of their particles; mixtures (including solutions) can be formed by combining 2 or more different substances"
+          },
+          {
+           "code": "VC2S6U04",
+           "text": "changes to substances may be reversible, in which case the substance may be recovered, or irreversible, in which case new substances are formed; for most substances a change of state or dissolving in water is reversible, while irreversible changes include cooking and rusting"
+          }
+         ]
+        },
+        {
+         "name": "Earth and space sciences",
+         "cds": [
+          {
+           "code": "VC2S6U05",
+           "text": "geological processes including weathering, erosion, transportation and deposition can cause slow or rapid changes to Earth’s surface"
+          },
+          {
+           "code": "VC2S6U06",
+           "text": "sudden geological changes or extreme weather conditions can affect Earth’s surface and atmosphere; the impacts of natural hazards, including earthquakes, volcanic eruptions, wildfires and floods, can be reduced by human actions and technological innovations"
+          },
+          {
+           "code": "VC2S6U07",
+           "text": "the force of gravity keeps Earth and other planets in the solar system in orbit around the Sun; cyclic observable phenomena, including variable day and night length, can be related to Earth’s tilt, rotation on its axis and revolution around the Sun"
+          }
+         ]
+        },
+        {
+         "name": "Physical sciences",
+         "cds": [
+          {
+           "code": "VC2S6U08",
+           "text": "light can be produced from many sources; light travels in a straight path, can form shadows, and can be absorbed, transmitted, reflected or refracted by objects"
+          },
+          {
+           "code": "VC2S6U09",
+           "text": "materials may be electrical insulators or conductors; energy can be transferred and transformed in electrical circuits where the components of a circuit play particular roles in the function of the circuit"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "Science Inquiry",
+       "substrands": [
+        {
+         "name": "Questioning and predicting",
+         "cds": [
+          {
+           "code": "VC2S6I01",
+           "text": "investigable questions and reasoned predictions can be used in guiding investigations to identify patterns and test relationships"
+          }
+         ]
+        },
+        {
+         "name": "Planning and conducting",
+         "cds": [
+          {
+           "code": "VC2S6I02",
+           "text": "repeatable scientific investigations to answer questions can be planned and conducted, including, as appropriate, deciding the variables to be changed, measured and controlled in fair tests, considering potential risks, planning for the safe and ethical use of equipment and materials, and obtaining permissions for investigations conducted on Country and Place or in protected areas"
+          },
+          {
+           "code": "VC2S6I03",
+           "text": "equipment can be used to observe, generate, measure and record data with reasonable precision for repeated measurements, using digital tools as appropriate"
+          }
+         ]
+        },
+        {
+         "name": "Processing, modelling and analysing",
+         "cds": [
+          {
+           "code": "VC2S6I04",
+           "text": "data and information can be organised and processed to show patterns, trends and relationships by constructing representations including tables, graphs and visual or physical models"
+          }
+         ]
+        },
+        {
+         "name": "Evaluating",
+         "cds": [
+          {
+           "code": "VC2S6I05",
+           "text": "methods and findings can be compared with those of others to identify sources of error, to select evidence in support of reasoned explanations and conclusions, and to develop further questions for investigation"
+          }
+         ]
+        },
+        {
+         "name": "Communicating",
+         "cds": [
+          {
+           "code": "VC2S6I06",
+           "text": "scientific ideas, findings, patterns, trends and relationships can be communicated for a specific purpose and audience, using various presentation formats, scientific vocabulary and digital tools as appropriate"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
      "level": "7–8",
      "achievement": "By the end of Level 8, students explain how new evidence can lead to changes in scientific knowledge. They discuss how people with different understandings, skills, perspectives and worldviews have worked in multidisciplinary teams to develop scientific knowledge. They discuss the relevant ethical, environmental, social and economic considerations associated with a proposed scientific response to a selected socio-scientific issue. They analyse the importance of science communication in shaping viewpoints, policies and regulations.\n\nStudents explain how biological diversity is ordered and organised. They explain the role of specialised cell structures and organelles in cellular function, and distinguish between cells in selected examples of plants and animals, and unicellular and multicellular organisms. They analyse the relationship between structure and function at organ and body system levels for a selected plant and an animal, and explain how a disorder in the cells, tissues or organs of these systems affects the survival of each organism. They represent flows of matter and energy in ecosystems and use real and hypothetical scenarios and population data to interpret and predict the effects of environmental changes. They use the particle and kinetic theories of matter to explain the structure, properties and behaviour of substances. They distinguish between pure substances and mixtures, and design procedures to separate mixtures. They classify and represent matter as elements, compounds or mixtures, and distinguish between physical and chemical changes. They distinguish between renewable and non-renewable resources, evaluate the sustainable use of different resources, and compare the benefits and risks of resource extraction and energy production. They apply the theory of plate tectonics to explain geological phenomena including volcanoes, earthquakes, mountain formation and the distribution of earthquakes and volcanic zones around the globe. They explain how the properties of rocks relate to their formation and influence their use. They model the Earth–Sun–Moon system’s cyclic changes to explain the observable phenomena of seasons and tides. They demonstrate how simple machines can be used for a purpose. They represent and explain the effects of forces acting on objects. They compare different forms of energy and represent energy transfers and transformations in simple systems. They undertake a household energy audit and propose ways to decrease energy consumption. They design and construct series and parallel circuits, and observe and make predictions about voltage and current and about energy transfer in the circuits.\n\nStudents develop hypotheses and make reasoned predictions to identify patterns, test relationships and analyse and evaluate scientific models when investigating phenomena at various scales. They plan a range of reproducible scientific investigations, document procedures and identify potential ethical issues and intercultural considerations required for fieldwork or use of secondary data. They select and use equipment to generate and record data with precision. They select and construct appropriate representations to organise and process data and information. They analyse and connect data and information to identify and explain patterns, trends, relationships and anomalies. They identify assumptions and sources of error in methods and analyse conclusions and claims with reference to conflicting evidence and unanswered questions. They provide science-based explanations for findings, and use evidence to support conclusions and evaluate claims. They select and use appropriate presentation formats, scientific vocabulary, models and other representations when communicating their ideas, findings and arguments for specific purposes to specific audiences.",
+     "standard": [
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "By the end of Level 8, students explain how new evidence can lead to changes in scientific knowledge."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They discuss how people with different understandings, skills, perspectives and worldviews have worked in multidisciplinary teams to develop scientific knowledge."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They discuss the relevant ethical, environmental, social and economic considerations associated with a proposed scientific response to a selected socio-scientific issue."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They analyse the importance of science communication in shaping viewpoints, policies and regulations."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "Students explain how biological diversity is ordered and organised."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They explain the role of specialised cell structures and organelles in cellular function, and distinguish between cells in selected examples of plants and animals, and unicellular and multicellular organisms."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They analyse the relationship between structure and function at organ and body system levels for a selected plant and an animal, and explain how a disorder in the cells, tissues or organs of these systems affects the survival of each organism."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They represent flows of matter and energy in ecosystems and use real and hypothetical scenarios and population data to interpret and predict the effects of environmental changes."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They use the particle and kinetic theories of matter to explain the structure, properties and behaviour of substances."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They distinguish between pure substances and mixtures, and design procedures to separate mixtures."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They classify and represent matter as elements, compounds or mixtures, and distinguish between physical and chemical changes."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They distinguish between renewable and non-renewable resources, evaluate the sustainable use of different resources, and compare the benefits and risks of resource extraction and energy production."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They apply the theory of plate tectonics to explain geological phenomena including volcanoes, earthquakes, mountain formation and the distribution of earthquakes and volcanic zones around the globe."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They explain how the properties of rocks relate to their formation and influence their use."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They model the Earth–Sun–Moon system’s cyclic changes to explain the observable phenomena of seasons and tides."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They demonstrate how simple machines can be used for a purpose."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They represent and explain the effects of forces acting on objects."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They compare different forms of energy and represent energy transfers and transformations in simple systems."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They undertake a household energy audit and propose ways to decrease energy consumption."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They design and construct series and parallel circuits, and observe and make predictions about voltage and current and about energy transfer in the circuits."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Questioning and predicting",
+       "text": "Students develop hypotheses and make reasoned predictions to identify patterns, test relationships and analyse and evaluate scientific models when investigating phenomena at various scales."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They plan a range of reproducible scientific investigations, document procedures and identify potential ethical issues and intercultural considerations required for fieldwork or use of secondary data."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They select and use equipment to generate and record data with precision."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Processing, modelling and analysing",
+       "text": "They select and construct appropriate representations to organise and process data and information."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Processing, modelling and analysing",
+       "text": "They analyse and connect data and information to identify and explain patterns, trends, relationships and anomalies."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Evaluating",
+       "text": "They identify assumptions and sources of error in methods and analyse conclusions and claims with reference to conflicting evidence and unanswered questions."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Evaluating",
+       "text": "They provide science-based explanations for findings, and use evidence to support conclusions and evaluate claims."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Communicating",
+       "text": "They select and use appropriate presentation formats, scientific vocabulary, models and other representations when communicating their ideas, findings and arguments for specific purposes to specific audiences."
+      }
+     ],
      "strands": [
       {
        "name": "Science as a Human Endeavour",
@@ -1101,6 +2418,153 @@ window.VC2 = {
     {
      "level": "9–10",
      "achievement": "By the end of Level 10, students analyse the importance of different scientific methods, critique, replication, publication and peer review in the development of scientific knowledge. They examine the relationship between science, engineering and technologies. They examine how different projected outcomes of the application of scientific knowledge to a selected socio-scientific issue may lead to varied support from individuals and groups in society. They discuss how scientific information and misinformation may inform personal and social decision-making and influence priorities for scientific research.\n\nStudents describe how the processes of sexual and asexual reproduction enable survival of the species. They explain the processes that underpin heredity and genetic diversity, and predict the outcomes of monohybrid crosses. They explain how the nervous and endocrine systems use negative feedback to support homeostasis in the body’s internal environment. They distinguish between infectious and non-infectious disease, and compare different infectious disease control measures. They describe the evidence supporting the theory of evolution by natural selection. They explain how ideas about the structure of the atom have changed over time, and model natural radioactive decay to illustrate how stable atoms are formed. They describe patterns and trends in the periodic table. They demonstrate the Law of Conservation of Mass in chemical reactions, and write word and balanced chemical equations for these reactions. They classify energy changes in chemical reactions as exothermic or endothermic. They predict the products of reactions and the effect of changing reaction conditions. They explain how interactions within and between Earth’s interrelated systems affect the carbon cycle. They describe trends in patterns of global climate change and propose strategies to mitigate contributing factors. They discuss the advantages and disadvantages of space exploration. They distinguish between different features in the universe and sequence key events in the origin and evolution of the universe, including an outline of the supporting evidence for the big bang theory. They explain how wave and particle models describe energy transfer, and compare the properties, features and applications of waves. They analyse and represent energy conservation, including efficiency, in systems, and model how different forms of energy are transformed into electrical energy. They use Newton’s laws to describe and predict the motion of objects in a system.\n\nStudents formulate and refine questions and hypotheses to make reasoned predictions, test relationships and develop explanatory models when investigating scientific questions, problems and claims. They plan a range of valid, reproducible and safe scientific investigations and explain how they have addressed any ethical and cultural considerations when generating or using primary and secondary data. They select and use equipment to generate and record data, ensuring the use of suitable sample sizes and assessing the precision of multiple measurement readings. They select and construct a range of appropriate representations to organise, process and summarise data and information. They analyse and compare a variety of data and information to identify and explain qualitative and quantitative patterns, trends, relationships, assumptions and anomalies. They evaluate the validity and reproducibility of investigation methods including ways to improve the quality of data, and the validity of conclusions and claims. They provide evidence-based explanations for findings and construct logical arguments based on the evaluation of multiple sources of evidence to justify conclusions and assess claims. They select and use appropriate presentation formats, scientific content, vocabulary, models, conventions, formulas and other representations to achieve their purpose when communicating and justifying their ideas, findings, arguments and proposals to diverse audiences.",
+     "standard": [
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "By the end of Level 10, students analyse the importance of different scientific methods, critique, replication, publication and peer review in the development of scientific knowledge."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They examine the relationship between science, engineering and technologies."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They examine how different projected outcomes of the application of scientific knowledge to a selected socio-scientific issue may lead to varied support from individuals and groups in society."
+      },
+      {
+       "strand": "Science as a Human Endeavour",
+       "sub": "Nature and development of science",
+       "text": "They discuss how scientific information and misinformation may inform personal and social decision-making and influence priorities for scientific research."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "Students describe how the processes of sexual and asexual reproduction enable survival of the species."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They explain the processes that underpin heredity and genetic diversity, and predict the outcomes of monohybrid crosses."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They explain how the nervous and endocrine systems use negative feedback to support homeostasis in the body’s internal environment."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They distinguish between infectious and non-infectious disease, and compare different infectious disease control measures."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Biological sciences",
+       "text": "They describe the evidence supporting the theory of evolution by natural selection."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They explain how ideas about the structure of the atom have changed over time, and model natural radioactive decay to illustrate how stable atoms are formed."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They describe patterns and trends in the periodic table."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They demonstrate the Law of Conservation of Mass in chemical reactions, and write word and balanced chemical equations for these reactions."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They classify energy changes in chemical reactions as exothermic or endothermic."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Chemical sciences",
+       "text": "They predict the products of reactions and the effect of changing reaction conditions."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They explain how interactions within and between Earth’s interrelated systems affect the carbon cycle."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They describe trends in patterns of global climate change and propose strategies to mitigate contributing factors."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They discuss the advantages and disadvantages of space exploration."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Earth and space sciences",
+       "text": "They distinguish between different features in the universe and sequence key events in the origin and evolution of the universe, including an outline of the supporting evidence for the big bang theory."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They explain how wave and particle models describe energy transfer, and compare the properties, features and applications of waves."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They analyse and represent energy conservation, including efficiency, in systems, and model how different forms of energy are transformed into electrical energy."
+      },
+      {
+       "strand": "Science Understanding",
+       "sub": "Physical sciences",
+       "text": "They use Newton’s laws to describe and predict the motion of objects in a system."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Questioning and predicting",
+       "text": "Students formulate and refine questions and hypotheses to make reasoned predictions, test relationships and develop explanatory models when investigating scientific questions, problems and claims."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They plan a range of valid, reproducible and safe scientific investigations and explain how they have addressed any ethical and cultural considerations when generating or using primary and secondary data."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Planning and conducting",
+       "text": "They select and use equipment to generate and record data, ensuring the use of suitable sample sizes and assessing the precision of multiple measurement readings."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Processing, modelling and analysing",
+       "text": "They select and construct a range of appropriate representations to organise, process and summarise data and information."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Processing, modelling and analysing",
+       "text": "They analyse and compare a variety of data and information to identify and explain qualitative and quantitative patterns, trends, relationships, assumptions and anomalies."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Evaluating",
+       "text": "They evaluate the validity and reproducibility of investigation methods including ways to improve the quality of data, and the validity of conclusions and claims."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Evaluating",
+       "text": "They provide evidence-based explanations for findings and construct logical arguments based on the evaluation of multiple sources of evidence to justify conclusions and assess claims."
+      },
+      {
+       "strand": "Science Inquiry",
+       "sub": "Communicating",
+       "text": "They select and use appropriate presentation formats, scientific content, vocabulary, models, conventions, formulas and other representations to achieve their purpose when communicating and justifying their ideas, findings, arguments and proposals to diverse audiences."
+      }
+     ],
      "strands": [
       {
        "name": "Science as a Human Endeavour",

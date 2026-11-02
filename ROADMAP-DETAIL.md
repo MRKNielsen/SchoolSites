@@ -42,6 +42,22 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — Towards / At / Above standards in the builder (2 Nov 2026)
+
+Kodie asked whether the achievement standards could be grouped into Towards,
+At and Above. A VCAA standard describes only the expected standard at the
+end of a level, so splitting one three ways would be invented. Instead the
+builder reads the continuum: Towards is the level below's standard, At the
+code's own level, Above the level above, each narrowed to the linked code's
+sub-strand (Science) or strand (Mathematics), and each click lands in the
+matching band. Added the Foundation–6 charts (Levels 5 and up kept) so Level
+7 and Levels 7–8 have a Towards — now 263 content descriptions. Science
+sentences are tagged to sub-strands by shared words with an in-order rule; all
+74 were read by hand and one correction lives in `SUB_OVERRIDES`. Level 10A
+has no standard, so its content descriptions stand in, labelled.
+`test-rubric-builder.js` now 74 checks, including nine hand-checked tag
+anchors and the columns for VC2S8U14, VC2M10A04 and VC2M7N01.
+
 ### Landed — rubric builder (1 Nov 2026)
 
 `tools/rubric-builder.html` (+ `assets/js/rubric-builder.js`) writes rubric
@@ -1322,11 +1338,12 @@ starting a new one.
       `tools/build-curriculum.py` (a new learning-area letter needs a line
       in its `SUBJECTS`). Other charts may lay out their tables differently;
       the script stops with a message rather than guessing. **S each**
-- [ ] **Achievement-standard snippets by strand.** The builder offers the
+- [x] **Achievement-standard snippets by strand.** The builder offers the
       whole level standard (30 sentences for Science 7–8). Mathematics'
       chart already splits the standard by strand, so the snippets could be
       narrowed to the linked code's strand; Science's would need sentences
-      matched to sub-strands by hand. **S**
+      matched to sub-strands by hand. **S** *(done 2026-11-02 — grouped as
+      Towards / At / Above from the continuum; see "Landed — Towards / At / Above")*
 - [ ] **Port bio's rubric onto the shared engine.** `bio-ecosystems/rubric.html`
       still carries its own copy of the old engine (ticks, species artefact,
       own palette). As a rubric file it would be all-`max: 1` criteria; the
