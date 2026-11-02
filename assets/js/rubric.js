@@ -68,15 +68,24 @@ function validateRubric(R){
 
   R.parts.forEach(p => { if(typeof p.name !== "string" || !p.name.trim()) E("Part " + p.id + " has no name."); });
   const str = v => typeof v === "string" && v.trim() !== "";
+  /* bands with at least one question behind them; the others are empty —
+     allowed, greyed out on the rubric, and never awarded */
+  const used = {};
+  R.criteria.forEach(c => { if(c && c.strand != null && Number.isInteger(c.band)) (used[c.strand] = used[c.strand] || new Set()).add(c.band); });
+  const isUsed = (sid, b) => !!(used[sid] && used[sid].has(b));
   R.strands.forEach(s => {
     const where = "Strand " + s.id;
     if(!str(s.name)) E(where + " has no name.");
     const mb = s.maxBand == null ? 4 : s.maxBand;
     if(!Number.isInteger(mb) || mb < 1 || mb > 4){ E(where + ": maxBand must be a whole number from 1 to 4."); return; }
-    if(!Array.isArray(s.bands) || s.bands.length < mb) E(where + ": needs a descriptor for each of bands 1–" + mb + ".");
-    else s.bands.slice(0, mb).forEach((b, i) => { if(!b || !str(b.d)) E(where + ", band " + (i+1) + ": descriptor (d) is empty."); });
-    if(!Array.isArray(s.can) || s.can.length < mb || !s.can.slice(0, mb).every(str)) E(where + ": can needs one phrase for each of bands 1–" + mb + ".");
-    if(!Array.isArray(s.next) || s.next.length < mb || !s.next.slice(0, mb).every(str)) E(where + ": next needs one phrase for each of bands 1–" + mb + ".");
+    ["bands","can","next"].forEach(k => { if(!Array.isArray(s[k])) E(where + ": " + k + " must be a list (one entry per band, empty bands included)."); });
+    if(!Array.isArray(s.bands) || !Array.isArray(s.can) || !Array.isArray(s.next)) return;
+    for(let b = 1; b <= mb; b++){
+      if(!isUsed(s.id, b)) continue;
+      if(!s.bands[b-1] || !str(s.bands[b-1].d)) E(where + ", band " + b + ": descriptor (d) is empty.");
+      if(!str(s.can[b-1])) E(where + ", band " + b + ": can needs a phrase (“Ava can now …”).");
+      if(!str(s.next[b-1])) E(where + ", band " + b + ": next needs a phrase (“To improve, Ava should …”).");
+    }
     if(!str(s.start)) E(where + ": start (the next step for band 0) is empty.");
     if(s.weight != null && !(typeof s.weight === "number" && s.weight > 0)) E(where + ": weight must be a positive number.");
     if(s.code != null && typeof s.code !== "string") E(where + ": code must be text.");
@@ -94,14 +103,21 @@ function validateRubric(R){
   });
   if(errors.length) return {errors, warnings};
 
-  /* The band ladder must be complete. topCell() walks down from maxBand and
-     missedBelow() penalises gaps, so a band with no question behind it
-     silently caps the strand below it. */
+  /* Empty bands are allowed (Nov 2026): a band with no question behind it is
+     greyed out on the rubric and cannot be awarded; a student who reaches
+     the band above it skips it, and a penalty steps down past it. A strand
+     needs at least one question, and an empty TOP band is worth a note —
+     usually the task just doesn't reach it, which is what maxBand is for. */
   R.strands.forEach(s => {
     const mb = s.maxBand == null ? 4 : s.maxBand;
-    for(let b = 1; b <= mb; b++)
-      if(!R.criteria.some(c => c.strand === s.id && c.band === b))
-        E("Strand " + s.id + " has no question for band " + b + ", so nobody could be awarded above band " + (b-1) + ". Add a question for it, or lower maxBand.");
+    if(!used[s.id] || !used[s.id].size){ E("Strand " + s.id + " has no question behind it, so it can't be marked. Tag at least one question to it."); return; }
+    const empty = [];
+    for(let b = 1; b <= mb; b++) if(!isUsed(s.id, b)) empty.push(b);
+    if(!empty.length) return;
+    const top = empty.includes(mb);
+    W("Strand " + s.id + ": band" + (empty.length === 1 ? " " : "s ") + empty.join(", ") + (empty.length === 1 ? " has" : " have")
+      + " no question, so " + (empty.length === 1 ? "it is" : "they are") + " greyed out and can't be awarded."
+      + (top ? " Nobody can reach band " + mb + " — if this task doesn't go that high, lower the strand's highest band to " + Math.max(...[0].concat([...used[s.id]])) + " instead." : ""));
   });
   /* A strand's weight is its marks on the paper, so the overall level is
      weighted exactly as the paper is. Leave weight out to have it summed. */
@@ -154,7 +170,10 @@ function normaliseRubric(src){
       R.criteria.forEach(c => { if(c.strand === s.id && !qs.includes(c.q)) qs.push(c.q); });
       s.sub = qs.join(", ");
     }
-    s.bands = s.bands.map(b => ({q: (b && b.q) || "", d: b.d}));
+    /* one entry per band up to maxBand, empty bands included */
+    s.bands = Array.from({length: Math.max(s.maxBand, s.bands.length)}, (_, j) => { const b = s.bands[j]; return {q: (b && b.q) || "", d: (b && b.d) || ""}; });
+    s.can = Array.from({length: s.maxBand}, (_, j) => s.can[j] || "");
+    s.next = Array.from({length: s.maxBand}, (_, j) => s.next[j] || "");
   });
   R.criteria.forEach(c => { c.sub = c.sub || ""; c.label = c.label || ""; if(c.strand === undefined) c.strand = null; });
   return R;
@@ -331,7 +350,11 @@ function strandTouched(st, s){
 function strandResult(st, s){
   const top = topCell(st, s);
   const missed = missedBelow(st, s, top);
-  const derived = Math.max(0, top - missed);
+  /* step down `missed` bands that have questions, skipping empty ones —
+     identical to top - missed when no band is empty */
+  const ladder = [];
+  for(let b = top; b >= 1; b--) if(EV[s.id][b].length) ladder.push(b);
+  const derived = missed < ladder.length ? ladder[missed] : 0;
   const o = st.override[s.id];
   const overridden = Number.isInteger(o) && o >= 0 && o <= maxBandOf(s);
   return {top, missed, derived, band: overridden ? o : derived, overridden,
@@ -864,7 +887,7 @@ function renderComments(){
         const isov = Number.isInteger(ov);
         return '<div class="ovcell'+(isov?' isov':'')+'"><span class="ovname">'+esc(sd.sub)+'</span>'
           + '<select data-ov="'+sd.id+'"><option value="">Auto — '+(rr.assessed ? ('band '+der + (rr.missed ? ' (top '+rr.top+', −'+rr.missed+')' : '')) : 'not assessed')+'</option>'
-          + [0,1,2,3,4].filter(b => b <= maxBandOf(sd)).map(b => '<option value="'+b+'"'+(ov===b?' selected':'')+'>Band '+b+(b===0?' — '+state.band0:'')+'</option>').join("")
+          + [0,1,2,3,4].filter(b => b <= maxBandOf(sd) && (b === 0 || EV[sd.id][b].length || ov === b)).map(b => '<option value="'+b+'"'+(ov===b?' selected':'')+'>Band '+b+(b===0?' — '+state.band0:'')+'</option>').join("")
           + '</select></div>';
       }).join("") + '</div></div>'
     + '<label class="field"><span>Comment for '+esc(st.name)+' '+(st.edited?'<span class="edited-flag">edited by hand</span>':'')+'</span>'

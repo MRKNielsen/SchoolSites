@@ -1012,16 +1012,22 @@ calls the task and its items: Space says "test"/"question"), `columnOrder`
 a rubric that fails shows a list of problems instead of a marker. It carries
 every rule the Space and bio rubrics taught:
 
-- Every strand needs a **complete band ladder up to its own `maxBand`** —
-  at least one criterion per band. `topCell()` walks down from `maxBand` and
-  `missedBelow()` penalises gaps, so an empty band silently caps the strand.
+- A strand needs **at least one criterion**; a strand with none is an
+  error. **Empty bands are allowed** (2 Nov 2026): a band with no question
+  behind it is a warning, not an error. It prints greyed out ("No question
+  in this test."), is never awarded, `missedBelow()` penalties step down
+  past it to the next band that has evidence, and the override list leaves
+  it out (unless an old save already holds it). An empty *top* band gets
+  advice to lower `maxBand` instead. Descriptor/`can`/`next` text is only
+  required for bands that have questions; `normaliseRubric()` pads the rest
+  with blanks.
 - A strand's `weight` is its **actual marks** on the paper. Give it and it
   must equal the sum of its criteria's `max`; leave it out and it is summed.
   `total`, if given, must equal the paper's marks. Space's six strands sum
   to 50, so the overall level is weighted exactly as the paper is.
 - Ids are plain (`[A-Za-z0-9_-]`), unique, and every `part`/`strand`
   reference resolves; `max` is a whole or half mark; `band` sits within the
-  strand's `maxBand`; `can`/`next`/descriptors exist for every band.
+  strand's `maxBand`; `can`/`next`/descriptors exist for every band that has a question.
 - Everything else in a rubric is text the engine escapes. A rubric file
   is a document someone emailed, so markup in it must stay text.
   `tools/test-rubric-marker.js` puts an `<img onerror>` in every field

@@ -423,7 +423,13 @@ function defaultsFor(s){
     else out.gaps.push("band " + b + (role === "at" && atPicks.length ? " (only " + atPicks.length + " At skill" + (atPicks.length === 1 ? "" : "s") + " match" + (atPicks.length === 1 ? "es" : "") + ")"
       : lvl[role] ? " (nothing at Level " + lvl[role] + " matches)" : " (no level " + (role === "towards" ? "below" : "above") + ")"));
   }
-  for(let b = 1; b <= mb; b++) out.next[b-1] = b < mb ? (out.can[b] || "") : TOP_NEXT;
+  /* a band's next step is the next band up that has something in it — an
+     empty band is skipped, as it can't be awarded */
+  for(let b = 1; b <= mb; b++){
+    if(!out.can[b-1]) continue;
+    const up = out.can.slice(b).find(Boolean);
+    out.next[b-1] = up || TOP_NEXT;
+  }
   out.start = best("towards") || best("at");
   return out;
 }
@@ -637,9 +643,9 @@ function strandCard(s, i){
   h += `<div class="bbands">`;
   for(let b = 1; b <= mb; b++){
     const auto = autoEvidence(doc, s.id, b);
-    h += `<div class="bband">
+    h += `<div class="bband${auto ? "" : " bempty"}" id="bb${i}_${b}">
       <div class="bband-h"><span class="bnum b${b}">${b}</span> ${esc(doc.bands[b-1] || "")}
-        <span class="bev ${auto ? "" : "none"}" id="ev${i}_${b}">${auto ? "evidence: " + esc(auto) : "no question tagged to this band yet"}</span></div>
+        <span class="bev ${auto ? "" : "none"}" id="ev${i}_${b}">${auto ? "evidence: " + esc(auto) : "no question — greyed out on the rubric, can’t be awarded"}</span></div>
       ${field("Descriptor — what work at this band looks like", `strands.${i}.bands.${b-1}.d`, s.bands[b-1].d, {area: true, rows: 2, text: true})}
       <div class="grid2">
         ${field("Comment: “Ava can now …”", `strands.${i}.can.${b-1}`, s.can[b-1], {text: true, placeholder: "label the layers of the Sun"})}
@@ -671,7 +677,7 @@ function coverageHTML(){
       if(b > mb){ h += '<td class="na">—</td>'; continue; }
       const cs = d.criteria.filter(c => c.strand === s.id && +c.band === b);
       h += cs.length ? '<td>' + esc(cs.map(qTag).join(", ")) + ' <span class="hint">' + cs.reduce((t, c) => t + (+c.max || 0), 0) + 'm</span></td>'
-                     : '<td class="gap">missing</td>';
+                     : '<td class="bempty">empty — greyed out</td>';
     }
     h += '<td class="n">' + d.criteria.filter(c => c.strand === s.id).reduce((t, c) => t + (+c.max || 0), 0) + '</td></tr>';
   });
@@ -719,7 +725,7 @@ function renderQuestions(){
     });
     h += `</tbody></table></div>`;
   }
-  h += `</div></div><div class="card"><div class="card-head"><div><h2>Evidence by band</h2><p>Every band up to a strand’s highest needs a question behind it — an empty one would stop anyone being awarded above it.</p></div></div><div class="card-body" id="bCov">${coverageHTML()}</div></div>`;
+  h += `</div></div><div class="card"><div class="card-head"><div><h2>Evidence by band</h2><p>A band with no question behind it is allowed: it is greyed out on the rubric and can’t be awarded, and a student who reaches the band above simply skips it.</p></div></div><div class="card-body" id="bCov">${coverageHTML()}</div></div>`;
   return h;
 }
 
@@ -794,7 +800,8 @@ function derived(){
       for(let b = 1; b <= 4; b++){
         const ev = $("#ev" + i + "_" + b); if(!ev) continue;
         const auto = autoEvidence(doc, s.id, b);
-        ev.textContent = auto ? "evidence: " + auto : "no question tagged to this band yet";
+        ev.textContent = auto ? "evidence: " + auto : "no question — greyed out on the rubric, can’t be awarded";
+        const bb = $("#bb" + i + "_" + b); if(bb) bb.classList.toggle("bempty", !auto);
         ev.classList.toggle("none", !auto);
         const qi = app.querySelector(`[data-f="strands.${i}.bands.${b-1}.q"]`);
         if(qi) qi.placeholder = auto || "filled from the questions tagged to this band";

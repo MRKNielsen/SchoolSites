@@ -81,11 +81,12 @@ async function boot(rubric, extra) {
     ['criterion in a missing strand',r => { r.criteria[0].strand = 's9'; },                                  'does not exist'],
     ['band above the strand maxBand',r => { r.criteria.find(c => c.strand === 's5').band = 4; },             "maxBand"],
     ['quarter-mark max',             r => { r.criteria[0].max = 0.25; },                                     'whole or half mark'],
-    ['missing can phrase',           r => { r.strands[0].can.length = 3; },                                  'can needs one phrase'],
-    ['missing next phrase',          r => { r.strands[0].next.length = 2; },                                 'next needs one phrase'],
+    ['missing can phrase',           r => { r.strands[0].can.length = 3; },                                  'band 4: can needs a phrase'],
+    ['missing next phrase',          r => { r.strands[0].next.length = 2; },                                 'band 3: next needs a phrase'],
     ['empty band descriptor',        r => { r.strands[0].bands[1].d = ''; },                                 'descriptor (d) is empty'],
     ['no start step',                r => { delete r.strands[0].start; },                                    'start'],
-    ['an empty band in the ladder',  r => { r.criteria.filter(c => c.strand === 's1' && c.band === 2).forEach(c => c.band = 1); }, 'has no question for band 2'],
+    ['a strand with no questions',   r => { r.criteria.filter(c => c.strand === 's6').forEach(c => c.strand = 's5');
+                                            r.strands.find(x => x.id === 's5').weight = 6; r.strands.find(x => x.id === 's6').weight = 3; }, 'Strand s6 has no question behind it'],
     ['weight disagrees with marks',  r => { r.strands[0].weight = 10; },                                     'weight is 10'],
     ['total disagrees with marks',   r => { r.total = 51; },                                                 'total is 51'],
     ['theme that is not a name',     r => { r.theme = 'space" onload="x'; },                                 'theme must be'],
@@ -104,6 +105,43 @@ async function boot(rubric, extra) {
     const { w } = await boot(r);
     ok(w.eval('RUBRIC_OK') && w.eval('JSON.stringify(STRANDS.map(s => s.weight))') === '[9,12,11,12,3,3]',
        'weight left out is summed from the questions (9,12,11,12,3,3)');
+  }
+
+  console.log('\n=== empty bands are allowed, greyed out, never awarded ===');
+  {
+    /* s1 band 2 emptied: its only question (Q1b) moved to band 1 */
+    const r = clone(SPACE);
+    r.criteria.find(c => c.id === 'Q1b').band = 1; r.criteria.find(c => c.id === 'Q6a').band = 1;
+    r.strands[0].bands[1].d = ''; r.strands[0].can[1] = ''; r.strands[0].next[1] = '';
+    const { w, $, errs } = await boot(r);
+    const chk = JSON.parse(w.eval('JSON.stringify(RUBRIC_CHECK)'));
+    ok(w.eval('RUBRIC_OK') && errs.length === 0, 'a rubric with an empty band (and blank wording for it) is valid');
+    ok(chk.warnings.some(x => /Strand s1: band 2 has no question, so it is greyed out and can't be awarded/.test(x)), 'with a note saying the band is greyed out');
+    $('#f-roll').value = 'Gap Test'; w.eval('applyRoll()');
+    const set = (id, v) => w.eval(`setMark(0, CRITERIA.findIndex(c => c.id === "${id}"), ${v})`);
+    ['Q1a','Q1b','Q6a','Q6b'].forEach(id => set(id, w.eval(`MAXOF["${id}"]`)));
+    ok(w.eval('state.students[0].marks.s1') === 3, 'bands 1 and 3 done → band 3: the empty band 2 is skipped, not required');
+    set('Q1a', 0);
+    ok(w.eval('state.students[0].marks.s1') === 1 && w.eval('state.students[0].res.s1.missed') === 1,
+       'a missed band-1 question steps the award down past empty band 2, to band 1 — never onto the empty band');
+    ok(w.eval('state.students[0].res.s1.top') === 3, '(top cell met is still 3)');
+    w.eval('renderAll(); renderPrint();');
+    const row = [...w.document.querySelectorAll('#printPane table.rub tbody tr')][0];
+    const cells = [...row.querySelectorAll('td')];
+    /* cells: strand, band 0, band 1, band 2 … */
+    ok(cells[3].classList.contains('na') && /No question in this test/.test(cells[3].textContent)
+       && cells[4].classList.contains('hit') && cells[2].classList.contains('awarded'),
+       'the printed rubric greys band 2 out; band 3 shows as met, band 1 as awarded after the penalty');
+    w.eval('state.ui.cmtSel = state.students[0].id; renderComments();');
+    const opts = [...w.document.querySelectorAll('[data-ov="s1"] option')].map(o => o.value).join(',');
+    ok(opts === ',0,1,3,4', 'band overrides don’t offer the empty band (' + opts + ')');
+    /* an empty top band is allowed, with advice */
+    const t = clone(SPACE);
+    t.criteria.find(c => c.id === 'Q10').band = 3;
+    const r2 = await boot(t);
+    const w2 = JSON.parse(r2.w.eval('JSON.stringify(RUBRIC_CHECK.warnings)'));
+    ok(r2.w.eval('RUBRIC_OK') && w2.some(x => /Nobody can reach band 4 — if this task doesn't go that high, lower the strand's highest band to 3/.test(x)),
+       'an empty top band is allowed, with advice to lower the highest band instead');
   }
 
   console.log('\n=== a broken rubric shows its problems, not a marker ===');

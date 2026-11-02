@@ -42,6 +42,29 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — empty bands allowed, greyed out (2 Nov 2026)
+
+A test rarely has a question for every band of every strand, and forcing a
+full ladder made teachers invent questions. Now:
+
+- **Engine** (`assets/js/rubric.js`): a band with no question is a
+  *warning* ("bands 1, 3 have no question, so they are greyed out and can't
+  be awarded"); only a strand with no questions at all is an error. An
+  empty top band adds "Nobody can reach band N — lower the strand's highest
+  band instead". `strandResult()` builds the ladder from bands that have
+  evidence, so each missed question below the top drops one *real* band and
+  skips empty ones. Overrides list only bands with evidence. Print,
+  reference and group sheets already greyed these cells (`td.na`).
+- **Builder**: empty band panels are hatched (`.bband.bempty` — not
+  `.empty`, which is the marker's centred empty-state class) with "no
+  question — greyed out on the rubric, can't be awarded"; the coverage grid
+  says "empty — greyed out"; default next-step phrases skip empty bands to
+  the next band that has a `can` phrase.
+- Tests: marker suite has an "empty bands are allowed" section (penalty
+  skip, print cells, override options, top-band advice); builder suite
+  checks the warning and three hatched panels. Space is unchanged — it has
+  no empty bands.
+
 ### Landed — one skill per descriptor in the builder (2 Nov 2026)
 
 Kodie spotted default descriptors carrying six or more skills — e.g. the
@@ -462,6 +485,7 @@ Three things learned that apply to any future rubric:
   `topCell()` walks down from `maxBand` and `missedBelow()` penalises
   gaps, so one empty band in the middle silently caps that strand. There
   is now a test for it.
+  *(Superseded 2 Nov 2026: empty bands are now allowed and greyed out — penalties step past them.)*
 - bio ranks strengths on `band/maxBand`, which only works when every
   strand shares a `maxBand`. Here band 2 of 3 (0.67) beat band 2 of 4
   (0.50), so a student at band 2 across the board was told their

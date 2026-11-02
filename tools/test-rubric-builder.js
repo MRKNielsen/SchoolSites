@@ -135,8 +135,8 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(B.doc.criteria.length === 3 && B.doc.criteria.map(c => c.q + '/' + c.max).join(' ') === 'Q1.1/1 Q1.2/2 Q1.3/1', 'and adds them with their marks');
     let r = B.check();
     ok(r.errors.length > 0, 'untagged, the rubric is not ready (' + r.errors.length + ' problems)');
-    ok(r.errors.some(e => /Strand 1 \(“Describes balanced/.test(e) && /no question for band 1/.test(e)),
-       'a missing band is named by strand number and name: "' + (r.errors.find(e => /no question for band/.test(e)) || '').slice(0, 80) + '…"');
+    ok(r.errors.some(e => /Strand 1 \(“Describes balanced/.test(e) && /has no question behind it/.test(e)),
+       'a strand with no questions is named by strand number and name: "' + (r.errors.find(e => /no question behind it/.test(e)) || '').slice(0, 80) + '…"');
     const tag = (i, strand, band) => {
       choose(w, $(`[data-f="criteria.${i}.strand"]`), strand);
       if (band) choose(w, $(`[data-f="criteria.${i}.band"]`), String(band));
@@ -306,7 +306,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
 
   console.log('\n=== default statements, real data ===');
   if (fs.existsSync(VC_FILE)) {
-    const { w, B, $ } = await open();
+    const { w, B, $, $$ } = await open();
     B.doc = { format: 'rubric-marker/1', id: 'd', title: 'D', bands: ['Towards', 'At', 'At', 'Above'], parts: [{ id: 'A', name: 'A' }], strands: [], criteria: [] };
     B.showTab('strands');
     click(w, $('[data-act="pick"][data-i="new"]'));
@@ -321,13 +321,17 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', { bubbles: t
     ok(s.bands[3].d === 'Can use Newton’s laws to describe and predict the motion of objects in a system.', 'band 4 (Above) is the Level 9–10 skill about motion');
     ok(s.bands.every(b => B.splitSkills(b.d).length <= 1), 'every default descriptor is a single skill');
     ok(s.can[1] === 'represent and explain the effects of forces acting on objects', '“Ava can now …” takes the base form, lower-case, no full stop');
-    ok(s.next[0] === s.can[1] && /\{their\}/.test(s.next[3]), 'a band’s next step is the band above’s “can now”; the top band gets an extension step');
+    ok(s.next[0] === '' && s.next[1] === s.can[3] && /\{their\}/.test(s.next[3]),
+       'a band’s next step is the next band up with something in it (band 2 → band 4, past empty band 3); the top band gets an extension step');
     ok(s.start === 'represent and explain the effects of forces acting on objects', 'band 0’s first step falls back to the At skill when Towards has nothing');
     B.doc.criteria.push({ id: 'Q1', q: 'Q1', part: 'A', strand: 's1', band: 2, max: 1 });
     let r = B.check();
+    ok(r.errors.length === 0 && r.warnings.some(x => /bands 1, 3, 4 have no question, so they are greyed out/.test(x)),
+       'blank bands with no question are allowed — greyed out, noted, not errors');
+    B.showTab('strands');
+    ok($$('.bstrand[data-strand="0"] .bband.bempty').length === 3 && /greyed out on the rubric/.test($('#ev0_1').textContent),
+       'the builder greys out the three empty band panels');
     B.doc.criteria.pop();
-    ok(r.errors.some(x => /band 1: descriptor \(d\) is empty/.test(x)) && r.errors.some(x => /band 3: descriptor \(d\) is empty/.test(x)),
-       'the blank bands are listed for the teacher to write');
     ok(r.warnings.some(x => /Strand 1 still has default wording in \d+ boxes \(row heading/.test(x)), 'Check lists boxes still holding defaults: "' + (r.warnings.find(x => /default wording/.test(x)) || '').slice(0, 70) + '…"');
     /* Fill never overwrites */
     type(w, $('[data-f="strands.0.name"]'), 'Explains motion with forces');
