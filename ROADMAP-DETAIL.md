@@ -1565,6 +1565,78 @@ starting a new one.
 
 ### Tier 5 — Platform work (ongoing, do between content pushes)
 
+- [ ] **Year 7 Science workbook redesign.** **L** *(in progress — Kodie, 2026-11-05)*
+      Year 7 Science moves to a printed-workbook look taken from the unit
+      covers (`year7-science/covers/`). Decisions, all Kodie's (4–5 Nov 2026):
+      - **Scope:** Year 7 Science only, under its own theme, so no other
+        subject changes until it is proven.
+      - **Web:** cream paper with grain, plus a charcoal version for dark
+        mode. Headings in a geometric sans (Outfit), Year 7 only. One accent
+        per unit, taken from its cover: Ecosystems green, Space navy, Forces
+        rust, Particle Model teal.
+      - **Decks:** content slides go cream too. I do / We do / You do are
+        remapped to cover colours, and answer green / error red are nudged
+        toward the palette. This is a deliberate Year 7 exception to the
+        "pedagogy colours never change" rule — update CLAUDE.md when it
+        lands.
+      - **Book navigation:** clicking a cover grows it and swings it open
+        into the unit page (cross-document View Transitions; Firefox falls
+        back to a plain load). The unit page is a contents spread of lesson
+        pages, each captioned "Turn to page N", where N is the lesson's real
+        start page in the printed booklet, read from the build's `.aux`. A
+        short page-flick (~0.6 s) plays on every click before the deck
+        opens. Reduced motion skips all of it. Lesson pages are
+        typographic (number, title, unit-colour shape) until Kodie
+        supplies lesson art.
+      - **Booklets** (lesson, investigation and teacher copies): reworked
+        for **A5**. The copier's booklet mode folds plain A5 pages onto A4,
+        so use mirrored margins, and the build pads to a multiple of 4
+        with a unit glossary (from each lesson's key vocabulary), then
+        notes pages. All of Kodie's writing-space rules stay at full size
+        (5 cm boxes, 1.5 cm rows, 9 mm dotted thirds), so page counts grow
+        about 1.5–2×. Tables too wide for A5 get a landscape page. Colour
+        cover, **black-and-white interior**: each lesson opens with a band
+        carrying ink-style line art, the lesson number and title. I do / We
+        do / You do are told apart by an icon and border style (solid /
+        dashed / heavy), not colour. Teacher copies keep red answers
+        (mostly read on screen).
+      - **Worksheets:** the HTML worksheets stay A4 but take the new look
+        and the B&W box system.
+      - **Flip-book:** a tool renders each booklet page to an image, and
+        the unit page shows the booklet as two-page spreads with the same
+        page-turn. A check fails if the images are older than the PDF. The
+        PDF download stays.
+      - **Booklet view on slides:** a small, always-visible view of the
+        whole booklet page, with the task's box outlined in the unit colour.
+        A click or key enlarges it. The slide names the answer slot by its
+        key (Forces style, e.g. `6.t3b`); the booklet build records each
+        box's position, so the outline follows renumbering. The build fails
+        on an unknown key. This replaces `.bookref` wherever a slide points
+        at a task.
+      - **Lesson art** (Kodie sourcing): colour for site and decks, plus an
+        ink version for booklets made from the colour image so the
+        compositions match.
+
+      Build order:
+      - [x] 1. Year 7 theme (paper, charcoal, Outfit, unit accents) and the
+            index on it. *(done 2026-11-05: `body.workbook` + `wb-eco|space|
+            forces|particle` tokens in tokens.css, light and dark;
+            `assets/css/workbook.css` layer, course-page only so far;
+            sitenav search box and kbd now mix with `--sn-panel` instead of
+            white so the drawer works on charcoal — same result elsewhere)*
+      - [ ] 2. Space contents page + cover-open and page-flick transitions.
+      - [ ] 3. Space booklet rebuilt as A5 with the new look and box
+            positions recorded — **test-print on the school copier in
+            booklet mode before going further**.
+      - [ ] 4. Page-image tool, then the flip-book and the booklet view on
+            slides.
+      - [ ] 5. One cream Space deck with the booklet view, for testing on a
+            Year 7 panel.
+      - [ ] 6. Year 7 worksheets restyled (A4).
+      - [ ] 7. Roll out: Forces, Particle Model, Ecosystems, investigation
+            booklets, teacher copies.
+      - [ ] Separation Technologies and Techniques cover (Kodie supplying).
+
 - [x] **Generic rubric marker (tier 1 of the rubric-builder idea).** Split
       `space/rubric.html` into a shared engine (`assets/js/rubric.js` +
       `assets/css/rubric.css`) and a per-assessment rubric file, so one

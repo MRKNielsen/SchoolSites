@@ -88,6 +88,33 @@
   --c-part-c:    #2c5063;   /* blue */
   --c-part-d:    #5e3a57;   /* plum */
 
+  /* Year 7 workbook palette (workbook.css) — taken from the unit cover
+     art in year7-science/covers/. Light = cream paper, dark = charcoal
+     paper. Accents are darkened (light) / lifted (dark) from the cover
+     hues so they hold 4.5:1 as text on their paper. */
+  --c-wb-paper:      #efe6d2;
+  --c-wb-paper-deep: #e5d9be;   /* cards, panels on the paper */
+  --c-wb-ink:        #1f2a33;
+  --c-wb-ink-soft:   #4b5560;
+  --c-wb-ink-faint:  #6e7276;
+  --c-wb-line:       #cdbf9f;
+  --c-wb-mustard:    #d9a12b;   /* cover shapes, never text on paper */
+  --c-wb-teal:       #1d6b69;
+  --c-wb-rust:       #a8421d;
+  --c-wb-navy:       #1e4d78;
+  --c-wb-green:      #2f6a45;
+  --c-wb-paper-dk:      #1f2326;
+  --c-wb-paper-deep-dk: #292e32;
+  --c-wb-ink-dk:        #ece5d5;
+  --c-wb-ink-soft-dk:   #bdb6a6;
+  --c-wb-ink-faint-dk:  #8d8a82;
+  --c-wb-line-dk:       #41474c;
+  --c-wb-mustard-dk:    #e7b74c;
+  --c-wb-teal-dk:       #6cc3c1;
+  --c-wb-rust-dk:       #ee8c63;
+  --c-wb-navy-dk:       #93b9e0;
+  --c-wb-green-dk:      #86c79a;
+
   --c-paper-warm:#f6f4ef;   /* landing pages */
   --c-paper-cool:#fbfcfe;   /* decks & hubs — bright, projection-friendly */
   --c-white:     #ffffff;
@@ -184,4 +211,60 @@ body.theme-computing {       /* Applied Computing — deep cyan-blue / cyan */
 body.theme-maths {
   --accent: var(--c-blue-800);  --accent-dark: #1a3f7d;
   --accent-warm: var(--c-amber-700);
+}
+
+
+/* ---------- Year 7 workbook look (pair with workbook.css) ----------
+   <body class="course-page theme-science workbook wb-space">
+   `workbook` switches the page to cream paper (charcoal in dark mode)
+   and the cover-art palette; a `wb-<unit>` class picks the unit's
+   accent. Comes after the subject themes so it wins at equal
+   specificity. Year 7 Science only for now (Nov 2026 redesign). */
+body.workbook {
+  --paper:       var(--c-wb-paper);
+  --card:        var(--c-wb-paper-deep);
+  --panel:       var(--c-wb-paper-deep);
+  --ink:         var(--c-wb-ink);
+  --ink-soft:    var(--c-wb-ink-soft);
+  --ink-faint:   var(--c-wb-ink-faint);
+  --muted:       var(--c-wb-ink-soft);
+  --line:        var(--c-wb-line);
+  --line-strong: var(--c-wb-ink-faint);
+  --accent:      var(--c-wb-teal);
+  --accent-dark: var(--c-wb-teal);
+  --accent-warm: var(--c-wb-mustard);
+  --wb-shape:    var(--c-wb-mustard);
+  --wb-shadow:   31, 42, 51;    /* rgb triplet for rgba() shadows */
+  --font-display: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  /* Print grain: fractal noise as dark speckle. Colourless by design —
+     it only darkens whatever paper sits under it. */
+  --wb-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.4 1.1'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+}
+body.workbook.wb-eco      { --accent: var(--c-wb-green); --accent-dark: var(--c-wb-green); }
+body.workbook.wb-space    { --accent: var(--c-wb-navy);  --accent-dark: var(--c-wb-navy); }
+body.workbook.wb-forces   { --accent: var(--c-wb-rust);  --accent-dark: var(--c-wb-rust); }
+body.workbook.wb-particle { --accent: var(--c-wb-teal);  --accent-dark: var(--c-wb-teal); }
+
+@media (prefers-color-scheme: dark) {
+  body.workbook {
+    --paper:       var(--c-wb-paper-dk);
+    --card:        var(--c-wb-paper-deep-dk);
+    --panel:       var(--c-wb-paper-deep-dk);
+    --ink:         var(--c-wb-ink-dk);
+    --ink-soft:    var(--c-wb-ink-soft-dk);
+    --ink-faint:   var(--c-wb-ink-faint-dk);
+    --muted:       var(--c-wb-ink-soft-dk);
+    --line:        var(--c-wb-line-dk);
+    --line-strong: var(--c-wb-ink-faint-dk);
+    --accent:      var(--c-wb-teal-dk);
+    --accent-dark: var(--c-wb-teal-dk);
+    --accent-warm: var(--c-wb-mustard-dk);
+    --wb-shape:    var(--c-wb-mustard-dk);
+    --wb-shadow:   0, 0, 0;
+    color-scheme: dark;
+  }
+  body.workbook.wb-eco      { --accent: var(--c-wb-green-dk); --accent-dark: var(--c-wb-green-dk); }
+  body.workbook.wb-space    { --accent: var(--c-wb-navy-dk);  --accent-dark: var(--c-wb-navy-dk); }
+  body.workbook.wb-forces   { --accent: var(--c-wb-rust-dk);  --accent-dark: var(--c-wb-rust-dk); }
+  body.workbook.wb-particle { --accent: var(--c-wb-teal-dk);  --accent-dark: var(--c-wb-teal-dk); }
 }

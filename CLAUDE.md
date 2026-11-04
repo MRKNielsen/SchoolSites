@@ -149,6 +149,16 @@ wide table, prints A4 landscape), `assets/css/rubric.css` (the rubric
 marker, with `assets/js/rubric.js` — see "Rubric marker"),
 `assets/css/site.css` (plain index pages).
 
+`assets/css/workbook.css` is an optional **layer**, not a page type: the
+Year 7 Science workbook look (cream paper with grain, charcoal in dark
+mode, Outfit headings, cover-art palette). Link it after the page's own
+stylesheet, load Outfit in the fonts link, and add `workbook` plus a unit
+accent (`wb-eco`, `wb-space`, `wb-forces`, `wb-particle`) to `<body>`.
+Its tokens are the `body.workbook` blocks at the end of tokens.css. It
+covers course pages so far; decks, booklets and worksheets follow (see
+"Year 7 Science workbook redesign" in ROADMAP-DETAIL.md). Year 7 Science
+only until the look is proven.
+
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
 `styleguide/deck-template.html`.
