@@ -42,6 +42,150 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 74 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+<<<<<<< HEAD
+### Landed — empty bands allowed, greyed out (2 Nov 2026)
+
+A test rarely has a question for every band of every strand, and forcing a
+full ladder made teachers invent questions. Now:
+
+- **Engine** (`assets/js/rubric.js`): a band with no question is a
+  *warning* ("bands 1, 3 have no question, so they are greyed out and can't
+  be awarded"); only a strand with no questions at all is an error. An
+  empty top band adds "Nobody can reach band N — lower the strand's highest
+  band instead". `strandResult()` builds the ladder from bands that have
+  evidence, so each missed question below the top drops one *real* band and
+  skips empty ones. Overrides list only bands with evidence. Print,
+  reference and group sheets already greyed these cells (`td.na`).
+- **Builder**: empty band panels are hatched (`.bband.bempty` — not
+  `.empty`, which is the marker's centred empty-state class) with "no
+  question — greyed out on the rubric, can't be awarded"; the coverage grid
+  says "empty — greyed out"; default next-step phrases skip empty bands to
+  the next band that has a `can` phrase.
+- Tests: marker suite has an "empty bands are allowed" section (penalty
+  skip, print cells, override options, top-band advice); builder suite
+  checks the warning and three hatched panels. Space is unchanged — it has
+  no empty bands.
+
+### Landed — one skill per descriptor in the builder (2 Nov 2026)
+
+Kodie spotted default descriptors carrying six or more skills — e.g. the
+whole Level 6 Number standard joined with semicolons. Two causes: the
+defaults joined every sentence for the sub-strand, and VCAA's sentences (and
+content descriptions) bundle skills themselves. Now `splitSkills()` breaks
+text into discrete skills (his Level 6 example gives exactly nine; the rules
+were checked against every one of the 195 standard sentences), the columns
+show skills, each default band takes the single closest skill (blank where a
+level has nothing relevant), a code's own skills can be chosen as the
+strand's focus or split into a strand each, and the Check tab flags a
+descriptor with more skills than questions behind it. Builder tests 125.
+
+### Landed — rubrics in use are protected (2 Nov 2026)
+
+Until now, editing a rubric after a class was part-marked could lose marks
+silently: on load the marker skipped any mark whose question was gone or that
+exceeded a lowered maximum, and any override for a removed strand. Now the
+marker sets those aside (`parked` on the student, kept in saves, shown with
+the reason, restored automatically when the question returns) and says what
+changed between the version the class was marked on and this one. The
+builder spots a class marked on the rubric in this browser and lists, on the
+Check tab, every change that would touch its marks, with counts; removing a
+question with marks asks first; such changes bump the rubric's `version`.
+`rubricDiff()` lives in rubric.js so both tools agree. Tests: marker 72
+checks (a v1 class opened on a v2 rubric loses nothing and round-trips back),
+builder 108 (the builder's warning counts match what the marker then sets
+aside).
+
+Still open from the same request: the **Forces rubric** needs the Lesson 18
+Trebuchet Investigation Test paper and key (staff-only, not in the repo) and
+the **Particle Model rubrics** need their investigation booklets, still to be
+written.
+
+### Landed — default statements + statement bank in the builder (2 Nov 2026)
+
+Kodie asked for default statements; he chose band descriptors, comment
+phrases, the band 0 first step and a reusable bank. A strand linked to a code
+can be filled from its Towards / At / Above sentences (automatically when
+started from the picker); only empty boxes are filled. Wording stays VCAA's,
+reframed as "Can …" / "… can now …". Untouched defaults, and two bands with
+the same descriptor, are listed as warnings on the Check tab. The bank keeps
+a teacher's own statements in the browser and moves between people as a
+`.json` file. `test-rubric-builder.js` now 97 checks.
+
+### Landed — Towards / At / Above standards in the builder (2 Nov 2026)
+
+Kodie asked whether the achievement standards could be grouped into Towards,
+At and Above. A VCAA standard describes only the expected standard at the
+end of a level, so splitting one three ways would be invented. Instead the
+builder reads the continuum: Towards is the level below's standard, At the
+code's own level, Above the level above, each narrowed to the linked code's
+sub-strand (Science) or strand (Mathematics), and each click lands in the
+matching band. Added the Foundation–6 charts (Levels 5 and up kept) so Level
+7 and Levels 7–8 have a Towards — now 263 content descriptions. Science
+sentences are tagged to sub-strands by shared words with an in-order rule; all
+74 were read by hand and one correction lives in `SUB_OVERRIDES`. Level 10A
+has no standard, so its content descriptions stand in, labelled.
+`test-rubric-builder.js` now 74 checks, including nine hand-checked tag
+anchors and the columns for VC2S8U14, VC2M10A04 and VC2M7N01.
+
+### Landed — rubric builder (1 Nov 2026)
+
+`tools/rubric-builder.html` (+ `assets/js/rubric-builder.js`) writes rubric
+files for the marker: Task → Strands → Questions → Check & export, with live
+validation (the marker's own `validateRubric()`, loaded via
+`RUBRIC_NO_BOOT`), a booklet paste for question lists, an evidence-by-band
+grid, and *Open in marker* / *Edit in builder* hand-offs both ways. Opening
+the Space rubric and exporting it gives back the identical file.
+
+Curriculum: `assets/js/vc2-curriculum.js` — 198 content descriptions and the
+achievement standards for Science 7–10 and Mathematics 7–10A — generated by
+`tools/build-curriculum.py` from VCAA's scope-and-sequence charts (Kodie
+downloaded them; VCAA's site is blocked from the tooling). CC BY-NC 3.0 AU;
+the attribution line travels into any rubric using a VC2 code. Checked
+against an independent pandoc reading of the same charts: all 198 codes, all
+198 descriptions and all 30 achievement-standard paragraphs match word for
+word (one differs only in equation spacing). The charts hold three traps the
+script handles: π stored as an Office Math object (a plain text dump gives
+"between  and the circumference"), `y = cos x` whose brackets are an equation
+delimiter, and Mathematics splitting each level's standard across its strand
+tables. The `.docx` inputs live in `tools/vcaa/`, gitignored.
+
+`tools/test-rubric-builder.js` (59 checks): round trips, a rubric built from
+scratch through the form then booted in the marker, booklet paste formats,
+escaping, the picker, and the curriculum data. All three rubric suites pass;
+checked in Chromium.
+
+### Landed — shared rubric engine + generic marker (1 Nov 2026)
+
+`year7-science/space/rubric.html` is now a shell. The engine is
+`assets/js/rubric.js` + `assets/css/rubric.css`, the Astronomy Test rubric is
+plain JSON in `space/rubric-data.js`, and `tools/rubric-marker.html` (with
+`assets/js/rubric-open.js`) opens **any** rubric file or saved class. A
+starter rubric to adapt is `tools/rubric-starter.json`. Tier 1 of
+Kodie's "teachers build their own rubrics" idea; tier 2 is the builder
+in Tier 5.
+
+- The engine was moved out by an exact-replacement script (every splice
+  asserted once), not retyped. The old and new pages rendered from the same
+  demo class: comments (all three lengths), comment pane and teaching
+  groups are **byte-identical**. Everything else differs only where a
+  hardcoded hex became a token class, or "question"/"test" now comes from
+  the rubric's `noun`.
+- **`validateRubric()`** now does what `check_marks()` and the builder's
+  asserts did, for any rubric: complete band ladders, weights equal to
+  marks, total, ids and references, comment phrases for every band. A
+  failing rubric shows its problems instead of a marker.
+- Saves carry their rubric; a page with a different rubric refuses them.
+  Space keeps `astronomy-rubric:v1` and save v2, so part-marked classes and
+  old save files still open.
+- Retired: `tools/build_space_rubric.py`, `space_rubric_data.py`,
+  `space_rubric_analysis.py` (re-running them would have rebuilt the old
+  page over the new one), plus a committed `.pyc` of the data module.
+- `test-space-rubric.js` (65 checks) now inlines the page's local scripts;
+  new `test-rubric-marker.js` (57 checks) breaks each of 19 validation
+  rules on purpose, injects markup into every rubric field, marks the
+  starter end to end and drives the generic page's open / save / switch
+  flow. Both pass; rendered and checked in Chromium.
+=======
 ### Landed — Algorithmics U4 AOS 2 additional topics (4 Nov 2026)
 
 Four new topic decks in `year12-algorithmics/unit-4/slides/`, linked from the
@@ -68,6 +212,7 @@ worked example (traces, DP table, tours, colourings) was generated from and
 asserted against code before the figures were drawn. No inline `style=` or
 hex outside SVG. Rendered in Chromium at 1600×900 and 1280×720 with every
 reveal open: no slide overflows.
+>>>>>>> 794435fd1e42b8e16c0c647b73f14a103012ddc9
 
 ### Landed — Space rubric Analysis tab (22 Oct 2026)
 
@@ -369,6 +514,7 @@ Three things learned that apply to any future rubric:
   `topCell()` walks down from `maxBand` and `missedBelow()` penalises
   gaps, so one empty band in the middle silently caps that strand. There
   is now a test for it.
+  *(Superseded 2 Nov 2026: empty bands are now allowed and greyed out — penalties step past them.)*
 - bio ranks strengths on `band/maxBand`, which only works when every
   strand shares a `maxBand`. Here band 2 of 3 (0.67) beat band 2 of 4
   (0.50), so a student at band 2 across the board was told their
@@ -1399,6 +1545,40 @@ starting a new one.
 
 ### Tier 5 — Platform work (ongoing, do between content pushes)
 
+- [x] **Generic rubric marker (tier 1 of the rubric-builder idea).** Split
+      `space/rubric.html` into a shared engine (`assets/js/rubric.js` +
+      `assets/css/rubric.css`) and a per-assessment rubric file, so one
+      engine marks any assessment; add a page that opens any rubric file.
+      **M** *(done 2026-11-01 — see "Landed — shared rubric engine")*
+- [x] **Rubric builder (tier 2).** A form page that writes a rubric file:
+      pick strands from Victorian Curriculum 2.0 content descriptions (with
+      `code`) or write your own; enter the task's parts, questions and
+      marks; tag each question to a strand and band; draft band descriptors
+      and comment phrases from the achievement standard. Live
+      `validateRubric()` warnings while editing, and *Open in marker* hands
+      the result straight to `tools/rubric-marker.html`. Needs a bundled
+      JSON of the curriculum codes for the subjects in use — **check VCAA's
+      copyright terms** before offering it beyond this school. Could also
+      read a booklet PDF's `QN.M (n marks)` lines to prefill questions. **L**
+      *(done 2026-11-01 — see "Landed — rubric builder")*
+- [ ] **More of the curriculum in the builder.** `vc2-curriculum.js` has
+      Science 7–10 and Mathematics 7–10A — the areas taught here. Another
+      area or F–6 is a download into `tools/vcaa/` and a re-run of
+      `tools/build-curriculum.py` (a new learning-area letter needs a line
+      in its `SUBJECTS`). Other charts may lay out their tables differently;
+      the script stops with a message rather than guessing. **S each**
+- [x] **Achievement-standard snippets by strand.** The builder offers the
+      whole level standard (30 sentences for Science 7–8). Mathematics'
+      chart already splits the standard by strand, so the snippets could be
+      narrowed to the linked code's strand; Science's would need sentences
+      matched to sub-strands by hand. **S** *(done 2026-11-02 — grouped as
+      Towards / At / Above from the continuum; see "Landed — Towards / At / Above")*
+- [ ] **Port bio's rubric onto the shared engine.** `bio-ecosystems/rubric.html`
+      still carries its own copy of the old engine (ticks, species artefact,
+      own palette). As a rubric file it would be all-`max: 1` criteria; the
+      per-student species line is the one feature the shared engine dropped
+      (it was dormant on Space) and would need restoring as an optional
+      rubric field. Keep `ecosystem-rubric:v1` as its `storageKey`. **M**
 - [ ] **Inline `style=` sweep outside SVGs.** About 430 attributes
       across 57 pages, mostly spacing (`margin-top:12px` and friends).
       Worst: Specialist T3W01–T3W08 (10–20 each), Algorithmics

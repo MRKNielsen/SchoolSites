@@ -1,9 +1,13 @@
 /* Boots year7-science/space/rubric.html in a real DOM (jsdom) and drives it
-   as a teacher would: enters a class, cycles ticks, checks the bands,
+   as a teacher would: enters a class, enters marks, checks the bands,
    comment, teaching groups, printable rubric and the autosave round trip.
 
-   The page is not gated, so this loads it whole rather than injecting a
-   decrypted payload. It exists because the first build shipped broken: a
+   Since Nov 2026 the page is a shell: the rubric is rubric-data.js beside it
+   and the engine is the shared assets/js/rubric.js. jsdom does not fetch
+   scripts, so this inlines the page's own local <script src>s in order —
+   exactly what a browser runs — and leaves sitenav.js out.
+
+   The harness first exists because the first build shipped broken. It exists because the first build shipped broken: a
    splice in tools/build_space_rubric.py anchored on `const rows = [`, which
    appears three times, matched the wrong one and deleted ~12,600 characters
    including persist(), restore() and demo(). The page threw
@@ -28,10 +32,19 @@ catch (e) { console.error('This harness needs jsdom:  npm install jsdom'); proce
 
 const PAGE = path.join(__dirname, '..', 'year7-science', 'space', 'rubric.html');
 if (!fs.existsSync(PAGE)) {
-  console.error('No page at ' + PAGE + '\nBuild it:  python tools/build_space_rubric.py');
+  console.error('No page at ' + PAGE);
   process.exit(2);
 }
-const pageHtml = fs.readFileSync(PAGE, 'utf8');
+/* the page with each local script inlined; sitenav.js is chrome, not the tool */
+function inlineScripts(file){
+  const dir = path.dirname(file);
+  return fs.readFileSync(file, 'utf8').replace(/<script src="([^"]+)"( defer)?><\/script>/g, (m, src) => {
+    if (/sitenav\.js$/.test(src) || /^[a-z]+:/i.test(src)) return '';
+    const js = fs.readFileSync(path.join(dir, src), 'utf8');
+    return '<script>' + js.replace(/<\/script/gi, '<\\/script') + '</script>';
+  });
+}
+const pageHtml = inlineScripts(PAGE);
 
 /* Load the page itself, scripts and all. External CSS/JS (tokens, sitenav)
    is not fetched, which affects only how it looks, not what it does. */
@@ -227,7 +240,8 @@ const ok = (c, m) => { console.log((c?'  OK   ':'  FAIL ')+m); if(!c) fail++; };
   ok(csvA.split('\n').length === 35 && /^Question,Part,/.test(csvA), 'analysis CSV: header + 34 rows in paper order');
 
   console.log('\n=== the key is namespaced away from bio ===');
-  ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the payload');
+  ok(!pageHtml.includes('ecosystem-rubric'), 'no "ecosystem-rubric" key left in the page or its scripts');
+  ok(window.eval('R.storageKey') === 'astronomy-rubric:v1', 'Space keeps its autosave key, so a class mid-marking is not lost');
 
   console.log('\n' + (fail ? fail + ' CHECK(S) FAILED' : 'ALL CHECKS PASSED'));
   process.exit(fail ? 1 : 0);
