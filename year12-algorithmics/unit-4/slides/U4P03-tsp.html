@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Additional topic 3 — The Travelling Salesman Problem</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Additional topic 3 · The Travelling Salesman Problem</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>The Travelling Salesman Problem</h1>
+  <p>Unit 4 AOS2 · Additional topic 3 of 4 — the classic intractable problem, from brute force to 2-opt</p>
+  <p class="slide-foot">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="TSP · The problem" data-menu="The problem">
+  <h2>The problem</h2>
+  <div class="box defn"><span class="lbl">Travelling salesman problem (TSP)</span>
+    <p>Given a weighted graph, find the <b>lowest-cost cycle that visits every node exactly once</b> and returns to where it started.</p>
+  </div>
+  <ul class="small">
+    <li>A cycle through every node exactly once is a <b>Hamiltonian cycle</b>. TSP asks for the cheapest one.</li>
+    <li>Applications: delivery and pick-up routes, drilling holes in circuit boards, ordering jobs on a machine where changeover time depends on the order.</li>
+  </ul>
+  <div class="box flag"><span class="lbl">Three things it is not</span>
+    <p class="small"><b>Not an MST</b> — a tree, not a cycle. <b>Not all-pairs shortest paths</b> — that is Floyd–Warshall. <b>Not every edge once</b> — that is an Euler circuit. VCAA has used all three as distractors.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · The problem" data-menu="Two versions">
+  <h2>Decision and optimisation</h2>
+  <table class="tbl">
+    <tr><th>Version</th><th>Question asked</th><th>Output</th><th>Class</th></tr>
+    <tr><td>Optimisation</td><td>What is the cheapest tour?</td><td>a tour</td><td><b>NP-hard</b></td></tr>
+    <tr><td>Decision</td><td>Is there a tour of total weight less than \(X\)?</td><td>yes / no</td><td><b>NP-complete</b></td></tr>
+  </table>
+  <ul class="small">
+    <li>The decision version is in NP: a proposed tour can be <b>checked</b> quickly, even though finding one seems to need a search.</li>
+    <li>The optimisation version is not known to be in NP — given a tour, you cannot quickly confirm that <em>no</em> cheaper one exists.</li>
+    <li>They stand or fall together: a fast algorithm for either would give a fast algorithm for the other (binary search on \(X\)).</li>
+  </ul>
+  <div class="box key"><span class="lbl">Say which one you mean</span>
+    <p>"TSP is NP-complete" is only true of the <b>decision</b> version. In an extended response, name the version before you classify it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Worked instance" data-menu="The instance">
+  <h2>Six towns</h2>
+  <div class="cols even">
+    <div>
+<table class="tbl">
+  <tr><th></th><th class="c">A</th><th class="c">B</th><th class="c">C</th><th class="c">D</th><th class="c">E</th><th class="c">F</th></tr>
+  <tr><td><b>A</b></td><td class="c">–</td><td class="c">6</td><td class="c">10</td><td class="c">7</td><td class="c">2</td><td class="c">5</td></tr>
+  <tr><td><b>B</b></td><td class="c">6</td><td class="c">–</td><td class="c">9</td><td class="c">2</td><td class="c">4</td><td class="c">7</td></tr>
+  <tr><td><b>C</b></td><td class="c">10</td><td class="c">9</td><td class="c">–</td><td class="c">8</td><td class="c">10</td><td class="c">6</td></tr>
+  <tr><td><b>D</b></td><td class="c">7</td><td class="c">2</td><td class="c">8</td><td class="c">–</td><td class="c">5</td><td class="c">6</td></tr>
+  <tr><td><b>E</b></td><td class="c">2</td><td class="c">4</td><td class="c">10</td><td class="c">5</td><td class="c">–</td><td class="c">5</td></tr>
+  <tr><td><b>F</b></td><td class="c">5</td><td class="c">7</td><td class="c">6</td><td class="c">6</td><td class="c">5</td><td class="c">–</td></tr>
+</table>
+      <p class="figcap">Road distances in km (straight-line, rounded)</p>
+    </div>
+    <div>
+      <div class="box question"><span class="lbl">Think</span>
+        <p>How many different tours are there starting from A? How would you be <em>sure</em> you had the shortest?</p>
+        <button class="reveal-btn" data-answer="#a-count">Show answer</button>
+        <div class="a" id="a-count"><span class="lbl-a">Answer</span>
+          <p>Fix A as the start. The other 5 towns can be ordered in \(5! = 120\) ways, but each cycle is counted twice (once each direction): <span class="result">60 tours</span>. Being sure means checking all 60.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Brute force" data-menu="Brute force">
+  <h2>Brute force — \((n-1)!/2\) tours</h2>
+  <table class="tbl">
+    <tr><th>Towns \(n\)</th><th>Distinct tours \((n-1)!/2\)</th><th>At \(10^9\) tours per second</th></tr>
+    <tr><td>6</td><td>60</td><td>instant</td></tr>
+    <tr><td>10</td><td>181,440</td><td>instant</td></tr>
+    <tr><td>15</td><td>43,589,145,600</td><td>about 44 seconds</td></tr>
+    <tr><td>20</td><td>60,822,550,204,416,000</td><td>about 2 years</td></tr>
+    <tr><td>25</td><td>about \(3.1 \times 10^{23}\)</td><td>about 10 million years</td></tr>
+  </table>
+  <ul class="small">
+    <li>Each tour costs \(O(n)\) to add up, so brute force is \(O(n \cdot n!)\) — worse than exponential.</li>
+    <li>The best known exact method, dynamic programming over subsets (Held–Karp), is \(O(n^2 2^n)\): far better, still exponential.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Five more towns, each time</span>
+    <p>15 towns: under a minute. 20: two years. 25: ten million years. A computer a thousand times faster buys you about two more towns — no hardware upgrade fixes factorial growth.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Heuristics" data-menu="Nearest neighbour">
+  <h2>Greedy: nearest neighbour from A</h2>
+  <div class="cols">
+    <div class="graph-card">
+<svg viewBox="0 0 600 370" role="img" aria-label="Nearest-neighbour tour, length 30">
+  <line x1="540" y1="320" x2="540" y2="228" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="540" y="279" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="540" y1="228" x2="492" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="516" y="141" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <line x1="492" y1="44" x2="396" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="444" y="49" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="396" y1="44" x2="300" y2="320" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="348" y="187" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <line x1="300" y1="320" x2="60" y2="182" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="180" y="256" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <line x1="60" y1="182" x2="540" y2="320" style="stroke:var(--accent-warm);stroke-width:5"/>
+  <text x="300" y="256" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">10</text>
+  <circle cx="540" cy="320" r="15" style="fill:var(--accent-dark)"/>
+  <text x="540" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">A</text>
+  <circle cx="492" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="492" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">B</text>
+  <circle cx="60" cy="182" r="15" style="fill:var(--ink)"/>
+  <text x="60" y="188" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">C</text>
+  <circle cx="396" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="396" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">D</text>
+  <circle cx="540" cy="228" r="15" style="fill:var(--ink)"/>
+  <text x="540" y="234" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">E</text>
+  <circle cx="300" cy="320" r="15" style="fill:var(--ink)"/>
+  <text x="300" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">F</text>
+</svg>
+    </div>
+    <div>
+      <ol class="steps" id="s-nn">
+        <li><span class="stepno">1</span> From <b>A</b> the nearest is E (2).</li>
+        <li><span class="stepno">2</span> From <b>E</b>: B (4).</li>
+        <li><span class="stepno">3</span> From <b>B</b>: D (2).</li>
+        <li><span class="stepno">4</span> From <b>D</b>: F (6) beats C (8).</li>
+        <li><span class="stepno">5</span> From <b>F</b>: C (6) — the only town left.</li>
+        <li><span class="stepno">6</span> Return <b>C → A</b>: forced, and costs 10.</li>
+        <li class="ans"><span class="stepno">✓</span> Length \(2 + 4 + 2 + 6 + 6 + 10 =\) <span class="result">30 km</span></li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-nn">Next step</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Heuristics" data-menu="The stranded town">
+  <h2>What went wrong: the stranded town</h2>
+  <ul>
+    <li>C is far from everyone. Nearest neighbour keeps choosing closer towns, so C is left until last — and the trip home from C is the <b>longest edge in the tour</b> — the thick orange leg on the previous slide.</li>
+    <li>Every choice was locally best and never reconsidered. That is exactly what makes it greedy, and exactly why it can't see the final leg coming.</li>
+    <li>\(O(n^2)\): \(n\) steps, each scanning up to \(n\) towns. Fast, valid, no guarantee.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">The fix is not "be greedier"</span>
+    <p>Building a better tour step by step needs foresight greedy doesn't have. Instead, take the finished tour and <b>improve</b> it — local search.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Heuristics" data-menu="2-opt">
+  <h2>Improving it: one 2-opt move</h2>
+  <div class="cols even">
+    <div>
+      <div class="graph-card">
+<svg viewBox="0 0 600 370" role="img" aria-label="The two edges 2-opt removes">
+  <line x1="540" y1="320" x2="540" y2="228" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="540" y="279" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="540" y1="228" x2="492" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="516" y="141" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <line x1="492" y1="44" x2="396" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="444" y="49" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="396" y1="44" x2="300" y2="320" style="stroke:var(--neg);stroke-width:3;stroke-dasharray:8 6"/>
+  <text x="348" y="187" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <line x1="300" y1="320" x2="60" y2="182" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="180" y="256" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <line x1="60" y1="182" x2="540" y2="320" style="stroke:var(--neg);stroke-width:3;stroke-dasharray:8 6"/>
+  <text x="300" y="256" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">10</text>
+  <circle cx="540" cy="320" r="15" style="fill:var(--accent-dark)"/>
+  <text x="540" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">A</text>
+  <circle cx="492" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="492" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">B</text>
+  <circle cx="60" cy="182" r="15" style="fill:var(--ink)"/>
+  <text x="60" y="188" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">C</text>
+  <circle cx="396" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="396" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">D</text>
+  <circle cx="540" cy="228" r="15" style="fill:var(--ink)"/>
+  <text x="540" y="234" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">E</text>
+  <circle cx="300" cy="320" r="15" style="fill:var(--ink)"/>
+  <text x="300" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">F</text>
+</svg>
+      </div>
+      <p class="figcap">Remove D–F (6) and C–A (10)…</p>
+    </div>
+    <div>
+      <div class="graph-card">
+<svg viewBox="0 0 600 370" role="img" aria-label="Optimal tour, length 27">
+  <line x1="540" y1="320" x2="540" y2="228" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="540" y="279" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="540" y1="228" x2="492" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="516" y="141" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <line x1="492" y1="44" x2="396" y2="44" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="444" y="49" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">2</text>
+  <line x1="396" y1="44" x2="60" y2="182" style="stroke:var(--accent-warm);stroke-width:5"/>
+  <text x="228" y="118" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">8</text>
+  <line x1="60" y1="182" x2="300" y2="320" style="stroke:var(--accent);stroke-width:3.5"/>
+  <text x="180" y="256" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <line x1="300" y1="320" x2="540" y2="320" style="stroke:var(--accent-warm);stroke-width:5"/>
+  <text x="420" y="325" text-anchor="middle" font-size="16" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <circle cx="540" cy="320" r="15" style="fill:var(--accent-dark)"/>
+  <text x="540" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">A</text>
+  <circle cx="492" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="492" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">B</text>
+  <circle cx="60" cy="182" r="15" style="fill:var(--ink)"/>
+  <text x="60" y="188" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">C</text>
+  <circle cx="396" cy="44" r="15" style="fill:var(--ink)"/>
+  <text x="396" y="50" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">D</text>
+  <circle cx="540" cy="228" r="15" style="fill:var(--ink)"/>
+  <text x="540" y="234" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">E</text>
+  <circle cx="300" cy="320" r="15" style="fill:var(--ink)"/>
+  <text x="300" y="326" text-anchor="middle" font-size="16" font-weight="700" style="fill:#fff">F</text>
+</svg>
+      </div>
+      <p class="figcap">…reconnect as D–C (8) and F–A (5)</p>
+    </div>
+  </div>
+  <ul class="small">
+    <li><b>2-opt</b>: delete two edges and reconnect the tour the only other way possible — equivalent to <b>reversing a segment</b> (here F, C becomes C, F).</li>
+    <li>Change: \((8 + 5) - (6 + 10) = -3\). New tour A → E → B → D → C → F → A, length <span class="result">27 km</span> — the optimum, checked against all 60 tours.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="TSP · Heuristics" data-menu="Local search">
+  <h2>TSP as a local search</h2>
+  <table class="tbl">
+    <tr><th>Component</th><th>For TSP</th></tr>
+    <tr><td>Representation</td><td>an ordering of the towns</td></tr>
+    <tr><td>Neighbourhood</td><td>2-opt (reverse a segment) or swap two towns</td></tr>
+    <tr><td>Objective</td><td>total tour length — minimise</td></tr>
+    <tr><td>Starting point</td><td>random order, or the nearest-neighbour tour</td></tr>
+  </table>
+  <div class="cols even">
+    <div class="box example"><span class="lbl">Hill climbing</span>
+      <p class="small">Apply improving 2-opt moves until none is left. Here one move reached the optimum; on large instances it stops at a <b>local optimum</b>.</p>
+    </div>
+    <div class="box example"><span class="lbl">Simulated annealing</span>
+      <p class="small">Also accept some <b>worse</b> moves, with probability falling as the temperature drops — to escape local optima. See T11.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="TSP · Exam focus" data-menu="Definition MCQ">
+  <h2>What is the objective?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section A Q9</p>
+  <div class="chooser frag">
+    <p class="ch-tag">The objective of the travelling salesman problem is to find the <span class="ch-clue">— which one?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>lowest-cost tree that connects each node in the graph</span></div>
+      <div class="opt"><b>B</b><span>lowest-cost paths that connect each pair of nodes in the graph</span></div>
+      <div class="opt correct"><b>C</b><span>lowest-cost cycle that traverses every node of the graph exactly once</span></div>
+      <div class="opt"><b>D</b><span>lowest-cost cycle that traverses every edge of the graph exactly once</span></div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Name the distractors</span>
+    <p>A is a minimum spanning tree. B is all-pairs shortest paths. D is the Chinese postman / Euler circuit. Only C is a <b>cycle</b> through every <b>node</b> once.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Exam focus" data-menu="Why in NP">
+  <h2>Why is the decision version in NP?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2021, Section B Q8a</p>
+  <div class="box question"><span class="lbl">Question (2 marks)</span>
+    <p class="small">The decision version of TSP asks whether there is a cycle from a source node, visiting every other node exactly once, with total weight less than \(X\). Explain why this problem is in NP.</p>
+    <button class="reveal-btn" data-answer="#a-np">Show answer</button>
+    <div class="a" id="a-np"><span class="lbl-a">Answer</span>
+      <p class="small">A problem is in NP if a proposed solution can be <b>verified in polynomial time</b>. <b>[1]</b> Given a proposed tour, we check that it starts and ends at the source, that every node appears exactly once, that each consecutive pair is joined by an edge, and that the weights sum to less than \(X\) — all \(O(n)\) with an adjacency matrix, so polynomial. <b>[1]</b></p>
+    </div>
+  </div>
+  <div class="box flag"><span class="lbl">The common slip</span>
+    <p>"It's in NP because it can't be solved in polynomial time" earns nothing. NP is about <b>checking</b> a solution, not about how hard finding one is — every problem in P is in NP too.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Exam focus" data-menu="If TSP were fast">
+  <h2>What if someone solved TSP quickly?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2020, Section B Q12b</p>
+  <div class="box question"><span class="lbl">Question (2 marks)</span>
+    <p class="small">Jane claims an algorithm that solves the travelling salesman problem on \(n\) vertices in at most \(n^3 + n^2\) steps. If she is correct, what are the consequences for all other NP-complete problems? Explain.</p>
+    <button class="reveal-btn" data-answer="#a-jane">Show answer</button>
+    <div class="a" id="a-jane"><span class="lbl-a">Answer</span>
+      <p class="small">TSP (decision) is NP-complete, so every problem in NP can be <b>reduced to it in polynomial time</b>. <b>[1]</b> Reducing any NP-complete problem to TSP and then running Jane's \(O(n^3)\) algorithm solves it in polynomial time — so every NP-complete problem, and all of NP, would be solvable in polynomial time: <b>P = NP</b>. <b>[1]</b></p>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">The word that earns the mark</span>
+    <p><b>Reduction.</b> The consequence follows from NP-completeness — every NP problem reduces to TSP — not from TSP simply being "hard".</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">How many distinct tours does brute force check for 8 towns?</p>
+      <p class="a">\((8 - 1)!/2 = 5040/2 = 2520\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Run nearest neighbour on the six towns starting from <b>D</b>. Is it better or worse than from A?</p>
+      <p class="a">D → B (2) → E (4) → A (2) → F (5) → C (6) → D (8): total <b>27</b> — the optimum, the same cycle as the 2-opt result. C is still last, but the leg home from C is now 8, not 10. Trying every starting town is a cheap improvement: \(n\) runs, \(O(n^3)\).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why can't hill climbing with 2-opt guarantee the optimal tour?</p>
+      <p class="a">It stops when no single 2-opt move improves the tour. That is a <b>local optimum</b>: a better tour may exist that needs several moves, some of them worsening, to reach.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Is "find the shortest path from A to F" NP-hard like TSP? Explain.</p>
+      <p class="a"><b>No.</b> Shortest path is in P — Dijkstra solves it in \(O((V + E)\log V)\). TSP is hard because the route must visit <b>every</b> node exactly once.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="TSP · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b>Revisit:</b> <a href="U4T10-heuristics.html">T10 · Greedy &amp; hill climbing</a> and <a href="U4T11-annealing.html">T11 · Simulated annealing</a> — both use TSP as their running example.</li>
+    <li><b>Revisit:</b> <a href="U4T08-np-complete.html">T8 · NP-completeness</a> — reductions, and why one fast NP-complete solver would be enough.</li>
+    <li><b>Next additional topic:</b> <a href="U4P04-graph-colouring.html">graph colouring</a>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>TSP asks for the cheapest cycle through every node once; checking a tour is easy, finding the best one takes \((n-1)!/2\) tries by brute force, so in practice we build a greedy tour and improve it by local search.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>State the objective of TSP in one sentence.</li>
+      <li>Which version of TSP is NP-complete, and why is it in NP?</li>
+      <li>Describe one 2-opt move in your own words.</li>
+    </ol>
+    <p class="start-hint">Additional topic 4 — graph colouring.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">→</span> reveals then advances · <span class="key">←</span> back · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>The Travelling Salesman Problem — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

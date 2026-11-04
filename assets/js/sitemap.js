@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-01",
+ "generated": "2026-11-04",
  "tree": [
   {
    "t": "Home",
@@ -1013,6 +1013,26 @@ window.SITEMAP = {
            "k": "algorithmics"
           },
           {
+           "t": "U4 Additional topic 1 — A* Search",
+           "h": "year12-algorithmics/unit-4/slides/U4P01-astar.html",
+           "k": "algorithmics"
+          },
+          {
+           "t": "U4 Additional topic 2 — The 0-1 Knapsack Problem",
+           "h": "year12-algorithmics/unit-4/slides/U4P02-knapsack.html",
+           "k": "algorithmics"
+          },
+          {
+           "t": "U4 Additional topic 3 — The Travelling Salesman Problem",
+           "h": "year12-algorithmics/unit-4/slides/U4P03-tsp.html",
+           "k": "algorithmics"
+          },
+          {
+           "t": "U4 Additional topic 4 — Graph Colouring",
+           "h": "year12-algorithmics/unit-4/slides/U4P04-graph-colouring.html",
+           "k": "algorithmics"
+          },
+          {
            "t": "U4 Topic 1 — Growth Rates and Big-O",
            "h": "year12-algorithmics/unit-4/slides/U4T01-growth-rates.html",
            "k": "algorithmics"
@@ -1325,11 +1345,11 @@ window.SITEMAP = {
        "h": "tools/page-builder.html"
       },
       {
-       "t": "Rubric builder (write a rubric)",
+       "t": "Rubric builder — write a rubric for the rubric marker",
        "h": "tools/rubric-builder.html"
       },
       {
-       "t": "Rubric marker (open any rubric)",
+       "t": "Rubric marker — mark any assessment against its rubric",
        "h": "tools/rubric-marker.html"
       },
       {

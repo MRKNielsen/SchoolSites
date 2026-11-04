@@ -681,9 +681,11 @@
 % ctab also registers write-in tables (S column) for page filling: the extra
 % height is per row, logged with the row count.
 \newenvironment{ctab}{\par\smallskip\begingroup\centering
-  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
-  \ifteacher\else\ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi\fi
-  \endgroup\smallskip}
+	\abnext\let\tbcur\abcur\global\wtrows0
+	\typeout{CTAB id=\theabox\space extra/row=\tbcur\space on p.\thepage}%
+}{\par
+	\ifteacher\else\ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi\fi
+	\endgroup\smallskip}
 
 % ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
 % 1. No marks are shown anywhere in the booklet.
@@ -997,21 +999,23 @@ The graph above is from a launch with an 800\,g counterweight. The long arm is 0
 \end{infobox}
 
 \needspace{12\baselineskip}
+\newpage
 \task A launch gives a peak spin of 7.5\,rad/s. The trebuchet's long arm is 0.50\,m and its short arm is 0.10\,m.
 \pt{a}Calculate the speed of the tip of the long arm.
+\abox{t1}{1.5cm}
 \pt{b}Calculate the speed of the counterweight end of the arm.
+\abox{t1}{1.5cm}
 \pt{c}How many times faster does the tip move than the counterweight end?
-\abox{t1}{3.0cm}
+\abox{t1}{2.0cm}
 
 \needspace{10\baselineskip}
 \task Two groups strap the same sensor to the same trebuchet arm. Group 1 straps it 5\,cm from the pivot. Group 2 straps it 20\,cm from the pivot. Will their peak spin readings be the same or different? Explain your answer.
-\abox{t2}{2.4cm}
+\abox{t2}{3.4cm}
 
 \subsection{Planning a Fair Test}\label{sub:B3}
 
 You will change the \textbf{mass of the counterweight}, using five different masses with three launches at each. On every launch you will measure two things: the \textbf{range}, from the 0\,m line to where the projectile first lands, and the \textbf{peak spin} of the arm, from the sensor. Everything else must stay the same.
-
-\needspace{14\baselineskip}
+%\needspace{15\baselineskip}
 \task\label{tk:vars}Complete the table for the variables in this investigation.
 \begin{ctab}
 \begin{tabular}{|SW{3.3cm}|W{4.0cm}|W{5.6cm}|Z{1.9cm}|}
@@ -1021,74 +1025,40 @@ You will change the \textbf{mass of the counterweight}, using five different mas
   & \textbf{Dependent 2} \newline (what the sensor measures) & \cell{t3-dv2} & \cell{t3-dv2how} & \cell{t3-dv2u} \\ \hline
 \end{tabular}
 \end{ctab}
-
-\subsubsection*{Equipment (for each group)}
-\begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{\hspace{0.04\linewidth}}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{}}
-  \textbullet\ Desktop trebuchet with a counterweight hanger & \textbullet\ Tablet or laptop with SPARKvue \\
-  \textbullet\ Slotted masses for five counterweights & \textbullet\ Measuring tape (at least 8\,m) and a metre ruler \\
-  \textbullet\ One beanbag projectile --- the same one every launch & \textbullet\ Masking tape, and a counter to mark the landing spot \\
-  \textbullet\ PASCO acceleration sensor and its strap & \textbullet\ Safety glasses for everyone in the group \\
-\end{tabular}
-
-\begin{infobox}{Group roles --- swap roles after each counterweight}
-\textbf{Operator:} loads, cocks and releases the trebuchet. The only person beside it.\\
-\textbf{Safety officer:} checks the range is clear, then calls ``Launching!'' and, afterwards, ``All clear''.\\
-\textbf{Spotter:} stands well to the side of the range and puts a counter where the projectile first lands.\\
-\textbf{Recorder:} runs SPARKvue, reads the peak spin, and records both results.
-\end{infobox}
-
-\needspace{16\baselineskip}
-\task To make it a fair test, these things must stay the same on every launch. The first row is done for you. Complete the others, and add one more of your own in the last row.
+\newpage
+%\needspace{16\baselineskip}
+\task To make it a fair test, some things must stay the same on every launch. The first row is done for you. Complete the others, suggest one more.
 \begin{ctab}
 \begin{tabular}{|SW{3.6cm}|W{5.8cm}|W{5.6cm}|}
   \hd & \thead{Kept the same} & \thead{If it changed, how could it change the results?} & \thead{How we keep it the same} \\ \hline
   & \scaf{The projectile} & \scaf{A heavier or lighter projectile would fly a different distance.} & \scaf{Use the same beanbag for every launch.} \\ \hline
   & The sling and release pin & \cell{t4-a2} & \cell{t4-a3} \\ \hline
-  & How far the arm is pulled back & \cell{t4-b2} & \cell{t4-b3} \\ \hline
   & Where the sensor is strapped & \cell{t4-c2} & \cell{t4-c3} \\ \hline
-  & Where the range is measured from & \cell{t4-d2} & \cell{t4-d3} \\ \hline
-  & \cell{t4-e1} & \cell{t4-e2} & \cell{t4-e3} \\ \hline
+  & How far the arm is pulled back & \cell{t4-c2} & \cell{t4-c3} \\ \hline
+  & Where the range is measured from & \cell{t4-c2} & \cell{t4-c3} \\ \hline
+  &  & \cell{t4-d2} & \cell{t4-d3} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{14\baselineskip}
-\task\label{tk:predict}Make a prediction before you launch.
-\pt{a}Complete the prediction, and give a reason using energy or levers.
-\begin{scaffold}{Prediction}
+
+\task\label{tk:predict}Make a prediction (form a hypothesis) before you launch. 
+\pt{a}Complete the hypothesis, and give a reason using energy or levers.
+\begin{scaffold}{Hypothesis}
 I predict that as the mass of the counterweight increases, the range will \blankk{3.2cm}{t5-1} and the peak spin of the arm will \blankk{3.2cm}{t5-2}, because \ldots
 \end{scaffold}
-\abox{t5a}{2.2cm}
-\needspace{10\baselineskip}
+\abox{t5a}{3cm}
+\needspace{5\baselineskip}
 \pt{b}Sketch the shape you expect for each graph. You do not need any numbers.
 \par\vspace{2pt}\noindent\grpstart
 \begin{minipage}[t]{0.485\linewidth}\sketchbox{t5b1}{4.6cm}{range}{counterweight mass}\end{minipage}\hfill
 \begin{minipage}[t]{0.485\linewidth}\sketchbox{t5b2}{4.6cm}{peak spin}{counterweight mass}\end{minipage}\grpend
 \par
-
-
-\subsubsection*{Method}
-\textbf{Setting up}
-\begin{enumerate}[itemsep=1pt]
-  \item Place the trebuchet on the floor, facing down the range. Stick a strip of masking tape on the floor along the front edge of the base. This is the \textbf{0\,m line}. Line the base up with it before every launch.
-  \item Lay the measuring tape on the floor from the 0\,m line, straight down the range.
-  \item Strap the sensor tightly to the long arm, as close to the pivot as you can while it still swings clear of the frame. Swing the arm slowly by hand to check. Do not move the sensor again.
-  \item Turn the sensor on and connect it in SPARKvue. Show a graph of angular velocity against time, at the sample rate your teacher gives you.
-  \item Measure the long arm $L$, the counterweight drop $h$ and the mass of the projectile. Record them in Part C.
-\end{enumerate}
-\textbf{Launching}
-\begin{enumerate}[itemsep=1pt, resume]
-  \item Load the hanger to make the smallest counterweight.
-  \item Pull the long arm down and set the trigger. Put the projectile in the pouch and hook the sling's loop over the release pin. Keep your hands out of the arm's path.
-  \item The safety officer checks that the range is clear and everyone is behind the trebuchet, then calls ``Launching!''
-  \item The recorder presses \textbf{Start}. The operator releases the trigger. Press \textbf{Stop} once the arm has stopped swinging.
-  \item The spotter puts a counter where the projectile \textbf{first} landed. Measure from the 0\,m line to the counter, to the nearest centimetre.
-  \item Read the peak spin from the graph. Record it with the range.
-  \item Launch three times with this counterweight. Then repeat steps 6 to 11 for each of the five counterweights.
-\end{enumerate}
+\newpage
 
 \needspace{9\baselineskip}
 \task\label{tk:repeats}You will launch three times with each counterweight. Give two reasons why three launches are better than one.
-\abox{t6}{1.7cm}
+\abox{t6}{5.7cm}
 
 \needspace{16\baselineskip}
 \task\label{tk:risk}Complete the risk assessment. The first row is done for you.
@@ -1103,7 +1073,14 @@ I predict that as the mass of the counterweight increases, the range will \blank
 \end{ctab}
 
 \begin{safetybox}{Safety rules}
-Safety glasses on while launching. \textbullet{} Never stand in front of the trebuchet or beside the range. \textbullet{} Soft beanbag projectiles only. \textbullet{} Collect projectiles only after ``All clear''. \textbullet{} Keep your hands out of the arm's path while it is cocked. \textbullet{} Change the counterweight only while the arm is hanging at rest, never while it is cocked.
+Safety glasses on while launching. 
+\begin{itemize}
+	\item  Never stand in front of the trebuchet or beside the range. 
+	\item  Soft beanbag projectiles only. 
+	\item  Collect projectiles only after ``All clear''. 
+	\item  Keep your hands out of the arm's path while it is cocked. 
+	\item Change the counterweight only while the arm is hanging at rest, never while it is cocked.
+\end{itemize}
 \end{safetybox}
 
 % ══════════════════════════════════════════════════════════════════════════════
@@ -1114,6 +1091,40 @@ Safety glasses on while launching. \textbullet{} Never stand in front of the tre
 
 \subsection{Before You Launch}\label{sub:C1}
 
+\subsubsection*{Equipment (for each group)}
+\begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{\hspace{0.04\linewidth}}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{}}
+	\textbullet\ Desktop trebuchet with a counterweight hanger & \textbullet\ Tablet or laptop with SPARKvue \\
+	\textbullet\ Slotted masses for five counterweights & \textbullet\ Measuring tape (at least 8\,m) and a metre ruler \\
+	\textbullet\ One beanbag projectile --- the same one every launch & \textbullet\ Masking tape, and a counter to mark the landing spot \\
+	\textbullet\ PASCO acceleration sensor and its strap & \textbullet\ Safety glasses for everyone in the group \\
+\end{tabular}
+
+\begin{infobox}{Group roles --- swap roles after each counterweight}
+	\textbf{Operator:} loads, cocks and releases the trebuchet. The only person beside it.\\
+	\textbf{Safety officer:} checks the range is clear, then calls ``Launching!'' and, afterwards, ``All clear''.\\
+	\textbf{Spotter:} stands well to the side of the range and puts a counter where the projectile first lands.\\
+	\textbf{Recorder:} runs SPARKvue, reads the peak spin, and records both results.
+\end{infobox}
+
+\subsubsection*{Method}
+\textbf{Setting up}
+\begin{enumerate}[itemsep=1pt]
+	\item Place the trebuchet on the floor, facing down the range. Stick a strip of masking tape on the floor along the front edge of the base. This is the \textbf{0\,m line}. Line the base up with it before every launch.
+	\item Lay the measuring tape on the floor from the 0\,m line, straight down the range.
+	\item Strap the sensor tightly to the long arm, as close to the pivot as you can while it still swings clear of the frame. Swing the arm slowly by hand to check. Do not move the sensor again.
+	\item Turn the sensor on and connect it in SPARKvue. Show a graph of angular velocity against time, at the sample rate your teacher gives you.
+	\item Measure the long arm $L$, the counterweight drop $h$ and the mass of the projectile. Record them in Part C.
+\end{enumerate}
+\textbf{Launching}
+\begin{enumerate}[itemsep=1pt, resume]
+	\item Load the hanger to make the smallest counterweight.
+	\item Pull the long arm down and set the trigger. Put the projectile in the pouch and hook the sling's loop over the release pin. Keep your hands out of the arm's path.
+	\item The safety officer checks that the range is clear and everyone is behind the trebuchet, then calls ``Launching!''
+	\item The recorder presses \textbf{Start}. The operator releases the trigger. Press \textbf{Stop} once the arm has stopped swinging.
+	\item The spotter puts a counter where the projectile \textbf{first} landed. Measure from the 0\,m line to the counter, to the nearest centimetre.
+	\item Read the peak spin from the graph. Record it with the range.
+	\item Launch three times with this counterweight. Then repeat steps 6 to 11 for each of the five counterweights.
+\end{enumerate}
 \needspace{14\baselineskip}
 \task\label{tk:fixed}Measure and record these before your first launch. The first row shows you how.
 \begin{ctab}
@@ -1184,11 +1195,11 @@ Safety glasses on while launching. \textbullet{} Never stand in front of the tre
 \subsection{Graphs}\label{sub:C3}
 
 \needspace{24\baselineskip}
-\task\label{tk:graph1}Draw a line graph of \textbf{mean range} (vertical axis) against \textbf{counterweight mass} (horizontal axis). Start both axes at zero, choose scales that use most of the grid, plot your five points, draw a smooth line of best fit, and give the graph a title.
+\task\label{tk:graph1}Draw a scatter plot of \textbf{mean range} (vertical axis) against \textbf{counterweight mass} (horizontal axis). Start both axes at zero, choose scales that use most of the grid, plot your five points, draw a smooth line of best fit, and give the graph a title.
 \graphgrid{g1}{8.0cm}
 
 \needspace{24\baselineskip}
-\task\label{tk:graph2}Draw a second line graph, of \textbf{tip speed} (vertical axis) against \textbf{counterweight mass} (horizontal axis), in the same way. Start both axes at zero again, so that you can compare the two graphs fairly.
+\task\label{tk:graph2}Draw a second scatter plot, of \textbf{tip speed} (vertical axis) against \textbf{counterweight mass} (horizontal axis), in the same way. Start both axes at zero again, so that you can compare the two graphs fairly.
 \graphgrid{g2}{8.0cm}
 
 \subsection{Analysis}\label{sub:C4}
@@ -1196,16 +1207,15 @@ Safety glasses on while launching. \textbullet{} Never stand in front of the tre
 \needspace{14\baselineskip}
 \task\label{tk:pattern}Describe the pattern in your range graph, using numbers from your results.
 \begin{scaffold}{Sentence starter}
-As the counterweight mass increased from \blankk{1.6cm}{t14-1}\,g to \blankk{1.6cm}{t14-2}\,g, the mean range increased / decreased from \blankk{1.6cm}{t14-3}\,m to \blankk{1.6cm}{t14-4}\,m. The line of best fit was straight / curved, which means \ldots
+{\Large As the counterweight mass increased from \blankk{2.6cm}{t14-1}\,g to \blankk{2.6cm}{t14-2}\,g, the mean range increased / decreased from \blankk{2.6cm}{t14-3}\,m to \blankk{2.6cm}{t14-4}\,m. The line of best fit was straight / curved, which means \ldots \vspace*{2cm}}
 \end{scaffold}
-\abox{t14}{2.2cm}
 
 \needspace{14\baselineskip}
 \task\label{tk:compare}Compare your heaviest and your lightest counterweights.
 \pt{a}How many times further did the projectile go? Divide the mean range for the heaviest by the mean range for the lightest.
 \pt{b}How many times faster did the tip of the arm move? Divide the two tip speeds in the same way.
 \pt{c}Which changed by more: the range, or the speed of the arm?
-\abox{t15}{3.2cm}
+\abox{t15}{4.2cm}
 
 \needspace{14\baselineskip}
 \task\label{tk:explain}Explain \emph{why} a heavier counterweight throws the projectile further. Use at least four of the words in the word bank.
@@ -1256,6 +1266,9 @@ This investigation found that \ldots \quad For example, \ldots \quad This happen
 \begin{yr8box}
 These questions go beyond the Year 7 standard. Each one gives you the data it needs, all from one group's investigation with a 25\,g projectile and a long arm of 0.40\,m. Use $g = 9.8$\,N/kg.
 
+
+Complete them on blank paper and copy your answers into this booklet. 
+
 \medskip
 \needspace{18\baselineskip}
 \exttask\label{ext:speed}\textbf{Launch speed from range.} When a projectile is launched at about $45^\circ$, its launch speed is roughly
@@ -1298,7 +1311,10 @@ These questions go beyond the Year 7 standard. Each one gives you the data it ne
 \pt{c}For an object dropped from rest, $g = 2h \div t^2$. Use this to calculate $g$ from the drop.
 \abox{e5}{4.0cm}
 \end{yr8box}
-
+\newpage
+\notesfill
+\newpage
+\notesfill
 \label{LastStudentPage}
 \ifteacher\ifdefined\teacherappendix
   \clearpage
