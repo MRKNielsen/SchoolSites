@@ -561,6 +561,13 @@ Three components exist for index pages specifically:
   root page is curated, the drawer is the full map.
 - `.band-label` — eyebrow above a panel's cards ("Junior", "VCE Units
   3 & 4").
+- `.cover-grid`/`.cover-card` — a shelf of illustrated workbook covers,
+  one per unit, with the card's `.dc-desc` + `.dc-kind` underneath. Used
+  on `year7-science/index.html`. The art has the unit title baked in, so
+  the `<img alt>` names the unit (it is the link's name). Covers live in
+  `year7-science/covers/` as 2:3 JPEGs, a 1024w copy plus a 480w copy
+  for `srcset`. **Only link a cover for a unit that exists** — covers for
+  unbuilt units wait in the folder, same rule as placeholder cards.
 
 **A subject index carries its subject's theme class**, so the colour a
 student sees on the year-level card carries through to the unit. Every

@@ -42,6 +42,26 @@ Fourteen subject folders exist. Five carry content; nine are identical
 Totals: 74 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
 
+### Landed — Year 7 Science workbook covers (4 Nov 2026)
+
+`year7-science/index.html` now shows each unit as an illustrated workbook
+cover (new `.cover-grid` / `.cover-card` in course.css, documented in
+CLAUDE.md) instead of a `.feature` row. Covers are Kodie's own generated
+art, 1024×1536 plus a 480w copy, in `year7-science/covers/`. Linked:
+bio-ecosystems, Space, Forces. Waiting in the folder, not linked:
+`particle-model.jpg` (link it with the unit — see the Particle Model item
+in Tier 1) and `science-skills.jpg` (no unit yet).
+
+- [ ] **Separation Technologies and Techniques cover** — Kodie is
+      generating it. Drop it in `covers/` as `separation.jpg` +
+      `separation-480.jpg` (2:3) and link it when that unit exists.
+      **S** *(2026-11-04)*
+- [ ] **Two cover titles differ from the unit names**: the Space cover
+      reads "Earth in our Solar System" and the Forces cover "Forces"
+      (the unit is Forces & Motion). Alt text carries the full names;
+      regenerate the art if the printed title should match. **S**
+      *(2026-11-04)*
+
 <<<<<<< HEAD
 ### Landed — empty bands allowed, greyed out (2 Nov 2026)
 

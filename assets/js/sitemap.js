@@ -1345,11 +1345,11 @@ window.SITEMAP = {
        "h": "tools/page-builder.html"
       },
       {
-       "t": "Rubric builder — write a rubric for the rubric marker",
+       "t": "Rubric builder (write a rubric)",
        "h": "tools/rubric-builder.html"
       },
       {
-       "t": "Rubric marker — mark any assessment against its rubric",
+       "t": "Rubric marker (open any rubric)",
        "h": "tools/rubric-marker.html"
       },
       {

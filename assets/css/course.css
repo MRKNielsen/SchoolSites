@@ -10,7 +10,8 @@
      (.dc-num/.dc-title/.dc-desc/.dc-quiz/.dc-kind) · .deck-card.feature
      full-width row cards (.fi icon, .fbody, .go) ·
      .section-head/.section-sub · .deck-item/.dc-wslink ·
-     .ws-strip/.ws-link · .yeartabs/.ytab/.ypanel/.band-label ·
+     .ws-strip/.ws-link · .cover-grid/.cover-card (workbook covers) ·
+     .yeartabs/.ytab/.ypanel/.band-label ·
      .pdf-frame/.pdf-fallback/.pdf-actions/.pdf-btn · footer
    ============================================================ */
 
@@ -153,6 +154,58 @@ body.course-page {
   margin-left: auto; font-family: var(--font-display); font-weight: 700;
   font-size: clamp(0.88rem, 1.4vw, 1.05rem); color: rgba(255,255,255,0.85);
   white-space: nowrap;
+}
+
+/* ---------- Workbook covers ----------
+   A shelf of unit covers: one illustrated workbook cover per unit, the
+   unit's details underneath. The cover art carries its own title, so the
+   <img> alt names the unit and is the link's accessible name.
+     <div class="cover-grid">
+       <a class="cover-card" href="space/">
+         <img src="covers/earth-solar-system-480.jpg"
+              srcset="covers/earth-solar-system-480.jpg 480w, covers/earth-solar-system.jpg 1024w"
+              sizes="(max-width: 560px) 45vw, 300px" width="1024" height="1536"
+              alt="The Earth in Our Solar System workbook">
+         <span class="cc-body"><span class="dc-desc">…</span><span class="dc-kind">Unit</span></span>
+       </a>
+     </div>
+   Covers are 2:3 portrait (1024×1536 + a 480w copy), in the unit
+   folder's parent covers/ folder. */
+.cover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(44%, 220px), 1fr));
+  gap: 4vh max(14px, 2.2vw);
+  align-items: start;
+}
+.cover-card {
+  display: flex; flex-direction: column; gap: 1.4vh;
+  color: #fff; text-decoration: none;
+}
+.cover-card img {
+  display: block; width: 100%; height: auto; aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 3px 8px 8px 3px;
+  box-shadow:
+    inset 6px 0 8px -6px rgba(0,0,0,0.25),
+    0 2px 4px rgba(0,0,0,0.25),
+    0 14px 28px -10px rgba(0,0,0,0.55);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.cover-card:hover img,
+.cover-card:focus-visible img {
+  transform: translateY(-5px) rotate(-0.6deg);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.25),
+    0 22px 36px -12px rgba(0,0,0,0.6);
+}
+.cover-card:focus-visible { outline: none; }
+.cover-card:focus-visible img { outline: 3px solid #fff; outline-offset: 4px; }
+.cover-card .cc-body { display: flex; align-items: flex-start; gap: 0.8em; }
+.cover-card .dc-desc { flex: 1 1 auto; min-width: 0; line-height: 1.4; }
+.cover-card .dc-kind { align-self: flex-start; }
+@media (prefers-reduced-motion: reduce) {
+  .cover-card img { transition: none; }
+  .cover-card:hover img, .cover-card:focus-visible img { transform: none; }
 }
 
 /* ---------- Secondary section on a course page ---------- */
