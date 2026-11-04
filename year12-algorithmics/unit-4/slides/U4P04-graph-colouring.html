@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Additional topic 4 — Graph Colouring</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Additional topic 4 · Graph Colouring</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>Graph Colouring</h1>
+  <p>Unit 4 AOS2 · Additional topic 4 of 4 — timetables, clashes and the chromatic number</p>
+  <p class="slide-foot">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="Colouring · The problem" data-menu="The problem">
+  <h2>The problem</h2>
+  <div class="box defn"><span class="lbl">Graph colouring</span>
+    <p>Assign a colour to every node so that <b>no two adjacent nodes share a colour</b> (a <b>proper colouring</b>), using as <b>few colours</b> as possible.</p>
+  </div>
+  <ul class="small">
+    <li>A colouring that uses at most \(k\) colours is a <b>\(k\)-colouring</b>.</li>
+    <li>The fewest colours that work is the graph's <b>chromatic number</b>, \(\chi(G)\).</li>
+    <li>Colours are just labels — "red", "block 2", "register 5", "frequency 3" — the problem only cares which nodes <b>share</b> one.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Two quick lower bounds</span>
+    <p>Any edge forces \(\chi \ge 2\). Any <b>triangle</b> forces \(\chi \ge 3\) — three nodes all adjacent to each other need three different colours. In general, \(k\) mutually adjacent nodes force \(\chi \ge k\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · The problem" data-menu="Versions & classes">
+  <h2>Versions and complexity</h2>
+  <table class="tbl">
+    <tr><th>Question</th><th>Class</th><th>Why</th></tr>
+    <tr><td>Is \(G\) 2-colourable?</td><td><b>P</b></td><td>BFS, alternating colours; fails exactly when there is an odd cycle. \(O(V + E)\).</td></tr>
+    <tr><td>Is \(G\) \(k\)-colourable, \(k \ge 3\)?</td><td><b>NP-complete</b></td><td>easy to check a colouring; no known fast way to find one</td></tr>
+    <tr><td>What is \(\chi(G)\)? Find a colouring using \(\chi(G)\) colours.</td><td><b>NP-hard</b></td><td>at least as hard as every \(k\)-colouring decision</td></tr>
+  </table>
+  <ul class="small">
+    <li>Verifying a proposed colouring: for every edge, check its two ends differ — \(O(E)\). That is why the decision version is in NP.</li>
+    <li>The jump from 2 colours (easy) to 3 colours (NP-complete) is a favourite exam point.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Colouring · Modelling" data-menu="Timetabling">
+  <h2>Modelling a timetable as colouring</h2>
+  <div class="cols figure-wide">
+    <div class="graph-card">
+<svg viewBox="0 0 610 290" role="img" aria-label="Conflict graph of six gym programs">
+  <line x1="80" y1="70" x2="260" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="80" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="440" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="170" y1="220" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="350" y1="220" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <rect x="28" y="48" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="80" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Yoga</text>
+  <rect x="208" y="48" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="260" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Spin</text>
+  <rect x="388" y="48" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="440" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Boxing</text>
+  <rect x="118" y="198" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="170" y="226" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Pilates</text>
+  <rect x="298" y="198" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="350" y="226" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Swim</text>
+  <rect x="478" y="198" width="104" height="44" rx="22" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="530" y="226" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">Climb</text>
+</svg>
+    </div>
+    <div>
+      <ul class="small">
+        <li><b>Node</b> = a gym program.</li>
+        <li><b>Edge</b> = some member is enrolled in both, so they clash.</li>
+        <li><b>Colour</b> = a timetable block.</li>
+      </ul>
+      <div class="box try"><span class="lbl">Think</span>
+        <p class="small">What is the fewest blocks this gym needs? Find a lower bound first.</p>
+      </div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The mapping</span>
+    <p>A proper colouring is a timetable with <b>no clashes</b>: adjacent programs get different blocks. The fewest blocks needed is \(\chi(G)\).</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Modelling" data-menu="Three blocks">
+  <h2>Three blocks is the minimum</h2>
+  <div class="graph-card narrow">
+<svg viewBox="0 0 610 290" role="img" aria-label="Greedy colouring in listed order: three blocks">
+  <line x1="80" y1="70" x2="260" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="80" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="440" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="170" y1="220" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="350" y1="220" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <rect x="28" y="46" width="104" height="48" rx="24" style="fill:var(--accent)"/>
+  <text x="80" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Yoga</text>
+  <text x="80" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 1</text>
+  <rect x="208" y="46" width="104" height="48" rx="24" style="fill:var(--accent-warm)"/>
+  <text x="260" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Spin</text>
+  <text x="260" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 2</text>
+  <rect x="388" y="46" width="104" height="48" rx="24" style="fill:var(--accent)"/>
+  <text x="440" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Boxing</text>
+  <text x="440" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 1</text>
+  <rect x="118" y="196" width="104" height="48" rx="24" style="fill:var(--c-indigo-600)"/>
+  <text x="170" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Pilates</text>
+  <text x="170" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 3</text>
+  <rect x="298" y="196" width="104" height="48" rx="24" style="fill:var(--accent-warm)"/>
+  <text x="350" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Swim</text>
+  <text x="350" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 2</text>
+  <rect x="478" y="196" width="104" height="48" rx="24" style="fill:var(--c-indigo-600)"/>
+  <text x="530" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Climb</text>
+  <text x="530" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 3</text>
+</svg>
+  </div>
+  <ul class="small">
+    <li><b>Lower bound:</b> Yoga, Spin and Pilates form a triangle, so at least 3 blocks.</li>
+    <li><b>Upper bound:</b> the colouring above uses 3 and every edge joins different blocks.</li>
+    <li>Lower bound meets upper bound, so \(\chi = 3\). On a small graph a triangle is a quick proof; on a large one, finding matching bounds is the hard part.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Colouring · Modelling" data-menu="Other uses">
+  <h2>The same problem in other clothes</h2>
+  <table class="tbl">
+    <tr><th>Application</th><th>Nodes</th><th>Edge means</th><th>Colours</th></tr>
+    <tr><td>Exam scheduling</td><td>exams</td><td>a student sits both</td><td>sessions</td></tr>
+    <tr><td>Register allocation</td><td>program variables</td><td>both live at the same time</td><td>CPU registers</td></tr>
+    <tr><td>Radio frequencies</td><td>transmitters</td><td>close enough to interfere</td><td>frequencies</td></tr>
+    <tr><td>Map colouring</td><td>regions</td><td>share a border</td><td>colours (4 always suffice)</td></tr>
+    <tr><td>Sudoku</td><td>cells</td><td>same row, column or box</td><td>digits 1–9</td></tr>
+  </table>
+  <div class="box hint"><span class="lbl">Recognise the shape</span>
+    <p>Whenever a question says "these things can't share a … ", reach for graph colouring: things are nodes, conflicts are edges, the shared resource is the colour.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Greedy" data-menu="Greedy colouring">
+  <h2>Greedy colouring</h2>
+  <pre class="code"><span><b>Algorithm</b> GreedyColour(G, order):</span><span>    <b>Foreach</b> v in order <b>Do</b></span><span>        used ← colours of v's already-coloured neighbours</span><span>        colour[v] ← smallest colour number not in used</span><span>    <b>Return</b> colour</span></pre>
+  <ul class="small">
+    <li>One pass, each node checks its neighbours: \(O(V + E)\). Always gives a <b>proper</b> colouring.</li>
+    <li>Never needs more than \(\Delta + 1\) colours, where \(\Delta\) is the largest degree — each node has at most \(\Delta\) neighbours to avoid.</li>
+    <li>Whether it hits \(\chi(G)\) depends entirely on the <b>order</b>.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Welsh–Powell</span>
+    <p>A common ordering rule: colour nodes in order of <b>decreasing degree</b>, so the most constrained programs are placed first. On the gym it gives 3 blocks. Still a heuristic — no guarantee in general.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Greedy" data-menu="Order matters">
+  <h2>Same graph, worse order</h2>
+  <div class="cols">
+    <div class="graph-card">
+<svg viewBox="0 0 610 290" role="img" aria-label="Greedy colouring in a poor order: four blocks">
+  <line x1="80" y1="70" x2="260" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="80" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="170" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="260" y1="70" x2="440" y2="70" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="170" y1="220" x2="350" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="350" y1="220" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <line x1="440" y1="70" x2="530" y2="220" style="stroke:var(--ink-soft);stroke-width:2.5"/>
+  <rect x="28" y="46" width="104" height="48" rx="24" style="fill:var(--accent)"/>
+  <text x="80" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Yoga</text>
+  <text x="80" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 1</text>
+  <rect x="208" y="46" width="104" height="48" rx="24" style="fill:var(--c-indigo-600)"/>
+  <text x="260" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Spin</text>
+  <text x="260" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 3</text>
+  <rect x="388" y="46" width="104" height="48" rx="24" style="fill:var(--c-maroon-600)"/>
+  <text x="440" y="68" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Boxing</text>
+  <text x="440" y="86" text-anchor="middle" font-size="13" style="fill:#fff">block 4</text>
+  <rect x="118" y="196" width="104" height="48" rx="24" style="fill:var(--accent-warm)"/>
+  <text x="170" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Pilates</text>
+  <text x="170" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 2</text>
+  <rect x="298" y="196" width="104" height="48" rx="24" style="fill:var(--accent)"/>
+  <text x="350" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Swim</text>
+  <text x="350" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 1</text>
+  <rect x="478" y="196" width="104" height="48" rx="24" style="fill:var(--accent-warm)"/>
+  <text x="530" y="218" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">Climb</text>
+  <text x="530" y="236" text-anchor="middle" font-size="13" style="fill:#fff">block 2</text>
+</svg>
+    </div>
+    <div>
+      <p class="small">Order: Yoga, Swim, Pilates, Spin, Climb, Boxing.</p>
+      <ol class="steps" id="s-bad">
+        <li><span class="stepno">1</span> Yoga → 1. Swim has no coloured neighbours → 1.</li>
+        <li><span class="stepno">2</span> Pilates touches Yoga (1) and Swim (1) → 2.</li>
+        <li><span class="stepno">3</span> Spin touches Yoga (1), Pilates (2) → 3.</li>
+        <li><span class="stepno">4</span> Climb touches Swim (1) → 2.</li>
+        <li><span class="stepno">5</span> Boxing touches Spin (3), Swim (1), Climb (2) → <b>4</b>.</li>
+        <li class="ans"><span class="stepno">✗</span> Four blocks — one more than needed.</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-bad">Next step</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Exact methods" data-menu="Backtracking">
+  <h2>Exact: backtracking for a \(k\)-colouring</h2>
+  <pre class="code"><span><b>Algorithm</b> Colour(G, k, i):           <i>// try to colour nodes i..n</i></span><span>    <b>If</b> i &gt; n <b>Do</b></span><span>        <b>Return</b> true                   <i>// every node coloured</i></span><span>    <b>Foreach</b> c from 1 <b>To</b> k <b>Do</b></span><span>        <b>If</b> no neighbour of node i has colour c <b>Do</b></span><span>            colour[i] ← c</span><span>            <b>If</b> Colour(G, k, i + 1) <b>Do</b></span><span>                <b>Return</b> true</span><span>            colour[i] ← none          <i>// undo, try the next colour</i></span><span>    <b>Return</b> false                       <i>// dead end: backtrack</i></span></pre>
+  <ul class="small">
+    <li>Worst case tries all \(k^n\) assignments: \(O(k^n)\) checks, each up to \(O(\Delta)\). Exponential.</li>
+    <li>Pruning — refusing a colour as soon as it clashes — cuts most branches in practice. To find \(\chi\), run it for \(k = 1, 2, 3, \dots\) until it succeeds.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Colouring · Heuristics" data-menu="Annealing">
+  <h2>Heuristic: simulated annealing for colouring</h2>
+  <table class="tbl">
+    <tr><th>Component</th><th>For \(k\)-colouring</th></tr>
+    <tr><td>Representation</td><td>a colour from 1..\(k\) for every node (clashes allowed)</td></tr>
+    <tr><td>Neighbourhood</td><td>change the colour of one node — ideally one involved in a clash</td></tr>
+    <tr><td>Objective</td><td>number of edges whose ends share a colour — minimise to 0</td></tr>
+    <tr><td>Accept</td><td>always if fewer clashes; sometimes if more, less often as it cools</td></tr>
+  </table>
+  <div class="cols even">
+    <div class="box answer"><span class="lbl">Strength</span>
+      <p class="small">Scales to thousands of nodes. Stopping early still leaves a timetable with only a few clashes, which may be acceptable.</p>
+    </div>
+    <div class="box flag"><span class="lbl">Limitation</span>
+      <p class="small">If it ends with clashes, you can't tell whether a \(k\)-colouring doesn't exist or the search just missed it. Backtracking can prove "impossible"; annealing can't.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="Colouring · Exam focus" data-menu="NP-hard MCQ">
+  <h2>Which one is not NP-hard?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q20</p>
+  <div class="chooser frag">
+    <p class="ch-tag">Which one of the following problems is <b>not</b> in the NP-hard class? <span class="ch-clue">— three of these are this unit's additional topics</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>finding a solution to the 0-1 knapsack problem</span></div>
+      <div class="opt correct"><b>B</b><span>finding the minimum cost spanning tree of a graph</span></div>
+      <div class="opt"><b>C</b><span>finding a colouring of a graph with at most four colours</span></div>
+      <div class="opt"><b>D</b><span>finding the minimum cost solution to the travelling salesman problem</span></div>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">Why B</span>
+    <p>Prim's algorithm finds a minimum spanning tree in polynomial time, so MST is in P. Knapsack, 4-colouring (\(k \ge 3\)) and TSP are all NP-hard — unless P = NP.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Exam focus" data-menu="Describe & map">
+  <h2>Describe the problem and map onto it</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q10b–c</p>
+  <div class="box question"><span class="lbl">Question (1 + 2 marks)</span>
+    <p class="small">(b) Describe the graph colouring problem. (c) Explain how allocating gym programs to timetable blocks without conflicts can be mapped to the graph colouring problem.</p>
+    <button class="reveal-btn" data-answer="#a-map">Show answer</button>
+    <div class="a" id="a-map"><span class="lbl-a">Answer</span>
+      <p class="small"><b>(b)</b> Assign a colour to each node of a graph so that no two nodes joined by an edge have the same colour, using the minimum number of colours. <b>[1]</b></p>
+      <p class="small"><b>(c)</b> Each program is a node, with an edge between two programs if they conflict (a member is enrolled in both). Each timetable block is a colour. <b>[1]</b> A valid colouring places conflicting programs in different blocks, so it is a clash-free timetable, and a minimum colouring uses the fewest blocks. <b>[1]</b></p>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Where the marks are</span>
+    <p>Mapping marks need <b>all three</b> correspondences — node, edge, colour — and then the sentence linking a valid colouring to a valid timetable.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Exam focus" data-menu="Classify it">
+  <h2>Classify it — and say why</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section B Q10d</p>
+  <div class="box question"><span class="lbl">Question (2 marks)</span>
+    <p class="small">The gym needs to find an allocation of programs to timetable blocks. State the complexity class of this problem and explain what features of the problem give rise to this classification.</p>
+    <button class="reveal-btn" data-answer="#a-class">Show answer</button>
+    <div class="a" id="a-class"><span class="lbl-a">Answer</span>
+      <p class="small">Finding an allocation with the fewest blocks is graph colouring, which is <b>NP-hard</b> (asking whether \(k \ge 3\) blocks suffice is <b>NP-complete</b>). <b>[1]</b> A proposed allocation is easy to check — compare the blocks at each end of every conflict edge — but there is no known way to find one other than searching through the \(k^n\) possible assignments, which grows exponentially with the number of programs. <b>[1]</b></p>
+    </div>
+  </div>
+  <div class="box flag"><span class="lbl">Careful with 2 blocks</span>
+    <p>If the gym only had <b>two</b> blocks, the question "is there a clash-free timetable?" is 2-colouring — that is in <b>P</b>. Check \(k\) before you classify.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">A graph is a single cycle of 7 nodes. What is its chromatic number?</p>
+      <p class="a"><b>3.</b> Alternating two colours around an odd cycle forces the last node to clash with the first, so 2 fails; 3 is enough (alternate, then give the last node the third colour).</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">A verifier checks a proposed 3-colouring in \(2^n + n^4\) steps. Does that show 3-colouring is in NP?</p>
+      <p class="a"><b>No.</b> NP needs a <b>polynomial-time</b> verifier, and \(2^n + n^4\) is exponential. (3-colouring <em>is</em> in NP — checking every edge is \(O(E)\) — but this verifier doesn't show it.) <span class="small">VCAA 2020 B Q12a</span></p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why can greedy colouring never use more than \(\Delta + 1\) colours?</p>
+      <p class="a">When a node is coloured it has at most \(\Delta\) neighbours, so at most \(\Delta\) colours are blocked. One of colours \(1..\Delta + 1\) must be free.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Backtracking or annealing for a school exam timetable with 400 exams? Justify briefly.</p>
+      <p class="a"><b>Annealing.</b> Backtracking is \(O(k^n)\) with \(n = 400\) — infeasible in the worst case. Annealing scales and gives a usable timetable with few or no clashes, at the cost of no guarantee of the minimum number of sessions.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Colouring · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b>Revisit:</b> <a href="U4T09-exact-techniques.html">T9 · DP &amp; backtracking</a> — n-queens backtracks exactly like \(k\)-colouring.</li>
+    <li><b>Revisit:</b> <a href="U4T11-annealing.html">T11 · Simulated annealing</a> — then write the full accept rule for the colouring version.</li>
+    <li><b>Exam practice:</b> VCAA 2023 Section B Q10e asks you to compare backtracking and annealing for the gym timetable (10 marks). Plan it using the last two content slides.</li>
+    <li><b>Back to the start:</b> <a href="U4P01-astar.html">A* search</a>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Graph colouring gives adjacent nodes different colours using as few as possible; 2 colours is easy, 3 or more is NP-complete, so real timetables use greedy orderings, backtracking for small cases, or annealing for big ones.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Define the chromatic number of a graph.</li>
+      <li>In a timetabling model, what are the nodes, the edges and the colours?</li>
+      <li>Which is in P: 2-colouring or 3-colouring?</li>
+    </ol>
+    <p class="start-hint">Bring these four problems to your exam revision.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">→</span> reveals then advances · <span class="key">←</span> back · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>Graph Colouring — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

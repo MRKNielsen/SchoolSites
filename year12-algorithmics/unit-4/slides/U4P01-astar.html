@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Additional topic 1 — A* Search</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Additional topic 1 · A* Search</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>A* Search</h1>
+  <p>Unit 4 AOS2 · Additional topic 1 of 4 — shortest paths with a sense of direction</p>
+  <p class="slide-foot">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="A* · Motivation" data-menu="Why not Dijkstra?">
+  <h2>Why not just use Dijkstra?</h2>
+  <ul>
+    <li>Dijkstra finalises nodes in order of distance <b>from the start</b>. It has no idea where the goal is, so it grows outwards evenly in every direction.</li>
+    <li>For one start and one goal, most of that work is wasted: it carefully finds shortest paths to places you are walking <em>away</em> from.</li>
+    <li>Often we <b>do</b> know something about where the goal is — a map gives straight-line distance, a maze photo shows where the centre is.</li>
+  </ul>
+  <div class="box key"><span class="lbl">The idea</span>
+    <p>A* is Dijkstra with an <b>estimate of the distance still to go</b> added to each node's priority. Nodes that are close to the start <em>and</em> look close to the goal get expanded first.</p>
+  </div>
+  <div class="box hint"><span class="lbl">Where it lives in the course</span>
+    <p>A* is a <b>heuristic-guided</b> search, but — unlike hill climbing — with the right heuristic it still guarantees the shortest path. Hold on to that contrast.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · The method" data-menu="f = g + h">
+  <h2>The priority: \(f(n) = g(n) + h(n)\)</h2>
+  <div class="box defn"><span class="lbl">Three quantities per node</span>
+    <p>\(g(n)\) — the cost of the best path found so far <b>from the start to \(n\)</b>. Known exactly, as in Dijkstra.</p>
+    <p>\(h(n)\) — a <b>heuristic estimate</b> of the cost from \(n\) <b>to the goal</b>. Guessed, never computed by search.</p>
+    <p>\(f(n) = g(n) + h(n)\) — the estimated cost of the cheapest complete path through \(n\). The priority queue is ordered on this.</p>
+  </div>
+  <table class="tbl">
+    <tr><th>Choice of \(h\)</th><th>What A* becomes</th></tr>
+    <tr><td>\(h(n) = 0\) for every node</td><td>exactly Dijkstra's algorithm</td></tr>
+    <tr><td>\(h\) admissible (never overestimates)</td><td>optimal, and usually expands far fewer nodes</td></tr>
+    <tr><td>\(h(n)\) = the true remaining cost</td><td>walks straight down the optimal path</td></tr>
+    <tr><td>\(h\) sometimes overestimates</td><td>faster still, but can return a <b>non-optimal</b> path</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-topic="A* · The method" data-menu="Pseudocode">
+  <h2>A* in pseudocode</h2>
+  <pre class="code"><span><b>Algorithm</b> AStar(G, start, goal, h):</span><span>    g[start] ← 0;  g[v] ← ∞ for every other v</span><span>    parent[start] ← null</span><span>    PQ ← priority queue containing start with priority h(start)</span><span>    <b>While</b> PQ is not empty <b>Do</b></span><span>        u ← PQ.removeMin()                 <i>// smallest f = g + h</i></span><span>        <b>If</b> u = goal <b>Do</b></span><span>            <b>Return</b> path rebuilt from parent[]</span><span>        <b>Foreach</b> neighbour v of u <b>Do</b></span><span>            <b>If</b> g[u] + w(u, v) &lt; g[v] <b>Do</b>   <i>// relax, as in Dijkstra</i></span><span>                g[v] ← g[u] + w(u, v)</span><span>                parent[v] ← u</span><span>                PQ.insertOrUpdate(v, g[v] + h(v))</span><span>    <b>Return</b> no path</span></pre>
+  <div class="box key"><span class="lbl">Spot the difference</span>
+    <p>Delete <code>+ h(v)</code> on line 13 and <code>h(start)</code> on line 4, and this is Dijkstra line for line. The other change: A* <b>stops when the goal is removed</b> from the queue, not when the queue empties.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Worked example" data-menu="The instance">
+  <h2>A worked instance</h2>
+  <div class="cols figure-wide">
+    <div class="graph-card">
+<svg viewBox="0 0 560 300" role="img" aria-label="Weighted graph, S to G, with heuristic values">
+  <line x1="160" y1="150" x2="280" y2="70" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="160" y1="150" x2="280" y2="230" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="160" y1="150" x2="40" y2="150" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="40" y1="150" x2="80" y2="30" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="80" y1="30" x2="280" y2="70" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="70" x2="400" y2="110" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="230" x2="400" y2="270" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="230" x2="400" y2="110" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="400" y1="110" x2="520" y2="190" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="400" y1="270" x2="520" y2="190" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <text x="220" y="115" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="220" y="195" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">7</text>
+  <text x="100" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">3</text>
+  <text x="60" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="180" y="55" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <text x="340" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="340" y="255" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="340" y="175" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="460" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="460" y="235" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <circle cx="160" cy="150" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="160" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">S</text>
+  <text x="160" y="124" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=9</text>
+  <circle cx="280" cy="70" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="280" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">A</text>
+  <text x="280" y="44" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=6</text>
+  <circle cx="280" cy="230" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="280" y="236" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">B</text>
+  <text x="280" y="264" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=6</text>
+  <circle cx="400" cy="110" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="400" y="116" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">C</text>
+  <text x="400" y="84" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=3</text>
+  <circle cx="400" cy="270" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="400" y="276" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">D</text>
+  <text x="362" y="276" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=3</text>
+  <circle cx="40" cy="150" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="40" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">W</text>
+  <text x="40" y="184" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=12</text>
+  <circle cx="80" cy="30" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="80" y="36" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">X</text>
+  <text x="116" y="36" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=11</text>
+  <circle cx="520" cy="190" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="520" y="196" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">G</text>
+  <text x="520" y="224" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=0</text>
+</svg>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Find the shortest path from <b>S</b> to <b>G</b>. Edge weights in black.</li>
+        <li><span class="result">h</span> (orange) is the straight-line distance to G, rounded down.</li>
+        <li>No road can be shorter than a straight line, so \(h\) never overestimates.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Before we trace it</span>
+    <p>W is only 3 from S — the cheapest first step. Will A* ever expand W? Will Dijkstra?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Worked example" data-menu="The trace">
+  <h2>Tracing A* — always expand the smallest \(f\)</h2>
+  <ol class="steps" id="s-trace">
+    <li><span class="stepno">1</span> <b>Expand S</b> (\(f = 0 + 9 = 9\)). Add A: \(4 + 6 = 10\), B: \(7 + 6 = 13\), W: \(3 + 12 = 15\).</li>
+    <li><span class="stepno">2</span> <b>Expand A</b> (\(f = 10\)). Add C: \(8 + 3 = 11\), X: \(10 + 11 = 21\). &nbsp;Queue: C 11, B 13, W 15, X 21.</li>
+    <li><span class="stepno">3</span> <b>Expand C</b> (\(f = 11\)). Add G: \(12 + 0 = 12\). B via C would cost \(13 &gt; 7\), so no update. &nbsp;Queue: G 12, B 13, W 15, X 21.</li>
+    <li><span class="stepno">4</span> <b>Remove G</b> (\(f = 12\)) — it is the goal, so stop.</li>
+    <li class="ans"><span class="stepno">✓</span> Path <b>S → A → C → G</b>, cost <span class="result">12</span>. Four nodes expanded; B, W and X never were.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-trace">Next step</button>
+  <div class="box hint"><span class="lbl">Why it is safe to stop at G</span>
+    <p>Every other entry in the queue has \(f \ge 13\). Since \(h\) never overestimates, any path through them costs <em>at least</em> 13 — so nothing left can beat 12.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Worked example" data-menu="Against Dijkstra">
+  <h2>Same graph, same answer, half the work</h2>
+  <div class="cols even">
+    <div>
+      <div class="graph-card">
+<svg viewBox="0 0 560 300" role="img" aria-label="A* expands S, A, C, G only">
+  <line x1="160" y1="150" x2="280" y2="70" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="160" y1="150" x2="280" y2="230" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="160" y1="150" x2="40" y2="150" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="40" y1="150" x2="80" y2="30" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="80" y1="30" x2="280" y2="70" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="70" x2="400" y2="110" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="280" y1="230" x2="400" y2="270" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="230" x2="400" y2="110" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="400" y1="110" x2="520" y2="190" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="400" y1="270" x2="520" y2="190" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <text x="220" y="115" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="220" y="195" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">7</text>
+  <text x="100" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">3</text>
+  <text x="60" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="180" y="55" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <text x="340" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="340" y="255" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="340" y="175" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="460" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="460" y="235" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <circle cx="160" cy="150" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="160" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">S</text>
+  <text x="160" y="124" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=9</text>
+  <circle cx="280" cy="70" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="280" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">A</text>
+  <text x="280" y="44" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=6</text>
+  <circle cx="280" cy="230" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="280" y="236" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">B</text>
+  <text x="280" y="264" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=6</text>
+  <circle cx="400" cy="110" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="400" y="116" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">C</text>
+  <text x="400" y="84" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=3</text>
+  <circle cx="400" cy="270" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="400" y="276" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">D</text>
+  <text x="362" y="276" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=3</text>
+  <circle cx="40" cy="150" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="40" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">W</text>
+  <text x="40" y="184" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=12</text>
+  <circle cx="80" cy="30" r="17" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:2"/>
+  <text x="80" y="36" text-anchor="middle" font-size="17" font-weight="700" style="fill:var(--ink)">X</text>
+  <text x="116" y="36" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=11</text>
+  <circle cx="520" cy="190" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="520" y="196" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">G</text>
+  <text x="520" y="224" text-anchor="middle" font-size="13" style="fill:var(--accent-warm)">h=0</text>
+</svg>
+      </div>
+      <p class="figcap"><b>A*</b> — expands S, A, C, G</p>
+    </div>
+    <div>
+      <div class="graph-card">
+<svg viewBox="0 0 560 300" role="img" aria-label="Dijkstra expands all eight nodes">
+  <line x1="160" y1="150" x2="280" y2="70" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="160" y1="150" x2="280" y2="230" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="160" y1="150" x2="40" y2="150" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="40" y1="150" x2="80" y2="30" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="80" y1="30" x2="280" y2="70" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="70" x2="400" y2="110" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="280" y1="230" x2="400" y2="270" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="280" y1="230" x2="400" y2="110" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <line x1="400" y1="110" x2="520" y2="190" style="stroke:var(--accent);stroke-width:5"/>
+  <line x1="400" y1="270" x2="520" y2="190" style="stroke:var(--ink-faint);stroke-width:2"/>
+  <text x="220" y="115" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="220" y="195" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">7</text>
+  <text x="100" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">3</text>
+  <text x="60" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="180" y="55" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">6</text>
+  <text x="340" y="95" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="340" y="255" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="340" y="175" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">5</text>
+  <text x="460" y="155" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <text x="460" y="235" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink);paint-order:stroke;stroke:var(--card);stroke-width:5px">4</text>
+  <circle cx="160" cy="150" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="160" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">S</text>
+  <circle cx="280" cy="70" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="280" y="76" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">A</text>
+  <circle cx="280" cy="230" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="280" y="236" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">B</text>
+  <circle cx="400" cy="110" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="400" y="116" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">C</text>
+  <circle cx="400" cy="270" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="400" y="276" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">D</text>
+  <circle cx="40" cy="150" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="40" y="156" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">W</text>
+  <circle cx="80" cy="30" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="80" y="36" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">X</text>
+  <circle cx="520" cy="190" r="17" style="fill:var(--accent);stroke:var(--accent-dark);stroke-width:2"/>
+  <text x="520" y="196" text-anchor="middle" font-size="17" font-weight="700" style="fill:#fff">G</text>
+</svg>
+      </div>
+      <p class="figcap"><b>Dijkstra</b> — expands all eight nodes</p>
+    </div>
+  </div>
+  <ul class="small">
+    <li>Dijkstra expands W first — it really is the closest node to S — and then X, B and D, all of which lead away from G.</li>
+    <li>Both return S → A → C → G at cost 12. The heuristic changed <b>how much was searched</b>, not the answer.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="A* · Heuristics" data-menu="Admissibility">
+  <h2>Admissible heuristics</h2>
+  <div class="box defn"><span class="lbl">Admissible</span>
+    <p>A heuristic \(h\) is <b>admissible</b> if it <b>never overestimates</b>: \(h(n) \le\) the true cheapest cost from \(n\) to the goal, for every node \(n\).</p>
+  </div>
+  <div class="box key"><span class="lbl">The guarantee</span>
+    <p>With an admissible heuristic, A* is <b>guaranteed to return a shortest path</b>. An optimistic estimate can only make a node look <em>better</em> than it is, so the true best path is never left sitting in the queue behind a worse one.</p>
+  </div>
+  <table class="tbl">
+    <tr><th>Setting</th><th>A standard admissible \(h\)</th></tr>
+    <tr><td>Road map, any direction</td><td>straight-line (Euclidean) distance to the goal</td></tr>
+    <tr><td>Grid, moves up/down/left/right only</td><td>Manhattan distance \(|x_1 - x_2| + |y_1 - y_2|\)</td></tr>
+    <tr><td>Anything at all</td><td>\(h = 0\) — admissible, but gives no guidance (Dijkstra)</td></tr>
+  </table>
+</section>
+
+<section class="slide" data-topic="A* · Heuristics" data-menu="When h lies">
+  <h2>When the heuristic overestimates</h2>
+  <div class="cols">
+    <div>
+      <p>Take three nodes: S–G costs <b>10</b> directly; S–A costs <b>1</b> and A–G costs <b>1</b>. The true shortest path is S → A → G, cost 2.</p>
+      <p>Now suppose a bad heuristic claims \(h(A) = 20\).</p>
+      <ol class="steps" id="s-lie">
+        <li><span class="stepno">1</span> Expand S. Queue: G with \(f = 10 + 0 = 10\); A with \(f = 1 + 20 = 21\).</li>
+        <li><span class="stepno">2</span> Remove G (smallest \(f\)) — it is the goal, so A* stops.</li>
+        <li class="ans"><span class="stepno">✗</span> Returns S → G at cost <b>10</b>. The optimum was <b>2</b>.</li>
+      </ol>
+      <button class="reveal-btn" data-target="#s-lie">Run it</button>
+    </div>
+    <div>
+      <div class="box flag"><span class="lbl">What went wrong</span>
+        <p>\(h(A) = 20\) but the real cost from A is 1. The overestimate buried the best path behind the goal, and A* stopped before ever looking at it.</p>
+      </div>
+      <div class="box hint"><span class="lbl">A deliberate trade</span>
+        <p>Inflating \(h\) on purpose (e.g. \(3 \times\) straight-line) is a real technique: fewer expansions, faster answers, no optimality guarantee. That version <em>is</em> a heuristic in the T10 sense.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Analysis" data-menu="Complexity">
+  <h2>Complexity and where A* fits</h2>
+  <ul>
+    <li><b>Worst case</b>: no better than Dijkstra, \(O((V + E)\log V)\) with a binary-heap priority queue — with \(h = 0\) it <em>is</em> Dijkstra.</li>
+    <li><b>In practice</b>: a good admissible heuristic prunes most of the graph, which is why A* is the standard for route-finding, game path-finding and puzzles.</li>
+    <li><b>Memory</b> is often the real limit: every generated node sits in the queue.</li>
+  </ul>
+  <table class="tbl">
+    <tr><th></th><th>BFS</th><th>Dijkstra</th><th>A*</th></tr>
+    <tr><td>Weighted edges</td><td>no — counts edges</td><td>yes (non-negative)</td><td>yes (non-negative)</td></tr>
+    <tr><td>Uses goal location</td><td>no</td><td>no</td><td><b>yes</b>, through \(h\)</td></tr>
+    <tr><td>Finds shortest path</td><td>fewest edges</td><td>always</td><td>if \(h\) admissible</td></tr>
+    <tr><td>Answers</td><td>one source → all</td><td>one source → all</td><td><b>one source → one goal</b></td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Not a heuristic algorithm</span>
+    <p>With an admissible \(h\), A* is <b>exact</b>. The heuristic buys speed without giving up the guarantee — the same point T10 made about Dijkstra being greedy but not a heuristic.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="A* · Exam focus" data-menu="Exam question">
+  <h2>The maze-solving program</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2023, Section A Q8</p>
+  <div class="chooser frag">
+    <p class="ch-tag">A program takes a <b>satellite photo</b> of a maze, uses image recognition to find the walls, entrance and centre, and returns a path from the entrance to the centre. <span class="ch-clue">— which is likely to be most efficient?</span></p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>breadth-first search</span></div>
+      <div class="opt"><b>B</b><span>depth-first search</span></div>
+      <div class="opt"><b>C</b><span>Dijkstra's algorithm</span></div>
+      <div class="opt correct"><b>D</b><span>the A* algorithm</span></div>
+    </div>
+  </div>
+  <div class="box try"><span class="lbl">Before you look</span>
+    <p>What does the photo give the program that a plain list of corridors would not?</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Exam focus" data-menu="Exam solution">
+  <h2>Working it through</h2>
+  <ol class="steps" id="s-exam">
+    <li><span class="stepno">1</span> <b>The photo tells us where the centre is.</b> Every corridor junction has coordinates, so the distance to the centre can be estimated — a heuristic is available for free.</li>
+    <li><span class="stepno">2</span> <b>BFS and Dijkstra ignore the goal's position.</b> They are correct, but expand outward in every direction until they happen to reach the centre.</li>
+    <li><span class="stepno">3</span> <b>DFS</b> finds <em>a</em> path, with no guarantee it is short, and can wander down long dead ends first.</li>
+    <li><span class="stepno">4</span> <b>A* uses the estimate</b> (e.g. Manhattan distance to the centre, which never overestimates in a grid maze) to expand promising junctions first, while still returning a shortest path.</li>
+    <li class="ans"><span class="stepno">✓</span> <b>Answer: D.</b></li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-exam">Reveal the reasoning</button>
+  <div class="box key"><span class="lbl">The trigger</span>
+    <p>Whenever a question mentions <b>coordinates, a map, or a known goal location</b>, ask whether it is quietly offering you a heuristic — and therefore A*.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Exam focus" data-menu="Written question">
+  <h2>A short-answer version</h2>
+  <div class="box question"><span class="lbl">Question (3 marks)</span>
+    <p class="small">A navigation app uses A* on a road network with straight-line distance to the destination as \(h\). (a) Explain why this heuristic is admissible. (b) A developer proposes using three times the straight-line distance to speed the search up. Explain the consequence.</p>
+    <button class="reveal-btn" data-answer="#a-written">Show answer</button>
+    <div class="a" id="a-written"><span class="lbl-a">Answer</span>
+      <p class="small"><b>(a)</b> No road between two points is shorter than the straight line between them, so the straight-line distance is never more than the true remaining road distance — it never overestimates. <b>[1]</b></p>
+      <p class="small"><b>(b)</b> Tripling it can overestimate the remaining cost, so it is no longer admissible. <b>[1]</b> The search will usually expand fewer nodes and finish faster, but A* is no longer guaranteed to return the shortest route. <b>[1]</b></p>
+    </div>
+  </div>
+  <div class="box hint"><span class="lbl">Where the marks are</span>
+    <p>"Never overestimates" is the definition — say it in those words. For (b), one mark for <b>losing admissibility</b>, one for naming <b>both sides of the trade</b>: faster, but optimality not guaranteed.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">State what \(g(n)\), \(h(n)\) and \(f(n)\) represent in A*.</p>
+      <p class="a">\(g(n)\): cost of the best known path from the start to \(n\). \(h(n)\): heuristic estimate of the cost from \(n\) to the goal. \(f(n) = g(n) + h(n)\): estimated total cost of a path through \(n\) — the priority-queue key.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">What does A* become when \(h(n) = 0\) for every node? Is it still optimal?</p>
+      <p class="a">It becomes <b>Dijkstra's algorithm</b> (stopping once the goal is removed). Yes — \(h = 0\) never overestimates, so it is admissible and the path is still shortest; it just gets no guidance towards the goal.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">On a grid where diagonal moves are allowed at cost 1, is Manhattan distance admissible?</p>
+      <p class="a"><b>No.</b> One diagonal step moves 1 across and 1 up for cost 1, but Manhattan distance counts it as 2 — an overestimate. Use \(\max(|\Delta x|, |\Delta y|)\) instead.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give one situation where A* has no advantage over Dijkstra.</p>
+      <p class="a">When you need shortest paths from one source to <b>every</b> node (A* targets a single goal), or when no useful estimate of the remaining distance exists, so \(h\) is effectively 0.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="A* · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b>Revisit:</b> <a href="U4T10-heuristics.html">T10 · Greedy &amp; hill climbing</a> — why a greedy <em>technique</em> is not automatically a heuristic. A* is the same story.</li>
+    <li><b>Try it:</b> rerun the worked instance with \(h(W) = 0\). Does A* now expand W? Does the answer change?</li>
+    <li><b>Next additional topic:</b> <a href="U4P02-knapsack.html">the 0-1 knapsack problem</a>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>A* orders the search by \(g + h\) — cost so far plus an estimate of cost to go — and as long as that estimate never overestimates, it finds the shortest path while searching far less than Dijkstra.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>Write the formula A* uses to order its priority queue, and name each term.</li>
+      <li>Define an admissible heuristic in one sentence.</li>
+      <li>What can go wrong if the heuristic overestimates?</li>
+    </ol>
+    <p class="start-hint">Additional topic 2 — the 0-1 knapsack problem.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">→</span> reveals then advances · <span class="key">←</span> back · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>A* Search — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>

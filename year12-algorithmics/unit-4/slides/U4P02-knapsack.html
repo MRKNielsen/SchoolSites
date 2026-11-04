@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U4 Additional topic 2 — The 0-1 Knapsack Problem</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady().then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-algorithmics">
+<div class="progress"></div>
+<div class="lessontag">Additional topic 2 · The 0-1 Knapsack Problem</div>
+<a class="homebtn" href="../index.html">⌂ Unit 4 hub</a>
+<main class="deck">
+
+<section class="slide section-slide active" data-menu="Title">
+  <h1>The 0-1 Knapsack Problem</h1>
+  <p>Unit 4 AOS2 · Additional topic 2 of 4 — brute force, backtracking, greedy and dynamic programming on one problem</p>
+  <p class="slide-foot">VCE Algorithmics (HESS) · Northcote High School</p>
+</section>
+
+<section class="slide" data-topic="Knapsack · The problem" data-menu="The problem">
+  <h2>The problem</h2>
+  <div class="box defn"><span class="lbl">0-1 knapsack</span>
+    <p>Given \(n\) items, each with a <b>size</b> \(s_i\) and a <b>value</b> \(v_i\), and a knapsack of <b>capacity</b> \(C\): choose a subset of the items whose total size is at most \(C\) and whose total value is as large as possible.</p>
+  </div>
+  <ul class="small">
+    <li><b>"0-1"</b> means each item is either taken whole (1) or left (0). No fractions, no second copies.</li>
+    <li>It models any budgeted selection: projects under a fixed budget, cargo under a weight limit, ads in a fixed-length break.</li>
+  </ul>
+  <table class="tbl">
+    <tr><th>Version</th><th>Question asked</th><th>Class</th></tr>
+    <tr><td>Decision</td><td>Is there a subset with size \(\le C\) and value \(\ge k\)?</td><td><b>NP-complete</b></td></tr>
+    <tr><td>Optimisation</td><td>What is the greatest value that fits?</td><td><b>NP-hard</b></td></tr>
+  </table>
+</section>
+
+<section class="slide" data-topic="Knapsack · The problem" data-menu="The instance">
+  <h2>One instance, used all lesson</h2>
+  <div class="cols">
+    <div>
+      <table class="tbl">
+        <tr><th>Item</th><th class="c">Size \(s\)</th><th class="c">Value \(v\)</th><th class="c">\(v / s\)</th></tr>
+        <tr><td>1</td><td class="c">5</td><td class="c">4</td><td class="c">0.80</td></tr>
+        <tr><td>2</td><td class="c">4</td><td class="c">11</td><td class="c">2.75</td></tr>
+        <tr><td>3</td><td class="c">8</td><td class="c">12</td><td class="c">1.50</td></tr>
+        <tr><td>4</td><td class="c">2</td><td class="c">2</td><td class="c">1.00</td></tr>
+      </table>
+      <p class="bookref">Instance from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q7</p>
+    </div>
+    <div>
+      <div class="box question"><span class="lbl">Capacity 10</span>
+        <p>Which items should go in? Find the best value you can in one minute.</p>
+        <button class="reveal-btn" data-answer="#a-inst">Show answer</button>
+        <div class="a" id="a-inst"><span class="lbl-a">Answer</span>
+          <p>Items <b>1 and 2</b>: size \(5 + 4 = 9\), value <span class="result">15</span>. The tempting {3, 4} fills the bag exactly but is worth only 14.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Brute force" data-menu="Brute force">
+  <h2>Brute force — try every subset</h2>
+  <ul>
+    <li>Each item is in or out, so there are \(2^n\) subsets. For each, add up its size and value: \(O(n)\).</li>
+    <li>Total: \(O(n \cdot 2^n)\). Always correct — and hopeless beyond a few dozen items.</li>
+  </ul>
+  <table class="tbl">
+    <tr><th>\(n\)</th><th>Subsets \(2^n\)</th><th>At \(10^9\) checks per second</th></tr>
+    <tr><td>4</td><td>16</td><td>instant</td></tr>
+    <tr><td>30</td><td>about \(1.1 \times 10^9\)</td><td>about a second</td></tr>
+    <tr><td>60</td><td>about \(1.2 \times 10^{18}\)</td><td>about 37 years</td></tr>
+    <tr><td>100</td><td>about \(1.3 \times 10^{30}\)</td><td>far longer than the age of the universe</td></tr>
+  </table>
+  <div class="box key"><span class="lbl">Doubling per item</span>
+    <p>Adding one item <b>doubles</b> the work. That is the signature of exponential growth, and why knapsack sits with TSP and graph colouring as a standard intractable problem.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Backtracking" data-menu="Search tree">
+  <h2>Organising the search as a tree</h2>
+  <div class="graph-card narrow">
+<svg viewBox="0 0 684 328" role="img" aria-label="Search tree of item subsets">
+  <line x1="48" y1="250" x2="48" y2="272" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="90" y1="184" x2="48" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="90" y1="184" x2="132" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="216" y1="184" x2="216" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="90" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="216" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="300" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="384" y1="184" x2="384" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="426" y1="118" x2="384" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="426" y1="118" x2="468" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="552" y1="118" x2="552" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="195" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="426" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="552" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="636" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <rect x="12" y="272" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="48" y="290" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,3,4}</text>
+  <text x="48" y="307" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 19 · v 29</text>
+  <rect x="12" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="48" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,3}</text>
+  <text x="48" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 17 · v 27</text>
+  <rect x="96" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="132" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,4}</text>
+  <text x="132" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 11 · v 17</text>
+  <rect x="54" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="90" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2}</text>
+  <text x="90" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 9 · v 15</text>
+  <rect x="180" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="216" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,3,4}</text>
+  <text x="216" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 15 · v 18</text>
+  <rect x="180" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="216" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,3}</text>
+  <text x="216" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 13 · v 16</text>
+  <rect x="264" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="300" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,4}</text>
+  <text x="300" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 7 · v 6</text>
+  <rect x="159" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="195" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1}</text>
+  <text x="195" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 5 · v 4</text>
+  <rect x="348" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="384" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,3,4}</text>
+  <text x="384" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 14 · v 25</text>
+  <rect x="348" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="384" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,3}</text>
+  <text x="384" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 12 · v 23</text>
+  <rect x="432" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="468" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,4}</text>
+  <text x="468" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 6 · v 13</text>
+  <rect x="390" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="426" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2}</text>
+  <text x="426" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 4 · v 11</text>
+  <rect x="516" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="552" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{3,4}</text>
+  <text x="552" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 10 · v 14</text>
+  <rect x="516" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="552" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{3}</text>
+  <text x="552" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 8 · v 12</text>
+  <rect x="600" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="636" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{4}</text>
+  <text x="636" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 2 · v 2</text>
+  <rect x="379.5" y="8" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="415.5" y="26" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{ }</text>
+  <text x="415.5" y="43" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 0 · v 0</text>
+</svg>
+  </div>
+  <p class="figcap">Each node is a set of items; a child adds one item with a <b>larger</b> number, so no set appears twice.</p>
+</section>
+
+<section class="slide" data-topic="Knapsack · Backtracking" data-menu="Backtracking">
+  <h2>Backtracking — stop as soon as it can't work</h2>
+  <pre class="code"><span><b>Algorithm</b> Explore(items, last, c, sizes, values):</span><span>    <b>If</b> size(items) &gt; c <b>Do</b></span><span>        <b>Return</b>                          <i>// over capacity: backtrack</i></span><span>    record items if value(items) is the best so far</span><span>    <b>Foreach</b> i from last + 1 <b>To</b> n <b>Do</b></span><span>        Explore(items ∪ {i}, i, c, sizes, values)</span><span></span><span><b>Call</b> Explore({ }, 0, c, sizes, values)</span></pre>
+  <ul class="small">
+    <li>Adding items can only make a set <b>bigger</b>, so once a set is over capacity every set below it is too — the whole subtree can be skipped.</li>
+    <li>Same worst case as brute force, \(O(2^n)\): if every item fits, nothing is pruned. The saving is real but not guaranteed.</li>
+  </ul>
+  <div class="box hint"><span class="lbl">Stronger pruning</span>
+    <p>Also backtrack when <em>value so far + value of every remaining item</em> cannot beat the best found. That is <b>branch and bound</b>.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Greedy" data-menu="Greedy fails">
+  <h2>Greedy — fast, plausible, wrong</h2>
+  <table class="tbl">
+    <tr><th>Greedy rule (take if it fits)</th><th>Order tried</th><th>Taken</th><th class="c">Value</th></tr>
+    <tr><td>Best value per unit size first</td><td>2, 3, 4, 1</td><td>2, 4</td><td class="c">13</td></tr>
+    <tr><td>Most valuable first</td><td>3, 2, 1, 4</td><td>3, 4</td><td class="c">14</td></tr>
+    <tr><td>Smallest first</td><td>4, 2, 1, 3</td><td>4, 2</td><td class="c">13</td></tr>
+    <tr><td><b>Optimal</b></td><td></td><td><b>1, 2</b></td><td class="c"><b>15</b></td></tr>
+  </table>
+  <ul class="small">
+    <li>Each rule is \(O(n \log n)\) — a sort, then one pass. None finds 15 here.</li>
+    <li>Ratio-greedy fails because taking item 2 then item 4 leaves 4 units of space that item 1 (size 5) cannot use. Whole items waste space.</li>
+  </ul>
+  <div class="box key"><span class="lbl">Fractional vs 0-1</span>
+    <p>If items could be <b>cut</b>, ratio-greedy would be <b>optimal</b> — fill the leftover space with part of the next item. The 0-1 restriction is exactly what breaks it.</p>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Dynamic programming" data-menu="DP idea">
+  <h2>Dynamic programming — the recurrence</h2>
+  <p>Let \(K(i, c)\) be the best value using only items \(1..i\) with capacity \(c\). Item \(i\) is either left out, or put in:</p>
+  <div class="box key"><span class="lbl">Recurrence</span>
+    <p>\[ K(i, c) = \begin{cases} K(i-1, c) & \text{if } s_i &gt; c \\[4pt] \max\big(K(i-1, c),\; v_i + K(i-1, c - s_i)\big) & \text{otherwise} \end{cases} \]</p>
+    <p>with \(K(0, c) = 0\) for every \(c\).</p>
+  </div>
+  <ul class="small">
+    <li><b>Optimal substructure:</b> the best packing that includes item \(i\) is item \(i\) plus the best packing of the rest into \(c - s_i\).</li>
+    <li><b>Overlapping subproblems:</b> the same \(K(i, c)\) is needed by many larger subproblems — so store each one once in a table.</li>
+  </ul>
+</section>
+
+<section class="slide" data-topic="Knapsack · Dynamic programming" data-menu="DP table">
+  <h2>Filling the table</h2>
+<table class="tbl">
+  <tr><th>item \ capacity</th><th class="c">0</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th><th class="c">5</th><th class="c">6</th><th class="c">7</th><th class="c">8</th><th class="c">9</th><th class="c">10</th></tr>
+  <tr><td>none</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td></tr>
+  <tr><td>1 (s5, v4)</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">4</td><td class="c"><b>4</b></td><td class="c">4</td><td class="c">4</td><td class="c">4</td><td class="c">4</td></tr>
+  <tr><td>2 (s4, v11)</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">11</td><td class="c">11</td><td class="c">11</td><td class="c">11</td><td class="c">11</td><td class="c">15</td><td class="c"><b>15</b></td></tr>
+  <tr><td>3 (s8, v12)</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">0</td><td class="c">11</td><td class="c">11</td><td class="c">11</td><td class="c">11</td><td class="c">12</td><td class="c">15</td><td class="c"><b>15</b></td></tr>
+  <tr><td>4 (s2, v2)</td><td class="c">0</td><td class="c">0</td><td class="c">2</td><td class="c">2</td><td class="c">11</td><td class="c">11</td><td class="c">13</td><td class="c">13</td><td class="c">13</td><td class="c">15</td><td class="c"><b>15</b></td></tr>
+</table>
+  <ol class="steps" id="s-dp">
+    <li><span class="stepno">1</span> Fill row by row. E.g. \(K(4, 6) = \max(K(3, 6),\ 2 + K(3, 4)) = \max(11,\ 13) = 13\).</li>
+    <li><span class="stepno">2</span> The answer is the bottom-right cell: <span class="result">15</span>.</li>
+    <li><span class="stepno">3</span> <b>Trace back</b> (bold cells): 15 = row above, so item 4 out; 15 = row above again, item 3 out; 15 ≠ 4, so item 2 in, move to capacity 6; 4 ≠ 0, so item 1 in.</li>
+    <li class="ans"><span class="stepno">✓</span> Items <b>1 and 2</b>, value 15 — matching brute force.</li>
+  </ol>
+  <button class="reveal-btn" data-target="#s-dp">Next step</button>
+</section>
+
+<section class="slide" data-topic="Knapsack · Dynamic programming" data-menu="Pseudo-polynomial">
+  <h2>So is knapsack in P after all?</h2>
+  <ul>
+    <li>The table has \((n + 1)(C + 1)\) cells, each filled in \(O(1)\): the DP runs in \(O(nC)\).</li>
+    <li>That <em>looks</em> polynomial — but \(C\) is a <b>number</b>, written in about \(\log_2 C\) digits. Doubling the number of digits <b>squares</b> \(C\).</li>
+    <li>Measured against the size of the input, \(O(nC)\) is <b>exponential</b>. It is called <b>pseudo-polynomial</b>.</li>
+  </ul>
+  <div class="cols even">
+    <div class="box answer"><span class="lbl">Small capacity</span>
+      <p class="small">\(C = 1000\), \(n = 500\): half a million cells. DP is the right tool, and it is exact.</p>
+    </div>
+    <div class="box flag"><span class="lbl">Huge capacity</span>
+      <p class="small">\(C = 10^{15}\) (sizes in grams of cargo, cents of budget): the table is impossibly big. Back to backtracking or heuristics.</p>
+    </div>
+  </div>
+  <div class="box key"><span class="lbl">The exam point</span>
+    <p>The DP does <b>not</b> show P = NP. Knapsack stays NP-complete; DP is an exact method that is fast only when \(C\) is small.</p>
+  </div>
+</section>
+
+<section class="slide section-slide" data-menu="§ Exam focus">
+  <h1>Exam focus</h1>
+</section>
+
+<section class="slide" data-topic="Knapsack · Exam focus" data-menu="Exam question">
+  <h2>Which nodes does backtracking never reach?</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q7b</p>
+  <div class="cols figure-wide">
+  <div class="graph-card">
+<svg viewBox="0 0 684 328" role="img" aria-label="Search tree of item subsets">
+  <line x1="48" y1="250" x2="48" y2="272" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="90" y1="184" x2="48" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="90" y1="184" x2="132" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="216" y1="184" x2="216" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="90" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="216" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="195" y1="118" x2="300" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="384" y1="184" x2="384" y2="206" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="426" y1="118" x2="384" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="426" y1="118" x2="468" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="552" y1="118" x2="552" y2="140" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="195" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="426" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="552" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <line x1="415.5" y1="52" x2="636" y2="74" style="stroke:var(--ink-faint);stroke-width:1.5"/>
+  <rect x="12" y="272" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="48" y="290" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,3,4}</text>
+  <text x="48" y="307" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 19 · v 29</text>
+  <rect x="12" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="48" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,3}</text>
+  <text x="48" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 17 · v 27</text>
+  <rect x="96" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="132" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2,4}</text>
+  <text x="132" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 11 · v 17</text>
+  <rect x="54" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="90" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,2}</text>
+  <text x="90" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 9 · v 15</text>
+  <rect x="180" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="216" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,3,4}</text>
+  <text x="216" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 15 · v 18</text>
+  <rect x="180" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="216" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,3}</text>
+  <text x="216" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 13 · v 16</text>
+  <rect x="264" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="300" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1,4}</text>
+  <text x="300" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 7 · v 6</text>
+  <rect x="159" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="195" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{1}</text>
+  <text x="195" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 5 · v 4</text>
+  <rect x="348" y="206" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="384" y="224" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,3,4}</text>
+  <text x="384" y="241" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 14 · v 25</text>
+  <rect x="348" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="384" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,3}</text>
+  <text x="384" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 12 · v 23</text>
+  <rect x="432" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="468" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2,4}</text>
+  <text x="468" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 6 · v 13</text>
+  <rect x="390" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="426" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{2}</text>
+  <text x="426" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 4 · v 11</text>
+  <rect x="516" y="140" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="552" y="158" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{3,4}</text>
+  <text x="552" y="175" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 10 · v 14</text>
+  <rect x="516" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="552" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{3}</text>
+  <text x="552" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 8 · v 12</text>
+  <rect x="600" y="74" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="636" y="92" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{4}</text>
+  <text x="636" y="109" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 2 · v 2</text>
+  <rect x="379.5" y="8" width="72" height="44" rx="6" style="fill:var(--card);stroke:var(--ink-soft);stroke-width:1.5"/>
+  <text x="415.5" y="26" text-anchor="middle" font-size="14" font-weight="700" style="fill:var(--ink)">{ }</text>
+  <text x="415.5" y="43" text-anchor="middle" font-size="12" style="fill:var(--ink-soft)">s 0 · v 0</text>
+  <g class="frag">
+    <rect x="9" y="203" width="78" height="50" rx="8" style="fill:none;stroke:var(--accent-warm);stroke-width:3.5"/>
+    <rect x="93" y="203" width="78" height="50" rx="8" style="fill:none;stroke:var(--accent-warm);stroke-width:3.5"/>
+    <rect x="177" y="137" width="78" height="50" rx="8" style="fill:none;stroke:var(--accent-warm);stroke-width:3.5"/>
+    <rect x="345" y="137" width="78" height="50" rx="8" style="fill:none;stroke:var(--accent-warm);stroke-width:3.5"/>
+  </g>
+  <g class="frag">
+    <ellipse cx="216" cy="228" rx="45.0" ry="31.0" style="fill:none;stroke:var(--neg);stroke-width:3.5"/>
+    <ellipse cx="384" cy="228" rx="45.0" ry="31.0" style="fill:none;stroke:var(--neg);stroke-width:3.5"/>
+    <ellipse cx="48" cy="294" rx="45.0" ry="31.0" style="fill:none;stroke:var(--neg);stroke-width:3.5"/>
+  </g>
+</svg>
+  </div>
+  <div class="box question"><span class="lbl">Question (1 mark)</span>
+    <p class="small">The algorithm backtracks whenever it reaches a node that is over the capacity of 10. Identify the nodes in the tree that are <b>never searched</b>.</p>
+    <button class="reveal-btn" data-answer="#a-tree">Show answer</button>
+    <div class="a" id="a-tree"><span class="lbl-a">Answer</span>
+      <p class="small">Over capacity (orange): {1,3}, {2,3}, {1,2,3} and {1,2,4}. Each is reached, checked and abandoned. Their children are never searched (red): <b>{1,3,4}, {2,3,4} and {1,2,3,4}</b>. {1,2,4} has no children, so it prunes nothing.</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Exam focus" data-menu="Pseudocode question">
+  <h2>Write the tree-building algorithm</h2>
+  <p class="bookref">Adapted from VCAA Algorithmics (HESS) Written Examination 2022, Section B Q7a</p>
+  <div class="cols">
+    <div class="box question"><span class="lbl">Question (4 marks)</span>
+      <p class="small">Write pseudocode that takes a capacity <code>c</code>, a list <code>sizes</code> and a list <code>values</code> and generates a search tree in the style of the one on the previous slide.</p>
+      <button class="reveal-btn" data-answer="#a-pseudo">Show a model response</button>
+      <div class="a" id="a-pseudo"><span class="lbl-a">Model response</span>
+        <pre class="code"><span><b>Algorithm</b> BuildTree(c, sizes, values):</span><span>    root ← new node with items = { }</span><span>    AddChildren(root, 0, sizes, values)</span><span>    <b>Return</b> root</span><span></span><span><b>Algorithm</b> AddChildren(node, last, sizes, values):</span><span>    <b>Foreach</b> i from last + 1 <b>To</b> length(sizes) <b>Do</b></span><span>        child ← node with items ∪ {i}, size + sizes[i], value + values[i]</span><span>        add child as a child of node</span><span>        AddChildren(child, i, sizes, values)</span></pre>
+      </div>
+    </div>
+    <div class="box hint"><span class="lbl">Where the marks are</span>
+      <p>Children add only <b>later</b> items (no duplicates) · size and value are <b>accumulated</b> · it <b>recurses</b> on each child · a correct starting call. Turning it into Rosa's backtracking version is one line: only recurse when <code>child.size ≤ c</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Consolidation" data-menu="Check yourself">
+  <h2>Check yourself</h2>
+  <div class="qgrid">
+    <div class="qcard">
+      <p class="q">Why is \(O(nC)\) not considered polynomial time?</p>
+      <p class="a">Input size is measured in bits. \(C\) takes only about \(\log_2 C\) bits to write, so \(C\) itself is exponential in its own length — adding one digit to \(C\) multiplies the running time by ten.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Explain why backtracking can safely skip every node below an over-capacity node.</p>
+      <p class="a">Children only <b>add</b> items, and sizes are positive, so every descendant is at least as large as its over-capacity ancestor. None can fit, so none can be a solution.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Give a two-item instance where best-ratio greedy fails badly.</p>
+      <p class="a">Capacity 10. Item A: size 1, value 2 (ratio 2). Item B: size 10, value 10 (ratio 1). Greedy takes A, then B no longer fits: value 2. Optimum is B alone: value 10.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+    <div class="qcard">
+      <p class="q">Why is the decision version of knapsack in NP?</p>
+      <p class="a">A proposed subset is a certificate. Checking it means summing at most \(n\) sizes and \(n\) values and comparing with \(C\) and \(k\) — \(O(n)\), polynomial time.</p>
+      <button class="reveal-btn">Show answer</button>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-topic="Knapsack · Consolidation" data-menu="Take it away">
+  <h2>Take it away</h2>
+  <ul>
+    <li><b>Revisit:</b> <a href="U4T09-exact-techniques.html">T9 · DP &amp; backtracking</a> — the coins example uses the same "use it or don't" recurrence.</li>
+    <li><b>Try it:</b> add item 5 (size 3, value 5) and refill the DP table. Does the answer change?</li>
+    <li><b>Next additional topic:</b> <a href="U4P03-tsp.html">the travelling salesman problem</a>.</li>
+  </ul>
+  <div class="box key"><span class="lbl">One sentence to remember</span>
+    <p><em>Knapsack is NP-complete: brute force and backtracking are exponential, greedy is fast but not optimal, and the \(O(nC)\) DP is exact but only pseudo-polynomial.</em></p>
+  </div>
+</section>
+
+<section class="slide exit-slide" data-menu="Exit">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go…</h1>
+    <ol>
+      <li>How many subsets does brute force check for 20 items?</li>
+      <li>Write the knapsack DP recurrence from memory.</li>
+      <li>Why doesn't the \(O(nC)\) algorithm prove P = NP?</li>
+    </ol>
+    <p class="start-hint">Additional topic 3 — the travelling salesman problem.</p>
+  </div>
+</section>
+
+</main>
+
+<div class="keyhint"><span class="key">→</span> reveals then advances · <span class="key">←</span> back · <span class="key">M</span> menu · <span class="key">R</span> reveal · <span class="key">F</span> fullscreen</div>
+<div class="chrome">
+  <button class="navbtn menubtn" aria-label="Slide menu">☰</button>
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">←</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">→</button>
+</div>
+<div class="slidemenu" hidden>
+  <button class="menuclose" aria-label="Close menu">×</button>
+  <h2>The 0-1 Knapsack Problem — slide overview</h2>
+  <div class="menugrid"></div>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+</body>
+</html>
