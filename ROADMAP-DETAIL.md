@@ -982,11 +982,12 @@ label on its own.
 
 ### Tier 0 — Housekeeping (minutes each)
 
-- [ ] **Encrypt `year7-science/space/worksheet-revision-solutions.html`.**
+- [x] **Encrypt `year7-science/space/worksheet-revision-solutions.html`.**
       Ships with a placeholder blob until the staff password is applied:
       run `worksheet-revision-solutions-payload.html` through
       `tools/staff-crypt.html`, paste the line over `var BLOB`, then
-      `node tools/check-gated.js`. **S**
+      `node tools/check-gated.js`. **S** *(confirmed done 2026-10-30 — the
+      page carries a full v2 blob; found in the repo sweep)*
 - [ ] **Space deck 6 understates the debris energy by 100×.** The "We do"
       slide says a 10 g bolt at 7,800 m/s has "20× more kinetic energy than
       a cricket ball", but its own figures are 304,200 J against 152 J,
@@ -1020,6 +1021,56 @@ label on its own.
       `<title>` also changed without a sitemap rebuild, so
       `node tools/build-sitemap.js` is owed either way; do both in one
       pass. **S**
+- [ ] **Rebuild the sitemap — the Particle Model unit is missing from the
+      nav drawer.** `node tools/build-sitemap.js --check` fails; the only
+      difference is the unit itself, `particle-model/deck1.html` and
+      `particle-model/planner.html`, so students can't reach it from the
+      drawer or search. Run `node tools/build-sitemap.js`. **S**
+      *(found 2026-10-30, repo sweep)*
+- [ ] **`bio-ecosystems/portfolio-solutions.html` says "Incorrect password"
+      to the right password.** It still ships the empty placeholder blob,
+      and its unlock handler doesn't guard on `BLOB.ct`, so a teacher is
+      told the password is wrong when the real fault is that nothing has
+      been encrypted. Copy the guard and message from
+      `space/worksheet-revision1-solutions.html` ("This page has no answers
+      in it yet…"), then encrypt the payload through
+      `tools/staff-crypt.html`. **S** *(found 2026-10-30, repo sweep)*
+- [ ] **Encrypt `year7-science/space/worksheet-revision1-solutions.html`.**
+      Placeholder blob (empty `ct`) — locks but can't unlock. Its handler
+      already gives the right "not encrypted yet" message. Run
+      `worksheet-revision1-solutions-payload.html` through
+      `tools/staff-crypt.html`. **S** *(found 2026-10-30, repo sweep)*
+- [ ] **Untrack the committed `.pyc` files.** `.gitignore` ignores
+      `__pycache__/` but eleven were committed before it did: 2 in
+      `tools/__pycache__/`, 9 in
+      `year11-applied-computing/unit-1/workbooks/checks/__pycache__/`.
+      `git rm -r --cached` both folders. **S** *(found 2026-10-30, repo
+      sweep)*
+- [ ] **Delete `forces-lesson1.patch` from the repo root.** 2.6 MB, left
+      over from the "Forces 1" commit (`2e52d79`); it's a diff of
+      `ROADMAP-DETAIL.md` and Forces files, not site content. **S**
+      *(found 2026-10-30, repo sweep)*
+- [ ] **Untrack the `.abp`/`.abx` LaTeX build leftovers and ignore them.**
+      Committed for the Forces lesson booklet, the Trebuchet
+      Investigation, the Particle Model booklet and the Applied Computing
+      Unit 1 booklet. Add `*.abp` and `*.abx` to the LaTeX block in
+      `.gitignore`, then `git rm --cached` the six files. **S** *(found
+      2026-10-30, repo sweep)*
+- [ ] **A stale `bio-ecosystems/rubric-payload.html` makes `check-gated.js`
+      report an ungated page as "ok".** The rubric has been ungated since
+      8 Oct, but the old payload is still on disk (gitignored, so local
+      only), and the checker pairs it with `rubric.html`. Delete the local
+      payload — and see the "no blob at all" item above, which is the
+      same blind spot from the other side. **S** *(found 2026-10-30, repo
+      sweep)*
+- [ ] **`space/deck1.html` types 📝 into six `.bookref` chips.** Use the
+      `.bookref.sheet` modifier instead, and replace the five inline
+      `style="display:block;margin-top:6px"` with `.bookref.stack`. **S**
+      *(found 2026-10-30, repo sweep)*
+- [ ] **Rebuild the Trebuchet Build Guide PDF.**
+      `forces/labs/Trebuchet_Build_Guide.tex` gained ~157 lines on 16 Oct
+      (`91aa537`) but the PDF is from the 15 Oct commit. xelatex ×3 from
+      a scratch copy. **S** *(found 2026-10-30, repo sweep)*
 - [x] **`.gitignore` has a stray trailing quote.** Stripped; confirmed
       with `git check-ignore -v` that
       `year12-algorithmics/unit-4/sat/Memo03_brief.pdf` now matches.
@@ -1060,7 +1111,87 @@ label on its own.
 
 ### Tier 1 — Small fixes (under a session each)
 
-- [ ] **Encrypt `year7-science/space/solutions.html`.** It ships
+- [ ] **Per-lesson booklet solutions as a button under every lesson. M**
+      Each lesson card on a unit landing page should carry a button that
+      opens the booklet answers for *that lesson*, beside the existing
+      worksheet link. Today the answer key is one gated page per unit, so
+      a teacher or student has to unlock it and scroll to find the
+      lesson. *(requested by Kodie 2026-10-30)*
+      Where things stand: bio-ecosystems and Space already wrap every
+      lesson card in `.deck-item` with a `.dc-wslink`, so the button slots
+      in beside it. Forces (15 lesson cards) and Particle Model (1 so
+      far) have no `.deck-item` wrappers and **no booklet answer key at
+      all**. Decide first, then build:
+  - [ ] **How the button lands on one lesson.** Two options: (a) give
+        each lesson's section an id (`#lesson-3`) inside the existing
+        payload, link the button to `solutions.html#lesson-3`, and have
+        the unlock handler scroll to `location.hash` after it injects the
+        decrypted markup — one blob, one password entry; or (b) one gated
+        page per lesson — simplest links, but N blobs to re-encrypt on
+        every key correction, the cost that got the rubrics ungated.
+        (a) is the likely answer. Also decide whether the button is
+        staff-only or also opens with the student password.
+  - [ ] A `.dc-solink` (or similar) component in course.css, a sibling
+        of `.dc-wslink` inside `.deck-item`, so it doesn't need a new
+        wrapper and reads as a different kind of link from a worksheet.
+  - [ ] bio-ecosystems — anchors in `solutions-payload` (decrypt →
+        edit → re-encrypt), buttons on 11 lessons.
+  - [ ] Space — anchors in `solutions-payload.html`, buttons on 10
+        lessons. Keep `check-gated.js` passing (107 answers).
+  - [ ] Forces — write the booklet answer key first (L on its own;
+        derive from the deck answer slides, as the red answer copies
+        do), add `.deck-item` wrappers, then the buttons.
+  - [ ] Particle Model — same as Forces, lesson by lesson as the decks
+        land; build the key alongside the booklet rather than after.
+  - [ ] Note it in CLAUDE.md's "Printable worksheets" / course landing
+        section once the component exists.
+- [ ] **Give every unit-planner activity its own curriculum code. M**
+      Every activity in a `planner.css` page should name the Victorian
+      Curriculum 2.0 content description it addresses, not just the
+      week. Today all four Year 7 Science planners put codes only in the
+      **Focus** column, one set per week row; none of the activities in
+      *Core activities*, *Optional activities* or *Assessment* has its
+      own code — 79 in bio-ecosystems, 48 in Forces, 42 in Space, 42 in
+      Particle Model (211 in all). Tag each activity with the codes it
+      actually covers, assessments included, using the codes already in
+      that row's Focus cell as the pool; flag any activity that fits
+      none of them rather than inventing one. Keep the Word copy in step
+      (see the planner page type note). *(requested by Kodie
+      2026-10-29)*
+- [ ] **Link the Particle Model unit from `year7-science/index.html`
+      once it's ready to show.** The unit's `index.html` exists but
+      nothing links to it — the Year 7 Science page lists only
+      bio-ecosystems, Forces and Space. Possibly deliberate while it's
+      in progress (claimed 27 Oct); decide when it goes live. **S**
+      *(found 2026-10-30, repo sweep)*
+- [ ] **`bio-ecosystems/deck11.html` carries a per-deck `<style>`** to
+      stop `.bookref` chips stretching to full slide width
+      (`align-self: flex-start; width: fit-content`). If that's true for
+      every deck, the rule belongs in deck.css; if it's specific to this
+      deck, find out why. **S** *(found 2026-10-30, repo sweep)*
+- [ ] **`year12-specialist/term-3/slides/T3W00.html` sets a font inside
+      a figure `<style>`.** The `.lb` rule uses the `font` shorthand with
+      a family, which CLAUDE.md says to leave to deck.css's
+      `.deck svg text` rule. Drop the family. **S** *(found 2026-10-30,
+      repo sweep)*
+- [ ] **Three MathJax pages lack the `startup.pageReady` hook:**
+      `forces/planner.html`, `particle-model/planner.html` and
+      `styleguide/deck-demo.html`. The rule is written for decks, so
+      low impact, but the styleguide is what new decks copy from. **S**
+      *(found 2026-10-30, repo sweep)*
+- [ ] **`space/worksheet-revision1.html` has no marks total** in its
+      `.namebar`, and Part 1 has no marks. Probably deliberate for a
+      fill-in-as-we-go sheet — confirm, and if so say so in the source
+      comment so the next sweep doesn't flag it. **S** *(found
+      2026-10-30, repo sweep)*
+- [ ] **`T3W04.html` slide 14 uses `.reveal-btn` for simulation
+      controls** (`#cs-one`, `#cs-many`, `#cs-clear`). Its own script
+      drives them and deck.js finds nothing to wire, so it works, but
+      the class says "reveal". Give them a neutral button class. **S**
+      *(found 2026-10-30, repo sweep)*
+- [x] **Encrypt `year7-science/space/solutions.html`.** *(confirmed done
+      2026-10-30 — full v2 blob, and `check-gated.js` matches all 107
+      answers to the built booklet; found in the repo sweep)* It shipped
       `var BLOB = {salt:"", iv:"", iter:0, ct:""}` — the page locks but
       can never unlock, which is worse than not shipping it. The
       plaintext `solutions-payload.html` is right there (and correctly
@@ -1241,6 +1372,14 @@ starting a new one.
 
 ### Tier 5 — Platform work (ongoing, do between content pushes)
 
+- [ ] **Inline `style=` sweep outside SVGs.** About 430 attributes
+      across 57 pages, mostly spacing (`margin-top:12px` and friends).
+      Worst: Specialist T3W01–T3W08 (10–20 each), Algorithmics
+      U4W01–U4W04 and U4T16, `space/deck1.html` (17). Inline hex is
+      concentrated in `space/revision1.html` (23) and `space/deck1.html`
+      / `deck10.html`. Do each deck when next touched, not as one push.
+      *(counted 2026-10-30, repo sweep; year11-methods excluded — it has
+      its own Tier 2 item)*
 - [ ] **Repo weight.** `year12-algorithmics/unit-4/workbooks` is 27 MB —
       the largest thing in the repo by a wide margin — because each
       marimo export ships its own copy of the favicon set and an
