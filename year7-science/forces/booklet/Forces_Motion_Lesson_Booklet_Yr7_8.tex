@@ -2,8 +2,48 @@
 %  Forces and Motion — Lesson Booklet (one section per lesson: A Reading · B Theory · C Practice · D Above level)
 %  Years 7–8  |  Victorian Curriculum F–10 Version 2.0
 %  Compile with: xelatex, three times (see CLAUDE.md) --- fill.py does this and sizes the answer boxes
+%
+%  TWO BUILDS FROM THIS ONE SOURCE (the Ch3G-L / Trebuchet pattern)
+%    Forces_Motion_Lesson_Booklet_Yr7_8.tex          student copy --- no answers
+%    Forces_Motion_Lesson_Booklet_Yr7_8_Teacher.tex  teacher copy --- defines
+%        \teacheranswers (every \defans, read from teacher-answers/L01.tex ...
+%        L14.tex, plus \teacherappendix) and then \input's this file, so every
+%        box, cell, drawing space and graph prints its model answer in red.
+%  The teacher wrapper, teacher-answers/ and the teacher PDF are gitignored:
+%  answer keys never ship as a plain file (ROADMAP.md, "Staff material").
+%  Keep this file free of answers. A key missing from the wrapper prints
+%  ??key?? in the teacher copy, so grep the teacher PDF for "??" after a build.
+%
+%  Every answer-bearing piece of furniture carries a key: \abox{key}{h} (ruled
+%  writing box), \wbox{key}{h} (plain box for calculations), \rcqk{key}{q}{h}
+%  (comprehension Cn), \cell{key} (write-in table cell), \drawk{key}{h}{caption}
+%  and \graphgrid{key}{h}. Keys were set from the printed numbering on
+%  30 Oct 2026 (6.t3b = Task 6.3(b), 6.x9 = Extension 6.9, 6.c2 = C2,
+%  6.wd1a = We do 6.1(a), 6.pred = prediction, 6.v3 = vocab row 3,
+%  6.res-r2c3 = results table row 2 column 3) and are literal from then on:
+%  renumbering the booklet never moves an answer. New furniture needs a new key.
+%
+%  Both copies paginate identically: answers sit inside fixed-height boxes and
+%  cells. The teacher build reads the STUDENT page-fill file (.abx) and never
+%  writes one, so build the student copy (and run fill.py) first. Both builds
+%  log every key with its page and printed label to <jobname>.akp; the two
+%  files must agree page for page (tools/forces_solutions.py checks this).
 % ============================================================
 \documentclass[11pt,a4paper]{article}
+
+% ── Student / teacher switch ─────────────────────────────────────────────────
+% The teacher wrapper defines \teacheranswers (every \defans) before \input-ing
+% this file. Without it this is the student copy and every answer is blank.
+\newif\ifteacher
+\makeatletter
+\newcommand{\defans}[2]{\@namedef{kans@#1}{#2}}
+\newcommand{\getans}[1]{\@ifundefined{kans@#1}{\textbf{??#1??}}{\@nameuse{kans@#1}}}
+\newcommand{\hasans}[1]{\@ifundefined{kans@#1}{\@secondoftwo}{\@firstoftwo}}
+\makeatother
+\ifdefined\teacheranswers \teachertrue \teacheranswers \fi
+% Page-fill files always use the student copy's name, so the teacher build
+% reads the student layout and never writes its own.
+\def\abbase{Forces_Motion_Lesson_Booklet_Yr7_8}
 
 % ── Fonts (compile with XeLaTeX) ────────────────────────────────────────────
 \usepackage{fontspec}
@@ -87,11 +127,11 @@
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
 \fancyhead[L]{\headingfont\small\color{NavyBlue}Forces and Motion}
-\fancyhead[R]{\headingfont\small\color{DarkGrey}Years 7--8 \textbar{} Victorian Curriculum F--10 v2.0}
-\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancyhead[R]{\headingfont\small\ifteacher\textcolor{ScaffoldRed}{\bfseries Teacher copy}\ \textbar{}\ \fi\color{DarkGrey}Years 7--8 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastStudentPage}}
 \fancypagestyle{plain}{%
   \fancyhf{}
-  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastStudentPage}}
   \renewcommand{\headrulewidth}{0pt}
 }
 
@@ -143,6 +183,7 @@
 
 % Scaffold box (yellow)
 \newtcolorbox{scaffold}[1]{
+  before upper={\anslabelset{Prediction}},
   breakable, arc=2.5mm, boxrule=0.5pt,
   colback=GoldLight, colframe=Amber!40,
   fonttitle=\headingfont\bfseries, coltitle=GoldDark,
@@ -178,7 +219,7 @@
   left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
 }
 \newenvironment{wedo}[1]
-  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\par\needspace{9\baselineskip}\anslabelset{We do \thewenum}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
   {\end{wedobox}}
 
 % Year 7 box (blue)
@@ -1286,14 +1327,14 @@
     left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
   {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
   \end{tcolorbox}\vspace{2pt}%
-  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par\anslabelset{Key vocabulary}}
 
 % Curriculum codes under a lesson banner
 \newcommand{\lessoncodes}[1]{%
   {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
 
 % Two short tasks side by side, each with its own working box
-% \taskpair{text}{box height}{text}{box height}
+% \taskpair{text}{box}{text}{box}, where each box is a keyed \wbox/\abox call
 % The two boxes line up: the shorter question is padded by the difference in
 % text height (measured in a scratch box, task counter restored, no label).
 \newsavebox\tpbox
@@ -1311,13 +1352,13 @@
   \noindent
   \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
   \begin{minipage}[t]{0.485\linewidth}
-    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}#2
   \end{minipage}\hfill
   \begin{minipage}[t]{0.485\linewidth}
-    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}#4
   \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
 % Two parts of one question side by side, with their answer boxes level:
-% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% \ptpair{a}{part (a) text}{box}{b}{part (b) text}{box}, each box a keyed \wbox/\abox call.
 % The shorter part's text gets space below it to match the longer one.
 \newcommand\ptmeasure[3]{%
   \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
@@ -1327,10 +1368,10 @@
   \par\noindent
   \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
   \begin{minipage}[t]{0.485\linewidth}
-    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi#3
   \end{minipage}\hfill
   \begin{minipage}[t]{0.485\linewidth}
-    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi#6
   \end{minipage}\par\gdef\abgrp{0}}
 
 % Answer boxes never split across a page (a half box on its own page is useless)
@@ -1340,13 +1381,21 @@
 % among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
 % boxes share a group so they grow together.
 \newcounter{abox}
-\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newwrite\abpos \ifteacher\else\immediate\openout\abpos=\abbase.abp\fi
+% Footers count the student pages only (\label{LastStudentPage} sits before the
+% teacher notes), so page 4 reads "4 | 158" in both copies.
+% Every keyed box also logs "key page label" to \jobname.akp (both builds), for
+% the page-for-page check and for the web answer key's question numbers.
+\newwrite\akpos \immediate\openout\akpos=\jobname.akp
+\def\anslabel{}\def\anspart{}
+\newcommand{\anslabelset}[1]{\xdef\anslabel{#1}\gdef\anspart{}}
+\newcommand{\akplog}[1]{\edef\abtmp{\noexpand\write\akpos{#1\space\noexpand\thepage\space\theabox\space\anslabel\anspart}}\abtmp}
 \newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
-\InputIfFileExists{\jobname.abx}{}{}
+\InputIfFileExists{\abbase.abx}{}{}
 \def\abgrp{0}
 \newcommand{\abnext}{\stepcounter{abox}%
   \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
-\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\ablog}{\ifteacher\else\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp\fi}
 \newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
 \renewcommand{\answerbox}[1]{%
   \abnext
@@ -1358,6 +1407,108 @@
 \newcommand{\drawbox}[2]{%
   \abnext
   \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% ── Keyed answer furniture (Oct 2026) ───────────────────────────────────────
+% Every written-response box is ruled in dotted thirds (\abox: comprehension,
+% We do, tasks and extensions). Space for mathematical working stays plain
+% (\wbox), as do \drawk, \graphgrid and the write-in tables. In the teacher
+% copy each one prints its answer in red instead (no ruling), at the largest of
+% \small / \footnotesize / \scriptsize that fits; anything that still does not
+% fit is reported as "ANSOVERFLOW key" in the log. Heights never depend on the
+% answer, so the two copies paginate identically.
+% \linedbox is the particle-model booklet's ruling: rows \thirdrow apart, run
+% dotted, dotted, solid (the baseline), ending on one dotted line, counted from
+% the box's final height so the ruling still fills a box fill.py has grown.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\anscolor}{\color{ScaffoldRed}}
+\newsavebox\ansbx \newlength\ansH
+\makeatletter
+\newcommand\anstry[2]{\sbox\ansbx{\parbox[t]{\linewidth}{#2\anscolor\ignorespaces\getans{#1}\par}}}
+\newcommand\ansfits{\ifdim\dimexpr\ht\ansbx+\dp\ansbx\relax>\ansH\relax\expandafter\@secondoftwo\else\expandafter\@firstoftwo\fi}
+\newcommand{\ansfit}[2]{%
+  \setlength\ansH{#2}%
+  \anstry{#1}{\small}%
+  \ansfits{}{\anstry{#1}{\footnotesize}%
+    \ansfits{}{\anstry{#1}{\scriptsize}%
+      \ansfits{}{\typeout{ANSOVERFLOW #1}}}}%
+  \usebox\ansbx}
+\makeatother
+% rows for a ruled box of height #1 (call after \abnext, so \abcur is known)
+\newcommand{\thirdsmeasure}[1]{%
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}}
+\tcbset{thirds/.style={underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}},
+  plainbox/.style={}}
+% the box shared by \abox and \wbox: #3 = tcolorbox style (thirds or plainbox)
+\newcommand{\ansframe}[3]{%
+  \abnext
+  \ifteacher
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2.5mm, right=2.5mm, top=1.4mm, bottom=1mm, boxrule=1pt, height=\abh{#2}]
+  \akplog{#1}\ansfit{#1}{\dimexpr\abh{#2}-2.4mm-2pt-1pt\relax}%
+  \end{tcolorbox}%
+  \else
+  \thirdsmeasure{#2}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#2}, #3]
+  \akplog{#1}%
+  \end{tcolorbox}%
+  \fi\ablog}
+% \abox{key}{height}: ruled writing box.  \wbox{key}{height}: plain box for working.
+\newcommand{\abox}[2]{\ansframe{#1}{#2}{thirds}}
+\newcommand{\wbox}[2]{\ansframe{#1}{#2}{plainbox}}
+% \rcqk{key}{question}{height}: comprehension question C1, C2 ...
+\newcommand{\rcqk}[3]{%
+  \stepcounter{rcnum}\anslabelset{C\thercnum}%
+  \needspace{3\baselineskip}%
+  \vspace{4pt}%
+  \noindent\textbf{C\thercnum.}\quad #2\par
+  \vspace{2pt}%
+  \abox{#1}{#3}}
+% \cell{key}: a write-in table cell
+\newcommand{\cell}[1]{\akplog{#1}\ifteacher{\anscolor\small\getans{#1}}\fi}
+% Drawings and graphs: the teacher copy draws the model answer over the box
+% (TikZ, x = y = 1 cm, origin at the bottom left of the interior).
+% \AW and \AH hold the interior width and height in cm, for answers to place
+% themselves: ({\AW/2},{\AH/2}) is the centre, (0,\AH) the top left corner.
+\makeatletter
+\newcommand{\ansdims}{\pgfpointdiff{\pgfpointanchor{interior}{south west}}{\pgfpointanchor{interior}{north east}}%
+  \pgfmathsetmacro{\AW}{\pgf@x/28.45274}\pgfmathsetmacro{\AH}{\pgf@y/28.45274}%
+  \typeout{ANSDIMS \anskey\space\AW\space\AH}}
+\makeatother
+\ifteacher
+  \tcbset{ansdraw/.style={overlay={\begin{scope}[shift={(interior.south west)}, x=1cm, y=1cm]\ansdims\getans{\anskey}\end{scope}}}}
+\else
+  \tcbset{ansdraw/.style={}}
+\fi
+% \drawk{key}{height}{caption}: a white box to draw in, caption top left
+\newcommand{\drawk}[3]{%
+  \abnext\def\anskey{#1}%
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, fontupper=\small\color{DarkGrey}, ansdraw]
+  \akplog{#1}#3
+  \end{tcolorbox}\ablog}
+% \graphgrid{key}{height}: 5 mm grid for a student graph
+\newcommand{\graphgrid}[2]{%
+  \abnext\def\anskey{#1}%
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt,
+    height=\abh{#2}, left=0mm, right=0mm, top=0mm, bottom=0mm,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}},
+    ansdraw]
+  \akplog{#1}%
+  \end{tcolorbox}\ablog}
+
 % Notes box at the end of Part B: fills whatever is left of the page (if worth it)
 \newcommand{\notesfill}{\par
   \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
@@ -1377,7 +1528,7 @@
 % height is per row, logged with the row count.
 \newenvironment{ctab}{\par\smallskip\begingroup\centering
   \abnext\let\tbcur\abcur\global\wtrows0 }{\par
-  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \ifteacher\else\ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi\fi
   \endgroup\smallskip}
 
 % ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
@@ -1385,13 +1536,13 @@
 \renewcommand{\markscount}[1]{}
 % 2. A task's heading sits on its own line; its text starts on the next
 %    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
-\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
-\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
-\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
-\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\anslabelset{Task \thetasknum}\IfValueT{#1}{\xdef\anspart{ (#1)}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\xdef\anspart{ (#1)}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\anslabelset{Extension \thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\xdef\anspart{ (#1)}\par\noindent\textbf{(#1)}\ \ignorespaces}
 % Workstation pages (Experiment 1): numbered method steps with a hanging
 % indent, and a one-line safety reminder under the materials list.
-\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wsstep}[1]{\anslabelset{Workstation \wsname, step #1}\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
 \newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
 % 3. Tables have vertical rules between columns and down both sides
 %    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
@@ -1414,7 +1565,6 @@
 \newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
 \newcommand{\hd}{\global\nowhtrue}
 % 5. The first row of a multi-row write-in table is a worked scaffold in red.
-\definecolor{ScaffoldRed}{HTML}{C0392B}
 \newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
 % 6. Tables are a light grid (rules between rows and columns) on white —
 %    row shading is off, because colortbl paints shading over column rules.
@@ -1429,9 +1579,14 @@
 %  COVER PAGE
 % ══════════════════════════════════════════════════════════════════════════════
 \thispagestyle{plain}
-
+\ifteacher
+  \tcbset{coverstamp/.style={overlay={\node[anchor=north east, fill=ScaffoldRed, text=white, font=\headingfont\bfseries\small,
+    rounded corners=2pt, inner sep=4pt] at ([xshift=-4mm, yshift=-4mm]frame.north east) {TEACHER COPY --- answers in red};}}}
+\else
+  \tcbset{coverstamp/.style={}}
+\fi
 \begin{tcolorbox}[
-  enhanced, breakable=false, arc=4mm,
+  enhanced, breakable=false, arc=4mm, coverstamp,
   colback=NavyBlue, colframe=NavyBlue,
   left=6mm, right=6mm, top=9mm, bottom=9mm,
   boxrule=0pt
@@ -1507,11 +1662,11 @@ Experiments 2--4 follow the same four parts: a reading about the science, planni
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Force}} & \scaf{A push or a pull on an object.} \\ \hline
-  & \textbf{Newton (N)} & \\ \hline
-  & \textbf{Spring scale} & \\ \hline
-  & \textbf{Mass} & \\ \hline
-  & \textbf{Weight} & \\ \hline
-  & \textbf{Non-contact force} & \\ \hline
+  & \textbf{Newton (N)} & \cell{1.v2} \\ \hline
+  & \textbf{Spring scale} & \cell{1.v3} \\ \hline
+  & \textbf{Mass} & \cell{1.v4} \\ \hline
+  & \textbf{Weight} & \cell{1.v5} \\ \hline
+  & \textbf{Non-contact force} & \cell{1.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1527,15 +1682,15 @@ Forces are invisible, so scientists need a way to record them. The solution is s
 \end{readingbox}
 
 \rcreset
-\rcq{According to the passage, name the two forces acting on you while you sit still, and state the direction of each.}{1.6cm}
-\rcq{The passage says that if the chair vanished, ``gravity would win''. Explain what this means, using the idea of two forces that are no longer equal.}{1.8cm}
-\rcq{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
-\rcq{Does an astronaut on the Space Station still have weight? Use a number from the passage to support your answer.}{1.6cm}
+\rcqk{1.c1}{According to the passage, name the two forces acting on you while you sit still, and state the direction of each.}{1.6cm}
+\rcqk{1.c2}{The passage says that if the chair vanished, ``gravity would win''. Explain what this means, using the idea of two forces that are no longer equal.}{1.8cm}
+\rcqk{1.c3}{Explain why astronauts on the Space Station appear to float, even though gravity is still acting on them.}{2.2cm}
+\rcqk{1.c4}{Does an astronaut on the Space Station still have weight? Use a number from the passage to support your answer.}{1.6cm}
 \clearpage
-\rcq{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
-\rcq{Which three-word phrase in the first paragraph describes two forces that are the same size but act in opposite directions?}{1.4cm}
-\rcq{Forces are invisible. Describe one way you could tell that a force is acting on an object, even though you cannot see the force itself.}{1.8cm}
-\rcq{Imagine the Space Station suddenly stopped moving around the Earth. Using the passage, predict what would happen to the station and the astronauts inside, and explain why.}{2.2cm}
+\rcqk{1.c5}{The passage says drawing forces as arrows is ``simple but powerful''. What two pieces of information does a force arrow give you?}{1.6cm}
+\rcqk{1.c6}{Which three-word phrase in the first paragraph describes two forces that are the same size but act in opposite directions?}{1.4cm}
+\rcqk{1.c7}{Forces are invisible. Describe one way you could tell that a force is acting on an object, even though you cannot see the force itself.}{1.8cm}
+\rcqk{1.c8}{Imagine the Space Station suddenly stopped moving around the Earth. Using the passage, predict what would happen to the station and the astronauts inside, and explain why.}{2.2cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:1}
@@ -1602,7 +1757,7 @@ A spring scale is marked from 0 to 10\,N, with \textbf{20} small divisions betwe
 A spring scale is marked from 0 to 5\,N, with \textbf{20} small divisions between 0 and 5. The pointer sits on the \textbf{9th} small division. What is the reading?
 \par\smallskip\noindent
 \begin{minipage}[c]{0.3\linewidth}\diagSpringScaleWeDo\end{minipage}\hfill
-\begin{minipage}[c]{0.66\linewidth}\answerbox{4.6cm}\end{minipage}
+\begin{minipage}[c]{0.66\linewidth}\wbox{1.wd1}{4.6cm}\end{minipage}
 \end{wedo}
 
 \subsection{Mass and Weight Are Not the Same Thing}\label{sub:1.4}
@@ -1640,11 +1795,11 @@ Their \emph{mass} is 50\,kg in both places --- only the \emph{weight} changes.
 \begin{wedo}{Mass and weight}
 A robot has a mass of 20\,kg. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
 \pt{a}Find its weight on Earth.
-\answerbox{1.8cm}
+\wbox{1.wd2a}{1.8cm}
 \pt{b}Find its weight on the Moon.
-\answerbox{1.8cm}
+\wbox{1.wd2b}{1.8cm}
 \pt{c}Has its mass changed? Explain.
-\answerbox{1.6cm}
+\abox{1.wd2c}{1.6cm}
 \end{wedo}
 
 \subsection{Contact and Non-contact Forces}\label{sub:1.5}
@@ -1670,7 +1825,7 @@ A fridge magnet holds a shopping list on the fridge door without sliding down. N
 
 \begin{wedo}{Classifying forces}
 A book is pushed across a desk. After you let go, it slides and slows down. Name two forces acting on the book while it slides, and say whether each one is a contact or a non-contact force.
-\answerbox{4.0cm}
+\abox{1.wd3}{4.0cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -1686,8 +1841,8 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{5.2cm}|Z{2.3cm}|W{5.2cm}|Z{2.3cm}|}
   \hd & \thead{Action} & \thead{Push or pull?} & \thead{Action} & \thead{Push or pull?} \\ \hline
   & Kicking a football      & \scaf{PUSH} & Opening a drawer       & \scaf{PULL} \\ \hline
-  & A crane lifting a girder & & Squeezing a stress ball & \\ \hline
-  & A dog straining on a lead & & Wind on a sail       & \\ \hline
+  & A crane lifting a girder & \cell{1.t1-r2c2} & Squeezing a stress ball & \cell{1.t1-r2c4} \\ \hline
+  & A dog straining on a lead & \cell{1.t1-r3c2} & Wind on a sail       & \cell{1.t1-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1707,7 +1862,7 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{5.6cm}|Z{1.9cm}|W{5.6cm}|Z{1.9cm}|}
   \hd & \thead{Event} & \thead{Effect (1--5)} & \thead{Event} & \thead{Effect (1--5)} \\ \hline
   & A goalkeeper catches a ball  & \scaf{2} & Stretching a rubber band & \scaf{5} \\ \hline
-  & A car turns a corner at steady speed & & A rocket lifts off & \\ \hline
+  & A car turns a corner at steady speed & \cell{1.t2-r2c2} & A rocket lifts off & \cell{1.t2-r2c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1719,9 +1874,9 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{8.4cm}|Z{2.8cm}|Z{2.8cm}|}
   \hd & \thead{Action} & \thead{Push or pull?} & \thead{Effect (1--5)} \\ \hline
   & \scaf{Opening the fridge door} & \scaf{PULL} & \scaf{1} \\ \hline
-  & & & \\ \hline
-  & & & \\ \hline
-  & & & \\ \hline
+  & \cell{1.t3-r2c1} & \cell{1.t3-r2c2} & \cell{1.t3-r2c3} \\ \hline
+  & \cell{1.t3-r3c1} & \cell{1.t3-r3c2} & \cell{1.t3-r3c3} \\ \hline
+  & \cell{1.t3-r4c1} & \cell{1.t3-r4c2} & \cell{1.t3-r4c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1734,7 +1889,7 @@ Work through every task. Show your working for calculations, and always include 
 \begin{ctab}
 \begin{tabular}{|SZ{4.6cm}|Z{4.6cm}|Z{4.6cm}|}
   \hd & \thead{Scale A} & \thead{Scale B} & \thead{Scale C} \\ \hline
-  & & & \\ \hline
+  & \cell{1.t4-r1c1} & \cell{1.t4-r1c2} & \cell{1.t4-r1c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1746,13 +1901,13 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{4.6cm}|Z{2.8cm}|Z{3.6cm}|Z{3.6cm}|}
   \hd & \thead{Object} & \thead{Mass (kg)} & \thead{Weight on Earth (N)} & \thead{Weight on Moon (N)} \\ \hline
   & Bag of sugar & 1   & \scaf{$1 \times 9.8 = 9.8$} & \scaf{$1 \times 1.6 = 1.6$} \\ \hline
-  & Bicycle      & 12  & & \\ \hline
-  & Small car    & 900 & & \\ \hline
+  & Bicycle      & 12  & \cell{1.t5-r2c3} & \cell{1.t5-r2c4} \\ \hline
+  & Small car    & 900 & \cell{1.t5-r3c3} & \cell{1.t5-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
-\taskpair{A bag of flour has a mass of 2\,kg. Find its weight on Earth. Use $g = 9.8$\,N/kg.}{2.2cm}
-         {Which has the greater weight on Earth: a 5\,kg dog, or a box that weighs 50\,N? Show your working.}{2.2cm}
+\taskpair{A bag of flour has a mass of 2\,kg. Find its weight on Earth. Use $g = 9.8$\,N/kg.}{\wbox{1.t6}{2.2cm}}
+         {Which has the greater weight on Earth: a 5\,kg dog, or a box that weighs 50\,N? Show your working.}{\wbox{1.t7}{2.2cm}}
 
 \needspace{10\baselineskip}
 \task Complete the table. For each force, write whether it is a contact or non-contact force, and give a real-world example.
@@ -1762,25 +1917,25 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{3.4cm}|Z{3.4cm}|W{7.8cm}|}
   \hd & \thead{Force} & \thead{Contact / Non-contact} & \thead{Real-world example} \\ \hline
   & Gravity        & \scaf{Non-contact} & \scaf{An apple falling from a tree} \\ \hline
-  & Friction       & & \\ \hline
-  & Magnetic force & & \\ \hline
-  & Normal force   & & \\ \hline
-  & Air resistance & & \\ \hline
-  & Tension        & & \\ \hline
+  & Friction       & \cell{1.t8-r2c2} & \cell{1.t8-r2c3} \\ \hline
+  & Magnetic force & \cell{1.t8-r3c2} & \cell{1.t8-r3c3} \\ \hline
+  & Normal force   & \cell{1.t8-r4c2} & \cell{1.t8-r4c3} \\ \hline
+  & Air resistance & \cell{1.t8-r5c2} & \cell{1.t8-r5c3} \\ \hline
+  & Tension        & \cell{1.t8-r6c2} & \cell{1.t8-r6c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
 
 \needspace{10\baselineskip}
 \task A spring scale is marked from 0 to 20\,N, with \textbf{40} small divisions. The pointer sits on the \textbf{13th} small division. What is the reading? Show both steps.
-\answerbox{2.2cm}
+\wbox{1.t9}{2.2cm}
 
-\taskpair{A cat has a mass of 4\,kg. Find its weight on Earth.}{2.2cm}
-         {The same cat travels to the Moon. Find its weight there. Has its mass changed?}{2.2cm}
+\taskpair{A cat has a mass of 4\,kg. Find its weight on Earth.}{\wbox{1.t10}{2.2cm}}
+         {The same cat travels to the Moon. Find its weight there. Has its mass changed?}{\wbox{1.t11}{2.2cm}}
 
 \needspace{10\baselineskip}
 \task A balloon rubbed on your hair sticks to a wall. Name the force holding it there, and say whether it is a contact or non-contact force.
-\answerbox{2.0cm}
+\abox{1.t12}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:1}
@@ -1792,45 +1947,45 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \needspace{10\baselineskip}
 \exttask An astronaut has a mass of 75\,kg.
 \pt{a}Find her weight on Earth.
-\answerbox{2.0cm}
+\wbox{1.x13a}{2.0cm}
 \pt{b}Find her weight on the Moon.
-\answerbox{2.0cm}
+\wbox{1.x13b}{2.0cm}
 \pt{c}Explain why she can jump much higher on the Moon, even though her mass has not changed.
-\answerbox{2.0cm}
+\abox{1.x13c}{2.0cm}
 
 
 \needspace{10\baselineskip}
 \exttask A suitcase has a weight of 196\,N on Earth.
 \pt{a}Find its mass.
-\answerbox{2.0cm}
+\wbox{1.x14a}{2.0cm}
 \pt{b}Find its weight on the Moon.
-\answerbox{2.0cm}
+\wbox{1.x14b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A bathroom scale really measures \emph{force}, but it is labelled in kilograms. A 60\,kg student reads 60\,kg on it on Earth. Predict what the same scale would read on the Moon, and explain why the scale is not really measuring mass.
-\answerbox{3.0cm}
+\abox{1.x15}{3.0cm}
 
 \needspace{10\baselineskip}
 \exttask On Mars, $g = 3.7$\,N/kg. A 10\,kg backpack is carried on Earth ($g = 9.8$\,N/kg), on the Moon ($g = 1.6$\,N/kg) and on Mars.
 \pt{a}Calculate the backpack's weight in each place.
-\answerbox{2.0cm}
+\wbox{1.x16a}{2.0cm}
 \pt{b}Rank the three places from easiest to hardest to carry the backpack, and explain your ranking.
-\answerbox{2.0cm}
+\abox{1.x16b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A rock hangs from a spring scale on Earth, and the scale reads 4.9\,N. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
 \pt{a}Find the mass of the rock.
-\answerbox{2.0cm}
+\wbox{1.x17a}{2.0cm}
 \pt{b}Find what the same spring scale would read if the rock were hung from it on the Moon.
-\answerbox{2.0cm}
+\wbox{1.x17b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A \emph{balance} compares an object with known masses. A \emph{spring scale} measures the pull of gravity on the object. Explain why a balance gives the same result on the Moon as on Earth, but a spring scale does not.
-\answerbox{3.2cm}
+\abox{1.x18}{3.2cm}
 
 \needspace{10\baselineskip}
 \exttask Magnets can push or pull without touching. Describe a quick test you could do with a magnet, a paperclip and a sheet of paper to show that magnetic force acts \emph{through} the paper. Say what you would do and what you would expect to see.
-\answerbox{3.4cm}
+\abox{1.x19}{3.4cm}
 
 \end{yr8box}
 \newpage
@@ -1845,11 +2000,11 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Free body diagram}} & \scaf{A drawing of one object with an arrow for every force acting on it.} \\ \hline
-  & \textbf{Normal force} & \\ \hline
-  & \textbf{Friction} & \\ \hline
-  & \textbf{Air resistance} & \\ \hline
-  & \textbf{Net force} & \\ \hline
-  & \textbf{Unbalanced forces} & \\ \hline
+  & \textbf{Normal force} & \cell{2.v2} \\ \hline
+  & \textbf{Friction} & \cell{2.v3} \\ \hline
+  & \textbf{Air resistance} & \cell{2.v4} \\ \hline
+  & \textbf{Net force} & \cell{2.v5} \\ \hline
+  & \textbf{Unbalanced forces} & \cell{2.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -1867,14 +2022,14 @@ Coaches explain this with force arrows. They draw the rope, the two pulls and th
 \end{readingbox}
 
 \rcreset
-\rcq{While the rope is not moving, what can you say about the two teams' pulls? Use the word \emph{balanced}.}{1.6cm}
-\rcq{What happens to the rope when one team pulls harder? Explain why, using the words \emph{net force}.}{1.8cm}
-\rcq{According to the passage, why does a team on a slippery surface lose, however strong they are?}{1.8cm}
-\rcq{List two things from the passage that give a team better grip.}{1.4cm}
-\rcq{How can a coach tell which team will win just by looking at the force arrows?}{1.6cm}
-\rcq{Explain why each person needs friction under their shoes in order to pull on the rope.}{1.8cm}
-\rcq{A team plays in socks on a polished wooden floor. Use the passage to predict what will happen to them, and explain why.}{1.8cm}
-\rcq{In your own words, explain the difference between balanced and unbalanced forces. Give an example of each from the passage.}{2.2cm}
+\rcqk{2.c1}{While the rope is not moving, what can you say about the two teams' pulls? Use the word \emph{balanced}.}{1.6cm}
+\rcqk{2.c2}{What happens to the rope when one team pulls harder? Explain why, using the words \emph{net force}.}{1.8cm}
+\rcqk{2.c3}{According to the passage, why does a team on a slippery surface lose, however strong they are?}{1.8cm}
+\rcqk{2.c4}{List two things from the passage that give a team better grip.}{1.4cm}
+\rcqk{2.c5}{How can a coach tell which team will win just by looking at the force arrows?}{1.6cm}
+\rcqk{2.c6}{Explain why each person needs friction under their shoes in order to pull on the rope.}{1.8cm}
+\rcqk{2.c7}{A team plays in socks on a polished wooden floor. Use the passage to predict what will happen to them, and explain why.}{1.8cm}
+\rcqk{2.c8}{In your own words, explain the difference between balanced and unbalanced forces. Give an example of each from the passage.}{2.2cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:2}
@@ -1922,9 +2077,9 @@ Using a scale of 1\,cm = 5\,N, how long should the arrow be for a 25\,N push?
 \begin{wedo}{Drawing arrows to scale}
 Using a scale of 1\,cm = 10\,N:
 \pt{a}Work out how long the arrow should be for a 40\,N pull.
-\answerbox{1.8cm}
+\wbox{2.wd1a}{1.8cm}
 \pt{b}Draw the arrow, starting on the dot, pointing to the right. Label it with its size.
-\drawbox{2.4cm}{\vspace*{0.6cm}\tikz{\fill[Ink] (0,0) circle (2.5pt);}}
+\drawk{2.wd1b}{2.4cm}{\vspace*{0.6cm}\tikz{\fill[Ink] (0,0) circle (2.5pt);}}
 \end{wedo}
 
 \subsection{Free Body Diagrams}\label{sub:2.3}
@@ -1947,7 +2102,7 @@ A book with a weight of 10\,N rests on a table. Draw its free body diagram.
 
 \begin{wedo}{Drawing a free body diagram}
 A box is dragged across the floor by a rope at a \textbf{steady speed}. The rope pulls it with 30\,N. The box has a weight of 50\,N. Draw its free body diagram. Label all four forces with their names and sizes, and make the arrow lengths match.
-\drawbox{5.0cm}{}
+\drawk{2.wd2}{5.0cm}{}
 \end{wedo}
 
 \subsection{Balanced and Unbalanced: Net Force}\label{sub:2.4}
@@ -1974,9 +2129,9 @@ The net force is not zero, so the forces are unbalanced and the sledge \textbf{s
 \begin{wedo}{Finding the net force}
 A cyclist pedals forwards with a force of 120\,N. Air resistance and friction push back with a total of 75\,N.
 \pt{a}Find the size and direction of the net force.
-\answerbox{1.8cm}
+\wbox{2.wd3a}{1.8cm}
 \pt{b}Are the forces balanced or unbalanced? Describe what happens to the cyclist's speed.
-\answerbox{1.8cm}
+\abox{2.wd3b}{1.8cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -1987,37 +2142,36 @@ Work through every task. Show your working for calculations, and always include 
 \needspace{10\baselineskip}
 \task Using a scale of \textbf{1\,cm = 2\,N}, how long should the arrow be for each force?
 \pt{a}6\,N
-\answerbox{2.0cm}
+\wbox{2.t1a}{2.0cm}
 \pt{b}10\,N
-\answerbox{2.0cm}
+\wbox{2.t1b}{2.0cm}
 \pt{c}3\,N
-\answerbox{2.0cm}
+\wbox{2.t1c}{2.0cm}
 
-\taskpair{Using a scale of 1\,cm = 10\,N, how long should the arrow be for a 45\,N pull?}{2.0cm}
-         {An arrow is 3.5\,cm long. The scale is 1\,cm = 20\,N. What force does it show?}{2.0cm}
+\taskpair{Using a scale of 1\,cm = 10\,N, how long should the arrow be for a 45\,N pull?}{\wbox{2.t2}{2.0cm}}
+         {An arrow is 3.5\,cm long. The scale is 1\,cm = 20\,N. What force does it show?}{\wbox{2.t3}{2.0cm}}
 
 \needspace{14\baselineskip}
 \task A box is pulled right with 30\,N and friction resists with 10\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both arrows on the box below. Label each with its name and size.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, height=4.2cm, boxrule=0.5pt]
-\end{tcolorbox}
+\drawk{2.t4}{4.2cm}{}
 
 \needspace{24\baselineskip}
 \task[a] The diagrams below show the forces on a book resting on a table (left) and on a box being pushed along the floor (right).
 
 \diagFBD
 Why is the book not speeding up or slowing down? Use the words \textit{net force} in your answer.
-\answerbox{2.2cm}
+\abox{2.t5a}{2.2cm}
 
 \taskpart{b} The box is pushed right with 20\,N, and friction pushes left with 5\,N. Calculate the net force on the box and state which way it speeds up.
-\answerbox{2.2cm}
+\wbox{2.t5b}{2.2cm}
 
 \needspace{16\baselineskip}
 \taskpart{c} Draw a free body diagram for a skydiver falling at a steady speed (terminal velocity). Label each force with its name and show their comparative sizes.
 
 \vspace{3pt}
-\drawbox{4.6cm}{
+\drawk{2.t5c}{4.6cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
 }
 
@@ -2025,59 +2179,59 @@ Why is the book not speeding up or slowing down? Use the words \textit{net force
 \task A lamp with a weight of 15\,N hangs still from the ceiling on a cord. Draw its free body diagram, labelling each force with its name and size.
 
 \vspace{3pt}
-\drawbox{4.2cm}{
+\drawk{2.t6}{4.2cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
 }
 
 \needspace{6\baselineskip}
 \textbf{Net force.} For each question, state the size \emph{and} direction of the net force, and whether the forces are balanced or unbalanced.
 
-\taskpair{Two people push a car in the same direction with 250\,N and 310\,N. Find the net force.}{2.2cm}
-         {A trolley is pushed right with 40\,N while friction pushes left with 12\,N. Find the net force.}{2.2cm}
+\taskpair{Two people push a car in the same direction with 250\,N and 310\,N. Find the net force.}{\wbox{2.t7}{2.2cm}}
+         {A trolley is pushed right with 40\,N while friction pushes left with 12\,N. Find the net force.}{\wbox{2.t8}{2.2cm}}
 
-\taskpair{A book rests on a table. Its weight is 8\,N. What is the normal force from the table? Explain.}{2.2cm}
-         {In a tug-of-war, one team pulls left with 900\,N and the other pulls right with 900\,N. Describe the motion of the rope.}{2.2cm}
+\taskpair{A book rests on a table. Its weight is 8\,N. What is the normal force from the table? Explain.}{\abox{2.t9}{2.2cm}}
+         {In a tug-of-war, one team pulls left with 900\,N and the other pulls right with 900\,N. Describe the motion of the rope.}{\abox{2.t10}{2.2cm}}
 
 \needspace{10\baselineskip}
 \task A rocket engine produces 50\,000\,N of upward thrust. The rocket's weight is 32\,000\,N.
 \pt{a}Find the net force.
-\answerbox{2.0cm}
+\wbox{2.t11a}{2.0cm}
 \pt{b}State which way the rocket speeds up.
-\answerbox{2.0cm}
+\abox{2.t11b}{2.0cm}
 \pt{c}Explain what would happen if the thrust dropped to 32\,000\,N.
-\answerbox{2.0cm}
+\abox{2.t11c}{2.0cm}
 
-\taskpair{A box has three forces on it: 15\,N right, 10\,N right and 30\,N left. Find the size and direction of the net force.}{2.4cm}
-         {A skydiver weighs 600\,N. Air resistance on her is 600\,N. Are the forces balanced or unbalanced? Describe her motion.}{2.4cm}
+\taskpair{A box has three forces on it: 15\,N right, 10\,N right and 30\,N left. Find the size and direction of the net force.}{\wbox{2.t12}{2.4cm}}
+         {A skydiver weighs 600\,N. Air resistance on her is 600\,N. Are the forces balanced or unbalanced? Describe her motion.}{\abox{2.t13}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A swimmer moves forward at a steady speed. Her arms provide 120\,N of forward force.
 \pt{a}What is the size of the water resistance acting on her?
-\answerbox{2.0cm}
+\abox{2.t14a}{2.0cm}
 \pt{b}Explain how you know.
-\answerbox{2.0cm}
+\abox{2.t14b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A parachutist has a weight of 700\,N. Just after the parachute opens, air resistance is 950\,N.
 \pt{a}Find the net force and its direction.
-\answerbox{2.0cm}
+\wbox{2.t15a}{2.0cm}
 \pt{b}Describe what happens to the parachutist's speed.
-\answerbox{2.0cm}
+\abox{2.t15b}{2.0cm}
 \pt{c}Air resistance then falls to 700\,N --- describe the motion now.
-\answerbox{2.0cm}
+\abox{2.t15c}{2.0cm}
 
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \needspace{12\baselineskip}
 \task In a tug-of-war, Team A pulls the rope left with 550\,N and Team B pulls it right with 620\,N.
 \pt{a}Find the size and direction of the net force on the rope.
-\answerbox{2.0cm}
+\wbox{2.t16a}{2.0cm}
 \pt{b}Which team is winning? Explain using the words \emph{unbalanced} and \emph{net force}.
-\answerbox{2.0cm}
+\abox{2.t16b}{2.0cm}
 \pt{c}Draw both pulls on the rope below as force arrows, using a scale of 1\,cm = 100\,N. Label each arrow with its size.
 
 \vspace{3pt}
-\drawbox{4.4cm}{
+\drawk{2.t16c}{4.4cm}{
 \vspace*{2.4cm}
 \begin{center}\tikz{\draw[line width=2pt, DarkGrey] (0,0) -- (6,0);}\\[2pt]\textit{\small\color{MidGrey}rope}\end{center}
 }
@@ -2090,7 +2244,7 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \medskip
 \needspace{10\baselineskip}
 \exttask Sam says: \emph{``A hockey puck sliding across ice at a steady speed must have an unbalanced force pushing it forwards.''} Is Sam right? Use a free body diagram and the idea of net force to explain.
-\answerbox{3.4cm}
+\abox{2.x17}{3.4cm}
 
 \needspace{14\baselineskip}
 \exttask A skydiver jumps from a plane. Draw a free body diagram for each moment below. Then explain why air resistance grows, and why the skydiver eventually stops speeding up.
@@ -2100,48 +2254,48 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 
 \vspace{3pt}
 \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
-\noindent\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(i)} just after jumping}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(ii)} speeding up}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\drawbox{4.2cm}{\textbf{(iii)} terminal velocity}\end{minipage}\par\gdef\abgrp{0}
-\answerbox{2.6cm}
+\noindent\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18i}{4.2cm}{\textbf{(i)} just after jumping}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18ii}{4.2cm}{\textbf{(ii)} speeding up}\end{minipage}\hfill
+\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18iii}{4.2cm}{\textbf{(iii)} terminal velocity}\end{minipage}\par\gdef\abgrp{0}
+\abox{2.x18-why}{2.6cm}
 
 \needspace{10\baselineskip}
 \exttask A car has a driving force of 4500\,N and a total resistive force of 1200\,N.
 \pt{a}Calculate the net force.
-\answerbox{2.0cm}
+\wbox{2.x19a}{2.0cm}
 \pt{b}State which way the car accelerates.
-\answerbox{2.0cm}
+\abox{2.x19b}{2.0cm}
 \pt{c}Suggest one way the driver could make the forces balanced.
-\answerbox{2.0cm}
+\abox{2.x19c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 1200\,kg car has a driving force of 4800\,N. Air resistance and friction total 1500\,N.
 \pt{a}Find the net force.
-\answerbox{2.0cm}
+\wbox{2.x20a}{2.0cm}
 \pt{b}Use $F = ma$ (acceleration = net force $\div$ mass) to find the acceleration.
-\answerbox{2.0cm}
+\wbox{2.x20b}{2.0cm}
 \pt{c}The driving force rises to 6000\,N --- find the new acceleration.
-\answerbox{2.0cm}
+\wbox{2.x20c}{2.0cm}
 \needspace{16\baselineskip}
 \exttask A car drives along a flat road at a steady 60\,km/h. Draw a free body diagram for the car showing four forces: weight, the normal force, the driving force and the total resistive force. Show which pairs of forces are balanced.
 
 \vspace{3pt}
-\drawbox{4.6cm}{
+\drawk{2.x21}{4.6cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
 }
 
 \needspace{10\baselineskip}
 \exttask A 2\,kg ball is falling. Air resistance pushes up on it with 5\,N. Use $W = mg$ with $g = 9.8$\,N/kg.
 \pt{a}Find the weight of the ball.
-\answerbox{2.0cm}
+\wbox{2.x22a}{2.0cm}
 \pt{b}Find the size and direction of the net force.
-\answerbox{2.0cm}
+\wbox{2.x22b}{2.0cm}
 \pt{c}Is the ball speeding up, slowing down or moving at a steady speed? Explain.
-\answerbox{2.0cm}
+\abox{2.x22c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A loaded truck and a small car are both travelling at the same speed. Explain, using the idea of net force, why the truck needs a much bigger braking force to stop in the same distance.
-\answerbox{3.0cm}
+\abox{2.x23}{3.0cm}
 
 \end{yr8box}
 \newpage
@@ -2159,10 +2313,10 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Inference}} & \scaf{An explanation of what you observed, using what you already know.} \\ \hline
-  & \textbf{Electrostatic force} & \\ \hline
-  & \textbf{Magnetic force} & \\ \hline
-  & \textbf{Buoyancy force} & \\ \hline
-  & \textbf{Generalisation} & \\ \hline
+  & \textbf{Electrostatic force} & \cell{3.v2} \\ \hline
+  & \textbf{Magnetic force} & \cell{3.v3} \\ \hline
+  & \textbf{Buoyancy force} & \cell{3.v4} \\ \hline
+  & \textbf{Generalisation} & \cell{3.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -2184,7 +2338,7 @@ There are five workstations, A to E, and each one has its own page in this bookl
 
 % ─── WORKSTATION A ────────────────────────────────────────────────────────────
 \newpage
-\subsection{Workstation A --- Pushing Forces}\label{sub:3.1}
+\subsection{Workstation A --- Pushing Forces}\label{sub:3.1}\def\wsname{A}
 
 \subsubsection*{Materials}
 \begin{itemize}[nosep, leftmargin=1.4em]
@@ -2197,11 +2351,11 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \wsstep{1}Use the table tennis ball and a straw to answer these questions.
 
 \pt{a}What happens if you blow on the ball while it is moving towards you?
-\answerbox{2.2cm}
+\abox{3.A1a}{2.2cm}
 \pt{b}What happens if you blow on it while it is moving away from you?
-\answerbox{2.2cm}
+\abox{3.A1b}{2.2cm}
 \pt{c}What happens if you blow on it while it is moving across in front of you?
-\answerbox{2.2cm}
+\abox{3.A1c}{2.2cm}
 
 \subsubsection*{Part 2}
 \wsstep{2}Play a game of blowball. This game is played in groups of four, with two in each team. Use a straw each, and set up two goals. See who can score the most goals.
@@ -2209,13 +2363,13 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \begin{ctab}
 \begin{tabular}{|SW{4.6cm}|Z{5.2cm}|Z{5.2cm}|}
   \hd & \thead{} & \thead{Team 1} & \thead{Team 2} \\ \hline
-  & \textbf{Number of goals scored} & & \\ \hline
+  & \textbf{Number of goals scored} & \cell{3.A2-r1c2} & \cell{3.A2-r1c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
 % ─── WORKSTATION B ────────────────────────────────────────────────────────────
 \newpage
-\subsection{Workstation B --- Gravitational Forces}\label{sub:3.2}
+\subsection{Workstation B --- Gravitational Forces}\label{sub:3.2}\def\wsname{B}
 
 \subsubsection*{Materials}
 \begin{itemize}[nosep, leftmargin=1.4em]
@@ -2230,16 +2384,16 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \wsstep{2}Hold the piece of paper in one hand and the coin in the other, at the same height. Drop them both at the same time.
 
 \pt{a}Write an inference to explain what happened. Say what forces were acting on the coin and the paper, and in which direction they were acting.
-\answerbox{3.4cm}
+\abox{3.B2a}{3.4cm}
 
 \wsstep{3}Roll the paper into a ball and drop it and the coin again.
 
 \pt{b}Write an inference to explain what happened.
-\answerbox{3.0cm}
+\abox{3.B3b}{3.0cm}
 
 % ─── WORKSTATION C ────────────────────────────────────────────────────────────
 \newpage
-\subsection{Workstation C --- Electrostatic Forces}\label{sub:3.3}
+\subsection{Workstation C --- Electrostatic Forces}\label{sub:3.3}\def\wsname{C}
 
 \subsubsection*{Materials}
 \begin{itemize}[nosep, leftmargin=1.4em]
@@ -2253,15 +2407,15 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \wsstep{1}Tear a piece of paper into small bits. Rub a plastic rod briskly on your clothes. (A woollen jumper works well.)
 
 \pt{a}What happens when you bring the rod near the pieces of paper?
-\answerbox{2.4cm}
+\abox{3.C1a}{2.4cm}
 \pt{b}The force acting here is due to an electrostatic charge on the rod. Does the rod need to be touching the paper, or can the electrostatic force act over a distance?
-\answerbox{2.4cm}
+\abox{3.C1b}{2.4cm}
 \pt{c}Rub a plastic rod briskly on the woollen cloth, and then place the rod near a weak stream of running water. What happens?
-\answerbox{2.4cm}
+\abox{3.C1c}{2.4cm}
 
 % ─── WORKSTATION D ────────────────────────────────────────────────────────────
 \newpage
-\subsection{Workstation D --- Magnetic Forces}\label{sub:3.4}
+\subsection{Workstation D --- Magnetic Forces}\label{sub:3.4}\def\wsname{D}
 
 \subsubsection*{Materials}
 \begin{itemize}[nosep, leftmargin=1.4em]
@@ -2271,18 +2425,18 @@ There are five workstations, A to E, and each one has its own page in this bookl
 
 \subsubsection*{Method}
 \wsstep{1}Hold one magnet in each hand. Feel what happens as you slowly bring the end of one magnet close to the end of the other. Write down what happens. Draw the magnets below.
-\answerbox{1.8cm}
-\drawbox{3.2cm}{}
+\abox{3.D1}{1.8cm}
+\drawk{3.D1-draw}{3.2cm}{}
 
 \wsstep{2}Repeat the test, but use the other end of one of the magnets. Write down what happens.
-\answerbox{2.0cm}
+\abox{3.D2}{2.0cm}
 
 \wsstep{3}Write a generalisation describing the forces acting between the two magnets.
-\answerbox{2.2cm}
+\abox{3.D3}{2.2cm}
 
 % ─── WORKSTATION E ────────────────────────────────────────────────────────────
 \newpage
-\subsection{Workstation E --- Buoyancy Forces}\label{sub:3.5}
+\subsection{Workstation E --- Buoyancy Forces}\label{sub:3.5}\def\wsname{E}
 
 \subsubsection*{Materials}
 \begin{itemize}[nosep, leftmargin=1.4em]
@@ -2295,10 +2449,10 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \wsstep{1}Put a table tennis ball into a bucket of water. Push it to the bottom of the bucket and let it go.
 
 \wsstep{2}Do the same with the other balls. What forces act on a ball in water? In which direction do they act?
-\answerbox{3.0cm}
+\abox{3.E2}{3.0cm}
 
 \pt{a}Try to write a generalisation about what happens to different balls in water.
-\answerbox{3.0cm}
+\abox{3.E2a}{3.0cm}
 
 \newpage
 % ══════════════════════════════════════════════════════════════════════════════
@@ -2312,10 +2466,10 @@ There are five workstations, A to E, and each one has its own page in this bookl
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Inertia}} & \scaf{The tendency of an object to keep doing what it is already doing --- staying still or moving at a steady speed.} \\ \hline
-  & \textbf{Newton's First Law} & \\ \hline
-  & \textbf{Newton's Third Law} & \\ \hline
-  & \textbf{Action--reaction pair} & \\ \hline
-  & \textbf{Atmosphere} & \\ \hline
+  & \textbf{Newton's First Law} & \cell{4.v2} \\ \hline
+  & \textbf{Newton's Third Law} & \cell{4.v3} \\ \hline
+  & \textbf{Action--reaction pair} & \cell{4.v4} \\ \hline
+  & \textbf{Atmosphere} & \cell{4.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -2334,13 +2488,13 @@ The \emph{New York Times} eventually printed a correction --- in July 1969, the 
 \end{readingbox}
 
 \rcreset
-\rcq{What mistaken reason did the 1920 editorial give for believing rockets could not work in space?}{1.6cm}
-\rcq{Explain, using Newton's Third Law, what a rocket actually pushes against.}{2.0cm}
-\rcq{The passage says rockets work \emph{better} in space. Give the reason, and name the force that is absent.}{1.6cm}
-\rcq{The \emph{Voyager} probes are still moving fast, even though no engine is pushing them. Explain why they have not slowed down.}{2.0cm}
-\rcq{According to the passage, why does a ball rolled along the ground on Earth soon stop?}{1.6cm}
-\rcq{Which phrase in the second paragraph tells you how the push of the gas on the rocket compares with the push of the rocket on the gas?}{1.4cm}
-\rcq{The editorial's reasoning ``seemed like common sense''. Using the two examples in the passage, explain why it seemed right to many people.}{1.8cm}
+\rcqk{4.c1}{What mistaken reason did the 1920 editorial give for believing rockets could not work in space?}{1.6cm}
+\rcqk{4.c2}{Explain, using Newton's Third Law, what a rocket actually pushes against.}{2.0cm}
+\rcqk{4.c3}{The passage says rockets work \emph{better} in space. Give the reason, and name the force that is absent.}{1.6cm}
+\rcqk{4.c4}{The \emph{Voyager} probes are still moving fast, even though no engine is pushing them. Explain why they have not slowed down.}{2.0cm}
+\rcqk{4.c5}{According to the passage, why does a ball rolled along the ground on Earth soon stop?}{1.6cm}
+\rcqk{4.c6}{Which phrase in the second paragraph tells you how the push of the gas on the rocket compares with the push of the rocket on the gas?}{1.4cm}
+\rcqk{4.c7}{The editorial's reasoning ``seemed like common sense''. Using the two examples in the passage, explain why it seemed right to many people.}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:4}
@@ -2403,9 +2557,9 @@ A coin sits on a playing card on top of a glass. The card is flicked quickly sid
 \begin{wedo}{At rest stays at rest}
 Five wooden blocks are stacked in a tower. The bottom block is hit sideways very quickly with a ruler. It shoots out, and the four blocks above drop straight down instead of flying off with it.
 \pt{a}Which object does the big force from the ruler act on?
-\answerbox{1.4cm}
+\abox{4.wd1a}{1.4cm}
 \pt{b}Use the word \emph{inertia} to explain why the blocks above drop straight down.
-\answerbox{2.4cm}
+\abox{4.wd1b}{2.4cm}
 \end{wedo}
 
 \begin{workedex}{Moving keeps moving}
@@ -2422,9 +2576,9 @@ A car travelling at 50\,km/h crashes into a wall and stops suddenly. Explain wha
 \begin{wedo}{Moving keeps moving}
 A cyclist is riding at 20\,km/h when the front wheel hits a kerb and the bike stops suddenly.
 \pt{a}What happens to the cyclist?
-\answerbox{1.6cm}
+\abox{4.wd2a}{1.6cm}
 \pt{b}Use Newton's First Law to explain why.
-\answerbox{2.4cm}
+\abox{4.wd2b}{2.4cm}
 \end{wedo}
 
 \subsection{Newton's Third Law --- Action and Reaction}\label{sub:4.2}
@@ -2479,11 +2633,11 @@ A student on roller skates pushes against a wall with a force of 40\,N. Describe
 \begin{wedo}{Describing a reaction force}
 A student sitting on a wheeled office chair pushes against a desk with a force of 25\,N.
 \pt{a}Name the reaction force: what pushes on what?
-\answerbox{1.4cm}
+\abox{4.wd3a}{1.4cm}
 \pt{b}Give the size and direction of the reaction force.
-\answerbox{1.4cm}
+\abox{4.wd3b}{1.4cm}
 \pt{c}What happens to the student? Explain.
-\answerbox{2.0cm}
+\abox{4.wd3c}{2.0cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -2499,32 +2653,32 @@ Work through every task. Use the words \emph{inertia}, \emph{unbalanced force}, 
 \begin{tabular}{|SW{5.4cm}|Z{2.0cm}|W{5.4cm}|Z{2.0cm}|}
   \hd & \thead{Situation} & \thead{Law} & \thead{Situation} & \thead{Law} \\ \hline
   & Passengers lurch forwards when a bus brakes & \scaf{FIRST} & A swimmer pushes water back and moves forwards & \scaf{THIRD} \\ \hline
-  & A puck keeps sliding across smooth ice & & A balloon flies off when its air rushes out & \\ \hline
-  & A tablecloth is whipped away and the plates stay put & & A fire hose pushes back hard on the firefighters holding it & \\ \hline
-  & When a car turns sharply right, you slide to the left of your seat & & Pushing off the side of a pool sends you away from the wall & \\ \hline
+  & A puck keeps sliding across smooth ice & \cell{4.t1-r2c2} & A balloon flies off when its air rushes out & \cell{4.t1-r2c4} \\ \hline
+  & A tablecloth is whipped away and the plates stay put & \cell{4.t1-r3c2} & A fire hose pushes back hard on the firefighters holding it & \cell{4.t1-r3c4} \\ \hline
+  & When a car turns sharply right, you slide to the left of your seat & \cell{4.t1-r4c2} & Pushing off the side of a pool sends you away from the wall & \cell{4.t1-r4c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task Explain why passengers lurch forwards when a bus suddenly brakes. Use the words \textit{inertia} and \textit{unbalanced force} in your answer.
-\answerbox{2.6cm}
+\abox{4.t2}{2.6cm}
 
 \needspace{10\baselineskip}
 \task A hockey puck slides across an almost frictionless ice surface.
 \pt{a}Describe how the puck moves while it slides.
-\answerbox{2.0cm}
+\abox{4.t3a}{2.0cm}
 \pt{b}What will eventually stop it, and why?
-\answerbox{2.0cm}
+\abox{4.t3b}{2.0cm}
 
-\taskpair{Which has more inertia: an empty shopping trolley or a full one? Explain.}{2.4cm}
-         {A truck and a small car travel at the same speed. Why does the truck need much stronger brakes?}{2.4cm}
+\taskpair{Which has more inertia: an empty shopping trolley or a full one? Explain.}{\abox{4.t4}{2.4cm}}
+         {A truck and a small car travel at the same speed. Why does the truck need much stronger brakes?}{\abox{4.t5}{2.4cm}}
 
-\taskpair{The same push sends a ball rolling across carpet and across a smooth wooden floor. On which surface does it roll further? Explain.}{2.4cm}
-         {When you shake a wet umbrella and then stop it suddenly, the water flies off. Use the idea of inertia to explain why.}{2.4cm}
+\taskpair{The same push sends a ball rolling across carpet and across a smooth wooden floor. On which surface does it roll further? Explain.}{\abox{4.t6}{2.4cm}}
+         {When you shake a wet umbrella and then stop it suddenly, the water flies off. Use the idea of inertia to explain why.}{\abox{4.t7}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task When a car is hit hard from behind, it is suddenly pushed forwards. Use the First Law to explain why a passenger's head is jolted backwards, and how a headrest helps.
-\answerbox{2.8cm}
+\abox{4.t8}{2.8cm}
 
 \needspace{14\baselineskip}
 \task Complete the table. For each action force, describe the reaction force.
@@ -2534,42 +2688,42 @@ Work through every task. Use the words \emph{inertia}, \emph{unbalanced force}, 
 \begin{tabular}{|SW{7.2cm}|W{7.6cm}|}
   \hd & \thead{Action force} & \thead{Reaction force} \\ \hline
   & A boat's paddle pushes the water backwards & \scaf{The water pushes the paddle (and the boat) forwards} \\ \hline
-  & A hammer pushes down on a nail & \\ \hline
-  & A tennis racquet pushes the ball forwards & \\ \hline
-  & A bird's wings push the air downwards & \\ \hline
-  & The Earth pulls an apple downwards & \\ \hline
+  & A hammer pushes down on a nail & \cell{4.t9-r2c2} \\ \hline
+  & A tennis racquet pushes the ball forwards & \cell{4.t9-r3c2} \\ \hline
+  & A bird's wings push the air downwards & \cell{4.t9-r4c2} \\ \hline
+  & The Earth pulls an apple downwards & \cell{4.t9-r5c2} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task A swimmer pushes backward against the water with a force of 80\,N. Describe the reaction force: name it, state its size, and state its direction.
-\answerbox{2.4cm}
+\abox{4.t10}{2.4cm}
 
 \needspace{16\baselineskip}
 \task Two skaters stand still on ice, facing each other. Skater A pushes skater B with a force of 30\,N. Using a scale of \textbf{1\,cm = 10\,N}, draw both forces of the Third Law pair. Draw each skater as a box, start each arrow on the skater it acts on, and label each arrow with its size.
 
 \vspace{3pt}
-\drawbox{4.4cm}{
+\drawk{4.t11}{4.4cm}{
 \textit{\color{MidGrey}Draw your force diagram here.}
 }
 
 \needspace{10\baselineskip}
 \task When you blow up a balloon and let it go, it zooms around the room.
 \pt{a}What does the balloon push on?
-\answerbox{2.0cm}
+\abox{4.t12a}{2.0cm}
 \pt{b}Use the Third Law to explain why the balloon moves forwards.
-\answerbox{2.0cm}
+\abox{4.t12b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A skateboarder jumps forwards off the back of a skateboard, and the skateboard shoots off backwards. Explain why, naming the action force and the reaction force.
-\answerbox{2.6cm}
+\abox{4.t13}{2.6cm}
 
 \needspace{10\baselineskip}
 \task A student steps forwards off a small rowing boat onto a jetty, and the boat drifts backwards, away from the jetty.
 \pt{a}Name the action force and the reaction force.
-\answerbox{2.0cm}
+\abox{4.t14a}{2.0cm}
 \pt{b}Explain why the boat moves, even though nobody pushed it with their hands.
-\answerbox{2.0cm}
+\abox{4.t14b}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:4}
@@ -2580,50 +2734,50 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \medskip
 \needspace{10\baselineskip}
 \exttask Jess says: \emph{``The weight of a book on a table and the normal force from the table are a Third Law pair, because they are equal and opposite.''} Is Jess right? Explain, and name the true reaction force to each of the two forces.
-\answerbox{2.8cm}
+\abox{4.x15}{2.8cm}
 
 \needspace{12\baselineskip}
 \exttask For each pair of forces, decide whether it is a Third Law pair. Write \textbf{YES} or \textbf{NO}, and explain how you decided.
 \pt{i}The Earth pulls a book down; the book pulls the Earth up.
-\answerbox{2.0cm}
+\abox{4.x16i}{2.0cm}
 \pt{ii}A rope pulls a sledge forwards; friction from the snow pulls the sledge backwards.
-\answerbox{2.0cm}
+\abox{4.x16ii}{2.0cm}
 \pt{iii}A swimmer pushes the water backwards; the water pushes the swimmer forwards.
-\answerbox{2.0cm}
+\abox{4.x16iii}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A horse pulls a cart. By the Third Law, the cart pulls back on the horse with an equal force. Liam says: \emph{``So the forces cancel out, and the horse can never get the cart moving.''} Explain Liam's mistake. \textit{(Hint: draw a free body diagram for the horse alone. What pushes the horse forwards?)}
-\answerbox{3.0cm}
+\abox{4.x17}{3.0cm}
 
 \needspace{10\baselineskip}
 \exttask An astronaut on a spacewalk is floating 10\,m from the Space Station, not moving. Her safety line has come loose, but she is holding a heavy toolbox.
 \pt{a}Explain how she can use the Third Law to start moving back towards the station.
-\answerbox{2.0cm}
+\abox{4.x18a}{2.0cm}
 \pt{b}Once she is moving, does she need to keep doing anything to keep moving? Use the First Law.
-\answerbox{2.0cm}
+\abox{4.x18b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask An apple falls from a tree. The Earth pulls the apple down with a force of 1\,N.
 \pt{a}What is the reaction force? Give its size and direction, and say what it acts on.
-\answerbox{2.0cm}
+\abox{4.x19a}{2.0cm}
 \pt{b}The two forces are the same size. So why do we see the apple move towards the Earth, and not the Earth move towards the apple? Use the idea of inertia.
-\answerbox{2.0cm}
+\abox{4.x19b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Two skaters stand still on ice and push each other apart. Skater A has twice the mass of skater B.
 \pt{a}Compare the sizes of the forces on the two skaters.
-\answerbox{2.0cm}
+\abox{4.x20a}{2.0cm}
 \pt{b}Which skater moves away faster? Explain, using the idea of inertia.
-\answerbox{2.0cm}
+\abox{4.x20b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A waiter carries a full cup of water on a tray.
 \pt{a}The waiter suddenly moves the tray forwards. Which way does the water spill? Explain.
-\answerbox{2.0cm}
+\abox{4.x21a}{2.0cm}
 \pt{b}Later, walking at a steady speed, the waiter suddenly stops. Which way does the water spill now? Explain.
-\answerbox{2.0cm}
+\abox{4.x21b}{2.0cm}
 \pt{c}Use the First Law to explain why moving the tray smoothly stops the water spilling.
-\answerbox{2.0cm}
+\abox{4.x21c}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -2638,10 +2792,10 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Acceleration}} & \scaf{How quickly an object's speed changes, measured in metres per second squared ($\text{m/s}^2$).} \\ \hline
-  & \textbf{Deceleration} & \\ \hline
-  & \textbf{Newton's Second Law} & \\ \hline
-  & \textbf{Directly proportional} & \\ \hline
-  & \textbf{Rearrange} & \\ \hline
+  & \textbf{Deceleration} & \cell{5.v2} \\ \hline
+  & \textbf{Newton's Second Law} & \cell{5.v3} \\ \hline
+  & \textbf{Directly proportional} & \cell{5.v4} \\ \hline
+  & \textbf{Rearrange} & \cell{5.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -2659,14 +2813,14 @@ Isaac Newton tied all of this together in his Second Law: how quickly an object 
 \end{readingbox}
 
 \rcreset
-\rcq{What happened to the car's acceleration when two friends joined in? Explain why.}{1.6cm}
-\rcq{The same push was used on the loaded van. Describe what happened, and explain it using the word \emph{mass}.}{1.8cm}
-\rcq{Once the car rolls at a steady speed, which force are the pushers balancing? How do you know the forces are balanced?}{1.8cm}
-\rcq{Why are racing cars and racing bikes built to be as light as possible?}{1.6cm}
-\rcq{According to the passage, what \emph{two} things decide how quickly an object speeds up?}{1.4cm}
-\rcq{Which sentence in the first paragraph sums up what happened when more people pushed the car?}{1.4cm}
-\rcq{Describe one other everyday example where the same push gives a smaller acceleration because the object has more mass.}{1.6cm}
-\rcq{Suppose the three pushers kept pushing just as hard after the car was already rolling. Using the passage, predict what would happen to the car, and explain why using the words \emph{net force}.}{2.0cm}
+\rcqk{5.c1}{What happened to the car's acceleration when two friends joined in? Explain why.}{1.6cm}
+\rcqk{5.c2}{The same push was used on the loaded van. Describe what happened, and explain it using the word \emph{mass}.}{1.8cm}
+\rcqk{5.c3}{Once the car rolls at a steady speed, which force are the pushers balancing? How do you know the forces are balanced?}{1.8cm}
+\rcqk{5.c4}{Why are racing cars and racing bikes built to be as light as possible?}{1.6cm}
+\rcqk{5.c5}{According to the passage, what \emph{two} things decide how quickly an object speeds up?}{1.4cm}
+\rcqk{5.c6}{Which sentence in the first paragraph sums up what happened when more people pushed the car?}{1.4cm}
+\rcqk{5.c7}{Describe one other everyday example where the same push gives a smaller acceleration because the object has more mass.}{1.6cm}
+\rcqk{5.c8}{Suppose the three pushers kept pushing just as hard after the car was already rolling. Using the passage, predict what would happen to the car, and explain why using the words \emph{net force}.}{2.0cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
@@ -2749,7 +2903,7 @@ A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
 
 \begin{wedo}{Finding acceleration}
 A 3\,kg toy car is pushed with a net force of 15\,N. What is its acceleration?
-\answerbox{2.8cm}
+\wbox{5.wd1}{2.8cm}
 \end{wedo}
 
 \begin{workedex}{Finding force}
@@ -2765,7 +2919,7 @@ A 1200\,kg car accelerates at 2\,m/s$^2$. What net force is acting on it?
 
 \begin{wedo}{Finding force}
 A 0.5\,kg ball accelerates at 12\,m/s$^2$ when it is thrown. What net force acts on it?
-\answerbox{2.8cm}
+\wbox{5.wd2}{2.8cm}
 \end{wedo}
 
 \begin{workedex}{Finding mass}
@@ -2781,7 +2935,7 @@ A net force of 60\,N gives a box an acceleration of 4\,m/s$^2$. What is the mass
 
 \begin{wedo}{Finding mass}
 A net force of 80\,N gives a wheelbarrow an acceleration of 5\,m/s$^2$. What is the mass of the wheelbarrow?
-\answerbox{2.8cm}
+\wbox{5.wd3}{2.8cm}
 \end{wedo}
 
 \subsection{Always Use the Net Force}\label{sub:5.4}
@@ -2800,9 +2954,9 @@ A 10\,kg trolley is pushed forwards with 50\,N. Friction pushes back with 10\,N.
 \begin{wedo}{Net force first}
 A 25\,kg go-kart is pushed forwards with 120\,N. Friction pushes back with 45\,N.
 \pt{a}Find the net force.
-\answerbox{1.8cm}
+\wbox{5.wd4a}{1.8cm}
 \pt{b}Find the acceleration of the go-kart.
-\answerbox{1.8cm}
+\wbox{5.wd4b}{1.8cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -2818,8 +2972,8 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{5.2cm}|Z{2.3cm}|W{5.2cm}|Z{2.3cm}|}
   \hd & \thead{Change} & \thead{Acceleration} & \thead{Change} & \thead{Acceleration} \\ \hline
   & The force is doubled; the mass stays the same & \scaf{doubles} & The mass is doubled; the force stays the same & \scaf{halves} \\ \hline
-  & More people help push the same car & & A heavier rider pedals the same bike just as hard & \\ \hline
-  & A truck is loaded with bricks; its engine force stays the same & & A rocket burns fuel and gets lighter; its thrust stays the same & \\ \hline
+  & More people help push the same car & \cell{5.t1-r2c2} & A heavier rider pedals the same bike just as hard & \cell{5.t1-r2c4} \\ \hline
+  & A truck is loaded with bricks; its engine force stays the same & \cell{5.t1-r3c2} & A rocket burns fuel and gets lighter; its thrust stays the same & \cell{5.t1-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -2831,20 +2985,20 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{4.4cm}|Z{3.2cm}|Z{3.2cm}|Z{3.6cm}|}
   \hd & \thead{Situation} & \thead{Force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
   & Trolley pushed      & 20     & 5    & \scaf{$a = 20 \div 5 = 4$} \\ \hline
-  & Soccer ball kicked  & 45     & 0.45 & \\ \hline
-  & Car braking         &        & 1200 & 3.5 \\ \hline
-  & Rocket launch       & 6\,000 &      & 30 \\ \hline
+  & Soccer ball kicked  & 45     & 0.45 & \cell{5.t2-r2c4} \\ \hline
+  & Car braking         & \cell{5.t2-r3c2} & 1200 & 3.5 \\ \hline
+  & Rocket launch       & 6\,000 & \cell{5.t2-r4c3} & 30 \\ \hline
 \end{tabular}
 \end{ctab}
 
-\taskpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{2.4cm}
-         {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{2.4cm}
+\taskpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{\wbox{5.t3}{2.4cm}}
+         {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{\wbox{5.t4}{2.4cm}}
 
-\taskpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{2.4cm}
-         {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the net force needed.}{2.4cm}
+\taskpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{\wbox{5.t5}{2.4cm}}
+         {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the net force needed.}{\wbox{5.t6}{2.4cm}}
 
-\taskpair{A 70\,kg sprinter accelerates at 4\,m/s$^2$ out of the blocks. Find the net force on her.}{2.4cm}
-         {A 0.15\,kg cricket ball is hit with a net force of 30\,N. Find its acceleration.}{2.4cm}
+\taskpair{A 70\,kg sprinter accelerates at 4\,m/s$^2$ out of the blocks. Find the net force on her.}{\wbox{5.t7}{2.4cm}}
+         {A 0.15\,kg cricket ball is hit with a net force of 30\,N. Find its acceleration.}{\wbox{5.t8}{2.4cm}}
 
 \needspace{14\baselineskip}
 \task A 2.5\,kg trolley is pushed with different net forces.
@@ -2855,52 +3009,52 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SZ{3.4cm}|Z{3.4cm}|Z{5.6cm}|}
   \hd & \thead{Net force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
   & 5  & 2.5 & \scaf{$a = 5 \div 2.5 = 2$} \\ \hline
-  & 10 & 2.5 & \\ \hline
-  & 15 & 2.5 & \\ \hline
-  & 20 & 2.5 & \\ \hline
+  & 10 & 2.5 & \cell{5.t9a-r2c3} \\ \hline
+  & 15 & 2.5 & \cell{5.t9a-r3c3} \\ \hline
+  & 20 & 2.5 & \cell{5.t9a-r4c3} \\ \hline
 \end{tabular}
 \end{ctab}
 \pt{b}What happens to the acceleration each time the force goes up by 5\,N? Describe the pattern.
-\answerbox{2.0cm}
+\abox{5.t9b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A shopping trolley of mass 15\,kg is pushed with a force of 45\,N. Friction opposes the motion with 15\,N.
 \pt{a}Find the net force.
-\answerbox{2.0cm}
+\wbox{5.t10a}{2.0cm}
 \pt{b}Find the acceleration of the trolley.
-\answerbox{2.0cm}
+\wbox{5.t10b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A 60\,kg cyclist and her 12\,kg bicycle accelerate at 1.5\,m/s$^2$.
 \pt{a}Find the total mass.
-\answerbox{2.0cm}
+\wbox{5.t11a}{2.0cm}
 \pt{b}Find the net force.
-\answerbox{2.0cm}
+\wbox{5.t11b}{2.0cm}
 \pt{c}Air resistance is 30\,N. Find the force she must produce by pedalling.
-\answerbox{2.0cm}
+\wbox{5.t11c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task Two identical trolleys are pushed with the same force. Trolley A is empty, with a mass of 2\,kg. Trolley B carries an extra 6\,kg, so its total mass is 8\,kg.
 \pt{a}Which trolley accelerates more?
-\answerbox{2.0cm}
+\abox{5.t12a}{2.0cm}
 \pt{b}Explain your answer using $F = ma$.
-\answerbox{2.0cm}
+\abox{5.t12b}{2.0cm}
 \pt{c}The force is 16\,N. Calculate both accelerations.
-\answerbox{2.0cm}
+\wbox{5.t12c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A net force of 3600\,N gives a car an acceleration of 2\,m/s$^2$.
 \pt{a}Find the mass of the car.
-\answerbox{2.0cm}
+\wbox{5.t13a}{2.0cm}
 \pt{b}The car is then loaded with 200\,kg of luggage. Find its new acceleration with the same net force.
-\answerbox{2.0cm}
+\wbox{5.t13b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A 900\,kg car travels along a flat road at a steady 60\,km/h. Its engine provides a driving force of 2000\,N.
 \pt{a}What is the car's acceleration? Explain how you know.
-\answerbox{2.0cm}
+\abox{5.t14a}{2.0cm}
 \pt{b}What is the total size of the resistive forces (friction and air resistance) acting on the car?
-\answerbox{2.0cm}
+\abox{5.t14b}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:5}
@@ -2911,63 +3065,63 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \medskip
 \needspace{10\baselineskip}
 \exttask Ahmed pushes a 20\,kg crate with a force of 60\,N, but it does not move. He says: \emph{``$F = ma$ means it should accelerate at 3\,m/s$^2$, so the formula must be wrong.''} Explain Ahmed's mistake, and find the size of the friction force on the crate.
-\answerbox{3.0cm}
+\wbox{5.x15}{3.0cm}
 
 \needspace{10\baselineskip}
 \exttask Mia pushes a 50\,kg crate across the floor. Friction on the crate is 40\,N. She says: \emph{``If I push twice as hard, the crate will speed up twice as fast.''}
 \pt{a}Find the acceleration when she pushes with 100\,N.
-\answerbox{2.0cm}
+\wbox{5.x16a}{2.0cm}
 \pt{b}Find the acceleration when she pushes with 200\,N.
-\answerbox{2.0cm}
+\wbox{5.x16b}{2.0cm}
 \pt{c}Is Mia right? Explain, using the idea of net force.
-\answerbox{2.0cm}
+\abox{5.x16c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A rocket's engines push exhaust gas downwards with a force of 500\,000\,N, and the gas pushes the rocket upwards with the same force. The rocket has a mass of 20\,000\,kg. Use $g = 9.8$\,N/kg.
 \pt{a}Find the rocket's weight.
-\answerbox{2.0cm}
+\wbox{5.x17a}{2.0cm}
 \pt{b}Find the net force on the rocket at lift-off.
-\answerbox{2.0cm}
+\wbox{5.x17b}{2.0cm}
 \pt{c}Find its acceleration.
-\answerbox{2.0cm}
+\wbox{5.x17c}{2.0cm}
 \pt{d}Which of Newton's laws explains (i) the upward push of the gas, and (ii) the size of the acceleration?
-\answerbox{2.0cm}
+\abox{5.x17d}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A lift and its passengers have a total mass of 800\,kg. The cable pulls the lift upwards with a force of 8640\,N. Use $g = 9.8$\,N/kg.
 \pt{a}Find the weight of the lift and its passengers.
-\answerbox{2.0cm}
+\wbox{5.x18a}{2.0cm}
 \pt{b}Find the size and direction of the net force.
-\answerbox{2.0cm}
+\wbox{5.x18b}{2.0cm}
 \pt{c}Find the acceleration of the lift.
-\answerbox{2.0cm}
+\wbox{5.x18c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A cyclist speeds up from 2\,m/s to 8\,m/s in 4\,s. The cyclist and bicycle have a total mass of 80\,kg.
 \pt{a}Calculate the acceleration, using $a = \Delta v \div t$ (change in speed $\div$ time).
-\answerbox{2.0cm}
+\wbox{5.x19a}{2.0cm}
 \pt{b}Calculate the net force on the cyclist and bicycle.
-\answerbox{2.0cm}
+\wbox{5.x19b}{2.0cm}
 \pt{c}Air resistance and friction total 40\,N. Find the force the cyclist must supply by pedalling.
-\answerbox{2.0cm}
+\wbox{5.x19c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 0.045\,kg golf ball is struck and leaves the tee at 60\,m/s. The club is in contact with the ball for 0.0005\,s.
 \pt{a}Calculate the acceleration of the ball, using $a = \Delta v \div t$ (change in speed $\div$ time).
-\answerbox{2.0cm}
+\wbox{5.x20a}{2.0cm}
 \pt{b}Calculate the force applied by the club.
-\answerbox{2.0cm}
+\wbox{5.x20b}{2.0cm}
 \pt{c}Calculate the ball's weight, and comment on how the force from the club compares with it.
-\answerbox{2.0cm}
+\wbox{5.x20c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask In the trebuchet investigation at the end of this unit, a sling swings a 0.05\,kg projectile. While it is being swung, the net force on the projectile is 2\,N.
 \pt{a}Find the projectile's acceleration.
-\answerbox{2.0cm}
+\wbox{5.x21a}{2.0cm}
 \pt{b}The sling pulls on the projectile. Describe the reaction force.
-\answerbox{2.0cm}
+\abox{5.x21b}{2.0cm}
 \pt{c}Once the projectile leaves the sling, nothing pushes it forwards. Explain why it keeps moving forwards, and name the force that brings it back to the ground.
-\answerbox{2.0cm}
+\abox{5.x21c}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -2982,11 +3136,11 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Fair test}} & \scaf{An experiment where only one variable is changed and everything else is kept the same.} \\ \hline
-  & \textbf{Independent variable} & \\ \hline
-  & \textbf{Dependent variable} & \\ \hline
-  & \textbf{Controlled variable} & \\ \hline
-  & \textbf{Trial} & \\ \hline
-  & \textbf{Mean} & \\ \hline
+  & \textbf{Independent variable} & \cell{6.v2} \\ \hline
+  & \textbf{Dependent variable} & \cell{6.v3} \\ \hline
+  & \textbf{Controlled variable} & \cell{6.v4} \\ \hline
+  & \textbf{Trial} & \cell{6.v5} \\ \hline
+  & \textbf{Mean} & \cell{6.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3004,10 +3158,10 @@ In this experiment you will measure friction with a spring balance, then add mas
 \end{readingbox}
 
 \rcreset
-\rcq{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
-\rcq{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{1.6cm}
-\rcq{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
-\rcq{Why must the block move at a \emph{steady} speed when you read the spring balance?}{1.8cm}
+\rcqk{6.c1}{Explain how friction helps you to walk, and why walking on ice is so hard.}{1.8cm}
+\rcqk{6.c2}{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{1.6cm}
+\rcqk{6.c3}{Give one example where engineers want more friction, and one where they want less.}{1.6cm}
+\rcqk{6.c4}{Why must the block move at a \emph{steady} speed when you read the spring balance?}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:6}
@@ -3046,19 +3200,19 @@ A student wants to know if the temperature of water changes how fast sugar disso
 \par\noindent\edef\abgrp{\number\numexpr\value{abox}+1\relax}%
 \begin{minipage}[t]{0.485\linewidth}
 \pt{a}Name the independent variable.
-\answerbox{1.4cm}
+\abox{6.wd1a}{1.4cm}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.485\linewidth}
 \pt{b}Name the dependent variable.
-\answerbox{1.4cm}
+\abox{6.wd1b}{1.4cm}
 \end{minipage}\par\gdef\abgrp{0}%
 \pt{c}Name two controlled variables.
-\answerbox{1.8cm}
+\abox{6.wd1c}{1.8cm}
 \end{wedo}
 
 \begin{scaffold}{Prediction --- before you begin}
 What do you think will happen to the friction force as you add more mass to the block? Why?
-\answerbox{2cm}
+\abox{6.pred}{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
@@ -3084,18 +3238,18 @@ Pull gently and keep the spring balance in line with the block --- a spring bala
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Results and analysis}{Amber}\label{prac:6}
 
-\subsubsection*{Results}
+\subsubsection*{Results}\anslabelset{Results}
 
 \begin{ctab}
 \begin{tabular}{|SW{3.6cm}|Z{2.4cm}|Z{2.4cm}|Z{2.4cm}|Z{2.8cm}|}
   \hd & \thead{Mass added (g)} & \thead{Friction, test 1 (N)} & \thead{Friction, test 2 (N)} & \thead{Friction, test 3 (N)} & \thead{Mean (N)} \\ \hline
   & \scaf{e.g.\ 0 (block only)} & \scaf{0.8} & \scaf{1.0} & \scaf{0.9} & \scaf{0.9} \\ \hline
-  & 0 (block only) & & & & \\ \hline
-  & 200 & & & & \\ \hline
-  & 400 & & & & \\ \hline
-  & 600 & & & & \\ \hline
-  & 800 & & & & \\ \hline
-  & 1000 & & & & \\ \hline
+  & 0 (block only) & \cell{6.res-r2c2} & \cell{6.res-r2c3} & \cell{6.res-r2c4} & \cell{6.res-r2c5} \\ \hline
+  & 200 & \cell{6.res-r3c2} & \cell{6.res-r3c3} & \cell{6.res-r3c4} & \cell{6.res-r3c5} \\ \hline
+  & 400 & \cell{6.res-r4c2} & \cell{6.res-r4c3} & \cell{6.res-r4c4} & \cell{6.res-r4c5} \\ \hline
+  & 600 & \cell{6.res-r5c2} & \cell{6.res-r5c3} & \cell{6.res-r5c4} & \cell{6.res-r5c5} \\ \hline
+  & 800 & \cell{6.res-r6c2} & \cell{6.res-r6c3} & \cell{6.res-r6c4} & \cell{6.res-r6c5} \\ \hline
+  & 1000 & \cell{6.res-r7c2} & \cell{6.res-r7c3} & \cell{6.res-r7c4} & \cell{6.res-r7c5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3108,40 +3262,38 @@ Add the tests, then divide by how many there are: \quad $(0.8 + 1.0 + 0.9) \div 
 
 \begin{wedo}{Calculating a mean}
 With 400\,g on the block, a group measured 1.9\,N, 2.1\,N and 2.3\,N. Calculate the mean friction force.
-\answerbox{2.2cm}
+\wbox{6.wd2}{2.2cm}
 \end{wedo}
 
 \needspace{10\baselineskip}
 \task Identify the independent variable, the dependent variable, and two controlled variables in \emph{your} experiment.
-\answerbox{2.4cm}
+\abox{6.t1}{2.4cm}
 
 \needspace{10\baselineskip}
 \task What happened to the size of the friction force as the mass on the block increased? Was your prediction correct?
-\answerbox{2.0cm}
+\abox{6.t2}{2.0cm}
 
 \needspace{10\baselineskip}
 \task
 \pt{a}Why did you take three results for each mass?
-\answerbox{2.0cm}
+\abox{6.t3a}{2.0cm}
 \pt{b}Identify one error or mistake that could have affected your results.
-\answerbox{2.0cm}
+\abox{6.t3b}{2.0cm}
 \pt{c}Propose one improvement to the design of the experiment.
-\answerbox{2.0cm}
+\abox{6.t3c}{2.0cm}
 
-\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean.}{2.2cm}
-         {A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.}{2.2cm}
+\taskpair{Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean.}{\wbox{6.t4}{2.2cm}}
+         {A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.}{\wbox{6.t5}{2.2cm}}
 
 \needspace{10\baselineskip}
 \task Use the idea of \emph{bumps} pressing together to explain your results. Then describe a situation in everyday life where you have noticed this link between friction and mass.
-\answerbox{2.4cm}
+\abox{6.t6}{2.4cm}
 
 \needspace{20\baselineskip}
 \task Draw a line graph of your results. Put \textbf{mass added (g)} on the horizontal axis and \textbf{mean friction force (N)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=19cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
+\graphgrid{6.t7}{19cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:6}
@@ -3152,23 +3304,23 @@ These questions go beyond the Year 7 standard. They ask you to interpret your gr
 \medskip
 \needspace{10\baselineskip}
 \exttask Look at your graph. With no masses added, the friction was not zero. Explain why the block still has friction when nothing is stacked on it, and say what your line of best fit would do if you could make the block lighter and lighter.
-\answerbox{2.6cm}
+\abox{6.x8}{2.6cm}
 
 \needspace{10\baselineskip}
 \exttask Predict how your results would change if you repeated the experiment with the block sliding on sandpaper instead of the bench. Would the line on your graph be steeper or less steep? Explain.
-\answerbox{2.4cm}
+\abox{6.x9}{2.4cm}
 
 \needspace{10\baselineskip}
 \exttask The wooden block has a mass of 0.3\,kg. With 1\,kg of masses on top, the total mass is 1.3\,kg. Use your mean friction force for 1000\,g. If the loaded block were sliding and you let go of the spring balance, friction would be the only horizontal force on it. Use $F = ma$ (acceleration = force $\div$ mass) to calculate how quickly it would slow down. Show all working.
-\answerbox{3.2cm}
+\wbox{6.x10}{3.2cm}
 \needspace{12\baselineskip}
 \exttask Design a fair test to find out whether the \emph{type of surface} changes the friction force on the block.
 \pt{a}Name the independent and dependent variables.
-\answerbox{1.6cm}
+\abox{6.x11a}{1.6cm}
 \pt{b}Name two variables you would keep the same.
-\answerbox{1.6cm}
+\abox{6.x11b}{1.6cm}
 \pt{c}Predict what you would find, and give a reason.
-\answerbox{1.8cm}
+\abox{6.x11c}{1.8cm}
 
 \end{yr8box}
 
@@ -3184,11 +3336,11 @@ These questions go beyond the Year 7 standard. They ask you to interpret your gr
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Energy}} & \scaf{The ability to make something happen. It is measured in joules (J).} \\ \hline
-  & \textbf{Kinetic energy} & \\ \hline
-  & \textbf{Gravitational potential energy} & \\ \hline
-  & \textbf{Energy transformation} & \\ \hline
-  & \textbf{Conservation of energy} & \\ \hline
-  & \textbf{Efficiency} & \\ \hline
+  & \textbf{Kinetic energy} & \cell{7.v2} \\ \hline
+  & \textbf{Gravitational potential energy} & \cell{7.v3} \\ \hline
+  & \textbf{Energy transformation} & \cell{7.v4} \\ \hline
+  & \textbf{Conservation of energy} & \cell{7.v5} \\ \hline
+  & \textbf{Efficiency} & \cell{7.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3208,13 +3360,13 @@ At the end of the ride the train still has some kinetic energy, and it has to be
 \end{readingbox}
 
 \rcreset
-\rcq{Where does a roller coaster train get the energy for the whole ride, and how is that energy stored?}{1.8cm}
-\rcq{Describe the energy transformation that happens as the train travels down the first hill.}{1.8cm}
-\rcq{Explain why each hill on the track must be lower than the one before it. Name the two ways energy is lost.}{2.0cm}
-\rcq{At which point on the ride does the train have the most kinetic energy? Explain how you know.}{1.6cm}
-\rcq{Which phrase in the third paragraph tells you that energy cannot simply appear from nowhere?}{1.4cm}
-\rcq{How do magnetic brakes stop the train, and what happens to the train's kinetic energy?}{1.8cm}
-\rcq{In your own words, explain what the passage means when it says the swap between potential and kinetic energy is ``never perfect''.}{1.8cm}
+\rcqk{7.c1}{Where does a roller coaster train get the energy for the whole ride, and how is that energy stored?}{1.8cm}
+\rcqk{7.c2}{Describe the energy transformation that happens as the train travels down the first hill.}{1.8cm}
+\rcqk{7.c3}{Explain why each hill on the track must be lower than the one before it. Name the two ways energy is lost.}{2.0cm}
+\rcqk{7.c4}{At which point on the ride does the train have the most kinetic energy? Explain how you know.}{1.6cm}
+\rcqk{7.c5}{Which phrase in the third paragraph tells you that energy cannot simply appear from nowhere?}{1.4cm}
+\rcqk{7.c6}{How do magnetic brakes stop the train, and what happens to the train's kinetic energy?}{1.8cm}
+\rcqk{7.c7}{In your own words, explain what the passage means when it says the swap between potential and kinetic energy is ``never perfect''.}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:7}
@@ -3261,9 +3413,9 @@ At every step a little energy is \textbf{wasted} as thermal energy and sound ---
 \begin{wedo}{An energy chain for a skateboarder}
 A skateboarder starts at rest at the top of a half-pipe ramp, rolls down, and rolls up the other side.
 \pt{a}Write the energy chain from the top of the ramp to the top of the other side.
-\answerbox{2.0cm}
+\abox{7.wd1a}{2.0cm}
 \pt{b}Explain why the skateboarder does not quite reach the same height on the other side.
-\answerbox{2.0cm}
+\abox{7.wd1b}{2.0cm}
 \end{wedo}
 
 \subsection{Conservation of Energy and Efficiency}\label{sub:7.3}
@@ -3294,9 +3446,9 @@ An old-style light bulb is supplied with 100\,J of electrical energy. It gives o
 \begin{wedo}{Calculating efficiency}
 An LED globe is supplied with 100\,J of electrical energy. It gives out 40\,J of light.
 \pt{a}How much energy is wasted?
-\answerbox{1.6cm}
+\wbox{7.wd2a}{1.6cm}
 \pt{b}What is its efficiency?
-\answerbox{1.8cm}
+\wbox{7.wd2b}{1.8cm}
 \end{wedo}
 
 \subsection{Calculating Gravitational Potential and Kinetic Energy}\label{sub:7.4}
@@ -3315,7 +3467,7 @@ $\text{GPE} = mgh = 2 \times 9.8 \times 5 = \mathbf{98\ \text{J}}$
 
 \begin{wedo}{Gravitational potential energy}
 A 5\,kg box is lifted onto a shelf 1.5\,m high. Find its gravitational potential energy. Use $g = 9.8$\,N/kg.
-\answerbox{2.4cm}
+\wbox{7.wd3}{2.4cm}
 \end{wedo}
 
 \begin{workedex}{Kinetic energy}
@@ -3329,7 +3481,7 @@ A 4\,kg dog runs at 3\,m/s. Find its kinetic energy.
 
 \begin{wedo}{Kinetic energy}
 A 6\,kg bowling ball rolls at 2\,m/s. Find its kinetic energy.
-\answerbox{2.4cm}
+\wbox{7.wd4}{2.4cm}
 \end{wedo}
 
 When the 2\,kg ball in Worked Example~\ref{we:7.3} is dropped, its 98\,J of gravitational potential energy becomes kinetic energy. Just before it lands it has close to 98\,J of kinetic energy --- a little less, because some is wasted pushing through the air.
@@ -3347,9 +3499,9 @@ Work through every task. Use $g = 9.8$\,N/kg. Show your working for calculations
 \begin{tabular}{|SW{5.2cm}|Z{2.6cm}|W{4.8cm}|Z{2.6cm}|}
   \hd & \thead{Object} & \thead{Form of energy} & \thead{Object} & \thead{Form of energy} \\ \hline
   & A stretched rubber band & \scaf{elastic potential} & A bowling ball rolling down the lane & \scaf{kinetic} \\ \hline
-  & A rock balanced on a cliff edge & & A battery & \\ \hline
-  & A cup of hot chocolate & & A drawn-back bowstring & \\ \hline
-  & A sandwich & & A child sliding down a slide & \\ \hline
+  & A rock balanced on a cliff edge & \cell{7.t1-r2c2} & A battery & \cell{7.t1-r2c4} \\ \hline
+  & A cup of hot chocolate & \cell{7.t1-r3c2} & A drawn-back bowstring & \cell{7.t1-r3c4} \\ \hline
+  & A sandwich & \cell{7.t1-r4c2} & A child sliding down a slide & \cell{7.t1-r4c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3361,30 +3513,30 @@ Work through every task. Use $g = 9.8$\,N/kg. Show your working for calculations
 \begin{tabular}{|SW{3.4cm}|Z{3.6cm}|Z{3.8cm}|Z{3.8cm}|}
   \hd & \thead{Device} & \thead{Energy in} & \thead{Useful energy out} & \thead{Wasted energy} \\ \hline
   & Torch & \scaf{chemical (battery)} & \scaf{light} & \scaf{thermal} \\ \hline
-  & Electric kettle & & & \\ \hline
-  & Car engine & & & \\ \hline
-  & Wind-up toy car & & & \\ \hline
+  & Electric kettle & \cell{7.t2-r2c2} & \cell{7.t2-r2c3} & \cell{7.t2-r2c4} \\ \hline
+  & Car engine & \cell{7.t2-r3c2} & \cell{7.t2-r3c3} & \cell{7.t2-r3c4} \\ \hline
+  & Wind-up toy car & \cell{7.t2-r4c2} & \cell{7.t2-r4c3} & \cell{7.t2-r4c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task A person bounces on a trampoline. Write the energy chain from the top of one jump, down onto the trampoline, and back up to the top of the next jump. Then name the energy that is wasted.
-\answerbox{2.8cm}
+\abox{7.t3}{2.8cm}
 
-\taskpair{A 2\,kg book is lifted onto a shelf 1.8\,m high. Find its GPE.}{2.4cm}
-         {A 0.15\,kg ball moves at 20\,m/s. Find its KE.}{2.4cm}
+\taskpair{A 2\,kg book is lifted onto a shelf 1.8\,m high. Find its GPE.}{\wbox{7.t4}{2.4cm}}
+         {A 0.15\,kg ball moves at 20\,m/s. Find its KE.}{\wbox{7.t5}{2.4cm}}
 
-\taskpair{A 60\,kg student climbs stairs 4\,m high. Find the GPE gained.}{2.4cm}
-         {A 1200\,kg car travels at 15\,m/s. Find its KE.}{2.4cm}
+\taskpair{A 60\,kg student climbs stairs 4\,m high. Find the GPE gained.}{\wbox{7.t6}{2.4cm}}
+         {A 1200\,kg car travels at 15\,m/s. Find its KE.}{\wbox{7.t7}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A 3\,kg ball is held at a height of 4\,m.
 \pt{a}Calculate its GPE.
-\answerbox{2.0cm}
+\wbox{7.t8a}{2.0cm}
 \pt{b}The ball is dropped. Just before it hits the ground its speed is 8.85\,m/s. Calculate its KE.
-\answerbox{2.0cm}
+\wbox{7.t8b}{2.0cm}
 \pt{c}Compare your answers to (a) and (b). What does this suggest?
-\answerbox{2.0cm}
+\abox{7.t8c}{2.0cm}
 
 \needspace{14\baselineskip}
 \task Complete the table. Use $\text{efficiency} = \text{useful energy out} \div \text{energy in} \times 100\%$.
@@ -3394,43 +3546,43 @@ Work through every task. Use $g = 9.8$\,N/kg. Show your working for calculations
 \begin{tabular}{|SW{3.4cm}|Z{2.6cm}|Z{3.0cm}|Z{2.6cm}|Z{2.8cm}|}
   \hd & \thead{Device} & \thead{Energy in (J)} & \thead{Useful energy out (J)} & \thead{Wasted energy (J)} & \thead{Efficiency (\%)} \\ \hline
   & Old-style light bulb & 100  & 5    & \scaf{$100 - 5 = 95$} & \scaf{$5 \div 100 \times 100 = 5$} \\ \hline
-  & Electric motor       & 200  & 150  & & \\ \hline
-  & Electric kettle      & 2000 & 1800 & & \\ \hline
-  & Car engine           & 500  & 150  & & \\ \hline
+  & Electric motor       & 200  & 150  & \cell{7.t9-r2c4} & \cell{7.t9-r2c5} \\ \hline
+  & Electric kettle      & 2000 & 1800 & \cell{7.t9-r3c4} & \cell{7.t9-r3c5} \\ \hline
+  & Car engine           & 500  & 150  & \cell{7.t9-r4c4} & \cell{7.t9-r4c5} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task A machine is supplied with 800\,J of energy and produces 560\,J of useful output.
 \pt{a}Calculate the efficiency.
-\answerbox{2.0cm}
+\wbox{7.t10a}{2.0cm}
 \pt{b}How much energy was wasted?
-\answerbox{2.0cm}
+\wbox{7.t10b}{2.0cm}
 \pt{c}Suggest two forms the wasted energy is likely to take.
-\answerbox{2.0cm}
+\abox{7.t10c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task Look at the trebuchet energy chain in Figure~\ref{fig:energy-types}.
 \pt{a}Name \textbf{two} forms of energy present at the moment the trebuchet releases the ball.
-\answerbox{2.0cm}
+\abox{7.t11a}{2.0cm}
 \pt{b}Explain why the ball's kinetic energy is less than the gravitational potential energy the counterweight started with.
-\answerbox{2.0cm}
+\abox{7.t11b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A 0.5\,kg ball is dropped from a height of 3\,m.
 \pt{a}Calculate its GPE before it is dropped.
-\answerbox{2.0cm}
+\wbox{7.t12a}{2.0cm}
 \pt{b}Assuming no energy is wasted, state its KE just before it lands.
-\answerbox{2.0cm}
+\wbox{7.t12b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A pendulum is pulled to one side and let go. It swings back and forth.
 \pt{a}Where in the swing does it have the most gravitational potential energy?
-\answerbox{2.0cm}
+\abox{7.t13a}{2.0cm}
 \pt{b}Where does it have the most kinetic energy?
-\answerbox{2.0cm}
+\abox{7.t13b}{2.0cm}
 \pt{c}Explain why it eventually stops swinging.
-\answerbox{2.0cm}
+\abox{7.t13c}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:7}
@@ -3442,55 +3594,55 @@ These questions go beyond the Year 7 standard. They ask you to use the Law of Co
 \needspace{10\baselineskip}
 \exttask The 2\,kg ball in Worked Example~\ref{we:7.3} starts with 98\,J of GPE, but actually hits the ground with 92\,J of KE.
 \pt{a}Calculate the efficiency of the GPE $\rightarrow$ KE transformation.
-\answerbox{2.0cm}
+\wbox{7.x14a}{2.0cm}
 \pt{b}Explain where the ``missing'' energy went. Has it been destroyed?
-\answerbox{2.0cm}
+\abox{7.x14b}{2.0cm}
 
 \needspace{18\baselineskip}
 \exttask A trebuchet counterweight provides 500\,J of GPE. Only 380\,J is transferred to the ball as KE. Draw a Sankey diagram for this energy transfer, using a scale of \textbf{1\,cm = 50\,J}. Label each arrow with its energy.
 
 \vspace{3pt}
-\drawbox{5.0cm}{
+\drawk{7.x15}{5.0cm}{
 \textit{\color{MidGrey}Draw your Sankey diagram here: energy in on the left, useful energy straight on, wasted energy turning down.}
 }
 
 \needspace{10\baselineskip}
 \exttask A 0.5\,kg ball is dropped from a height of 3\,m. Assume no energy is wasted.
 \pt{a}Find its KE just before it lands.
-\answerbox{2.0cm}
+\wbox{7.x16a}{2.0cm}
 \pt{b}Use $\text{KE} = \tfrac{1}{2}mv^2$ to find the speed at which it lands. \textit{(Hint: find $v^2$ first, then take the square root.)}
-\answerbox{2.0cm}
+\wbox{7.x16b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A trebuchet's 10\,kg counterweight falls 1.0\,m. The trebuchet is 20\% efficient.
 \pt{a}Calculate the GPE given up by the counterweight.
-\answerbox{2.0cm}
+\wbox{7.x17a}{2.0cm}
 \pt{b}Calculate the KE given to the projectile.
-\answerbox{2.0cm}
+\wbox{7.x17b}{2.0cm}
 \pt{c}The projectile has a mass of 0.1\,kg. Calculate its launch speed.
-\answerbox{2.0cm}
+\wbox{7.x17c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Jordan says: \emph{``If a car goes twice as fast, it has twice as much kinetic energy.''}
 \pt{a}Calculate the KE of a 1000\,kg car at 10\,m/s and at 20\,m/s.
-\answerbox{2.0cm}
+\wbox{7.x18a}{2.0cm}
 \pt{b}Is Jordan right? Explain what happens to the KE when the speed doubles.
-\answerbox{2.0cm}
+\abox{7.x18b}{2.0cm}
 \pt{c}Suggest why this matters for how far a car needs to stop.
-\answerbox{2.0cm}
+\abox{7.x18c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 500\,kg roller coaster train is pulled to the top of a first hill 40\,m high.
 \pt{a}Calculate its GPE at the top.
-\answerbox{2.0cm}
+\wbox{7.x19a}{2.0cm}
 \pt{b}By the bottom of the first drop, 25\% of this energy has been wasted. Calculate its KE at the bottom.
-\answerbox{2.0cm}
+\wbox{7.x19b}{2.0cm}
 \pt{c}Use your answers to explain why the next hill cannot be 40\,m high.
-\answerbox{2.0cm}
+\abox{7.x19c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A pole vaulter sprints down the runway, plants the pole, bends it, and is flung up over the bar. Describe the energy chain from the run-up to the top of the jump. Say where elastic potential energy appears, and where energy is wasted.
-\answerbox{3.0cm}
+\abox{7.x20}{3.0cm}
 \end{yr8box}
 
 \newpage
@@ -3505,10 +3657,10 @@ These questions go beyond the Year 7 standard. They ask you to use the Law of Co
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Elastic potential energy}} & \scaf{The energy stored in an object when it is squashed or stretched.} \\ \hline
-  & \textbf{Thermal energy} & \\ \hline
-  & \textbf{Drop height} & \\ \hline
-  & \textbf{Bounce height} & \\ \hline
-  & \textbf{Wasted energy} & \\ \hline
+  & \textbf{Thermal energy} & \cell{8.v2} \\ \hline
+  & \textbf{Drop height} & \cell{8.v3} \\ \hline
+  & \textbf{Bounce height} & \cell{8.v4} \\ \hline
+  & \textbf{Wasted energy} & \cell{8.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3526,10 +3678,10 @@ In this experiment you will run your own bounce test, and use the heights to wor
 \end{readingbox}
 
 \rcreset
-\rcq{From what height is a tennis ball dropped in the bounce test, and how high must it bounce to be approved?}{1.4cm}
-\rcq{Explain, using the words \emph{elastic potential energy}, what happens to the ball's energy when it hits the ground.}{1.5cm}
-\rcq{Why can a ball never bounce back up to the height it was dropped from? Name the two forms of wasted energy.}{1.5cm}
-\rcq{Why do squash players hit the ball hard for a few minutes before a match?}{1.4cm}
+\rcqk{8.c1}{From what height is a tennis ball dropped in the bounce test, and how high must it bounce to be approved?}{1.4cm}
+\rcqk{8.c2}{Explain, using the words \emph{elastic potential energy}, what happens to the ball's energy when it hits the ground.}{1.5cm}
+\rcqk{8.c3}{Why can a ball never bounce back up to the height it was dropped from? Name the two forms of wasted energy.}{1.5cm}
+\rcqk{8.c4}{Why do squash players hit the ball hard for a few minutes before a match?}{1.4cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:8}
@@ -3560,8 +3712,7 @@ A ball is dropped from 100\,cm and bounces back up to 62\,cm. Find the efficienc
 
 \begin{wedo}{Calculating bounce efficiency}
 A tennis ball is dropped from 80\,cm and bounces back up to 44\,cm.
-\ptpair{a}{Find the efficiency of the bounce.}{1.8cm}
-       {b}{What percentage of the energy is wasted, and where does it go?}{1.8cm}
+\ptpair{a}{Find the efficiency of the bounce.}{\wbox{8.wd1a}{1.8cm}}{b}{What percentage of the energy is wasted, and where does it go?}{\wbox{8.wd1b}{1.8cm}}
 \end{wedo}
 
 \subsection{Making it a Fair Test}\label{sub:8.2}
@@ -3571,7 +3722,7 @@ You will change the \textbf{drop height} (independent variable) and measure the 
 \needspace{9\baselineskip}
 \begin{scaffold}{Prediction --- before you begin}
 What do you think will happen to the bounce height as the drop height increases from 40\,cm to 160\,cm? Will the \emph{efficiency} change? Give a reason.
-\answerbox{2cm}
+\abox{8.pred}{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
@@ -3598,16 +3749,16 @@ Keep every drop height within reach while you are standing on the floor --- do n
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Results and analysis}{Amber}\label{prac:8}
 
-\subsubsection*{Results}
+\subsubsection*{Results}\anslabelset{Results}
 
 \begin{ctab}
 \begin{tabular}{|SZ{2.3cm}|Z{2.3cm}|Z{2.3cm}|Z{2.3cm}|Z{2.6cm}|Z{2.4cm}|}
   \hd & \thead{Drop height $h_1$ (cm)} & \thead{Bounce, trial 1 (cm)} & \thead{Bounce, trial 2 (cm)} & \thead{Bounce, trial 3 (cm)} & \thead{Mean bounce $h_2$ (cm)} & \thead{Efficiency (\%)} \\ \hline
   & \scaf{e.g.\ 40} & \scaf{23} & \scaf{21} & \scaf{22} & \scaf{22} & \scaf{55} \\ \hline
-  & 40  & & & & & \\ \hline
-  & 80  & & & & & \\ \hline
-  & 120 & & & & & \\ \hline
-  & 160 & & & & & \\ \hline
+  & 40  & \cell{8.res-r2c2} & \cell{8.res-r2c3} & \cell{8.res-r2c4} & \cell{8.res-r2c5} & \cell{8.res-r2c6} \\ \hline
+  & 80  & \cell{8.res-r3c2} & \cell{8.res-r3c3} & \cell{8.res-r3c4} & \cell{8.res-r3c5} & \cell{8.res-r3c6} \\ \hline
+  & 120 & \cell{8.res-r4c2} & \cell{8.res-r4c3} & \cell{8.res-r4c4} & \cell{8.res-r4c5} & \cell{8.res-r4c6} \\ \hline
+  & 160 & \cell{8.res-r5c2} & \cell{8.res-r5c3} & \cell{8.res-r5c4} & \cell{8.res-r5c5} & \cell{8.res-r5c6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3618,30 +3769,28 @@ Efficiency: \quad $22 \div 40 \times 100\% = \mathbf{55\%}$.
 
 \needspace{10\baselineskip}
 \task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
-\answerbox{2.6cm}
+\abox{8.t1}{2.6cm}
 
 \needspace{10\baselineskip}
 \task What happened to the bounce height as the drop height increased? Was your prediction correct?
-\answerbox{2.2cm}
+\abox{8.t2}{2.2cm}
 
 \needspace{10\baselineskip}
 \task Look at your efficiency column. Did the efficiency stay about the same, rise, or fall as the drop height increased? Use numbers from your results.
-\answerbox{2.4cm}
+\abox{8.t3}{2.4cm}
 
-\taskpair{A ball dropped from 150\,cm bounces to 90\,cm. Calculate the efficiency of the bounce.}{2.4cm}
-         {Another group's bounce heights for an 80\,cm drop were 52, 55 and 41\,cm. Which value looks wrong? Find the mean of the other two.}{2.4cm}
+\taskpair{A ball dropped from 150\,cm bounces to 90\,cm. Calculate the efficiency of the bounce.}{\wbox{8.t4}{2.4cm}}
+         {Another group's bounce heights for an 80\,cm drop were 52, 55 and 41\,cm. Which value looks wrong? Find the mean of the other two.}{\wbox{8.t5}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task Explain why the ball never bounces back up to its drop height. Use the words \emph{gravitational potential}, \emph{kinetic}, \emph{elastic potential} and \emph{thermal} in your answer.
-\answerbox{2.6cm}
+\abox{8.t6}{2.6cm}
 
 \needspace{20\baselineskip}
 \task Draw a line graph of your results. Put \textbf{drop height (cm)} on the horizontal axis and \textbf{mean bounce height (cm)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
+\graphgrid{8.t7}{7.5cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:8}
@@ -3653,33 +3802,33 @@ These questions go beyond the Year 7 standard. They ask you to interpret your gr
 \needspace{10\baselineskip}
 \exttask Look at your graph from Task~\ref{task:8.7}.
 \pt{a}Is your line of best fit straight, and does it pass through (or close to) the origin? What does this tell you about drop height and bounce height?
-\answerbox{2.0cm}
+\abox{8.x8a}{2.0cm}
 \pt{b}Calculate the gradient of your line. Explain how it is connected to the efficiency of the ball.
-\answerbox{2.0cm}
+\wbox{8.x8b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 0.2\,kg ball is dropped from 2.0\,m and bounces back up to 1.4\,m. Use $g = 9.8$\,N/kg.
 \pt{a}Calculate the GPE before the drop, and at the top of the bounce.
-\answerbox{2.0cm}
+\wbox{8.x9a}{2.0cm}
 \pt{b}Calculate the efficiency of the bounce.
-\answerbox{2.0cm}
+\wbox{8.x9b}{2.0cm}
 \pt{c}How much energy was wasted, and what forms did it take?
-\answerbox{2.0cm}
+\wbox{8.x9c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Predict how the bounce efficiency would change if you dropped the same ball onto thick carpet instead of a hard floor. Explain your prediction using the ideas of elastic potential energy and thermal energy.
-\answerbox{2.4cm}
+\abox{8.x10}{2.4cm}
 
 \needspace{12\baselineskip}
 \exttask Design a fair test to find out whether the \emph{temperature} of a ball changes its bounce efficiency.
 \pt{a}Name the independent and dependent variables.
-\answerbox{1.6cm}
+\abox{8.x11a}{1.6cm}
 \pt{b}Name two variables you would keep the same.
-\answerbox{1.6cm}
+\abox{8.x11b}{1.6cm}
 \pt{c}Describe a safe way to make the ball warmer and colder.
-\answerbox{2.0cm}
+\abox{8.x11c}{2.0cm}
 \pt{d}Predict what you would find, and give a reason using the reading.
-\answerbox{2.0cm}
+\abox{8.x11d}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -3694,11 +3843,11 @@ These questions go beyond the Year 7 standard. They ask you to interpret your gr
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Simple machine}} & \scaf{A device that makes a job easier by changing the size or direction of a force.} \\ \hline
-  & \textbf{Lever} & \\ \hline
-  & \textbf{Fulcrum} & \\ \hline
-  & \textbf{Effort} & \\ \hline
-  & \textbf{Load} & \\ \hline
-  & \textbf{Mechanical advantage} & \\ \hline
+  & \textbf{Lever} & \cell{9.v2} \\ \hline
+  & \textbf{Fulcrum} & \cell{9.v3} \\ \hline
+  & \textbf{Effort} & \cell{9.v4} \\ \hline
+  & \textbf{Load} & \cell{9.v5} \\ \hline
+  & \textbf{Mechanical advantage} & \cell{9.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3715,13 +3864,13 @@ The same principle drives the machine you will build towards in this unit. A tre
 \end{readingbox}
 
 \rcreset
-\rcq{What tools and materials did the pyramid builders have available to them?}{1.4cm}
-\rcq{Explain what is meant by ``trade distance for force''. Use the ramp as your example.}{2.0cm}
-\rcq{According to the passage, what do the pyramid builders' levers and a medieval trebuchet have in common?}{1.6cm}
-\rcq{About how many blocks are in the Great Pyramid, and how heavy are many of them?}{1.4cm}
-\rcq{Which sentence in the second paragraph tells you that a simple machine cannot give you extra energy?}{1.4cm}
-\rcq{In your own words, explain how the Egyptians and the medieval engineers used levers for \emph{different} purposes.}{1.8cm}
-\rcq{Name the two simple machines described in the passage, and give one other example of a lever you have used.}{1.6cm}
+\rcqk{9.c1}{What tools and materials did the pyramid builders have available to them?}{1.4cm}
+\rcqk{9.c2}{Explain what is meant by ``trade distance for force''. Use the ramp as your example.}{2.0cm}
+\rcqk{9.c3}{According to the passage, what do the pyramid builders' levers and a medieval trebuchet have in common?}{1.6cm}
+\rcqk{9.c4}{About how many blocks are in the Great Pyramid, and how heavy are many of them?}{1.4cm}
+\rcqk{9.c5}{Which sentence in the second paragraph tells you that a simple machine cannot give you extra energy?}{1.4cm}
+\rcqk{9.c6}{In your own words, explain how the Egyptians and the medieval engineers used levers for \emph{different} purposes.}{1.8cm}
+\rcqk{9.c7}{Name the two simple machines described in the passage, and give one other example of a lever you have used.}{1.6cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:9}
@@ -3772,7 +3921,7 @@ The heavier child sits \emph{closer} to the pivot.
 
 \begin{wedo}{Balancing a seesaw}
 A 200\,N child sits 3\,m from the pivot of a seesaw. Where must a 500\,N adult sit on the other side to balance it?
-\answerbox{2.8cm}
+\wbox{9.wd1}{2.8cm}
 \end{wedo}
 \newpage
 \subsection{Mechanical Advantage}\label{sub:9.3}
@@ -3794,9 +3943,9 @@ A lever has an effort arm of 2.0\,m and a load arm of 0.5\,m. Find its MA, and t
 \begin{wedo}{Mechanical advantage}
 A lever has an effort arm of 1.8\,m and a load arm of 0.6\,m.
 \pt{a}Find its mechanical advantage.
-\answerbox{1.6cm}
+\wbox{9.wd2a}{1.6cm}
 \pt{b}What load can a 150\,N effort lift?
-\answerbox{1.6cm}
+\wbox{9.wd2b}{1.6cm}
 \end{wedo}
 \newpage
 \subsection{The Three Classes of Lever}\label{sub:9.4}
@@ -3835,9 +3984,9 @@ A trebuchet has a short arm of 0.4\,m and a long arm of 2.0\,m. Find its MA, and
 \begin{wedo}{The trebuchet's mechanical advantage}
 A model trebuchet has a short arm of 0.4\,m and a long arm of 1.6\,m.
 \pt{a}Find its mechanical advantage.
-\answerbox{1.6cm}
+\wbox{9.wd3a}{1.6cm}
 \pt{b}How many times faster does the end of the long arm move than the counterweight?
-\answerbox{1.6cm}
+\wbox{9.wd3b}{1.6cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -3853,8 +4002,8 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{5.0cm}|Z{2.8cm}|W{4.6cm}|Z{2.8cm}|}
   \hd & \thead{Object} & \thead{Simple machine} & \thead{Object} & \thead{Simple machine} \\ \hline
   & A ramp up into a removal truck & \scaf{inclined plane} & A crowbar & \scaf{lever} \\ \hline
-  & An axe splitting wood & & The rope and wheel on a flagpole & \\ \hline
-  & The lid of a jam jar & & A doorknob & \\ \hline
+  & An axe splitting wood & \cell{9.t1-r2c2} & The rope and wheel on a flagpole & \cell{9.t1-r2c4} \\ \hline
+  & The lid of a jam jar & \cell{9.t1-r3c2} & A doorknob & \cell{9.t1-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3866,9 +4015,9 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{3.0cm}|W{3.9cm}|W{3.9cm}|W{3.9cm}|}
   \hd & \thead{Lever} & \thead{Fulcrum} & \thead{Effort} & \thead{Load} \\ \hline
   & Seesaw & \scaf{the pivot in the middle} & \scaf{child pushing down on one end} & \scaf{child on the other end} \\ \hline
-  & Wheelbarrow & & & \\ \hline
-  & Pair of scissors & & & \\ \hline
-  & Tweezers & & & \\ \hline
+  & Wheelbarrow & \cell{9.t2-r2c2} & \cell{9.t2-r2c3} & \cell{9.t2-r2c4} \\ \hline
+  & Pair of scissors & \cell{9.t2-r3c2} & \cell{9.t2-r3c3} & \cell{9.t2-r3c4} \\ \hline
+  & Tweezers & \cell{9.t2-r4c2} & \cell{9.t2-r4c3} & \cell{9.t2-r4c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -3880,54 +4029,54 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SW{5.2cm}|Z{2.3cm}|W{5.2cm}|Z{2.3cm}|}
   \hd & \thead{Lever} & \thead{Class} & \thead{Lever} & \thead{Class} \\ \hline
   & Seesaw & \scaf{1} & Wheelbarrow & \scaf{2} \\ \hline
-  & Crowbar lifting a rock & & Nutcracker & \\ \hline
-  & Tweezers & & Fishing rod & \\ \hline
+  & Crowbar lifting a rock & \cell{9.t3-r2c2} & Nutcracker & \cell{9.t3-r2c4} \\ \hline
+  & Tweezers & \cell{9.t3-r3c2} & Fishing rod & \cell{9.t3-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
-\taskpair{A lever has an effort arm of 1.5\,m and a load arm of 0.3\,m. Find its MA.}{2.4cm}
-         {A lever with an MA of 5 is used with an effort of 80\,N. What load can it lift?}{2.4cm}
+\taskpair{A lever has an effort arm of 1.5\,m and a load arm of 0.3\,m. Find its MA.}{\wbox{9.t4}{2.4cm}}
+         {A lever with an MA of 5 is used with an effort of 80\,N. What load can it lift?}{\wbox{9.t5}{2.4cm}}
 
-\taskpair{A 600\,N person sits 2\,m from the pivot of a seesaw. How far from the pivot must a 400\,N child sit to balance it?}{2.6cm}
-         {A crowbar has an MA of 8. What effort is needed to shift a 2400\,N rock?}{2.6cm}
+\taskpair{A 600\,N person sits 2\,m from the pivot of a seesaw. How far from the pivot must a 400\,N child sit to balance it?}{\wbox{9.t6}{2.6cm}}
+         {A crowbar has an MA of 8. What effort is needed to shift a 2400\,N rock?}{\wbox{9.t7}{2.6cm}}
 
 \needspace{10\baselineskip}
 \task A wheelbarrow carries a 400\,N load positioned 0.4\,m from the wheel. The handles are 1.2\,m from the wheel.
 \pt{a}Identify the lever class.
-\answerbox{2.0cm}
+\abox{9.t8a}{2.0cm}
 \pt{b}Calculate the mechanical advantage.
-\answerbox{2.0cm}
+\wbox{9.t8b}{2.0cm}
 \pt{c}Calculate the effort needed to lift the handles.
-\answerbox{2.0cm}
+\wbox{9.t8c}{2.0cm}
 
 \task Look at the trebuchet in Figure~\ref{fig:trebuchet-lever}. Identify the effort, the load and the fulcrum, and explain why it is a Class 1 lever.
-\answerbox{2.6cm}
+\abox{9.t9}{2.6cm}
 
 \needspace{10\baselineskip}
 \task A trebuchet has a long arm of 3.0\,m and a short arm of 0.5\,m.
 \pt{a}Calculate its mechanical advantage.
-\answerbox{2.0cm}
+\wbox{9.t10a}{2.0cm}
 \pt{b}The counterweight pushes with 500\,N. What force acts on the projectile?
-\answerbox{2.0cm}
+\wbox{9.t10b}{2.0cm}
 \pt{c}How many times faster does the end of the long arm move than the counterweight?
-\answerbox{2.0cm}
+\wbox{9.t10c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A door handle is always placed on the side of the door furthest from the hinges. Explain why, using the words \emph{fulcrum}, \emph{effort arm} and \emph{mechanical advantage}.
-\answerbox{2.6cm}
+\abox{9.t11}{2.6cm}
 
 \needspace{10\baselineskip}
 \task A student pushes down hard on a crowbar but cannot move a heavy rock. Suggest \textbf{two} changes to the way the crowbar is used that would help, and explain each one using mechanical advantage.
-\answerbox{2.8cm}
+\abox{9.t12}{2.8cm}
 
 \needspace{10\baselineskip}
 \task Two ramps lead up to the same 1\,m high stage. Ramp A is 2\,m long and Ramp B is 4\,m long.
 \pt{a}Which ramp needs less force to push a trolley up?
-\answerbox{2.0cm}
+\abox{9.t13a}{2.0cm}
 \pt{b}On which ramp must the trolley be pushed further?
-\answerbox{2.0cm}
+\abox{9.t13b}{2.0cm}
 \pt{c}Explain your answers using the idea of trading distance for force.
-\answerbox{2.0cm}
+\abox{9.t13c}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:9}
@@ -3939,53 +4088,53 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, de
 \needspace{10\baselineskip}
 \exttask A trebuchet has a short arm of 0.6\,m and a long arm of 3.0\,m.
 \pt{a}Calculate the mechanical advantage.
-\answerbox{2.0cm}
+\wbox{9.x14a}{2.0cm}
 \pt{b}The counterweight pushes with 600\,N. Calculate the force at the projectile end.
-\answerbox{2.0cm}
+\wbox{9.x14b}{2.0cm}
 \pt{c}Explain why a trebuchet is designed with an MA less than 1, rather than greater than 1.
-\answerbox{2.0cm}
+\abox{9.x14c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Two trebuchets have the same counterweight, dropping the same distance. Trebuchet A has arms of 0.5\,m and 2.0\,m; Trebuchet B has arms of 0.5\,m and 3.5\,m.
 \pt{a}Calculate the ratio long arm $\div$ short arm for each.
-\answerbox{2.0cm}
+\wbox{9.x15a}{2.0cm}
 \pt{b}Explain which will launch the projectile faster, referring to the distance the arm tip travels.
-\answerbox{2.0cm}
+\abox{9.x15b}{2.0cm}
 \pt{c}Suggest one practical limit on making the long arm even longer.
-\answerbox{2.0cm}
+\abox{9.x15c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Your forearm is a Class 3 lever with the elbow as the fulcrum. Your biceps muscle pulls 4\,cm from the elbow, and you hold a 20\,N dumbbell 32\,cm from the elbow.
 \pt{a}Calculate the mechanical advantage.
-\answerbox{2.0cm}
+\wbox{9.x16a}{2.0cm}
 \pt{b}Use the law of the lever to find the force the biceps must provide.
-\answerbox{2.0cm}
+\wbox{9.x16b}{2.0cm}
 \pt{c}Suggest why the body uses a lever with an MA less than 1 here.
-\answerbox{2.0cm}
+\abox{9.x16c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask On one side of a seesaw, a 300\,N child sits 1.5\,m from the pivot and a 200\,N child sits 1.0\,m from the pivot. Where must a 500\,N adult sit on the other side to balance it? Show your working.
-\answerbox{3.0cm}
+\wbox{9.x17}{3.0cm}
 
 \needspace{10\baselineskip}
 \exttask You need to lift a 1200\,N log with a 2.5\,m bar, but you can push with at most 300\,N.
 \pt{a}What mechanical advantage do you need?
-\answerbox{2.0cm}
+\abox{9.x18a}{2.0cm}
 \pt{b}Where should you place the fulcrum along the bar? Show your working.
-\answerbox{2.0cm}
+\wbox{9.x18b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 600\,N box must be loaded onto a truck 1\,m high. Lifting it straight up uses $600 \times 1 = 600$\,J of energy. Pushing it up a 3\,m ramp takes a steady push of 250\,N. The energy used is $\text{force} \times \text{distance moved}$.
 \pt{a}Calculate the energy used pushing the box up the ramp.
-\answerbox{2.0cm}
+\wbox{9.x19a}{2.0cm}
 \pt{b}Calculate the efficiency of the ramp.
-\answerbox{2.0cm}
+\wbox{9.x19b}{2.0cm}
 \pt{c}Where did the extra energy go?
-\answerbox{2.0cm}
+\abox{9.x19c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Ali says: \emph{``A lever with an MA of 4 gives you four times as much energy as you put in.''} Is Ali right? Explain, using the idea of trading distance for force.
-\answerbox{2.8cm}
+\abox{9.x20}{2.8cm}
 \end{yr8box}
 
 \newpage
@@ -4000,10 +4149,10 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, de
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Steelyard}} & \scaf{An old weighing machine: a lever with a sliding weight that balances the load.} \\ \hline
-  & \textbf{Pivot} & \\ \hline
-  & \textbf{Effort arm} & \\ \hline
-  & \textbf{Load arm} & \\ \hline
-  & \textbf{Balanced lever} & \\ \hline
+  & \textbf{Pivot} & \cell{10.v2} \\ \hline
+  & \textbf{Effort arm} & \cell{10.v3} \\ \hline
+  & \textbf{Load arm} & \cell{10.v4} \\ \hline
+  & \textbf{Balanced lever} & \cell{10.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4021,10 +4170,10 @@ In this experiment you will do what a steelyard does: balance a heavy load near 
 \end{readingbox}
 
 \rcreset
-\rcq{Describe how a market seller uses a steelyard to find the weight of some goods.}{1.5cm}
-\rcq{Explain how a small sliding weight can balance a much heavier load. Use the words \emph{pivot} and \emph{distance}.}{1.5cm}
-\rcq{The sliding weight sits ten times further from the pivot than the goods. How heavy can the goods be, compared with the sliding weight?}{1.4cm}
-\rcq{In this experiment, what will you balance, and what will you measure?}{1.4cm}
+\rcqk{10.c1}{Describe how a market seller uses a steelyard to find the weight of some goods.}{1.5cm}
+\rcqk{10.c2}{Explain how a small sliding weight can balance a much heavier load. Use the words \emph{pivot} and \emph{distance}.}{1.5cm}
+\rcqk{10.c3}{The sliding weight sits ten times further from the pivot than the goods. How heavy can the goods be, compared with the sliding weight?}{1.4cm}
+\rcqk{10.c4}{In this experiment, what will you balance, and what will you measure?}{1.4cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:10}
@@ -4063,11 +4212,11 @@ They agree. This is the law of the lever: $100 \times 20 = 50 \times 40 = 2000$ 
 \begin{wedo}{Mechanical advantage of a balanced lever}
 A 150\,g load stands 10\,cm from the fulcrum. A 50\,g effort balances it 30\,cm from the fulcrum.
 \pt{a}Find the MA from the arms.
-\answerbox{1.6cm}
+\wbox{10.wd1a}{1.6cm}
 \pt{b}Find the MA from the forces.
-\answerbox{1.6cm}
+\wbox{10.wd1b}{1.6cm}
 \pt{c}Show that the law of the lever works for this lever.
-\answerbox{1.6cm}
+\wbox{10.wd1c}{1.6cm}
 \end{wedo}
 
 \subsection{Making it a Fair Test}\label{sub:10.3}
@@ -4077,7 +4226,7 @@ You will change the \textbf{effort mass} (50, 100, 150 and 200\,g) and measure t
 \needspace{9\baselineskip}
 \begin{scaffold}{Prediction --- before you begin}
 As the effort mass increases from 50\,g to 200\,g, will the effort arm get longer or shorter? What will happen to the MA? Give a reason.
-\answerbox{2cm}
+\abox{10.pred}{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
@@ -4099,17 +4248,17 @@ Keep the masses low on the bench and hold the stick while you add or move a mass
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Results and analysis}{Amber}\label{prac:10}
 
-\subsubsection*{Results}
+\subsubsection*{Results}\anslabelset{Results}
 \textit{Load: 100\,g \qquad Load arm: 20\,cm}
 
 \begin{ctab}
 \begin{tabular}{|SZ{1.9cm}|Z{1.5cm}|Z{1.5cm}|Z{1.5cm}|Z{2.2cm}|Z{2.5cm}|Z{2.5cm}|}
   \hd & \thead{Effort mass (g)} & \thead{Effort arm, trial 1 (cm)} & \thead{Effort arm, trial 2 (cm)} & \thead{Effort arm, trial 3 (cm)} & \thead{Mean effort arm (cm)} & \thead{MA = effort arm $\div$ load arm} & \thead{MA = load $\div$ effort} \\ \hline
   & \scaf{e.g.\ 50} & \scaf{39} & \scaf{41} & \scaf{40} & \scaf{40} & \scaf{$40 \div 20 = 2$} & \scaf{$100 \div 50 = 2$} \\ \hline
-  & 50  & & & & & & \\ \hline
-  & 100 & & & & & & \\ \hline
-  & 150 & & & & & & \\ \hline
-  & 200 & & & & & & \\ \hline
+  & 50  & \cell{10.res-r2c2} & \cell{10.res-r2c3} & \cell{10.res-r2c4} & \cell{10.res-r2c5} & \cell{10.res-r2c6} & \cell{10.res-r2c7} \\ \hline
+  & 100 & \cell{10.res-r3c2} & \cell{10.res-r3c3} & \cell{10.res-r3c4} & \cell{10.res-r3c5} & \cell{10.res-r3c6} & \cell{10.res-r3c7} \\ \hline
+  & 150 & \cell{10.res-r4c2} & \cell{10.res-r4c3} & \cell{10.res-r4c4} & \cell{10.res-r4c5} & \cell{10.res-r4c6} & \cell{10.res-r4c7} \\ \hline
+  & 200 & \cell{10.res-r5c2} & \cell{10.res-r5c3} & \cell{10.res-r5c4} & \cell{10.res-r5c5} & \cell{10.res-r5c6} & \cell{10.res-r5c7} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4120,30 +4269,28 @@ MA from the arms: \quad $40 \div 20 = \mathbf{2}$. \qquad MA from the forces: \q
 
 \needspace{10\baselineskip}
 \task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
-\answerbox{2.6cm}
+\abox{10.t1}{2.6cm}
 
 \needspace{10\baselineskip}
 \task What happened to the effort arm as the effort mass increased? What happened to the MA? Was your prediction correct?
-\answerbox{2.4cm}
+\abox{10.t2}{2.4cm}
 
 \needspace{10\baselineskip}
 \task Compare your two MA columns. Do they agree? Suggest one reason why they might not agree exactly.
-\answerbox{2.4cm}
+\abox{10.t3}{2.4cm}
 
-\taskpair{Another group balanced the 100\,g load (load arm 20\,cm) with an 80\,g effort. Use the law of the lever to predict their effort arm.}{2.4cm}
-         {A group's effort arms for 100\,g were 19, 21 and 27\,cm. Which value looks wrong? Find the mean of the other two.}{2.4cm}
+\taskpair{Another group balanced the 100\,g load (load arm 20\,cm) with an 80\,g effort. Use the law of the lever to predict their effort arm.}{\wbox{10.t4}{2.4cm}}
+         {A group's effort arms for 100\,g were 19, 21 and 27\,cm. Which value looks wrong? Find the mean of the other two.}{\wbox{10.t5}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task Use the law of the lever to explain \emph{why} a heavier effort mass balanced the load closer to the fulcrum.
-\answerbox{2.4cm}
+\abox{10.t6}{2.4cm}
 
 \needspace{20\baselineskip}
 \task Draw a line graph of your results. Put \textbf{effort mass (g)} on the horizontal axis and \textbf{mean effort arm (cm)} on the vertical axis. Plot each point, then draw a smooth curve of best fit --- it will not be a straight line. Give your graph a title.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.5cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
+\graphgrid{10.t7}{7.5cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:10}
@@ -4155,29 +4302,29 @@ These questions go beyond the Year 7 standard: interpret your graph, use the law
 \needspace{10\baselineskip}
 \exttask Your graph from Task~\ref{task:10.7} is a curve, not a straight line.
 \pt{a}For each row of your results, calculate effort mass $\times$ mean effort arm. What do you notice?
-\answerbox{2.0cm}
+\wbox{10.x8a}{2.0cm}
 \pt{b}Use the law of the lever to explain why this number should be the same every time, and what it should equal.
-\answerbox{2.0cm}
+\abox{10.x8b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask In this experiment the light effort sat on the long arm, so the MA was greater than 1. A trebuchet is a lever too.
 \pt{a}Describe how a trebuchet's effort and load are placed differently.
-\answerbox{2.0cm}
+\abox{10.x9a}{2.0cm}
 \pt{b}Explain why a trebuchet is built with an MA \emph{less} than 1.
-\answerbox{2.0cm}
+\abox{10.x9b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask The metre stick has its own weight, which acts at its centre --- the 50\,cm mark. Explain why the method keeps the fulcrum at the 50\,cm mark, and predict what would go wrong if the fulcrum were moved to the 30\,cm mark with nothing else changed.
-\answerbox{2.6cm}
+\abox{10.x10}{2.6cm}
 
 \needspace{12\baselineskip}
 \exttask Design a fair test to find out how the \emph{load arm} affects the effort needed to balance the 100\,g load. Use the same metre stick and masses.
 \pt{a}Name the independent and dependent variables.
-\answerbox{2.0cm}
+\abox{10.x11a}{2.0cm}
 \pt{b}Name two variables you would keep the same.
-\answerbox{2.0cm}
+\abox{10.x11b}{2.0cm}
 \pt{c}Predict what you would find, and give a reason using the law of the lever.
-\answerbox{2.0cm}
+\abox{10.x11c}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -4192,10 +4339,10 @@ These questions go beyond the Year 7 standard: interpret your graph, use the law
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Turning effect}} & \scaf{How strongly a force turns something about a pivot: force $\times$ distance from the pivot.} \\ \hline
-  & \textbf{Counterweight} & \\ \hline
-  & \textbf{Arc} & \\ \hline
-  & \textbf{Tip speed} & \\ \hline
-  & \textbf{Launch speed} & \\ \hline
+  & \textbf{Counterweight} & \cell{11.v2} \\ \hline
+  & \textbf{Arc} & \cell{11.v3} \\ \hline
+  & \textbf{Tip speed} & \cell{11.v4} \\ \hline
+  & \textbf{Launch speed} & \cell{11.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4216,14 +4363,14 @@ The castle's small garrison, only about thirty men, offered to surrender before 
 \end{readingbox}
 
 \rcreset
-\rcq{Who ordered Warwolf to be built, and where and when was it used?}{1.5cm}
-\rcq{Explain why a trebuchet is a Class 1 lever. Name its effort and its load.}{1.7cm}
-\rcq{The counterweight only drops a few metres. Explain why the tip of the long arm moves so much faster than the counterweight.}{1.9cm}
-\rcq{Where does the energy for the throw come from? Describe the energy transformation.}{1.7cm}
-\rcq{Which phrase in the third paragraph tells you that a lever cannot create energy?}{1.4cm}
-\rcq{Give two pieces of evidence from the passage that show how big Warwolf was.}{1.5cm}
-\rcq{Suggest why Edward refused to accept the surrender until Warwolf had been tested.}{1.7cm}
-\rcq{Suppose Warwolf's counterweight had been made heavier, with the arms kept the same. Using the passage, predict what would happen to the energy available and to the speed of the stone, and explain why.}{2.0cm}
+\rcqk{11.c1}{Who ordered Warwolf to be built, and where and when was it used?}{1.5cm}
+\rcqk{11.c2}{Explain why a trebuchet is a Class 1 lever. Name its effort and its load.}{1.7cm}
+\rcqk{11.c3}{The counterweight only drops a few metres. Explain why the tip of the long arm moves so much faster than the counterweight.}{1.9cm}
+\rcqk{11.c4}{Where does the energy for the throw come from? Describe the energy transformation.}{1.7cm}
+\rcqk{11.c5}{Which phrase in the third paragraph tells you that a lever cannot create energy?}{1.4cm}
+\rcqk{11.c6}{Give two pieces of evidence from the passage that show how big Warwolf was.}{1.5cm}
+\rcqk{11.c7}{Suggest why Edward refused to accept the surrender until Warwolf had been tested.}{1.7cm}
+\rcqk{11.c8}{Suppose Warwolf's counterweight had been made heavier, with the arms kept the same. Using the passage, predict what would happen to the energy available and to the speed of the stone, and explain why.}{2.0cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:11}
@@ -4250,7 +4397,7 @@ On one side of a seesaw, a 300\,N child sits 2.0\,m from the pivot and a 200\,N 
 \end{workedex}
 \begin{wedo}{Two children on one side}
 On one side of a seesaw, a 200\,N child sits 1.5\,m from the pivot and a 300\,N child sits 0.5\,m from the pivot. Where must a 450\,N adult sit on the other side to balance it?
-\answerbox{3.0cm}
+\wbox{11.wd1}{3.0cm}
 \end{wedo}
 \newpage
 \subsection{Arcs and Tip Speed}\label{sub:11.2}
@@ -4278,9 +4425,9 @@ A trebuchet's long arm is 2.0\,m long. During a launch it sweeps through 90$^\ci
 \begin{wedo}{Speed of the arm tip}
 A model trebuchet's long arm is 1.5\,m long. During a launch it sweeps through 90$^\circ$ in 0.3\,s. Use $\pi = 3.14$.
 \pt{a}Find the arc travelled by the tip.
-\answerbox{1.8cm}
+\wbox{11.wd2a}{1.8cm}
 \pt{b}Find the tip's average speed.
-\answerbox{1.6cm}
+\wbox{11.wd2b}{1.6cm}
 \end{wedo}
 
 \begin{workedex}{Speed of the counterweight end}
@@ -4294,7 +4441,7 @@ The same trebuchet has a short arm of 0.4\,m. How fast does the counterweight en
 
 \begin{wedo}{Speed of the counterweight end}
 The same model trebuchet has a short arm of 0.5\,m, and its tip moves at about 7.9\,m/s. How fast does the counterweight end of the arm move?
-\answerbox{2.4cm}
+\wbox{11.wd3}{2.4cm}
 \end{wedo}
 
 \subsection{Energy Sets the Limit}\label{sub:11.3}
@@ -4320,9 +4467,9 @@ A 20\,kg counterweight falls 0.8\,m. The trebuchet is 25\% efficient and the sto
 \begin{wedo}{Launch speed from energy}
 An 8\,kg counterweight falls 1.0\,m. The trebuchet is 25\% efficient and the stone has a mass of 0.2\,kg. Use $g = 9.8$\,N/kg.
 \pt{a}Find the GPE the counterweight gives up.
-\answerbox{1.6cm}
+\wbox{11.wd4a}{1.6cm}
 \pt{b}Find the kinetic energy of the stone and its launch velocity.
-\answerbox{1.6cm}
+\wbox{11.wd4b}{1.6cm}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -4330,19 +4477,19 @@ An 8\,kg counterweight falls 1.0\,m. The trebuchet is 25\% efficient and the sto
 
 Every question in this lesson goes beyond the Year 7 standard. Use $g = 9.8$\,N/kg and $\pi \approx 3.14$. Show your working, and always include the unit.
 
-\taskpair{A 40\,N force pushes on a door 0.5\,m from its hinges. Find its turning effect.}{2.4cm}
-         {Which has the bigger turning effect: 60\,N acting 0.4\,m from a pivot, or 30\,N acting 0.9\,m from it? Show your working.}{2.4cm}
+\taskpair{A 40\,N force pushes on a door 0.5\,m from its hinges. Find its turning effect.}{\wbox{11.t1}{2.4cm}}
+         {Which has the bigger turning effect: 60\,N acting 0.4\,m from a pivot, or 30\,N acting 0.9\,m from it? Show your working.}{\wbox{11.t2}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A mechanic pushes on a spanner with 50\,N, 0.25\,m from the nut.
 \pt{a}Find the turning effect.
-\answerbox{2.0cm}
+\wbox{11.t3a}{2.0cm}
 \pt{b}What force would give the same turning effect if she pushed only 0.10\,m from the nut?
-\answerbox{2.0cm}
+\wbox{11.t3b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task On one side of a seesaw, a 250\,N child sits 1.6\,m from the pivot and a 150\,N child sits 1.0\,m from the pivot. Where must a 500\,N adult sit on the other side to balance it?
-\answerbox{2.8cm}
+\wbox{11.t4}{2.8cm}
 
 \needspace{12\baselineskip}
 \task Complete the table. Use arc length $= \tfrac{\text{angle}}{360} \times 2 \times \pi \times r$.
@@ -4352,41 +4499,41 @@ Every question in this lesson goes beyond the Year 7 standard. Use $g = 9.8$\,N/
 \begin{tabular}{|SZ{3.4cm}|Z{3.4cm}|Z{6.4cm}|}
   \hd & \thead{Angle turned} & \thead{Distance from pivot $r$ (m)} & \thead{Arc length (m)} \\ \hline
   & 90$^\circ$  & 2.0 & \scaf{$\tfrac{90}{360} \times 2 \times 3.14 \times 2.0 = 3.14$} \\ \hline
-  & 90$^\circ$  & 1.0 & \\ \hline
-  & 180$^\circ$ & 2.0 & \\ \hline
-  & 60$^\circ$  & 1.2 & \\ \hline
+  & 90$^\circ$  & 1.0 & \cell{11.t5-r2c3} \\ \hline
+  & 180$^\circ$ & 2.0 & \cell{11.t5-r3c3} \\ \hline
+  & 60$^\circ$  & 1.2 & \cell{11.t5-r4c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
-\taskpair{The tip of a trebuchet arm sweeps along a 4.8\,m arc in 0.3\,s. Find its average speed.}{2.4cm}
-         {A trebuchet has a long arm of 3.0\,m and a short arm of 0.6\,m. The counterweight end moves at 3\,m/s. How fast does the tip move?}{2.4cm}
+\taskpair{The tip of a trebuchet arm sweeps along a 4.8\,m arc in 0.3\,s. Find its average speed.}{\wbox{11.t6}{2.4cm}}
+         {A trebuchet has a long arm of 3.0\,m and a short arm of 0.6\,m. The counterweight end moves at 3\,m/s. How fast does the tip move?}{\wbox{11.t7}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task Two trebuchets both have a short arm of 0.5\,m. Trebuchet A has a long arm of 2.0\,m; trebuchet B has a long arm of 3.0\,m. In both, the counterweight end moves at 2.4\,m/s.
 \pt{a}Find the tip speed of each trebuchet.
-\answerbox{2.0cm}
+\wbox{11.t8a}{2.0cm}
 \pt{b}Which one launches its stone faster, and why?
-\answerbox{2.0cm}
+\abox{11.t8b}{2.0cm}
 
-\taskpair{A 15\,kg counterweight falls 1.0\,m. Find the GPE it gives up.}{2.4cm}
-         {A 0.1\,kg stone leaves a trebuchet at 18\,m/s. Find its kinetic energy.}{2.4cm}
+\taskpair{A 15\,kg counterweight falls 1.0\,m. Find the GPE it gives up.}{\wbox{11.t9}{2.4cm}}
+         {A 0.1\,kg stone leaves a trebuchet at 18\,m/s. Find its kinetic energy.}{\wbox{11.t10}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A counterweight gives up 150\,J of GPE, and the stone gains 45\,J of kinetic energy. Find the efficiency of the trebuchet, and name two places the rest of the energy went.
-\answerbox{2.8cm}
+\wbox{11.t11}{2.8cm}
 
 \needspace{10\baselineskip}
 \task A 12\,kg counterweight falls 1.5\,m. The trebuchet is 25\% efficient, and the stone has a mass of 0.15\,kg.
 \pt{a}Find the GPE the counterweight gives up.
-\answerbox{2.0cm}
+\wbox{11.t12a}{2.0cm}
 \pt{b}Find the KE given to the stone.
-\answerbox{2.0cm}
+\wbox{11.t12b}{2.0cm}
 \pt{c}Find the stone's launch speed.
-\answerbox{2.0cm}
+\wbox{11.t12c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task Explain, in your own words, why making the long arm longer makes the tip move faster, but cannot make the stone go faster and faster without any limit.
-\answerbox{2.8cm}
+\abox{11.t13}{2.8cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Challenge}{Violet}\label{ext:11}
@@ -4397,46 +4544,46 @@ The hardest questions in this extension lesson. They ask you to check a claim, c
 \medskip
 \needspace{10\baselineskip}
 \exttask Sam says his model trebuchet, with a 2\,kg counterweight that falls 0.5\,m, launched a 0.05\,kg ball at 25\,m/s. Use energy to decide whether this is possible. Show your working.
-\answerbox{3.0cm}
+\wbox{11.x14}{3.0cm}
 
 \needspace{10\baselineskip}
 \exttask A trebuchet has a short arm of 0.4\,m. The builders want the tip to move 6 times as fast as the counterweight end.
 \pt{a}How long must the long arm be?
-\answerbox{2.0cm}
+\wbox{11.x15a}{2.0cm}
 \pt{b}Suggest one practical problem with making the long arm very long.
-\answerbox{2.0cm}
+\abox{11.x15b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Before launch, a trebuchet arm is held level. A 30\,kg counterweight hangs 0.5\,m from the pivot on the short side. The arm's own weight, 100\,N, acts 0.6\,m from the pivot on the long side. A trigger rope pulls straight down on the end of the long arm, 2.5\,m from the pivot. Find the force in the trigger rope.
-\answerbox{3.4cm}
+\wbox{11.x16}{3.4cm}
 
 \needspace{10\baselineskip}
 \exttask During a launch, a trebuchet arm turns through 120$^\circ$ in 0.4\,s. Its long arm is 2.4\,m and its short arm is 0.6\,m.
 \pt{a}Find the arc travelled by the tip, and its average speed.
-\answerbox{2.0cm}
+\wbox{11.x17a}{2.0cm}
 \pt{b}Find the average speed of the counterweight end.
-\answerbox{2.0cm}
+\wbox{11.x17b}{2.0cm}
 \pt{c}Check that your two speeds are in the same ratio as the arm lengths.
-\answerbox{2.0cm}
+\wbox{11.x17c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A 25\,kg counterweight falls 1.2\,m, and launches a 0.2\,kg stone at 15\,m/s.
 \pt{a}Calculate the efficiency of this trebuchet.
-\answerbox{2.0cm}
+\wbox{11.x18a}{2.0cm}
 \pt{b}Most of the energy did not reach the stone. Suggest where it went --- think about what is still moving when the stone leaves the sling.
-\answerbox{2.0cm}
+\abox{11.x18b}{2.0cm}
 
 \needspace{18\baselineskip}
 \exttask A counterweight gives up 200\,J. The stone gets 60\,J, the counterweight and arm are still moving with 90\,J, and 50\,J becomes thermal energy and sound. Draw a Sankey diagram using a scale of \textbf{1\,cm = 20\,J}. Label each arrow with its energy.
 
 \vspace{3pt}
-\drawbox{4.6cm}{
+\drawk{11.x19}{4.6cm}{
 \textit{\color{MidGrey}Draw your Sankey diagram here: energy in on the left, the useful energy straight on, the other energy turning down.}
 }
 
 \needspace{10\baselineskip}
 \exttask Real trebuchets fling the stone from a sling that hangs from the end of the long arm. Use the idea of arcs and tip speed to explain how the sling helps the stone leave faster.
-\answerbox{3.0cm}
+\abox{11.x20}{3.0cm}
 \end{yr8box}
 
 \newpage
@@ -4451,11 +4598,11 @@ The hardest questions in this extension lesson. They ask you to check a claim, c
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Projectile}} & \scaf{An object that is thrown or launched and then moves under gravity alone.} \\ \hline
-  & \textbf{Trajectory} & \\ \hline
-  & \textbf{Horizontal} & \\ \hline
-  & \textbf{Vertical} & \\ \hline
-  & \textbf{Independent motions} & \\ \hline
-  & \textbf{Time of flight} & \\ \hline
+  & \textbf{Trajectory} & \cell{12.v2} \\ \hline
+  & \textbf{Horizontal} & \cell{12.v3} \\ \hline
+  & \textbf{Vertical} & \cell{12.v4} \\ \hline
+  & \textbf{Independent motions} & \cell{12.v5} \\ \hline
+  & \textbf{Time of flight} & \cell{12.v6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4474,13 +4621,13 @@ That is why a launched ball and a dropped ball speed up downwards at exactly the
 \end{readingbox}
 
 \rcreset
-\rcq{Describe the path Tartaglia thought a cannonball followed.}{1.5cm}
-\rcq{Galileo said a projectile does ``two things at once''. Describe each motion.}{1.8cm}
-\rcq{According to the passage, why does a projectile's sideways speed stay the same?}{1.5cm}
-\rcq{What is the name of the curved path that Galileo described?}{1.2cm}
-\rcq{Explain why a ball launched sideways and a ball dropped from the same height land at the same time.}{1.9cm}
-\rcq{Which phrase in the second paragraph tells you that the sideways motion and the downwards motion are independent?}{1.4cm}
-\rcq{How does the passage show that scientific ideas can change? Give the old idea and the new one.}{1.8cm}
+\rcqk{12.c1}{Describe the path Tartaglia thought a cannonball followed.}{1.5cm}
+\rcqk{12.c2}{Galileo said a projectile does ``two things at once''. Describe each motion.}{1.8cm}
+\rcqk{12.c3}{According to the passage, why does a projectile's sideways speed stay the same?}{1.5cm}
+\rcqk{12.c4}{What is the name of the curved path that Galileo described?}{1.2cm}
+\rcqk{12.c5}{Explain why a ball launched sideways and a ball dropped from the same height land at the same time.}{1.9cm}
+\rcqk{12.c6}{Which phrase in the second paragraph tells you that the sideways motion and the downwards motion are independent?}{1.4cm}
+\rcqk{12.c7}{How does the passage show that scientific ideas can change? Give the old idea and the new one.}{1.8cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:12}
@@ -4538,7 +4685,7 @@ A ball rolls off a table 1.25\,m high. How long does it take to land?
 
 \begin{wedo}{Time of flight}
 A ball rolls off a table 0.60\,m high. Use $t = \sqrt{2h \div 9.8}$ to find how long it takes to land.
-\answerbox{2.8cm}
+\wbox{12.wd1}{2.8cm}
 \end{wedo}
 
 \subsection{How Far Does It Go?}\label{sub:12.4}
@@ -4554,7 +4701,7 @@ $R = v \times t = 3.0 \times 0.51 \approx \mathbf{1.5\ \text{m}}$
 
 \begin{wedo}{Range}
 A ball rolls off a table 0.60\,m high at 2.5\,m/s, and is in the air for 0.35\,s. How far from the table does it land?
-\answerbox{2.4cm}
+\wbox{12.wd2}{2.4cm}
 \end{wedo}
 
 \subsection{Measuring $g$}\label{sub:12.5}
@@ -4585,8 +4732,7 @@ Use the graph in Figure~\ref{fig:velocity-time} to find the ball's acceleration.
 
 \begin{wedo}{Finding $g$ from a velocity--time graph}
 A motion sensor's graph for a falling tennis ball shows a starting velocity of 0.2\,m/s and a final velocity of 3.1\,m/s. The fall took 0.30\,s.
-\ptpair{a}{Find the change in speed.}{1.8cm}
-       {b}{Find the acceleration.}{1.8cm}
+\ptpair{a}{Find the change in speed.}{\wbox{12.wd3a}{1.8cm}}{b}{Find the acceleration.}{\wbox{12.wd3b}{1.8cm}}
 \end{wedo}
 
 % ─── PART C ───────────────────────────────────────────────────────────────────
@@ -4602,8 +4748,8 @@ Work through every task. Use $g = 9.8$\,m/s$^2$ and ignore air resistance. Show 
 \begin{tabular}{|SW{5.4cm}|Z{2.0cm}|W{5.4cm}|Z{2.0cm}|}
   \hd & \thead{Object} & \thead{Projectile?} & \thead{Object} & \thead{Projectile?} \\ \hline
   & A basketball after it leaves the player's hands & \scaf{YES} & A rocket with its engine on & \scaf{NO} \\ \hline
-  & A stone flying from a trebuchet & & A car driving along a road & \\ \hline
-  & Water arcing from a drinking fountain & & A ball rolling off the edge of a table & \\ \hline
+  & A stone flying from a trebuchet & \cell{12.t1-r2c2} & A car driving along a road & \cell{12.t1-r2c4} \\ \hline
+  & Water arcing from a drinking fountain & \cell{12.t1-r3c2} & A ball rolling off the edge of a table & \cell{12.t1-r3c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4614,48 +4760,48 @@ Work through every task. Use $g = 9.8$\,m/s$^2$ and ignore air resistance. Show 
 \begin{ctab}
 \begin{tabular}{|SW{4.4cm}|W{5.2cm}|W{5.2cm}|}
   \hd & \thead{} & \thead{Sideways motion} & \thead{Downwards motion} \\ \hline
-  & What force acts? & \scaf{none (ignoring air)} & \\ \hline
-  & What happens to the speed? & & \\ \hline
+  & What force acts? & \scaf{none (ignoring air)} & \cell{12.t2-r1c3} \\ \hline
+  & What happens to the speed? & \cell{12.t2-r2c2} & \cell{12.t2-r2c3} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task One ball is dropped, and an identical ball is launched sideways from the same height at the same moment. The dropped ball lands after 0.6\,s. When does the launched ball land? Explain.
-\answerbox{2.4cm}
+\abox{12.t3}{2.4cm}
 
-\taskpair{A ball rolls off a table 0.80\,m high. Find its time of flight.}{2.4cm}
-         {A ball rolls off a ledge 2.0\,m high. Find its time of flight.}{2.4cm}
+\taskpair{A ball rolls off a table 0.80\,m high. Find its time of flight.}{\wbox{12.t4}{2.4cm}}
+         {A ball rolls off a ledge 2.0\,m high. Find its time of flight.}{\wbox{12.t5}{2.4cm}}
 
-\taskpair{A ball is launched sideways at 4.0\,m/s and is in the air for 0.50\,s. How far does it travel sideways?}{2.4cm}
-         {A ball launched sideways lands 2.4\,m away after 0.60\,s. Find its launch speed.}{2.4cm}
+\taskpair{A ball is launched sideways at 4.0\,m/s and is in the air for 0.50\,s. How far does it travel sideways?}{\wbox{12.t6}{2.4cm}}
+         {A ball launched sideways lands 2.4\,m away after 0.60\,s. Find its launch speed.}{\wbox{12.t7}{2.4cm}}
 
-\taskpair{A ball falls 2.0\,m in 0.64\,s. Calculate $g$.}{2.4cm}
-         {A motion sensor shows a falling ball speed up from 1.0\,m/s to 4.0\,m/s in 0.31\,s. Find its acceleration.}{2.4cm}
+\taskpair{A ball falls 2.0\,m in 0.64\,s. Calculate $g$.}{\wbox{12.t8}{2.4cm}}
+         {A motion sensor shows a falling ball speed up from 1.0\,m/s to 4.0\,m/s in 0.31\,s. Find its acceleration.}{\wbox{12.t9}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A marble rolls off a desk 0.45\,m high at 2.0\,m/s.
 \pt{a}Find its time of flight.
-\answerbox{2.0cm}
+\wbox{12.t10a}{2.0cm}
 \pt{b}Find how far from the desk it lands.
-\answerbox{2.0cm}
+\wbox{12.t10b}{2.0cm}
 
 \needspace{10\baselineskip}
 \task A group measures $g = 9.2$\,m/s$^2$. Calculate their percentage error, using
 \[ \% \text{ error} = \frac{|\text{measured } g - 9.8|}{9.8} \times 100\% \]
-\answerbox{2.6cm}
+\wbox{12.t11}{2.6cm}
 
 \needspace{10\baselineskip}
 \task Two marbles roll off the same desk at the same moment, one at 1\,m/s and one at 3\,m/s.
 \pt{a}Which one lands first?
-\answerbox{2.0cm}
+\abox{12.t12a}{2.0cm}
 \pt{b}Which one lands further from the desk?
-\answerbox{2.0cm}
+\abox{12.t12b}{2.0cm}
 \pt{c}Explain both answers using the idea of two independent motions.
-\answerbox{2.0cm}
+\abox{12.t12c}{2.0cm}
 
 \needspace{10\baselineskip}
 \task Priya says: \emph{``The faster I roll a ball off the table, the longer it stays in the air.''} Is Priya right? Explain.
-\answerbox{2.6cm}
+\abox{12.t13}{2.6cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:12}
@@ -4667,47 +4813,47 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 \needspace{10\baselineskip}
 \exttask On the Moon, $g = 1.6$\,m/s$^2$. A ball rolls off a 1.25\,m ledge at 2.0\,m/s.
 \pt{a}Find its time of flight and how far it travels sideways.
-\answerbox{2.0cm}
+\wbox{12.x14a}{2.0cm}
 \pt{b}Compare your answers with the same roll on Earth ($t = 0.51$\,s). Explain the difference.
-\answerbox{2.0cm}
+\abox{12.x14b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Ball A rolls off a 0.45\,m step and ball B rolls off a 1.80\,m wall.
 \pt{a}Find the time of flight of each ball.
-\answerbox{2.0cm}
+\wbox{12.x15a}{2.0cm}
 \pt{b}B fell four times as far as A. How many times as long did it take? Use $h = \tfrac{1}{2}gt^2$ to explain why.
-\answerbox{2.0cm}
+\wbox{12.x15b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A ball rolls off a bench and takes 0.45\,s to land. Use $h = \tfrac{1}{2}gt^2$ to find the height of the bench.
-\answerbox{2.6cm}
+\wbox{12.x16}{2.6cm}
 
 \needspace{10\baselineskip}
 \exttask A ball machine fires tennis balls sideways from a height of 1.5\,m at 20\,m/s. Ignoring air resistance, how far do the balls travel before they land?
-\answerbox{2.8cm}
+\wbox{12.x17}{2.8cm}
 
 \needspace{10\baselineskip}
 \exttask A group rolls a ball off a 0.80\,m bench and measures a mean value of $g = 10.6$\,m/s$^2$.
 \pt{a}Calculate their percentage error.
-\answerbox{2.0cm}
+\wbox{12.x18a}{2.0cm}
 \pt{b}Suggest two sources of error in the method, and how each could be reduced.
-\answerbox{2.0cm}
+\abox{12.x18b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask On a velocity--time graph, the acceleration is the slope (steepness) of the line. A falling ball's line passes through the points (0.10\,s, 1.2\,m/s) and (0.40\,s, 4.1\,m/s).
 \pt{a}Find the slope of the line: the change in velocity divided by the change in time.
-\answerbox{2.0cm}
+\wbox{12.x19a}{2.0cm}
 \pt{b}Describe how the line would look for the same ball dropped on the Moon, where $g = 1.6$\,m/s$^2$.
-\answerbox{2.0cm}
+\abox{12.x19b}{2.0cm}
 
 \needspace{12\baselineskip}
 \exttask Galileo's idea says that sideways speed does not change how long a projectile takes to fall. Design a fair test, using a ramp, a table and a slow-motion video, to check this.
 \pt{a}Name the independent and dependent variables.
-\answerbox{2.0cm}
+\abox{12.x20a}{2.0cm}
 \pt{b}Name two variables you would keep the same.
-\answerbox{2.0cm}
+\abox{12.x20b}{2.0cm}
 \pt{c}Predict what you would find, and give a reason.
-\answerbox{2.0cm}
+\abox{12.x20c}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -4722,10 +4868,10 @@ These questions go beyond the Year 7 standard. They ask you to combine equations
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Motion sensor}} & \scaf{A device that sends out pulses of sound and times their echoes, to measure how far away an object is many times a second.} \\ \hline
-  & \textbf{Velocity} & \\ \hline
-  & \textbf{Accepted value} & \\ \hline
-  & \textbf{Percentage error} & \\ \hline
-  & \textbf{Anomaly} & \\ \hline
+  & \textbf{Velocity} & \cell{13.v2} \\ \hline
+  & \textbf{Accepted value} & \cell{13.v3} \\ \hline
+  & \textbf{Percentage error} & \cell{13.v4} \\ \hline
+  & \textbf{Anomaly} & \cell{13.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4743,10 +4889,10 @@ In this experiment you will drop three weights of different mass under a motion 
 \end{readingbox}
 
 \rcreset
-\rcq{Why is a ball dropped from head height hard to time with a stopwatch?}{1.4cm}
-\rcq{What did Aristotle teach about falling objects, and what did Galileo say instead?}{1.7cm}
-\rcq{What happened when David Scott dropped a hammer and a feather on the Moon? Why would the same test not work on Earth?}{1.7cm}
-\rcq{Explain how a motion sensor works out how far away an object is.}{1.5cm}
+\rcqk{13.c1}{Why is a ball dropped from head height hard to time with a stopwatch?}{1.4cm}
+\rcqk{13.c2}{What did Aristotle teach about falling objects, and what did Galileo say instead?}{1.7cm}
+\rcqk{13.c3}{What happened when David Scott dropped a hammer and a feather on the Moon? Why would the same test not work on Earth?}{1.7cm}
+\rcqk{13.c4}{Explain how a motion sensor works out how far away an object is.}{1.5cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Planning the experiment}{Blue}\label{theory:13}
@@ -4791,9 +4937,9 @@ The graph for a falling 100\,g weight shows a starting velocity of 0.2\,m/s, a f
 \begin{wedo}{Acceleration from a graph}
 Another drop shows a starting velocity of 0.1\,m/s, a final velocity of 4.5\,m/s and a time of fall of 0.45\,s.
 \pt{a}Find the change in speed.
-\answerbox{1.6cm}
+\wbox{13.wd1a}{1.6cm}
 \pt{b}Find the acceleration, to one decimal place.
-\answerbox{1.8cm}
+\wbox{13.wd1b}{1.8cm}
 \end{wedo}
 
 \subsection{How Close Did You Get?}\label{sub:13.3}
@@ -4815,9 +4961,9 @@ A group's mean value of $g$ is 9.2\,m/s$^2$. Find the percentage error.
 \begin{wedo}{Percentage error}
 Another group's mean value of $g$ is 10.3\,m/s$^2$.
 \pt{a}Find the difference from the accepted value of 9.8\,m/s$^2$.
-\answerbox{1.4cm}
+\wbox{13.wd2a}{1.4cm}
 \pt{b}Find the percentage error.
-\answerbox{1.6cm}
+\wbox{13.wd2b}{1.6cm}
 \end{wedo}
 
 \subsection{Making it a Fair Test}\label{sub:13.4}
@@ -4829,7 +4975,7 @@ Do \textbf{three trials} for each weight. A trial that is clearly different from
 \needspace{9\baselineskip}
 \begin{scaffold}{Prediction --- before you begin}
 Which weight will have the greatest acceleration: the 50\,g, the 100\,g or the 200\,g weight? Or will they all be about the same? Give a reason.
-\answerbox{2cm}
+\abox{13.pred}{2cm}
 \end{scaffold}
 
 \subsubsection*{Equipment}
@@ -4854,21 +5000,21 @@ Stand the base of the stand well onto the bench so it cannot tip over. The weigh
 % ─── PART C ───────────────────────────────────────────────────────────────────
 \lessonpart{C}{Results and analysis}{Amber}\label{prac:13}
 
-\subsubsection*{Results}
+\subsubsection*{Results}\anslabelset{Results}
 
 \begin{ctab}
 \begin{tabular}{|SZ{2.3cm}|Z{2.0cm}|Z{2.0cm}|Z{1.9cm}|Z{3.6cm}|Z{2.3cm}|}
   \hd & \thead{Weight, trial} & \thead{Starting velocity (m/s)} & \thead{Final velocity (m/s)} & \thead{Time of fall (s)} & \thead{Acceleration $=$ change in speed $\div$ time (m/s$^2$)} & \thead{Slope from the software (m/s$^2$)} \\ \hline
   & \scaf{e.g.\ 50\,g, 1} & \scaf{0.1} & \scaf{4.3} & \scaf{0.45} & \scaf{$(4.3 - 0.1) \div 0.45 = 9.3$} & \scaf{9.4} \\ \hline
-  & 50\,g, 1 & & & & & \\ \hline
-  & 50\,g, 2 & & & & & \\ \hline
-  & 50\,g, 3 & & & & & \\ \hline
-  & 100\,g, 1 & & & & & \\ \hline
-  & 100\,g, 2 & & & & & \\ \hline
-  & 100\,g, 3 & & & & & \\ \hline
-  & 200\,g, 1 & & & & & \\ \hline
-  & 200\,g, 2 & & & & & \\ \hline
-  & 200\,g, 3 & & & & & \\ \hline
+  & 50\,g, 1 & \cell{13.res-r2c2} & \cell{13.res-r2c3} & \cell{13.res-r2c4} & \cell{13.res-r2c5} & \cell{13.res-r2c6} \\ \hline
+  & 50\,g, 2 & \cell{13.res-r3c2} & \cell{13.res-r3c3} & \cell{13.res-r3c4} & \cell{13.res-r3c5} & \cell{13.res-r3c6} \\ \hline
+  & 50\,g, 3 & \cell{13.res-r4c2} & \cell{13.res-r4c3} & \cell{13.res-r4c4} & \cell{13.res-r4c5} & \cell{13.res-r4c6} \\ \hline
+  & 100\,g, 1 & \cell{13.res-r5c2} & \cell{13.res-r5c3} & \cell{13.res-r5c4} & \cell{13.res-r5c5} & \cell{13.res-r5c6} \\ \hline
+  & 100\,g, 2 & \cell{13.res-r6c2} & \cell{13.res-r6c3} & \cell{13.res-r6c4} & \cell{13.res-r6c5} & \cell{13.res-r6c6} \\ \hline
+  & 100\,g, 3 & \cell{13.res-r7c2} & \cell{13.res-r7c3} & \cell{13.res-r7c4} & \cell{13.res-r7c5} & \cell{13.res-r7c6} \\ \hline
+  & 200\,g, 1 & \cell{13.res-r8c2} & \cell{13.res-r8c3} & \cell{13.res-r8c4} & \cell{13.res-r8c5} & \cell{13.res-r8c6} \\ \hline
+  & 200\,g, 2 & \cell{13.res-r9c2} & \cell{13.res-r9c3} & \cell{13.res-r9c4} & \cell{13.res-r9c5} & \cell{13.res-r9c6} \\ \hline
+  & 200\,g, 3 & \cell{13.res-r10c2} & \cell{13.res-r10c3} & \cell{13.res-r10c4} & \cell{13.res-r10c5} & \cell{13.res-r10c6} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4876,50 +5022,50 @@ Stand the base of the stand well onto the bench so it cannot tip over. The weigh
 \begin{tabular}{|SZ{2.8cm}|Z{2.4cm}|Z{5.4cm}|Z{4.4cm}|}
   \hd & \thead{Weight} & \thead{Mass (kg)} & \thead{Mean acceleration (m/s$^2$), leaving out any anomalies} & \thead{Percentage error (\%)} \\ \hline
   & \scaf{e.g.\ 50\,g} & \scaf{0.05} & \scaf{$(9.3 + 9.5 + 9.4) \div 3 = 9.4$} & \scaf{$(9.8 - 9.4) \div 9.8 \times 100 \approx 4$} \\ \hline
-  & 50\,g & & & \\ \hline
-  & 100\,g & & & \\ \hline
-  & 200\,g & & & \\ \hline
+  & 50\,g & \cell{13.mean-r2c2} & \cell{13.mean-r2c3} & \cell{13.mean-r2c4} \\ \hline
+  & 100\,g & \cell{13.mean-r3c2} & \cell{13.mean-r3c3} & \cell{13.mean-r3c4} \\ \hline
+  & 200\,g & \cell{13.mean-r4c2} & \cell{13.mean-r4c3} & \cell{13.mean-r4c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task Identify the independent variable, the dependent variable, and two controlled variables in this experiment.
-\answerbox{2.4cm}
+\abox{13.t1}{2.4cm}
 
 \needspace{10\baselineskip}
 \task
 \pt{a}Look at your mean accelerations. Does the mass of a falling object change its acceleration? Use numbers from your results.
-\answerbox{2.2cm}
+\abox{13.t2a}{2.2cm}
 \pt{b}Was your prediction correct?
-\answerbox{1.6cm}
+\abox{13.t2b}{1.6cm}
 
 \needspace{10\baselineskip}
 \task
 \pt{a}For each trial, compare the acceleration you calculated with the slope from the software. Are they close?
-\answerbox{1.8cm}
+\abox{13.t3a}{1.8cm}
 \pt{b}Suggest one reason why the two values might be slightly different.
-\answerbox{1.8cm}
+\abox{13.t3b}{1.8cm}
 
 \needspace{10\baselineskip}
 \task
 \pt{a}Did any trial look like an anomaly? Say which, and suggest what might have gone wrong.
-\answerbox{2.0cm}
+\abox{13.t4a}{2.0cm}
 \pt{b}Why is it better to use the mean of three trials than a single trial?
-\answerbox{2.0cm}
+\abox{13.t4b}{2.0cm}
 
-\taskpair{A falling weight speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration.}{2.6cm}
-         {A group's mean acceleration was 9.5\,m/s$^2$. Calculate their percentage error.}{2.6cm}
+\taskpair{A falling weight speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration.}{\wbox{13.t5}{2.6cm}}
+         {A group's mean acceleration was 9.5\,m/s$^2$. Calculate their percentage error.}{\wbox{13.t6}{2.6cm}}
 
 \needspace{10\baselineskip}
 \task An apple and a bowling ball are dropped from the same height at the same moment. Which one lands first? Use your results to explain your answer.
-\answerbox{2.4cm}
+\abox{13.t7}{2.4cm}
 
 \needspace{10\baselineskip}
 \task Identify two sources of error in this experiment. For each one, suggest a change to the method that would reduce it.
 \pt{a}First source of error and how to reduce it:
-\answerbox{2.0cm}
+\abox{13.t8a}{2.0cm}
 \pt{b}Second source of error and how to reduce it:
-\answerbox{2.0cm}
+\abox{13.t8b}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:13}
@@ -4930,21 +5076,19 @@ These questions go beyond the Year 7 standard: judge the precision of the method
 \medskip
 \needspace{10\baselineskip}
 \exttask The motion sensor takes 50 readings every second.
-\ptpair{a}{How much time passes between one reading and the next?}{1.8cm}
-       {b}{A fall lasts about 0.45\,s. About how many readings does the sensor take during the fall?}{1.8cm}
+\ptpair{a}{How much time passes between one reading and the next?}{\wbox{13.x9a}{1.8cm}}{b}{A fall lasts about 0.45\,s. About how many readings does the sensor take during the fall?}{\wbox{13.x9b}{1.8cm}}
 \pt{c}Explain why a sensor that took only 5 readings a second would give a much less precise value of $g$.
-\answerbox{2.0cm}
+\abox{13.x9c}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Air resistance pushes up on a falling object. The 50\,g weight often has a slightly smaller acceleration than the 200\,g weight. Use the idea of net force to explain why. (Hint: the air resistance on each one is about the same size, but the pull of gravity on the 50\,g weight is much smaller.)
-\answerbox{2.8cm}
+\abox{13.x10}{2.8cm}
 
 \needspace{12\baselineskip}
 \exttask Design a fair test to find out whether the \emph{size} of a falling object changes its acceleration.
-\ptpair{a}{Name the independent and dependent variables.}{2.0cm}
-       {b}{Name two variables you would keep the same. One of them should be the variable you changed today.}{2.0cm}
+\ptpair{a}{Name the independent and dependent variables.}{\abox{13.x11a}{2.0cm}}{b}{Name two variables you would keep the same. One of them should be the variable you changed today.}{\abox{13.x11b}{2.0cm}}
 \pt{c}Predict what you would find, and give a reason.
-\answerbox{2.0cm}
+\abox{13.x11c}{2.0cm}
 \end{yr8box}
 
 \newpage
@@ -4959,10 +5103,10 @@ These questions go beyond the Year 7 standard: judge the precision of the method
 \begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
   \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
   & \scaf{\textbf{Launch angle}} & \scaf{The angle between the ground and the direction a projectile is launched in.} \\ \hline
-  & \textbf{Range} & \\ \hline
-  & \textbf{Maximum range} & \\ \hline
-  & \textbf{Complementary angles} & \\ \hline
-  & \textbf{Launch height} & \\ \hline
+  & \textbf{Range} & \cell{14.v2} \\ \hline
+  & \textbf{Maximum range} & \cell{14.v3} \\ \hline
+  & \textbf{Complementary angles} & \cell{14.v4} \\ \hline
+  & \textbf{Launch height} & \cell{14.v5} \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -4980,10 +5124,10 @@ Medieval engineers had to solve the same problem with trebuchets. The stone leav
 \end{readingbox}
 
 \rcreset
-\rcq{On flat ground with no air, what launch angle gives the longest range?}{1.2cm}
-\rcq{Explain why a launch that is too flat, or too steep, does not go as far.}{1.6cm}
-\rcq{Why do long jumpers take off at about 20$^\circ$ instead of 45$^\circ$?}{1.6cm}
-\rcq{Give two reasons why a real trebuchet is usually set to release below 45$^\circ$.}{1.6cm}
+\rcqk{14.c1}{On flat ground with no air, what launch angle gives the longest range?}{1.2cm}
+\rcqk{14.c2}{Explain why a launch that is too flat, or too steep, does not go as far.}{1.6cm}
+\rcqk{14.c3}{Why do long jumpers take off at about 20$^\circ$ instead of 45$^\circ$?}{1.6cm}
+\rcqk{14.c4}{Give two reasons why a real trebuchet is usually set to release below 45$^\circ$.}{1.6cm}
 
 % ─── PART B ───────────────────────────────────────────────────────────────────
 \lessonpart{B}{Theory and examples}{Blue}\label{theory:14}
@@ -5012,7 +5156,7 @@ A ball is launched at 20\,m/s. Find its maximum range on flat ground.
 
 \begin{wedo}{Maximum range}
 A ball is launched at 14\,m/s. Find its maximum range on flat ground.
-\answerbox{2.6cm}
+\wbox{14.wd1}{2.6cm}
 \end{wedo}
 
 \begin{workedex}{Complementary angles}
@@ -5027,9 +5171,9 @@ A ball launched at 25$^\circ$ lands 6.6\,m away. Which other launch angle, at th
 \begin{wedo}{Complementary angles}
 A ball launched at 35$^\circ$ lands 9.4\,m away.
 \pt{a}Which other launch angle, at the same speed, lands in the same place?
-\answerbox{1.4cm}
+\abox{14.wd2a}{1.4cm}
 \pt{b}Which of the two launches keeps the ball in the air longer? Explain.
-\answerbox{1.8cm}
+\abox{14.wd2b}{1.8cm}
 \end{wedo}
 
 \begin{workedex}{Using the range equation}
@@ -5044,9 +5188,9 @@ A ball is launched at 12\,m/s at 30$^\circ$. Find its range. Use $\sin 60^\circ 
 \begin{wedo}{Using the range equation}
 A ball is launched at 10\,m/s at 15$^\circ$. Use $\sin 30^\circ = 0.5$.
 \pt{a}Find $\sin(2\theta)$.
-\answerbox{1.4cm}
+\wbox{14.wd3a}{1.4cm}
 \pt{b}Find the range.
-\answerbox{1.8cm}
+\wbox{14.wd3b}{1.8cm}
 \end{wedo}
 
 \subsection{Real Launches}\label{sub:14.3}
@@ -5070,46 +5214,44 @@ Work through every task. Show your working for calculations, and always include 
 \begin{tabular}{|SZ{2.4cm}|Z{2.2cm}|Z{2.2cm}|Z{6.0cm}|}
   \hd & \thead{Launch angle $\theta$} & \thead{$2\theta$} & \thead{$\sin(2\theta)$} & \thead{Range $R$ (m)} \\ \hline
   & \scaf{15$^\circ$} & \scaf{30$^\circ$} & \scaf{0.50} & \scaf{$225 \times 0.50 \div 9.8 = 11.5$} \\ \hline
-  & 30$^\circ$ & 60$^\circ$ & 0.87 & \\ \hline
-  & 45$^\circ$ & 90$^\circ$ & 1.00 & \\ \hline
-  & 60$^\circ$ & 120$^\circ$ & 0.87 & \\ \hline
-  & 75$^\circ$ & 150$^\circ$ & 0.50 & \\ \hline
+  & 30$^\circ$ & 60$^\circ$ & 0.87 & \cell{14.t1-r2c4} \\ \hline
+  & 45$^\circ$ & 90$^\circ$ & 1.00 & \cell{14.t1-r3c4} \\ \hline
+  & 60$^\circ$ & 120$^\circ$ & 0.87 & \cell{14.t1-r4c4} \\ \hline
+  & 75$^\circ$ & 150$^\circ$ & 0.50 & \cell{14.t1-r5c4} \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{10\baselineskip}
 \task Look at the ranges you calculated for a launch speed of 15\,m/s: 30$^\circ$, 45$^\circ$, 60$^\circ$ and 75$^\circ$.
 \pt{a}Which angle gives the maximum range?
-\answerbox{1.4cm}
+\abox{14.t2a}{1.4cm}
 \pt{b}Which pairs of angles give the same range? What do the angles in each pair add up to?
-\answerbox{1.8cm}
+\abox{14.t2b}{1.8cm}
 
-\taskpair{A javelin is thrown at 25\,m/s. Find its maximum range on flat ground, ignoring air resistance.}{2.4cm}
-         {A ball's maximum range is 10.2\,m when launched at 10\,m/s. What angle was it launched at?}{2.4cm}
+\taskpair{A javelin is thrown at 25\,m/s. Find its maximum range on flat ground, ignoring air resistance.}{\wbox{14.t3}{2.4cm}}
+         {A ball's maximum range is 10.2\,m when launched at 10\,m/s. What angle was it launched at?}{\wbox{14.t4}{2.4cm}}
 
 \needspace{10\baselineskip}
 \task A ball is kicked at 20$^\circ$ and lands 13\,m away. At what other angle could it be kicked, at the same speed, to land in the same place? Which kick would be harder for a goalkeeper to catch before it lands, and why?
-\answerbox{2.6cm}
+\abox{14.t5}{2.6cm}
 
 \needspace{10\baselineskip}
 \task A ball is launched straight up, at 90$^\circ$. Explain why its range is zero, even though it is in the air for a long time.
-\answerbox{2.2cm}
+\abox{14.t6}{2.2cm}
 
 \needspace{10\baselineskip}
 \task A student says: \emph{``Doubling the launch speed doubles the range.''} Use $R_{\max} = v^2 \div g$ with $v = 10$\,m/s and $v = 20$\,m/s to test the claim. Is the student right?
-\answerbox{2.6cm}
+\wbox{14.t7}{2.6cm}
 
 \needspace{10\baselineskip}
 \task Explain why a long jumper takes off at about 20$^\circ$ rather than 45$^\circ$. Use the words \emph{launch angle} and \emph{speed}.
-\answerbox{2.4cm}
+\abox{14.t8}{2.4cm}
 
 \needspace{20\baselineskip}
 \task Draw a line graph of your results from Task~\ref{task:14.1}. Put \textbf{launch angle} on the horizontal axis (0 to 90$^\circ$) and \textbf{range (m)} on the vertical axis. Add the points (0$^\circ$, 0\,m) and (90$^\circ$, 0\,m), then draw a smooth curve. Give your graph a title.
 
 \vspace{3pt}
-\begin{tcolorbox}[enhanced, colback=white, colframe=MidGrey, boxrule=0.5pt, height=7.0cm,
-  underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
-\end{tcolorbox}
+\graphgrid{14.t9}{7.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
 \lessonpart{D}{Above level}{Violet}\label{ext:14}
@@ -5121,29 +5263,34 @@ These questions go beyond the Year 7 standard: they use the range equation, or a
 \needspace{10\baselineskip}
 \exttask Your graph from Task~\ref{task:14.9} is symmetrical about 45$^\circ$.
 \pt{a}Use the graph to estimate the range at 40$^\circ$ and at 50$^\circ$.
-\answerbox{1.8cm}
+\abox{14.x10a}{1.8cm}
 \pt{b}Explain why being a few degrees away from 45$^\circ$ makes only a small difference to the range.
-\answerbox{2.0cm}
+\abox{14.x10b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask A trebuchet releases a stone at 18\,m/s.
 \pt{a}Find the maximum range on flat ground, ignoring air resistance.
-\answerbox{1.8cm}
+\wbox{14.x11a}{1.8cm}
 \pt{b}The stone actually lands 26\,m away. Give two reasons why the real range is shorter.
-\answerbox{2.0cm}
+\abox{14.x11b}{2.0cm}
 
 \needspace{10\baselineskip}
 \exttask Two balls are launched at the same speed, one at 30$^\circ$ and one at 60$^\circ$. Both are launched from the top of a 2\,m wall onto the ground below. Predict which one lands further away now, and explain why.
-\answerbox{2.6cm}
+\abox{14.x12}{2.6cm}
 
 \needspace{12\baselineskip}
 \exttask Design a fair test, using a ramp launcher that can be set to different angles, to find the best launch angle for a ball launched from a table top.
 \pt{a}Name the independent and dependent variables.
-\answerbox{2.0cm}
+\abox{14.x13a}{2.0cm}
 \pt{b}Name two variables you would keep the same.
-\answerbox{2.0cm}
+\abox{14.x13b}{2.0cm}
 \pt{c}Predict the best angle, and give a reason.
-\answerbox{2.0cm}
+\abox{14.x13c}{2.0cm}
 \end{yr8box}
 
+\label{LastStudentPage}
+\ifteacher\ifdefined\teacherappendix
+  \clearpage
+  \teacherappendix
+\fi\fi
 \end{document}
