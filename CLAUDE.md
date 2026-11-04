@@ -578,6 +578,12 @@ Three components exist for index pages specifically:
   `year7-science/covers/` as 2:3 JPEGs, a 1024w copy plus a 480w copy
   for `srcset`. **Only link a cover for a unit that exists** — covers for
   unbuilt units wait in the folder, same rule as placeholder cards.
+  The one exception (Kodie's call, Nov 2026) is a **"Coming soon"** row:
+  `.cover-card.is-soon` is a `<div>`, never a link, with a `Soon`
+  `.dc-kind`, so the course's planned units show without a stub page
+  behind them. `.cover-blank` stands in for a cover whose art doesn't
+  exist yet (title set as type). When a unit goes live, move it up into
+  the main grid as an `<a>`.
 
 **A subject index carries its subject's theme class**, so the colour a
 student sees on the year-level card carries through to the unit. Every

@@ -180,6 +180,7 @@ body.course-page {
 .cover-card {
   display: flex; flex-direction: column; gap: 1.4vh;
   color: #fff; text-decoration: none;
+  container-type: inline-size;   /* .cover-blank sizes its type in cqw */
 }
 .cover-card img {
   display: block; width: 100%; height: auto; aspect-ratio: 2 / 3;
@@ -207,6 +208,37 @@ body.course-page {
   .cover-card img { transition: none; }
   .cover-card:hover img, .cover-card:focus-visible img { transform: none; }
 }
+
+/* A unit still being written: same cover, not a link. Use a <div>, never
+   an <a> to a stub page. .cover-blank stands in until the art exists —
+   the title set as type on paper, sized to the card (container units).
+   A cover is printed paper, so it stays cream in dark mode too. */
+.cover-card.is-soon img { filter: saturate(0.75); opacity: 0.9; }
+.cover-card.is-soon .dc-kind { border-style: dashed; }
+.cover-blank {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 1.5cqw;
+  aspect-ratio: 2 / 3; width: 100%;
+  padding: 8cqw 8cqw 0;
+  background: var(--wb-cover-paper, rgba(255,255,255,0.12));
+  border: 1px dashed var(--wb-cover-line, rgba(255,255,255,0.4));
+  border-radius: 3px 8px 8px 3px;
+  color: var(--wb-cover-ink, #fff);
+}
+.cover-blank::after {           /* one cover-palette disc, lower right */
+  content: ""; position: absolute;
+  width: 62cqw; height: 62cqw; right: -14cqw; bottom: -10cqw;
+  border-radius: 50%;
+  background: var(--wb-cover-shape, var(--accent-warm));
+  opacity: 0.6;
+}
+.cover-blank .cb-kicker { font-family: var(--font-display); font-size: 5cqw; }
+.cover-blank .cb-title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 10.5cqw; line-height: 1.05; letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.cover-blank .cb-sub { font-family: var(--font-display); font-size: 5.6cqw; }
 
 /* ---------- Secondary section on a course page ---------- */
 .course-page .section-head {
