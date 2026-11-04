@@ -24,7 +24,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | Subject | State | What's there |
 |---|---|---|
 | year7-science | **Built** | `bio-ecosystems` (11 decks, 11 worksheets + collated booklet & gated answer copy, quiz, gated solutions + rubric, booklet, research portfolio, bandicoot profile) · `space` (8 decks, quiz, booklet) |
-| year12-algorithmics | **Built** | `unit-4` (13 slide decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
+| year12-algorithmics | **Built** | `unit-4` (13 slide decks + 4 additional-topic decks, 9 marimo workbooks, hub, 7 problem sets, 7 revision PDFs, SAT brief, solutions) |
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
 | year11-methods | **Built, on debt** | `chapter-9` (7 decks), `chapter-11` (2 decks) — still inline styles |
@@ -39,8 +39,35 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-methods | Stub | — |
 | year12-foundation | Stub | — |
 
-Totals: 70 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
+Totals: 74 decks, 22 worksheets, 3 hubs, 2 quizzes, 1 profile page,
 8 gated pages.
+
+### Landed — Algorithmics U4 AOS 2 additional topics (4 Nov 2026)
+
+Four new topic decks in `year12-algorithmics/unit-4/slides/`, linked from the
+Week 9 card of the Unit 4 hub under an **Additional topics — AOS 2** legend
+(Kodie's call to put them there rather than in a section of their own):
+
+- `U4P01-astar.html` — \(f = g + h\), pseudocode, a traced 8-node instance
+  (A* expands 4 nodes, Dijkstra all 8), admissibility, an overestimating-h
+  counterexample; VCAA 2023 A Q8 (maze)
+- `U4P02-knapsack.html` — brute force, the subset search tree and
+  backtracking, three greedy rules that all miss the optimum, the DP table
+  with traceback, pseudo-polynomial; VCAA 2022 B Q7a–b (Rosa's instance)
+- `U4P03-tsp.html` — decision vs optimisation, \((n-1)!/2\) growth,
+  nearest neighbour on six towns (30 km) and one 2-opt move to the optimum
+  (27 km); VCAA 2022 A Q9, 2021 B Q8a, 2020 B Q12b
+- `U4P04-graph-colouring.html` — chromatic number, 2-colouring in P vs
+  \(k \ge 3\) NP-complete, the gym timetable model, greedy colouring and its
+  order dependence (3 vs 4 blocks on one graph), backtracking, annealing;
+  VCAA 2023 A Q20, B Q10b–d
+
+Named `U4P0n` ("additional topic n of 4") rather than U4T18+, so the T1–T17
+teaching sequence and its "Topic n of 17" title slides stay true. Every
+worked example (traces, DP table, tours, colourings) was generated from and
+asserted against code before the figures were drawn. No inline `style=` or
+hex outside SVG. Rendered in Chromium at 1600×900 and 1280×720 with every
+reveal open: no slide overflows.
 
 ### Landed — Space rubric Analysis tab (22 Oct 2026)
 
