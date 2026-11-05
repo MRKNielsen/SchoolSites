@@ -58,6 +58,10 @@ this repo has seen came from skipping one of these.
       ```bash
       pdftotext -layout booklet/*.pdf - | grep -o 'Q[0-9]*\.[0-9]* ([0-9]* marks\?)'
       ```
+- [ ] **Touched a booklet with a workbook contents page?**
+      `python3 tools/booklet_pages.py <unit>/index.html` — the "Turn
+      to page N" numbers are read from the booklet build, and go stale
+      silently otherwise (`--check` exits 1).
 - [ ] **Touched a worksheet?** Marks totals agree across `.namebar
       .marks-total`, the toolbar hint, and the index `.wl-marks`.
 - [ ] **Touched a gated page?** Round-trip through

@@ -12,8 +12,9 @@
    Needs the Outfit font in the page's Google Fonts link. All colours
    come from the body.workbook tokens in tokens.css, which also carry
    the charcoal dark-mode values — nothing here is light/dark specific.
-   Page types covered so far: course-page. Decks, booklets and
-   worksheets follow (see ROADMAP-DETAIL "Year 7 Science workbook
+   Page types covered so far: course-page, plus the book navigation
+   (shelf cover -> contents spread -> page flick) further down, which
+   needs assets/js/workbook.js. Decks, booklets and worksheets follow (see ROADMAP-DETAIL "Year 7 Science workbook
    redesign").
    ============================================================ */
 
@@ -82,3 +83,288 @@ body.course-page.workbook {
     0 22px 34px -14px rgba(var(--wb-shadow), 0.5);
 }
 .workbook .cover-card:focus-visible img { outline-color: var(--accent); }
+
+/* ============================================================
+   BOOK NAVIGATION (with assets/js/workbook.js)
+   Shelf cover -> opens into the unit's contents spread -> each
+   lesson is a booklet page captioned "Turn to page N" -> a short
+   page-flick into the deck. Printed things (covers, booklet pages)
+   stay cream paper in dark mode: they use the --wb-cover-* and
+   --wb-page-accent tokens, which do not change with the scheme.
+   ============================================================ */
+
+/* Cross-document View Transitions between workbook pages. Both pages
+   must link this file; anything else just loads normally. */
+@view-transition { navigation: auto; }
+::view-transition-group(book-cover) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 0.3s; }
+
+/* ---------- Unit hero: title beside its cover ---------- */
+.workbook .unit-hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2vh 4vw; align-items: start;
+}
+.workbook .unit-hero .hero-cover {
+  width: clamp(110px, 14vw, 190px); height: auto; aspect-ratio: 2 / 3;
+  border-radius: 3px 8px 8px 3px;
+  box-shadow:
+    inset 6px 0 8px -6px rgba(var(--wb-shadow), 0.18),
+    0 12px 24px -12px rgba(var(--wb-shadow), 0.45);
+  transform: rotate(2deg);
+}
+.workbook .acknowledgement {
+  background: var(--card); border-color: var(--line); color: var(--ink-soft);
+}
+.workbook .acknowledgement a { color: var(--accent); }
+.workbook .acknowledgement strong { color: var(--ink); }
+
+/* ---------- Resource tabs: bookmarks along the top of the book ---------- */
+.wb-tabs {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin: 3vh 0 4vh;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--accent);
+}
+.wb-tabs a {
+  display: inline-flex; align-items: center; gap: 0.45em;
+  padding: 0.5em 1em 0.45em;
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(0.82rem, 1.2vw, 0.95rem);
+  color: var(--ink); text-decoration: none;
+  background: var(--card);
+  border: 1px solid var(--line); border-radius: 8px;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.wb-tabs a:hover { border-color: var(--accent); transform: translateY(-2px); }
+.wb-tabs a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.wb-tabs .tab-staff { color: var(--ink-soft); border-style: dashed; }
+
+/* ---------- Lesson pages ---------- */
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(44%, 200px), 1fr));
+  gap: 3.5vh max(14px, 2vw);
+  align-items: start;
+}
+.lp-item {
+  display: flex; flex-direction: column; gap: 0.8vh;
+  container-type: inline-size;
+}
+.lesson-page {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 2.2cqw;
+  aspect-ratio: 148 / 210;              /* an A5 page */
+  padding: 9cqw 9cqw 17cqw;
+  background:
+    linear-gradient(90deg, rgba(var(--wb-shadow), 0.10), transparent 7%),
+    var(--wb-cover-paper);
+  color: var(--wb-cover-ink); text-decoration: none;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow:
+    0 1px 2px rgba(var(--wb-shadow), 0.18),
+    0 10px 20px -12px rgba(var(--wb-shadow), 0.45);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.lesson-page:hover,
+.lesson-page:focus-visible {
+  transform: translateY(-4px) rotate(-0.5deg);
+  box-shadow:
+    0 2px 4px rgba(var(--wb-shadow), 0.18),
+    0 20px 30px -14px rgba(var(--wb-shadow), 0.5);
+}
+.lesson-page:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+/* One cover-palette shape per page, cycling, so a row reads as a set. */
+.lesson-page::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  width: 46cqw; height: 46cqw; right: -10cqw; top: -10cqw;
+  border-radius: 50%;
+  background: var(--wb-cover-shape); opacity: 0.55;
+}
+.lp-item:nth-child(4n+2) .lesson-page::before {
+  background: var(--wb-page-accent); opacity: 0.18;
+  border-radius: 0 0 0 100%; right: 0; top: 0; width: 38cqw; height: 38cqw;
+}
+.lp-item:nth-child(4n+3) .lesson-page::before {
+  background: transparent; opacity: 0.5;
+  border: 3cqw solid var(--wb-page-accent); right: -8cqw; top: -6cqw;
+}
+.lp-item:nth-child(4n) .lesson-page::before {
+  border-radius: 0; opacity: 0.4;
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+.lesson-page > * { position: relative; z-index: 1; }
+
+.lp-num {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 24cqw; line-height: 0.9; letter-spacing: -0.03em;
+  color: var(--wb-page-accent);
+}
+.lp-title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: max(8.4cqw, 0.92rem); line-height: 1.12; text-wrap: balance;
+}
+.lp-desc {
+  font-size: max(5.6cqw, 0.74rem); line-height: 1.35;
+  color: color-mix(in srgb, var(--wb-cover-ink) 72%, transparent);
+  display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7; overflow: hidden;
+}
+.lp-quiz {
+  font-size: max(5cqw, 0.7rem); font-weight: 600;
+  color: color-mix(in srgb, var(--wb-cover-ink) 62%, transparent);
+}
+.lp-flag {
+  align-self: flex-start;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: max(4.6cqw, 0.62rem); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.3em 0.8em; border-radius: 100px;
+  border: 1px dashed var(--wb-page-accent); color: var(--wb-page-accent);
+}
+.lp-turn {
+  position: absolute; left: 9cqw; right: 9cqw; bottom: 6cqw;
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 2.5cqw;
+  border-top: 1px solid color-mix(in srgb, var(--wb-cover-ink) 25%, transparent);
+  font-family: var(--font-display); font-size: max(5.4cqw, 0.72rem);
+  color: color-mix(in srgb, var(--wb-cover-ink) 75%, transparent);
+}
+.lp-turn .bk-page {
+  font-weight: 700; font-size: 1.35em; color: var(--wb-page-accent);
+  font-variant-numeric: tabular-nums;
+}
+/* Above-level / optional pages read as extension at a glance. */
+.lp-item.is-ext .lesson-page {
+  outline: 1px dashed color-mix(in srgb, var(--wb-cover-ink) 35%, transparent);
+  outline-offset: -5cqw;
+}
+.workbook .lp-item .dc-wslink {
+  background: var(--card); border-color: var(--line); color: var(--ink);
+}
+.workbook .lp-item .dc-wslink:hover { border-color: var(--accent); }
+.workbook .dc-wslink .wl-marks { color: var(--ink-faint); }
+
+/* ---------- The cover opening (arrival from the shelf) ---------- */
+.book-opener { display: none; }
+.wb-opening .book-opener {
+  display: grid; place-items: center;
+  position: fixed; inset: 0; z-index: 60;
+  pointer-events: none; perspective: 1800px;
+}
+.wb-opening .book-opener::before {   /* blank paper the cover lifts off */
+  content: ""; position: absolute; inset: 0;
+  background-color: var(--paper); background-image: var(--wb-grain);
+  animation: wb-fade-out 0.55s ease 0.75s both;
+}
+/* .bo-frame carries the view-transition name and the perspective; the
+   leaf inside it does the 3D swing. They must be two elements: a
+   view-transition-name (like opacity) flattens 3D on its own element,
+   and the back face would then show through mirrored. */
+.bo-frame {
+  position: relative;
+  height: min(78vh, 115vw); aspect-ratio: 2 / 3;
+  perspective: 1800px;
+}
+.wb-opening .bo-frame {
+  view-transition-name: book-cover;
+  animation: wb-fade-out 0.25s ease 1.2s both;
+}
+.bo-leaf {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d; transform-origin: left center;
+}
+.wb-opening .bo-leaf {
+  animation: wb-swing 0.95s cubic-bezier(0.55, 0.05, 0.35, 1) 0.45s both;
+}
+.bo-leaf img, .bo-back {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  border-radius: 3px 8px 8px 3px; backface-visibility: hidden;
+}
+.bo-leaf img { box-shadow: 0 24px 50px -20px rgba(var(--wb-shadow), 0.6); }
+.bo-back {                            /* inside of the cover */
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(270deg, rgba(var(--wb-shadow), 0.18), transparent 12%),
+    var(--wb-cover-paper);
+}
+/* Belt and braces for engines that ignore backface-visibility:
+   the front hides and the inside shows at the half-way point. */
+.wb-opening .bo-leaf img { animation: wb-hide-at-half 0.95s linear 0.45s both; }
+.wb-opening .bo-back     { animation: wb-show-at-half 0.95s linear 0.45s both; }
+@keyframes wb-hide-at-half { 0%, 49.9% { visibility: visible; } 50%, 100% { visibility: hidden; } }
+@keyframes wb-show-at-half { 0%, 49.9% { visibility: hidden; } 50%, 100% { visibility: visible; } }
+@keyframes wb-swing {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(-172deg); }
+}
+@keyframes wb-fade-out { to { opacity: 0; } }
+@keyframes wb-fade-in  { from { opacity: 0; } }
+
+/* ---------- The page flick (contents -> lesson) ---------- */
+.wb-flip {
+  position: fixed; inset: 0; z-index: 70;
+  display: grid; place-items: center;
+  background: rgba(var(--wb-shadow), 0.42);
+  backdrop-filter: blur(3px);
+  perspective: 1600px;
+  animation: wb-fade-in 0.15s ease both;
+}
+.wf-book {
+  position: relative; display: flex;
+  width: min(86vw, 640px); aspect-ratio: 296 / 210;   /* an A5 spread */
+  transform-style: preserve-3d;
+  perspective: 2400px;          /* no filter/opacity here: they flatten 3D */
+}
+.wf-page {
+  flex: 1; position: relative; background: var(--wb-cover-paper);
+  box-shadow: 0 28px 36px -18px rgba(0, 0, 0, 0.55);
+}
+.wf-left  { border-radius: 6px 0 0 6px;
+  background: linear-gradient(270deg, rgba(var(--wb-shadow), 0.16), transparent 14%), var(--wb-cover-paper); }
+.wf-right { border-radius: 0 6px 6px 0;
+  background: linear-gradient(90deg, rgba(var(--wb-shadow), 0.16), transparent 14%), var(--wb-cover-paper); }
+.wf-turn {
+  position: absolute; right: 8%; bottom: 7%;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(1.1rem, 3vw, 1.8rem); color: var(--wb-page-accent);
+  animation: wb-fade-in 0.2s ease 0.45s both;
+}
+.wf-leaf {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 50%;
+  transform-origin: left center;
+  border-radius: 0 6px 6px 0;
+  background:
+    linear-gradient(90deg, rgba(var(--wb-shadow), 0.22), transparent 35%,
+                    transparent 85%, rgba(var(--wb-shadow), 0.18)),
+    var(--wb-cover-paper);
+  border: 1px solid rgba(var(--wb-shadow), 0.22); border-left: 0;
+  transform-style: preserve-3d;
+  animation: wb-leaf 0.4s cubic-bezier(0.45, 0.05, 0.4, 1)
+             calc(var(--i) * 75ms + 60ms) both;
+}
+/* The leaf darkens as it stands up, then lightens as it lies down —
+   that shading is what makes the turn read on flat cream paper. */
+@keyframes wb-leaf {
+  0%   { transform: rotateY(0deg);    box-shadow: 0 0 0 rgba(0,0,0,0); }
+  50%  { transform: rotateY(-90deg);  box-shadow: -10px 0 18px rgba(0,0,0,0.35);
+         filter: brightness(0.82); }
+  100% { transform: rotateY(-178deg); box-shadow: 0 0 0 rgba(0,0,0,0); }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 640px) {
+  .workbook .unit-hero { grid-template-columns: minmax(0, 1fr); }
+  .workbook .unit-hero .hero-cover { display: none; }
+}
+
+/* ---------- Reduced motion: no transitions, no opening, no flick ---------- */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .wb-opening .book-opener, .wb-flip { display: none; }
+  .lesson-page, .wb-tabs a { transition: none; }
+  .lesson-page:hover, .lesson-page:focus-visible, .wb-tabs a:hover { transform: none; }
+}

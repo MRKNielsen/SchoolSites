@@ -1624,7 +1624,15 @@ starting a new one.
             `assets/css/workbook.css` layer, course-page only so far;
             sitenav search box and kbd now mix with `--sn-panel` instead of
             white so the drawer works on charcoal — same result elsewhere)*
-      - [ ] 2. Space contents page + cover-open and page-flick transitions.
+      - [x] 2. Space contents page + cover-open and page-flick transitions.
+            *(done 2026-11-05: `space/index.html` is now a contents spread —
+            10 lesson pages by week with real booklet pages (2, 8, 11, 14,
+            20, 23, 28, 33, 38, 42) from `tools/booklet_pages.py`, resource
+            tabs, every former card kept under "Also in this unit";
+            `assets/js/workbook.js` for the opening and the flick)*
+      - [ ] Index covers for Ecosystems and Forces still open straight
+            into their old pages (no opener until step 7). That is
+            expected, not a bug.
       - [ ] 3. Space booklet rebuilt as A5 with the new look and box
             positions recorded — **test-print on the school copier in
             booklet mode before going further**.

@@ -159,6 +159,35 @@ covers course pages so far; decks, booklets and worksheets follow (see
 "Year 7 Science workbook redesign" in ROADMAP-DETAIL.md). Year 7 Science
 only until the look is proven.
 
+**Book navigation** (workbook pages only) is `assets/js/workbook.js`,
+loaded in `<head>` **without `defer`** so it can mark the page before
+first paint. Clicking a shelf cover glides it to the unit page (a
+cross-document View Transition, which `workbook.css` opts into) and the
+unit page's `.book-opener` swings it open; clicking a `.lesson-page`
+plays a ~0.7 s page flick, then follows the link. Reduced motion skips
+all of it; a direct visit, reload or Back never plays the opening.
+Two things that bite: the opener is **two elements** (`.bo-frame`
+carries `view-transition-name` and the perspective, `.bo-leaf` turns)
+because a view-transition name, like `opacity` or `filter`, flattens 3D
+on its own element and the cover then swings open mirrored; and nothing
+on `.wf-book` may carry a filter or opacity, for the same reason.
+Reference: `year7-science/space/index.html`.
+
+A unit's contents page (`section.contents`) lists each lesson as an
+A5-shaped `.lesson-page` in a `.page-grid`, captioned "Turn to page N".
+**N is never typed.** Each number is
+`<span class="bk-page" data-label="sec:2">8</span>`, the section's
+`data-booklet` names the booklet `.tex`, and
+
+```bash
+python3 tools/booklet_pages.py year7-science/space/index.html          # write
+python3 tools/booklet_pages.py year7-science/space/index.html --check  # exit 1 if stale
+```
+
+builds the booklet in a scratch folder, reads the labels from the
+`.aux` and rewrites the numbers (needs xelatex). Re-run it whenever the
+booklet changes — the A5 rebuild will move every page.
+
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
 `styleguide/deck-template.html`.
