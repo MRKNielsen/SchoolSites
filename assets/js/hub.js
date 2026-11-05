@@ -2,7 +2,9 @@
    hub.js — shared behaviour for course-hub pages
    - Highlights the current week: <div class="week" data-start="YYYY-MM-DD">
      inside #weeks; optional data-end="YYYY-MM-DD" on #weeks bounds the
-     last week (defaults to 7 days after its start).
+     last week (defaults to 7 days after its start). A week's own
+     data-end (the day after its last school day) wins over both, so a
+     term's last week stops being "current" when the holidays start.
    - Marks timeline milestones: .mile[data-date] gets .done when past,
      the first upcoming one gets .next.
    - Countdown: <span class="countdown" data-to="YYYY-MM-DD"> shows
@@ -16,7 +18,9 @@
   const weeks = weeksWrap ? Array.from(weeksWrap.querySelectorAll(".week[data-start]")) : [];
   weeks.forEach((w, i) => {
     const start = new Date(w.dataset.start + "T00:00:00");
-    const next = weeks[i + 1]
+    const next = w.dataset.end
+      ? new Date(w.dataset.end + "T00:00:00")
+      : weeks[i + 1]
       ? new Date(weeks[i + 1].dataset.start + "T00:00:00")
       : (weeksWrap.dataset.end
           ? new Date(weeksWrap.dataset.end + "T00:00:00")

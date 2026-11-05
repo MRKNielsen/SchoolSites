@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-04",
+ "generated": "2026-11-05",
  "tree": [
   {
    "t": "Home",
@@ -1243,6 +1243,70 @@ window.SITEMAP = {
     {
      "t": "Specialist Mathematics",
      "c": [
+      {
+       "t": "VCE Specialist Mathematics 3&4 — 2027 Course Home",
+       "h": "year12-specialist/2027/index.html",
+       "u": 1,
+       "c": [
+        {
+         "t": "Resources",
+         "g": 1,
+         "c": [
+          {
+           "t": "Topic 1 · Vectors, Lines and Planes | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t01-vectors.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 2 · Circular Functions | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t02-circular-functions.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 3 · Complex Numbers | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t03-complex-numbers.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 4 · Differential Calculus | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t04-differential-calculus.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 5 · Integration | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t05-integration.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 6 · Differential Equations | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t06-differential-equations.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 7 · Kinematics and Vector Calculus | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t07-kinematics-vector-calculus.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 8 · Probability and Statistics | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t08-probability-statistics.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 9 · Logic and Proof | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t09-logic-proof.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Topic 10 · Exam Revision | Specialist Maths 2027",
+           "h": "year12-specialist/2027/t10-exam-revision.html",
+           "k": "specialist"
+          }
+         ]
+        }
+       ],
+       "k": "specialist"
+      },
       {
        "t": "Term 3",
        "h": "year12-specialist/term-3/index.html",

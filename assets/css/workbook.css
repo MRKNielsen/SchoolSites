@@ -380,6 +380,125 @@ body.course-page.workbook {
          filter: brightness(0.6); }
 }
 
+/* ============================================================
+   DECKS — <body class="deck-page theme-space workbook wb-space">
+   Link workbook.css after deck.css (and quiz.css), workbook.js in
+   <head> without defer. Tokens for decks are the body.deck-page.workbook
+   blocks in tokens.css (paper, ink, and the remapped I do / We do /
+   You do and answer / error colours).
+   ============================================================ */
+body.deck-page.workbook { background-color: var(--paper); background-image: var(--wb-grain); }
+.deck-page.workbook h1 { font-weight: 600; letter-spacing: -0.02em; }
+.deck-page.workbook h2 { font-weight: 600; letter-spacing: -0.01em; }
+.deck-page.workbook .eyebrow b { color: var(--accent); }
+
+/* deck.css tints its boxes toward white; on paper (and charcoal) they
+   tint toward the card colour instead, so they read as printed panels. */
+.deck-page.workbook .box.key,
+.deck-page.workbook .box.defn     { background: color-mix(in srgb, var(--accent) 12%, var(--card)); }
+.deck-page.workbook .box.try,
+.deck-page.workbook .box.question { background: color-mix(in srgb, var(--accent-warm) 14%, var(--card)); }
+.deck-page.workbook .box.hint     { background: color-mix(in srgb, var(--accent) 9%, var(--card)); }
+.deck-page.workbook .box.answer,
+.deck-page.workbook .chooser.on .opt.correct { background: color-mix(in srgb, var(--pos) 13%, var(--card)); }
+.deck-page.workbook .box.key .lbl,
+.deck-page.workbook .box.defn .lbl { color: var(--accent); }
+.deck-page.workbook .box.try .lbl,
+.deck-page.workbook .box.question .lbl { color: color-mix(in srgb, var(--accent-warm) 55%, var(--ink)); }
+.deck-page.workbook .bookref {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--card));
+}
+/* A chip is as wide as its words, not the slide (deck.css stretches it in
+   a column flex slide — the deck11 per-deck <style> works round the same). */
+.deck-page.workbook .bookref { align-self: flex-start; width: fit-content; }
+.deck-page.workbook .ptab.active {
+  color: var(--wb-ido-text);
+  background: color-mix(in srgb, var(--ido) 10%, var(--card));
+}
+.deck-page.workbook .teacher > summary { color: var(--wb-ido-text); }
+.deck-page.workbook .navbtn:hover { background: var(--card); border-color: var(--accent); }
+
+/* Title slide: the unit's cover sits beside the title. */
+.deck-page.workbook .title-slide { padding-right: calc(5vw + min(24vw, 46vh)); }
+.title-cover {
+  position: absolute; right: 6vw; top: 50%;
+  height: min(70vh, 36vw); width: auto; aspect-ratio: 2 / 3;
+  transform: translateY(-50%) rotate(2.5deg);
+  border-radius: 3px 8px 8px 3px;
+  box-shadow:
+    inset 6px 0 8px -6px rgba(var(--wb-shadow), 0.18),
+    0 22px 40px -18px rgba(var(--wb-shadow), 0.55);
+}
+
+/* ---------- Booklet view: the page students should be on ----------
+   <button class="bookview" type="button" aria-label="Show booklet page larger">
+     <img alt="Booklet page">
+     <span class="bv-cap">Booklet p.&nbsp;<span class="bk-page" data-label="sub:1.2">3</span> · §1.2</span>
+   </button>
+   Last child of the slide. The page number comes from the booklet build
+   (tools/booklet_pages.py — the deck's <main> carries data-booklet), and
+   workbook.js sets the image from it: <main data-booklet-pages="booklet/pages/">
+   + p03.jpg (tools/booklet_images.py). Click or B enlarges it; Escape,
+   a click or any navigation key puts it back. */
+.bookview {
+  --bv-w: clamp(110px, 10vw, 170px);
+  position: absolute; right: 1.6vw; bottom: 8vh; z-index: 5;
+  width: var(--bv-w);
+  display: flex; flex-direction: column; align-items: center; gap: 0.6vh;
+  padding: 0; border: 0; background: none; color: inherit; font: inherit;
+  cursor: zoom-in;
+}
+.bookview img {
+  display: block; width: 100%; height: auto; aspect-ratio: 210 / 297;
+  object-fit: cover; object-position: top;
+  background: var(--wb-cover-paper);
+  border-radius: 2px;
+  box-shadow:
+    -4px 0 0 0 var(--wb-page-accent),          /* the booklet's spine */
+    0 14px 26px -12px rgba(var(--wb-shadow), 0.55);
+  transform: rotate(-1.5deg);
+  transition: transform .18s ease;
+}
+.bookview:hover img { transform: rotate(0deg) scale(1.03); }
+.bookview:focus-visible { outline: none; }
+.bookview:focus-visible img { outline: 3px solid var(--accent); outline-offset: 3px; }
+.bv-cap {
+  font-family: var(--font-display); font-weight: 500;
+  font-size: clamp(11px, 0.8vw, 14px); line-height: 1.25; text-align: center;
+  color: var(--ink-soft);
+}
+.bv-cap .bk-page { font-weight: 700; color: var(--accent); }
+/* Keep slide content clear of it. */
+.deck-page.workbook .slide:has(> .bookview) {
+  padding-right: calc(5vw + var(--bv-w, 170px) + 1vw);
+}
+.bookview.is-open {
+  position: fixed; inset: 0; z-index: 9400; width: auto;
+  justify-content: center; gap: 1.2vh;
+  background: rgba(0, 0, 0, 0.62);
+  cursor: zoom-out;
+}
+.bookview.is-open img {
+  width: auto; height: 88vh; max-width: 92vw;
+  transform: none;
+  box-shadow: -8px 0 0 0 var(--wb-page-accent), 0 30px 60px rgba(0,0,0,0.5);
+}
+.bookview.is-open .bv-cap { color: #fff; font-size: clamp(14px, 1.2vw, 20px); }
+.bookview.is-open .bv-cap .bk-page { color: #fff; }
+
+@media (max-width: 700px) {
+  .bookview { position: static; align-self: flex-start; margin-top: 14px; --bv-w: 120px; }
+  .deck-page.workbook .slide:has(> .bookview) { padding-right: 5vw; }
+  .deck-page.workbook .title-slide { padding-right: 5vw; }
+  .title-cover { display: none; }
+}
+@media print {
+  .bookview, .title-cover { display: none; }
+  body.deck-page.workbook { background: #fff; }
+}
+
 /* ---------- Small screens ---------- */
 @media (max-width: 640px) {
   .workbook .unit-hero { grid-template-columns: minmax(0, 1fr); }

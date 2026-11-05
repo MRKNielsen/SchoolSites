@@ -670,6 +670,17 @@ and next topic. Reference implementation:
 `wrapup-revision-cat3.html`. A new lesson goes on its topic page; the
 lesson count on the home page's button is typed, so update it too.
 
+**Generated course hub — `year12-specialist/2027/`.** The Specialist
+course home and its ten topic pages are built from
+`year12-specialist/2027/course.json` by `node tools/build-spm-course.js`
+(`--check` exits 1 if any page is stale). **Never hand-edit those HTML
+files**; change the JSON and regenerate. Week dates come from each
+term's Week 1 Monday, events attach to the week they fall in, and an
+unconfirmed milestone carries `"tbc": true`. Week cards carry their own
+`data-end` (day after the last school day), which hub.js prefers, so a
+term's last week stops being "current" in the holidays. Topics 7–9 link
+into the 2026 `term-3/` decks by relative path; don't move those files.
+
 ## Species / case-study profile pages
 
 Use `assets/css/profile.css` + `assets/js/profile.js` with

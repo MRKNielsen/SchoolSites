@@ -114,6 +114,18 @@
   --c-wb-rust-dk:       #ee8c63;
   --c-wb-navy-dk:       #93b9e0;
   --c-wb-green-dk:      #86c79a;
+  /* Year 7 workbook decks: I do / We do / You do and answer / error,
+     remapped to the cover palette (Kodie's call, Nov 2026). Tag colours
+     carry white-on text in both schemes; the -dk text colours are for
+     answers and labels on charcoal. */
+  --c-wb-ido:     #1e4d78;   /* navy */
+  --c-wb-wedo:    #8a5d0f;   /* deep mustard */
+  --c-wb-youdo:   #1d6b69;   /* deep teal */
+  --c-wb-pos:     #2f6a45;   /* answer green, toward the cover greens */
+  --c-wb-neg:     #b23a24;   /* error red, toward the cover rust */
+  --c-wb-pos-dk:  #86c79a;
+  --c-wb-neg-dk:  #f08c74;
+  --c-wb-ido-dk:  #93b9e0;
 
   --c-paper-warm:#f6f4ef;   /* landing pages */
   --c-paper-cool:#fbfcfe;   /* decks & hubs — bright, projection-friendly */
@@ -253,6 +265,14 @@ body.workbook.wb-space    { --wb-page-accent: var(--c-wb-navy); }
 body.workbook.wb-forces   { --wb-page-accent: var(--c-wb-rust); }
 body.workbook.wb-particle { --wb-page-accent: var(--c-wb-teal); }
 body.workbook.wb-eco      { --accent: var(--c-wb-green); --accent-dark: var(--c-wb-green); }
+/* Decks: deck.css sets --paper/--ink/--line on body.deck-page, which would
+   beat body.workbook at equal specificity, so restate them here. */
+body.deck-page.workbook {
+  --paper: var(--c-wb-paper); --ink: var(--c-wb-ink); --line: var(--c-wb-line);
+  --ido: var(--c-wb-ido); --wedo: var(--c-wb-wedo); --youdo: var(--c-wb-youdo);
+  --pos: var(--c-wb-pos); --neg: var(--c-wb-neg);
+  --wb-ido-text: var(--c-wb-ido);
+}
 body.workbook.wb-space    { --accent: var(--c-wb-navy);  --accent-dark: var(--c-wb-navy); }
 body.workbook.wb-forces   { --accent: var(--c-wb-rust);  --accent-dark: var(--c-wb-rust); }
 body.workbook.wb-particle { --accent: var(--c-wb-teal);  --accent-dark: var(--c-wb-teal); }
@@ -276,6 +296,11 @@ body.workbook.wb-particle { --accent: var(--c-wb-teal);  --accent-dark: var(--c-
     color-scheme: dark;
   }
   body.workbook.wb-eco      { --accent: var(--c-wb-green-dk); --accent-dark: var(--c-wb-green-dk); }
+  body.deck-page.workbook {
+    --paper: var(--c-wb-paper-dk); --ink: var(--c-wb-ink-dk); --line: var(--c-wb-line-dk);
+    --pos: var(--c-wb-pos-dk); --neg: var(--c-wb-neg-dk);
+    --wb-ido-text: var(--c-wb-ido-dk);
+  }
   body.workbook.wb-space    { --accent: var(--c-wb-navy-dk);  --accent-dark: var(--c-wb-navy-dk); }
   body.workbook.wb-forces   { --accent: var(--c-wb-rust-dk);  --accent-dark: var(--c-wb-rust-dk); }
   body.workbook.wb-particle { --accent: var(--c-wb-teal-dk);  --accent-dark: var(--c-wb-teal-dk); }

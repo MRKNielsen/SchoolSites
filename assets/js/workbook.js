@@ -17,6 +17,8 @@
       .wb-opening: the .book-opener (the same cover) swings open on
       its left edge to reveal the contents, then removes itself.
       A direct visit, a reload or Back never plays it.
+   4. Deck slides: a .bookview shows the booklet page the task is on;
+      click or B enlarges it. (Described further down.)
    3. Contents → lesson. Clicking a .lesson-page plays a short
       page-flick (~0.7 s): one page fills the window, bound by a spine
       on its left edge, and leaves lift off it from that hinge. Then
@@ -117,6 +119,52 @@
     if (!("onpagereveal" in window)) window.setTimeout(swing, 60);
     window.setTimeout(swing, 1500);               // transition never ended
   });
+
+  /* ---- 4. Booklet view on deck slides ----
+     The page number in .bk-page is written by tools/booklet_pages.py;
+     the image is <main data-booklet-pages> + pNN.jpg, built by
+     tools/booklet_images.py. Click or B enlarges it; Escape, a click,
+     or any other key puts it back (so moving slides never leaves it up). */
+  function pageFile(n) {
+    n = parseInt(n, 10);
+    return "p" + (n < 10 ? "0" + n : String(n)) + ".jpg";
+  }
+  function closeViews() {
+    var open = document.querySelectorAll(".bookview.is-open");
+    for (var i = 0; i < open.length; i++) {
+      open[i].classList.remove("is-open");
+      open[i].setAttribute("aria-expanded", "false");
+    }
+    return open.length > 0;
+  }
+  function toggleView(v) {
+    var open = !v.classList.contains("is-open");
+    closeViews();
+    if (open) { v.classList.add("is-open"); v.setAttribute("aria-expanded", "true"); }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    var views = document.querySelectorAll(".bookview");
+    for (var i = 0; i < views.length; i++) {
+      var v = views[i], img = v.querySelector("img"),
+          num = v.querySelector(".bk-page"),
+          host = v.closest("[data-booklet-pages]");
+      if (img && num && host && /^\d+$/.test(num.textContent.trim())) {
+        img.src = host.getAttribute("data-booklet-pages") + pageFile(num.textContent.trim());
+        img.alt = "Booklet page " + num.textContent.trim();
+      }
+      v.setAttribute("aria-expanded", "false");
+      v.addEventListener("click", function (e) { e.stopPropagation(); toggleView(this); });
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+    if ((e.key === "b" || e.key === "B") && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      var v = document.querySelector(".slide.active .bookview");
+      if (v) { e.preventDefault(); toggleView(v); }
+      return;
+    }
+    if (closeViews() && e.key === "Escape") e.stopPropagation();
+  }, true);
 
   /* Back/forward cache restores the page mid-animation: reset it. */
   window.addEventListener("pageshow", function (e) {
