@@ -401,10 +401,6 @@ body.deck-page.workbook { background-color: var(--paper); background-image: var(
 .deck-page.workbook .box.hint     { background: color-mix(in srgb, var(--accent) 9%, var(--card)); }
 .deck-page.workbook .box.answer,
 .deck-page.workbook .chooser.on .opt.correct { background: color-mix(in srgb, var(--pos) 13%, var(--card)); }
-.deck-page.workbook .box.key .lbl,
-.deck-page.workbook .box.defn .lbl { color: var(--accent); }
-.deck-page.workbook .box.try .lbl,
-.deck-page.workbook .box.question .lbl { color: color-mix(in srgb, var(--accent-warm) 55%, var(--ink)); }
 .deck-page.workbook .bookref {
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 10%, var(--card));
@@ -419,6 +415,87 @@ body.deck-page.workbook { background-color: var(--paper); background-image: var(
 }
 .deck-page.workbook .teacher > summary { color: var(--wb-ido-text); }
 .deck-page.workbook .navbtn:hover { background: var(--card); border-color: var(--accent); }
+
+/* ---------- In-slide components, in the cover-art style ----------
+   Flat colour, a printed feel, no glossy shadows. Boxes lose deck.css's
+   coloured left rail (a rail on a rounded card is the generic look);
+   their label becomes a solid tab in the box's colour instead. */
+.deck-page.workbook .box {
+  --box-c: var(--ink-soft);
+  border: 0; border-radius: 4px;
+  background: color-mix(in srgb, var(--box-c) 9%, var(--card));
+  padding: 14px 20px 16px;
+}
+.deck-page.workbook .box.key,
+.deck-page.workbook .box.defn,
+.deck-page.workbook .box.hint     { --box-c: var(--wb-page-accent); }   /* navy in both modes */
+.deck-page.workbook .box.try,
+.deck-page.workbook .box.question { --box-c: var(--wb-fill-mustard); }
+.deck-page.workbook .box.answer   { --box-c: var(--pos); }
+.deck-page.workbook .box.flag     { --box-c: var(--neg); }
+.deck-page.workbook .box.country  { --box-c: var(--country); background: var(--country-bg); }
+.deck-page.workbook .box.defn     { outline: 2px solid color-mix(in srgb, var(--box-c) 45%, transparent); outline-offset: -2px; }
+.deck-page.workbook .box .lbl {
+  display: inline-block; margin-bottom: 9px;
+  padding: 3px 10px 2px; border-radius: 3px;
+  font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .09em;
+  color: var(--wb-cover-paper); background: var(--box-c);
+}
+/* Mustard is a shape colour, too light for cream text: ink on it instead. */
+.deck-page.workbook .box.try .lbl,
+.deck-page.workbook .box.question .lbl { color: var(--wb-cover-ink); }
+/* Answer green and error red change with the scheme, so their tab text
+   takes the page colour: cream on dark green, charcoal on light green. */
+.deck-page.workbook .box.answer .lbl,
+.deck-page.workbook .box.flag .lbl { color: var(--paper); }
+.deck-page.workbook .box > .a { border-top: 1.5px dashed color-mix(in srgb, var(--box-c) 50%, transparent); }
+.deck-page.workbook .box > .a .lbl-a { font-family: var(--font-display); }
+
+/* Gradual-release tags: squared tabs, like the box labels. */
+.deck-page.workbook .phase-tag {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: .08em;
+  border-radius: 3px; padding: 4px 10px 3px;
+}
+
+/* Figures sit on a printed plate. */
+.deck-page.workbook .graph-card {
+  background: var(--card); border: 0; border-radius: 4px; box-shadow: none;
+  padding: 14px 14px 8px;
+}
+.deck-page.workbook .photo {
+  border-radius: 2px;
+  border: 6px solid var(--wb-cover-paper);
+  box-shadow: 0 10px 20px -12px rgba(var(--wb-shadow), 0.5);
+}
+.deck-page.workbook .credit { color: var(--ink-faint); }
+
+/* Tables: a cover-colour header band, paper-tinted rows. */
+.deck-page.workbook table.tbl { font-variant-numeric: tabular-nums; }
+.deck-page.workbook table.tbl th {
+  font-family: var(--font-display); font-weight: 600;
+  color: var(--accent); border-bottom: 2px solid var(--accent);
+}
+.deck-page.workbook table.tbl.filled th {
+  color: var(--wb-cover-paper); background: var(--wb-page-accent); border-bottom: 0;
+}
+.deck-page.workbook table.tbl td { border-bottom-color: var(--line); }
+.deck-page.workbook table.tbl tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+}
+
+/* Buttons and pills. */
+.deck-page.workbook .reveal-btn {
+  font-family: var(--font-display); font-weight: 500;
+  border: 1.5px solid var(--accent); color: var(--accent);
+  background: transparent; border-radius: 6px;
+}
+.deck-page.workbook .reveal-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.deck-page.workbook .pill {
+  font-family: var(--font-display); background: var(--card);
+  border: 0; border-radius: 4px;
+}
+.deck-page.workbook .eyebrow { font-family: var(--font-display); font-weight: 600; letter-spacing: .12em; }
+.deck-page.workbook .note { color: var(--ink-soft); }
 
 /* Title slide: the unit's cover sits beside the title. */
 .deck-page.workbook .title-slide { padding-right: calc(5vw + min(24vw, 46vh)); }

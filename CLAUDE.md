@@ -203,6 +203,58 @@ builds the booklet in a scratch folder, reads the labels from the
 `.aux` and rewrites the numbers (needs xelatex). Re-run it whenever the
 booklet changes — the A5 rebuild will move every page.
 
+**Workbook decks** (`<body class="deck-page theme-space workbook wb-space">`,
+workbook.css after deck.css/quiz.css, workbook.js in `<head>`): cream
+paper, Outfit headings, the unit's cover beside the title
+(`img.title-cover`), and boxes tinted toward the card colour rather than
+white so they work on charcoal. **Year 7 workbook decks are the one
+exception to the pedagogy-colour rule above** (Kodie's call, Nov 2026):
+`body.deck-page.workbook` in tokens.css remaps I do / We do / You do to
+navy / deep mustard / deep teal and nudges answer green and error red
+toward the cover palette. Every other deck keeps the standard colours.
+Reference: `year7-science/space/deck1.html`.
+
+Inside a workbook slide, workbook.css also restyles the components in the
+cover-art manner: **boxes lose the coloured left rail** and get a solid
+label tab in the box colour (key/defn/hint navy in both schemes,
+try/question mustard with ink text, answer/flag green/red), figures sit
+on a flat `.graph-card` plate, `.photo` is a pasted-in print with a paper
+border, `table.tbl.filled` has a header band in the unit colour, and
+reveal buttons and pills are squared. **Diagrams take flat fills from the
+`--wb-fill-*` tokens** (mustard, cream, teal, deep teal, rust, navy,
+green) via `style="fill:var(--wb-fill-rust)"`, with labels in
+`--wb-cover-ink` or `--wb-cover-paper` — those are the cover's own hues and
+do not change in dark mode, because a figure is a printed thing on its
+plate. Never use them for text on the page. Illustrative colours that
+carry meaning across a unit stay as they are (Space's planet hues match
+from lesson to lesson; the Sun's layers match the booklet).
+
+A slide that points at a booklet task ends with a **booklet view** — a
+small image of that booklet page, bottom right, which a click or **B**
+enlarges (Escape, a click or any other key puts it back):
+
+```html
+<button class="bookview" type="button" aria-label="Show booklet page larger"><img alt="Booklet page"><span class="bv-cap">Booklet p.&nbsp;<span class="bk-page" data-label="sub:1.2">3</span> &middot; §1.2</span></button>
+```
+
+It replaces the hand-typed `.bookref.book` chip on workbook decks
+(worksheet chips stay `.bookref.sheet`). The deck's `<main>` carries
+`data-booklet="booklet/….tex"` (so `booklet_pages.py` writes the page
+numbers, exactly as on a contents page) and
+`data-booklet-pages="booklet/pages/"`; workbook.js builds the image path
+from the number. The page images are build output:
+
+```bash
+python3 tools/booklet_images.py year7-science/space/booklet/Space_Unit_Booklet_Yr7_8.pdf          # write pNN.jpg
+python3 tools/booklet_images.py year7-science/space/booklet/Space_Unit_Booklet_Yr7_8.pdf --check  # exit 1 if stale
+```
+
+`B` was free in both deck.js (arrows, space, R, M, 1–9) and sitenav.js
+(N, Escape). Not yet done: outlining the exact box on the page — that
+needs the booklet to record each box's position, which comes with the A5
+rebuild. Boxes the slides point at but which have no `\label` get one
+(`\label{y8:1.moon}`); a label changes nothing in the printed booklet.
+
 **Living reference: open `styleguide/deck-demo.html` in a browser.** It
 exercises every component and has a theme switcher. Start new decks from
 `styleguide/deck-template.html`.

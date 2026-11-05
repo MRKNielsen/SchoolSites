@@ -61,7 +61,9 @@ this repo has seen came from skipping one of these.
 - [ ] **Touched a booklet with a workbook contents page?**
       `python3 tools/booklet_pages.py <unit>/index.html` — the "Turn
       to page N" numbers are read from the booklet build, and go stale
-      silently otherwise (`--check` exits 1).
+      silently otherwise (`--check` exits 1). Do the same for every
+      workbook deck with booklet views, and re-render the page images:
+      `python3 tools/booklet_images.py <unit>/booklet/<booklet>.pdf`.
 - [ ] **Touched a worksheet?** Marks totals agree across `.namebar
       .marks-total`, the toolbar hint, and the index `.wl-marks`.
 - [ ] **Touched a gated page?** Round-trip through

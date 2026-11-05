@@ -1638,8 +1638,15 @@ starting a new one.
             booklet mode before going further**.
       - [ ] 4. Page-image tool, then the flip-book and the booklet view on
             slides.
-      - [ ] 5. One cream Space deck with the booklet view, for testing on a
-            Year 7 panel.
+      - [x] 5. One cream Space deck with the booklet view, for testing on a
+            Year 7 panel. *(done early 2026-11-05, at Kodie's request, on
+            the current A4 booklet: `space/deck1.html` on the workbook look,
+            8 booklet views from labels (`sub:1.2–1.4`, new `y8:1.mag` /
+            `y8:1.moon`), page images from `tools/booklet_images.py`, B key.
+            Still to come with step 3: the outline round the exact box, and
+            re-pointing at the A5 pages — both just a re-run of the two tools
+            once the booklet records box positions. **Test it on a Year 7
+            panel.**)*
       - [ ] 6. Year 7 worksheets restyled (A4).
       - [ ] 7. Roll out: Forces, Particle Model, Ecosystems, investigation
             booklets, teacher copies.
