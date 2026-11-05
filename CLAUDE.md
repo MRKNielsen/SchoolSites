@@ -171,9 +171,14 @@ carries `view-transition-name` and the perspective, `.bo-leaf` turns)
 because a view-transition name, like `opacity` or `filter`, flattens 3D
 on its own element and the cover then swings open mirrored; and nothing
 on `.wf-book` may carry a filter or opacity, for the same reason.
-Both fill the window: the cover is cropped from the top (`object-fit:
-cover`) so its title stays in view, and the flick's spread is the whole
-viewport. The swing is **started by script, not by a CSS delay**:
+Both fill the window and are **bound on the left**: a spine in the
+unit colour sits on the window's left edge, the cover swings open on it,
+and the flick is one page filling the window whose leaves lift off that
+hinge. The cover is cropped from the top (`object-fit: cover`) so its
+title stays in view. The flick's spine is drawn on `.wb-flip`, outside
+the 3D `.wf-book` — inside a 3D scene `z-index` is ignored, and a leaf
+lifting towards the viewer would cover it. Both overlays sit at
+`z-index: 9500`, above the nav drawer's tab (9000). The swing is **started by script, not by a CSS delay**:
 `workbook.js` adds `.wb-swinging` when the view transition's `finished`
 promise settles (or straight away where there is no `pagereveal`, i.e.
 Firefox). During a transition the cover is only a captured snapshot, so

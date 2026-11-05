@@ -256,10 +256,17 @@ body.course-page.workbook {
 .workbook .dc-wslink .wl-marks { color: var(--ink-faint); }
 
 /* ---------- The cover opening (arrival from the shelf) ---------- */
+/* Both animations hinge on a spine at the window's left edge. */
+.book-opener, .wb-flip {
+  --wb-spine-w: clamp(12px, 1.6vw, 22px);
+  --wb-spine:
+    linear-gradient(90deg, rgba(0,0,0,0.38), rgba(0,0,0,0.08) 70%, rgba(255,255,255,0.12)),
+    var(--wb-page-accent);
+}
 .book-opener { display: none; }
 .wb-opening .book-opener {
   display: grid; place-items: center;
-  position: fixed; inset: 0; z-index: 60;
+  position: fixed; inset: 0; z-index: 9500;   /* above the nav drawer's tab */
   pointer-events: none; perspective: 1800px;
 }
 .wb-opening .book-opener::before {   /* blank paper the cover lifts off */
@@ -268,6 +275,15 @@ body.course-page.workbook {
 }
 /* workbook.js adds .wb-swinging once the view transition has finished. */
 .wb-swinging .book-opener::before { animation: wb-fade-out 0.55s ease 0.35s both; }
+/* The binding: a cloth spine fixed to the window's left edge. The cover
+   hinges on it, and it leaves with the cover. */
+.wb-opening .book-opener::after {
+  content: ""; position: absolute; z-index: 2; left: 0; top: 0; bottom: 0;
+  width: var(--wb-spine-w);
+  background: var(--wb-spine);
+  box-shadow: 3px 0 8px rgba(0,0,0,0.25);
+}
+.wb-swinging .book-opener::after { animation: wb-fade-out 0.25s ease 0.85s both; }
 /* .bo-frame carries the view-transition name and the perspective; the
    leaf inside it does the 3D swing. They must be two elements: a
    view-transition-name (like opacity) flattens 3D on its own element,
@@ -311,25 +327,32 @@ body.course-page.workbook {
 
 /* ---------- The page flick (contents -> lesson) ---------- */
 .wb-flip {
-  position: fixed; inset: 0; z-index: 70;
+  position: fixed; inset: 0; z-index: 9500;   /* above the nav drawer's tab */
   display: grid; place-items: stretch;
   background: rgba(var(--wb-shadow), 0.42);
   animation: wb-fade-in 0.15s ease both;
 }
-.wf-book {
-  position: relative; display: flex;
-  width: 100%; height: 100%;              /* the spread fills the window */
+.wf-book {                 /* one page fills the window, bound on the left */
+  position: relative;
+  width: 100%; height: 100%;
   transform-style: preserve-3d;
   perspective: 2600px;          /* no filter/opacity here: they flatten 3D */
+  perspective-origin: 35% 50%;  /* off the hinge, so a lifting leaf is seen */
+}
+/* The spine sits OUTSIDE .wf-book: inside a 3D scene z-index is ignored
+   and a lifting leaf, coming towards the viewer, would cover it. */
+.wb-flip::after {
+  content: ""; position: absolute; z-index: 1; left: 0; top: 0; bottom: 0;
+  width: var(--wb-spine-w);
+  background: var(--wb-spine);
+  box-shadow: 3px 0 8px rgba(0,0,0,0.25);
 }
 .wf-page {
-  flex: 1; position: relative; background: var(--wb-cover-paper);
-  box-shadow: 0 28px 36px -18px rgba(0, 0, 0, 0.55);
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(var(--wb-shadow), 0.18), transparent 8%),
+    var(--wb-cover-paper);
 }
-.wf-left  {
-  background: linear-gradient(270deg, rgba(var(--wb-shadow), 0.16), transparent 14%), var(--wb-cover-paper); }
-.wf-right {
-  background: linear-gradient(90deg, rgba(var(--wb-shadow), 0.16), transparent 14%), var(--wb-cover-paper); }
 .wf-turn {
   position: absolute; right: 8%; bottom: 7%;
   font-family: var(--font-display); font-weight: 700;
@@ -337,24 +360,24 @@ body.course-page.workbook {
   animation: wb-fade-in 0.2s ease 0.45s both;
 }
 .wf-leaf {
-  position: absolute; top: 0; bottom: 0; left: 50%; width: 50%;
-  transform-origin: left center;
+  position: absolute; inset: 0;
+  transform-origin: left center;    /* hinged on the spine */
   background:
     linear-gradient(90deg, rgba(var(--wb-shadow), 0.22), transparent 35%,
                     transparent 85%, rgba(var(--wb-shadow), 0.18)),
     var(--wb-cover-paper);
-  border: 1px solid rgba(var(--wb-shadow), 0.22); border-left: 0;
-  transform-style: preserve-3d;
-  animation: wb-leaf 0.4s cubic-bezier(0.45, 0.05, 0.4, 1)
+  border-right: 1px solid rgba(var(--wb-shadow), 0.22);
+  animation: wb-leaf 0.42s cubic-bezier(0.45, 0.05, 0.4, 1)
              calc(var(--i) * 75ms + 60ms) both;
 }
 /* The leaf darkens as it stands up, then lightens as it lies down —
    that shading is what makes the turn read on flat cream paper. */
 @keyframes wb-leaf {
   0%   { transform: rotateY(0deg);    box-shadow: 0 0 0 rgba(0,0,0,0); }
-  50%  { transform: rotateY(-90deg);  box-shadow: -10px 0 18px rgba(0,0,0,0.35);
-         filter: brightness(0.82); }
-  100% { transform: rotateY(-178deg); box-shadow: 0 0 0 rgba(0,0,0,0); }
+  60%  { transform: rotateY(-80deg);  box-shadow: -10px 0 24px rgba(0,0,0,0.35);
+         filter: brightness(0.8); }
+  100% { transform: rotateY(-120deg); box-shadow: 0 0 0 rgba(0,0,0,0);
+         filter: brightness(0.6); }
 }
 
 /* ---------- Small screens ---------- */

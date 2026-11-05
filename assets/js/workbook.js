@@ -18,7 +18,9 @@
       its left edge to reveal the contents, then removes itself.
       A direct visit, a reload or Back never plays it.
    3. Contents → lesson. Clicking a .lesson-page plays a short
-      page-flick (~0.7 s) over the page, then follows the link.
+      page-flick (~0.7 s): one page fills the window, bound by a spine
+      on its left edge, and leaves lift off it from that hinge. Then
+      it follows the link.
       Modified clicks (new tab etc.) are left alone.
    ============================================================ */
 (function () {
@@ -57,8 +59,7 @@
     var o = document.createElement("div");
     o.className = "wb-flip";
     o.setAttribute("aria-hidden", "true");
-    var html = '<div class="wf-book"><div class="wf-page wf-left"></div>' +
-      '<div class="wf-page wf-right">' +
+    var html = '<div class="wf-book"><div class="wf-page">' +
       (page ? '<span class="wf-turn">p.&nbsp;' + page.trim() + "</span>" : "") +
       "</div>";
     for (var i = 0; i < 5; i++) {
