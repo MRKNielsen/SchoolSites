@@ -44,7 +44,7 @@
     }
   } catch (e) { /* storage blocked: no animation, page still works */ }
 
-  function endOpening() { root.classList.remove("wb-opening"); }
+  function endOpening() { root.classList.remove("wb-opening", "wb-swinging"); }
 
   function plainClick(e) {
     return e.button === 0 && !e.defaultPrevented &&
@@ -89,16 +89,32 @@
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function () {
+  /* The swing starts only once the view transition has finished —
+     during the transition the cover is a captured snapshot, so a swing
+     run then is never seen. Browsers without `pagereveal` (Firefox)
+     have no transition either, so they start straight away. */
+  var swung = false;
+  function swing() {
+    if (swung || !root.classList.contains("wb-opening")) return;
+    swung = true;
+    root.classList.add("wb-swinging");
     var frame = document.querySelector(".book-opener .bo-frame");
-    if (frame && root.classList.contains("wb-opening")) {
+    if (frame) {
       frame.addEventListener("animationend", function (e) {
         if (e.target === frame) endOpening();     // the frame fades last
       });
-      window.setTimeout(endOpening, 2600);       // safety net
-    } else {
-      endOpening();
     }
+    window.setTimeout(endOpening, 2200);          // safety net
+  }
+  window.addEventListener("pagereveal", function (e) {
+    if (!root.classList.contains("wb-opening")) return;
+    if (e.viewTransition) e.viewTransition.finished.then(swing, swing);
+    else swing();
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!document.querySelector(".book-opener")) { endOpening(); return; }
+    if (!("onpagereveal" in window)) window.setTimeout(swing, 60);
+    window.setTimeout(swing, 1500);               // transition never ended
   });
 
   /* Back/forward cache restores the page mid-animation: reset it. */

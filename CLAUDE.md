@@ -171,6 +171,16 @@ carries `view-transition-name` and the perspective, `.bo-leaf` turns)
 because a view-transition name, like `opacity` or `filter`, flattens 3D
 on its own element and the cover then swings open mirrored; and nothing
 on `.wf-book` may carry a filter or opacity, for the same reason.
+Both fill the window: the cover is cropped from the top (`object-fit:
+cover`) so its title stays in view, and the flick's spread is the whole
+viewport. The swing is **started by script, not by a CSS delay**:
+`workbook.js` adds `.wb-swinging` when the view transition's `finished`
+promise settles (or straight away where there is no `pagereveal`, i.e.
+Firefox). During a transition the cover is only a captured snapshot, so
+a swing timed to start then is never seen. Measured in Chromium: cover
+fills the window at ~0.97 s, swings open by ~2.1 s, page usable at
+~2.2 s. Headless screen recordings drop frames and make the swing look
+rushed; time it with `animationstart`/`animationend` events instead.
 Reference: `year7-science/space/index.html`.
 
 A unit's contents page (`section.contents`) lists each lesson as an
