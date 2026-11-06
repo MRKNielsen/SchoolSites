@@ -1636,6 +1636,37 @@ starting a new one.
       - [ ] 3. Space booklet rebuilt as A5 with the new look and box
             positions recorded — **test-print on the school copier in
             booklet mode before going further**.
+            *Trial done 2026-11-06 (Kodie: "do not overwrite originals yet"):
+            `space/booklet/a5-test/` builds **Section 1 only** as A5 from the
+            untouched master — `make_a5_test.py` (generator; fails on any lost
+            word) + `fill_a5.py` (Particle Model page filler, A5 geometry) →
+            `Space_Section1_A5.pdf`, 16 pages, so no padding needed. In it: colour
+            cover, opener band with the Lesson 1 ink symbol, Key vocabulary
+            write-in table (12 words from the section's own bold terms), I do /
+            We do / You do as solid / dashed / heavy frames with 1–3 dot tabs,
+            Key idea, Above level (double rule), Country (dotted), no marks,
+            dotted thirds for written answers and plain boxes for calculations,
+            You do sets each on one page, ink-pattern Earth and Sun diagrams,
+            glossary with page refs, pad-to-4 with notes pages. **Next: Kodie
+            test-prints it in booklet mode.** Not yet in the trial: recorded box
+            positions for the slide highlight (needs answer-slot keys, Forces
+            style), headings still Poppins (Outfit not vendored).*
+      - [ ] **Two books, not one** (Kodie, 2026-11-06). The full A5 booklet
+            would run ~100–110 pages (27 folded sheets), past what a booklet
+            stapler takes, so Space prints as a **core book** (Lessons 1–7,
+            including optional Lesson 4; est. ~75 pp, ~19 sheets) and an
+            **extension book** (above-level Lessons 8–10; est. ~35 pp, ~9
+            sheets). Each has its own cover, glossary and pad-to-4. Lesson
+            numbers continue (the extension book opens at Lesson 8). Page
+            numbers restart in each book, so "Turn to page N" on the contents
+            page and the slides' booklet view must also name the book
+            (e.g. "Extension book, p. 5"): `booklet_pages.py` reads the labels
+            per book, and a lesson's `data-booklet` names its book's `.tex`.
+      - [ ] **Master booklet bug:** `~1,200 km`, `~5,400°C`, `~15 million°C`,
+            `~5,778 K` in §1.2/§1.4 use `~` for "about", but in LaTeX `~` is an
+            invisible non-breaking space, so the printed booklet drops it
+            ("radius 1,200 km"). Use `\textasciitilde` or "about". Fixed in the
+            A5 trial only. **S** *(found 2026-11-06)*
       - [ ] 4. Page-image tool, then the flip-book and the booklet view on
             slides.
       - [x] 5. One cream Space deck with the booklet view, for testing on a
