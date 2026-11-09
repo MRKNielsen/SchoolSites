@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-05",
+ "generated": "2026-11-09",
  "tree": [
   {
    "t": "Home",
@@ -895,6 +895,11 @@ window.SITEMAP = {
          ]
         }
        ],
+       "k": "computing"
+      },
+      {
+       "t": "Summer Holiday Homework",
+       "h": "year11-applied-computing/holiday-homework.html",
        "k": "computing"
       },
       {

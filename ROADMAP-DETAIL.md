@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026. Last addition: 17 Oct 2026 (Applied Computing Unit 1 AOS 1 — dataset + all 16 decks).
+Last full audit: 16 Aug 2026. Last addition: 9 Nov 2026 (Applied Computing — summer holiday homework).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -28,7 +28,7 @@ Fourteen subject folders exist. Five carry content; nine are identical
 | year12-specialist | **Built** | `term-3` (11 decks, hub, 5 problem sets, SAC revision) |
 | year10-mathematics | **Built** | `10methods-primer` (9 decks + hub) |
 | year11-methods | **Built, on debt** | `chapter-9` (7 decks), `chapter-11` (2 decks) — still inline styles |
-| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and **all 16 AOS 1 decks** (154 slides). No workbooks, worksheets or assessments yet |
+| year11-applied-computing | **In build** | Subject landing, Unit 1 + Unit 2 hubs, Unit 1 + Unit 2 outlines, PSM reference, the Unit 1 AOS 1 dataset, and **all 16 AOS 1 decks** (154 slides), **8 marimo workbooks** + check banks, **8 revision worksheets**, and the Unit 1 lesson booklet (topics 1–4 of 16). No assessments yet |
 | year7-mathematics | Stub | — |
 | year8-mathematics | Stub | — |
 | year9-mathematics | Stub | — |
@@ -1053,6 +1053,42 @@ marimo workbooks and the assessed language are the same), SQL against a
 relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
 Semester 2.
 
+### Landed — Applied Computing summer holiday homework (9 Nov 2026)
+
+`year11-applied-computing/holiday-homework.html`, linked from the subject
+page under a **Before you start** heading, plus
+`unit-1/data/holiday-extract.csv` (January 2025, all six stations, 186
+rows) for its spreadsheet part.
+
+Five to seven hours over the break for the incoming Year 11s, due in the
+first lesson of week 1 and unmarked. Seven parts: what the subject is
+(a flipped-style reading + four questions), the data you make, reading a
+chart honestly, the unit dataset by hand, the same data in a spreadsheet,
+thinking in steps, and a first look at Python. Decisions, all Kodie's:
+computer-first with a **paper fallback for every computer task** (Part E
+carries its own `.fnbox` saying what to do instead), the **course climate
+dataset** rather than a throwaway one so week 1 starts further along, and
+**due and followed up** rather than optional.
+
+- **No `.ws-runhead`.** This sheet is the measurement CLAUDE.md asks for
+  before using one: with a forced break per part it ran **23 pages at 64%
+  mean fill**, flowing it runs **20 pages at 74%** — the three extra pages
+  each held one orphaned end-of-part question. That contradicts the
+  "new part, new page" rule used in the Unit 1 *booklet*, where parts are
+  long enough to pay for the break; on a worksheet they are not.
+- Writing space follows the 5 cm rule: 36 written questions at
+  `data-lines="7"` (5.6 cm) and 4 single-word answers at `data-lines="1"`.
+- Part C's three charts are inline SVG in `figure.ws-fig`, greyscale fills
+  with `currentColor` ink so they survive a mono photocopier. Charts 1 and
+  2 are the **same three real means** with the axis starting at 0 and at
+  19 — the point of the part.
+- Every printed figure comes from `climate.db`, not typed by hand, so the
+  extract and the charts cannot drift from the course dataset.
+- The generator is staff-side and deliberately not committed; it reads the
+  class list out of `worksheet.css` and fails the build on a mark, a
+  short answer box, a fill table with no red scaffold row, an inline
+  style outside an SVG, or a class the stylesheet does not define.
+
 ### Landed — Year 11 Applied Computing, Unit 1 AOS 1 dataset and first decks (17 Oct 2026)
 
 **The teaching dataset is built** at `year11-applied-computing/unit-1/data/`.
@@ -1181,6 +1217,15 @@ label on its own.
       `tools/staff-crypt.html`, paste the line over `var BLOB`, then
       `node tools/check-gated.js`. **S** *(confirmed done 2026-10-30 — the
       page carries a full v2 blob; found in the repo sweep)*
+- [ ] **`add-sitenav.js` / `add-favicon.js` want to inject into
+      `year7-science/bio-ecosystems/rubric.html`.** Both list it as
+      needing the tags, and add-sitenav would also add `tokens.css` — but
+      CLAUDE.md records that page as deliberately standalone (its own
+      palette and fonts, its own copy of the engine), so applying them
+      would change how it renders. Either add it to the tools' skip lists
+      beside the marimo exports, or decide it should be a normal page and
+      port it. Until then `--write` cannot be run blind. **S** *(found
+      2026-11-09, building the Applied Computing holiday homework)*
 - [ ] **Space deck 6 understates the debris energy by 100×.** The "We do"
       slide says a 10 g bolt at 7,800 m/s has "20× more kinetic energy than
       a cricket ball", but its own figures are 304,200 J against 152 J,
@@ -1554,7 +1599,10 @@ re-earn it.
       Unit 2 AOS 1 project scaffolding and AOS 2 cyber security decks
       plus the teacher-provided case study. Unit 1 is the half to build
       first — it is taught in Semester 1. *(in progress — Kodie, 17 Oct 2026)*
-      Dataset and all 16 AOS 1 decks landed 17 Oct 2026; see Part 1.
+      Dataset and all 16 AOS 1 decks landed 17 Oct 2026; the eight marimo
+      workbooks, eight revision worksheets and the Unit 1 lesson booklet
+      (topics 1–4 of 16) landed 18 Oct 2026; see Part 1.
+      Summer holiday homework landed 9 Nov 2026; see Part 1.
 
 **Ordering note:** don't take a Tier 4 subject purely because it's next
 alphabetically. Prefer whichever you're actually teaching, or whichever
