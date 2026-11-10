@@ -1185,7 +1185,7 @@ function mathHead(up){
 function commonHead(up){
   return '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
    '<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800' +
-   '&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">\n' +
+   '&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">\n' +
    '<link rel="stylesheet" href="' + up + 'assets/css/tokens.css">\n';
 }
 function tailHead(up){
@@ -1206,6 +1206,8 @@ function deckHead(up){
    commonHead(up) +
    '<link rel="stylesheet" href="' + up + 'assets/css/deck.css">\n' +
    (usesQuiz() ? '<link rel="stylesheet" href="' + up + 'assets/css/quiz.css">\n' : "") +
+   '<link rel="stylesheet" href="' + up + 'assets/css/workbook.css">\n' +
+   '<script src="' + up + 'assets/js/workbook.js"><\/script>\n' +
    tailHead(up);
 }
 function sheetHead(up){
@@ -1221,6 +1223,14 @@ function deckTail(up){
    (usesQuiz() ? '<script src="' + up + 'assets/js/quiz.js" defer><\/script>\n' : "");
 }
 
+/* Every deck is on the workbook look (Nov 2026). The theme picks the
+   cover colour; Year 7 Science units set their own (wb-eco, wb-forces …)
+   by hand, so plain theme-science gets the default teal. */
+var WB_FOR_THEME = {"theme-methods":"wb-maths","theme-primer":"wb-maths","theme-maths":"wb-maths",
+  "theme-foundation":"wb-maths","theme-specialist":"wb-specialist","theme-algorithmics":"wb-algorithmics",
+  "theme-computing":"wb-computing","theme-space":"wb-space"};
+function wbClass(theme){ return WB_FOR_THEME[theme] ? " " + WB_FOR_THEME[theme] : ""; }
+
 function buildDeckFile(head, tail){
   var up = depthPrefix();
   var slides = doc.items.map(function(s,i){
@@ -1231,7 +1241,7 @@ function buildDeckFile(head, tail){
    '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
    (head == null ? deckHead(up) : head) +
    "</head>\n" +
-   '<body class="deck-page ' + doc.theme + '">\n\n' +
+   '<body class="deck-page ' + doc.theme + ' workbook' + wbClass(doc.theme) + '">\n\n' +
    '<div class="progress"></div>\n' +
    '<div class="lessontag">' + esc(doc.lessontag) + "</div>\n" +
    '<a class="homebtn" href="' + esc(doc.homeHref) + '">' + esc(doc.homeText) + "</a>\n\n" +
@@ -1332,7 +1342,7 @@ function safeStyle(css){ return String(css).replace(/<\/style/gi, "<\\/style"); 
 function safeScript(js){ return String(js).replace(/<\/script/gi, "<\\/script"); }
 
 var FONT_CSS_URL = "https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800" +
-  "&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap";
+  "&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap";
 
 /* Google serves one @font-face per family per unicode subset. Only the
    latin ones are kept — the rest are Cyrillic, Greek and Vietnamese
@@ -1390,6 +1400,7 @@ function buildSelfContained(say){
              "../assets/css/" + (deck ? "deck.css" : "worksheet.css"),
              "../assets/css/sitenav.css"];
   if (deck && usesQuiz()) css.splice(2, 0, "../assets/css/quiz.css");
+  if (deck) css.splice(css.length - 1, 0, "../assets/css/workbook.css");   /* before sitenav, as on the site */
 
   say("Collecting stylesheets…");
   var jobs = {
@@ -1454,9 +1465,10 @@ function previewShell(){
    '<script src="' + up + 'assets/vendor/mathjax/tex-svg.js"><\/script>' +
    '<link rel="preconnect" href="https://fonts.googleapis.com">' +
    '<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800' +
-   '&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">' +
+   '&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">' +
    '<link rel="stylesheet" href="' + up + 'assets/css/tokens.css">' +
    '<link rel="stylesheet" href="' + up + 'assets/css/' + css + '">' +
+   (doc.kind === "deck" ? '<link rel="stylesheet" href="' + up + 'assets/css/workbook.css">' : "") +
    (doc.kind === "deck"
      ? "<style>.slide{position:static!important;display:flex!important;height:100%}" +
        ".deck{height:100%}body{overflow:auto}" +
@@ -1496,6 +1508,7 @@ function paintPreview(){
   var root = d && d.getElementById("root");
   if (!root) return;
   d.body.className = (doc.kind === "deck" ? "deck-page " : "worksheet-page ") + doc.theme +
+    (doc.kind === "deck" ? " workbook" + wbClass(doc.theme) : "") +
                      (showAll ? " pv-all" : "");
   if (doc.kind === "deck"){
     var s = doc.items[sel];

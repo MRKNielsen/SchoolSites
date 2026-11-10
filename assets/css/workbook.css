@@ -462,7 +462,7 @@ body.deck-page.workbook { background-color: var(--paper); background-image: var(
   --box-c: var(--ink-soft);
   border: 0; border-radius: 4px;
   background: color-mix(in srgb, var(--box-c) 9%, var(--card));
-  padding: 14px 20px 16px;
+  padding: 12px 20px 14px;     /* with the tab, the same height as deck.css's box */
 }
 .deck-page.workbook .box.key,
 .deck-page.workbook .box.defn,
@@ -474,8 +474,8 @@ body.deck-page.workbook { background-color: var(--paper); background-image: var(
 .deck-page.workbook .box.country  { --box-c: var(--country); background: var(--country-bg); }
 .deck-page.workbook .box.defn     { outline: 2px solid color-mix(in srgb, var(--box-c) 45%, transparent); outline-offset: -2px; }
 .deck-page.workbook .box .lbl {
-  display: inline-block; margin-bottom: 9px;
-  padding: 3px 10px 2px; border-radius: 3px;
+  display: inline-block; margin-bottom: 6px;
+  padding: 2px 9px 1px; border-radius: 3px; line-height: 1.35;
   font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .09em;
   color: var(--wb-cover-paper); background: var(--box-c);
 }
@@ -545,6 +545,26 @@ body.deck-page.workbook { background-color: var(--paper); background-image: var(
   box-shadow:
     inset 6px 0 8px -6px rgba(var(--wb-shadow), 0.18),
     0 22px 40px -18px rgba(var(--wb-shadow), 0.55);
+}
+
+/* Section slides: a printed divider page instead of deck.css's glossy
+   gradient — the subject colour, flat, with one cover-style circle. */
+.deck-page.workbook .section-slide {
+  background: var(--wb-page-accent); color: var(--wb-cover-paper);
+  overflow: hidden;   /* slides are already positioned, so ::before sits inside */
+}
+.deck-page.workbook .section-slide::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  width: min(30vw, 48vh); aspect-ratio: 1; right: -8vw; top: -16vh;
+  border-radius: 50%; background: var(--wb-fill-mustard); opacity: .9;
+}
+.deck-page.workbook .section-slide > * { position: relative; z-index: 1; }
+.deck-page.workbook .section-slide h1,
+.deck-page.workbook .section-slide h2,
+.deck-page.workbook .section-slide a { color: var(--wb-cover-paper); }
+.deck-page.workbook .section-slide .chip { border-color: color-mix(in srgb, var(--wb-cover-paper) 50%, transparent); }
+.deck-page.workbook .deck:has(.section-slide.active)::after {
+  background: linear-gradient(to bottom, transparent, var(--wb-page-accent));
 }
 
 /* ---------- Booklet view: the page students should be on ----------

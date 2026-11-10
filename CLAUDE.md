@@ -217,15 +217,26 @@ draws the Milky Way and its dark lane, not the Emu or any other specific
 figure; keep it that way unless the unit's Aboriginal and Torres Strait
 Islander sources supply an image to use.
 
-**Workbook decks** (`<body class="deck-page theme-space workbook wb-space">`,
-workbook.css after deck.css/quiz.css, workbook.js in `<head>`): cream
-paper, Outfit headings, the unit's cover beside the title
-(`img.title-cover`), and boxes tinted toward the card colour rather than
-white so they work on charcoal. **Year 7 workbook decks are the one
-exception to the pedagogy-colour rule above** (Kodie's call, Nov 2026):
-`body.deck-page.workbook` in tokens.css remaps I do / We do / You do to
-navy / deep mustard / deep teal and nudges answer green and error red
-toward the cover palette. Every other deck keeps the standard colours.
+**Workbook decks — every deck on the site** (Kodie's call, Nov 2026: it
+started as Year 7 only and was rolled out site-wide on 10 Nov). Each deck
+has `workbook` plus a colour class on `<body>`, the Outfit font in its
+Google Fonts link, and workbook.css + workbook.js straight before the
+sitenav stylesheet (so after deck.css, quiz.css and any widget CSS):
+`<body class="deck-page theme-space workbook wb-space">`. Colour classes:
+Year 7 units `wb-eco` / `wb-space` / `wb-forces` / `wb-particle`; Year 10
+primer and Methods `wb-maths` (navy), Specialist `wb-specialist` (green),
+Algorithmics `wb-algorithmics` (rust), Applied Computing `wb-computing`
+(teal). A new subject gets a class in tokens.css from the same cover
+palette. The look: cream paper (charcoal in dark mode), Outfit headings,
+boxes tinted toward the card colour, and **section slides as flat
+printed divider pages** in the subject colour with one mustard circle
+(not deck.css's gradient). Year 7 title slides also carry the unit's
+cover (`img.title-cover`). **The workbook layer remaps the pedagogy
+colours on every deck**: `body.deck-page.workbook` in tokens.css sets I do
+/ We do / You do to navy / deep mustard / deep teal and nudges answer
+green and error red toward the cover palette — this replaces the old
+"pedagogy colours never change" rule for decks. `tools/page-builder.html`
+writes new decks this way (theme → colour class in `WB_FOR_THEME`).
 Reference: `year7-science/space/deck1.html`.
 
 Inside a workbook slide, workbook.css also restyles the components in the
@@ -251,8 +262,18 @@ enlarges (Escape, a click or any other key puts it back):
 <button class="bookview" type="button" aria-label="Show booklet page larger"><img alt="Booklet page"><span class="bv-cap">Booklet p.&nbsp;<span class="bk-page" data-label="sub:1.2">3</span> &middot; §1.2</span></button>
 ```
 
-It replaces the hand-typed `.bookref.book` chip on workbook decks
-(worksheet chips stay `.bookref.sheet`). The deck's `<main>` carries
+It replaces the hand-typed `.bookref.book` chip on every Year 7 deck
+(worksheet chips stay `.bookref.sheet`; a chip naming several sections,
+like a revision overview, stays a chip). Space Lesson 1 numbers its views
+from booklet labels as below. **The other Year 7 decks** (rolled out
+10 Nov 2026) carry the page as plain text, `<span class="bk-page">35</span>`
+with no `data-label`; every one was checked against the booklet PDF when
+it was made (by the item it names — Worked Example, We do, Task,
+Extension, a § heading, or a Q within its section; Ecosystems' Year 8
+boxes by their lavender colour), which corrected 38 stale numbers, most of
+them in Ecosystems. After the A5 rebuild they must be re-derived, not
+hand-edited. The Forces investigation booklet's views carry
+`data-booklet-pages="booklet/trebuchet-pages/"` on the button itself. The deck's `<main>` carries
 `data-booklet="booklet/….tex"` (so `booklet_pages.py` writes the page
 numbers, exactly as on a contents page) and
 `data-booklet-pages="booklet/pages/"`; workbook.js builds the image path
@@ -261,7 +282,11 @@ from the number. The page images are build output:
 ```bash
 python3 tools/booklet_images.py year7-science/space/booklet/Space_Unit_Booklet_Yr7_8.pdf          # write pNN.jpg
 python3 tools/booklet_images.py year7-science/space/booklet/Space_Unit_Booklet_Yr7_8.pdf --check  # exit 1 if stale
+python3 tools/booklet_images.py year7-science/forces/booklet/Trebuchet_Investigation_Yr7_8.pdf --out year7-science/forces/booklet/trebuchet-pages
 ```
+
+Images are named `p01.jpg … p99.jpg, p100.jpg …` — the names workbook.js
+asks for — whatever the page count. All five Year 7 booklets have them.
 
 `B` was free in both deck.js (arrows, space, R, M, 1–9) and sitenav.js
 (N, Escape). Not yet done: outlining the exact box on the page — that
@@ -513,8 +538,9 @@ path and not a stack of overlapping objects.
   `--accent`, `--accent-dark`, `--accent-warm` (define new hexes as
   primitives in the same file first). Theme classes work on any page type
   (decks, hubs, landing pages). Do not override the pedagogy colours
-  (`--ido/--wedo/--youdo`), answer-green, or error-red — these stay
-  consistent across subjects.
+  (`--ido/--wedo/--youdo`), answer-green, or error-red per subject —
+  they stay consistent across subjects. (On decks the workbook layer
+  sets them once for everyone; see "Workbook decks".)
 - Slides are `<section class="slide">` inside `<main class="deck">`;
   variants: `title-slide`, `section-slide`, `exit-slide`.
 - Callouts use the box system: `<div class="box key|defn|try|example|hint|answer|question|cas">`

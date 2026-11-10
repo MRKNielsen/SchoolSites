@@ -267,7 +267,10 @@ body.workbook {
      it only darkens whatever paper sits under it. */
   --wb-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.4 1.1'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
 }
-/* --wb-page-accent is the unit colour ON PRINTED PAPER (lesson pages,
+/* Subject classes for workbook decks outside Year 7 Science (Nov 2026,
+   site-wide): wb-maths (Year 10 primer, Methods) navy, wb-specialist green,
+   wb-algorithmics rust, wb-computing teal — the same cover palette.
+   --wb-page-accent is the unit colour ON PRINTED PAPER (lesson pages,
    covers) — the dark-mode block deliberately does not change it. */
 body.workbook             { --wb-page-accent: var(--c-wb-teal); }
 body.workbook {
@@ -276,11 +279,16 @@ body.workbook {
   --wb-fill-rust: var(--c-wb-fill-rust);       --wb-fill-navy: var(--c-wb-fill-navy);
   --wb-fill-green: var(--c-wb-fill-green);
 }
-body.workbook.wb-eco      { --wb-page-accent: var(--c-wb-green); }
-body.workbook.wb-space    { --wb-page-accent: var(--c-wb-navy); }
-body.workbook.wb-forces   { --wb-page-accent: var(--c-wb-rust); }
-body.workbook.wb-particle { --wb-page-accent: var(--c-wb-teal); }
-body.workbook.wb-eco      { --accent: var(--c-wb-green); --accent-dark: var(--c-wb-green); }
+body.workbook.wb-eco,
+body.workbook.wb-specialist { --wb-page-accent: var(--c-wb-green); }
+body.workbook.wb-space,
+body.workbook.wb-maths    { --wb-page-accent: var(--c-wb-navy); }
+body.workbook.wb-forces,
+body.workbook.wb-algorithmics { --wb-page-accent: var(--c-wb-rust); }
+body.workbook.wb-particle,
+body.workbook.wb-computing { --wb-page-accent: var(--c-wb-teal); }
+body.workbook.wb-eco,
+body.workbook.wb-specialist { --accent: var(--c-wb-green); --accent-dark: var(--c-wb-green); }
 /* Decks: deck.css sets --paper/--ink/--line on body.deck-page, which would
    beat body.workbook at equal specificity, so restate them here. */
 body.deck-page.workbook {
@@ -289,9 +297,12 @@ body.deck-page.workbook {
   --pos: var(--c-wb-pos); --neg: var(--c-wb-neg);
   --wb-ido-text: var(--c-wb-ido);
 }
-body.workbook.wb-space    { --accent: var(--c-wb-navy);  --accent-dark: var(--c-wb-navy); }
-body.workbook.wb-forces   { --accent: var(--c-wb-rust);  --accent-dark: var(--c-wb-rust); }
-body.workbook.wb-particle { --accent: var(--c-wb-teal);  --accent-dark: var(--c-wb-teal); }
+body.workbook.wb-space,
+body.workbook.wb-maths    { --accent: var(--c-wb-navy);  --accent-dark: var(--c-wb-navy); }
+body.workbook.wb-forces,
+body.workbook.wb-algorithmics { --accent: var(--c-wb-rust);  --accent-dark: var(--c-wb-rust); }
+body.workbook.wb-particle,
+body.workbook.wb-computing { --accent: var(--c-wb-teal);  --accent-dark: var(--c-wb-teal); }
 
 @media (prefers-color-scheme: dark) {
   body.workbook {
@@ -311,13 +322,17 @@ body.workbook.wb-particle { --accent: var(--c-wb-teal);  --accent-dark: var(--c-
     --wb-shadow:   0, 0, 0;
     color-scheme: dark;
   }
-  body.workbook.wb-eco      { --accent: var(--c-wb-green-dk); --accent-dark: var(--c-wb-green-dk); }
+  body.workbook.wb-eco,
+  body.workbook.wb-specialist { --accent: var(--c-wb-green-dk); --accent-dark: var(--c-wb-green-dk); }
   body.deck-page.workbook {
     --paper: var(--c-wb-paper-dk); --ink: var(--c-wb-ink-dk); --line: var(--c-wb-line-dk);
     --pos: var(--c-wb-pos-dk); --neg: var(--c-wb-neg-dk);
     --wb-ido-text: var(--c-wb-ido-dk);
   }
-  body.workbook.wb-space    { --accent: var(--c-wb-navy-dk);  --accent-dark: var(--c-wb-navy-dk); }
-  body.workbook.wb-forces   { --accent: var(--c-wb-rust-dk);  --accent-dark: var(--c-wb-rust-dk); }
-  body.workbook.wb-particle { --accent: var(--c-wb-teal-dk);  --accent-dark: var(--c-wb-teal-dk); }
+  body.workbook.wb-space,
+  body.workbook.wb-maths    { --accent: var(--c-wb-navy-dk);  --accent-dark: var(--c-wb-navy-dk); }
+  body.workbook.wb-forces,
+  body.workbook.wb-algorithmics { --accent: var(--c-wb-rust-dk);  --accent-dark: var(--c-wb-rust-dk); }
+  body.workbook.wb-particle,
+  body.workbook.wb-computing { --accent: var(--c-wb-teal-dk);  --accent-dark: var(--c-wb-teal-dk); }
 }

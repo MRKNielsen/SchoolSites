@@ -1702,6 +1702,18 @@ starting a new one.
             level, recap; booklet page refs from the build; 60 retrieval
             questions added to questions.js; "Lesson N of 15". Decks 7–15 to
             come.)*
+      - [x] **Workbook deck look site-wide** (Kodie, 2026-11-10 — widened
+            from Year 7 only). All 112 decks: workbook body class + subject
+            colour (new wb-maths / wb-specialist / wb-algorithmics /
+            wb-computing in tokens.css), Outfit, section slides as flat
+            divider pages, Year 7 title covers; page-builder writes the same.
+            Box padding tightened so slides keep their height: of 2,263
+            slides measured before/after, 6 newly need a scroll (all but one
+            by under 25 px). Booklet views on all 42 Year 7 decks (415
+            views, page images for all five booklets), every page checked
+            against its PDF — 38 stale numbers corrected. Not done: inline
+            SVG diagrams outside Space Lesson 1 keep their old hard-coded
+            colours.
       - [ ] 3. Space booklet rebuilt as A5 with the new look and box
             positions recorded — **test-print on the school copier in
             booklet mode before going further**.

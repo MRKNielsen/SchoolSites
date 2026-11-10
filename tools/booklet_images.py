@@ -9,7 +9,9 @@ They are build output from the PDF, never edited by hand:
     python3 tools/booklet_images.py year7-science/space/booklet/Space_Unit_Booklet_Yr7_8.pdf --check
 
 writes booklet/pages/p01.jpg, p02.jpg ... (700 px wide, JPEG) beside the
-PDF. --check changes nothing and exits 1 if any page image is missing,
+PDF. A folder with two booklets gives the second its own folder with
+--out, e.g. --out year7-science/forces/booklet/trebuchet-pages; a deck
+points a bookview at it with data-booklet-pages on the button. --check changes nothing and exits 1 if any page image is missing,
 older than the PDF, or left over from a longer booklet. Re-run after
 every booklet rebuild. Needs pdftoppm (poppler).
 """
@@ -30,7 +32,8 @@ def pages_of(pdf):
 
 
 def name(n, total):
-    return "p%0*d.jpg" % (max(2, len(str(total))), n)
+    # p01 … p99, p100 …: the same names workbook.js asks for (pageFile)
+    return "p%02d.jpg" % n
 
 
 def main(argv):
@@ -39,6 +42,8 @@ def main(argv):
     pdf = argv[1]
     check = "--check" in argv[2:]
     outdir = os.path.join(os.path.dirname(pdf), "pages")
+    if "--out" in argv[2:]:
+        outdir = argv[argv.index("--out") + 1]
     total = pages_of(pdf)
     want = {name(n, total) for n in range(1, total + 1)}
     have = {os.path.basename(f) for f in glob.glob(os.path.join(outdir, "p*.jpg"))}
