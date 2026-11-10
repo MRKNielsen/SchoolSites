@@ -12,7 +12,7 @@
    Needs the Outfit font in the page's Google Fonts link. All colours
    come from the body.workbook tokens in tokens.css, which also carry
    the charcoal dark-mode values — nothing here is light/dark specific.
-   Page types covered so far: course-page, plus the book navigation
+   Page types covered: decks, course-page and hub-page (all subjects), plus the book navigation
    (shelf cover -> contents spread -> page flick) further down, which
    needs assets/js/workbook.js. Decks, booklets and worksheets follow (see ROADMAP-DETAIL "Year 7 Science workbook
    redesign").
@@ -83,6 +83,110 @@ body.course-page.workbook {
     0 22px 34px -14px rgba(var(--wb-shadow), 0.5);
 }
 .workbook .cover-card:focus-visible img { outline-color: var(--accent); }
+
+/* The rest of course.css's glass components, on paper (Nov 2026: every
+   course and hub page site-wide, not just Year 7). */
+.workbook .acknowledgement {
+  background: var(--card); border-color: var(--line); color: var(--ink-soft);
+}
+.workbook .acknowledgement a { color: var(--accent); }
+.workbook .dc-num { color: color-mix(in srgb, var(--accent) 55%, var(--paper)); }
+.workbook .dc-quiz { color: var(--ink-faint); }
+.workbook .dc-ext {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.workbook .deck-card.is-ext { border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+.workbook .deck-card.feature:hover {
+  background: color-mix(in srgb, var(--card) 80%, var(--accent) 8%);
+}
+.workbook .deck-card.feature .go { color: var(--accent); }
+.workbook .dc-wslink,
+.workbook .ws-link {
+  background: var(--card); border-color: var(--line); color: var(--ink);
+}
+.workbook .dc-wslink:hover,
+.workbook .ws-link:hover { border-color: var(--accent); background: var(--card); }
+.workbook .dc-wslink .wl-marks,
+.workbook .ws-link .wl-marks { color: var(--ink-faint); }
+.workbook .ws-link .wl-num { color: color-mix(in srgb, var(--accent) 55%, var(--paper)); }
+.course-page.workbook .band-label { color: var(--ink-faint); }
+
+/* Site home: year tabs as bookmarks */
+.workbook .ytab {
+  color: var(--ink-soft); background: var(--card); border-color: var(--line);
+}
+.workbook .ytab:hover { border-color: var(--accent); color: var(--ink); background: var(--card); }
+.workbook .ytab:focus-visible { outline-color: var(--accent); }
+.workbook .ytab[aria-selected="true"] {
+  background: var(--accent); border-color: var(--accent); color: var(--paper);
+}
+
+/* Embedded PDFs */
+.workbook .pdf-frame { background: var(--card); border-color: var(--line); }
+.workbook .pdf-fallback { color: var(--ink-soft); }
+.workbook .pdf-fallback strong { color: var(--ink); }
+.workbook .pdf-btn { background: var(--card); border-color: var(--line); color: var(--ink); }
+.workbook .pdf-btn:hover { border-color: var(--accent); background: var(--card); }
+
+/* ---------- Course hub pages (hub.css) on paper ----------
+   The weekly calendar, milestone strip and topic buttons as a printed
+   planner: cream page, white cards, the subject colour for emphasis, and
+   deep mustard (the We do colour) where hub.css used amber, which does not
+   read on cream. */
+body.hub-page.workbook {
+  background-color: var(--paper);
+  background-image: var(--wb-grain);
+  color: var(--ink);
+}
+.hub-page.workbook .backlink { background: transparent; }
+.hub-page.workbook .hub-head h1 { color: var(--ink); font-weight: 600; letter-spacing: -0.02em; }
+.hub-page.workbook .hub-head p { color: var(--ink-soft); opacity: 1; }
+.hub-page.workbook h2 { color: var(--ink); font-weight: 600; }
+.hub-page.workbook .mile {
+  background: var(--card); border-color: var(--line); border-left-color: var(--accent);
+  color: var(--ink);
+}
+.hub-page.workbook .mile span { color: var(--ink-soft); }
+.hub-page.workbook .mile.next { outline-color: var(--accent); }
+.hub-page.workbook .countdown { color: var(--wedo); }
+.hub-page.workbook .week,
+.hub-page.workbook .topic {
+  background: var(--card); border-color: var(--line); color: var(--ink);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.hub-page.workbook .week:hover { background: var(--card); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.hub-page.workbook .week.current {
+  border-color: var(--accent); background: var(--card);
+  box-shadow: 0 8px 20px -12px rgba(var(--wb-shadow), 0.45);
+}
+.hub-page.workbook .week.current .wk-head::after { background: var(--accent); color: var(--paper); }
+.hub-page.workbook .wk-head .dates { color: var(--ink-soft); }
+.hub-page.workbook .aosC { background: color-mix(in srgb, var(--ink) 14%, transparent); color: var(--ink); }
+.hub-page.workbook ul.periods li { border-top-color: var(--line); color: var(--ink); }
+.hub-page.workbook ul.periods li::before { color: var(--ink-faint); }
+.hub-page.workbook ul.periods li b { color: var(--wedo); }
+.hub-page.workbook ul.periods a { color: var(--ink); }
+.hub-page.workbook .ch-meta,
+.hub-page.workbook .legend,
+.hub-page.workbook .prog { color: var(--ink-soft); }
+.hub-page.workbook .ch-open,
+.hub-page.workbook .links a {
+  color: var(--ink); background: var(--card); border-color: var(--line);
+}
+.hub-page.workbook .ch-open:hover,
+.hub-page.workbook .links a:hover { border-color: var(--accent); background: var(--card); }
+.hub-page.workbook .links { border-top-color: var(--line); }
+.hub-page.workbook .c-accent,
+.hub-page.workbook .c-navy { background: var(--accent); color: var(--paper); }
+.hub-page.workbook .topic::after { color: var(--ink-faint); }
+.hub-page.workbook .topic:hover,
+.hub-page.workbook .topic:focus-visible { background: var(--card); border-color: var(--accent); }
+.hub-page.workbook .topic:hover::after,
+.hub-page.workbook .topic:focus-visible::after { color: var(--accent); }
+.hub-page.workbook .tp-eyebrow { color: var(--accent); }
+.hub-page.workbook .tp-meta { color: var(--ink-soft); }
+.hub-page.workbook footer { color: var(--ink-faint); }
 
 /* ============================================================
    BOOK NAVIGATION (with assets/js/workbook.js)

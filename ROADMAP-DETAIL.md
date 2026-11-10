@@ -1702,6 +1702,12 @@ starting a new one.
             level, recap; booklet page refs from the build; 60 retrieval
             questions added to questions.js; "Lesson N of 15". Decks 7–15 to
             come.)*
+      - [x] **Landing pages site-wide + Ecosystems and Forces contents pages**
+            (Kodie, 2026-11-10). 53 course and hub pages on paper (new hub-page
+            rules in workbook.css); Ecosystems and Forces rebuilt as contents
+            spreads with cover opening, 29 new lesson symbols (colour + ink),
+            booklet page numbers, every old card kept under "Also in this unit".
+            Open: the Ecosystems PDF predates its source (see CLAUDE.md).
       - [x] **Workbook deck look site-wide** (Kodie, 2026-11-10 — widened
             from Year 7 only). All 112 decks: workbook body class + subject
             colour (new wb-maths / wb-specialist / wb-algorithmics /

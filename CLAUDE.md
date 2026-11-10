@@ -188,6 +188,8 @@ fills the window at ~0.97 s, swings open by ~2.1 s, page usable at
 rushed; time it with `animationstart`/`animationend` events instead.
 Reference: `year7-science/space/index.html`.
 
+**Every course and hub page is on paper too** (Nov 2026, site-wide): `workbook` plus the subject's colour class on `<body>` (the same classes as the decks; the site home and 404 take the default teal), Outfit in the font link, and workbook.css before sitenav.css. workbook.css restyles course.css's glass components (cards, worksheet links, year tabs, PDF frames, the acknowledgement) and hub.css's weekly calendar, milestone strip and topic buttons as a printed planner — white cards on cream, the subject colour for emphasis, deep mustard where hub.css used amber. Only Year 7 unit pages also load workbook.js (cover opening and page flick). All four Year 7 units now have contents pages: Space, Particle Model, Ecosystems (11 lessons, worksheets under each page) and Forces (18 — Lessons 15–18 point at the investigation booklet and say so instead of giving a page). Ecosystems' booklet labels each section inside its `\sectiondiv` macro (`\label{sec:#1}`). Its committed PDF is an older build: today's build runs a page longer from Lesson 9, so `booklet_pages.py --check` reports 9–11 as stale. The page keeps the committed PDF's numbers (31, 35, 39) because that is what students print and what the decks' booklet views were checked against; when the PDF is rebuilt, re-run `booklet_pages.py`, `booklet_images.py` and the deck views together.
+
 A unit's contents page (`section.contents`) lists each lesson as an
 A5-shaped `.lesson-page` in a `.page-grid`, captioned "Turn to page N".
 **N is never typed.** Each number is
@@ -212,7 +214,7 @@ the link, so nothing is clipped. Space's symbols come from
 `tools/space_symbols.py`, which draws each one once and writes the colour
 SVG for the site and an ink SVG + PDF for the booklet
 (`space/booklet/art/lN-ink.pdf`) from the same geometry — edit the script,
-never the SVGs. It asserts the orbit rule above. Particle Model's come from `tools/particle_symbols.py`, which reuses Space's drawing kit. A lesson in the booklet without a deck yet is a `<div class="lesson-page is-soon">` with a "Deck coming" `.lp-flag` — never a link to a missing page; swap it for the `<a>` when the deck lands. Lesson 7 deliberately
+never the SVGs. It asserts the orbit rule above. Particle Model's come from `tools/particle_symbols.py`, Ecosystems' from `tools/ecosystems_symbols.py` and Forces' (Lessons 1–18, the investigation included) from `tools/forces_symbols.py`; all reuse Space's drawing kit through `tools/unit_symbols_common.py`, which also drops duplicate SVG attributes so every ink file is valid XML. A lesson in the booklet without a deck yet is a `<div class="lesson-page is-soon">` with a "Deck coming" `.lp-flag` — never a link to a missing page; swap it for the `<a>` when the deck lands. Lesson 7 deliberately
 draws the Milky Way and its dark lane, not the Emu or any other specific
 figure; keep it that way unless the unit's Aboriginal and Torres Strait
 Islander sources supply an image to use.
