@@ -12,7 +12,11 @@ python3 fill_a5.py Space_Section1_A5         # builds, then grows boxes to fill 
 - `make_a5_test.py` — slices Section 1 out of the master and applies the A5
   layout (see its docstring for every change). Fails if any word is lost.
 - `fill_a5.py` — the Particle Model page filler with A5 geometry.
-- `art/l1-ink.pdf` — Lesson 1's ink symbol; `art/make_symbols.py` draws
-  every symbol in colour and ink from one geometry.
+- `../art/lN-ink.pdf` — the ink lesson symbols, shared by the core and
+  extension books. `tools/space_symbols.py` draws every symbol in colour (for
+  the site) and ink (for the booklet) from one geometry; rerun it after a
+  change.
+- Headings are set in Outfit (`../fonts/Outfit-*.ttf`, OFL licence beside
+  them), the site's heading face. Body text stays Lato.
 
 Print `Space_Section1_A5.pdf` with the copier's **booklet** setting to test it.

@@ -50,10 +50,13 @@ PREAMBLE = r"""% ============================================================
   Path=../fonts/, Extension=.ttf, Ligatures=TeX,
   UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
   BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
-\newfontfamily\headingfont{Poppins}[
+% Headings in Outfit, the site's heading face. Bold is Outfit SemiBold, the
+% weight the site uses; Outfit has no italic, so a slanted one stands in.
+\newfontfamily\headingfont{Outfit}[
   Path=../fonts/, Extension=.ttf, Ligatures=TeX,
-  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
-  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
 
 % A5, mirrored: the wider margin is on the inside, by the fold.
 \usepackage[a5paper, inner=17mm, outer=13mm, top=19mm, bottom=17mm,
@@ -347,6 +350,13 @@ def document(vc, body, words, core):
 \thispagestyle{empty}
 \begin{tikzpicture}[remember picture, overlay]
   \node at (current page.center) {\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio=false, trim=0 40 0 40, clip]{../../../covers/earth-solar-system.jpg}};
+  % Name box, top right: white, so it writes on clearly over the art. Sized to
+  % sit right of the cover's baked-in title ("Earth in our" ends ~100 mm in);
+  % check it again when a cover changes.
+  \node[anchor=north east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.5mm,
+        inner xsep=2.4mm, inner ysep=2mm, text width=33mm, font=\headingfont\footnotesize]
+    at ([xshift=-5mm, yshift=-4.5mm]current page.north east)
+    {\textbf{Name}\par\vspace{4.2mm}\hrule\vspace{2.2mm}\textbf{Class}\par\vspace{4.2mm}\hrule};
 \end{tikzpicture}
 \mbox{}
 \clearpage
@@ -379,7 +389,7 @@ Section~N goes with Lesson~N. Each kind of box has its own frame and mark:\par\s
 \end{keybox}
 
 % ---- Section 1 ------------------------------------------------------------
-\lessonopener{1}{Earth, Moon and Sun --- Scale and Structure}{art/l1-ink.pdf}{1 \textbullet\ Earth, Moon and Sun}\label{sec:1}
+\lessonopener{1}{Earth, Moon and Sun --- Scale and Structure}{../art/l1-ink.pdf}{1 \textbullet\ Earth, Moon and Sun}\label{sec:1}
 \vc{Science Understanding}{""" + vc + r"""}
 
 \begin{keyvocab}

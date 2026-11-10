@@ -1634,8 +1634,8 @@ starting a new one.
         start page in the printed booklet, read from the build's `.aux`. A
         short page-flick (~0.6 s) plays on every click before the deck
         opens. Reduced motion skips all of it. Lesson pages are
-        typographic (number, title, unit-colour shape) until Kodie
-        supplies lesson art.
+        typographic (number, title, unit-colour shape) until a unit has
+        lesson symbols (Space has them).
       - **Booklets** (lesson, investigation and teacher copies): reworked
         for **A5**. The copier's booklet mode folds plain A5 pages onto A4,
         so use mirrored margins, and the build pads to a multiple of 4
@@ -1681,6 +1681,27 @@ starting a new one.
       - [ ] Index covers for Ecosystems and Forces still open straight
             into their old pages (no opener until step 7). That is
             expected, not a bug.
+      - [x] Space lesson symbols, all 10, in colour and ink.
+            *(done 2026-11-09: `tools/space_symbols.py` → `space/img/symbols/`
+            (site) and `space/booklet/art/` (booklet). The Space contents page
+            leads each lesson page with its symbol; descriptions moved under
+            the page. The A5 trial's headings switched from Poppins to Outfit
+            (`booklet/fonts/Outfit-*.ttf` + OFL) to match the site.)*
+      - [x] Particle Model contents page, opener and lesson symbols.
+            *(done 2026-11-10, Kodie's calls: Lessons 1–15 only — mixtures,
+            solutions and separation (16–30) move to the Separation unit for
+            2027; lessons without a deck show as `div.lesson-page.is-soon`
+            "Deck coming", not links; the cover is live on the shelf.
+            `tools/particle_symbols.py` → `particle-model/img/symbols/` +
+            `booklet/art/`; booklet pages 3–117 via `booklet_pages.py`. The
+            booklet PDF and planner still hold Lessons 16–30 until Separation
+            is built.)*
+      - [x] Particle Model decks 2–6 (Weeks 1–2). *(done 2026-11-10: same
+            structure as deck 1 — review quiz, vocabulary, reading, every
+            booklet Worked Example as I do with its We do, practice, above
+            level, recap; booklet page refs from the build; 60 retrieval
+            questions added to questions.js; "Lesson N of 15". Decks 7–15 to
+            come.)*
       - [ ] 3. Space booklet rebuilt as A5 with the new look and box
             positions recorded — **test-print on the school copier in
             booklet mode before going further**.

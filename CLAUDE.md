@@ -203,6 +203,20 @@ builds the booklet in a scratch folder, reads the labels from the
 `.aux` and rewrites the numbers (needs xelatex). Re-run it whenever the
 booklet changes — the A5 rebuild will move every page.
 
+**Lesson symbols.** Each lesson page leads with its symbol:
+`<img class="lp-art" src="img/symbols/lN.svg" alt="" width="300" height="300">`
+first inside `.lesson-page` (decorative, so empty `alt`). With a symbol
+the number sits beside the title, and the description and quiz note move
+**under** the page as `<p class="lp-desc">` / `<p class="lp-quiz">` after
+the link, so nothing is clipped. Space's symbols come from
+`tools/space_symbols.py`, which draws each one once and writes the colour
+SVG for the site and an ink SVG + PDF for the booklet
+(`space/booklet/art/lN-ink.pdf`) from the same geometry — edit the script,
+never the SVGs. It asserts the orbit rule above. Particle Model's come from `tools/particle_symbols.py`, which reuses Space's drawing kit. A lesson in the booklet without a deck yet is a `<div class="lesson-page is-soon">` with a "Deck coming" `.lp-flag` — never a link to a missing page; swap it for the `<a>` when the deck lands. Lesson 7 deliberately
+draws the Milky Way and its dark lane, not the Emu or any other specific
+figure; keep it that way unless the unit's Aboriginal and Torres Strait
+Islander sources supply an image to use.
+
 **Workbook decks** (`<body class="deck-page theme-space workbook wb-space">`,
 workbook.css after deck.css/quiz.css, workbook.js in `<head>`): cream
 paper, Outfit headings, the unit's cover beside the title

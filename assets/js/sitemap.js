@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-09",
+ "generated": "2026-11-10",
  "tree": [
   {
    "t": "Home",
@@ -331,6 +331,31 @@ window.SITEMAP = {
           {
            "t": "Lesson 1 — States of Matter",
            "h": "year7-science/particle-model/deck1.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 2 — What is a Scientific Model?",
+           "h": "year7-science/particle-model/deck2.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 3 — Experiment 1: Matter Has Mass and Takes Up Space",
+           "h": "year7-science/particle-model/deck3.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 4",
+           "h": "year7-science/particle-model/deck4.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 5 — Particles Are Always Moving",
+           "h": "year7-science/particle-model/deck5.html",
+           "k": "science"
+          },
+          {
+           "t": "Lesson 6 — The Limits of the Model",
+           "h": "year7-science/particle-model/deck6.html",
            "k": "science"
           }
          ]
