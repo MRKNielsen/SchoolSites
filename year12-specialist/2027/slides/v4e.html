@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4E — Collinearity</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">4E · Collinearity</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Collinearity</h1>
+  <p>Three points on one line, and points that divide a segment</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 4 · Section 4E</span>
+</section>
+<section class="slide" data-topic="4E · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Show that three points are collinear using vectors</li><li>Find the ratio in which a point divides a line segment</li><li>Find unknown coordinates that make points collinear</li><li>Find where two lines in a figure cross</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 4E</p>
+</section>
+<section class="slide" data-topic="4E · Collinear points">
+  <h2>Collinear points</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Collinear</span><p>Three or more points are collinear if they lie on a single straight line.</p></div>
+<div class="box key"><span class="lbl">Test</span><p>\(A\), \(B\) and \(C\) are collinear exactly when \(\overrightarrow{AC} = k\,\overrightarrow{AB}\) for some real \(k\). The vectors are parallel <b>and</b> share the point \(A\).</p></div>
+<div class="box key"><span class="lbl">Equivalent form</span><p>\(\overrightarrow{OC} = (1 - k)\,\overrightarrow{OA} + k\,\overrightarrow{OB}\). The coefficients add to 1.</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 420 250" role="img" aria-label="Points A, B and C on one line: the vector AC is a multiple of the vector AB" style="color:var(--ink)"><line x1="40" y1="210" x2="380" y2="70" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="90" cy="189.4" r="4" fill="currentColor"/><circle cx="200" cy="144.1" r="4" fill="currentColor"/><circle cx="330" cy="90.6" r="4" fill="currentColor"/><text x="84" y="176" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="194" y="131" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">B</text><text x="324" y="77" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">C</text><line x1="90.0" y1="205.0" x2="184.8" y2="166.2" stroke="#c0392b" stroke-width="2.4" stroke-linecap="round"/><polygon points="195.0,162.0 183.1,161.9 186.6,170.4" fill="#c0392b"/><line x1="90.0" y1="221.0" x2="314.8" y2="128.2" stroke="#1a66d6" stroke-width="2.4" stroke-linecap="round"/><polygon points="325.0,124.0 313.1,123.9 316.6,132.4" fill="#1a66d6"/><text x="150" y="208" fill="#c0392b" font-size="15" text-anchor="middle" font-weight="700">AB</text><text x="250" y="190" fill="#1a66d6" font-size="15" text-anchor="middle" font-weight="700">AC = k AB</text></svg></div><p class="figcap">Parallel vectors with a common point</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4E · Dividing a segment">
+  <h2>Dividing a segment</h2>
+<div class="box key"><span class="lbl">Ratio</span><p>If \(P\) lies on \(AB\) with \(AP : PB = m : n\), then \[\overrightarrow{OP} = \mathbf{a} + \frac{m}{m+n}(\mathbf{b} - \mathbf{a}) = \frac{n\mathbf{a} + m\mathbf{b}}{m + n}\]</p></div>
+<div class="box example"><span class="lbl">Quick check</span><p>Midpoint: \(m = n = 1\) gives \(\tfrac12(\mathbf{a} + \mathbf{b})\).</p></div>
+<div class="box hint"><span class="lbl">Writing it up</span><p>Say both things: the vectors are parallel, and they have a point in common.</p></div>
+</section>
+<section class="slide" data-topic="4E · I do">
+  <h2><span class="phase-tag ido">I do</span> Showing points are collinear</h2>
+<div class="box example"><span class="lbl">Example 1</span><p>Show that \(A(1, 2, -1)\), \(B(3, 5, 1)\) and \(C(7, 11, 5)\) are collinear, and find \(AB : BC\).</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} + 3\mathbf{j} + 2\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{BC} = 4\mathbf{i} + 6\mathbf{j} + 4\mathbf{k} = 2\,\overrightarrow{AB}\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{BC}\) is parallel to \(\overrightarrow{AB}\) and \(B\) is common to both.</li>
+<li class="ans"><span class="stepno">✓</span> \(A\), \(B\), \(C\) are collinear and \(AB : BC = 1 : 2\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</section>
+<section class="slide" data-topic="4E · We do">
+  <h2><span class="phase-tag wedo">We do</span> Showing points are collinear</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Show that \(A(2, -1, 4)\), \(B(4, 3, 2)\) and \(C(5, 5, 1)\) are collinear, and find \(AB : BC\).</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} + 4\mathbf{j} - 2\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{BC} = \mathbf{i} + 2\mathbf{j} - \mathbf{k}\), so \(\overrightarrow{AB} = 2\,\overrightarrow{BC}\)</li>
+<li><span class="stepno">3</span> Parallel, with \(B\) in common.</li>
+<li class="ans"><span class="stepno">✓</span> Collinear, and \(AB : BC = 2 : 1\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</section>
+<section class="slide" data-topic="4E · I do">
+  <h2><span class="phase-tag ido">I do</span> Unknown coordinates</h2>
+<div class="box example"><span class="lbl">Example 2</span><p>The points \(A(1, -2, 3)\), \(B(3, 2, -1)\) and \(C(m, 8, n)\) are collinear. Find \(m\) and \(n\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} + 4\mathbf{j} - 4\mathbf{k}\) and \(\overrightarrow{AC} = (m - 1)\mathbf{i} + 10\mathbf{j} + (n - 3)\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{AC} = k\,\overrightarrow{AB}\). From \(\mathbf{j}\): \(10 = 4k\), so \(k = \tfrac52\)</li>
+<li><span class="stepno">3</span> \(m - 1 = 5\) and \(n - 3 = -10\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = 6,\ n = -7\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</section>
+<section class="slide" data-topic="4E · We do">
+  <h2><span class="phase-tag wedo">We do</span> Unknown coordinates</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>The points \(A(2, 1, 0)\), \(B(5, -1, 3)\) and \(C(-4, p, q)\) are collinear. Find \(p\) and \(q\).</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 3\mathbf{i} - 2\mathbf{j} + 3\mathbf{k}\) and \(\overrightarrow{AC} = -6\mathbf{i} + (p - 1)\mathbf{j} + q\mathbf{k}\)</li>
+<li><span class="stepno">2</span> From \(\mathbf{i}\): \(-6 = 3k\), so \(k = -2\)</li>
+<li><span class="stepno">3</span> \(p - 1 = 4\) and \(q = -6\)</li>
+<li class="ans"><span class="stepno">✓</span> \(p = 5,\ q = -6\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="4E · I do">
+  <h2><span class="phase-tag ido">I do</span> Where two lines cross <span class="chip">Exam style</span></h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 3</span><p>In triangle \(OAB\), \(\overrightarrow{OA} = \mathbf{a}\) and \(\overrightarrow{OB} = \mathbf{b}\). \(M\) is the midpoint of \(OA\), and \(N\) lies on \(OB\) with \(ON : NB = 2 : 1\). The lines \(AN\) and \(BM\) meet at \(P\). Find \(\overrightarrow{OP}\) in terms of \(\mathbf{a}\) and \(\mathbf{b}\).</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> \(P\) on \(AN\): \(\overrightarrow{OP} = \mathbf{a} + s\left(\tfrac23\mathbf{b} - \mathbf{a}\right) = (1 - s)\mathbf{a} + \tfrac23 s\,\mathbf{b}\)</li>
+<li><span class="stepno">2</span> \(P\) on \(BM\): \(\overrightarrow{OP} = \mathbf{b} + t\left(\tfrac12\mathbf{a} - \mathbf{b}\right) = \tfrac12 t\,\mathbf{a} + (1 - t)\mathbf{b}\)</li>
+<li><span class="stepno">3</span> \(\mathbf{a}\), \(\mathbf{b}\) not parallel: \(1 - s = \tfrac12 t\) and \(\tfrac23 s = 1 - t\)</li>
+<li><span class="stepno">4</span> Solving: \(s = \tfrac34,\ t = \tfrac12\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\overrightarrow{OP} = \tfrac14\mathbf{a} + \tfrac12\mathbf{b}\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Method</span><p>Write \(\overrightarrow{OP}\) two ways, one for each line, then equate coefficients.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4E · We do">
+  <h2><span class="phase-tag wedo">We do</span> Where two lines cross <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>In triangle \(OAB\), \(\overrightarrow{OA} = \mathbf{a}\) and \(\overrightarrow{OB} = \mathbf{b}\). \(M\) is the midpoint of \(AB\), and \(N\) lies on \(OA\) with \(ON : NA = 1 : 2\). The lines \(OM\) and \(BN\) meet at \(P\). Find \(\overrightarrow{OP}\), and the ratio \(OP : PM\).</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(P\) on \(OM\): \(\overrightarrow{OP} = \tfrac12 s(\mathbf{a} + \mathbf{b})\)</li>
+<li><span class="stepno">2</span> \(P\) on \(BN\): \(\overrightarrow{OP} = \mathbf{b} + t\left(\tfrac13\mathbf{a} - \mathbf{b}\right) = \tfrac13 t\,\mathbf{a} + (1 - t)\mathbf{b}\)</li>
+<li><span class="stepno">3</span> \(\tfrac12 s = \tfrac13 t\) and \(\tfrac12 s = 1 - t\), so \(t = \tfrac34,\ s = \tfrac12\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\overrightarrow{OP} = \tfrac14\mathbf{a} + \tfrac14\mathbf{b}\), and \(OP : PM = 1 : 1\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="4E · You do">
+  <h2><span class="phase-tag youdo">You do</span> Check your understanding</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">Are \((0, 1, 2)\), \((2, 0, 5)\) and \((6, -2, 11)\) collinear?</p><button class="reveal-btn">Answer</button><div class="a">Yes: \(\overrightarrow{AB} = 2\mathbf{i} - \mathbf{j} + 3\mathbf{k}\) and \(\overrightarrow{BC} = 2\,\overrightarrow{AB}\)</div></div>
+<div class="qcard"><p class="q">\(A(1, 1, 1)\) and \(B(6, -4, 11)\). Find \(P\) on \(AB\) with \(AP : PB = 2 : 3\).</p><button class="reveal-btn">Answer</button><div class="a">\(\overrightarrow{OP} = \mathbf{a} + \tfrac25\overrightarrow{AB}\), so \(P(3, -1, 5)\)</div></div>
+<div class="qcard"><p class="q">Find \(k\) if \((1, 2, 3)\), \((2, 4, k)\) and \((4, 8, 9)\) are collinear.</p><button class="reveal-btn">Answer</button><div class="a">\(\overrightarrow{AC} = 3\,\overrightarrow{AB}\), so \(3(k - 3) = 6\) and \(k = 5\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 4E</li><li><a href="../problemsets/v4e-problem-set.pdf">Problem Set 4E</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>What two things must you state to show points are collinear?</li><li>How do you find where two lines in a figure meet?</li><li>Hurdle 4E: four questions, working shown, final answer in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>

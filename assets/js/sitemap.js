@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-10",
+ "generated": "2026-11-11",
  "tree": [
   {
    "t": "Home",
@@ -1278,6 +1278,72 @@ window.SITEMAP = {
        "h": "year12-specialist/2027/index.html",
        "u": 1,
        "c": [
+        {
+         "t": "Lessons",
+         "g": 1,
+         "c": [
+          {
+           "t": "4A — Introduction to vectors",
+           "h": "year12-specialist/2027/slides/v4a.html",
+           "k": "specialist"
+          },
+          {
+           "t": "4B — Resolution of a vector into rectangular components",
+           "h": "year12-specialist/2027/slides/v4b.html",
+           "k": "specialist"
+          },
+          {
+           "t": "4C — Scalar product of vectors",
+           "h": "year12-specialist/2027/slides/v4c.html",
+           "k": "specialist"
+          },
+          {
+           "t": "4D — Vector projections",
+           "h": "year12-specialist/2027/slides/v4d.html",
+           "k": "specialist"
+          },
+          {
+           "t": "4E — Collinearity",
+           "h": "year12-specialist/2027/slides/v4e.html",
+           "k": "specialist"
+          },
+          {
+           "t": "4F — Geometric proofs",
+           "h": "year12-specialist/2027/slides/v4f.html",
+           "k": "specialist"
+          },
+          {
+           "t": "5A — Vector equations of lines",
+           "h": "year12-specialist/2027/slides/v5a.html",
+           "k": "specialist"
+          },
+          {
+           "t": "5B — Intersection of lines and skew lines",
+           "h": "year12-specialist/2027/slides/v5b.html",
+           "k": "specialist"
+          },
+          {
+           "t": "5C — Vector product",
+           "h": "year12-specialist/2027/slides/v5c.html",
+           "k": "specialist"
+          },
+          {
+           "t": "5D — Vector equations of planes",
+           "h": "year12-specialist/2027/slides/v5d.html",
+           "k": "specialist"
+          },
+          {
+           "t": "5E — Distances, angles and intersections",
+           "h": "year12-specialist/2027/slides/v5e.html",
+           "k": "specialist"
+          },
+          {
+           "t": "Week 1",
+           "h": "year12-specialist/2027/slides/w1.html",
+           "k": "specialist"
+          }
+         ]
+        },
         {
          "t": "Resources",
          "g": 1,

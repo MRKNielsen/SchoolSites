@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4B — Resolution of a vector into rectangular components</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">4B · Resolution of a vector into rectangular components</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Resolution of a vector into rectangular components</h1>
+  <p>Working with i, j and k in three dimensions</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 4 · Section 4B</span>
+</section>
+<section class="slide" data-topic="4B · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Write vectors in the form \(x\mathbf{i} + y\mathbf{j} + z\mathbf{k}\)</li><li>Find magnitudes and unit vectors</li><li>Use components to test for parallel vectors</li><li>Find the angle a vector makes with each axis</li><li>Test three vectors in 3D for linear dependence</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 4B</p>
+</section>
+<section class="slide" data-topic="4B · Components in three dimensions">
+  <h2>Components in three dimensions</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Unit vectors</span><p>\(\mathbf{i}\), \(\mathbf{j}\) and \(\mathbf{k}\) are vectors of length 1 along the positive \(x\), \(y\) and \(z\) axes.</p></div>
+<div class="box key"><span class="lbl">Position vector</span><p>The point \(P(x, y, z)\) has position vector \(\overrightarrow{OP} = x\mathbf{i} + y\mathbf{j} + z\mathbf{k}\).</p></div>
+<div class="box key"><span class="lbl">Working in components</span><p>Add, subtract and scale one component at a time. For points \(A\) and \(B\): \(\overrightarrow{AB} = \mathbf{b} - \mathbf{a}\).</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 420 310" role="img" aria-label="A point P in three dimensions with position vector r equal to x i plus y j plus z k" style="color:var(--ink)"><line x1="150.0" y1="210.0" x2="68.7" y2="273.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polygon points="60.0,280.0 71.5,276.9 65.9,269.6" fill="currentColor"/><line x1="150.0" y1="210.0" x2="359.0" y2="210.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polygon points="370.0,210.0 359.0,205.4 359.0,214.6" fill="currentColor"/><line x1="150.0" y1="210.0" x2="150.0" y2="41.0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polygon points="150.0,30.0 145.4,41.0 154.6,41.0" fill="currentColor"/><text x="48" y="296" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">x</text><text x="384" y="216" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">y</text><text x="150" y="20" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">z</text><line x1="110" y1="241" x2="290" y2="241" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/><line x1="290" y1="241" x2="330" y2="210" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/><line x1="290" y1="241" x2="290" y2="91" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 5" stroke-linecap="round"/><line x1="150.0" y1="210.0" x2="281.6" y2="98.1" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><polygon points="290.0,91.0 278.6,94.6 284.6,101.6" fill="#c0392b"/><circle cx="290" cy="91" r="4" fill="#c0392b"/><line x1="150.0" y1="210.0" x2="118.7" y2="234.3" stroke="#1a66d6" stroke-width="2.4" stroke-linecap="round"/><polygon points="110.0,241.0 121.5,237.9 115.9,230.6" fill="#1a66d6"/><text x="112" y="222" fill="#1a66d6" font-size="16" text-anchor="middle" font-weight="700">xi</text><text x="210" y="262" fill="#1a66d6" font-size="16" text-anchor="middle" font-weight="700">yj</text><text x="310" y="170" fill="#1a66d6" font-size="16" text-anchor="middle" font-weight="700">zk</text><text x="316" y="84" fill="#c0392b" font-size="17" text-anchor="start">P(x, y, z)</text><text x="205" y="136" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">r</text></svg></div><p class="figcap">\(\mathbf{r} = x\mathbf{i} + y\mathbf{j} + z\mathbf{k}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4B · Magnitude and unit vectors">
+  <h2>Magnitude and unit vectors</h2>
+<div class="box key"><span class="lbl">Magnitude</span><p>If \(\mathbf{a} = a_1\mathbf{i} + a_2\mathbf{j} + a_3\mathbf{k}\), then \[|\mathbf{a}| = \sqrt{a_1^2 + a_2^2 + a_3^2}\]</p></div>
+<div class="box key"><span class="lbl">Unit vector</span><p>The unit vector in the direction of \(\mathbf{a}\) is \[\hat{\mathbf{a}} = \frac{1}{|\mathbf{a}|}\,\mathbf{a}\]</p></div>
+<div class="box key"><span class="lbl">Parallel</span><p>\(\mathbf{a}\) and \(\mathbf{b}\) are parallel when \(\mathbf{a} = k\mathbf{b}\) for some real \(k \ne 0\): every component is scaled by the same \(k\).</p></div>
+</section>
+<section class="slide" data-topic="4B · I do">
+  <h2><span class="phase-tag ido">I do</span> From points to a vector</h2>
+<div class="box example"><span class="lbl">Example 1</span><p>Points \(A(2, -1, 4)\) and \(B(5, 3, -8)\) are given. Find \(\overrightarrow{AB}\), \(|\overrightarrow{AB}|\) and the unit vector in the direction of \(\overrightarrow{AB}\).</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = \mathbf{b} - \mathbf{a} = (5-2)\mathbf{i} + (3+1)\mathbf{j} + (-8-4)\mathbf{k} = 3\mathbf{i} + 4\mathbf{j} - 12\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(|\overrightarrow{AB}| = \sqrt{9 + 16 + 144} = \sqrt{169} = 13\)</li>
+<li class="ans"><span class="stepno">✓</span> Unit vector \(= \tfrac{1}{13}(3\mathbf{i} + 4\mathbf{j} - 12\mathbf{k})\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</section>
+<section class="slide" data-topic="4B · We do">
+  <h2><span class="phase-tag wedo">We do</span> From points to a vector</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Points \(A(1, 4, -2)\) and \(B(3, -2, 1)\) are given. Find \(\overrightarrow{AB}\), \(|\overrightarrow{AB}|\) and the unit vector in the direction of \(\overrightarrow{AB}\).</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} - 6\mathbf{j} + 3\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(|\overrightarrow{AB}| = \sqrt{4 + 36 + 9} = 7\)</li>
+<li class="ans"><span class="stepno">✓</span> Unit vector \(= \tfrac17(2\mathbf{i} - 6\mathbf{j} + 3\mathbf{k})\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</section>
+<section class="slide" data-topic="4B · I do">
+  <h2><span class="phase-tag ido">I do</span> Parallel vectors with unknowns</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 2</span><p>The vectors \(2\mathbf{i} + m\mathbf{j} - 6\mathbf{k}\) and \(n\mathbf{i} + 3\mathbf{j} + 9\mathbf{k}\) are parallel. Find \(m\) and \(n\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> Parallel, so \(2\mathbf{i} + m\mathbf{j} - 6\mathbf{k} = \lambda(n\mathbf{i} + 3\mathbf{j} + 9\mathbf{k})\)</li>
+<li><span class="stepno">2</span> \(\mathbf{k}\): \(-6 = 9\lambda\), so \(\lambda = -\tfrac23\)</li>
+<li><span class="stepno">3</span> \(\mathbf{j}\): \(m = 3\lambda = -2\)</li>
+<li><span class="stepno">4</span> \(\mathbf{i}\): \(2 = -\tfrac23 n\), so \(n = -3\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = -2,\ n = -3\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Start where you can</span><p>Use the component with no unknown to find the scale factor first.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4B · We do">
+  <h2><span class="phase-tag wedo">We do</span> Parallel vectors with unknowns</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>The vectors \(m\mathbf{i} - 4\mathbf{j} + 2\mathbf{k}\) and \(6\mathbf{i} + 8\mathbf{j} + n\mathbf{k}\) are parallel. Find \(m\) and \(n\).</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(\mathbf{j}\): \(-4 = 8\lambda\), so \(\lambda = -\tfrac12\)</li>
+<li><span class="stepno">2</span> \(\mathbf{i}\): \(m = 6\lambda = -3\)</li>
+<li><span class="stepno">3</span> \(\mathbf{k}\): \(2 = -\tfrac12 n\), so \(n = -4\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = -3,\ n = -4\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="4B · The angle a vector makes with an axis">
+  <h2>The angle a vector makes with an axis</h2>
+<div class="box key"><span class="lbl">Direction angles</span><p>If \(\mathbf{a} = a_1\mathbf{i} + a_2\mathbf{j} + a_3\mathbf{k}\) makes angles \(\alpha\), \(\beta\), \(\gamma\) with the positive \(x\), \(y\) and \(z\) axes, then \[\cos\alpha = \frac{a_1}{|\mathbf{a}|},\quad \cos\beta = \frac{a_2}{|\mathbf{a}|},\quad \cos\gamma = \frac{a_3}{|\mathbf{a}|}\]</p></div>
+<div class="box hint"><span class="lbl">Check</span><p>A negative component gives an obtuse angle with that axis.</p></div>
+</section>
+<section class="slide" data-topic="4B · I do">
+  <h2><span class="phase-tag ido">I do</span> Angles with the axes</h2>
+<div class="box example"><span class="lbl">Example 3</span><p>Find the angle that \(\mathbf{a} = \mathbf{i} + \sqrt2\,\mathbf{j} - \mathbf{k}\) makes with each of the positive axes.</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> \(|\mathbf{a}| = \sqrt{1 + 2 + 1} = 2\)</li>
+<li><span class="stepno">2</span> \(\cos\alpha = \tfrac12\), so \(\alpha = 60^\circ\)</li>
+<li><span class="stepno">3</span> \(\cos\beta = \tfrac{\sqrt2}{2}\), so \(\beta = 45^\circ\)</li>
+<li><span class="stepno">4</span> \(\cos\gamma = -\tfrac12\), so \(\gamma = 120^\circ\)</li>
+<li class="ans"><span class="stepno">✓</span> \(60^\circ\) with the \(x\)-axis, \(45^\circ\) with the \(y\)-axis, \(120^\circ\) with the \(z\)-axis</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</section>
+<section class="slide" data-topic="4B · We do">
+  <h2><span class="phase-tag wedo">We do</span> Angles with the axes</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Find, correct to one decimal place, the angle that \(\mathbf{a} = 2\mathbf{i} - 2\mathbf{j} + \mathbf{k}\) makes with the positive \(x\)-axis and with the positive \(z\)-axis.</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(|\mathbf{a}| = \sqrt{4 + 4 + 1} = 3\)</li>
+<li><span class="stepno">2</span> \(\cos\alpha = \tfrac23\), so \(\alpha \approx 48.2^\circ\)</li>
+<li class="ans"><span class="stepno">✓</span> \(48.2^\circ\) with the \(x\)-axis; \(\cos\gamma = \tfrac13\) gives \(70.5^\circ\) with the \(z\)-axis</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="4B · I do">
+  <h2><span class="phase-tag ido">I do</span> Linear dependence in three dimensions <span class="chip">Exam style</span></h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 4</span><p>Let \(\mathbf{a} = 2\mathbf{i} - \mathbf{j} + \mathbf{k}\), \(\mathbf{b} = \mathbf{i} + 2\mathbf{j} - 3\mathbf{k}\) and \(\mathbf{c} = 4\mathbf{i} - 7\mathbf{j} + t\mathbf{k}\). Find the value of \(t\) for which \(\mathbf{a}\), \(\mathbf{b}\) and \(\mathbf{c}\) are linearly dependent.</p></div>
+<ol class="steps" id="st7">
+<li><span class="stepno">1</span> \(\mathbf{a}\) and \(\mathbf{b}\) are not parallel, so we need \(\mathbf{c} = p\mathbf{a} + q\mathbf{b}\).</li>
+<li><span class="stepno">2</span> \(\mathbf{i}\): \(2p + q = 4\) &nbsp; and &nbsp; \(\mathbf{j}\): \(-p + 2q = -7\)</li>
+<li><span class="stepno">3</span> Solving: \(p = 3,\ q = -2\)</li>
+<li><span class="stepno">4</span> \(\mathbf{k}\): \(t = p - 3q = 3 + 6\)</li>
+<li class="ans"><span class="stepno">✓</span> \(t = 9\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st7">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Three equations, two unknowns</span><p>Solve two of them, then the third fixes \(t\).</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4B · We do">
+  <h2><span class="phase-tag wedo">We do</span> Linear dependence in three dimensions <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Let \(\mathbf{a} = \mathbf{i} + \mathbf{j} - 2\mathbf{k}\), \(\mathbf{b} = 3\mathbf{i} - \mathbf{j} + \mathbf{k}\) and \(\mathbf{c} = 5\mathbf{i} + \mathbf{j} + t\mathbf{k}\). Find the value of \(t\) for which \(\mathbf{a}\), \(\mathbf{b}\) and \(\mathbf{c}\) are linearly dependent.</p></div>
+<ol class="steps" id="st8">
+<li><span class="stepno">1</span> \(\mathbf{c} = p\mathbf{a} + q\mathbf{b}\)</li>
+<li><span class="stepno">2</span> \(p + 3q = 5\) and \(p - q = 1\), so \(q = 1,\ p = 2\)</li>
+<li><span class="stepno">3</span> \(t = -2p + q = -4 + 1\)</li>
+<li class="ans"><span class="stepno">✓</span> \(t = -3\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st8">Show solution</button>
+</section>
+<section class="slide" data-topic="4B · You do">
+  <h2><span class="phase-tag youdo">You do</span> Check your understanding</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">Find \(|2\mathbf{i} - 3\mathbf{j} + 6\mathbf{k}|\).</p><button class="reveal-btn">Answer</button><div class="a">\(\sqrt{4 + 9 + 36} = 7\)</div></div>
+<div class="qcard"><p class="q">\(A(1, 2, 3)\), \(B(4, 6, 3)\) and \(C(4, 2, -1)\). Find \(D\) so that \(ABCD\) is a parallelogram.</p><button class="reveal-btn">Answer</button><div class="a">\(\overrightarrow{OD} = \mathbf{a} + \mathbf{c} - \mathbf{b}\), so \(D(1, -2, -1)\)</div></div>
+<div class="qcard"><p class="q">Find \(m\) if \(|m\mathbf{i} + 2\mathbf{j} - 2\mathbf{k}| = 3\).</p><button class="reveal-btn">Answer</button><div class="a">\(m^2 + 8 = 9\), so \(m = \pm 1\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 4B: Questions 9, 10, 11, 12, 20, 31</li><li><a href="../problemsets/v4b-problem-set.pdf">Problem Set 4B</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>How do you find a unit vector in the direction of \(\mathbf{a}\)?</li><li>How do you test whether two vectors are parallel?</li><li>Hurdle 4B: four questions, working shown, final answer in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>

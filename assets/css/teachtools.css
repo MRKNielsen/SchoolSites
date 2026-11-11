@@ -1,0 +1,166 @@
+/* ============================================================
+   teachtools.css — the teacher's toolbox for slide decks (opt-in).
+   Load on a deck, after deck.css / workbook.css:
+
+     <link rel="stylesheet" href="../../../assets/css/teachtools.css">
+     <script src="../../../assets/js/teachtools.js" defer></script>
+
+   A tab on the right edge opens the toolbox: pen, highlighter and
+   eraser that write on the slide, a pop-out whiteboard, a countdown
+   timer, a ruler (straight edge), a measuring tool, a protractor,
+   "Lesson PDF" (the slides taught this session with their writing)
+   and delete. Writing is kept in this browser until deleted.
+   Built for a tablet with a stylus; works with touch and mouse.
+   ============================================================ */
+
+.tt-layer { position: fixed; inset: 0; z-index: 8000; pointer-events: none;
+  font-family: var(--font-body, system-ui, sans-serif); color: var(--ink, #222);
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.tt-layer > * { pointer-events: auto; }
+.tt-layer button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+
+/* ---------- Ink on the slide ---------- */
+.deck-page .slide > canvas.tt-ink { position: absolute !important; left: 0; top: 0; width: 100%;
+  z-index: 9 !important; pointer-events: none; touch-action: auto; margin: 0; padding: 0; }
+body.tt-drawing .slide > canvas.tt-ink { pointer-events: auto; touch-action: none; cursor: crosshair; }
+
+/* ---------- Edge tab + toolbox ---------- */
+.tt-tab { position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 96px; border: 1.5px solid var(--line, #c9c4b8); border-right: 0;
+  border-radius: 10px 0 0 10px; background: var(--card, #fff); opacity: .45;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity .2s, transform .25s; padding: 0; }
+.tt-tab:hover, .tt-tab:focus-visible, .tt-tab.live { opacity: 1; }
+.tt-tab svg { width: 18px; height: 18px; }
+.tt-tab .tt-dot { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,.25); display: none; }
+.tt-tab.live .tt-dot { display: block; }
+.tt-open .tt-tab { transform: translate(110%, -50%); }
+
+.tt-box { position: absolute; right: 0; top: 50%; transform: translate(105%, -50%);
+  width: 212px; max-height: 96vh; overflow-y: auto; padding: 10px;
+  background: var(--card, #fff); border: 1.5px solid var(--line, #c9c4b8); border-right: 0;
+  border-radius: 14px 0 0 14px; box-shadow: -6px 6px 24px rgba(0,0,0,.18);
+  transition: transform .25s ease; }
+.tt-open .tt-box { transform: translate(0, -50%); }
+.tt-box h4 { margin: 8px 2px 5px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #777); }
+.tt-box h4:first-child { margin-top: 0; }
+.tt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.tt-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  min-height: 54px; padding: 6px 4px; border-radius: 10px; border: 1.5px solid var(--line, #c9c4b8);
+  background: transparent; font-size: 12.5px; font-weight: 600; line-height: 1.15; text-align: center; }
+.tt-btn svg { width: 22px; height: 22px; }
+.tt-btn:hover { border-color: var(--accent, #24576f); }
+.tt-btn.on { background: var(--accent, #24576f); border-color: var(--accent, #24576f); color: #fff; }
+.tt-btn.warn { color: #b3261e; }
+.tt-btn.wide { grid-column: 1 / -1; flex-direction: row; gap: 8px; min-height: 44px; }
+.tt-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin: 6px 2px 2px; }
+.tt-sw { width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent; padding: 0;
+  box-shadow: inset 0 0 0 1.5px rgba(0,0,0,.2); }
+.tt-sw.on { border-color: var(--ink, #222); box-shadow: inset 0 0 0 2px var(--card, #fff); }
+.tt-wd { width: 34px; height: 26px; border-radius: 8px; border: 1.5px solid var(--line, #c9c4b8); background: transparent;
+  display: flex; align-items: center; justify-content: center; padding: 0; }
+.tt-wd i { display: block; width: 18px; border-radius: 4px; background: currentColor; }
+.tt-wd.on { border-color: var(--accent, #24576f); background: color-mix(in srgb, var(--accent, #24576f) 14%, transparent); }
+.tt-confirm { margin-top: 6px; padding: 8px; border-radius: 10px; background: #fdecea; color: #5c1410; font-size: 12.5px; display: none; }
+.tt-confirm.show { display: block; }
+.tt-confirm b { display: block; margin-bottom: 6px; }
+.tt-confirm button { margin: 0 4px 4px 0; padding: 6px 9px; border-radius: 8px; border: 1.5px solid #b3261e; background: #fff; color: #b3261e; font-weight: 700; font-size: 12.5px; }
+.tt-confirm button.plain { border-color: #999; color: #444; }
+.tt-toast { position: absolute; left: 50%; bottom: 9vh; transform: translateX(-50%); padding: 9px 16px; border-radius: 999px;
+  background: var(--ink, #222); color: var(--paper, #fff); font-size: 14px; font-weight: 600; opacity: 0; transition: opacity .25s; pointer-events: none !important; }
+.tt-toast.show { opacity: .94; }
+
+/* ---------- Floating cards: timer, whiteboard ---------- */
+.tt-card { position: absolute; background: var(--card, #fff); border: 1.5px solid var(--line, #c9c4b8);
+  border-radius: 14px; box-shadow: 0 10px 34px rgba(0,0,0,.22); touch-action: none; }
+.tt-bar { display: flex; align-items: center; gap: 6px; padding: 6px 8px 6px 12px; cursor: grab; touch-action: none;
+  font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted, #777); }
+.tt-bar span.grow { flex: 1; }
+.tt-x { width: 30px; height: 30px; border-radius: 8px; border: 0; background: transparent; font-size: 18px; line-height: 1; }
+.tt-x:hover { background: rgba(0,0,0,.08); }
+
+.tt-timer { right: 60px; top: 70px; padding-bottom: 10px; }
+.tt-timer .tt-time { font-family: var(--font-display, inherit); font-variant-numeric: tabular-nums; font-weight: 800;
+  font-size: 64px; line-height: 1; text-align: center; padding: 2px 22px 8px; color: var(--ink, #222); }
+.tt-timer.big .tt-time { font-size: 150px; padding: 6px 40px 14px; }
+.tt-timer .tt-row { justify-content: center; margin: 4px 10px; }
+.tt-pill { min-width: 40px; padding: 7px 10px; border-radius: 999px; border: 1.5px solid var(--accent, #24576f);
+  background: transparent; color: var(--accent-dark, #24576f) !important; font-weight: 700; font-size: 14px; }
+.tt-pill.go { background: var(--accent, #24576f); color: #fff !important; min-width: 84px; }
+.tt-timer.up { border-color: #E0533F; animation: tt-flash 1s ease-in-out 8; }
+.tt-timer.up .tt-time { color: #E0533F; }
+@keyframes tt-flash { 50% { background: #FDE3DF; } }
+
+.tt-wb { left: 8vw; top: 8vh; width: 78vw; height: 76vh; min-width: 320px; min-height: 240px; display: flex; flex-direction: column; overflow: hidden; }
+.tt-wb.max { left: 0 !important; top: 0 !important; width: 100vw !important; height: 100vh !important; height: 100dvh !important; border-radius: 0; }
+.tt-wb .tt-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 2px 10px 8px; border-bottom: 1.5px solid var(--line, #c9c4b8); }
+.tt-wb .tt-tools .sep { width: 1px; height: 22px; background: var(--line, #c9c4b8); margin: 0 3px; }
+.tt-mini { min-width: 34px; height: 30px; padding: 0 9px; border-radius: 8px; border: 1.5px solid var(--line, #c9c4b8); background: transparent; font-size: 13px; font-weight: 700; }
+.tt-mini.on { background: var(--accent, #24576f); border-color: var(--accent, #24576f); color: #fff; }
+.tt-wb .tt-surface { position: relative; flex: 1; min-height: 0; background: #fff; }
+.tt-wb canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+.tt-wb .tt-grip { position: absolute; right: 0; bottom: 0; width: 28px; height: 28px; cursor: nwse-resize; touch-action: none;
+  background: linear-gradient(135deg, transparent 50%, var(--line, #c9c4b8) 50%, var(--line, #c9c4b8) 58%, transparent 58%, transparent 68%, var(--line, #c9c4b8) 68%, var(--line, #c9c4b8) 76%, transparent 76%); }
+.tt-wb.max .tt-grip { display: none; }
+
+/* ---------- Ruler, protractor, measure ---------- */
+.tt-ruler, .tt-pro { position: absolute; left: 0; top: 0; touch-action: none; cursor: grab; transform-origin: 0 0; }
+.tt-ruler svg, .tt-pro svg { display: block; overflow: visible; }
+.tt-ruler .body { fill: rgba(250, 222, 120, .78); stroke: #8a6d1a; stroke-width: 1.2; }
+.tt-pro .body { fill: rgba(170, 215, 235, .55); stroke: #2c5f7a; stroke-width: 1.2; }
+.tt-ruler text, .tt-pro text { font: 600 11px var(--font-body, sans-serif); fill: #3a3210; text-anchor: middle; pointer-events: none; }
+.tt-pro text { fill: #17384a; }
+.tt-ruler .tick, .tt-pro .tick { stroke: #3a3210; stroke-width: 1; }
+.tt-pro .tick { stroke: #17384a; }
+.tt-handle { fill: #fff; stroke: #333; stroke-width: 1.5; cursor: grab; }
+.tt-read { font: 800 15px var(--font-body, sans-serif) !important; }
+.tt-pro .arm { stroke: #c0392b; stroke-width: 2.5; stroke-linecap: round; }
+.tt-pro .armknob { fill: #c0392b; stroke: #fff; stroke-width: 2; cursor: grab; }
+.tt-measure { position: absolute; inset: 0 0 9vh 0; cursor: crosshair; touch-action: none; }  /* leaves the deck's nav buttons reachable */
+.tt-measure svg { width: 100%; height: 100%; display: block; }
+.tt-measure line { stroke: #c0392b; stroke-width: 2.5; stroke-linecap: round; }
+.tt-measure circle { fill: #c0392b; }
+.tt-measure rect { fill: #fff; stroke: #c0392b; stroke-width: 1.2; rx: 6; }
+.tt-measure text { font: 700 14px var(--font-body, sans-serif); fill: #7a1d14; text-anchor: middle; }
+
+/* ---------- Lesson PDF view ----------
+   The taught slides stacked as pages, everything revealed, with the
+   writing laid over each. Shown on screen first so it can be checked,
+   then printed to PDF at exactly the screen's size so nothing reflows. */
+body.tt-exporting { overflow: auto !important; height: auto !important; }
+html.tt-exporting { height: auto !important; overflow: auto !important; }
+body.tt-exporting .deck { height: auto !important; }
+body.tt-exporting .slide { display: flex !important; position: relative !important; inset: auto !important;
+  height: auto !important; min-height: 100vh; overflow: visible !important; animation: none !important;
+  -webkit-mask-image: none !important; mask-image: none !important;
+  break-after: page; page-break-after: always; border-bottom: 2px dashed var(--line, #c9c4b8); }
+body.tt-exporting .slide.tt-skip { display: none !important; }
+body.tt-exporting .slide.overflowing { padding-top: 5vh; }
+body.tt-exporting .slide > canvas.tt-ink { display: none; }
+body.tt-exporting .slide > img.tt-inkimg { position: absolute; left: 0; top: 0; width: 100%; z-index: 9; pointer-events: none; margin: 0; }
+body.tt-exporting .progress, body.tt-exporting .chrome, body.tt-exporting .keyhint, body.tt-exporting .lessontag,
+body.tt-exporting .homebtn, body.tt-exporting .reveal-btn, body.tt-exporting .sn-handle, body.tt-exporting .deck::after,
+body.tt-exporting .tt-tab, body.tt-exporting .tt-box, body.tt-exporting .tt-card, body.tt-exporting .tt-ruler,
+body.tt-exporting .tt-pro, body.tt-exporting .tt-measure, body.tt-exporting .timer, body.tt-exporting .bookview { display: none !important; }
+body.tt-exporting .qcard .a, body.tt-exporting .box > .a { display: block !important; }
+body.tt-exporting .steps li, body.tt-exporting .frag { opacity: 1 !important; visibility: visible !important; transform: none !important; }
+body.tt-exporting .partpanel { display: block !important; }
+.tt-wbpage { display: none; }
+body.tt-exporting .tt-wbpage { display: flex; flex-direction: column; min-height: 100vh; padding: 3vh 4vw; background: #fff;
+  break-after: page; page-break-after: always; border-bottom: 2px dashed #c9c4b8; }
+.tt-wbpage h3 { font-size: 15px; color: #666; margin: 0 0 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.tt-wbpage img { max-width: 100%; max-height: 90vh; object-fit: contain; border: 1px solid #ddd; align-self: flex-start; }
+.tt-exportbar { display: none; }
+body.tt-exporting .tt-exportbar { display: flex; position: fixed; left: 0; right: 0; top: 0; z-index: 9990; align-items: center; gap: 10px;
+  padding: 10px 16px; background: #1f2937; color: #fff; font: 600 15px var(--font-body, sans-serif); pointer-events: auto; }
+.tt-exportbar span { flex: 1; }
+.tt-exportbar button { padding: 9px 16px; border-radius: 8px; border: 0; font: inherit; font-weight: 700; cursor: pointer; background: #fff; color: #1f2937; }
+.tt-exportbar button.pri { background: #f2b632; }
+body.tt-exporting .deck { padding-top: 58px; }
+
+@media print {
+  .tt-layer, .tt-exportbar { display: none !important; }
+  body.tt-exporting .deck { padding-top: 0; }
+  body.tt-exporting .slide, body.tt-exporting .tt-wbpage { border-bottom: 0; }
+  .slide > canvas.tt-ink { display: none; }
+}

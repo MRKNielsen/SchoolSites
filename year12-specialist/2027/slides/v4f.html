@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4F — Geometric proofs</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">4F · Geometric proofs</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Geometric proofs</h1>
+  <p>Proving results about shapes with vectors</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 4 · Section 4F</span>
+</section>
+<section class="slide" data-topic="4F · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Set up a figure with a small number of basis vectors</li><li>Translate geometric facts into vector statements</li><li>Write a complete vector proof with a conclusion</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 4F</p>
+</section>
+<section class="slide" data-topic="4F · The translation table">
+  <h2>The translation table</h2>
+<table class="tbl"><tr><th>Geometry</th><th>Vectors</th></tr><tr><td>Parallel</td><td>\(\mathbf{u} = k\mathbf{v}\)</td></tr><tr><td>Perpendicular</td><td>\(\mathbf{u} \cdot \mathbf{v} = 0\)</td></tr><tr><td>Equal lengths</td><td>\(\mathbf{u}\cdot\mathbf{u} = \mathbf{v}\cdot\mathbf{v}\)</td></tr><tr><td>Midpoint of \(AB\)</td><td>\(\tfrac12(\mathbf{a} + \mathbf{b})\)</td></tr><tr><td>Same point</td><td>Equal position vectors</td></tr><tr><td>Collinear</td><td>Parallel with a common point</td></tr></table>
+</section>
+<section class="slide" data-topic="4F · How to write a vector proof">
+  <h2>How to write a vector proof</h2>
+<div class="cols">
+<div>
+<ul><li><b>Draw</b> the figure and choose an origin, usually a vertex or a centre</li><li><b>Name</b> two (or three) vectors that everything else is built from</li><li><b>Translate</b> what is given into vector equations</li><li><b>Compute</b> the vectors in the statement to be proved</li><li><b>Conclude</b> in words</li></ul>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 430 270" role="img" aria-label="Parallelogram O A B C with O A equal to a and O C equal to c; the diagonals cross at their midpoints" style="color:var(--ink)"><polygon points="60,220 280,220 370,80 150,80" fill="none" stroke="currentColor" stroke-width="2"/><line x1="60" y1="220" x2="370" y2="80" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 5" stroke-linecap="round"/><line x1="280" y1="220" x2="150" y2="80" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 5" stroke-linecap="round"/><line x1="60.0" y1="220.0" x2="159.0" y2="220.0" stroke="#c0392b" stroke-width="2.8" stroke-linecap="round"/><polygon points="170.0,220.0 159.0,215.4 159.0,224.6" fill="#c0392b"/><line x1="60.0" y1="220.0" x2="99.1" y2="159.3" stroke="#1a66d6" stroke-width="2.8" stroke-linecap="round"/><polygon points="105.0,150.0 95.2,156.8 102.9,161.7" fill="#1a66d6"/><circle cx="215" cy="150" r="5" fill="#1e8a3c"/><text x="46" y="240" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">O</text><text x="290" y="240" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="384" y="76" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">B</text><text x="138" y="72" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">C</text><text x="120" y="242" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">a</text><text x="70" y="180" fill="#1a66d6" font-size="19" text-anchor="middle" font-weight="700">c</text></svg></div><p class="figcap">Parallelogram \(OABC\): everything in terms of \(\mathbf{a}\) and \(\mathbf{c}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4F · I do">
+  <h2><span class="phase-tag ido">I do</span> Diagonals of a parallelogram</h2>
+<div class="box example"><span class="lbl">Example 1</span><p>Prove that the diagonals of a parallelogram bisect each other.</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> Let \(OABC\) be a parallelogram with \(\overrightarrow{OA} = \mathbf{a}\), \(\overrightarrow{OC} = \mathbf{c}\). Then \(\overrightarrow{OB} = \mathbf{a} + \mathbf{c}\).</li>
+<li><span class="stepno">2</span> Midpoint of \(OB\): position vector \(\tfrac12(\mathbf{a} + \mathbf{c})\)</li>
+<li><span class="stepno">3</span> Midpoint of \(AC\): position vector \(\tfrac12(\mathbf{a} + \mathbf{c})\)</li>
+<li class="ans"><span class="stepno">✓</span> The midpoints are the same point, so the diagonals bisect each other.</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</section>
+<section class="slide" data-topic="4F · We do">
+  <h2><span class="phase-tag wedo">We do</span> The midpoint theorem</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>In triangle \(OAB\), \(M\) and \(N\) are the midpoints of \(OA\) and \(OB\). Prove that \(MN\) is parallel to \(AB\) and half its length.</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\overrightarrow{OM} = \tfrac12\mathbf{a}\) and \(\overrightarrow{ON} = \tfrac12\mathbf{b}\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{MN} = \tfrac12\mathbf{b} - \tfrac12\mathbf{a} = \tfrac12(\mathbf{b} - \mathbf{a})\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{AB} = \mathbf{b} - \mathbf{a}\), so \(\overrightarrow{MN} = \tfrac12\,\overrightarrow{AB}\)</li>
+<li class="ans"><span class="stepno">✓</span> \(MN\) is parallel to \(AB\) and \(|\overrightarrow{MN}| = \tfrac12|\overrightarrow{AB}|\).</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</section>
+<section class="slide" data-topic="4F · I do">
+  <h2><span class="phase-tag ido">I do</span> The angle in a semicircle</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 2</span><p>\(AB\) is a diameter of a circle with centre \(O\), and \(P\) is another point on the circle. Prove that \(\angle APB = 90^\circ\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> Let \(\overrightarrow{OA} = \mathbf{a}\), so \(\overrightarrow{OB} = -\mathbf{a}\). Let \(\overrightarrow{OP} = \mathbf{p}\), with \(|\mathbf{p}| = |\mathbf{a}|\) (radii).</li>
+<li><span class="stepno">2</span> \(\overrightarrow{AP} = \mathbf{p} - \mathbf{a}\) and \(\overrightarrow{BP} = \mathbf{p} + \mathbf{a}\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{AP}\cdot\overrightarrow{BP} = (\mathbf{p} - \mathbf{a})\cdot(\mathbf{p} + \mathbf{a}) = |\mathbf{p}|^2 - |\mathbf{a}|^2 = 0\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\overrightarrow{AP} \perp \overrightarrow{BP}\), so \(\angle APB = 90^\circ\).</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Choice of origin</span><p>Putting \(O\) at the centre makes every radius the same length.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4F · We do">
+  <h2><span class="phase-tag wedo">We do</span> Equal diagonals</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Prove that a parallelogram with diagonals of equal length is a rectangle.</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(OABC\) with \(\overrightarrow{OA} = \mathbf{a}\), \(\overrightarrow{OC} = \mathbf{c}\). Diagonals: \(\overrightarrow{OB} = \mathbf{a} + \mathbf{c}\), \(\overrightarrow{AC} = \mathbf{c} - \mathbf{a}\).</li>
+<li><span class="stepno">2</span> Given \(|\mathbf{a} + \mathbf{c}|^2 = |\mathbf{c} - \mathbf{a}|^2\)</li>
+<li><span class="stepno">3</span> \(|\mathbf{a}|^2 + 2\,\mathbf{a}\cdot\mathbf{c} + |\mathbf{c}|^2 = |\mathbf{c}|^2 - 2\,\mathbf{a}\cdot\mathbf{c} + |\mathbf{a}|^2\)</li>
+<li><span class="stepno">4</span> \(4\,\mathbf{a}\cdot\mathbf{c} = 0\), so \(\mathbf{a}\cdot\mathbf{c} = 0\)</li>
+<li class="ans"><span class="stepno">✓</span> \(OA \perp OC\), so the parallelogram is a rectangle.</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="4F · I do">
+  <h2><span class="phase-tag ido">I do</span> The parallelogram law <span class="chip">Exam style</span></h2>
+<div class="box example"><span class="lbl">Example 3</span><p>\(OABC\) is a parallelogram. Prove that \(|\overrightarrow{OB}|^2 + |\overrightarrow{AC}|^2 = 2\left(|\overrightarrow{OA}|^2 + |\overrightarrow{OC}|^2\right)\).</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> \(\overrightarrow{OB} = \mathbf{a} + \mathbf{c}\) and \(\overrightarrow{AC} = \mathbf{c} - \mathbf{a}\)</li>
+<li><span class="stepno">2</span> \(|\overrightarrow{OB}|^2 = |\mathbf{a}|^2 + 2\,\mathbf{a}\cdot\mathbf{c} + |\mathbf{c}|^2\)</li>
+<li><span class="stepno">3</span> \(|\overrightarrow{AC}|^2 = |\mathbf{c}|^2 - 2\,\mathbf{a}\cdot\mathbf{c} + |\mathbf{a}|^2\)</li>
+<li><span class="stepno">4</span> Adding: the \(\mathbf{a}\cdot\mathbf{c}\) terms cancel.</li>
+<li class="ans"><span class="stepno">✓</span> \(|\overrightarrow{OB}|^2 + |\overrightarrow{AC}|^2 = 2|\mathbf{a}|^2 + 2|\mathbf{c}|^2\), as required.</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</section>
+<section class="slide" data-topic="4F · We do">
+  <h2><span class="phase-tag wedo">We do</span> A median result <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>In triangle \(OAB\), \(M\) is the midpoint of \(AB\). Prove that \(|\overrightarrow{OA}|^2 + |\overrightarrow{OB}|^2 = 2|\overrightarrow{OM}|^2 + 2|\overrightarrow{AM}|^2\).</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(\overrightarrow{OM} = \tfrac12(\mathbf{a} + \mathbf{b})\) and \(\overrightarrow{AM} = \tfrac12(\mathbf{b} - \mathbf{a})\)</li>
+<li><span class="stepno">2</span> \(2|\overrightarrow{OM}|^2 = \tfrac12\left(|\mathbf{a}|^2 + 2\,\mathbf{a}\cdot\mathbf{b} + |\mathbf{b}|^2\right)\)</li>
+<li><span class="stepno">3</span> \(2|\overrightarrow{AM}|^2 = \tfrac12\left(|\mathbf{b}|^2 - 2\,\mathbf{a}\cdot\mathbf{b} + |\mathbf{a}|^2\right)\)</li>
+<li class="ans"><span class="stepno">✓</span> Sum \(= |\mathbf{a}|^2 + |\mathbf{b}|^2\), as required.</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="4F · You do">
+  <h2><span class="phase-tag youdo">You do</span> Prove these</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">Prove that the diagonals of a rhombus are perpendicular.</p><button class="reveal-btn">Answer</button><div class="a">\((\mathbf{a} + \mathbf{c})\cdot(\mathbf{c} - \mathbf{a}) = |\mathbf{c}|^2 - |\mathbf{a}|^2 = 0\) because the sides are equal.</div></div>
+<div class="qcard"><p class="q">In triangle \(OAB\), \(|\overrightarrow{OA}| = |\overrightarrow{OB}|\) and \(M\) is the midpoint of \(AB\). Prove \(OM \perp AB\).</p><button class="reveal-btn">Answer</button><div class="a">\(\tfrac12(\mathbf{a} + \mathbf{b})\cdot(\mathbf{b} - \mathbf{a}) = \tfrac12(|\mathbf{b}|^2 - |\mathbf{a}|^2) = 0\)</div></div>
+<div class="qcard"><p class="q">Prove that the midpoints of the sides of any quadrilateral form a parallelogram.</p><button class="reveal-btn">Answer</button><div class="a">With midpoints \(P, Q, R, S\) of \(AB, BC, CD, DA\): \(\overrightarrow{PQ} = \tfrac12(\mathbf{c} - \mathbf{a}) = \overrightarrow{SR}\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 4F</li><li><a href="../problemsets/v4f-problem-set.pdf">Problem Set 4F</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>Which vector statement means "perpendicular"? Which means "equal length"?</li><li>Why does a proof need a concluding sentence?</li><li>Hurdle 4F: four questions, working shown, conclusion in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>

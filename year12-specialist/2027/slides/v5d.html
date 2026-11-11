@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5D — Vector equations of planes</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">5D · Vector equations of planes</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Vector equations of planes</h1>
+  <p>Normals, and planes through points and lines</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 5 · Section 5D</span>
+</section>
+<section class="slide" data-topic="5D · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Write the equation of a plane from a point and a normal</li><li>Convert between the vector form \(\mathbf{r}\cdot\mathbf{n} = k\) and the Cartesian form</li><li>Find the plane through three points</li><li>Find the plane containing a line and a point, or two intersecting lines</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 5D</p>
+</section>
+<section class="slide" data-topic="5D · The equation of a plane">
+  <h2>The equation of a plane</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Normal</span><p>A normal vector \(\mathbf{n}\) is perpendicular to every direction in the plane.</p></div>
+<div class="box key"><span class="lbl">Vector equation</span><p>For a plane through \(A\) with normal \(\mathbf{n}\): \[(\mathbf{r} - \mathbf{a})\cdot\mathbf{n} = 0 \quad\text{or}\quad \mathbf{r}\cdot\mathbf{n} = \mathbf{a}\cdot\mathbf{n}\]</p></div>
+<div class="box key"><span class="lbl">Cartesian equation</span><p>With \(\mathbf{n} = a\mathbf{i} + b\mathbf{j} + c\mathbf{k}\): \[ax + by + cz = d,\quad d = \mathbf{a}\cdot\mathbf{n}\]</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 440 260" role="img" aria-label="A plane through A with normal n: for any point P in the plane, r minus a is perpendicular to n" style="color:var(--ink)"><polygon points="50,220 300,240 400,130 150,110" fill="var(--wb-fill-cream,#f3ead2)" stroke="currentColor" stroke-width="1.4"/><circle cx="190" cy="185" r="4" fill="currentColor"/><circle cx="310" cy="165" r="4" fill="#c0392b"/><line x1="190.0" y1="185.0" x2="190.0" y2="61.0" stroke="#1e8a3c" stroke-width="3.2" stroke-linecap="round"/><polygon points="190.0,50.0 185.4,61.0 194.6,61.0" fill="#1e8a3c"/><line x1="190.0" y1="185.0" x2="293.1" y2="167.8" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"/><polygon points="304.0,166.0 292.4,163.3 293.9,172.3" fill="#c0392b"/><text x="176" y="204" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="322" y="160" fill="#c0392b" font-size="19" text-anchor="start" font-style="italic">P</text><text x="204" y="60" fill="#1e8a3c" font-size="20" text-anchor="start" font-weight="700">n</text><text x="250" y="198" fill="#c0392b" font-size="16" text-anchor="middle" font-weight="700">r − a</text><text x="330" y="232" fill="currentColor" font-size="20" text-anchor="middle">Π</text></svg></div><p class="figcap">\(\mathbf{r} - \mathbf{a}\) lies in the plane, so it is perpendicular to \(\mathbf{n}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="5D · Finding a normal">
+  <h2>Finding a normal</h2>
+<div class="box key"><span class="lbl">Two directions in the plane</span><p>If \(\mathbf{u}\) and \(\mathbf{v}\) are non-parallel vectors in the plane, then \(\mathbf{n} = \mathbf{u} \times \mathbf{v}\) is a normal.</p></div>
+<ul><li>Three points \(A\), \(B\), \(C\): use \(\overrightarrow{AB} \times \overrightarrow{AC}\)</li><li>A line and a point \(A\) not on it: use the direction \(\mathbf{d}\) and a vector from \(A\) to the line</li><li>Two intersecting lines: use \(\mathbf{d}_1 \times \mathbf{d}_2\)</li></ul>
+<div class="box hint"><span class="lbl">Reading an equation</span><p>In \(2x - y + 3z = 5\), the coefficients give the normal \(2\mathbf{i} - \mathbf{j} + 3\mathbf{k}\).</p></div>
+</section>
+<section class="slide" data-topic="5D · I do">
+  <h2><span class="phase-tag ido">I do</span> Point and normal</h2>
+<div class="box example"><span class="lbl">Example 1</span><p>Find the Cartesian equation of the plane through \(A(1, 4, -2)\) with normal \(\mathbf{n} = 2\mathbf{i} - \mathbf{j} + 3\mathbf{k}\).</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> \(\mathbf{r}\cdot\mathbf{n} = \mathbf{a}\cdot\mathbf{n}\)</li>
+<li><span class="stepno">2</span> \(\mathbf{a}\cdot\mathbf{n} = 2 - 4 - 6 = -8\)</li>
+<li class="ans"><span class="stepno">✓</span> \(2x - y + 3z = -8\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</section>
+<section class="slide" data-topic="5D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Point and normal</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Find the Cartesian equation of the plane through \(A(2, -1, 5)\) with normal \(\mathbf{n} = \mathbf{i} + 3\mathbf{j} - 2\mathbf{k}\).</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\mathbf{a}\cdot\mathbf{n} = 2 - 3 - 10 = -11\)</li>
+<li class="ans"><span class="stepno">✓</span> \(x + 3y - 2z = -11\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</section>
+<section class="slide" data-topic="5D · I do">
+  <h2><span class="phase-tag ido">I do</span> Plane through three points</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 2</span><p>Find the Cartesian equation of the plane through \(A(1, 0, 2)\), \(B(3, 1, 1)\) and \(C(2, -1, 4)\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} + \mathbf{j} - \mathbf{k}\) and \(\overrightarrow{AC} = \mathbf{i} - \mathbf{j} + 2\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\mathbf{n} = \overrightarrow{AB} \times \overrightarrow{AC} = \mathbf{i} - 5\mathbf{j} - 3\mathbf{k}\)</li>
+<li><span class="stepno">3</span> \(\mathbf{a}\cdot\mathbf{n} = 1 - 0 - 6 = -5\)</li>
+<li class="ans"><span class="stepno">✓</span> \(x - 5y - 3z = -5\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Check</span><p>Substitute \(B\): \(3 - 5 - 3 = -5\) ✓ &nbsp; and \(C\): \(2 + 5 - 12 = -5\) ✓</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="5D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Plane through three points</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Find the Cartesian equation of the plane through \(A(0, 1, 1)\), \(B(2, 2, 0)\) and \(C(1, 3, 3)\).</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = 2\mathbf{i} + \mathbf{j} - \mathbf{k}\) and \(\overrightarrow{AC} = \mathbf{i} + 2\mathbf{j} + 2\mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\mathbf{n} = 4\mathbf{i} - 5\mathbf{j} + 3\mathbf{k}\)</li>
+<li><span class="stepno">3</span> \(\mathbf{a}\cdot\mathbf{n} = 0 - 5 + 3 = -2\)</li>
+<li class="ans"><span class="stepno">✓</span> \(4x - 5y + 3z = -2\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="5D · I do">
+  <h2><span class="phase-tag ido">I do</span> Plane containing two lines</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 3</span><p>The lines \(\mathbf{r} = \mathbf{i} + 2\mathbf{j} + \lambda(\mathbf{i} + \mathbf{j} + 2\mathbf{k})\) and \(\mathbf{r} = 2\mathbf{i} + 6\mathbf{j} + 3\mathbf{k} + \mu(\mathbf{i} - 2\mathbf{j} + \mathbf{k})\) intersect. Find the Cartesian equation of the plane containing both lines.</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> \(\mathbf{n} = \mathbf{d}_1 \times \mathbf{d}_2 = (1 + 4)\mathbf{i} - (1 - 2)\mathbf{j} + (-2 - 1)\mathbf{k} = 5\mathbf{i} + \mathbf{j} - 3\mathbf{k}\)</li>
+<li><span class="stepno">2</span> Use the point \((1, 2, 0)\): \(5 + 2 - 0 = 7\)</li>
+<li class="ans"><span class="stepno">✓</span> \(5x + y - 3z = 7\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Check</span><p>\((2, 6, 3)\) from the second line: \(10 + 6 - 9 = 7\) ✓</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="5D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Plane containing two lines</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>The lines \(\mathbf{r} = 2\mathbf{i} - \mathbf{j} + 3\mathbf{k} + \lambda(\mathbf{i} + 2\mathbf{j} - \mathbf{k})\) and \(\mathbf{r} = 3\mathbf{i} + 7\mathbf{j} - 3\mathbf{k} + \mu(2\mathbf{i} - 2\mathbf{j} + 3\mathbf{k})\) intersect. Find the Cartesian equation of the plane containing both lines.</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(\mathbf{n} = (6 - 2)\mathbf{i} - (3 + 2)\mathbf{j} + (-2 - 4)\mathbf{k} = 4\mathbf{i} - 5\mathbf{j} - 6\mathbf{k}\)</li>
+<li><span class="stepno">2</span> Use \((2, -1, 3)\): \(8 + 5 - 18 = -5\)</li>
+<li class="ans"><span class="stepno">✓</span> \(4x - 5y - 6z = -5\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="5D · I do">
+  <h2><span class="phase-tag ido">I do</span> Plane containing a line and a point <span class="chip">Exam style</span></h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 4</span><p>Find the Cartesian equation of the plane that contains the point \(A(2, 0, 1)\) and the line \(\mathbf{r} = \mathbf{i} + \mathbf{j} + 3\mathbf{k} + t(2\mathbf{i} - \mathbf{j} + \mathbf{k})\).</p></div>
+<ol class="steps" id="st7">
+<li><span class="stepno">1</span> \(B(1, 1, 3)\) is on the line, so \(\overrightarrow{AB} = -\mathbf{i} + \mathbf{j} + 2\mathbf{k}\) lies in the plane.</li>
+<li><span class="stepno">2</span> \(\mathbf{n} = \overrightarrow{AB} \times \mathbf{d} = (1 + 2)\mathbf{i} - (-1 - 4)\mathbf{j} + (1 - 2)\mathbf{k} = 3\mathbf{i} + 5\mathbf{j} - \mathbf{k}\)</li>
+<li><span class="stepno">3</span> \(\mathbf{a}\cdot\mathbf{n} = 6 + 0 - 1 = 5\)</li>
+<li class="ans"><span class="stepno">✓</span> \(3x + 5y - z = 5\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st7">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Check</span><p>\(B\): \(3 + 5 - 3 = 5\) ✓ &nbsp; and \(\mathbf{n}\cdot\mathbf{d} = 6 - 5 - 1 = 0\) ✓</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="5D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Plane containing a line and a point <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Find the Cartesian equation of the plane that contains the point \(A(1, 1, 0)\) and the line \(\mathbf{r} = 2\mathbf{i} + \mathbf{k} + t(\mathbf{i} + 2\mathbf{j} - \mathbf{k})\).</p></div>
+<ol class="steps" id="st8">
+<li><span class="stepno">1</span> \(B(2, 0, 1)\) is on the line, so \(\overrightarrow{AB} = \mathbf{i} - \mathbf{j} + \mathbf{k}\)</li>
+<li><span class="stepno">2</span> \(\mathbf{n} = \overrightarrow{AB} \times \mathbf{d} = (1 - 2)\mathbf{i} - (-1 - 1)\mathbf{j} + (2 + 1)\mathbf{k} = -\mathbf{i} + 2\mathbf{j} + 3\mathbf{k}\)</li>
+<li><span class="stepno">3</span> \(\mathbf{a}\cdot\mathbf{n} = -1 + 2 = 1\)</li>
+<li class="ans"><span class="stepno">✓</span> \(-x + 2y + 3z = 1\), or \(x - 2y - 3z = -1\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st8">Show solution</button>
+</section>
+<section class="slide" data-topic="5D · You do">
+  <h2><span class="phase-tag youdo">You do</span> Check your understanding</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">Find the equation of the plane through the origin with normal \(\mathbf{i} + 2\mathbf{j} + 3\mathbf{k}\).</p><button class="reveal-btn">Answer</button><div class="a">\(x + 2y + 3z = 0\)</div></div>
+<div class="qcard"><p class="q">Does \((1, 1, 1)\) lie on the plane \(2x - y + 3z = 4\)?</p><button class="reveal-btn">Answer</button><div class="a">Yes: \(2 - 1 + 3 = 4\)</div></div>
+<div class="qcard"><p class="q">Where does the plane \(2x + 3y + 6z = 12\) cut the three axes?</p><button class="reveal-btn">Answer</button><div class="a">\((6, 0, 0)\), \((0, 4, 0)\) and \((0, 0, 2)\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 5D</li><li><a href="../problemsets/v5d-problem-set.pdf">Problem Set 5D</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>What does the normal vector tell you about a plane?</li><li>How do you find a normal from three points?</li><li>Hurdle 5D: four questions, working shown, final answer in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>

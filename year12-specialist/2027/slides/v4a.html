@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4A — Introduction to vectors</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">4A · Introduction to vectors</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Introduction to vectors</h1>
+  <p>Directed line segments, position vectors and linear dependence</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 4 · Section 4A</span>
+</section>
+<section class="slide" data-topic="4A · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Add, subtract and scale vectors on a diagram</li><li>Write any vector in a figure in terms of two given vectors</li><li>Use position vectors: \(\overrightarrow{AB} = \mathbf{b} - \mathbf{a}\)</li><li>Decide whether a set of vectors is linearly dependent</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 4A</p>
+</section>
+<section class="slide" data-topic="4A · Vectors and scalars">
+  <h2>Vectors and scalars</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Vector</span><p>A quantity with <b>magnitude</b> and <b>direction</b>, drawn as a directed line segment. A scalar has magnitude only.</p></div>
+<div class="box key"><span class="lbl">Notation</span><p>Print uses bold: \(\mathbf{a}\). By hand we write \(\underset{\sim}{a}\). The vector from \(A\) to \(B\) is \(\overrightarrow{AB}\), and the magnitude of \(\mathbf{a}\) is \(|\mathbf{a}|\).</p></div>
+<ul><li>Equal vectors have the same length and direction: position does not matter</li><li>\(k\mathbf{a}\) is parallel to \(\mathbf{a}\), \(|k|\) times as long, reversed if \(k&lt;0\)</li><li>\(\mathbf{0}\) is the zero vector</li></ul>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 400 260" role="img" aria-label="Triangle of vectors: a from O to A, b from A to B, and a plus b from O to B" style="color:var(--ink)"><line x1="50.0" y1="220.0" x2="239.1" y2="191.6" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"/><polygon points="250.0,190.0 238.4,187.1 239.8,196.2" fill="#c0392b"/><line x1="250.0" y1="190.0" x2="324.2" y2="69.4" stroke="#1a66d6" stroke-width="2.6" stroke-linecap="round"/><polygon points="330.0,60.0 320.3,67.0 328.2,71.8" fill="#1a66d6"/><line x1="50.0" y1="220.0" x2="320.4" y2="65.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="330.0,60.0 318.2,61.5 322.7,69.5" fill="currentColor"/><text x="150" y="228" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">a</text><text x="312" y="140" fill="#1a66d6" font-size="19" text-anchor="middle" font-weight="700">b</text><text x="165" y="120" fill="currentColor" font-size="19" text-anchor="middle" font-weight="700">a + b</text><circle cx="50" cy="220" r="4" fill="currentColor"/><text x="38" y="240" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">O</text><text x="256" y="212" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="344" y="56" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">B</text></svg></div><p class="figcap">Triangle rule: go along \(\mathbf{a}\), then along \(\mathbf{b}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · Adding and subtracting">
+  <h2>Adding and subtracting</h2>
+<div class="cols">
+<div>
+<div class="box key"><span class="lbl">Triangle rule</span><p>\(\overrightarrow{OA} + \overrightarrow{AB} = \overrightarrow{OB}\). Place the vectors head to tail.</p></div>
+<div class="box key"><span class="lbl">Subtracting</span><p>\(\mathbf{a} - \mathbf{b} = \mathbf{a} + (-\mathbf{b})\). Reverse \(\mathbf{b}\), then add.</p></div>
+<div class="box hint"><span class="lbl">Moving through a figure</span><p>Any path from start to finish gives the same vector. Going against an arrow costs a minus sign.</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 400 270" role="img" aria-label="Position vectors a and b from O; the vector from A to B is b minus a" style="color:var(--ink)"><line x1="60.0" y1="230.0" x2="144.6" y2="79.6" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"/><polygon points="150.0,70.0 140.6,77.3 148.6,81.8" fill="#c0392b"/><line x1="60.0" y1="230.0" x2="339.4" y2="152.9" stroke="#1a66d6" stroke-width="2.6" stroke-linecap="round"/><polygon points="350.0,150.0 338.2,148.5 340.6,157.4" fill="#1a66d6"/><line x1="150.0" y1="70.0" x2="339.8" y2="145.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="350.0,150.0 341.5,141.6 338.1,150.2" fill="currentColor"/><circle cx="60" cy="230" r="4" fill="currentColor"/><text x="46" y="250" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">O</text><text x="140" y="56" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="366" y="154" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">B</text><text x="88" y="140" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">a</text><text x="215" y="212" fill="#1a66d6" font-size="19" text-anchor="middle" font-weight="700">b</text><text x="270" y="96" fill="currentColor" font-size="19" text-anchor="middle" font-weight="700">b − a</text></svg></div><p class="figcap">Going from \(A\) to \(B\) by way of \(O\): \(-\mathbf{a} + \mathbf{b}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · Position vectors">
+  <h2>Position vectors</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Position vector</span><p>The position vector of a point \(A\) is \(\overrightarrow{OA} = \mathbf{a}\), measured from a fixed origin \(O\).</p></div>
+<div class="box key"><span class="lbl">The one to remember</span><p>\[\overrightarrow{AB} = \overrightarrow{OB} - \overrightarrow{OA} = \mathbf{b} - \mathbf{a}\] Finish minus start.</p></div>
+<div class="box key"><span class="lbl">Midpoint</span><p>If \(M\) is the midpoint of \(AB\), then \(\overrightarrow{OM} = \tfrac12(\mathbf{a} + \mathbf{b})\).</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 400 270" role="img" aria-label="Position vectors a and b from O; the vector from A to B is b minus a" style="color:var(--ink)"><line x1="60.0" y1="230.0" x2="144.6" y2="79.6" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"/><polygon points="150.0,70.0 140.6,77.3 148.6,81.8" fill="#c0392b"/><line x1="60.0" y1="230.0" x2="339.4" y2="152.9" stroke="#1a66d6" stroke-width="2.6" stroke-linecap="round"/><polygon points="350.0,150.0 338.2,148.5 340.6,157.4" fill="#1a66d6"/><line x1="150.0" y1="70.0" x2="339.8" y2="145.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polygon points="350.0,150.0 341.5,141.6 338.1,150.2" fill="currentColor"/><circle cx="60" cy="230" r="4" fill="currentColor"/><text x="46" y="250" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">O</text><text x="140" y="56" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">A</text><text x="366" y="154" fill="currentColor" font-size="19" text-anchor="middle" font-style="italic">B</text><text x="88" y="140" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">a</text><text x="215" y="212" fill="#1a66d6" font-size="19" text-anchor="middle" font-weight="700">b</text><text x="270" y="96" fill="currentColor" font-size="19" text-anchor="middle" font-weight="700">b − a</text></svg></div><p class="figcap">\(\overrightarrow{AB} = \mathbf{b} - \mathbf{a}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · I do">
+  <h2><span class="phase-tag ido">I do</span> Vectors in a triangle</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 1</span><p>In triangle \(OAB\), \(\overrightarrow{OA} = \mathbf{a}\) and \(\overrightarrow{OB} = \mathbf{b}\). \(M\) is the midpoint of \(AB\), and \(P\) lies on \(OB\) with \(OP : PB = 2 : 1\). Find \(\overrightarrow{MP}\) in terms of \(\mathbf{a}\) and \(\mathbf{b}\).</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> \(\overrightarrow{OM} = \tfrac12(\mathbf{a} + \mathbf{b})\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{OP} = \tfrac23\mathbf{b}\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{MP} = \overrightarrow{OP} - \overrightarrow{OM} = \tfrac23\mathbf{b} - \tfrac12\mathbf{a} - \tfrac12\mathbf{b}\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\overrightarrow{MP} = \tfrac16\mathbf{b} - \tfrac12\mathbf{a}\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Plan</span><p>Write the position vector of each end, then use finish minus start.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · We do">
+  <h2><span class="phase-tag wedo">We do</span> Vectors in a parallelogram</h2>
+<div class="cols">
+<div>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>\(OABC\) is a parallelogram with \(\overrightarrow{OA} = \mathbf{a}\) and \(\overrightarrow{OC} = \mathbf{c}\). \(D\) lies on \(AB\) with \(AD : DB = 1 : 3\), and \(E\) is the midpoint of \(CB\). Find \(\overrightarrow{DE}\) in terms of \(\mathbf{a}\) and \(\mathbf{c}\).</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\overrightarrow{AB} = \mathbf{c}\), so \(\overrightarrow{OD} = \mathbf{a} + \tfrac14\mathbf{c}\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{CB} = \mathbf{a}\), so \(\overrightarrow{OE} = \mathbf{c} + \tfrac12\mathbf{a}\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{DE} = \overrightarrow{OE} - \overrightarrow{OD} = \mathbf{c} + \tfrac12\mathbf{a} - \mathbf{a} - \tfrac14\mathbf{c}\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\overrightarrow{DE} = \tfrac34\mathbf{c} - \tfrac12\mathbf{a}\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Sketch first</span><p>Draw the parallelogram and mark \(D\) and \(E\) before writing anything.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · Linear dependence">
+  <h2>Linear dependence</h2>
+<div class="box defn"><span class="lbl">Linearly dependent</span><p>Vectors \(\mathbf{a}\), \(\mathbf{b}\) and \(\mathbf{c}\) are linearly dependent if one can be written using the others, for example \(\mathbf{c} = m\mathbf{a} + n\mathbf{b}\). Equivalently \(k\mathbf{a} + l\mathbf{b} + m\mathbf{c} = \mathbf{0}\) with \(k, l, m\) not all zero.</p></div>
+<div class="box key"><span class="lbl">Two vectors</span><p>Two non-zero vectors are linearly dependent exactly when they are parallel.</p></div>
+<div class="box key"><span class="lbl">Equating coefficients</span><p>If \(\mathbf{a}\) and \(\mathbf{b}\) are <b>not parallel</b> and \(m\mathbf{a} + n\mathbf{b} = p\mathbf{a} + q\mathbf{b}\), then \(m = p\) and \(n = q\).</p></div>
+</section>
+<section class="slide" data-topic="4A · I do">
+  <h2><span class="phase-tag ido">I do</span> Equating coefficients</h2>
+<div class="box example"><span class="lbl">Example 2</span><p>\(\mathbf{a}\) and \(\mathbf{b}\) are non-zero and not parallel. Find \(m\) and \(n\) if \((2m-1)\mathbf{a} + (n+3)\mathbf{b} = (m+2)\mathbf{a} + (2n-1)\mathbf{b}\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> \(\mathbf{a}\) and \(\mathbf{b}\) are not parallel, so the coefficients match.</li>
+<li><span class="stepno">2</span> \(2m - 1 = m + 2\), so \(m = 3\)</li>
+<li><span class="stepno">3</span> \(n + 3 = 2n - 1\), so \(n = 4\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = 3,\ n = 4\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</section>
+<section class="slide" data-topic="4A · We do">
+  <h2><span class="phase-tag wedo">We do</span> Equating coefficients</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>\(\mathbf{a}\) and \(\mathbf{b}\) are non-zero and not parallel. Find \(p\) and \(q\) if \((p+q)\mathbf{a} + (p-q)\mathbf{b} = 5\mathbf{a} + \mathbf{b}\).</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(p + q = 5\) and \(p - q = 1\)</li>
+<li><span class="stepno">2</span> Adding: \(2p = 6\), so \(p = 3\)</li>
+<li class="ans"><span class="stepno">✓</span> \(p = 3,\ q = 2\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="4A · I do">
+  <h2><span class="phase-tag ido">I do</span> Showing linear dependence</h2>
+<div class="box example"><span class="lbl">Example 3</span><p>\(\mathbf{a}\) and \(\mathbf{b}\) are not parallel. Let \(\mathbf{u} = \mathbf{a} + 2\mathbf{b}\), \(\mathbf{v} = 2\mathbf{a} - \mathbf{b}\) and \(\mathbf{w} = 4\mathbf{a} + 3\mathbf{b}\). Show that \(\mathbf{u}\), \(\mathbf{v}\) and \(\mathbf{w}\) are linearly dependent.</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> Try \(\mathbf{w} = x\mathbf{u} + y\mathbf{v} = (x + 2y)\mathbf{a} + (2x - y)\mathbf{b}\)</li>
+<li><span class="stepno">2</span> Match coefficients: \(x + 2y = 4\) and \(2x - y = 3\)</li>
+<li><span class="stepno">3</span> Solving gives \(x = 2,\ y = 1\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\mathbf{w} = 2\mathbf{u} + \mathbf{v}\), so the three vectors are linearly dependent.</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</section>
+<section class="slide" data-topic="4A · We do">
+  <h2><span class="phase-tag wedo">We do</span> Showing linear dependence</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>\(\mathbf{a}\) and \(\mathbf{b}\) are not parallel. Let \(\mathbf{u} = \mathbf{a} - \mathbf{b}\), \(\mathbf{v} = 3\mathbf{a} + \mathbf{b}\) and \(\mathbf{w} = 5\mathbf{a} - \mathbf{b}\). Show that \(\mathbf{u}\), \(\mathbf{v}\) and \(\mathbf{w}\) are linearly dependent.</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(\mathbf{w} = x\mathbf{u} + y\mathbf{v} = (x + 3y)\mathbf{a} + (-x + y)\mathbf{b}\)</li>
+<li><span class="stepno">2</span> \(x + 3y = 5\) and \(-x + y = -1\)</li>
+<li><span class="stepno">3</span> Adding: \(4y = 4\), so \(y = 1\) and \(x = 2\)</li>
+<li class="ans"><span class="stepno">✓</span> \(\mathbf{w} = 2\mathbf{u} + \mathbf{v}\), so they are linearly dependent.</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="4A · I do">
+  <h2><span class="phase-tag ido">I do</span> A result about any quadrilateral <span class="chip">Exam style</span></h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 4</span><p>\(ABCD\) is a quadrilateral. \(M\) is the midpoint of \(AC\) and \(N\) is the midpoint of \(BD\). Show that \(\overrightarrow{AB} + \overrightarrow{AD} + \overrightarrow{CB} + \overrightarrow{CD} = 4\,\overrightarrow{MN}\).</p></div>
+<ol class="steps" id="st7">
+<li><span class="stepno">1</span> Use position vectors \(\mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}\) from an origin \(O\).</li>
+<li><span class="stepno">2</span> LHS \(= (\mathbf{b} - \mathbf{a}) + (\mathbf{d} - \mathbf{a}) + (\mathbf{b} - \mathbf{c}) + (\mathbf{d} - \mathbf{c}) = 2(\mathbf{b} + \mathbf{d}) - 2(\mathbf{a} + \mathbf{c})\)</li>
+<li><span class="stepno">3</span> \(\overrightarrow{OM} = \tfrac12(\mathbf{a} + \mathbf{c})\) and \(\overrightarrow{ON} = \tfrac12(\mathbf{b} + \mathbf{d})\)</li>
+<li><span class="stepno">4</span> \(4\,\overrightarrow{MN} = 4\left[\tfrac12(\mathbf{b} + \mathbf{d}) - \tfrac12(\mathbf{a} + \mathbf{c})\right] = 2(\mathbf{b} + \mathbf{d}) - 2(\mathbf{a} + \mathbf{c})\)</li>
+<li class="ans"><span class="stepno">✓</span> LHS \(=\) RHS, as required.</li>
+</ol>
+<button class="reveal-btn" data-target="#st7">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">"Show that"</span><p>Work on each side separately and finish with a clear concluding line.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4A · We do">
+  <h2><span class="phase-tag wedo">We do</span> The medians of a triangle <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>In triangle \(ABC\), the points \(D\), \(E\) and \(F\) are the midpoints of \(BC\), \(CA\) and \(AB\). Show that \(\overrightarrow{AD} + \overrightarrow{BE} + \overrightarrow{CF} = \mathbf{0}\).</p></div>
+<ol class="steps" id="st8">
+<li><span class="stepno">1</span> \(\overrightarrow{OD} = \tfrac12(\mathbf{b} + \mathbf{c})\), \(\overrightarrow{OE} = \tfrac12(\mathbf{c} + \mathbf{a})\), \(\overrightarrow{OF} = \tfrac12(\mathbf{a} + \mathbf{b})\)</li>
+<li><span class="stepno">2</span> \(\overrightarrow{AD} = \tfrac12(\mathbf{b} + \mathbf{c}) - \mathbf{a}\), and similarly for the others</li>
+<li><span class="stepno">3</span> Sum \(= \tfrac12(2\mathbf{a} + 2\mathbf{b} + 2\mathbf{c}) - (\mathbf{a} + \mathbf{b} + \mathbf{c})\)</li>
+<li class="ans"><span class="stepno">✓</span> Sum \(= \mathbf{0}\), as required.</li>
+</ol>
+<button class="reveal-btn" data-target="#st8">Show solution</button>
+</section>
+<section class="slide" data-topic="4A · You do">
+  <h2><span class="phase-tag youdo">You do</span> Check your understanding</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">In triangle \(OAB\), \(N\) lies on \(AB\) with \(AN : NB = 3 : 1\). Find \(\overrightarrow{ON}\) in terms of \(\mathbf{a}\) and \(\mathbf{b}\).</p><button class="reveal-btn">Answer</button><div class="a">\(\overrightarrow{ON} = \mathbf{a} + \tfrac34(\mathbf{b} - \mathbf{a}) = \tfrac14\mathbf{a} + \tfrac34\mathbf{b}\)</div></div>
+<div class="qcard"><p class="q">\(\mathbf{a}\) and \(\mathbf{b}\) are not parallel and \(3\mathbf{a} - 2\mathbf{b} = (k+1)\mathbf{a} + (m-4)\mathbf{b}\). Find \(k\) and \(m\).</p><button class="reveal-btn">Answer</button><div class="a">\(k = 2,\ m = 2\)</div></div>
+<div class="qcard"><p class="q">Are \(\mathbf{a} + \mathbf{b}\), \(\mathbf{a} - \mathbf{b}\) and \(3\mathbf{a} + \mathbf{b}\) linearly dependent?</p><button class="reveal-btn">Answer</button><div class="a">Yes: \(3\mathbf{a} + \mathbf{b} = 2(\mathbf{a} + \mathbf{b}) + (\mathbf{a} - \mathbf{b})\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 4A: Questions 12, 13, 15, 16</li><li><a href="../problemsets/v4a-problem-set.pdf">Problem Set 4A</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>What does \(\mathbf{b} - \mathbf{a}\) represent when \(\mathbf{a}\) and \(\mathbf{b}\) are position vectors?</li><li>When can you equate coefficients?</li><li>Hurdle 4A: four questions, working shown, final answer in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>

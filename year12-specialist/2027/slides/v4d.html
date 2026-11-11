@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4D — Vector projections</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+    startup: { pageReady: () => MathJax.startup.defaultPageReady()
+      .then(() => window.dispatchEvent(new Event('resize'))) }
+  };
+</script>
+<script src="../../../assets/vendor/mathjax/tex-svg.js" async></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Outfit:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../../assets/css/deck.css">
+<link rel="stylesheet" href="../../../assets/css/workbook.css">
+<script src="../../../assets/js/workbook.js"></script>
+<link rel="stylesheet" href="../../../assets/css/teachtools.css">
+<link rel="stylesheet" href="../../../assets/css/sitenav.css">
+<script src="../../../assets/js/sitenav.js" defer></script>
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../../assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="../../../site.webmanifest">
+<meta name="theme-color" content="#24576f">
+</head>
+<body class="deck-page theme-specialist workbook wb-specialist">
+<div class="progress"></div>
+<div class="lessontag">4D · Vector projections</div>
+<main class="deck">
+<section class="slide section-slide">
+  <h1>Vector projections</h1>
+  <p>Scalar and vector resolutes</p>
+  <p class="slide-foot">VCE Specialist Mathematics 3&amp;4 · Term 1, 2027</p>
+  <span class="chip">Chapter 4 · Section 4D</span>
+</section>
+<section class="slide" data-topic="4D · Goals">
+  <h2>By the end of this section you can…</h2>
+  <ul class="goals"><li>Find the scalar resolute of \(\mathbf{a}\) in the direction of \(\mathbf{b}\)</li><li>Find the vector resolute of \(\mathbf{a}\) in the direction of \(\mathbf{b}\)</li><li>Split \(\mathbf{a}\) into parts parallel and perpendicular to \(\mathbf{b}\)</li><li>Use resolutes to find the distance from a point to a line</li></ul>
+  <p class="small">Textbook: Cambridge Specialist Mathematics 3&amp;4, Section 4D</p>
+</section>
+<section class="slide" data-topic="4D · Resolving one vector along another">
+  <h2>Resolving one vector along another</h2>
+<div class="cols">
+<div>
+<div class="box defn"><span class="lbl">Scalar resolute</span><p>The signed length of the shadow of \(\mathbf{a}\) on \(\mathbf{b}\): \[\mathbf{a} \cdot \hat{\mathbf{b}} = \frac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{b}|}\]</p></div>
+<div class="box defn"><span class="lbl">Vector resolute</span><p>The shadow itself, a vector parallel to \(\mathbf{b}\): \[\mathbf{u} = \frac{\mathbf{a}\cdot\mathbf{b}}{\mathbf{b}\cdot\mathbf{b}}\,\mathbf{b}\]</p></div>
+<div class="box key"><span class="lbl">Perpendicular part</span><p>\(\mathbf{w} = \mathbf{a} - \mathbf{u}\). Always check that \(\mathbf{w} \cdot \mathbf{b} = 0\).</p></div>
+</div>
+<div>
+<div class="graph-card"><svg viewBox="0 0 430 280" role="img" aria-label="The vector resolute of a in the direction of b, and the perpendicular part" style="color:var(--ink)"><line x1="60.0" y1="220.0" x2="349.0" y2="220.0" stroke="#1a66d6" stroke-width="2.6" stroke-linecap="round"/><polygon points="360.0,220.0 349.0,215.4 349.0,224.6" fill="#1a66d6"/><line x1="60.0" y1="220.0" x2="241.4" y2="76.8" stroke="#c0392b" stroke-width="2.6" stroke-linecap="round"/><polygon points="250.0,70.0 238.5,73.2 244.2,80.4" fill="#c0392b"/><line x1="250" y1="70" x2="250" y2="220" stroke="currentColor" stroke-width="1.6" stroke-dasharray="6 5" stroke-linecap="round"/><line x1="60.0" y1="236.0" x2="239.0" y2="236.0" stroke="#1e8a3c" stroke-width="3" stroke-linecap="round"/><polygon points="250.0,236.0 239.0,231.4 239.0,240.6" fill="#1e8a3c"/><path d="M238 220v-12h12" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="320" y="210" fill="#1a66d6" font-size="19" text-anchor="middle" font-weight="700">b</text><text x="140" y="130" fill="#c0392b" font-size="19" text-anchor="middle" font-weight="700">a</text><text x="155" y="260" fill="#1e8a3c" font-size="14" text-anchor="middle">vector resolute of a in the direction of b</text><text x="262" y="150" fill="currentColor" font-size="14" text-anchor="start">perpendicular part</text></svg></div><p class="figcap">\(\mathbf{a} = \mathbf{u} + \mathbf{w}\)</p>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4D · I do">
+  <h2><span class="phase-tag ido">I do</span> Scalar and vector resolutes</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 1</span><p>Let \(\mathbf{a} = 3\mathbf{i} + 2\mathbf{j} - \mathbf{k}\) and \(\mathbf{b} = \mathbf{i} - 2\mathbf{j} + 2\mathbf{k}\). Find the scalar resolute and the vector resolute of \(\mathbf{a}\) in the direction of \(\mathbf{b}\), and the vector resolute of \(\mathbf{a}\) perpendicular to \(\mathbf{b}\).</p></div>
+<ol class="steps" id="st1">
+<li><span class="stepno">1</span> \(\mathbf{a}\cdot\mathbf{b} = 3 - 4 - 2 = -3\) and \(|\mathbf{b}| = 3\)</li>
+<li><span class="stepno">2</span> Scalar resolute \(= \dfrac{-3}{3} = -1\)</li>
+<li><span class="stepno">3</span> Vector resolute \(\mathbf{u} = \dfrac{-3}{9}\mathbf{b} = -\tfrac13(\mathbf{i} - 2\mathbf{j} + 2\mathbf{k})\)</li>
+<li><span class="stepno">4</span> Perpendicular part \(\mathbf{w} = \mathbf{a} - \mathbf{u} = \tfrac13(10\mathbf{i} + 4\mathbf{j} - \mathbf{k})\)</li>
+<li class="ans"><span class="stepno">✓</span> \(-1\); &nbsp; \(-\tfrac13(\mathbf{i} - 2\mathbf{j} + 2\mathbf{k})\); &nbsp; \(\tfrac13(10\mathbf{i} + 4\mathbf{j} - \mathbf{k})\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st1">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Check</span><p>\(\mathbf{w}\cdot\mathbf{b} = \tfrac13(10 - 8 - 2) = 0\) ✓</p></div>
+<div class="box hint"><span class="lbl">Negative?</span><p>A negative scalar resolute means the shadow points opposite to \(\mathbf{b}\).</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Scalar and vector resolutes</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Let \(\mathbf{a} = 5\mathbf{i} + \mathbf{j} + 3\mathbf{k}\) and \(\mathbf{b} = 2\mathbf{i} - \mathbf{j} + 2\mathbf{k}\). Find the scalar resolute and the vector resolute of \(\mathbf{a}\) in the direction of \(\mathbf{b}\), and the vector resolute of \(\mathbf{a}\) perpendicular to \(\mathbf{b}\).</p></div>
+<ol class="steps" id="st2">
+<li><span class="stepno">1</span> \(\mathbf{a}\cdot\mathbf{b} = 10 - 1 + 6 = 15\) and \(|\mathbf{b}| = 3\)</li>
+<li><span class="stepno">2</span> Scalar resolute \(= 5\)</li>
+<li><span class="stepno">3</span> \(\mathbf{u} = \tfrac{15}{9}\mathbf{b} = \tfrac53(2\mathbf{i} - \mathbf{j} + 2\mathbf{k})\)</li>
+<li><span class="stepno">4</span> \(\mathbf{w} = \mathbf{a} - \mathbf{u} = \tfrac13(5\mathbf{i} + 8\mathbf{j} - \mathbf{k})\)</li>
+<li class="ans"><span class="stepno">✓</span> \(5\); &nbsp; \(\tfrac53(2\mathbf{i} - \mathbf{j} + 2\mathbf{k})\); &nbsp; \(\tfrac13(5\mathbf{i} + 8\mathbf{j} - \mathbf{k})\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st2">Show solution</button>
+</section>
+<section class="slide" data-topic="4D · I do">
+  <h2><span class="phase-tag ido">I do</span> Distance from a point to a line through O</h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 2</span><p>Find the distance from the point \(A(4, 1, -2)\) to the line through the origin and \(B(2, 2, 1)\).</p></div>
+<ol class="steps" id="st3">
+<li><span class="stepno">1</span> The distance is the length of the part of \(\mathbf{a}\) perpendicular to \(\mathbf{b}\).</li>
+<li><span class="stepno">2</span> \(\mathbf{a}\cdot\mathbf{b} = 8 + 2 - 2 = 8\), \(|\mathbf{b}| = 3\), so the scalar resolute is \(\tfrac83\)</li>
+<li><span class="stepno">3</span> \(|\mathbf{a}|^2 = 16 + 1 + 4 = 21\)</li>
+<li><span class="stepno">4</span> Pythagoras: distance\(^2 = 21 - \tfrac{64}{9} = \tfrac{125}{9}\)</li>
+<li class="ans"><span class="stepno">✓</span> Distance \(= \dfrac{5\sqrt5}{3}\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st3">Show working</button>
+</div>
+<div>
+<div class="box key"><span class="lbl">Shortcut</span><p>\(|\mathbf{w}|^2 = |\mathbf{a}|^2 - (\text{scalar resolute})^2\)</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Distance from a point to a line through O</h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>Find the distance from the point \(A(3, 0, 4)\) to the line through the origin and \(B(1, 2, 2)\).</p></div>
+<ol class="steps" id="st4">
+<li><span class="stepno">1</span> \(\mathbf{a}\cdot\mathbf{b} = 3 + 0 + 8 = 11\), \(|\mathbf{b}| = 3\), scalar resolute \(= \tfrac{11}{3}\)</li>
+<li><span class="stepno">2</span> \(|\mathbf{a}|^2 = 25\)</li>
+<li><span class="stepno">3</span> distance\(^2 = 25 - \tfrac{121}{9} = \tfrac{104}{9}\)</li>
+<li class="ans"><span class="stepno">✓</span> Distance \(= \dfrac{2\sqrt{26}}{3}\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st4">Show solution</button>
+</section>
+<section class="slide" data-topic="4D · I do">
+  <h2><span class="phase-tag ido">I do</span> Working backwards from a resolute <span class="chip">Exam style</span></h2>
+<div class="cols">
+<div>
+<div class="box example"><span class="lbl">Example 3</span><p>The vector resolute of \(\mathbf{a} = m\mathbf{i} + 2\mathbf{j} - \mathbf{k}\) in the direction of \(\mathbf{b} = 2\mathbf{i} - \mathbf{j} + 2\mathbf{k}\) is \(\tfrac23\mathbf{b}\). Find \(m\), and hence find the vector resolute of \(\mathbf{a}\) perpendicular to \(\mathbf{b}\).</p></div>
+<ol class="steps" id="st5">
+<li><span class="stepno">1</span> Vector resolute \(= \dfrac{\mathbf{a}\cdot\mathbf{b}}{\mathbf{b}\cdot\mathbf{b}}\mathbf{b}\), so \(\dfrac{\mathbf{a}\cdot\mathbf{b}}{9} = \dfrac23\)</li>
+<li><span class="stepno">2</span> \(\mathbf{a}\cdot\mathbf{b} = 2m - 2 - 2 = 2m - 4 = 6\), so \(m = 5\)</li>
+<li><span class="stepno">3</span> \(\mathbf{w} = \mathbf{a} - \tfrac23\mathbf{b} = (5\mathbf{i} + 2\mathbf{j} - \mathbf{k}) - \tfrac23(2\mathbf{i} - \mathbf{j} + 2\mathbf{k})\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = 5\) and \(\mathbf{w} = \tfrac13(11\mathbf{i} + 8\mathbf{j} - 7\mathbf{k})\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st5">Show working</button>
+</div>
+<div>
+<div class="box hint"><span class="lbl">Check</span><p>\(\mathbf{w}\cdot\mathbf{b} = \tfrac13(22 - 8 - 14) = 0\) ✓</p></div>
+</div>
+</div>
+</section>
+<section class="slide" data-topic="4D · We do">
+  <h2><span class="phase-tag wedo">We do</span> Working backwards from a resolute <span class="chip">Exam style</span></h2>
+<div class="box try"><span class="lbl">Your turn, with me</span><p>The scalar resolute of \(\mathbf{a} = \mathbf{i} + m\mathbf{j} + 2\mathbf{k}\) in the direction of \(\mathbf{b} = 2\mathbf{i} + 2\mathbf{j} - \mathbf{k}\) is 2. Find \(m\).</p></div>
+<ol class="steps" id="st6">
+<li><span class="stepno">1</span> \(\dfrac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{b}|} = 2\) and \(|\mathbf{b}| = 3\)</li>
+<li><span class="stepno">2</span> \(\mathbf{a}\cdot\mathbf{b} = 2 + 2m - 2 = 2m\)</li>
+<li><span class="stepno">3</span> \(\dfrac{2m}{3} = 2\)</li>
+<li class="ans"><span class="stepno">✓</span> \(m = 3\)</li>
+</ol>
+<button class="reveal-btn" data-target="#st6">Show solution</button>
+</section>
+<section class="slide" data-topic="4D · You do">
+  <h2><span class="phase-tag youdo">You do</span> Check your understanding</h2>
+<div class="qgrid">
+<div class="qcard"><p class="q">Find the scalar resolute of \(4\mathbf{i} - \mathbf{j} + 3\mathbf{k}\) in the direction of \(\mathbf{i} + 2\mathbf{j} + 2\mathbf{k}\).</p><button class="reveal-btn">Answer</button><div class="a">\(\dfrac{4 - 2 + 6}{3} = \dfrac83\)</div></div>
+<div class="qcard"><p class="q">Find the vector resolute of \(2\mathbf{i} + 3\mathbf{j} + \mathbf{k}\) in the direction of \(\mathbf{i} - \mathbf{k}\).</p><button class="reveal-btn">Answer</button><div class="a">\(\dfrac{1}{2}(\mathbf{i} - \mathbf{k})\)</div></div>
+<div class="qcard"><p class="q">Find the scalar resolute of \(\mathbf{b} = 5\mathbf{i} + \mathbf{j} + \mathbf{k}\) in the direction of \(\mathbf{a} = 3\mathbf{i} - 4\mathbf{k}\).</p><button class="reveal-btn">Answer</button><div class="a">\(\dfrac{15 - 4}{5} = \dfrac{11}{5}\)</div></div>
+</div>
+<div class="box key"><span class="lbl">Practice</span><ul><li>Textbook Exercise 4D: Questions 7, 9, 10, 11</li><li><a href="../problemsets/v4d-problem-set.pdf">Problem Set 4D</a> (answers at the back)</li></ul></div>
+</section>
+<section class="slide exit-slide">
+  <div class="exit-wrap">
+    <p class="eyebrow">Exit ticket</p>
+    <h1>Before you go</h1>
+    <ol><li>Which resolute is a number and which is a vector?</li><li>How do you check a perpendicular component?</li><li>Hurdle 4D: four questions, working shown, final answer in the box.</li></ol>
+  </div>
+</section>
+
+</main>
+<a class="homebtn" href="../t01-vectors.html" title="Back to the topic page">&#8962; Home</a>
+<div class="keyhint"><span class="key">&#8594;</span> reveals then advances · <span class="key">&#8592;</span> back · <span class="key">F</span> fullscreen · tools on the right edge</div>
+<div class="chrome">
+  <button class="navbtn" data-nav="prev" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"></span>
+  <button class="navbtn" data-nav="next" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script src="../../../assets/js/deck.js" defer></script>
+<script src="../../../assets/js/teachtools.js" defer></script>
+</body>
+</html>
