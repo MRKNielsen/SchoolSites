@@ -305,6 +305,11 @@ window.SITEMAP = {
            "k": "science"
           },
           {
+           "t": "Trebuchet Investigation Test — Rubric & Report Generator | Year 7 Forces & Motion",
+           "h": "year7-science/forces/rubric.html",
+           "k": "science"
+          },
+          {
            "t": "Solution Set — Forces and Motion",
            "h": "year7-science/forces/solutions.html",
            "k": "science"

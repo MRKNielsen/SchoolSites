@@ -62,7 +62,23 @@ in Tier 1) and `science-skills.jpg` (no unit yet).
       regenerate the art if the printed title should match. **S**
       *(2026-11-04)*
 
-<<<<<<< HEAD
+### Landed — Forces Trebuchet Investigation Test rubric (11 Nov 2026)
+
+`year7-science/forces/rubric.html` (a copy of the Space shell, theme
+science) + `rubric-data.js` mark the Lesson 18 open-booklet test. Built from
+the staff-only paper and key in Kodie's `7 Science/Forces/Trebuchet_Test/`
+(still kept out of the repo): 14 questions, 37 criteria, 41 marks
+(A 12 · B 20 · C 9). Five strands, one skill per band: launch physics
+(VC2S8U15), variables (VC2S8I02, top band 3), processing data (VC2S8I04),
+graphs and patterns (VC2S8I05, top band 3), evaluating (VC2S8I06).
+Section C questions sit only in band 4; descriptors name skills, never
+answers. Linked from the Forces index Planning section ("Not
+password-protected", like Space) and listed in the marker's and builder's
+`data-examples`. `validateRubric()`: no errors, no warnings. Rendered in
+Chromium with the demo class on every tab. The rubric follows the 2026
+paper (counterweight mass as the variable); if the 2027 EPI CAT replaces
+the test, it needs its own rubric file.
+
 ### Landed — empty bands allowed, greyed out (2 Nov 2026)
 
 A test rarely has a question for every band of every strand, and forcing a
@@ -115,10 +131,9 @@ checks (a v1 class opened on a v2 rubric loses nothing and round-trips back),
 builder 108 (the builder's warning counts match what the marker then sets
 aside).
 
-Still open from the same request: the **Forces rubric** needs the Lesson 18
-Trebuchet Investigation Test paper and key (staff-only, not in the repo) and
-the **Particle Model rubrics** need their investigation booklets, still to be
-written.
+Still open from the same request: the **Particle Model rubrics** need their
+investigation booklets, still to be written. (The Forces rubric landed on
+11 Nov 2026 — see below.)
 
 ### Landed — default statements + statement bank in the builder (2 Nov 2026)
 
@@ -205,7 +220,6 @@ in Tier 5.
   rules on purpose, injects markup into every rubric field, marks the
   starter end to end and drives the generic page's open / save / switch
   flow. Both pass; rendered and checked in Chromium.
-=======
 ### Landed — Algorithmics U4 AOS 2 additional topics (4 Nov 2026)
 
 Four new topic decks in `year12-algorithmics/unit-4/slides/`, linked from the
@@ -232,7 +246,6 @@ worked example (traces, DP table, tours, colourings) was generated from and
 asserted against code before the figures were drawn. No inline `style=` or
 hex outside SVG. Rendered in Chromium at 1600×900 and 1280×720 with every
 reveal open: no slide overflows.
->>>>>>> 794435fd1e42b8e16c0c647b73f14a103012ddc9
 
 ### Landed — Space rubric Analysis tab (22 Oct 2026)
 
