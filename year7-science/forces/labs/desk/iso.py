@@ -34,9 +34,15 @@ class Solid:
         self.shape = shape
         self.o = np.asarray(o, float); self.U = np.asarray(U, float); self.V = np.asarray(V, float)
         self.n = np.asarray(n, float) if n is not None else np.cross(self.U, self.V)
+        # keep (U, V, n) right-handed: otherwise the edge faces point inwards and the wrong ones are drawn.
+        # Flipping n and moving the origin by t describes exactly the same slab.
+        if np.dot(np.cross(self.U, self.V), self.n) < 0:
+            self.o = self.o + t * self.n; self.n = -self.n
         self.t, self.color, self.ec, self.lw, self.alpha, self.label = t, color, ec, lw, alpha, label
+        self.layer = 0      # drawn in layer order first, then back to front: put a ground plane on layer -1
     def moved(self, d):
         s = Solid(self.shape, self.o + np.asarray(d, float), self.U, self.V, self.t, self.color, self.n, self.ec, self.lw, self.alpha, self.label)
+        s.layer = self.layer
         return s
     def to3(self, uv, off=0.0):
         uv = np.asarray(uv, float)
@@ -81,7 +87,7 @@ def render(ax, solids, cam, guides=(), labels=(), ghost=()):
                 d = cam.depth(pts).max() - 0.01
             k = 0.78 + 0.35 * max(0.0, float(np.dot(nrm, LIGHT)))
             items.append((d, rings, s, k, is_ghost, kind))
-    items.sort(key=lambda it: it[0])
+    items.sort(key=lambda it: (it[2].layer, it[0]))
     for d, rings, s, k, g, kind in items:
         verts, codes = [], []
         for r in rings:

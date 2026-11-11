@@ -89,13 +89,15 @@ def base():
     cuts = []
     for s in (-1, 1):
         xa, xb = s * (SX0 - CL / 2), s * (SX1 + CL / 2)
-        for y0, y1 in ((FOOT[0] - HOOK, FOOT[1] + SLIDE), (-FOOT[1] - HOOK, -FOOT[0] + SLIDE)):
+        # the slot is only as long as the hook: the foot drops in SLIDE mm forward of its final place, then
+        # slides back so the hook's heel goes under the solid base behind the slot (checked in precheck)
+        for y0, y1 in ((FOOT[0], FOOT[1] + SLIDE), (-FOOT[1], -FOOT[0] + SLIDE)):
             cuts.append(slot(min(xa, xb), max(xa, xb), y0 - 0.2, y1 + 0.2))
     for s in (-1, 1):           # trough guide tabs
         for yc in (-250.0, -60.0, 110.0):
             cuts.append(slot(s * GUIDE_X - SW / 2, s * GUIDE_X + SW / 2, yc - 10.2, yc + 10.2))
     # trigger post (hooked, slides towards the front)
-    cuts.append(slot(POST_X - SW / 2, POST_X + SW / 2, POST_Y - 8 - 0.2, POST_Y + 8 + HOOK + 0.2))
+    cuts.append(slot(POST_X - SW / 2, POST_X + SW / 2, POST_Y - 8 - HOOK - 0.2, POST_Y + 8 + 0.2))
     for c in cuts: g = g.difference(c)
     eng = text('BASE', 0, -180, 9) + text('FRONT', 0, 200, 7) + text('throwing direction ^', 0, 186, 4.5)
     eng += text('trigger', POST_X + 22, POST_Y, 4.5, angle=90)
@@ -231,7 +233,27 @@ def kit():
     p += [washer('axle', i) for i in range(20)] + [washer('hang', i) for i in range(12)]
     return p
 
+def hook_check():
+    """Every hooked joint must (a) drop through its base slot in the start position and (b) end with its hook
+    under solid base. Worked in the part's own plane: u = Y along the base, v = Z."""
+    b = base().solid()
+    def solid_base_at(x, y0, y1):          # is the base uncut along this line?
+        from shapely.geometry import LineString
+        return b.contains(LineString([(x, y0 + 0.01), (x, y1 - 0.01)]))
+    def open_at(x, y0, y1):
+        from shapely.geometry import LineString
+        return not b.intersects(LineString([(x, y0 + 0.01), (x, y1 - 0.01)]))
+    xs = (SX0 + T / 2, -(SX0 + T / 2))
+    for x in xs:
+        for h0, h1 in ((FOOT[0] - HOOK, FOOT[1]), (-FOOT[1] - HOOK, -FOOT[0])):      # hook extent, final position
+            assert open_at(x, h0 + SLIDE, h1 + SLIDE), 'foot hook cannot drop through its slot'
+            assert solid_base_at(x, h0, h0 + HOOK - 0.5), 'foot hook does not catch under the base'
+    h0, h1 = POST_Y - 8, POST_Y + 8 + HOOK                                          # trigger post hook, final
+    assert open_at(POST_X, h0 - HOOK, h1 - HOOK), 'trigger hook cannot drop through its slot'
+    assert solid_base_at(POST_X, h1 - HOOK + 0.5, h1), 'trigger hook does not catch under the base'
+
 def precheck(parts):
+    hook_check()
     from shapely.prepared import prep
     bad = []
     for p in parts:
