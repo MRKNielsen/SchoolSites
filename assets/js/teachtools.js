@@ -59,7 +59,8 @@
     undo: '<path d="M8 8H4V4"/><path d="M4 8a9 9 0 111 9"/>',
     pdf: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>',
     img: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="9.5" r="1.5"/>',
-    bin: '<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/>'
+    bin: '<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/>',
+    split: '<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M14 4v16"/>'
   };
   const icon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[k] + "</svg>";
 
@@ -306,6 +307,7 @@
   g = grid();
   button(g, "timer", "Timer", "timer", toggleTimer);
   button(g, "wb", "Whiteboard", "board", toggleWb);
+  button(g, "split", "Split view", "split", toggleSplit);
   button(g, "ruler", "Ruler", "ruler", toggleRuler);
   button(g, "measure", "Measure", "measure", toggleMeasure);
   button(g, "pro", "Protractor", "pro", togglePro, "wide");
@@ -430,7 +432,7 @@
   function toggleWb() {
     if (wb) { wb.close(); return; }
     const card = el("div", "tt-card tt-wb");
-    card.innerHTML = '<div class="tt-bar"><span class="grow">Whiteboard</span><button class="tt-x" data-a="max" aria-label="Full screen board">⤢</button><button class="tt-x" data-a="close" aria-label="Close whiteboard">✕</button></div>' +
+    card.innerHTML = '<div class="tt-bar"><span class="grow">Whiteboard</span><button class="tt-x" data-a="split" aria-label="Split screen: board on the right, slide on the left">◫</button><button class="tt-x" data-a="max" aria-label="Full screen board">⤢</button><button class="tt-x" data-a="close" aria-label="Close whiteboard">✕</button></div>' +
       '<div class="tt-tools"></div><div class="tt-surface"><canvas class="bg"></canvas><canvas class="fg" data-noswipe></canvas></div><div class="tt-grip"></div>';
     layer.appendChild(card);
     const tools = card.querySelector(".tt-tools"), bgC = card.querySelector(".bg"), fgC = card.querySelector(".fg"), surf = card.querySelector(".tt-surface");
@@ -474,23 +476,42 @@
       sws.forEach(b => { b.style.background = b.dataset.c === "ink" ? "#1d1d1f" : b.dataset.c; b.classList.toggle("on", b.dataset.c === pen.colour); });
     }
     let x = 0, y = 0;
+    function applySplit(goingSplit) {
+      card.classList.remove("max");
+      card.classList.toggle("split", goingSplit);
+      document.body.classList.toggle("tt-split", goingSplit);
+      card.style.transform = goingSplit ? "none" : "translate(" + x + "px," + y + "px)";   /* drop the drag offset while docked, restore it after */
+      btns.split.classList.toggle("on", goingSplit);
+      requestAnimationFrame(() => { fit(); window.dispatchEvent(new Event("resize")); });  /* lets the slide/ink re-fit the narrower deck */
+    }
     card.querySelector(".tt-bar").addEventListener("click", e => {
       const b = e.target.closest("button"); if (!b) return; e.stopPropagation(); b.blur();
-      if (b.dataset.a === "close") { wb.close(); return; }
+      const a = b.dataset.a;
+      if (a === "close") { applySplit(false); wb.close(); return; }
+      if (a === "split") { applySplit(!card.classList.contains("split")); return; }
+      if (card.classList.contains("split")) applySplit(false);
       const goingMax = !card.classList.contains("max");
       card.classList.toggle("max");
       card.style.transform = goingMax ? "none" : "translate(" + x + "px," + y + "px)";   /* drop the drag offset while full screen, restore it after */
       requestAnimationFrame(fit);
     });
-    drag(card.querySelector(".tt-bar"), (dx, dy) => { if (card.classList.contains("max")) return; x += dx; y += dy; card.style.transform = "translate(" + x + "px," + y + "px)"; });
+    drag(card.querySelector(".tt-bar"), (dx, dy) => { if (card.classList.contains("max") || card.classList.contains("split")) return; x += dx; y += dy; card.style.transform = "translate(" + x + "px," + y + "px)"; });
     drag(card.querySelector(".tt-grip"), (dx, dy) => { card.style.width = Math.max(320, card.offsetWidth + dx) + "px"; card.style.height = Math.max(240, card.offsetHeight + dy) + "px"; fit(); });
     const onResize = () => requestAnimationFrame(fit);
     window.addEventListener("resize", onResize);
     wbSync = sync; wbSyncTools = syncTools;
-    wb = { close: () => { window.removeEventListener("resize", onResize); card.remove(); wb = null; btns.wb.classList.remove("on"); } };
+    wb = { close: () => { applySplit(false); window.removeEventListener("resize", onResize); card.remove(); wb = null; btns.wb.classList.remove("on"); }, setSplit: applySplit };
     btns.wb.classList.add("on"); closeBox();
     if (!pen.tool) setTool("pen", true);
     sync(); syncTools();
+  }
+
+  /* Split view: docks the whiteboard full-height on the right 30%, slide on the left 70%.
+     Toggling it off keeps the board open as a normal floating card. */
+  function toggleSplit() {
+    if (document.body.classList.contains("tt-split")) { if (wb) wb.setSplit(false); return; }
+    if (!wb) toggleWb();
+    if (wb) wb.setSplit(true);
   }
 
   /* ---------------- ruler ---------------- */
@@ -622,6 +643,7 @@
   let exportBar = null, pageStyle = null;
   function exportLesson() {
     closeBox();
+    if (wb && document.body.classList.contains("tt-split")) wb.setSplit(false);   /* full-width deck for the printed pages */
     const body = document.body, W = window.innerWidth, H = window.innerHeight;
     visited.add(active);
     Object.keys(data.ink).forEach(k => { if (data.ink[k].length) visited.add(+k); });

@@ -6,11 +6,13 @@
      <script src="../../../assets/js/teachtools.js" defer></script>
 
    A tab on the right edge opens the toolbox: pen, highlighter and
-   eraser that write on the slide, a pop-out whiteboard, a countdown
-   timer, a ruler (straight edge), a measuring tool, a protractor,
-   "Lesson PDF" (the slides taught this session with their writing)
-   and delete. Writing is kept in this browser until deleted.
-   Built for a tablet with a stylus; works with touch and mouse.
+   eraser that write on the slide, a pop-out whiteboard (which can
+   also be docked as a 70/30 split, slide on the left, board on the
+   right, via its own bar button or the toolbox's "Split view"), a
+   countdown timer, a ruler (straight edge), a measuring tool, a
+   protractor, "Lesson PDF" (the slides taught this session with
+   their writing) and delete. Writing is kept in this browser until
+   deleted. Built for a tablet with a stylus; works with touch and mouse.
    ============================================================ */
 
 .tt-layer { position: fixed; inset: 0; z-index: 8000; pointer-events: none;
@@ -93,6 +95,18 @@ body.tt-drawing .slide > canvas.tt-ink { pointer-events: auto; touch-action: non
 
 .tt-wb { left: 8vw; top: 8vh; width: 78vw; height: 76vh; min-width: 320px; min-height: 240px; display: flex; flex-direction: column; overflow: hidden; }
 .tt-wb.max { left: 0 !important; top: 0 !important; width: 100vw !important; height: 100vh !important; height: 100dvh !important; border-radius: 0; }
+
+/* ---------- Split view: whiteboard docked on the right, slide on the left ---------- */
+:root { --tt-split-w: 30vw; }
+.tt-wb.split { left: auto !important; right: 0 !important; top: 0 !important; width: var(--tt-split-w) !important;
+  height: 100vh !important; height: 100dvh !important; border-radius: 0; border-top: none; border-right: none; border-bottom: none; }
+.tt-wb.split .tt-grip { display: none; }
+body.tt-split .deck { width: calc(100% - var(--tt-split-w)); }
+body.tt-split .chrome, body.tt-split .homebtn { right: calc(var(--tt-split-w) + 1vw); }
+body.tt-split .tt-tab, body.tt-split .tt-box { right: var(--tt-split-w); }
+@media (max-width: 700px) {
+  body.tt-split .chrome, body.tt-split .homebtn { right: calc(var(--tt-split-w) + 18px); }
+}
 .tt-wb .tt-tools { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 2px 10px 8px; border-bottom: 1.5px solid var(--line, #c9c4b8); }
 .tt-wb .tt-tools .sep { width: 1px; height: 22px; background: var(--line, #c9c4b8); margin: 0 3px; }
 .tt-mini { min-width: 34px; height: 30px; padding: 0 9px; border-radius: 8px; border: 1.5px solid var(--line, #c9c4b8); background: transparent; font-size: 13px; font-weight: 700; }

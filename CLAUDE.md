@@ -55,11 +55,13 @@ Plus the fonts:
 Optional modules — link only when a deck uses them:
 
 - `assets/css/teachtools.css` + `assets/js/teachtools.js` — the teacher's
-  toolbox (pen, highlighter, eraser, timer, pop-out whiteboard, ruler,
-  measure, protractor, "Lesson PDF" export, delete writing) on a tab at the
-  right edge. Link the CSS after deck.css and the script (`defer`) after
-  deck.js; no markup needed. Writing is stored per deck in localStorage
-  (`teachtools:<path>`) until deleted. The 2027 Specialist decks in
+  toolbox (pen, highlighter, eraser, timer, pop-out whiteboard — which can
+  also dock as a 70/30 split with the slide on the left, via its bar button
+  or the toolbox's "Split view" — ruler, measure, protractor, "Lesson PDF"
+  export, delete writing) on a tab at the right edge. Link the CSS after
+  deck.css and the script (`defer`) after deck.js; no markup needed. Writing
+  is stored per deck in localStorage (`teachtools:<path>`) until deleted.
+  The 2027 Specialist decks in
   `year12-specialist/2027/slides/` use it.
 
 - `assets/css/quiz.css` + `assets/js/quiz.js` — multiple-choice retrieval
