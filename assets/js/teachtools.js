@@ -74,6 +74,7 @@
   function drag(handle, move, start, end) {
     handle.addEventListener("pointerdown", e => {
       if (e.button > 0) return;
+      if (e.target.closest("button")) return;   /* let bar buttons (close, maximize, size) click normally */
       e.preventDefault(); e.stopPropagation();
       handle.setPointerCapture(e.pointerId);
       let px = e.clientX, py = e.clientY;
@@ -472,11 +473,15 @@
       bPen.classList.toggle("on", pen.tool === "pen"); bHi.classList.toggle("on", pen.tool === "hi"); bEr.classList.toggle("on", pen.tool === "erase");
       sws.forEach(b => { b.style.background = b.dataset.c === "ink" ? "#1d1d1f" : b.dataset.c; b.classList.toggle("on", b.dataset.c === pen.colour); });
     }
+    let x = 0, y = 0;
     card.querySelector(".tt-bar").addEventListener("click", e => {
       const b = e.target.closest("button"); if (!b) return; e.stopPropagation(); b.blur();
-      if (b.dataset.a === "close") wb.close(); else { card.classList.toggle("max"); requestAnimationFrame(fit); }
+      if (b.dataset.a === "close") { wb.close(); return; }
+      const goingMax = !card.classList.contains("max");
+      card.classList.toggle("max");
+      card.style.transform = goingMax ? "none" : "translate(" + x + "px," + y + "px)";   /* drop the drag offset while full screen, restore it after */
+      requestAnimationFrame(fit);
     });
-    let x = 0, y = 0;
     drag(card.querySelector(".tt-bar"), (dx, dy) => { if (card.classList.contains("max")) return; x += dx; y += dy; card.style.transform = "translate(" + x + "px," + y + "px)"; });
     drag(card.querySelector(".tt-grip"), (dx, dy) => { card.style.width = Math.max(320, card.offsetWidth + dx) + "px"; card.style.height = Math.max(240, card.offsetHeight + dy) + "px"; fit(); });
     const onResize = () => requestAnimationFrame(fit);
