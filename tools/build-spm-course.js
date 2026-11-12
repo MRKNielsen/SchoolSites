@@ -48,7 +48,14 @@ function weekInfo(t, w) {
   const mon = addDays(parse(term.monday), 7 * (w - 1));
   let fri = addDays(mon, 4);
   if (term.lastDay && parse(term.lastDay) < fri) fri = parse(term.lastDay);
-  const ab = course.abCycle === "restart" ? (w % 2 ? "A" : "B") : "";
+  let ab = "";
+  if (course.abCycle === "restart") {
+    ab = w % 2 ? "A" : "B";
+  } else if (course.abCycle === "continuous") {
+    const priorWeeks = course.terms.filter(x => x.n < t).reduce((s, x) => s + x.weeks, 0);
+    const g = priorWeeks + w;
+    ab = g % 2 ? "A" : "B";
+  }
   const events = course.events
     .filter(e => { const d = parse(e.date); return d >= mon && d <= addDays(mon, 6); })
     .map(e => e.label);
