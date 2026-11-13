@@ -48,7 +48,25 @@ BASE_Y = (-310.0, 250.0)
 BASE_HALF = 100.0
 GUIDE_X = 30.0          # trough guides at X = +-30 (inner faces +-27)
 GUIDE_Y = (-300.0, 150.0)
+GUIDE_LOW = 18.0         # trough wall height along most of its length (as before)
+GUIDE_H = 90.0           # trough wall height over the back section only, tall enough to carry the pin hole
+GUIDE_STEP_Y = -160.0    # the back section (GUIDE_Y[0] to here) is the tall one -- well clear of both ties at +-100.7
+GUIDE_TABS = (-250.0, -60.0, 110.0)    # guide hook tab centres (Y)
+PEG_D = 7.0             # tent peg hole diameter
+PEG_IN = 20.0           # tent peg hole inset from each base edge
+
+# cocked arm angle (tip pulled down to the back) -- matches steps_desk.py's d09_cocked drawing
+_COCK = math.radians(180 + math.degrees(math.asin((AXLE_Z - 40) / L_ARM)))
+PIN_Y = (L_ARM - 50) * math.cos(_COCK)         # where the arm's trigger hole lines up, cocked (= POST_Y)
+PIN_Z = AXLE_Z + (L_ARM - 50) * math.sin(_COCK)   # height of that hole above the base, cocked
+PIN_D = 3.0             # release-pin rod diameter
+
 POST_X, POST_Y = 51.0, -241.0
+
+# the trigger key slides through the post at local z = 30 .. 30+SW (see trigger_post()), sweeping across
+# both guides' X position at Y = POST_Y -- the tall back section needs a window there so the key still slides
+KEY_WIN_Y = (POST_Y - 8.0, POST_Y + 8.0)
+KEY_WIN_Z = (27.0, 40.0)
 BASKET = 70.0           # inside size of the basket (X and Y)
 BAIL_HALF = 50.0
 LC = 75.0               # hang pin to basket centre
@@ -93,20 +111,33 @@ def base():
         # slides back so the hook's heel goes under the solid base behind the slot (checked in precheck)
         for y0, y1 in ((FOOT[0], FOOT[1] + SLIDE), (-FOOT[1], -FOOT[0] + SLIDE)):
             cuts.append(slot(min(xa, xb), max(xa, xb), y0 - 0.2, y1 + 0.2))
-    for s in (-1, 1):           # trough guide tabs
-        for yc in (-250.0, -60.0, 110.0):
-            cuts.append(slot(s * GUIDE_X - SW / 2, s * GUIDE_X + SW / 2, yc - 10.2, yc + 10.2))
+    for s in (-1, 1):           # trough guide tabs: hooked like the feet -- slot runs on to +SLIDE
+        for yc in GUIDE_TABS:   # so the tab can drop in, then the guide slides back and the hooks catch
+            cuts.append(slot(s * GUIDE_X - SW / 2, s * GUIDE_X + SW / 2, yc - 10.2, yc + 10 + SLIDE + 0.2))
     # trigger post (hooked, slides towards the front)
     cuts.append(slot(POST_X - SW / 2, POST_X + SW / 2, POST_Y - 8 - HOOK - 0.2, POST_Y + 8 + 0.2))
     for c in cuts: g = g.difference(c)
     eng = text('BASE', 0, -180, 9) + text('FRONT', 0, 200, 7) + text('throwing direction ^', 0, 186, 4.5)
     eng += text('trigger', POST_X + 22, POST_Y, 4.5, angle=90)
-    return Part('base', g, [], eng)
+    # 4 corner tent-peg holes, inset from the base edges so the fillet never breaks into them
+    peg_x = BASE_HALF - PEG_IN
+    peg_ys = (BASE_Y[0] + PEG_IN, BASE_Y[1] - PEG_IN)
+    holes = [(sx * peg_x, sy, PEG_D) for sx in (-1, 1) for sy in peg_ys]
+    for sx in (-1, 1):
+        eng += text('peg', sx * peg_x, peg_ys[0] - 10, 3.2)
+    return Part('base', g, holes, eng)
 
 def plug(n):
     """Lock plug: fills the gap left in a foot slot after the side slides back."""
     g = unary_union([rect(-SLIDE / 2 + CL / 2, -T, SLIDE / 2 - CL / 2, 0.5), rect(-11, 0, 11, 9)])
     return Part(f'plug{n}', fillet(g, 1), [], text('P', 0, 4.5, 5))
+
+def trigger_plug(n):
+    """Shorter plug for the trigger post's hook slot (narrower grip than the foot plugs,
+    since the post itself is only 28 mm wide) -- fills the gap left after the post slides
+    forward so the hook's heel stays caught and the post can't be worked back out."""
+    g = unary_union([rect(-SLIDE / 2 + CL / 2, -T, SLIDE / 2 - CL / 2, 0.5), rect(-7, 0, 7, 7)])
+    return Part(f'trigger_plug{n}', fillet(g, 1), [], text('P', 0, 3.5, 4.5))
 
 def tie(n):
     """X-Z plane: between the sides, keyed outside each one."""
@@ -193,11 +224,22 @@ def wall(n):
     return Part(f'wall{n}', fillet(g, 1), [], text('WALL', 0, -LC + 20, 6))
 
 def guide(n):
-    """Trough guide, Y-Z plane, friction tabs into the base."""
-    g = rect(GUIDE_Y[0], 0, GUIDE_Y[1], 18)
-    for yc in (-250.0, -60.0, 110.0):
-        g = g.union(rect(yc - 9.9, -T, yc + 9.9, 0.5))
-    return Part(f'guide{n}', fillet(g, 1), [], text('TROUGH GUIDE', -100, 9, 6))
+    """Trough guide, Y-Z plane. Hooked tabs like the feet: drops in, then the guide slides
+    back with the sides/base so each tab's hook catches under solid base.
+
+    Only the back section (past GUIDE_STEP_Y) stands tall, to carry the release-pin hole --
+    both ties cross at Y = +-100.7 mm, z 50..80 mm, which would hit a wall raised along the
+    whole length. A window at Y = POST_Y lets the trigger key still slide through the tall
+    section (it sweeps across both guides' X position at z 30..36.4 mm when pulled)."""
+    low = rect(GUIDE_Y[0], 0, GUIDE_Y[1], GUIDE_LOW)
+    tall = rect(GUIDE_Y[0], 0, GUIDE_STEP_Y, GUIDE_H)
+    g = fillet(unary_union([low, tall]), 1)
+    tabs = [hooked_tab(yc - 10, yc + 10) for yc in GUIDE_TABS]
+    g = unary_union([g] + tabs)
+    g = g.difference(rect(KEY_WIN_Y[0], KEY_WIN_Z[0], KEY_WIN_Y[1], KEY_WIN_Z[1]))
+    holes = [(PIN_Y, PIN_Z, PIN_D)]
+    eng = text('TROUGH GUIDE', -100, 9, 6) + text('pin', PIN_Y, PIN_Z - 11, 3.5)
+    return Part(f'guide{n}', g, holes, eng)
 
 def trigger_post():
     body = rect(-14, 0, 14, 48)
@@ -229,7 +271,8 @@ def kit():
     p = [base(), side('L'), side('R'), arm(), tie(1), tie(2), guide(1), guide(2),
          bail(1), bail(2), floor_(), wall(1), wall(2), trigger_post(), trigger_key(), sensor_plate()]
     p += [plug(i) for i in range(5)] + [key(i) for i in range(8)]
-    p += [release_tip(a) for a in (0, 15, 30)] + [ring(i) for i in range(3)]
+    p += [trigger_plug(i) for i in range(2)]
+    p += [release_tip(a) for a in (0, 15, 30, 45, 60)] + [ring(i) for i in range(3)]
     p += [washer('axle', i) for i in range(20)] + [washer('hang', i) for i in range(12)]
     return p
 
@@ -251,6 +294,12 @@ def hook_check():
     h0, h1 = POST_Y - 8, POST_Y + 8 + HOOK                                          # trigger post hook, final
     assert open_at(POST_X, h0 - HOOK, h1 - HOOK), 'trigger hook cannot drop through its slot'
     assert solid_base_at(POST_X, h1 - HOOK + 0.5, h1), 'trigger hook does not catch under the base'
+    for s in (-1, 1):                                                               # trough guide hooks, final
+        x = s * GUIDE_X
+        for yc in GUIDE_TABS:
+            h0, h1 = yc - 10 - HOOK, yc + 10
+            assert open_at(x, h0 + SLIDE, h1 + SLIDE), 'guide hook cannot drop through its slot'
+            assert solid_base_at(x, h0, h0 + HOOK - 0.5), 'guide hook does not catch under the base'
 
 def precheck(parts):
     hook_check()
@@ -262,9 +311,26 @@ def precheck(parts):
         if n: bad.append((p.name, n))
     assert not bad, bad
 
+def nest_kit(parts):
+    """Nest the kit onto sheets. K.nest()'s greedy area-sort is sensitive to small area
+    changes in the long/awkward parts (base, sides, arm, guides) -- after the trough guide
+    was stepped (round of fixes for the tie/trigger-key clearance), its area shrank enough
+    to re-shuffle the sort order and spill a part onto a second sheet, even though overall
+    sheet utilisation is still well under half. Placing those few big/long parts first, in a
+    fixed order verified to nest everything onto one sheet, then handing the rest to the
+    normal nest() for the remaining free space, is more robust than hoping the generic
+    area-sort heuristic lands on a workable order every time a part's shape changes."""
+    big_order = ['base', 'side_L', 'guide1', 'side_R', 'arm', 'guide2']
+    by_name = {p.name: p for p in parts}
+    rest = [p for p in parts if p.name not in big_order]
+    sh = K.Sheet(1, 'desk trebuchet')
+    for n in big_order:
+        assert sh.try_place(by_name[n]), f'{n} does not fit the first sheet'
+    return K.nest(rest, [sh])
+
 if __name__ == '__main__':
     precheck(kit() + [test_coupon()])
-    sheets = K.nest(kit(), [K.Sheet(1, 'desk trebuchet')])
+    sheets = nest_kit(kit())
     for sh in sheets:
         K.check(sh.parts)
         for q in sh.parts:      # everything inside the 850 x 550 area

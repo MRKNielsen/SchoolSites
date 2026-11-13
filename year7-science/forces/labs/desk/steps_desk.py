@@ -78,7 +78,7 @@ def plugs(which=((1, 1), (1, -1), (-1, 1), (-1, -1))):
     return [Solid(D.plug(0).solid(), (sx * (D.SX0 + T / 2) - T / 2, ys[sy], 0), (0, 1, 0), (0, 0, 1), T) for sx, sy in which]
 def trig_post(): return [Solid(D.trigger_post().solid(), (D.POST_X - T / 2, D.POST_Y, 0), (0, 1, 0), (0, 0, 1), T)]
 def trig_key(): return [Solid(D.trigger_key().solid(), (D.POST_X - 30, D.POST_Y, 30.2), (1, 0, 0), (0, 1, 0), T)]
-def trig_plug(): return [Solid(D.plug(0).solid(), (D.POST_X - T / 2, D.POST_Y - 8 - D.HOOK / 2, 0), (0, 1, 0), (0, 0, 1), T)]
+def trig_plug(): return [Solid(D.trigger_plug(0).solid(), (D.POST_X - T / 2, D.POST_Y - 8 - D.HOOK / 2, 0), (0, 1, 0), (0, 0, 1), T)]
 
 def arm_parts(angle, tip=True, sensor=True, crop=None, tip_out=0.0):
     a = math.radians(angle)
@@ -188,9 +188,10 @@ def inventory():
     items = [('Base', D.base(), '1'), ('Side L and side R', D.side('L'), '2'), ('Arm', D.arm(), '1'), ('Tie', D.tie(1), '2'),
              ('Trough guide', D.guide(1), '2'), ('Basket bail', D.bail(1), '2'), ('Basket floor', D.floor_(), '1'),
              ('Basket wall', D.wall(1), '2'), ('Trigger post', D.trigger_post(), '1'), ('Trigger key', D.trigger_key(), '1'),
-             ('Release tips\n0 / 15 / 30', D.release_tip(15), '3'), ('Sling ring', D.ring(0), '3'), ('Lock plug', D.plug(0), '5'),
+             ('Release tips\n0/15/30/45/60', D.release_tip(15), '5'), ('Sling ring', D.ring(0), '3'), ('Lock plug', D.plug(0), '5'),
+             ('Trigger plug', D.trigger_plug(0), '2'),
              ('Tie key', D.key(0), '8'), ('Axle washer\n(large)', D.washer('axle', 0), '20'), ('Hang washer\n(small)', D.washer('hang', 0), '12')]
-    f, axs = plt.subplots(2, 8, figsize=(W, 3.3))
+    f, axs = plt.subplots(2, 9, figsize=(W, 3.3))
     for ax, (nm, p, q) in zip(axs.flat, items):
         flat(ax, p.solid(), WOOD, lw=0.5)
         ax.set_aspect('equal', adjustable='datalim'); ax.margins(0.16); ax.autoscale_view(); ax.axis('off')
@@ -202,20 +203,20 @@ def inventory():
 # ------------------------------------------------------------------ 2 trough guides
 def step2():
     f = plt.figure(figsize=(W, H))
-    ax, cam = view(f, [0.0, 0.0, 0.66, 1.0], old(base()) + new(shift(guides(), (0, 0, 55))), EYE)
+    ax, cam = view(f, [0.0, 0.0, 0.60, 1.0], old(base()) + new(shift(guides(), (0, 0, 55))), EYE)
     for yc in (-250.0, -60.0, 110.0):
         arrow(ax, cam, P(D.GUIDE_X + 9, yc, 46), P(D.GUIDE_X + 9, yc, 6), lw=2.0)
     badge(ax, cam, 1, P(D.GUIDE_X, -160, 70), (-10, 62))
+    arrow(ax, cam, P(D.GUIDE_X + 40, 150, 0), P(D.GUIDE_X + 40, 128, 0))
+    badge(ax, cam, 2, P(D.GUIDE_X + 40, 139, 0), (44, -26))
     note(ax, cam, 'FRONT', P(0, 205, 0), (0, 0), fs=9)
     arrow(ax, cam, P(0, 262, 0), P(0, 330, 0), lw=2.0, col=INK)
     note(ax, cam, 'throws this way', P(0, 345, 0), (40, -16), fs=8)
-    mark(ax, cam, P(D.GUIDE_X, 110, 22), 46, 'A'); fit(ax)
-    ad, cd = detail(f, [0.66, 0.08, 0.33, 0.84], old(base(crop=(-20, 50, 100, 170))) + new(shift(guides(crop=(55, 165), which=(1,)), (0, 0, 16))),
-                    (1.0, 0.75, 0.6), P(D.GUIDE_X, 110, 8), 52, 'A')
-    arrow(ad, cd, P(D.GUIDE_X + 8, 110, 30), P(D.GUIDE_X + 8, 110, 4))
-    note(ad, cd, 'tab', P(D.GUIDE_X + 3, 110, 13), (34, 26), fs=9)
-    note(ad, cd, 'slot', P(D.GUIDE_X + 3, 124, 0), (30, -22), fs=9)
-    seal(ad); save(f, 'd02_guides')
+    fit(ax)
+    for i, st in enumerate((1, 2)):
+        a2 = f.add_axes([0.60, 0.65 - i * 0.33, 0.40, 0.32]); hook_section(a2, st, 'guide')
+    f.text(0.80, 0.012, 'side view of one tab:   BACK ←    → FRONT', fontsize=6.8, color='#555555', ha='center', va='bottom')
+    save(f, 'd02_guides')
 
 # ------------------------------------------------------------------ 3 frame: ties through both sides, keys
 def step3():
@@ -245,29 +246,38 @@ def step3():
 # ------------------------------------------------------------------ 4 frame onto the base: drop, slide back, plug
 def hook_section(ax, stage, kind='foot'):
     """Side elevation of one hooked joint, front to the right (u = Y, v = Z).
-    foot: drops in 10 mm forward, slides BACK.  post: drops in 10 mm back, slides FORWARD."""
-    if kind == 'foot':
-        y0, y1 = D.FOOT[0], D.FOOT[1] + D.SLIDE                   # the slot in the base
-        part = D.side('L').solid().intersection(box(88, -14, 170, 24)); start = D.SLIDE
-        plug_y = D.FOOT[1] + D.SLIDE / 2; lo, hi = 70, 186
-        words = {1: 'drop in', 2: 'slide BACK 10 mm', 3: 'lock plug in front'}
+    foot: drops in 10 mm forward, slides BACK.  post: drops in 10 mm back, slides FORWARD.
+    guide: one trough-guide tab, drops in 10 mm forward, slides BACK (no plug -- the hook alone holds it)."""
+    if kind in ('foot', 'guide'):
+        if kind == 'foot':
+            y0, y1 = D.FOOT[0], D.FOOT[1] + D.SLIDE                   # the slot in the base
+            part = D.side('L').solid().intersection(box(88, -14, 170, 24)); start = D.SLIDE
+            plug_y = D.FOOT[1] + D.SLIDE / 2; lo, hi = 70, 186
+            words = {1: 'drop in', 2: 'slide BACK 10 mm', 3: 'lock plug in front'}
+        else:
+            yc = 110.0
+            y0, y1 = yc - 10, yc + 10 + D.SLIDE                        # the slot in the base
+            part = D.guide(1).solid().intersection(box(60, -14, 176, 24)); start = D.SLIDE
+            plug_y = None; lo, hi = 60, 176
+            words = {1: 'drop in', 2: 'slide BACK 10 mm'}
     else:
         y0, y1 = -8 - D.HOOK, 8
         part = D.trigger_post().solid(); start = -D.HOOK
         plug_y = -8 - D.HOOK / 2; lo, hi = -66, 50
-        words = {1: 'drop in', 2: 'slide FORWARD 10 mm', 3: 'lock plug behind'}
+        words = {1: 'drop in', 2: 'slide FORWARD 10 mm', 3: 'trigger plug behind'}
     for a, b in ((lo, y0 - 0.2), (y1 + 0.2, hi)):
         ax.add_patch(MP([(a, -T), (b, -T), (b, 0), (a, 0)], fc='#D8CFBD', ec=INK, lw=0.7, zorder=3))
-    lift = 16 if kind == 'foot' else 20
+    lift = 16 if kind in ('foot', 'guide') else 20
     dy, dz = {1: (start, lift), 2: (0, 0), 3: (0, 0)}[stage]
     if stage == 2: flat(ax, part, 'none', ec='#999999', lw=0.6, dx=start, z=4)
     flat(ax, part, NEW if stage < 3 else OLD, ec=NEW_EC if stage < 3 else OLD_EC, lw=0.8, dx=dy, dy=dz, z=5)
-    top = part.bounds[3]; sgn = 1 if kind == 'foot' else -1
-    xa = (part.bounds[2] + start + 9) if kind == 'foot' else (part.bounds[0] + start - 9)
+    top = part.bounds[3]; sgn = 1 if kind in ('foot', 'guide') else -1
+    xa = (part.bounds[2] + start + 9) if kind in ('foot', 'guide') else (part.bounds[0] + start - 9)
     if stage == 1: arrow2(ax, (xa, top + lift + 2), (xa, top - 6))
     if stage == 2: arrow2(ax, (xa + sgn * 14, top * 0.55), (xa - sgn * 8, top * 0.55))
     if stage == 3:
-        flat(ax, D.plug(0).solid(), NEW, ec=NEW_EC, lw=0.8, dx=plug_y, dy=13, z=6)
+        plug_part = D.trigger_plug(0) if kind == 'post' else D.plug(0)
+        flat(ax, plug_part.solid(), NEW, ec=NEW_EC, lw=0.8, dx=plug_y, dy=13, z=6)
         arrow2(ax, (plug_y + sgn * 19, 30), (plug_y + sgn * 19, 8))
     yt = max(top + lift, 40) + 13
     num2(ax, stage, (lo + 9, yt), fs=9); ax.text(lo + 9 + (hi - lo) * 0.10, yt, words[stage], fontsize=8.2, va='center', ha='left')
@@ -302,7 +312,7 @@ def step5():
     badge(ax, cam, 4, P(D.POST_X + 104, D.POST_Y - 20, 36), (-30, -34))
     note(ax, cam, 'trigger key', P(D.POST_X + 110, D.POST_Y + 6, 36), (34, 34), fs=8)
     note(ax, cam, 'post', P(D.POST_X + 3, D.POST_Y + 10, 48), (44, 40), fs=8)
-    note(ax, cam, 'lock plug', P(D.POST_X + 3, D.POST_Y - 20, 9), (-52, -30), fs=8)
+    note(ax, cam, 'trigger plug', P(D.POST_X + 3, D.POST_Y - 20, 9), (-52, -30), fs=8)
     note(ax, cam, 'trough guide', P(D.GUIDE_X, D.POST_Y - 40, 18), (-40, 44), fs=8)
     fit(ax)
     for i, st in enumerate((1, 2, 3)):
