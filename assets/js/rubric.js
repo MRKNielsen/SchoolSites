@@ -311,6 +311,15 @@ function refreshClass(){
 }
 const isDone   = (st, id) => hasMark(st, id) && st.q[id] > 0 && st.q[id] >= MAXOF[id] * PASS;
 const isNotAtt = (st, id) => !hasMark(st, id) && COLS_MARKED.has(id) && started(st);
+/* A strand's curriculum code counts as met once the awarded band reaches
+   at least PASS of that strand's top band — the same half-marks rule
+   isDone() already uses for a single question, just applied to the band
+   scale. Works for any maxBand (3 or 4), so it needs no band-label text
+   matching and no per-rubric tuning. */
+const metStandard = (st, s) => {
+  const b = Number.isInteger(st.marks[s.id]) ? st.marks[s.id] : 0;
+  return b > 0 && (b / maxBandOf(s)) >= PASS;
+};
 function rawTotal(st){ return CRITERIA.reduce((n,c) => n + (hasMark(st, c.id) ? st.q[c.id] : 0), 0); }
 /* "", "1", "1.5", "1,5", "1½", "½" -> number | null (blank) | NaN (invalid) */
 function parseMark(raw, max){
@@ -567,7 +576,7 @@ function buildComment(st){
     const lines = STRANDS.filter(s => Number.isInteger(st.marks[s.id])).map(s => {
       const b = st.marks[s.id];
       const label = b === 0 ? state.band0 : state.bandLabels[b-1];
-      return "• " + s.name + " — " + label
+      return "• " + s.name + (s.code ? " (" + s.code + ")" : "") + " — " + label
         + (b === 0 ? ": the next thing to do is " + nextOf(s) + "."
                    : ": " + (second ? "you can " : P.sub+" can ") + canOf(s) + ".");
     });
@@ -989,7 +998,7 @@ function sheetHTML(st, withComment, scale){
        teachers tick what was achieved and leave the rest blank, so blank
        is band 0 — not demonstrated. */
     const awarded = Number.isInteger(st.marks[s.id]) ? st.marks[s.id] : 0;
-    h += '<tr><td class="strand">'+esc(s.name)+'<span class="sub">'+esc(s.sub)+'</span>'
+    h += '<tr><td class="strand">'+esc(s.name)+(s.code ? '<span class="code">'+esc(s.code)+'</span>' : '')+'<span class="sub">'+esc(s.sub)+'</span>'
        + (r.missed ? '<span class="pen">&minus;'+r.missed+' band'+(r.missed===1?'':'s')+' for missing developing skills</span>' : '')
        + '</td>';
 
@@ -1039,6 +1048,21 @@ function sheetHTML(st, withComment, scale){
      + grp("Attempted, not yet successful", gPart, "part")
      + grp("Not attempted", gNot, "no")
      + '</div>';
+
+  /* Curriculum standards met — one chip per coded strand, split on whether
+     the awarded band reaches that strand's "at expected standard" bands.
+     Only strands with a code print here, so a rubric with none of its
+     strands coded (not this one) adds nothing to the sheet. */
+  const codedStrands = STRANDS.filter(s => s.code);
+  if(codedStrands.length){
+    const stdMet = [], stdNotYet = [];
+    codedStrands.forEach(s => (metStandard(st, s) ? stdMet : stdNotYet).push(s));
+    h += '<div class="stdbar">'
+       + '<span class="stdlab">Curriculum standards</span>'
+       + stdMet.map(s => '<span class="std met" title="'+esc(s.name)+'">'+esc(s.code)+'</span>').join("")
+       + stdNotYet.map(s => '<span class="std notyet" title="'+esc(s.name)+'">'+esc(s.code)+'</span>').join("")
+       + '</div>';
+  }
 
   const cmt = (st.comment || "").split(/\n{2,}/).filter(Boolean);
   h += '<div class="cbox keep"><h3>Feedback</h3>'

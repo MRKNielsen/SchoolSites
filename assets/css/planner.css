@@ -159,6 +159,40 @@ body.planner-page {
   font-weight: 700; color: var(--warn); white-space: nowrap;
 }
 
+/* ---------- Header block: description, achievement standard + codes, prep/review/DI/extension ---------- */
+.planner-page .pl-desc { font-size: .92rem; margin: 0 0 .9em; max-width: 100ch; }
+.planner-page .pl-as {
+  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 1.4em; margin: 0 0 1.1em; padding: .9em 1em;
+  background: color-mix(in srgb, var(--accent) 5%, #fff);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+}
+.planner-page .pl-as h2 {
+  font-size: .82rem; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--accent-dark); margin: 0 0 .5em;
+}
+.planner-page .pl-as .pl-list { font-size: .82rem; }
+.planner-page dl.pl-codes.pl-codes--stacked { grid-template-columns: 1fr; gap: .45em 0; }
+.planner-page dl.pl-codes.pl-codes--stacked dd { font-size: .8rem; }
+
+.planner-page .pl-grid2 {
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1em;
+  margin: 0 0 1.3em;
+}
+.planner-page .pl-grid2-cell {
+  padding: .8em .9em; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--panel);
+}
+.planner-page .pl-grid2-cell h3 {
+  font-size: .78rem; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--accent-dark); margin: 0 0 .4em;
+}
+.planner-page .pl-grid2-cell .pl-list { font-size: .8rem; }
+
+@media (max-width: 900px) {
+  .planner-page .pl-as, .planner-page .pl-grid2 { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 1100px) {
   .planner-page .sheet { padding: 16px; }
   .planner-page table.planner { min-width: 1400px; }
@@ -182,4 +216,5 @@ body.planner-page {
   .planner-page table.planner tbody tr { break-inside: avoid; }
   .planner-page a { color: var(--ink); text-decoration: none; }
   .planner-page .wk-n { font-size: 1.3rem; }
+  .planner-page .pl-as, .planner-page .pl-grid2 { break-inside: avoid; }
 }

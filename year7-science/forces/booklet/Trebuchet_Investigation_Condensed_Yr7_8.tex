@@ -566,34 +566,35 @@
 \end{tikzpicture}
 \end{center}}
 
-% ── What the sensor records during one launch (simulated, 800 g) ──────────────
-% x: 0..1.0 s at 12 cm; y: -7..10 rad/s at 0.36 cm per rad/s
-\newcommand{\diagSpinGraph}{%
-\begin{center}
-\begin{tikzpicture}[font=\small, x=12cm, y=0.335cm]
-  % grid
-  \foreach \yy in {-6,-4,...,10} \draw[Line] (0,\yy) -- (1.0,\yy);
-  \foreach \xx in {0,0.1,...,1.01} \draw[Line] (\xx,-7) -- (\xx,10);
-  % axes
-  \draw[thick, DarkGrey, -{Stealth}] (0,-7) -- (0,10.6);
-  \draw[thick, DarkGrey, -{Stealth}] (0,0) -- (1.04,0);
-  \foreach \yy in {-6,-4,...,10} \node[font=\scriptsize, text=DarkGrey, anchor=east] at (0,\yy) {\yy};
-  \foreach \xx/\l in {0.2/0.2,0.4/0.4,0.6/0.6,0.8/0.8,1.0/1.0} \node[font=\scriptsize, text=DarkGrey, anchor=north] at (\xx,-7) {\l};
-  \node[font=\small, text=DarkGrey, anchor=north] at (0.5,-8.3) {time (s)};
-  \node[font=\small, text=DarkGrey, rotate=90, anchor=south] at (-0.055,1.5) {spin rate (rad/s)};
-  % the trace
-  \draw[thick, MidBlue, line join=round] plot coordinates {\spintrace};
-  % annotations
-  \fill[OrangeDark] (0.67,9.04) circle (2.2pt);
-  \draw[OrangeDark, thin] (0.67,9.04) -- (0.78,9.5);
-  \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, fill=white, inner sep=1.5pt] at (0.78,9.5) {peak spin $\approx 9.0$ rad/s};
-  \draw[DarkGrey, thin, -{Stealth}] (0.12,4.0) -- (0.195,0.5);
-  \node[font=\scriptsize, text=DarkGrey, anchor=south, fill=white, inner sep=1.5pt, align=center] at (0.12,4.0) {trigger\\released};
-  \node[font=\scriptsize, text=DarkGrey, anchor=north, fill=white, inner sep=1.5pt, align=center] at (0.12,-1.2) {arm still:\\0 rad/s};
-  \node[font=\scriptsize, text=DarkGrey, anchor=west, fill=white, inner sep=1.5pt, align=left] at (0.62,-3.6) {arm swings\\back past\\the bottom};
-\end{tikzpicture}
-\end{center}}
+\newcommand{\sensortrace}{(0,0) (0.05,0) (0.1,0) (0.15,0) (0.2,0) (0.25,0) (0.3,0) (0.35,0) (0.4,0) (0.45,0) (0.5,0) (0.55,0) (0.6,0) (0.65,0) (0.7,0) (0.75,0) (0.8,0) (0.85,0) (0.9,0) (0.95,0) (1,0) (1.05,0) (1.1,0) (1.15,0) (1.2,0) (1.25,0) (1.3,0) (1.35,0) (1.4,0) (1.45,0) (1.5,0) (1.55,0) (1.6,0) (1.65,0) (1.7,0) (1.75,0) (1.8,0) (1.85,0) (1.9,0) (1.95,0) (2,0) (2.05,2.5) (2.1,5) (2.15,7.5) (2.2,10) (2.25,12.5) (2.3,15) (2.34,13.91) (2.38,11.95) (2.42,9.33) (2.46,6.27) (2.5,3.01) (2.54,-0.2) (2.58,-3.14) (2.62,-5.65) (2.66,-7.58) (2.7,-8.84) (2.74,-9.4) (2.78,-9.28) (2.82,-8.53) (2.86,-7.25) (2.9,-5.58) (2.94,-3.65) (2.98,-1.62) (3.02,0.36) (3.06,2.17) (3.1,3.69) (3.14,4.84) (3.18,5.57) (3.22,5.86) (3.26,5.73) (3.3,5.22) (3.34,4.39) (3.38,3.32) (3.42,2.11) (3.46,0.85) (3.5,-0.37) (3.54,-1.48) (3.58,-2.4) (3.62,-3.08) (3.66,-3.5) (3.7,-3.65) (3.74,-3.54) (3.78,-3.19) (3.82,-2.65) (3.86,-1.98) (3.9,-1.22) (3.94,-0.43) (3.98,0.32) (4.02,1) (4.06,1.55) (4.1,1.96) (4.14,2.2) (4.18,2.27) (4.22,2.18) (4.26,1.95) (4.3,1.6) (4.34,1.17) (4.38,0.7) (4.42,0.21) (4.46,-0.26) (4.5,-0.67) (4.54,-1) (4.58,-1.24) (4.62,-1.38) (4.66,-1.41) (4.7,-1.34) (4.74,-1.19) (4.78,-0.97) (4.82,-0.69) (4.86,-0.39) (4.9,-0.09) (4.94,0.19) (4.98,0.44) (5.02,0.64) (5.06,0.79) (5.1,0.86) (5.14,0.87) (5.18,0.83) (5.22,0.72) (5.26,0.58) (5.3,0.41) (5.34,0.22) (5.38,0.03) (5.42,-0.14) (5.46,-0.29) (5.5,-0.41) (5.54,-0.5) (5.58,-0.54) (5.62,-0.54) (5.66,-0.51) (5.7,-0.44) (5.74,-0.35) (5.78,-0.24) (5.82,-0.12)}
 
+\newcommand{\diagSpinGraph}{%
+	\begin{center}
+		\begin{tikzpicture}[font=\small, x=2cm, y=0.24cm]
+			% grid
+			\foreach \yy in {-10,-8,...,16} \draw[Line] (0,\yy) -- (6,\yy);
+			\foreach \xx in {0,0.5,...,6} \draw[Line] (\xx,-10) -- (\xx,16);
+			% axes
+			\draw[thick, DarkGrey, -{Stealth}] (0,-10) -- (0,16.8);
+			\draw[thick, DarkGrey, -{Stealth}] (0,0) -- (6.2,0);
+			\foreach \yy in {-8,-4,0,4,8,12,16} \node[font=\scriptsize, text=DarkGrey, anchor=east] at (0,\yy) {\yy};
+			\foreach \xx in {0,1,2,3,4,5,6} \node[font=\scriptsize, text=DarkGrey, anchor=north] at (\xx,-10) {\xx};
+			\node[font=\small, text=DarkGrey, anchor=north] at (3,-12.3) {time (s)};
+			\node[font=\small, text=DarkGrey, rotate=90, anchor=south] at (-0.55,3) {angular velocity -- $z$ (rad/s)};
+			% the trace
+			\draw[thick, MidBlue, line join=round] plot coordinates {\sensortrace};
+			% release marker
+			\draw[DarkGrey, dashed, thick] (2.0,-10) -- (2.0,16);
+			\node[font=\scriptsize\bfseries, text=DarkGrey, anchor=south east, fill=white, inner sep=1.5pt] at (1.95,15.6) {release};
+			% peak spin annotation -- leader pushed right so its label clears "release"
+			\fill[OrangeDark] (2.3,15.0) circle (2.2pt);
+			\draw[OrangeDark, thin] (2.3,15.0) -- (3.4,14.6);
+			\node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, fill=white, inner sep=1.5pt] at (3.4,14.6) {peak spin $\approx 15.0$ rad/s};
+			% ringing label -- kept well below the curve in this window, clear of both labels above
+			\draw[DarkGrey, thin, {Stealth}-{Stealth}] (3.0,-8.5) -- (5.5,-8.5);
+			\node[font=\scriptsize, text=DarkGrey, anchor=north, fill=white, inner sep=1.5pt, align=center] at (4.25,-8.8) {ringing (damped oscillation)};
+		\end{tikzpicture}
+\end{center}}
 % ── Energy chain for a trebuchet ─────────────────────────────────────────────
 \newcommand{\diagChain}{%
 \begin{center}
@@ -883,8 +884,8 @@ You work in a group of four, but everyone fills in their own booklet. The invest
 \medskip
 \begin{tabular}{@{}l p{12.6cm}@{}}
   \textcolor{Teal}{\rule{10pt}{10pt}}\ \textbf{Lesson 15} & \textbf{Plan.} Part A, a reading about how a trebuchet throws and how the sensor measures its swing. Part B, your prediction, the variables and safety. \\[4pt]
-  \textcolor{Amber}{\rule{10pt}{10pt}}\ \textbf{Lesson 16} & \textbf{Launch.} The first half of Part C: five counterweights, three launches each. \\[4pt]
-  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Lesson 17} & \textbf{Analyse.} The rest of Part C: graphs, analysis and conclusion. Then Part D. \\[4pt]
+  \textcolor{Amber}{\rule{10pt}{10pt}}\ \textbf{Lesson 16} & \textbf{Launch.} The first half of Part C: your group is assigned one counterweight and launches it ten times. Your results then join the whole class's. \\[4pt]
+  \textcolor{Violet}{\rule{10pt}{10pt}}\ \textbf{Lesson 17} & \textbf{Analyse.} The rest of Part C: the class results, graphs, analysis and conclusion. Then Part D. \\[4pt]
   \textcolor{NavyBlue}{\rule{10pt}{10pt}}\ \textbf{Lesson 18} & \textbf{Test.} An open-booklet test. Bring this booklet: some of the questions are about your own results. \\
 \end{tabular}
 
@@ -962,11 +963,11 @@ $L$ = length of the long arm, from the pivot to where the sling hangs, \textbf{i
 The graph above is from a launch with an 800\,g counterweight. The long arm is 0.40\,m and the short arm is 0.10\,m. Find the peak spin, the speed of the tip, and the speed of the counterweight end of the arm.
 
 \medskip
-\textbf{Peak spin:}\quad the highest point of the hump is about $\mathbf{9.0}$\,rad/s.
+\textbf{Peak spin:}\quad the highest point of the hump is about $\mathbf{15.0}$\,rad/s.
 
-\textbf{Tip speed:}\quad $v = \omega \times L = 9.0 \times 0.40 = \mathbf{3.6\ \text{m/s}}$
+\textbf{Tip speed:}\quad $v = \omega \times L = 15.0 \times 0.40 = \mathbf{6.0\ \text{m/s}}$
 
-\textbf{Counterweight end:}\quad $v = 9.0 \times 0.10 = \mathbf{0.9\ \text{m/s}}$. The tip moves $3.6 \div 0.9 = 4$ times as fast --- the same as long arm $\div$ short arm $= 0.40 \div 0.10 = 4$.
+\textbf{Counterweight end:}\quad $v = 15.0 \times 0.10 = \mathbf{1.5\ \text{m/s}}$. The tip moves $6.0 \div 1.5 = 4$ times as fast --- the same as long arm $\div$ short arm $= 0.40 \div 0.10 = 4$.
 \end{workedex}
 
 \begin{infobox}{Reading the sensor}
@@ -1014,7 +1015,7 @@ The graph above is from a launch with an 800\,g counterweight. The long arm is 0
 \newpage
 \subsection{Planning a Fair Test}\label{sub:B2}
 
-You will change the \textbf{mass of the counterweight}, using five different masses with three launches at each. On every launch you will measure two things: the \textbf{range}, from the 0\,m line to where the projectile first lands, and the \textbf{peak spin} of the arm, from the sensor. Everything else must stay the same.
+As a class you will change the \textbf{mass of the counterweight}, across six different masses. Your group is assigned \textbf{one} of those masses and launches ten times with it; every other group does the same with a different mass, and everyone's results are then combined into one class set. On every launch you will measure two things: the \textbf{range}, from the 0\,m line to where the projectile first lands, and the \textbf{peak spin} of the arm, from the sensor. Everything else must stay the same.
 %\needspace{15\baselineskip}
 \task\label{tk:vars}Complete the table for the variables in this investigation.
 \begin{ctab}
@@ -1031,7 +1032,7 @@ You will change the \textbf{mass of the counterweight}, using five different mas
 \begin{ctab}
 \begin{tabular}{|SW{3.6cm}|W{5.8cm}|W{5.6cm}|}
   \hd & \thead{Kept the same} & \thead{If it changed, how could it change the results?} & \thead{How we keep it the same} \\ \hline
-  & \scaf{The projectile} & \scaf{A heavier or lighter projectile would fly a different distance.} & \scaf{Use the same beanbag for every launch.} \\ \hline
+  & \scaf{The projectile} & \scaf{A heavier or lighter projectile would fly a different distance.} & \scaf{Use a ball of blu tac or clay remoulded to the same size and mass (about 8\,g) for every launch.} \\ \hline
   & The sling and release pin & \cell{t4-a2} & \cell{t4-a3} \\ \hline
   & Where the sensor is strapped & \cell{t4-c2} & \cell{t4-c3} \\ \hline
   & How far the arm is pulled back & \cell{t4-c2} & \cell{t4-c3} \\ \hline
@@ -1039,12 +1040,14 @@ You will change the \textbf{mass of the counterweight}, using five different mas
   &  & \cell{t4-d2} & \cell{t4-d3} \\ \hline
 \end{tabular}
 \end{ctab}
-
+\newpage
 \needspace{4\baselineskip}
 \task\label{tk:predict}Make a prediction (form a hypothesis) before you launch. 
 \pt{a}Complete the hypothesis, and give a reason using energy or levers.
 \begin{scaffold}{Hypothesis}
-I predict that as the mass of the counterweight increases, the range will \blankk{3.2cm}{t5-1} and the peak spin of the arm will \blankk{3.2cm}{t5-2}, because \ldots
+I predict that as the mass of the counterweight increases,\\ \vspace{.5cm}
+
+ the range will \blankk{3.2cm}{t5-1} and the peak spin of the arm will \blankk{3.2cm}{t5-2}, because \ldots
 \end{scaffold}
 \abox{t5a}{3cm}
 \needspace{5\baselineskip}
@@ -1055,7 +1058,7 @@ I predict that as the mass of the counterweight increases, the range will \blank
 \par
 
 \needspace{9\baselineskip}
-\task\label{tk:repeats}You will launch three times with each counterweight. Give two reasons why three launches are better than one.
+\task\label{tk:repeats}You will launch ten times with your group's one counterweight. Give two reasons why ten launches are better than one.
 \abox{t6}{5.7cm}
 \newpage
 \needspace{16\baselineskip}
@@ -1074,7 +1077,7 @@ I predict that as the mass of the counterweight increases, the range will \blank
 Safety glasses on while launching. 
 \begin{itemize}
 	\item  Never stand in front of the trebuchet or beside the range. 
-	\item  Soft beanbag projectiles only. 
+	\item  Soft blu tac or clay ball projectiles only (about 8\,g).
 	\item  Collect projectiles only after ``All clear''. 
 	\item  Keep your hands out of the arm's path while it is cocked. 
 	\item Change the counterweight only while the arm is hanging at rest, never while it is cocked.
@@ -1091,13 +1094,13 @@ Safety glasses on while launching.
 
 \subsubsection*{Equipment (for each group)}
 \begin{tabular}{@{}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{\hspace{0.04\linewidth}}>{\RaggedRight\arraybackslash}p{0.47\linewidth}@{}}
-	\textbullet\ Desktop trebuchet with a counterweight hanger & \textbullet\ Tablet or laptop with SPARKvue \\
-	\textbullet\ Slotted masses for five counterweights & \textbullet\ Measuring tape (at least 8\,m) and a metre ruler \\
-	\textbullet\ One beanbag projectile --- the same one every launch & \textbullet\ Masking tape, and a counter to mark the landing spot \\
-	\textbullet\ PASCO acceleration sensor and its strap & \textbullet\ Safety glasses for everyone in the group \\
+	\textbullet\ Desktop trebuchet, sensor already strapped to the arm & \textbullet\ Tablet or laptop with SPARKvue, and the SPARKvue setup sheet \\
+	\textbullet\ Slotted masses to build your group's assigned counterweight & \textbullet\ Measuring tape (at least 8\,m) and a metre ruler \\
+	\textbullet\ One blu tac or clay ball projectile, about 8\,g --- the same one every launch & \textbullet\ Masking tape, and a counter to mark the landing spot \\
+	\textbullet\ Counterweight hanger & \textbullet\ Safety glasses for everyone in the group \\
 \end{tabular}
 
-\begin{infobox}{Group roles --- swap roles after each counterweight}
+\begin{infobox}{Group roles --- swap roles every two or three launches}
 	\textbf{Operator:} loads, cocks and releases the trebuchet. The only person beside it.\\
 	\textbf{Safety officer:} checks the range is clear, then calls ``Launching!'' and, afterwards, ``All clear''.\\
 	\textbf{Spotter:} stands well to the side of the range and puts a counter where the projectile first lands.\\
@@ -1109,19 +1112,19 @@ Safety glasses on while launching.
 \begin{enumerate}[itemsep=1pt]
 	\item Place the trebuchet on the floor, facing down the range. Stick a strip of masking tape on the floor along the front edge of the base. This is the \textbf{0\,m line}. Line the base up with it before every launch.
 	\item Lay the measuring tape on the floor from the 0\,m line, straight down the range.
-	\item Strap the sensor tightly to the long arm, as close to the pivot as you can while it still swings clear of the frame. Swing the arm slowly by hand to check. Do not move the sensor again.
-	\item Turn the sensor on and connect it in SPARKvue. Show a graph of angular velocity against time, at the sample rate your teacher gives you.
+	\item The sensor is already strapped to the long arm near the pivot. Check the strap is tight, then swing the arm slowly by hand to make sure it swings clear of the frame. Do not move the sensor.
+	\item Turn the sensor on and connect it in SPARKvue, following the SPARKvue setup sheet. Show a graph of angular velocity against time, with the sample rate set to \textbf{1000\,Hz (1\,kHz)}.
 	\item Measure the long arm $L$, the counterweight drop $h$ and the mass of the projectile. Record them in Part C.
 \end{enumerate}
 \textbf{Launching}
 \begin{enumerate}[itemsep=1pt, resume]
-	\item Load the hanger to make the smallest counterweight.
+	\item Load the hanger to make your group's assigned counterweight.
 	\item Pull the long arm down and set the trigger. Put the projectile in the pouch and hook the sling's loop over the release pin. Keep your hands out of the arm's path.
 	\item The safety officer checks that the range is clear and everyone is behind the trebuchet, then calls ``Launching!''
 	\item The recorder presses \textbf{Start}. The operator releases the trigger. Press \textbf{Stop} once the arm has stopped swinging.
 	\item The spotter puts a counter where the projectile \textbf{first} landed. Measure from the 0\,m line to the counter, to the nearest centimetre.
 	\item Read the peak spin from the graph. Record it with the range.
-	\item Launch three times with this counterweight. Then repeat steps 6 to 11 for each of the five counterweights.
+	\item Launch ten times with your group's counterweight, swapping roles every two or three launches so everyone experiences every role.
 \end{enumerate}
 \needspace{14\baselineskip}
 \task\label{tk:fixed}Measure and record these before your first launch. The first row shows you how.
@@ -1137,70 +1140,127 @@ Safety glasses on while launching.
 \end{ctab}
 
 \needspace{14\baselineskip}
-\task\label{tk:roles}Decide who does each job. Swap jobs for every new counterweight, so that everyone does every job at least once. The first row is an example.
+\task\label{tk:roles}Your group only tests one counterweight, so swap jobs between \textbf{firings} instead: every two or three launches, so that everyone does every job at least once over your ten launches. The first row is an example.
 \begin{ctab}
 \begin{tabular}{|SZ{2.9cm}|Z{2.9cm}|Z{2.9cm}|Z{2.9cm}|Z{2.9cm}|}
-  \hd & \thead{Counterweight (g)} & \thead{Operator} & \thead{Safety officer} & \thead{Spotter} & \thead{Recorder} \\ \hline
-  & \scaf{e.g.\ 500} & \scaf{Ava} & \scaf{Ben} & \scaf{Chloe} & \scaf{Dev} \\ \hline
-  & \cell{ro1} & & & & \\ \hline
-  & \cell{ro2} & & & & \\ \hline
-  & \cell{ro3} & & & & \\ \hline
-  & \cell{ro4} & & & & \\ \hline
-  & \cell{ro5} & & & & \\ \hline
+  \hd & \thead{Launches} & \thead{Operator} & \thead{Safety officer} & \thead{Spotter} & \thead{Recorder} \\ \hline
+  & \scaf{e.g.\ 1--2} & \scaf{Ava} & \scaf{Ben} & \scaf{Chloe} & \scaf{Dev} \\ \hline
+  & 3--4\cell{ro1} & & & & \\ \hline
+  & 5--6\cell{ro2} & & & & \\ \hline
+  & 7--8\cell{ro3} & & & & \\ \hline
+  & 9--10\cell{ro4} & & & & \\ \hline
 \end{tabular}
 \end{ctab}
 
 \needspace{22\baselineskip}
 \subsection{Results}\label{sub:C2}
 
-\needspace{16\baselineskip}
-\task Record the range of every launch, then calculate the mean range for each counterweight. The first row is an example.
+\needspace{20\baselineskip}
+\task Record the range of each of your ten launches, in pairs, then calculate the mean range for your counterweight. The first row is an example.
 \begin{ctab}
-\begin{tabular}{|SZ{2.9cm}|Z{2.6cm}|Z{2.6cm}|Z{2.6cm}|Z{3.0cm}|}
-  \hd & \thead{Counterweight mass (g)} & \thead{Range, launch 1 (m)} & \thead{Range, launch 2 (m)} & \thead{Range, launch 3 (m)} & \thead{Mean range (m)} \\ \hline
-  & \scaf{e.g.\ 500} & \scaf{1.64} & \scaf{1.71} & \scaf{1.75} & \scaf{1.70} \\ \hline
-  & \cell{r1m} & \cell{r1a} & \cell{r1b} & \cell{r1c} & \cell{r1x} \\ \hline
-  & \cell{r2m} & \cell{r2a} & \cell{r2b} & \cell{r2c} & \cell{r2x} \\ \hline
-  & \cell{r3m} & \cell{r3a} & \cell{r3b} & \cell{r3c} & \cell{r3x} \\ \hline
-  & \cell{r4m} & \cell{r4a} & \cell{r4b} & \cell{r4c} & \cell{r4x} \\ \hline
-  & \cell{r5m} & \cell{r5a} & \cell{r5b} & \cell{r5c} & \cell{r5x} \\ \hline
+\begin{tabular}{|SZ{2.4cm}|Z{2.7cm}|Z{2.7cm}|}
+  \hd & \thead{Launches} & \thead{Range (m)} & \thead{Range (m)} \\ \hline
+  & \scaf{e.g.\ 1--2} & \scaf{1.64} & \scaf{1.71} \\ \hline
+  & 1--2\cell{r1m} & \cell{r1a} & \cell{r1b} \\ \hline
+  & 3--4\cell{r2m} & \cell{r2a} & \cell{r2b} \\ \hline
+  & 5--6\cell{r3m} & \cell{r3a} & \cell{r3b} \\ \hline
+  & 7--8\cell{r4m} & \cell{r4a} & \cell{r4b} \\ \hline
+  & 9--10\cell{r5m} & \cell{r5a} & \cell{r5b} \\ \hline
 \end{tabular}
 \end{ctab}
+\pt{a}Calculate the mean of all ten ranges (leave out any odd result).
+\abox{t10a}{1.4cm}
 
-\needspace{16\baselineskip}
-\task Record the peak spin of every launch and its mean. Then find the tip speed with $v = \omega \times L$, using your long arm in metres. The example is for a 0.40\,m arm.
+\needspace{20\baselineskip}
+\task Record the peak spin of each of your ten launches, in pairs, then calculate the mean. Then find the tip speed with $v = \omega \times L$, using your long arm in metres. The example is for a 0.40\,m arm.
 \begin{ctab}
-\begin{tabular}{|SZ{2.6cm}|Z{2.0cm}|Z{2.0cm}|Z{2.0cm}|Z{2.2cm}|Z{3.0cm}|}
-  \hd & \thead{Counterweight mass (g)} & \thead{Peak spin, launch 1 (rad/s)} & \thead{Peak spin, launch 2 (rad/s)} & \thead{Peak spin, launch 3 (rad/s)} & \thead{Mean peak spin (rad/s)} & \thead{Tip speed \newline $v = \omega \times L$ (m/s)} \\ \hline
-  & \scaf{e.g.\ 500} & \scaf{7.9} & \scaf{8.1} & \scaf{8.0} & \scaf{8.0} & \scaf{$8.0 \times 0.40 = 3.2$} \\ \hline
-  & \cell{w1m} & \cell{w1a} & \cell{w1b} & \cell{w1c} & \cell{w1x} & \cell{w1v} \\ \hline
-  & \cell{w2m} & \cell{w2a} & \cell{w2b} & \cell{w2c} & \cell{w2x} & \cell{w2v} \\ \hline
-  & \cell{w3m} & \cell{w3a} & \cell{w3b} & \cell{w3c} & \cell{w3x} & \cell{w3v} \\ \hline
-  & \cell{w4m} & \cell{w4a} & \cell{w4b} & \cell{w4c} & \cell{w4x} & \cell{w4v} \\ \hline
-  & \cell{w5m} & \cell{w5a} & \cell{w5b} & \cell{w5c} & \cell{w5x} & \cell{w5v} \\ \hline
+\begin{tabular}{|SZ{2.4cm}|Z{2.5cm}|Z{2.5cm}|}
+  \hd & \thead{Launches} & \thead{Peak spin (rad/s)} & \thead{Peak spin (rad/s)} \\ \hline
+  & \scaf{e.g.\ 1--2} & \scaf{7.9} & \scaf{8.1} \\ \hline
+  & 1--2\cell{w1m} & \cell{w1a} & \cell{w1b} \\ \hline
+  & 3--4\cell{w2m} & \cell{w2a} & \cell{w2b} \\ \hline
+  & 5--6\cell{w3m} & \cell{w3a} & \cell{w3b} \\ \hline
+  & 7--8\cell{w4m} & \cell{w4a} & \cell{w4b} \\ \hline
+  & 9--10\cell{w5m} & \cell{w5a} & \cell{w5b} \\ \hline
 \end{tabular}
 \end{ctab}
+\pt{a}Calculate the mean peak spin of all ten launches (leave out any odd result).
+\abox{t12a}{1.4cm}
+\pt{b}Calculate the tip speed: $v = \omega \times L$.
+\abox{t12b}{1.4cm}
 
 \begin{infobox}{Means and odd results}
-\textbf{Mean:} add the three launches and divide by 3. For 1.64, 1.71 and 1.75\,m: \ $(1.64 + 1.71 + 1.75) \div 3 = 5.10 \div 3 = \mathbf{1.70\ \text{m}}$.\\[2pt]
-\textbf{Odd result:} if one launch is very different from the other two --- the sling let go too early, or the projectile hit something --- circle it, write down what happened, and launch again. Leave the odd result out of the mean.
+\textbf{Mean:} add up the values you are keeping and divide by how many there are. For 1.64, 1.71 and 1.75\,m: \ $(1.64 + 1.71 + 1.75) \div 3 = 5.10 \div 3 = \mathbf{1.70\ \text{m}}$.\\[2pt]
+\textbf{Odd result:} if one launch is very different from the others --- the sling let go too early, or the projectile hit something --- circle it, write down what happened, and leave it out of the mean.
 \end{infobox}
 
 \needspace{10\baselineskip}
-\task\label{tk:odd}Did any launch give a result very different from the others with the same counterweight? Describe it and explain what you think went wrong. Was the peak spin odd for that launch too? What does that tell you?
+\task\label{tk:odd}Did any of your ten launches give a result very different from the others? Describe it and explain what you think went wrong. Was the peak spin odd for that launch too? What does that tell you?
 \abox{t11}{2.8cm}
+
+\needspace{20\baselineskip}
+\task\label{tk:class}Share your group's mean range and mean peak spin with the rest of the class, and record every group's results here. (Your teacher may display these on the board.) Calculate the tip speed for each row using $v = \omega \times L$ and your own long arm length.
+\begin{ctab}
+\begin{tabular}{|SZ{3.0cm}|Z{2.9cm}|Z{2.9cm}|Z{2.9cm}|}
+  \hd & \thead{Counterweight mass (g)} & \thead{Class mean range (m)} & \thead{Class mean peak spin (rad/s)} & \thead{Tip speed (m/s)} \\ \hline
+  & 200\cell{c1m} & \cell{c1r} & \cell{c1w} & \cell{c1v} \\ \hline
+  & 400\cell{c2m} & \cell{c2r} & \cell{c2w} & \cell{c2v} \\ \hline
+  & 600\cell{c3m} & \cell{c3r} & \cell{c3w} & \cell{c3v} \\ \hline
+  & 800\cell{c4m} & \cell{c4r} & \cell{c4w} & \cell{c4v} \\ \hline
+  & 1000\cell{c5m} & \cell{c5r} & \cell{c5w} & \cell{c5v} \\ \hline
+  & 1200\cell{c6m} & \cell{c6r} & \cell{c6w} & \cell{c6v} \\ \hline
+\end{tabular}
+\end{ctab}
 
 \subsection{Graphs}\label{sub:C3}
 
 \needspace{24\baselineskip}
-\task\label{tk:graph1}Draw a scatter plot of \textbf{mean range} (vertical axis) against \textbf{counterweight mass} (horizontal axis). Start both axes at zero, choose scales that use most of the grid, plot your five points, draw a smooth line of best fit, and give the graph a title.
+\task\label{tk:graph1}Using the \textbf{class results table}, draw a scatter plot of \textbf{mean range} (vertical axis) against \textbf{counterweight mass} (horizontal axis). Start both axes at zero, choose scales that use most of the grid, plot all six points, draw a smooth line of best fit, and give the graph a title.
 \graphgrid{g1}{8.0cm}
 
 \needspace{24\baselineskip}
-\task\label{tk:graph2}Draw a second scatter plot, of \textbf{tip speed} (vertical axis) against \textbf{counterweight mass} (horizontal axis), in the same way. Start both axes at zero again, so that you can compare the two graphs fairly.
+\task\label{tk:graph2}Draw a second scatter plot, of \textbf{tip speed} (vertical axis) against \textbf{counterweight mass} (horizontal axis), in the same way, using the class results table. Start both axes at zero again, so that you can compare the two graphs fairly.
 \graphgrid{g2}{8.0cm}
-
+\newpage
 \subsection{Analysis}\label{sub:C4}
+
+\needspace{26\baselineskip}
+\begin{infobox}{Reading a pattern: linear or non-linear?}
+A \textbf{linear} relationship makes a \textbf{straight} line: the dependent variable changes by the same amount for every equal step in the independent variable. A \textbf{non-linear} relationship makes a \textbf{curve}: the amount it changes by gets bigger or smaller as you move along the graph --- so the line is steeper in some places than others.
+
+\medskip
+\noindent
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Example A}\\[2pt]
+\begin{tabular}{|C{1.7cm}|C{1.9cm}|}
+  \thead{Time (s)} & \thead{Distance (m)} \\ \hline
+  1 & 2 \\ \hline 2 & 4 \\ \hline 3 & 6 \\ \hline 4 & 8 \\ \hline
+\end{tabular}\\[2pt]
+{\footnotesize Every second, the distance goes up by exactly 2\,m.}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Example B}\\[2pt]
+\begin{tabular}{|C{1.7cm}|C{1.9cm}|}
+  \thead{Mass (g)} & \thead{Range (m)} \\ \hline
+  100 & 8.0 \\ \hline 200 & 4.0 \\ \hline 300 & 2.7 \\ \hline 400 & 2.0 \\ \hline
+\end{tabular}\\[2pt]
+{\footnotesize Equal 100\,g steps in mass give smaller and smaller changes in range: $-4.0$, $-1.3$, $-0.7$\,m.}
+\end{minipage}
+\end{infobox}
+
+\needspace{10\baselineskip}
+\task\label{tk:linA}Look at Examples A and B above.
+\pt{a}Which one is linear, and which is non-linear?
+\abox{t13a}{1.2cm}
+\pt{b}Explain how you can tell, using the pattern of the changes --- not just ``it's a curve''.
+\abox{t13b}{2.0cm}
+
+\needspace{10\baselineskip}
+\task\label{tk:linB}Look at the class results table and the range-vs-mass graph you drew.
+\pt{a}Is the relationship between counterweight mass and range linear or non-linear?
+\abox{t13ca}{1.2cm}
+\pt{b}Justify your answer using numbers from the class results --- how much the range changed for equal steps in mass.
+\abox{t13cb}{2.0cm}
 
 \needspace{14\baselineskip}
 \task\label{tk:pattern}Describe the pattern in your range graph, using numbers from your results.
@@ -1209,7 +1269,7 @@ Safety glasses on while launching.
 \end{scaffold}
 
 \needspace{14\baselineskip}
-\task\label{tk:compare}Compare your heaviest and your lightest counterweights.
+\task\label{tk:compare}Compare the heaviest and lightest counterweights in the \textbf{class results table} (1200\,g and 200\,g).
 \pt{a}How many times further did the projectile go? Divide the mean range for the heaviest by the mean range for the lightest.
 \pt{b}How many times faster did the tip of the arm move? Divide the two tip speeds in the same way.
 \pt{c}Which changed by more: the range, or the speed of the arm?
@@ -1223,8 +1283,8 @@ Safety glasses on while launching.
 \abox{t16}{3.6cm}
 
 \needspace{12\baselineskip}
-\task\label{tk:spread}Look at the three launches for each counterweight in your range table.
-\pt{a}Which counterweight had the biggest spread between its three launches? How big was the spread (largest range $-$ smallest range)?
+\task\label{tk:spread}Look at your own group's ten launches in your range table.
+\pt{a}What was the spread between your highest and lowest range (largest $-$ smallest)?
 \pt{b}Were your results repeatable? Explain using your numbers.
 \abox{t17}{3.0cm}
 
@@ -1246,7 +1306,7 @@ Safety glasses on while launching.
 I predicted that \ldots \quad My results showed that \ldots \quad This supports / does not support my prediction because \ldots
 \end{scaffold}
 \abox{t19}{3.0cm}
-
+\newpage
 \subsection{Conclusion}\label{sub:C5}
 
 \needspace{16\baselineskip}
@@ -1262,7 +1322,7 @@ This investigation found that \ldots \quad For example, \ldots \quad This happen
 \lessonpart{D}{Above level}{Violet}\label{partD}
 
 \begin{yr8box}
-These questions go beyond the Year 7 standard. Each one gives you the data it needs, all from one group's investigation with a 25\,g projectile and a long arm of 0.40\,m. Use $g = 9.8$\,N/kg.
+These questions go beyond the Year 7 standard. Each one gives you the data it needs, all from one group's investigation with an 8\,g projectile and a long arm of 0.40\,m. Use $g = 9.8$\,N/kg.
 
 
 Complete them on blank paper and copy your answers into this booklet. 
@@ -1285,7 +1345,7 @@ Complete them on blank paper and copy your answers into this booklet.
 \abox{e1}{3.6cm}
 
 \needspace{14\baselineskip}
-\exttask\label{ext:eff}\textbf{How efficient is the trebuchet?} The 800\,g counterweight falls $h = 0.18$\,m. The 25\,g projectile is launched at 6.4\,m/s.
+\exttask\label{ext:eff}\textbf{How efficient is the trebuchet?} The 800\,g counterweight falls $h = 0.18$\,m. The 8\,g projectile is launched at 6.4\,m/s.
 \pt{a}Calculate the gravitational potential energy the counterweight gives up: $\text{GPE} = mgh$, with the mass in kilograms.
 \pt{b}Calculate the kinetic energy of the projectile: $\text{KE} = \tfrac{1}{2}mv^2$.
 \pt{c}Calculate the efficiency: useful energy out $\div$ energy in $\times\,100\%$.
