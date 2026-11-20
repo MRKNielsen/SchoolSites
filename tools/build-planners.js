@@ -6,6 +6,11 @@
      node tools/build-planners.js forces          (one unit)
      node tools/build-planners.js --docx <dir>    (also write the Word copies into <dir>)
 
+   Units with a site folder keep their data in year7-science/<unit>/planner-data.json
+   and get planner.html. Units with no site folder yet (S.S.S, Water Cycle +
+   Resources, Separation Techniques) keep it in tools/planner-data/<unit>.json and
+   are Word-only; "linkBase" points their relative links at another unit's folder.
+
    ONE SOURCE, TWO COPIES
    Each unit's plan lives in  year7-science/<unit>/planner-data.json.
    This script writes the site page  year7-science/<unit>/planner.html
@@ -63,7 +68,7 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 /* TeX → plain text for Word (the site keeps MathJax). */
 function texPlain(t) {
   return t.replace(/\\text\{([^}]*)\}/g, '$1').replace(/\\tfrac\{1\}\{2\}/g, '½')
-    .replace(/\\times/g, '×').replace(/\\omega/g, 'ω').replace(/\^2/g, '²')
+    .replace(/\\times/g, '×').replace(/\\div/g, '÷').replace(/\\omega/g, 'ω').replace(/\^2/g, '²')
     .replace(/\\,/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
@@ -83,6 +88,7 @@ function inlineHtml(str) {
 }
 const ul = items => items && items.length
   ? `<ul class="pl-list">\n${items.map(i => `        <li>${inlineHtml(i)}</li>`).join('\n')}\n      </ul>` : '';
+const printItem = p => p.href ? `[${p.text}](${p.href})` : p.text;
 const isAbove = (u, code) => (u.descriptors.find(d => d.code === code) || {}).above || /^VC2S10/.test(code);
 const chips = (u, codes) => `<p class="vc-row">${codes.map(c => `<span class="vc${isAbove(u, c) ? ' above' : ''}">${esc(c)}</span>`).join(' ')}</p>`;
 
@@ -209,7 +215,7 @@ ${cell('Extension', u.extension)}
 
     <div class="pl-print">
       <h3>Print the whole thing</h3>
-      ${ul(u.print.map(p => `[${p.text}](${p.href})`))}
+      ${ul(u.print.map(printItem))}
       <p class="sc">Each lesson row links its own booklet pages for printing one section at a time.</p>
     </div>
     ${ul(u.notes).replace('pl-list', 'pl-list pl-notes')}
@@ -253,7 +259,7 @@ async function writeDocx(u, outDir) {
 
   const FONT = 'Calibri';
   const ACC = u.accent;
-  const abs = h => /^https?:/.test(h) ? h : SITE + u.slug + '/' + h;
+  const abs = h => /^https?:/.test(h) ? h : SITE + (u.linkBase || u.slug) + '/' + h;
 
   const toRuns = (str, base = {}) => runs(str).map(r => {
     const o = { text: r.math ? texPlain(r.text) : r.text, font: FONT, size: base.size || 18,
@@ -301,7 +307,7 @@ async function writeDocx(u, outDir) {
     ]),
     new Paragraph({ text: '', spacing: { after: 80 } }),
     H('Print the whole thing:'),
-    ...u.print.map(p => B(`[${p.text}](${p.href})`)),
+    ...u.print.map(p => B(printItem(p))),
     P('*Each lesson row links its own booklet pages so one section can be printed at a time.*', { after: 100 }),
     ...u.notes.map(n => B(n)),
     new Paragraph({ children: [new TextRun({ text: u.length, font: FONT, size: 22, bold: true, highlight: 'yellow' })], spacing: { before: 160, after: 120 } }),
@@ -355,7 +361,7 @@ async function writeDocx(u, outDir) {
     }],
   });
   const name = u.unit.replace(/&/g, 'and').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
-  const file = path.join(outDir, `${name}_Unit_Plan_Yr7.docx`);
+  const file = path.join(outDir, u.file || `${name}_Unit_Plan_Yr7.docx`);
   fs.writeFileSync(file, await Packer.toBuffer(doc));
   return file;
 }
@@ -366,11 +372,27 @@ async function writeDocx(u, outDir) {
   let docxDir = null;
   const i = args.indexOf('--docx');
   if (i >= 0) { docxDir = path.resolve(args[i + 1]); args.splice(i, 2); }
-  const units = args.length ? args : fs.readdirSync(Y7).filter(d => fs.existsSync(path.join(Y7, d, 'planner-data.json')));
+  // A unit with a site folder keeps its data there and gets planner.html too.
+  // A unit with no site folder yet keeps its data in tools/planner-data/ and is Word-only.
+  const DATA = path.join(__dirname, 'planner-data');
+  const find = slug => {
+    const site = path.join(Y7, slug, 'planner-data.json');
+    if (fs.existsSync(site)) return { file: site, html: true };
+    const tool = path.join(DATA, slug + '.json');
+    if (fs.existsSync(tool)) return { file: tool, html: false };
+    throw new Error(`no planner-data for ${slug}`);
+  };
+  const units = args.length ? args : [
+    ...fs.readdirSync(Y7).filter(d => fs.existsSync(path.join(Y7, d, 'planner-data.json'))),
+    ...(fs.existsSync(DATA) ? fs.readdirSync(DATA).filter(f => f.endsWith('.json')).map(f => f.slice(0, -5)) : []),
+  ];
   for (const slug of units) {
-    const u = JSON.parse(fs.readFileSync(path.join(Y7, slug, 'planner-data.json'), 'utf8'));
-    fs.writeFileSync(path.join(Y7, slug, 'planner.html'), pageHtml(u));
-    console.log(`wrote year7-science/${slug}/planner.html`);
+    const { file, html } = find(slug);
+    const u = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (html) {
+      fs.writeFileSync(path.join(Y7, slug, 'planner.html'), pageHtml(u));
+      console.log(`wrote year7-science/${slug}/planner.html`);
+    }
     if (docxDir) console.log(`wrote ${await writeDocx(u, docxDir)}`);
   }
 })().catch(e => { console.error(e); process.exit(1); });
