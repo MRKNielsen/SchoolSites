@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-11",
+ "generated": "2026-11-22",
  "tree": [
   {
    "t": "Home",
@@ -161,7 +161,7 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
-           "t": "Unit Planner",
+           "t": "Unit Plan",
            "h": "year7-science/bio-ecosystems/planner.html",
            "k": "science"
           },
@@ -300,7 +300,7 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
-           "t": "Unit Planner",
+           "t": "Unit Plan",
            "h": "year7-science/forces/planner.html",
            "k": "science"
           },
@@ -312,6 +312,11 @@ window.SITEMAP = {
           {
            "t": "Solution Set — Forces and Motion",
            "h": "year7-science/forces/solutions.html",
+           "k": "science"
+          },
+          {
+           "t": "Catch-up Summary — the Unit in Three Lessons",
+           "h": "year7-science/forces/summary-deck.html",
            "k": "science"
           },
           {
@@ -370,7 +375,7 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
-           "t": "Unit Planner",
+           "t": "Unit Plan",
            "h": "year7-science/particle-model/planner.html",
            "k": "science"
           }
@@ -501,7 +506,7 @@ window.SITEMAP = {
          "g": 1,
          "c": [
           {
-           "t": "Unit Planner",
+           "t": "Unit Plan",
            "h": "year7-science/space/planner.html",
            "k": "space"
           },

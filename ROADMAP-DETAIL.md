@@ -62,6 +62,43 @@ in Tier 1) and `science-skills.jpg` (no unit yet).
       regenerate the art if the printed title should match. **S**
       *(2026-11-04)*
 
+### Landed — Forces catch-up summary: deck + workbook (22 Nov 2026)
+
+For a Year 7 class that is well behind: the whole Forces unit in **three
+lessons**, aimed at the CAT. `year7-science/forces/summary-deck.html` (42
+slides, one deck with three lesson dividers) and
+`forces/booklet/Forces_Summary_Workbook_Yr7.tex` + `.pdf` (29 pages, page
+images in `booklet/summary-pages/`). Linked from the Forces index under
+*Student resources*.
+
+- **Lesson 1** Forces and Newton's laws (old Lessons 1–6) · **Lesson 2**
+  Energy, levers and projectiles (7–14) · **Lesson 3** the investigation
+  skills (15–18), ending in a practice test. Each lesson: Key vocabulary →
+  the big ideas (every Worked Example followed by a We do) → Practice → CAT
+  check (tick-box + short answer, written like the test paper). Formula sheet
+  and "I can" checklist on the last page.
+- **The practice test uses a new data set** (Jordan: long-arm length
+  0.30–0.50 m, counterweight 800 g, one odd result at 0.40 m) so it gives away
+  neither the real test's Section A (counterweight mass) nor Section B
+  (beanbag mass). Modelled numbers, same shape as the investigation's.
+- **Preamble copied** from the Lesson Booklet (same macros, keys `s1.*`–`s3.*`,
+  dotted-thirds ruling, `fill.py`). Additions at the top of the body: `\mcq`,
+  `\sumpart`, `\catq`, `\chip`, an unbreakable `workedex`, and `\needspace`
+  guards on `\task` / `\pt` so a question never strands its box. Build:
+  `python3 fill.py Forces_Summary_Workbook_Yr7`.
+- The deck's booklet views carry `data-label`s, so
+  `python3 tools/booklet_pages.py year7-science/forces/summary-deck.html`
+  maintains them (36 numbers, all matching). Re-run it and
+  `booklet_images.py … --out …/summary-pages` after any workbook change.
+- Diagrams reused from decks 1, 2, 7, 9 and 12 and the booklet's TikZ macros;
+  one new SVG (model line graph, Lesson 3).
+- **No teacher copy.** Every We do, Practice and CAT-check answer is on a
+  reveal in the deck instead. A `_Teacher.tex` wrapper with `\defans` for the
+  `s*` keys would be the next step if one is wanted.
+- The container's TeX Live stops at `\end{document}` on an undefined
+  `\Hy@PageAnchorSlide` (the full Lesson Booklet does too); the workbook
+  defines it empty when missing, which is harmless elsewhere.
+
 ### Landed — Forces Trebuchet Investigation Test rubric (11 Nov 2026)
 
 `year7-science/forces/rubric.html` (a copy of the Space shell, theme
