@@ -1103,6 +1103,30 @@ marimo workbooks and the assessed language are the same), SQL against a
 relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
 Semester 2.
 
+### Landed — Applied Computing downloads page (23 Nov 2026)
+
+`year11-applied-computing/downloads.html` — every data file, workbook and
+printable for the subject in one grid, grouped into **The unit dataset /
+Workbooks / Printable / Reference**, course-page in the workbook look to
+match the subject index. Linked from the subject page, the Unit 1 hub's
+course-reference block, and the holiday homework's toolbar.
+
+Built because **the holiday homework's data file was unreachable.** Part E
+named `holiday-extract.csv` in bold prose and said it was "in the Unit 1
+data folder", but nothing linked it and GitHub Pages serves no directory
+listing, so `unit-1/data/` 404s. The file was live and correct the whole
+time — only an exact typed URL reached it. Part E now links it with
+`download`, and says what to do if the browser shows text instead.
+
+- **`check-links.js` cannot catch this class of fault.** It resolves links
+  that exist; it has nothing to say about prose instructing a student to
+  find a file nobody linked. Worth remembering whenever a worksheet tells
+  someone to "get the file from the site".
+- Sizes and link targets on the downloads page are **read off disk at build
+  time** — a missing file fails the build rather than shipping a dead card.
+- Data files and workbooks carry `download`; the three markdown reference
+  files deliberately do not, since a student wants to read those.
+
 ### Landed — Applied Computing summer holiday homework (9 Nov 2026)
 
 `year11-applied-computing/holiday-homework.html`, linked from the subject
@@ -1267,6 +1291,15 @@ label on its own.
       `tools/staff-crypt.html`, paste the line over `var BLOB`, then
       `node tools/check-gated.js`. **S** *(confirmed done 2026-10-30 — the
       page carries a full v2 blob; found in the repo sweep)*
+- [ ] **The three Applied Computing reference files are raw markdown.**
+      `unit-1/data/README.md`, `unit-1/data/data-dictionary.md` and
+      `unit-1/workbooks/README.md` are linked from the downloads page and
+      the Unit 1 hub, and render as unstyled plain text in a browser. The
+      data dictionary in particular is a table-heavy document students are
+      pointed at over the holidays. Convert to a page (profile.css suits a
+      long-form reference) or render the tables into the downloads page —
+      but keep one source of truth, since `docs.py` generates the markdown.
+      **S** *(found 2026-11-23, building the downloads page)*
 - [ ] **`add-sitenav.js` / `add-favicon.js` want to inject into
       `year7-science/bio-ecosystems/rubric.html`.** Both list it as
       needing the tags, and add-sitenav would also add `tokens.css` — but

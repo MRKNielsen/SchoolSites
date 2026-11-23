@@ -10,7 +10,7 @@
      p = PDF
    ============================================================ */
 window.SITEMAP = {
- "generated": "2026-11-22",
+ "generated": "2026-11-23",
  "tree": [
   {
    "t": "Home",
@@ -930,6 +930,11 @@ window.SITEMAP = {
          ]
         }
        ],
+       "k": "computing"
+      },
+      {
+       "t": "Downloads & Data",
+       "h": "year11-applied-computing/downloads.html",
        "k": "computing"
       },
       {
