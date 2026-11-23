@@ -1,0 +1,1377 @@
+% ============================================================
+%  The Particle Model — Lesson Booklet (one section per lesson: A Reading · B Theory · C Practice · D Above level)
+%  Year 7 (Year 8 extension)  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: xelatex three times, then python3 fill.py Particle_Model_Lesson_Booklet_Yr7
+% ============================================================
+\documentclass[11pt,a5paper,twoside]{article}
+\newcommand{\unitname}{Science Skills and Safety}\newcommand{\unitcaps}{SCIENCE SKILLS AND SAFETY}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a5paper, inner=17mm, outer=13mm, top=19mm, bottom=17mm, headheight=14pt, headsep=4mm, footskip=8mm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{pifont}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Science Skills and Safety — Lesson Booklet},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
+% hyperref 7.01 with implicit=false leaves \Hy@PageAnchorSlide undefined, which
+% throws at \end{document} and stops fill.py (it builds with -halt-on-error).
+\makeatletter\providecommand\Hy@PageAnchorSlide{}\makeatother
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}The Particle Model}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \linedbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.4cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  % the title is a bold lead-in on the first line rather than a title bar,
+  % which keeps Lesson 11's reading on the lesson's first page
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \linedbox{height}: an answer box ruled in dotted thirds. Lines are \thirdrow/3 apart and run dotted, dotted,
+% solid (the baseline), repeating, and end on one dotted line. The number of
+% rows is worked out from the box's final height, so the ruling still fills the
+% box after fill.py has grown it; the rows are centred in the box.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\newcommand{\linedbox}[1]{%
+  \abnext
+  % interior height = box height less the 1pt frame top and bottom
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  % whole rows that fit with at least 3 mm spare top and bottom (at least one)
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1},
+    underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}]
+  \end{tcolorbox}\ablog%
+}
+% Every written-response box is ruled the same way (Part A comprehension, We do,
+% Part C tasks and Part D extensions, including side-by-side pairs). Space for
+% mathematical working uses \workbox{height} instead and stays plain, as do
+% \drawbox and the write-in tables.
+\let\workbox\answerbox   % plain box: mathematical working (calculations) stays unruled
+\let\answerbox\linedbox
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+% ══════════════════════════════════════════════════════════════════════════════
+%  DIAGRAM DEFINITIONS — The Particle Model
+%  Self-contained TikZ macros, no external image files. Each \diag... macro is
+%  called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+\tikzset{
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+}
+
+% ── Lesson 1: the same three jars holding a solid, a liquid and a gas ───────────
+% The solid keeps its own shape, the liquid takes the jar's shape with a flat top,
+% the gas fills the whole jar. No particles yet: those arrive in Lesson 4.
+\newcommand{\jar}[1]{% jar outline with its base at (#1,0)
+  \draw[line width=1.2pt, Ink] (#1-1.25,2.9) -- (#1-1.25,0.15) arc (180:270:0.15)
+    -- (#1+1.1,0) arc (270:360:0.15) -- (#1+1.25,2.9);}
+\newcommand{\diagStates}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  % solid: a block sitting in the corner
+  \fill[GoldLight] (-0.95,0.02) rectangle (0.15,1.25);
+  \draw[GoldDark, line width=1.1pt] (-0.95,0.02) rectangle (0.15,1.25);
+  \jar{0}
+  \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Solid};
+  \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {keeps its own shape\\and volume};
+  % liquid: takes the jar's shape, flat top
+  \begin{scope}[xshift=4.2cm]
+    \fill[Sky!35] (-1.25,0.15) arc (180:270:0.15) -- (1.1,0) arc (270:360:0.15) -- (1.25,1.1) -- (-1.25,1.1) -- cycle;
+    \draw[MidBlue, line width=1.1pt] (-1.25,1.1) -- (1.25,1.1);
+    \jar{0}
+    \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Liquid};
+    \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {takes the jar's shape,\\keeps its volume};
+  \end{scope}
+  % gas: fills the whole (sealed) jar
+  \begin{scope}[xshift=8.4cm]
+    \fill[Violet!16] (-1.25,0.15) arc (180:270:0.15) -- (1.1,0) arc (270:360:0.15) -- (1.25,2.9) -- (-1.25,2.9) -- cycle;
+    \draw[line width=2.2pt, DarkGrey] (-1.4,2.9) -- (1.4,2.9);
+    \jar{0}
+    \node[font=\scriptsize, text=DarkGrey, anchor=south] at (0,2.95) {lid};
+    \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Gas};
+    \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {spreads out to fill\\the whole jar};
+  \end{scope}
+\end{tikzpicture}
+\end{center}}
+
+% ── Lesson 1, Worked Example 1.2 and We do 1.2: the same syringe, before and after
+\newcommand{\diagSyringe}[3]{% {start mL}{end mL}{contents: gas|liquid}
+\begin{center}\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize, x=0.11cm, y=1cm]
+  \foreach \row/\vol/\lab in {0/#1/before, -1.15/#2/after}{
+    \begin{scope}[yshift=\row cm]
+      \ifx#3g\fill[Violet!16] (0,0) rectangle (\vol,0.7);\else\fill[Sky!35] (0,0) rectangle (\vol,0.7);\fi
+      \draw[line width=1pt, Ink] (0,0) rectangle (60,0.7);
+      \draw[line width=1pt, Ink] (0,0.25) -- (-4,0.25) (0,0.45) -- (-4,0.45);
+      \fill[Ink] (-5.5,0.15) rectangle (-4,0.55);
+      \foreach \t in {0,10,...,60}{\draw[Ink] (\t,0.7) -- (\t,0.85); \node[anchor=south, font=\tiny] at (\t,0.82) {\t};}
+      \fill[DarkGrey] (\vol,0.04) rectangle (\vol+1.6,0.66);
+      \draw[line width=2pt, DarkGrey] (\vol+1.6,0.35) -- (\vol+26,0.35);
+      \draw[line width=2pt, DarkGrey] (\vol+26,0.05) -- (\vol+26,0.65);
+      \node[anchor=east, font=\scriptsize\bfseries, text=DarkGrey] at (-7,0.35) {\lab};
+    \end{scope}}
+  \node[font=\tiny, text=DarkGrey, anchor=west] at (61,0.35) {mL};
+  \node[font=\tiny, text=DarkGrey, anchor=north] at (-4.75,-1.2) {sealed tip};
+\end{tikzpicture}}
+\end{center}}
+
+% needspace.sty reserves room by planting a penalty -100 with 9 lines of
+% temporary stretch. On a page that can't be filled tightly that fake break
+% always wins, so a We do that fitted was pushed over and left half a page
+% empty. This version breaks only when the room really isn't there, and
+% ragged bottom lets every other page run on until something won't fit;
+% fill.py then grows the writing boxes into what is left at the foot.
+\renewcommand{\needspace}[1]{\par\ifdim\dimexpr\pagegoal-\pagetotal\relax<\dimexpr#1\relax\newpage\fi}
+\raggedbottom
+% Part D sits in a breakable yr8box, where \needspace can't see the page (the box
+% is built off the page first). Wrap each extension in keepext so it is one
+% unsplittable block: the yr8box then breaks between extensions, never inside one.
+\newenvironment{keepext}{\par\begin{tcolorbox}[blankest, breakable=false]}{\end{tcolorbox}\par}
+\usetikzlibrary{patterns}
+
+\providecommand{\unitname}{The Particle Model}\providecommand{\unitcaps}{THE PARTICLE MODEL}
+% ══════════════════════════════════════════════════════════════════════════════
+%  2027 WORKBOOK STYLE — A5 LESSON BOOKLET (added by make_a5.py)
+%  Same look as the Space A5 trial and the A4 experiment booklets: colour
+%  cover, black-and-white inside, Outfit headings, a lesson opener band with
+%  the lesson's ink symbol, boxes told apart by frame and icon:
+%    I do ● solid · We do ●● dashed · You do ●●● heavy · key idea / reading ◆
+%    thin · Above level ▲ double · Country ◎ dotted
+%  The body still names the master's colours; they are mapped to ink here.
+% ══════════════════════════════════════════════════════════════════════════════
+\usepackage{pdflscape}
+\usetikzlibrary{patterns}
+
+% A picture wider than the A5 text block is scaled down to fit it.
+\newsavebox\fitb
+\newenvironment{fitbox}{\begin{lrbox}{\fitb}}{\end{lrbox}%
+  \ifdim\wd\fitb>\linewidth\resizebox{\linewidth}{!}{\usebox\fitb}\else\usebox\fitb\fi}
+
+% ── Fonts: Outfit for headings ──────────────────────────────────────────────
+\renewfontfamily\headingfont{Outfit}[
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
+
+% ── Black and white inside ──────────────────────────────────────────────────
+\definecolor{Ink}{HTML}{111111}
+\colorlet{NavyBlue}{Ink}\colorlet{MidBlue}{Ink}\colorlet{TealGreen}{Ink}
+\colorlet{GoldDark}{Ink}\colorlet{PurpleDark}{Ink}\colorlet{OrangeDark}{Ink}
+\colorlet{TableHead}{Ink}
+\colorlet{Blue}{Ink}\colorlet{Teal}{Ink}\colorlet{Amber}{Ink}\colorlet{Coral}{Ink}
+\colorlet{Violet}{Ink}\colorlet{Sky}{Ink}
+\colorlet{LightBlue}{white}\colorlet{LightGreen}{white}\colorlet{GoldLight}{white}
+\colorlet{PurpleLight}{white}\colorlet{OrangeLight}{white}\colorlet{RowAlt}{white}
+\colorlet{LightGrey}{white}\colorlet{Paper}{white}
+\colorlet{DarkGrey}{black!72}\colorlet{MidGrey}{black!45}\colorlet{Line}{black!45}
+\arrayrulecolor{black!60}
+% Particle kinds stay distinguishable without colour: white, light grey,
+% dotted and dark.
+\tikzset{
+  pA/.style={circle, fill=white, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pB/.style={circle, fill=black!35, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pC/.style={circle, preaction={fill=white}, pattern=dots, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pD/.style={circle, fill=black!75, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt}}
+
+% ── Page style: mirrored, running head on the outside ───────────────────────
+\fancypagestyle{fancy}{\fancyhf{}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{Ink}\leaders\hrule height \headrulewidth\hfill}}%
+  \fancyhead[LE]{\headingfont\footnotesize \unitname}%
+  \fancyhead[RO]{\headingfont\footnotesize\leftmark}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{opener}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\pagestyle{fancy}\markboth{}{}
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+
+\titleformat{\subsection}{\headingfont\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{}{0em}{}
+
+% ── Lesson opener band (replaces the navy section banner) ────────────────────
+\renewcommand{\sectiondiv}[2]{%
+  \clearpage\thispagestyle{opener}%
+  \refstepcounter{section}\markboth{\thesection\ \textbullet\ #1}{\thesection\ \textbullet\ #1}%
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}\hypertarget{lesson.\thesection.1}{}%
+  \noindent\begin{minipage}[b]{\dimexpr\linewidth-36mm\relax}
+    {\headingfont\bfseries\scriptsize\addfontfeatures{LetterSpace=14}\unitcaps\ \textbullet\ LESSON}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{40}{40}\selectfont\thesection}\par\vspace{1.5mm}
+    {\headingfont\bfseries\fontsize{15}{18}\selectfont\RaggedRight #1\par}\vspace{1mm}
+    {\footnotesize\itshape\RaggedRight #2\par}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{34mm}\includegraphics[width=34mm]{../art/l\thesection-ink.pdf}\end{minipage}\par
+  \vspace{2.5mm}\noindent\rule{\linewidth}{1.6pt}\par\vspace{1mm}}
+\renewcommand{\lessoncodes}[1]{{\small\itshape VC 2.0: #1}\par\vspace{2pt}}
+
+% Lesson parts: a heading and a rule; B, C and D start a new page.
+\renewcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{8pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  {\headingfont\bfseries\Large Part #1 \textbullet\ #2}\par\vspace{0.5mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{1mm}}
+\renewcommand{\vocabhead}{%
+  \par\vspace{4pt}{\headingfont\bfseries\Large Key vocabulary}\par\vspace{1pt}%
+  \noindent{\small Copy the meaning of each word from the slide. The first one has been done for you.}\par}
+\renewcommand{\thead}[1]{\headingfont\bfseries #1}
+
+% ── Box system ──────────────────────────────────────────────────────────────
+\newcommand{\icodots}[1]{\tikz[baseline=-0.6ex]{\foreach \k in {1,...,#1}{\fill[white] (\k*1.9mm,0) circle (0.7mm);}}}
+\newcommand{\icokey}{\tikz[baseline=-0.6ex]{\fill[white] (0,0.9mm)--(0.9mm,0)--(0,-0.9mm)--(-0.9mm,0)--cycle;}}
+\newcommand{\icoup}{\tikz[baseline=-0.6ex]{\fill[white] (-1mm,-0.8mm)--(1mm,-0.8mm)--(0,1mm)--cycle;}}
+\newcommand{\icocountry}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.5pt] (0,0) circle (1mm); \fill[white] (0,0) circle (0.45mm);}}
+\newcommand{\icoread}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.6pt] (-1.1mm,-0.8mm) rectangle (1.1mm,0.8mm); \draw[white,line width=0.5pt] (0,-0.8mm) -- (0,0.8mm);}}
+\newcommand{\tagicon}[1]{\tikz[baseline=-0.6ex]\node[fill=Ink, rounded corners=0.8mm, inner xsep=1.2mm, inner ysep=1mm]{#1};}
+\tcbset{wbbase/.style={enhanced, colback=white, arc=1.2mm,
+    left=3mm, right=3mm, top=4.2mm, bottom=2.4mm, before skip=10pt, after skip=7pt,
+    attach boxed title to top left={xshift=3mm, yshift=-2.4mm},
+    boxed title style={colback=Ink, colframe=Ink, arc=0.8mm, boxrule=0pt,
+                       left=1.6mm, right=1.8mm, top=0.6mm, bottom=0.6mm},
+    fonttitle=\headingfont\bfseries\footnotesize, coltitle=white}}
+\renewtcolorbox{workedexbox}[1]{wbbase, breakable, colframe=Ink, boxrule=1pt,
+  title={\icodots{1}\ I do \textbullet\ #1}}
+\renewenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+\renewtcolorbox{wedobox}[1]{wbbase, breakable=false, frame hidden,
+  borderline={1.1pt}{0pt}{Ink, dash pattern=on 4pt off 2.6pt},
+  title={\icodots{2}\ #1}}
+\renewenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+\renewtcolorbox{yr7box}{wbbase, breakable, colframe=Ink, boxrule=2.4pt, top=5mm,
+  title={\icodots{3}\ You do \textbullet\ Check your understanding}}
+\renewtcolorbox{yr8box}{wbbase, breakable, frame hidden,
+  borderline={0.6pt}{0pt}{Ink}, borderline={0.6pt}{1.6pt}{Ink},
+  title={\icoup\ Above level \textbullet\ Year 8 extension}}
+\renewtcolorbox{infobox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{scaffold}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{skillbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{readingbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icoread\ #1}}
+\renewtcolorbox{expheader}[3]{wbbase, breakable=false, colframe=Ink, boxrule=1pt,
+  title={\icokey\ Experiment #1: #2},
+  after upper={\par\smallskip{\headingfont\bfseries Aim:}\ \textit{#3}}}
+\newtcolorbox{countrybox}[1]{wbbase, breakable, frame hidden,
+  borderline={1.4pt}{0pt}{Ink, line cap=round, dash pattern=on 0pt off 2.4pt},
+  title={\icocountry\ #1}}
+
+% ── Padding to a multiple of 4 (copier booklet mode) ────────────────────────
+\newcommand{\notespage}{\clearpage\markboth{Notes}{Notes}%
+  {\headingfont\bfseries\Large Notes}\par\vspace{3mm}%
+  \noindent\begin{tikzpicture}\foreach \y in {0,...,17}{\draw[black!35, line width=0.4pt] (0,-\y*9mm) -- (\linewidth,-\y*9mm);}\end{tikzpicture}}
+\newcount\padleft
+\newcommand{\padtofour}{\clearpage
+  \pgfmathtruncatemacro\pagesused{\the\value{page}-1}%
+  \pgfmathtruncatemacro\padn{mod(4-mod(\pagesused,4),4)}%
+  \padleft=\padn\relax
+  \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
+  \clearpage}
+
+\begin{document}
+\pdfbookmark[1]{Cover}{cover}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ---- Cover: the unit's cover art, full bleed, in colour ------------------
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at (current page.north) {\includegraphics[width=\paperwidth]{../../../covers/science-skills.jpg}};
+  \node[anchor=north east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
+        inner xsep=2mm, inner ysep=1.8mm, text width=30mm, font=\headingfont\footnotesize]
+    at ([xshift=-4mm, yshift=-4mm]current page.north east)
+    {\textbf{Name}\par\vspace{4mm}\hrule\vspace{2mm}\textbf{Class}\par\vspace{4mm}\hrule};
+  \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
+        inner xsep=2.6mm, inner ysep=2mm, font=\headingfont\bfseries, align=right]
+    at ([xshift=-4mm, yshift=6mm]current page.south east)
+    {Lesson Booklet\\[-1pt]{\normalfont\headingfont\scriptsize Lessons 1, 4 and 5}};
+\end{tikzpicture}
+\mbox{}
+\clearpage
+
+% ---- Inside cover ---------------------------------------------------------
+\thispagestyle{plain}
+{\headingfont\bfseries\fontsize{22}{26}\selectfont Science Skills and Safety}\par\vspace{1mm}
+{\headingfont\large Lesson Booklet \textbullet\ Year 7}\par\vspace{1mm}
+{\small\itshape VC 2.0: VC2S8I01--I08 \textbullet\ VC2S8H01}\par\vspace{4mm}
+\textbf{Teacher}\ \hrulefill\par
+
+\begin{countrybox}{Acknowledgement of Country}
+This booklet was created on the unceded Country of the Wurundjeri Woi-wurrung people of the Kulin Nation. We acknowledge Elders past, present and emerging.
+\end{countrybox}
+
+\begin{infobox}{How this booklet works}
+One section for each lesson. Each opens with its key vocabulary, then:\par\smallskip
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{24mm}p{70mm}@{}}
+\textbf{Part A} & a reading with comprehension questions \\
+\textbf{Part B} & the ideas, worked through \\
+\textbf{Part C} & practice on your own \\
+\textbf{Part D} & above level: Year 8 extension \\
+\end{tabular}
+
+\smallskip
+\begin{tabular}{@{}p{24mm}p{70mm}@{}}
+\textbf{I do} \tagicon{\icodots{1}} & your teacher works an example (solid frame) \\
+\textbf{We do} \tagicon{\icodots{2}} & you try one together (dashed frame) \\
+\textbf{Reading} \tagicon{\icoread} & a passage to read (thin frame) \\
+\textbf{Above level} \tagicon{\icoup} & extension (double frame) \\
+\end{tabular}
+
+\smallskip
+Lessons 2, 3 and 6 are practicals: they are in the \textbf{Experiment Booklet}.
+\end{infobox}
+
+\clearpage
+\markboth{Contents}{Contents}
+{\headingfont\bfseries\LARGE Contents}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|C{1.1cm}|L{6.0cm}|C{2.4cm}|}
+  \hline\thead{Lesson} & \thead{Title} & \thead{Page} \\ \hline
+  1 & \hyperlink{lesson.1.1}{What is Science?} & \hyperlink{lesson.1.1}{p.\ \pageref{sec:1}} \\ \hline
+  2 & \textit{Experiment 1 --- Exploring the Lab} & Experiment Booklet \\ \hline
+  3 & \textit{Experiment 2 --- Measuring Mass and Volume} & Experiment Booklet \\ \hline
+  4 & \hyperlink{lesson.4.1}{The Scientific Method} & \hyperlink{lesson.4.1}{p.\ \pageref{sec:4}} \\ \hline
+  5 & \hyperlink{lesson.5.1}{Safety} & \hyperlink{lesson.5.1}{p.\ \pageref{sec:5}} \\ \hline
+  6 & \textit{Experiment 3 --- Measuring Temperature and Time} & Experiment Booklet \\ \hline
+  --- & \hyperlink{glossary}{Glossary} & \hyperlink{glossary}{\pageref{sec:glossary}} \\ \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+\clearpage
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 1 — WHAT IS SCIENCE?                                         (Week 1 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\setcounter{section}{0}
+\sectiondiv{What is Science?}{How we know what we know \textbullet{} Observations and inferences \textbullet{} Questions science can answer}\label{sec:1}
+\lessoncodes{VC2S8H01 \textbullet{} VC2S8I01}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Science}\label{voc:science}} & \scaf{A way of finding out about the natural world by testing ideas against evidence.} \\ \hline
+  & \textbf{Evidence}\label{voc:evidence} & \\ \hline
+  & \textbf{Observation}\label{voc:observation} & \\ \hline
+  & \textbf{Inference}\label{voc:inference} & \\ \hline
+  & \textbf{Investigable question}\label{voc:investigable-question} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:1}
+
+\begin{readingbox}{Reading --- The Doctor Who Drank the Bacteria}
+For most of the twentieth century, doctors were sure they knew what caused stomach ulcers: stress, spicy food and too much acid. Nothing, they said, could live in the acid of the stomach.
+
+In Perth in the early 1980s, two Australian scientists looked more closely. Robin Warren, a pathologist, made a careful \textbf{observation}: when he looked at samples of ulcer patients' stomachs under a microscope, curved bacteria were there again and again. From this he made an \textbf{inference} --- perhaps the bacteria were causing the ulcers.
+
+Most doctors did not believe it. So Warren and his colleague Barry Marshall set out to find \textbf{evidence}. They grew the bacteria in the lab and turned their idea into an \textbf{investigable question}: \emph{do these bacteria cause stomach illness?} Marshall even drank a sample. Within days he was ill, and the bacteria were found in his stomach.
+
+Further tests showed that ulcers could be cured with antibiotics. In 2005 Marshall and Warren won the Nobel Prize. Their story shows how \textbf{science} works: ideas are tested against evidence, and even ideas everyone believes can change when new evidence comes in.
+\end{readingbox}
+
+\rcreset
+\rcq{What did most doctors believe caused stomach ulcers?}{2.5cm}
+\rcq{What observation did Robin Warren make?}{2.5cm}
+\rcq{What inference did he make from it?}{2.5cm}
+\rcq{Why did Marshall and Warren need to find evidence?}{2.5cm}
+\rcq{Write the investigable question they tested.}{2.5cm}
+\rcq{What does this story show about how scientific ideas can change?}{3cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:1}
+
+\subsection{Observations and Inferences}\label{sub:1.1}
+
+\begin{skillbox}{Two different things}
+An \textbf{observation} is something you notice with your senses or measure: \emph{the grass is wet}. An \textbf{inference} is an explanation of what you observed: \emph{it rained last night}. One observation can lead to several inferences --- the grass could also be wet from a sprinkler --- so scientists look for more evidence to decide between them.
+\end{skillbox}
+
+\begin{workedex}{Observation or inference?}
+A student finds a glass on the bench with a little water in the bottom. Sort the statements.
+
+\smallskip
+\emph{There is water in the glass.} \textbf{Observation} --- it can be seen.\\
+\emph{The glass is cold to touch.} \textbf{Observation} --- it can be felt.\\
+\emph{Someone drank most of the water.} \textbf{Inference} --- it explains what is seen.
+\end{workedex}
+
+\begin{wedo}{Observation or inference?}
+You see muddy footprints leading from the back door to the fridge.
+\pt{a}Write one observation.
+\answerbox{2.5cm}
+\pt{b}Write one inference.
+\answerbox{2.5cm}
+\end{wedo}
+
+\subsection{Questions Science Can Answer}\label{sub:1.2}
+
+\begin{skillbox}{An investigable question}
+Science can only answer a question that can be tested by collecting evidence. \emph{Which ice-cream flavour is best?} is a matter of opinion. An \textbf{investigable question} names what you will change and what you will measure:
+\par\smallskip\centerline{\textbf{How does} [the thing I change] \textbf{affect} [the thing I measure]\textbf{?}}
+\end{skillbox}
+
+\begin{workedex}{Making a question investigable}
+\emph{Do plants like music?} is hard to test --- what does ``like'' mean?
+
+\smallskip
+\textbf{Investigable:} \emph{How does playing music affect the height a bean plant grows in two weeks?} It names what is changed (music) and what is measured (height).
+\end{workedex}
+
+\begin{wedo}{Making a question investigable}
+Rewrite \emph{Is sugar good at dissolving?} as an investigable question.
+\answerbox{3cm}
+\end{wedo}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:1}
+
+\task Write \emph{O} for observation or \emph{I} for inference beside each statement.
+\begin{ctab}
+\begin{tabular}{|SW{8.4cm}|Z{1.6cm}|}
+  \hline\hd & \thead{Statement} & \thead{O or I?} \\ \hline
+  & \scaf{The candle flame is yellow.} & \scaf{O} \\ \hline
+  & The candle is getting shorter. & \\ \hline
+  & The wax is burning as fuel. & \\ \hline
+  & The air above the flame feels hot. & \\ \hline
+  & The flame needs air to keep burning. & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task A lunchbox left in a locker for two weeks is opened. The bread has green, fuzzy spots, and it smells sour.
+\pt{a}Write two observations.
+\answerbox{3.5cm}
+\pt{b}Write one inference, and say what further evidence would support it.
+\answerbox{5cm}
+
+\needspace{12\baselineskip}
+\task Tick the questions that science could investigate.
+\begin{ctab}
+\begin{tabular}{|SW{8.4cm}|Z{1.6cm}|}
+  \hline\hd & \thead{Question} & \thead{Testable?} \\ \hline
+  & \scaf{Does salt make ice melt faster?} & \scaf{\ding{51}} \\ \hline
+  & Which colour is the prettiest? & \\ \hline
+  & How does the length of a pendulum affect its swing time? & \\ \hline
+  & Is football better than netball? & \\ \hline
+  & Does warm water dissolve sugar faster than cold water? & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Rewrite each question as an investigable question.
+\pt{a}Do paper planes fly well?
+\answerbox{3cm}
+\pt{b}Is exercise good for your heart?
+\answerbox{3cm}
+
+\needspace{10\baselineskip}
+\task Your teacher shows you a mystery object. Write one observation and one inference about it.
+\answerbox{5cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:1}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard.
+
+\medskip
+\begin{keepext}
+\exttask Most doctors did not accept Marshall and Warren's idea at first. Explain why scientists are right to ask for strong evidence before they change an accepted idea, and why they must still be willing to change it.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\exttask A website says that wearing a copper bracelet cures sore joints. Describe how a scientist could test this claim fairly.
+\answerbox{5cm}
+\end{keepext}
+\end{yr8box}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 4 — THE SCIENTIFIC METHOD                                     (Week 2 · P1)
+% ══════════════════════════════════════════════════════════════════════════════
+\setcounter{section}{3}
+\sectiondiv{The Scientific Method}{The steps of an investigation \textbullet{} Independent, dependent and controlled variables \textbullet{} Writing a hypothesis}\label{sec:4}
+\lessoncodes{VC2S8I01 \textbullet{} VC2S8I02 \textbullet{} VC2S8H01}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Hypothesis}\label{voc:hypothesis}} & \scaf{A prediction that can be tested, with a reason: If \dots\ then \dots\ because \dots} \\ \hline
+  & \textbf{Independent variable}\label{voc:independent-variable} & \\ \hline
+  & \textbf{Dependent variable}\label{voc:dependent-variable} & \\ \hline
+  & \textbf{Controlled variable}\label{voc:controlled-variable} & \\ \hline
+  & \textbf{Fair test}\label{voc:fair-test} & \\ \hline
+  & \textbf{Conclusion}\label{voc:conclusion} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:4}
+
+\begin{readingbox}{Reading --- The Paper Helicopter Challenge}
+Ms Tran's class was given a challenge: make a paper helicopter that takes as long as possible to fall. Mia noticed that helicopters with longer blades seemed to spin down more slowly. She asked a question: \emph{how does the length of the blades affect the time a paper helicopter takes to fall?}
+
+Mia wrote a \textbf{hypothesis}: \emph{If the blades are longer, then the helicopter will take longer to fall, because longer blades push against more air.}
+
+To test it she changed only the blade length: 4, 6, 8 and 10\,cm. This was her \textbf{independent variable}. She measured the fall time with a stopwatch --- her \textbf{dependent variable}. Everything else stayed the same: the same paper, the same paper clip on the bottom, the same drop height of 2 metres. These were her \textbf{controlled variables}. Because only one thing changed, her experiment was a \textbf{fair test}.
+
+She timed each helicopter three times and averaged the results. The 10\,cm helicopter took longest to fall. Her \textbf{conclusion}: longer blades made the helicopter fall more slowly, so her hypothesis was supported.
+\end{readingbox}
+
+\rcreset
+\rcq{What question did Mia investigate?}{2.5cm}
+\rcq{What was her hypothesis?}{2.5cm}
+\rcq{Name her independent variable and her dependent variable.}{2.5cm}
+\rcq{Name two of her controlled variables.}{2.5cm}
+\rcq{Why was her experiment a fair test?}{2.5cm}
+\rcq{Why did she time each helicopter three times?}{2.5cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:4}
+
+\subsection{The Steps of an Investigation}\label{sub:4.1}
+
+\begin{center}
+\begin{fitbox}\begin{tikzpicture}[font=\small, box/.style={draw=Ink, line width=0.8pt, rounded corners=1.5mm, minimum width=19mm, minimum height=9mm, align=center, fill=white}]
+  \node[box] (q) at (0,0) {Question};
+  \node[box] (h) at (2.35,0) {Hypothesis};
+  \node[box] (m) at (4.7,0) {Method};
+  \node[box] (r) at (7.05,0) {Results};
+  \node[box] (c) at (9.4,0) {Conclusion};
+  \foreach \a/\b in {q/h,h/m,m/r,r/c}{\draw[Ink, line width=1pt, -{Stealth[length=5pt]}] (\a) -- (\b);}
+  \draw[Ink, line width=0.8pt, dashed, -{Stealth[length=5pt]}] (c.south) -- ++(0,-0.6) -| (q.south) node[pos=0.25, below, font=\scriptsize] {new questions};
+\end{tikzpicture}\end{fitbox}
+\end{center}
+
+\begin{skillbox}{What each step does}
+\textbf{Question:} what you want to find out. \textbf{Hypothesis:} your prediction and the reason for it. \textbf{Method:} numbered steps someone else could repeat. \textbf{Results:} measurements in a table, and often a graph. \textbf{Conclusion:} what the results show, and whether they support the hypothesis.
+\end{skillbox}
+
+\subsection{Variables}\label{sub:4.2}
+
+\begin{skillbox}{Three kinds of variable}
+The \textbf{independent variable} is what you change. The \textbf{dependent variable} is what you measure. The \textbf{controlled variables} are what you keep the same, so the test is fair.
+\end{skillbox}
+
+\begin{workedex}{Naming variables}
+A student tests how the temperature of water affects how fast a sugar cube dissolves.
+
+\smallskip
+\textbf{Independent:} the temperature of the water.\\
+\textbf{Dependent:} the time for the cube to dissolve.\\
+\textbf{Controlled:} the volume of water, the size of the sugar cube, stirring (or not).
+\end{workedex}
+
+\begin{wedo}{Naming variables}
+A student tests how the height of a ramp affects how far a toy car rolls.
+\pt{a}Independent variable:
+\answerbox{1.2cm}
+\pt{b}Dependent variable:
+\answerbox{1.2cm}
+\pt{c}Two controlled variables:
+\answerbox{2.5cm}
+\end{wedo}
+
+\subsection{Writing a Hypothesis}\label{sub:4.3}
+
+\begin{workedex}{A hypothesis}
+\textbf{Question:} How does the temperature of water affect how fast a sugar cube dissolves?
+
+\smallskip
+\textbf{Hypothesis:} \emph{If the water is hotter, then the sugar cube will dissolve faster, because hot water has more energy to break the sugar apart quickly.}
+\end{workedex}
+
+\begin{wedo}{A hypothesis}
+Write a hypothesis for the toy-car ramp investigation.
+\answerbox{4cm}
+\end{wedo}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:4}
+
+\task Number the steps of an investigation in order, 1 to 5.
+\begin{ctab}
+\begin{tabular}{|SW{8.4cm}|Z{1.6cm}|}
+  \hline\hd & \thead{Step} & \thead{Order} \\ \hline
+  & Results --- record measurements in a table & \\ \hline
+  & Question --- decide what to find out & \\ \hline
+  & Conclusion --- say what the results show & \\ \hline
+  & Method --- write the steps to follow & \\ \hline
+  & Hypothesis --- predict, with a reason & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{14\baselineskip}
+\task Identify the variables in each investigation.
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{2.2cm}|W{2.2cm}|W{2.4cm}|}
+  \hline\hd & \thead{Investigation} & \thead{Independent} & \thead{Dependent} & \thead{One controlled} \\ \hline
+  & \scaf{Does the size of a parachute change its fall time?} & \scaf{Size of parachute} & \scaf{Fall time} & \scaf{Drop height} \\ \hline
+  & How does the amount of light affect plant growth? & & & \\ \hline
+  & How does the mass of a ball affect how high it bounces? & & & \\ \hline
+  & Does the type of surface change how far a marble rolls? & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Write a hypothesis for this question: \emph{How does the length of a pendulum affect the time of one swing?}
+\answerbox{5cm}
+
+\needspace{14\baselineskip}
+\task A class drops paper helicopters to see how the number of paper clips on the bottom affects the fall time.
+\pt{a}Name the independent and dependent variables.
+\answerbox{3cm}
+\pt{b}Name two variables they must control, and explain why.
+\answerbox{5cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:4}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard.
+
+\medskip
+\begin{keepext}
+\exttask Sam tests two paper helicopters. One has longer blades \emph{and} is made from thicker paper. It falls more slowly. Explain why Sam cannot conclude that longer blades make a helicopter fall more slowly, and how to fix the test.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\exttask Mia's results did not support a classmate's hypothesis. Explain why a hypothesis that turns out wrong is still useful in science.
+\answerbox{5cm}
+\end{keepext}
+\end{yr8box}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 5 — SAFETY                                                    (Week 2 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\setcounter{section}{4}
+\sectiondiv{Safety}{Lab rules and why they matter \textbullet{} Hazards, risks and controls \textbullet{} Hazard symbols \textbullet{} A simple risk assessment}\label{sec:5}
+\lessoncodes{VC2S8I02}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Hazard}\label{voc:hazard}} & \scaf{Anything that could cause harm, such as a flame, hot water or broken glass.} \\ \hline
+  & \textbf{Risk}\label{voc:risk} & \\ \hline
+  & \textbf{Control}\label{voc:control} & \\ \hline
+  & \textbf{Risk assessment}\label{voc:risk-assessment} & \\ \hline
+  & \textbf{Hazard symbol}\label{voc:hazard-symbol} & \\ \hline
+  & \textbf{PPE}\label{voc:ppe} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:5}
+
+\begin{readingbox}{Reading --- Why Labs Have Rules}
+A school laboratory holds things you will not find in most classrooms: gas taps, open flames, glassware, hot plates and chemicals. Each of these is a \textbf{hazard}: something that could cause harm. A hazard is not the same as a \textbf{risk}. The risk is the chance that the hazard actually hurts someone, and how badly. A bottle of acid locked in a cupboard is a hazard with almost no risk; the same acid in an open beaker at the edge of a crowded bench is a high risk.
+
+Scientists reduce risk with \textbf{controls}: actions or equipment that make harm less likely. Wearing safety glasses, tying back long hair and standing up while heating are controls. Safety glasses, gloves and lab coats are called personal protective equipment, or \textbf{PPE}.
+
+Before an experiment, scientists write a \textbf{risk assessment}. For each hazard they list the risk and the control. Chemical containers carry \textbf{hazard symbols}: red-bordered diamonds that warn, for example, that a substance is flammable or an irritant.
+
+Most lab accidents happen when someone rushes, ignores an instruction or does not report a small problem. Following the rules every time keeps you and everyone around you safe.
+\end{readingbox}
+
+\rcreset
+\rcq{Give three hazards found in a school laboratory.}{2.5cm}
+\rcq{What is the difference between a hazard and a risk?}{2.5cm}
+\rcq{Explain why the acid on the edge of a crowded bench is a higher risk than the acid in the cupboard.}{2.5cm}
+\rcq{What is a control? Give two examples.}{2.5cm}
+\rcq{What does PPE stand for? Give an example.}{2.5cm}
+\rcq{How do most lab accidents happen?}{2.5cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
+
+\subsection{Hazard, Risk and Control}\label{sub:5.1}
+
+\begin{workedex}{Hazard, risk and control}
+A student heats water in a beaker over a Bunsen burner.
+
+\smallskip
+\textbf{Hazard:} hot water and hot glassware.\\
+\textbf{Risk:} burns or scalds if the beaker is touched or knocked over.\\
+\textbf{Control:} stand up while heating, keep the beaker in the middle of the gauze, and let it cool before touching it.
+\end{workedex}
+
+\begin{wedo}{Hazard, risk and control}
+A student cuts a potato into cubes with a scalpel.
+\pt{a}Hazard:
+\answerbox{1.2cm}
+\pt{b}Risk:
+\answerbox{2.5cm}
+\pt{c}Control:
+\answerbox{2.5cm}
+\end{wedo}
+
+\subsection{Hazard Symbols}\label{sub:5.2}
+
+\begin{center}
+\newcommand{\haz}[2]{\begin{fitbox}\begin{tikzpicture}[baseline=0]
+  \draw[Ink, line width=1.6pt, fill=white] (0,0.95) -- (0.95,0) -- (0,-0.95) -- (-0.95,0) -- cycle;
+  #1
+  \node[font=\scriptsize\bfseries, anchor=north, align=center] at (0,-1.05) {#2};
+\end{tikzpicture}\end{fitbox}}
+\haz{\fill[Ink] (0,-0.5) .. controls (-0.45,-0.35) and (-0.3,0.1) .. (-0.05,0.55) .. controls (0.05,0.2) and (0.15,0.1) .. (0.2,0.35) .. controls (0.45,0) and (0.4,-0.35) .. (0,-0.5);
+     \draw[Ink, line width=0.8pt] (-0.45,-0.6) -- (0.45,-0.6);}{Flammable}\hspace{6mm}%
+\haz{\fill[Ink] (-0.08,-0.1) rectangle (0.08,0.5); \fill[Ink] (0,-0.35) circle (0.09);}{Irritant\\or harmful}\hspace{6mm}%
+\haz{\fill[Ink] (0,0) circle (0.14);
+     \foreach \a in {0,45,...,315}{\draw[Ink, line width=1.2pt] (\a:0.22) -- (\a:0.5);}}{Explosive}\hspace{6mm}%
+\haz{\draw[Ink, line width=1pt] (-0.4,0.35) -- (-0.1,0.15) (0.4,0.35) -- (0.1,0.15);
+     \fill[Ink] (-0.1,0.1) circle (0.05) (0.1,0.1) circle (0.05);
+     \fill[Ink] (-0.5,-0.55) rectangle (-0.05,-0.42) (0.05,-0.55) rectangle (0.5,-0.42);
+     \draw[Ink, line width=0.8pt] (-0.15,0.0) -- (-0.25,-0.35) (0.15,0.0) -- (0.25,-0.35);}{Corrosive}
+\end{center}
+{\small\itshape On real labels these diamonds have a red border. Corrosive substances eat away skin and metal.}
+
+\begin{workedex}{Reading a label}
+A bottle of methylated spirits shows the \emph{flammable} symbol. \textbf{What it means:} it catches fire easily. \textbf{Control:} keep it away from flames, and put the lid back on straight away.
+\end{workedex}
+
+\begin{wedo}{Reading a label}
+A bottle of dilute hydrochloric acid shows the \emph{corrosive} symbol. Explain what this means and give one control.
+\answerbox{3.5cm}
+\end{wedo}
+
+\subsection{A Simple Risk Assessment}\label{sub:5.3}
+
+\begin{skillbox}{Writing a risk assessment}
+List every hazard in the experiment. For each one, write the risk (what could happen) and the control (how you will stop it). A control is something you \emph{do} --- ``be careful'' is not a control.
+\end{skillbox}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:5}
+
+\task Spot the hazards. In this lab, a student has a bag on the floor in the aisle, long hair hanging loose, and safety glasses pushed up on their head. A beaker of water sits right at the edge of the bench, a Bunsen burner has been left on with a yellow flame while nobody uses it, and a broken test tube is in the paper bin. Complete the table for four of the hazards.
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{6.2cm}|}
+  \hline\hd & \thead{Hazard} & \thead{What should be done} \\ \hline
+  & \scaf{Bag on the floor in the aisle} & \scaf{Put it under the bench so no one trips.} \\ \hline
+  & & \\ \hline
+  & & \\ \hline
+  & & \\ \hline
+  & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{14\baselineskip}
+\task Complete a risk assessment for this experiment: \emph{heating 100\,mL of salt water in an evaporating basin over a Bunsen burner until crystals form.}
+\begin{ctab}
+\begin{tabular}{|SW{2.8cm}|W{3.4cm}|W{3.8cm}|}
+  \hline\hd & \thead{Hazard} & \thead{Risk} & \thead{Control} \\ \hline
+  & \scaf{Bunsen flame} & \scaf{Burns; hair or paper catching fire} & \scaf{Tie hair back; use the safety flame when not heating.} \\ \hline
+  & Hot evaporating basin & & \\ \hline
+  & Spitting salt solution & & \\ \hline
+  & Gas & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Explain why ``be careful'' is not a control. Give a better control for carrying a beaker of hot water.
+\answerbox{5cm}
+
+\needspace{10\baselineskip}
+\task Choose three of the lab rules in your safety contract. For each, explain the hazard it protects you from.
+\answerbox{5cm}
+
+% ─── PART D ───────────────────────────────────────────────────────────────────
+\lessonpart{D}{Above level}{Violet}\label{ext:5}
+
+\begin{yr8box}
+These questions go beyond the Year 7 standard.
+
+\medskip
+\begin{keepext}
+\exttask A teacher says: ``We cannot remove every hazard from a lab, but we can make the risk very small.'' Explain what she means, using heating water as an example.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\exttask Some chemicals are only used by teachers, in a fume cupboard. Suggest why, and what kind of hazard a fume cupboard controls.
+\answerbox{5cm}
+\end{keepext}
+\end{yr8box}
+\clearpage\markboth{Glossary}{Glossary}\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
+{\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+{\small Every key word in this booklet and the page it is introduced on.}\par\smallskip
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|>{\RaggedRight}p{34mm}|p{9mm}|p{\dimexpr\linewidth-43mm-6\tabcolsep-4\arrayrulewidth-1pt\relax}|}
+\hline \rule{0pt}{4mm}\headingfont\bfseries Word & \headingfont\bfseries Page & \headingfont\bfseries In my own words \\ \hline \endhead
+  Conclusion & \pageref{voc:conclusion} & \\ \hline
+  Control & \pageref{voc:control} & \\ \hline
+  Controlled variable & \pageref{voc:controlled-variable} & \\ \hline
+  Dependent variable & \pageref{voc:dependent-variable} & \\ \hline
+  Evidence & \pageref{voc:evidence} & \\ \hline
+  Fair test & \pageref{voc:fair-test} & \\ \hline
+  Hazard & \pageref{voc:hazard} & \\ \hline
+  Hazard symbol & \pageref{voc:hazard-symbol} & \\ \hline
+  Hypothesis & \pageref{voc:hypothesis} & \\ \hline
+  Independent variable & \pageref{voc:independent-variable} & \\ \hline
+  Inference & \pageref{voc:inference} & \\ \hline
+  Investigable question & \pageref{voc:investigable-question} & \\ \hline
+  Observation & \pageref{voc:observation} & \\ \hline
+  PPE & \pageref{voc:ppe} & \\ \hline
+  Risk & \pageref{voc:risk} & \\ \hline
+  Risk assessment & \pageref{voc:risk-assessment} & \\ \hline
+  Science & \pageref{voc:science} & \\ \hline
+\end{longtable}
+\padtofour
+\end{document}

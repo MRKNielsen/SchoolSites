@@ -1,0 +1,266 @@
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 2 — A COOLING CURVE                                       (Lesson 6)
+%  Content from the A4 master's Lesson 9. First line graph of the year.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{A Cooling Curve}{Temperature over time \textbullet{} Line graphs \textbullet{} The freezing point \textbullet{} The plateau}{6}\label{sec:2}
+\lessoncodes{VC2S8U05 \textbullet{} VC2S8I01--I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Cooling curve}} & \scaf{A line graph showing how the temperature of a substance falls over time.} \\ \hline
+  & \textbf{Freezing point} & \\ \hline
+  & \textbf{Line graph} & \\ \hline
+  & \textbf{Axis} & \\ \hline
+  & \textbf{Plateau} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Record temperature every minute, then draw a line graph and describe the pattern.}
+\understandli{Find the freezing point from the graph, and explain why the temperature stays constant while a substance freezes.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can record the temperature every minute and draw a line graph with labelled axes, even scales and a title.
+  \item I can read the freezing point from my graph and explain the plateau using particles.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Sketch how the temperature will change.}
+\focus{PC3}{Assess the risks before you start.}
+\focus{PC6}{Read the temperature every minute.}
+\focus{PA2}{Draw your first line graph.}
+\focus{PA5}{Describe the curve's shape.}
+\focus{PA8}{Explain the plateau with particles.}
+\focus{EV2}{Compare with the accepted 44\,\textdegree C.}
+\end{skillsfocus}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Drawing a line graph}{PA2}
+\begin{minipage}[c]{0.56\linewidth}
+\begin{enumerate}[leftmargin=1.6em, itemsep=1pt, topsep=0pt]
+  \item Put the thing you \textbf{changed or controlled} (time) on the horizontal axis.
+  \item Put the thing you \textbf{measured} (temperature) on the vertical axis.
+  \item Choose an \textbf{even scale} for each axis that uses most of the grid.
+  \item \textbf{Label} both axes with the quantity and the unit, e.g.\ \emph{time (minutes)}.
+  \item \textbf{Plot} each point with a small cross, join the points with a smooth line, and give the graph a \textbf{title}.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\linewidth}\centering
+\begin{tikzpicture}[x=0.5cm, y=0.05cm, font=\scriptsize]
+  \foreach \m in {0,...,8}{\draw[black!25] (\m,20) -- (\m,70);}
+  \foreach \t in {20,30,...,70}{\draw[black!25] (0,\t) -- (8,\t); \node[anchor=east] at (0,\t) {\t};}
+  \foreach \m in {0,2,...,8}{\node[anchor=north] at (\m,20) {\m};}
+  \draw[axis] (0,20) -- (8.5,20); \draw[axis] (0,20) -- (0,74);
+  \draw[Ink, line width=1.2pt] plot[smooth] coordinates {(0,66) (1,55) (2,48) (3,44) (4,44) (5,44) (6,44) (7,40) (8,36)};
+  \foreach \p in {(0,66),(1,55),(2,48),(3,44),(4,44),(5,44),(6,44),(7,40),(8,36)} \node[font=\small] at \p {$\times$};
+  \node[anchor=north] at (4,13) {time (minutes)};
+  \node[rotate=90, anchor=south] at (-1.1,45) {temperature (\textdegree C)};
+\end{tikzpicture}
+\end{minipage}
+\end{technique}
+
+\begin{workedex}{Choosing a scale}
+Temperatures in a set of results go from 22\,\textdegree C up to 68\,\textdegree C. The grid has 15 big squares going up. Choose a scale for the temperature axis.
+
+\medskip
+Start just below the smallest value, at \textbf{20\,\textdegree C}. Going up in steps of \textbf{5\,\textdegree C} per big square, 15 squares reach $20 + 15 \times 5 = 95$\,\textdegree C. That fits every result and uses most of the grid.
+\end{workedex}
+
+\begin{wedo}{Choosing a scale}
+Times in a set of results go from 0 to 12 minutes. The grid has 15 big squares going across. Choose a scale for the time axis, and show it fits.
+\workbox{3cm}
+\end{wedo}
+
+\begin{youdobox}[Your first line graph]
+\task A student heated 150\,mL of water and recorded its temperature every minute. Draw a line graph of the results. Label both axes with units and give the graph a title. \skr{PA2}
+
+\begin{ctab}
+\begin{tabular}{|l|*{11}{C{0.78cm}|}}
+  \hline\thead{Time (min)} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+  \thead{Temperature (\textdegree C)} & 18 & 27 & 36 & 45 & 53 & 61 & 69 & 77 & 84 & 91 & 97 \\ \hline
+\end{tabular}
+\end{ctab}
+\graphgrid{15cm}
+\end{youdobox}
+
+% ─── PLAN AND SAFETY ─────────────────────────────────────────────────────────
+\exppart{Plan and safety}{Teal}
+
+\textbf{Aim:} To measure the temperature of lauric acid as it cools and freezes, and find its freezing point.
+
+\begin{infobox}{Why lauric acid?}
+Water would need a freezer to freeze. Lauric acid, a white waxy solid found in coconut oil, melts at a temperature hot water from a kettle can reach, so you can melt it and then watch it cool and freeze on the bench.
+\end{infobox}
+
+\needspace{14\baselineskip}
+\task Sketch what you think the temperature of the lauric acid will do as it cools, then explain your sketch. Will it fall steadily the whole time? \skr{QP1}
+
+\noindent\begin{minipage}[t]{0.42\linewidth}\drawbox{5cm}{\scriptsize temperature $\uparrow$ \hfill time $\rightarrow$}\end{minipage}\hfill
+\begin{minipage}[t]{0.55\linewidth}\answerbox{5cm}\end{minipage}
+
+\needspace{14\baselineskip}
+\task Complete the risk assessment before you start. Your teacher must initial it. \skr{PC3}\par\nobreak\hfill\textbf{Teacher's initials:}\ \underline{\hspace{3cm}}
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{4.6cm}|W{7.0cm}|}
+  \hline\hd & \thead{Hazard} & \thead{Risk (what could happen)} & \thead{Control (how we prevent it)} \\ \hline
+  & \scaf{Hot-water bath} & \scaf{Scalds to the hands} & \scaf{Collect the boiling tube with a test-tube holder, never with fingers.} \\ \hline
+  & Lauric acid & & \\ \hline
+  & Glass thermometer & & \\ \hline
+  & Hot boiling tube & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── METHOD ──────────────────────────────────────────────────────────────────
+\exppart{Method}{Teal}
+
+\subsubsection*{Equipment}
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=1.2em, itemsep=0pt, topsep=0pt]
+  \item boiling tube of lauric acid, melted by your teacher in a hot-water bath
+  \item test-tube holder
+  \item thermometer ($-10$ to 110\,\textdegree C)
+  \item retort stand and clamp
+  \item 250\,mL beaker (empty)
+  \item stopwatch
+  \item safety glasses
+\end{itemize}
+\end{multicols}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \begin{scope}\eqStand\end{scope}
+  \draw[eq] (2.2,0.2) -- (2.2,0.21);
+  \draw[eq] (1.55,2.25) -- (1.55,0.6) arc[start angle=180,end angle=360,radius=0.3] -- (2.15,2.25);
+  \fill[black!12] (1.57,1.5) -- (1.57,0.6) arc[start angle=180,end angle=360,radius=0.28] -- (2.13,1.5) -- cycle;
+  \draw[Ink, line width=0.6pt] (1.57,1.5) -- (2.13,1.5);
+  \draw[eq] (1.05,2.05) -- (1.25,1.9) -- (1.25,0.2) -- (2.45,0.2) -- (2.45,1.95);
+  \draw[eq] (1.85,0.65) circle (0.1);
+  \draw[eq] (1.79,0.74) -- (1.79,4.3) (1.91,0.74) -- (1.91,4.3);
+  \eqlab{(1.91,3.9)}{(3.4,3.9)}{thermometer}
+  \eqlab{(1.95,3.0)}{(3.4,3.2)}{clamp}
+  \eqlab{(2.15,2.0)}{(3.4,2.4)}{boiling tube}
+  \eqlab{(2.13,1.2)}{(3.4,1.6)}{lauric acid}
+  \eqlab{(2.45,0.9)}{(3.4,0.8)}{empty beaker}
+  \eqlabl{(0.35,3.6)}{(-0.4,3.6)}{retort stand}
+\end{tikzpicture}
+\expfigcap{Scientific diagram of the cooling curve set-up.}
+\end{center}
+
+\begin{enumerate}[itemsep=2pt]
+  \item Put on safety glasses. Collect a boiling tube of melted lauric acid from the hot-water bath, using a test-tube holder.
+  \item Clamp the boiling tube so it stands upright inside the empty beaker.
+  \item Put the thermometer in the lauric acid, with its bulb in the middle of the liquid.
+  \item When the temperature reads 65\,\textdegree C or just below, start the stopwatch and record the temperature.
+  \item Record the temperature every minute for 12 minutes. Stir gently with the thermometer while the lauric acid is still liquid.
+  \item Write down the time when you first see solid forming, and when it has all gone solid.
+  \item Do not try to pull the thermometer out once the lauric acid is solid. Return the tube to the hot-water bath to melt it again.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{The temperature of lauric acid as it cools \skr{PC6}}
+\begin{ctab}
+\begin{tabular}{|SZ{3.2cm}|Z{3.6cm}|Z{3.2cm}|Z{3.6cm}|}
+  \hline\hd & \thead{Time (min)} & \thead{Temperature (\textdegree C)} & \thead{Time (min)} & \thead{Temperature (\textdegree C)} \\ \hline
+  & \scaf{e.g. 0} & \scaf{65} & \scaf{e.g. 7} & \scaf{44} \\ \hline
+  & 0 & & 7 & \\ \hline
+  & 1 & & 8 & \\ \hline
+  & 2 & & 9 & \\ \hline
+  & 3 & & 10 & \\ \hline
+  & 4 & & 11 & \\ \hline
+  & 5 & & 12 & \\ \hline
+  & 6 & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\noindent Solid first seen at \rule{2.2cm}{0.4pt} minutes. \qquad All solid at \rule{2.2cm}{0.4pt} minutes.
+
+\clearpage
+\task Draw a cooling curve of your results. Put \textbf{time (minutes)} on the horizontal axis and \textbf{temperature (\textdegree C)} on the vertical axis. Plot each point, join them with a smooth line, and give the graph a title. \skr{PA2}
+
+\vspace{3pt}
+\graphgrid{16cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Describe the shape of your cooling curve, from start to finish. \skr{PA5}
+\answerbox{5cm}
+
+\needspace{14\baselineskip}
+\task Use your graph. \skr{EV2}
+\pt{a}Read the freezing point of lauric acid from your graph.
+\answerbox{1cm}
+\pt{b}The accepted freezing point of lauric acid is 44\,\textdegree C. Compare your value with it, and suggest one reason for any difference.
+\answerbox{5cm}
+\pt{c}For how many minutes did the temperature stay on the plateau?
+\workbox{2cm}
+
+\needspace{10\baselineskip}
+\task Was your prediction correct? Explain, using your graph. \skr{EV1}
+\answerbox{5cm}
+
+\needspace{14\baselineskip}
+\task Draw particle diagrams of the lauric acid before, during and after the plateau. Use the same number of particles, the same size, in each. \skr{PA4}
+
+\noindent
+\begin{minipage}[t]{0.32\linewidth}\centering\drawbox{4.5cm}{}{\small Before: liquid}\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}\centering\drawbox{4.5cm}{}{\small During: freezing}\end{minipage}\hfill
+\begin{minipage}[t]{0.32\linewidth}\centering\drawbox{4.5cm}{}{\small After: solid}\end{minipage}
+
+\needspace{10\baselineskip}
+\task Explain, using particles, what was happening to the lauric acid during the plateau, and why the temperature stayed steady. \skr{PA8}
+\answerbox{5cm}
+
+\needspace{16\baselineskip}
+\task Another group recorded these temperatures every minute, starting at 0 minutes: 64, 57, 51, 54, 44, 44, 44, 44, 43, 40, 37\,\textdegree C. \skr{PA7}
+\pt{a}Which reading does not fit the pattern?
+\answerbox{1cm}
+\pt{b}Suggest what might have caused it.
+\answerbox{5cm}
+\pt{c}What freezing point do their results show?
+\answerbox{1cm}
+
+\needspace{14\baselineskip}
+\task Evaluate the method. \skr{EV3}
+\pt{a}Identify one source of error in this experiment.
+\answerbox{5cm}
+\pt{b}Suggest one way to make the results more reliable.
+\answerbox{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask A group used twice as much lauric acid in their tube. Predict how their cooling curve would be different from yours, and how it would be the same. Explain both.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\exttask Candle wax is a mixture, not a pure substance. Its cooling curve has no flat plateau, only a part where the line slopes more gently. Suggest why.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\exttask The lauric acid cooled quickly at the start and slowly near the end. Think about how far its temperature was above room temperature in each case, and suggest a rule for how fast hot things cool.
+\answerbox{5cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{I can sketch and explain a prediction.}
+\scrow{PC3}{I completed a risk assessment and followed it.}
+\scrow{PC6}{I recorded a reading at every whole minute, with its unit.}
+\scrow{PA2}{I can draw a line graph with labelled axes, even scales, plotted points and a title.}
+\scrow{PA5}{I can describe the shape of a cooling curve.}
+\scrow{PA8}{I can use the particle model to explain the plateau.}
+\scrow{EV2}{I can compare my result with the accepted value.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 3? Explain what you will do differently.
+\answerbox{5cm}

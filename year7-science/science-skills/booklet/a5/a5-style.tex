@@ -1,0 +1,141 @@
+
+\providecommand{\unitname}{The Particle Model}\providecommand{\unitcaps}{THE PARTICLE MODEL}
+% ══════════════════════════════════════════════════════════════════════════════
+%  2027 WORKBOOK STYLE — A5 LESSON BOOKLET (added by make_a5.py)
+%  Same look as the Space A5 trial and the A4 experiment booklets: colour
+%  cover, black-and-white inside, Outfit headings, a lesson opener band with
+%  the lesson's ink symbol, boxes told apart by frame and icon:
+%    I do ● solid · We do ●● dashed · You do ●●● heavy · key idea / reading ◆
+%    thin · Above level ▲ double · Country ◎ dotted
+%  The body still names the master's colours; they are mapped to ink here.
+% ══════════════════════════════════════════════════════════════════════════════
+\usepackage{pdflscape}
+\usetikzlibrary{patterns}
+
+% A picture wider than the A5 text block is scaled down to fit it.
+\newsavebox\fitb
+\newenvironment{fitbox}{\begin{lrbox}{\fitb}}{\end{lrbox}%
+  \ifdim\wd\fitb>\linewidth\resizebox{\linewidth}{!}{\usebox\fitb}\else\usebox\fitb\fi}
+
+% ── Fonts: Outfit for headings ──────────────────────────────────────────────
+\renewfontfamily\headingfont{Outfit}[
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
+
+% ── Black and white inside ──────────────────────────────────────────────────
+\definecolor{Ink}{HTML}{111111}
+\colorlet{NavyBlue}{Ink}\colorlet{MidBlue}{Ink}\colorlet{TealGreen}{Ink}
+\colorlet{GoldDark}{Ink}\colorlet{PurpleDark}{Ink}\colorlet{OrangeDark}{Ink}
+\colorlet{TableHead}{Ink}
+\colorlet{Blue}{Ink}\colorlet{Teal}{Ink}\colorlet{Amber}{Ink}\colorlet{Coral}{Ink}
+\colorlet{Violet}{Ink}\colorlet{Sky}{Ink}
+\colorlet{LightBlue}{white}\colorlet{LightGreen}{white}\colorlet{GoldLight}{white}
+\colorlet{PurpleLight}{white}\colorlet{OrangeLight}{white}\colorlet{RowAlt}{white}
+\colorlet{LightGrey}{white}\colorlet{Paper}{white}
+\colorlet{DarkGrey}{black!72}\colorlet{MidGrey}{black!45}\colorlet{Line}{black!45}
+\arrayrulecolor{black!60}
+% Particle kinds stay distinguishable without colour: white, light grey,
+% dotted and dark.
+\tikzset{
+  pA/.style={circle, fill=white, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pB/.style={circle, fill=black!35, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pC/.style={circle, preaction={fill=white}, pattern=dots, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pD/.style={circle, fill=black!75, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt}}
+
+% ── Page style: mirrored, running head on the outside ───────────────────────
+\fancypagestyle{fancy}{\fancyhf{}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{Ink}\leaders\hrule height \headrulewidth\hfill}}%
+  \fancyhead[LE]{\headingfont\footnotesize \unitname}%
+  \fancyhead[RO]{\headingfont\footnotesize\leftmark}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{opener}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\pagestyle{fancy}\markboth{}{}
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+
+\titleformat{\subsection}{\headingfont\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{}{0em}{}
+
+% ── Lesson opener band (replaces the navy section banner) ────────────────────
+\renewcommand{\sectiondiv}[2]{%
+  \clearpage\thispagestyle{opener}%
+  \refstepcounter{section}\markboth{\thesection\ \textbullet\ #1}{\thesection\ \textbullet\ #1}%
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}\hypertarget{lesson.\thesection.1}{}%
+  \noindent\begin{minipage}[b]{\dimexpr\linewidth-36mm\relax}
+    {\headingfont\bfseries\scriptsize\addfontfeatures{LetterSpace=14}\unitcaps\ \textbullet\ LESSON}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{40}{40}\selectfont\thesection}\par\vspace{1.5mm}
+    {\headingfont\bfseries\fontsize{15}{18}\selectfont\RaggedRight #1\par}\vspace{1mm}
+    {\footnotesize\itshape\RaggedRight #2\par}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{34mm}\includegraphics[width=34mm]{../art/l\thesection-ink.pdf}\end{minipage}\par
+  \vspace{2.5mm}\noindent\rule{\linewidth}{1.6pt}\par\vspace{1mm}}
+\renewcommand{\lessoncodes}[1]{{\small\itshape VC 2.0: #1}\par\vspace{2pt}}
+
+% Lesson parts: a heading and a rule; B, C and D start a new page.
+\renewcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{8pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  {\headingfont\bfseries\Large Part #1 \textbullet\ #2}\par\vspace{0.5mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{1mm}}
+\renewcommand{\vocabhead}{%
+  \par\vspace{4pt}{\headingfont\bfseries\Large Key vocabulary}\par\vspace{1pt}%
+  \noindent{\small Copy the meaning of each word from the slide. The first one has been done for you.}\par}
+\renewcommand{\thead}[1]{\headingfont\bfseries #1}
+
+% ── Box system ──────────────────────────────────────────────────────────────
+\newcommand{\icodots}[1]{\tikz[baseline=-0.6ex]{\foreach \k in {1,...,#1}{\fill[white] (\k*1.9mm,0) circle (0.7mm);}}}
+\newcommand{\icokey}{\tikz[baseline=-0.6ex]{\fill[white] (0,0.9mm)--(0.9mm,0)--(0,-0.9mm)--(-0.9mm,0)--cycle;}}
+\newcommand{\icoup}{\tikz[baseline=-0.6ex]{\fill[white] (-1mm,-0.8mm)--(1mm,-0.8mm)--(0,1mm)--cycle;}}
+\newcommand{\icocountry}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.5pt] (0,0) circle (1mm); \fill[white] (0,0) circle (0.45mm);}}
+\newcommand{\icoread}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.6pt] (-1.1mm,-0.8mm) rectangle (1.1mm,0.8mm); \draw[white,line width=0.5pt] (0,-0.8mm) -- (0,0.8mm);}}
+\newcommand{\tagicon}[1]{\tikz[baseline=-0.6ex]\node[fill=Ink, rounded corners=0.8mm, inner xsep=1.2mm, inner ysep=1mm]{#1};}
+\tcbset{wbbase/.style={enhanced, colback=white, arc=1.2mm,
+    left=3mm, right=3mm, top=4.2mm, bottom=2.4mm, before skip=10pt, after skip=7pt,
+    attach boxed title to top left={xshift=3mm, yshift=-2.4mm},
+    boxed title style={colback=Ink, colframe=Ink, arc=0.8mm, boxrule=0pt,
+                       left=1.6mm, right=1.8mm, top=0.6mm, bottom=0.6mm},
+    fonttitle=\headingfont\bfseries\footnotesize, coltitle=white}}
+\renewtcolorbox{workedexbox}[1]{wbbase, breakable, colframe=Ink, boxrule=1pt,
+  title={\icodots{1}\ I do \textbullet\ #1}}
+\renewenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+\renewtcolorbox{wedobox}[1]{wbbase, breakable=false, frame hidden,
+  borderline={1.1pt}{0pt}{Ink, dash pattern=on 4pt off 2.6pt},
+  title={\icodots{2}\ #1}}
+\renewenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+\renewtcolorbox{yr7box}{wbbase, breakable, colframe=Ink, boxrule=2.4pt, top=5mm,
+  title={\icodots{3}\ You do \textbullet\ Check your understanding}}
+\renewtcolorbox{yr8box}{wbbase, breakable, frame hidden,
+  borderline={0.6pt}{0pt}{Ink}, borderline={0.6pt}{1.6pt}{Ink},
+  title={\icoup\ Above level \textbullet\ Year 8 extension}}
+\renewtcolorbox{infobox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{scaffold}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{skillbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{readingbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icoread\ #1}}
+\renewtcolorbox{expheader}[3]{wbbase, breakable=false, colframe=Ink, boxrule=1pt,
+  title={\icokey\ Experiment #1: #2},
+  after upper={\par\smallskip{\headingfont\bfseries Aim:}\ \textit{#3}}}
+\newtcolorbox{countrybox}[1]{wbbase, breakable, frame hidden,
+  borderline={1.4pt}{0pt}{Ink, line cap=round, dash pattern=on 0pt off 2.4pt},
+  title={\icocountry\ #1}}
+
+% ── Padding to a multiple of 4 (copier booklet mode) ────────────────────────
+\newcommand{\notespage}{\clearpage\markboth{Notes}{Notes}%
+  {\headingfont\bfseries\Large Notes}\par\vspace{3mm}%
+  \noindent\begin{tikzpicture}\foreach \y in {0,...,17}{\draw[black!35, line width=0.4pt] (0,-\y*9mm) -- (\linewidth,-\y*9mm);}\end{tikzpicture}}
+\newcount\padleft
+\newcommand{\padtofour}{\clearpage
+  \pgfmathtruncatemacro\pagesused{\the\value{page}-1}%
+  \pgfmathtruncatemacro\padn{mod(4-mod(\pagesused,4),4)}%
+  \padleft=\padn\relax
+  \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
+  \clearpage}
+

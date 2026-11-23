@@ -52,15 +52,69 @@ bio-ecosystems, Space, Forces. Waiting in the folder, not linked:
 `particle-model.jpg` (link it with the unit — see the Particle Model item
 in Tier 1) and `science-skills.jpg` (no unit yet).
 
-- [ ] **Separation Technologies and Techniques cover** — Kodie is
-      generating it. Drop it in `covers/` as `separation.jpg` +
-      `separation-480.jpg` (2:3) and link it when that unit exists.
-      **S** *(2026-11-04)*
+- [x] **Separation Technologies and Techniques cover** — in `covers/` as
+      `separation.jpg` + `separation-480.jpg`, with `water-resources.jpg`
+      beside it; both used on their booklets, not yet linked on the site.
+      *(2026-11-24)*
 - [ ] **Two cover titles differ from the unit names**: the Space cover
       reads "Earth in our Solar System" and the Forces cover "Forces"
       (the unit is Forces & Motion). Alt text carries the full names;
       regenerate the art if the printed title should match. **S**
       *(2026-11-04)*
+
+### Landed — Year 7 2027 experiment and lesson booklets (23–24 Nov 2026)
+
+From 2027 every Year 7 unit has **one A4 experiment booklet** that puts the
+experimental techniques and skills first, plus **A5 lesson booklets**
+(copier booklet mode) without the experiments (Kodie's call, 23 Nov 2026).
+Skills come from the faculty **Science Skills** continuum
+(`science_skills.docx`, Years 7–8 column), coded by sub-strand: QP1–2
+(VC2S8I01), PC1–8 (I02–I03), PA1–8 (I04–I05), EV1–5 (I06–I07), CO1–2 (I08).
+
+**Look:** the 2027 workbook style from the Space A5 trial — the unit's cover
+art full-bleed, black-and-white inside, Outfit headings, an opener band with
+the lesson's ink symbol, boxes told apart by frame and icon (I do ● solid,
+We do ●● dashed, You do ●●● heavy, key/technique ◆, Above level ▲ double,
+Country ◎ dotted), skill tags as ink tabs. A glossary closes every booklet.
+
+**Lesson numbers = the lesson's slot in its unit** (labs included, CATs not
+counted), as in the Scope & Sequence and the Particle Model unit plan. Each
+booklet's lesson set matches the plan's theory lessons one for one.
+
+| Unit | Experiment booklet (A4) | Lesson booklets (A5) |
+| --- | --- | --- |
+| S.S.S | `science-skills/booklet/` — Exps 1–3 (L2, L3, L6), lab safety contract, 41 pp | `science-skills/booklet/a5/` — L1, L4, L5 (new content), 40 pp |
+| Particle Model | `particle-model/booklet/Particle_Model_Experiment_Booklet_Yr7` — Mini-lab A (L1), Exps 1–3 (L3, L6, L9), 48 pp | `particle-model/booklet/a5/` — Book 1 L1, 2, 4; Book 2 L5, 7, 8 (56 pp each) |
+| Water Cycle + Resources | `water-resources/booklet/` — Exp 1 Water Cycle in a Bag (L2), Exp 2 Household Energy Audit (L6), 28 pp | `water-resources/booklet/a5/` — L1, 3, 4, 5, 48 pp |
+| Separation | `separation/booklet/` — Exps 1–9 in teaching order, "Separation techniques at a glance", 78 pp | `separation/booklet/a5/` — Book 1 L1, 2, 4, 5, 7 (72 pp); Book 2 L8, 10, 12, 16 (56 pp) |
+
+- The Particle Model and Separation A5 books are **generated** from the A4
+  Particle Model master by `a5/make_a5.py` (the master is never edited):
+  merged lessons keep the first lesson's reading, both theory sections, 3
+  practice tasks from each and 2 extensions. Old Lessons 6 (Limits of the
+  Model) and 12 (Gas Pressure) are left out as optional.
+- Builds: experiment booklet `python3 assemble.py`, xelatex ×3, then
+  `python3 fill.py <job>`; A5 `python3 make_a5.py`, then
+  `python3 fill_a5.py <job>` per book. The committed `.abx` files came from
+  the cloud TeX; re-run the fill locally before printing.
+- Scope & Sequence changed with this (23 Nov): T1 W9 L1 is the energy
+  audit; Sep Tech W3–W7 reordered so every lab follows its theory lesson
+  and Filtration (W6) comes before the EPI.
+
+Still to do *(Kodie, 2026-11-24)*:
+
+- [ ] **Great Green Mix Up** (Separation Exp 9) was written without the
+      faculty sheet; check the mixture against it. **S**
+- [ ] Teacher (red answer) copies of every experiment and lesson booklet. **L**
+- [ ] Assessments, kept out of the public repo: Particle Model CAT, Water
+      Cycle + Resources topic test, Separation CAT (Test), rock-salt EPI
+      booklet. **L**
+- [ ] **Website pass** (one pass, deferred by Kodie): unit pages for S.S.S,
+      Water Cycle + Resources and Separation (covers are in `covers/`);
+      the A5 switch on the Particle Model page, decks' booklet views and page
+      numbers; Particle decks 5–6 still use the old A4 numbering, as do the
+      unit plan's booklet links; S.S.S, WC+R and Separation decks; sitemap.
+      **L**
 
 ### Landed — Forces catch-up summary: deck + workbook (22 Nov 2026)
 

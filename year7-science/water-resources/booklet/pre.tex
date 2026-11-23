@@ -1,0 +1,604 @@
+% ============================================================
+%  Water Cycle and Resources — Experiment Booklet (one section per experiment)
+%  Year 7 (Year 8 extension)  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: xelatex three times, then python3 fill.py Water_Resources_Experiment_Booklet_Yr7
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+\newcommand{\unitname}{Water Cycle and Resources}\newcommand{\unitcaps}{WATER CYCLE AND RESOURCES}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Water Cycle and Resources — Experiment Booklet},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
+% hyperref 7.01 with implicit=false leaves \Hy@PageAnchorSlide undefined, which
+% throws at \end{document} and stops fill.py (it builds with -halt-on-error).
+\makeatletter\providecommand\Hy@PageAnchorSlide{}\makeatother
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}\unitname{} \textbar{} Experiment Booklet}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \linedbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.4cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  % the title is a bold lead-in on the first line rather than a title bar,
+  % which keeps Lesson 11's reading on the lesson's first page
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \linedbox{height}: an answer box ruled in dotted thirds. Lines are \thirdrow/3 apart and run dotted, dotted,
+% solid (the baseline), repeating, and end on one dotted line. The number of
+% rows is worked out from the box's final height, so the ruling still fills the
+% box after fill.py has grown it; the rows are centred in the box.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\newcommand{\linedbox}[1]{%
+  \abnext
+  % interior height = box height less the 1pt frame top and bottom
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  % whole rows that fit with at least 3 mm spare top and bottom (at least one)
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1},
+    underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}]
+  \end{tcolorbox}\ablog%
+}
+% Every written-response box is ruled the same way (Part A comprehension, We do,
+% Part C tasks and Part D extensions, including side-by-side pairs). Space for
+% mathematical working uses \workbox{height} instead and stays plain, as do
+% \drawbox and the write-in tables.
+\let\workbox\answerbox   % plain box: mathematical working (calculations) stays unruled
+\let\answerbox\linedbox
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}

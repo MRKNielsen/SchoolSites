@@ -1,0 +1,23 @@
+% ── Particle Model diagrams used by the experiments (copied from the lesson booklet) ──
+\usetikzlibrary{patterns,backgrounds}
+\tikzset{thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  axis/.style={-{Stealth[length=5pt,width=4pt]}, line width=0.9pt, Ink}, glass/.style={line width=1pt, Ink}, lab/.style={font=\scriptsize, text=DarkGrey}}
+\newcommand{\cylinder}[3]{%
+  \begin{scope}[xshift=#1cm]
+    \fill[Sky!30] (0,0) rectangle (1.2,{#2*0.045});
+    \draw[MidBlue, line width=0.8pt] (0,{#2*0.045}) -- (1.2,{#2*0.045});
+    \ifnum#3=1 \draw[fill=DarkGrey!45, draw=DarkGrey] (0.3,0.04) -- (0.85,0.06) -- (0.95,0.42) -- (0.6,0.6) -- (0.25,0.38) -- cycle;\fi
+    \draw[glass] (0,4.8) -- (0,0) -- (1.2,0) -- (1.2,4.8);
+    \draw[glass] (-0.25,-0.12) rectangle (1.45,0);
+    \foreach \v in {10,20,...,100}{\draw[Ink] (1.2,{\v*0.045}) -- (0.95,{\v*0.045}); \node[anchor=west, font=\tiny, text=DarkGrey] at (1.22,{\v*0.045}) {\v};}
+    \foreach \v in {5,15,...,95}{\draw[Ink] (1.2,{\v*0.045}) -- (1.07,{\v*0.045});}
+    \node[font=\tiny, text=DarkGrey] at (0.6,5.0) {mL};
+  \end{scope}}
+\newcommand{\diagDisplacement}[2]{% {before mL}{after mL}
+\begin{center}\begin{tikzpicture}
+  \cylinder{0}{#1}{0}\node[lab, font=\small\bfseries] at (0.6,-0.45) {before};
+  \cylinder{4}{#2}{1}\node[lab, font=\small\bfseries] at (4.6,-0.45) {after: rock added};
+  \draw[thin arrow, DarkGrey] (2.1,2.4) -- (3.4,2.4);
+\end{tikzpicture}\end{center}}
+
+% Filtration: funnel with a filter paper cone over a beaker
