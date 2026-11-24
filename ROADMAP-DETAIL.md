@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026. Last addition: 9 Nov 2026 (Applied Computing — summer holiday homework).
+Last full audit: 16 Aug 2026. Last addition: 24 Nov 2026 (Applied Computing — holiday homework opening section).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -1193,6 +1193,32 @@ Course design decisions recorded: Python as the OOP language (so the
 marimo workbooks and the assessed language are the same), SQL against a
 relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
 Semester 2.
+
+### Landed — Holiday homework opening section (24 Nov 2026)
+
+A **Start here — the class site** section at the top of
+`year11-applied-computing/holiday-homework.html`, before Part A: the site
+address in an `.infobox`, the click path to **Downloads & data**, a printed
+QR code, a `.wtbl` of what that page holds and a `.tick` list of what to do
+first. Asked for because the sheet explains the subject but never said
+where the site was.
+
+- **Students print this sheet, so a clickable link is useless.** Hence a
+  typable address *and* a scannable code. The QR encodes the full
+  `https://` URL of the downloads page at error level Q — 45x45 modules,
+  padded to a 49-unit viewBox.
+- **Capped at 38 mm printed** with an inline `max-height`, overriding
+  `.ws-fig[data-h="sm"]`'s 55 mm: neither preset suited a square figure
+  (22 mm gives 0.45 mm/module, below what a phone camera wants; 55 mm
+  dominated the column). 38 mm is **0.78 mm/module**.
+- **The code is verified, not assumed.** Generated with `segno`, decoded
+  back with `cv2.QRCodeDetector` from the actual inline SVG as Chromium
+  renders it in print media, sharp and under two levels of Gaussian blur,
+  all returning the exact URL.
+- **No numbered questions in it**, deliberately — the generator is gone and
+  adding one would mean hand-renumbering all 30 existing questions.
+- Sheet now **21 pages at 74% mean fill** (was 20 at 74%), no horizontal
+  overflow.
 
 ### Landed — Applied Computing downloads page (23 Nov 2026)
 
