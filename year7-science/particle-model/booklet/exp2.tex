@@ -47,7 +47,7 @@
   \item Put the thing you \textbf{measured} (temperature) on the vertical axis.
   \item Choose an \textbf{even scale} for each axis that uses most of the grid.
   \item \textbf{Label} both axes with the quantity and the unit, e.g.\ \emph{time (minutes)}.
-  \item \textbf{Plot} each point with a small cross, join the points with a smooth line, and give the graph a \textbf{title}.
+  \item \textbf{Plot} each point accurately with a small cross, and give the graph a \textbf{title} that names both variables.
 \end{enumerate}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.4\linewidth}\centering
@@ -60,6 +60,32 @@
   \foreach \p in {(0,66),(1,55),(2,48),(3,44),(4,44),(5,44),(6,44),(7,40),(8,36)} \node[font=\small] at \p {$\times$};
   \node[anchor=north] at (4,13) {time (minutes)};
   \node[rotate=90, anchor=south] at (-1.1,45) {temperature (\textdegree C)};
+\end{tikzpicture}
+\end{minipage}
+\end{technique}
+
+\begin{technique}{Join the points, or a line of best fit?}{PA2}
+\begin{minipage}[c]{0.56\linewidth}
+\textbf{Joining the points} (left): a ruled straight line from each point to the next. It shows every reading exactly, but each small measuring error becomes a kink, and it suggests you know what happened between readings when you do not.
+
+\smallskip
+\textbf{A line of best fit} (right): \emph{one} smooth line or curve through the middle of the points, with about as many points above it as below. It ignores an anomaly, evens out small errors and shows the \textbf{trend}. Scientists almost always use it.
+
+\smallskip
+Start by joining the points if you need to, but from your cooling curve on, \textbf{draw a line of best fit}.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\linewidth}\centering
+\begin{tikzpicture}[x=0.3cm, y=0.3cm, font=\scriptsize]
+  \foreach \ox/\lab in {0/joined, 7.5/best fit}{
+    \begin{scope}[shift={(\ox,0)}]
+    \draw[axis] (0,0) -- (6.2,0); \draw[axis] (0,0) -- (0,6.2);
+    \node[anchor=north] at (3,-0.2) {\lab};
+    \end{scope}}
+  \draw[Ink, line width=0.8pt] (0.5,0.9) -- (1.5,2.1) -- (2.5,2.4) -- (3.5,3.9) -- (4.5,4.1) -- (5.5,5.4);
+  \draw[Ink, line width=1.1pt] (8.0,0.8) -- (13.0,5.3);
+  \foreach \x/\y in {0.5/0.9,1.5/2.1,2.5/2.4,3.5/3.9,4.5/4.1,5.5/5.4}{
+    \node[font=\small] at (\x,\y) {$\times$};
+    \node[font=\small] at (\x+7.5,\y) {$\times$};}
 \end{tikzpicture}
 \end{minipage}
 \end{technique}
@@ -77,7 +103,7 @@ Times in a set of results go from 0 to 12 minutes. The grid has 15 big squares g
 \end{wedo}
 
 \begin{youdobox}[Your first line graph]
-\task A student heated 150\,mL of water and recorded its temperature every minute. Draw a line graph of the results. Label both axes with units and give the graph a title. \skr{PA2}
+\task A student heated 150\,mL of water and recorded its temperature every minute. Draw a line graph of the results. Label both axes with units, give the graph a title, then join the points with a ruler. Would a line of best fit look different here? \skr{PA2}
 
 \begin{ctab}
 \begin{tabular}{|l|*{11}{C{0.78cm}|}}
@@ -104,14 +130,14 @@ Water would need a freezer to freeze. Lauric acid, a white waxy solid found in c
 \begin{minipage}[t]{0.55\linewidth}\answerbox{5cm}\end{minipage}
 
 \needspace{14\baselineskip}
-\task Complete the risk assessment before you start. Your teacher must initial it. \skr{PC3}\par\nobreak\hfill\textbf{Teacher's initials:}\ \underline{\hspace{3cm}}
+\task Complete the risk assessment before you start. For each risk, say how to prevent it and what to do if it happens. Your teacher must initial it. \skr{PC3}\par\nobreak\hfill\textbf{Teacher's initials:}\ \underline{\hspace{3cm}}
 \begin{ctab}
-\begin{tabular}{|SW{3.6cm}|W{4.6cm}|W{7.0cm}|}
-  \hline\hd & \thead{Hazard} & \thead{Risk (what could happen)} & \thead{Control (how we prevent it)} \\ \hline
-  & \scaf{Hot-water bath} & \scaf{Scalds to the hands} & \scaf{Collect the boiling tube with a test-tube holder, never with fingers.} \\ \hline
-  & Lauric acid & & \\ \hline
-  & Glass thermometer & & \\ \hline
-  & Hot boiling tube & & \\ \hline
+\begin{tabular}{|SW{3.8cm}|W{5.4cm}|W{5.8cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{Scalds from the hot-water bath} & \scaf{Lift the boiling tube with a test-tube holder, never with fingers} & \scaf{Cool the burn under running water for 20 minutes; tell the teacher} \\ \hline
+  & Lauric acid gets on skin or in eyes & & \\ \hline
+  & The glass thermometer breaks & & \\ \hline
+  & Burns from the hot boiling tube & & \\ \hline
 \end{tabular}
 \end{ctab}
 
@@ -182,7 +208,7 @@ Water would need a freezer to freeze. Lauric acid, a white waxy solid found in c
 \noindent Solid first seen at \rule{2.2cm}{0.4pt} minutes. \qquad All solid at \rule{2.2cm}{0.4pt} minutes.
 
 \clearpage
-\task Draw a cooling curve of your results. Put \textbf{time (minutes)} on the horizontal axis and \textbf{temperature (\textdegree C)} on the vertical axis. Plot each point, join them with a smooth line, and give the graph a title. \skr{PA2}
+\task Draw a cooling curve of your results. Put \textbf{time (minutes)} on the horizontal axis and \textbf{temperature (\textdegree C)} on the vertical axis. Plot each point, draw a smooth \textbf{line of best fit} (a curve is fine) and give the graph a title. \skr{PA2}
 
 \vspace{3pt}
 \graphgrid{16cm}

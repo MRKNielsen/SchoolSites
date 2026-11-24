@@ -1,0 +1,220 @@
+% ══════════════════════════════════════════════════════════════════════════════
+%  FORCES — keyed answer slots and the experiment diagrams
+%  Every answer slot keeps the key it has in the A4 Forces Lesson Booklet
+%  (\abox{6.t2}{h} = Task 6.2's box), so the red teacher copy can later be
+%  built from the same teacher-answers/L03 ... L13.tex. Here the keys only
+%  name the slot: \abox is a ruled writing box, \wbox a plain working box.
+%  The diagrams are copied from the A4 master's preamble (lines 1013-1302).
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+\newcommand{\abox}[2]{\answerbox{#2}}
+\newcommand{\wbox}[2]{\workbox{#2}}
+\newcommand{\cell}[1]{}
+\newcommand{\rcqk}[3]{\rcq{#2}{#3}}
+\newcommand{\drawk}[3]{\drawbox{#2}{#3}}
+\newcommand{\diagBounceSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, y=1cm]
+  % floor and wall
+  \fill[ground hatch] (-0.6,-0.3) rectangle (8.8,0);
+  \draw[thick, DarkGrey] (-0.6,0) -- (8.8,0);
+  \fill[ground hatch] (-0.6,0) rectangle (-0.3,4.5);
+  \draw[thick, DarkGrey] (-0.3,0) -- (-0.3,4.5);
+  % metre rulers taped to the wall: 1 unit = 40 cm
+  \fill[GoldLight] (-0.3,0) rectangle (0.25,4.2);
+  \draw[GoldDark] (-0.3,0) rectangle (0.25,4.2);
+  \foreach \y in {0,0.25,...,4.0} \draw[GoldDark] (0.25,\y) -- (0.12,\y);
+  \foreach \y/\l in {0/0,1/40,2/80,3/120,4/160} {
+    \draw[GoldDark, thick] (0.25,\y) -- (0.0,\y);
+    \node[font=\scriptsize, text=GoldDark, anchor=east] at (-0.32,\y) {\l};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, rotate=90] at (-1.45,2.1) {height (cm)};
+  % ball before release (bottom of ball at 120 cm)
+  \shade[ball color=Amber!80] (1.5,3.25) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,3.0) -- (1.5,3.0);
+  % path of the ball
+  \draw[dashed, DarkGrey!70, -{Stealth}] (1.5,2.95) -- (2.4,0.55);
+  \shade[ball color=Amber!80] (2.55,0.25) circle (0.25);
+  \draw[dashed, DarkGrey!70, -{Stealth}] (2.7,0.55) -- (3.45,1.6);
+  \shade[ball color=Amber!80] (3.6,1.9) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,1.65) -- (3.6,1.65);
+  % heights
+  \draw[dim arrow] (7.0,0) -- (7.0,3.0) node[midway, right, font=\small, text=NavyBlue] {drop height $h_1$};
+  \draw[dim arrow] (4.4,0) -- (4.4,1.65) node[midway, right, font=\small, text=TealGreen] {bounce height $h_2$};
+  \draw[DarkGrey!60] (1.75,3.0) -- (7.2,3.0);
+  \draw[DarkGrey!60] (3.85,1.65) -- (4.6,1.65);
+  % reading tip
+  \node[font=\scriptsize\itshape, text=DarkGrey, align=left, anchor=west] at (1.9,4.05)
+       {Read the \textbf{bottom} of the ball, at eye level\\(or film it in slow motion and pause at the top).};
+\end{tikzpicture}
+\end{center}}
+
+% ── Parts of a lever: fulcrum, effort, load and the two arms ─────────────────
+\newcommand{\diagExpFourSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.2cm, y=1cm]
+  % bench
+  \fill[ground hatch] (-0.3,0.15) rectangle (12.3,0.5);
+  \draw[thick, DarkGrey] (-0.3,0.5) -- (12.3,0.5);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (-0.25,0.3) {bench};
+  % fulcrum: triangular prism under the 50 cm mark
+  \fill[red!65!black] (6.0,1.5) -- (5.6,0.5) -- (6.4,0.5) -- cycle;
+  \node[font=\small\bfseries, text=red!65!black, anchor=west] at (6.5,0.95) {fulcrum at 50\,cm};
+  % metre stick, with a scale every 10 cm
+  \draw[fill=GoldLight, draw=GoldDark] (0,1.5) rectangle (12,1.9);
+  \foreach \c in {0,10,...,100} {
+    \draw[GoldDark] ({0.12*\c},1.9) -- ({0.12*\c},1.76);
+  }
+  \foreach \c in {5,15,...,95} { \draw[GoldDark!70] ({0.12*\c},1.9) -- ({0.12*\c},1.82); }
+  \foreach \c in {10,20,30,40,60,70,80,90} {
+    \node[font=\scriptsize, text=GoldDark] at ({0.12*\c},1.63) {\c};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=north west] at (0.1,1.45) {metre stick};
+  % load: 100 g standing on the 30 cm mark
+  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=1pt] (3.25,1.9) rectangle (3.95,2.75);
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,2.325) {100\,g};
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,3.05) {Load};
+  % effort: one 50 g slotted mass on the 90 cm mark
+  \draw[fill=MidBlue!25, draw=MidBlue, rounded corners=1pt] (10.5,1.9) rectangle (11.1,2.32);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (10.8,2.11) {50\,g};
+  \node[font=\small\bfseries, text=MidBlue] at (10.8,2.62) {Effort};
+  % arms, measured from the fulcrum to the centre of each mass
+  \draw[densely dashed, DarkGrey!60] (3.6,3.3) -- (3.6,3.95);
+  \draw[densely dashed, DarkGrey!60] (6.0,1.9) -- (6.0,3.95);
+  \draw[densely dashed, DarkGrey!60] (10.8,2.87) -- (10.8,3.95);
+  \draw[dim arrow] (3.6,3.8) -- (6.0,3.8) node[midway, above, font=\small, text=TealGreen] {load arm = 20\,cm};
+  \draw[dim arrow] (6.0,3.8) -- (10.8,3.8) node[midway, above, font=\small, text=MidBlue] {effort arm = 40\,cm};
+\end{tikzpicture}
+\end{center}}
+
+% ── Same angle, different arcs: why the long end of an arm moves faster ──────
+\newcommand{\diagMotionSensorSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=0.74cm]
+  % floor
+  \fill[ground hatch] (-0.4,-0.3) rectangle (10.2,0);
+  \draw[thick, DarkGrey] (-0.4,0) -- (10.2,0);
+  % bench, its right-hand edge at x = 4
+  \fill[LightGrey, draw=DarkGrey] (-0.2,3.25) rectangle (4.0,3.45);
+  \fill[DarkGrey!70] (0.0,0) rectangle (0.15,3.25);
+  \fill[DarkGrey!70] (3.7,0) rectangle (3.85,3.25);
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (2.0,3.05) {bench};
+  % data logger on the bench
+  \draw[fill=white, draw=DarkGrey, rounded corners=1pt] (0.3,3.45) rectangle (1.9,4.45);
+  \draw[MidBlue, thick] (0.45,3.62) -- (0.75,3.62) -- (1.45,4.25) -- (1.52,3.62) -- (1.75,3.62);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=south] at (1.1,4.45) {data logger};
+  % stand: base, upright rod, right-angle clamp and an arm reaching over the edge
+  \fill[DarkGrey] (2.4,3.45) rectangle (3.6,3.62);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,3.62) -- (3.0,6.95);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,6.6) -- (5.7,6.6);
+  \fill[DarkGrey] (2.86,6.46) rectangle (3.14,6.74);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (2.85,6.1) {stand};
+  % motion sensor, pointing straight down
+  \draw[fill=NavyBlue, draw=NavyBlue, rounded corners=2pt] (5.15,6.0) rectangle (6.25,6.75);
+  \fill[MidGrey] (5.3,5.96) rectangle (6.1,6.06);
+  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (6.45,7.3) {motion sensor};
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=north west, align=left] at (6.45,7.0)
+       {sends pulses of sound down\\and times their echoes};
+  % cable to the logger
+  \draw[DarkGrey!70, thick] (5.15,6.4) .. controls (4.2,6.2) and (2.4,5.2) .. (1.9,4.1);
+  % sound pulses
+  \foreach \r in {0.25,0.45,0.65} {
+    \draw[MidBlue!70, thick] ($(5.7,5.96)+(-130:\r)$) arc[start angle=-130, end angle=-50, radius=\r];
+  }
+  % the weight, held with its bottom 40 cm below the sensor
+  \draw[fill=MidGrey!70, draw=DarkGrey] (5.35,4.4) rectangle (6.05,4.95);
+  \draw[fill=MidGrey!40, draw=DarkGrey] (5.7,4.95) ellipse (0.35 and 0.09);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=west] at (6.15,4.68) {weight};
+  \draw[dim arrow] (4.95,5.96) -- (4.95,4.4) node[midway, left, font=\small, text=DarkGrey] {40\,cm};
+  \draw[densely dashed, DarkGrey!50] (4.85,4.4) -- (5.3,4.4);
+  \draw[densely dashed, DarkGrey!50] (4.85,5.96) -- (5.15,5.96);
+  % its fall
+  \draw[densely dashed, TealGreen, -{Stealth[length=6pt]}] (5.7,4.3) -- (5.7,0.55);
+  \node[font=\scriptsize\itshape, text=TealGreen, anchor=west] at (5.8,2.4) {falls};
+  % cushion
+  \draw[fill=GoldLight, draw=GoldDark, rounded corners=3pt] (4.8,0) rectangle (6.6,0.32);
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=west] at (6.7,0.2) {cushion (no-bounce pad)};
+\end{tikzpicture}
+\end{center}}
+
+% ── A velocity–time graph for one drop under the motion sensor ───────────────
+% \diagVelocityTime{numbers} labels the axes with values (Lesson 12);
+% \diagVelocityTime{parts} labels what each part of the line means (Lesson 13).
+\newcommand{\diagVelocityTime}[1]{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=11cm, y=0.8cm]
+  % grid and axes: time 0–0.7 s, velocity 0–5 m/s
+  \foreach \t in {0.1,0.2,...,0.71} \draw[Line] (\t,0) -- (\t,5);
+  \foreach \v in {1,...,5} \draw[Line] (0,\v) -- (0.7,\v);
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0.73,0) node[right, font=\small, text=DarkGrey] {time (s)};
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0,5.4) node[above, font=\small, text=DarkGrey] {velocity (m/s)};
+  \foreach \t/\l in {0/0,0.1/0.1,0.2/0.2,0.3/0.3,0.4/0.4,0.5/0.5,0.6/0.6,0.7/0.7} \node[font=\scriptsize, text=DarkGrey, below] at (\t,0) {\l};
+  \foreach \v in {0,...,5} \node[font=\scriptsize, text=DarkGrey, left] at (0,\v) {\v};
+  % the line: held still, falling, landing
+  \draw[line width=1.6pt, MidBlue] (0,0) -- (0.10,0) -- (0.55,4.4) -- (0.565,0.05) -- (0.7,0.05);
+  \fill[TealGreen] (0.10,0) circle (2pt);
+  \fill[OrangeDark] (0.55,4.4) circle (2pt);
+  \def\vtmode{#1}\def\vtnumbers{numbers}%
+  \ifx\vtmode\vtnumbers
+    \draw[densely dashed, DarkGrey!60] (0,4.4) -- (0.55,4.4);
+    \draw[densely dashed, DarkGrey!60] (0.55,0) -- (0.55,4.4);
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=south east, align=right] at (0.10,0.15) {let go\\0\,m/s};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {just before\\it lands: 4.4\,m/s};
+  \else
+    \node[font=\scriptsize, text=DarkGrey, align=center, anchor=south] at (0.05,0.2) {held\\still};
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=north west, align=left] at (0.11,-0.45) {starting velocity\\(the moment it is let go)};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {final velocity\\(just before it lands)};
+    \node[font=\scriptsize, text=MidBlue, anchor=north west, align=left, fill=white, inner sep=1.5pt] at (0.03,4.75) {falling: a straight line, because\\the speed goes up steadily};
+    \draw[MidBlue, -{Stealth[length=4pt]}] (0.16,3.9) -- (0.29,2.05);
+    \node[font=\scriptsize, text=DarkGrey, anchor=west, align=left] at (0.58,0.9) {lands on\\the cushion};
+    \draw[dim arrow] (0.10,-1.35) -- (0.55,-1.35) node[midway, below, font=\scriptsize, text=DarkGrey] {time of fall};
+    \draw[densely dashed, DarkGrey!50] (0.10,-0.5) -- (0.10,-1.45);
+    \draw[densely dashed, DarkGrey!50] (0.55,-0.5) -- (0.55,-1.45);
+  \fi
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: pulling a loaded wooden block along the bench with a spring balance ──
+\newcommand{\diagExpTwoSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.18cm, y=1.18cm]
+  % bench
+  \fill[ground hatch] (0,-0.35) rectangle (13,0);
+  \draw[thick, DarkGrey] (0,0) -- (13,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.05,-0.18) {bench top};
+  % wooden block with a hook on its left face
+  \draw[fill=GoldLight, draw=GoldDark, thick] (7.2,0) rectangle (10.2,1.3);
+  \foreach \y in {0.35,0.7,1.0} { \draw[GoldDark!45] (7.35,\y) .. controls (8.2,\y+0.08) and (9.2,\y-0.08) .. (10.05,\y); }
+  \draw[DarkGrey, thick] (7.2,0.65) -- (6.95,0.65);
+  \draw[DarkGrey, thick] (6.85,0.65) circle (0.1);
+  % two 200 g slotted masses on top
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.3) rectangle (9.5,1.62);
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.62) rectangle (9.5,1.94);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.46) {200\,g};
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.78) {200\,g};
+  % spring balance, hooked to the block
+  \draw[fill=white, draw=DarkGrey, thick, rounded corners=3pt] (2.6,0.42) rectangle (6.1,0.88);
+  \foreach \x in {3.0,3.25,...,5.5} { \draw[DarkGrey] (\x,0.42) -- (\x,0.56); }
+  \draw[red!65!black, very thick] (4.6,0.42) -- (4.6,0.88);
+  \draw[DarkGrey, thick] (6.1,0.65) -- (6.75,0.65);
+  \draw[DarkGrey, thick] (2.45,0.65) circle (0.15);
+  % pull and friction
+  \draw[force arrow, red!65!black] (2.25,0.65) -- (0.6,0.65);
+  \draw[force arrow, TealGreen] (10.2,0.12) -- (12.0,0.12);
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (1.4,0.8) {pull steadily};
+  \node[font=\small\bfseries, text=TealGreen, anchor=south] at (11.4,0.25) {friction};
+  \node[font=\small\bfseries, text=DarkGrey, anchor=south west] at (2.55,0.92) {spring balance (or force sensor)};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south] at (8.7,2.0) {200\,g masses};
+  \node[font=\small\bfseries, text=GoldDark, anchor=north] at (8.7,-0.45) {wooden block with a hook};
+\end{tikzpicture}
+\end{center}}
+
+
+

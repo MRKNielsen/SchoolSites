@@ -1,0 +1,285 @@
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT BOOKLET LAYER (Nov 2026)
+%  From 2027 every Year 7 unit collects its experiments into one A4 experiment
+%  booklet that puts the experimental techniques and skills first. Every skill
+%  comes from the faculty Science Skills continuum (Years 7--8 column) and is
+%  named the same way everywhere: a code (QP1, PC4, PA2 …) on a chip coloured by
+%  its sub-strand. Copy this block into the next unit's experiment booklet.
+%
+%  Each experiment runs in the same order:
+%    \experimentdiv{title}{summary}{lesson}\label{sec:N}
+%    key vocabulary · learning intentions · \begin{skillsfocus}
+%    \exppart*{Technique spotlight}{Blue}   (technique, worked example, We do)
+%    \exppart{Plan and safety}{Teal}        (aim, prediction, variables, risks)
+%    \exppart{Method}{Teal}
+%    \exppart{Results}{Amber}
+%    \exppart{Analysis and evaluation}{Coral}
+%    \exppart{Skill check}{NavyBlue}
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning}
+\usepackage{pifont}
+
+\newenvironment{keepext}{\par\begin{tcolorbox}[blankest, breakable=false]}{\end{tcolorbox}\par}
+% graph-paper box: \graphgrid{height}
+\newcommand{\graphgrid}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt, height=#1,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);
+      \draw[step=1cm, MidGrey!70, thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+  \end{tcolorbox}}
+
+% ── Skills (faculty Science Skills continuum, Years 7–8) ─────────────────────
+% \defskill{code}{name}{colour}{VC code}{what it means}
+\makeatletter
+\newcommand{\defskill}[5]{%
+  \expandafter\gdef\csname sk@n@#1\endcsname{#2}%
+  \expandafter\gdef\csname sk@c@#1\endcsname{#3}%
+  \expandafter\gdef\csname sk@v@#1\endcsname{#4}%
+  \expandafter\gdef\csname sk@d@#1\endcsname{#5}}
+\newcommand{\skname}[1]{\csname sk@n@#1\endcsname}
+\newcommand{\skcode}[1]{\csname sk@v@#1\endcsname}
+\newcommand{\skdesc}[1]{\csname sk@d@#1\endcsname}
+% \sk{PC4}: the chip — code and name on the sub-strand colour
+\newcommand{\sk}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=4pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1\,\textperiodcentered\,\skname{#1}};}
+% \skr{PC4}: the chip flush right at the end of a paragraph; drops to its own line if it does not fit
+\newcommand{\skr}[1]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\sk{#1}}
+% \skc{PC4}: the code alone, for tight table cells
+\newcommand{\skc}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=3pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1};}
+\makeatother
+
+% Questioning and predicting — VC2S8I01
+\defskill{QP1}{Testable hypothesis}{Teal}{VC2S8I01}{A prediction an experiment can test, naming both variables and the direction of change: \emph{If the [IV] is \dots, the [DV] will \dots}; a reason is optional}
+\defskill{QP2}{Formulate an aim}{Teal}{VC2S8I01}{One sentence naming both variables: \emph{To investigate the effect of changing [IV] on [DV]}}
+% Planning and conducting — VC2S8I02, VC2S8I03
+\defskill{PC1}{Plan and follow a method}{Blue}{VC2S8I02}{Follow, and later write, numbered steps in order: named equipment, quantities with units, no personal pronouns and a labelled diagram, so that someone else could repeat it (repeatable)}
+\defskill{PC2}{Identify variables}{Blue}{VC2S8I02}{Name the independent variable (what you change), the dependent variable (what you measure) and at least two controlled variables (what you keep the same)}
+\defskill{PC3}{Risks and safety}{Blue}{VC2S8I02}{Name each risk, how to prevent it and how to respond if it happens; follow the lab rules}
+\defskill{PC4}{Precision}{Blue}{VC2S8I02}{Choose equipment with a fine enough scale, read it to its smallest division, and repeat measurements to see how closely they agree}
+\defskill{PC5}{Ethics}{Blue}{VC2S8I02}{Treat people, living things, the environment and other people's data with respect}
+\defskill{PC6}{Collect data and measure}{Blue}{VC2S8I02}{Take each measurement at the right time, with its unit, and record it straight away}
+\defskill{PC7}{Use and select equipment}{Blue}{VC2S8I03}{Name each piece of equipment, use it correctly and choose the right piece for the job}
+\defskill{PC8}{Use digital tools}{Blue}{VC2S8I03}{Use stopwatches, data loggers, sensors and spreadsheets to collect and record data}
+% Processing, modelling and analysing — VC2S8I04, VC2S8I05
+\defskill{PA1}{Tables}{GoldDark}{VC2S8I04}{Title, Headings, Units in the headings only, Decimals kept the same (THUD), with the independent variable in the first column}
+\defskill{PA2}{Graphing}{GoldDark}{VC2S8I04}{The right type of graph, a title, axes labelled with units, the independent variable on the x-axis, an even scale and accurate points, then join the points or draw a line of best fit}
+\defskill{PA3}{Mathematical relationships}{GoldDark}{VC2S8I04}{Process data with calculations: differences, averages, rates and formulas}
+\defskill{PA4}{Creating models}{GoldDark}{VC2S8I04}{Build a physical, drawn or mathematical model that represents something real}
+\defskill{PA5}{Patterns and trends}{GoldDark}{VC2S8I05}{Describe how the dependent variable changes as the independent variable changes, quoting data}
+\defskill{PA6}{Correlation and causality}{GoldDark}{VC2S8I05}{Say whether two variables change together, and whether there is evidence that one causes the other}
+\defskill{PA7}{Identify anomalies}{GoldDark}{VC2S8I05}{Spot a result that does not fit the pattern and suggest why it happened}
+\defskill{PA8}{Interpreting models}{GoldDark}{VC2S8I05}{Use a model to explain an observation, and say what the model shows well and what it leaves out}
+% Evaluating — VC2S8I06, VC2S8I07
+\defskill{EV1}{Results against hypothesis}{OrangeDark}{VC2S8I06}{State the general trend and whether it supports the hypothesis (supported, never proven), with data to back the trend}
+\defskill{EV2}{Compare with known concepts}{OrangeDark}{VC2S8I06}{Compare your results with accepted values and scientific ideas}
+\defskill{EV3}{Error sources}{OrangeDark}{VC2S8I06}{Name what could have made results less accurate or less precise, and suggest how to improve the method}
+\defskill{EV4}{Quality of secondary sources}{OrangeDark}{VC2S8I07}{Judge whether information from a website, book or video can be trusted}
+\defskill{EV5}{Questions for further investigation}{OrangeDark}{VC2S8I07}{Pose a new question that follows from your results}
+% Communicating — VC2S8I08
+\defskill{CO1}{Scientific writing}{PurpleDark}{VC2S8I08}{Write in the third person, legibly, with correct spelling and grammar, short and to the point, using scientific terms}
+\defskill{CO2}{Presentation formats}{PurpleDark}{VC2S8I08}{Choose the right format to show findings: a table, graph, scientific diagram, poster, report or talk}
+
+% Skills focus panel at the top of each experiment:
+%   \begin{skillsfocus} \focus{PC4}{what you do with it here} … \end{skillsfocus}
+\newtcolorbox{skillsfocus}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=NavyBlue!55,
+  fonttitle=\headingfont\bfseries, coltitle=white, colbacktitle=NavyBlue,
+  title={Skills focus --- the science skills this experiment builds},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\focus}[2]{\par\noindent\makebox[1.25cm][l]{\skc{#1}}\parbox[t]{\dimexpr\linewidth-1.25cm\relax}{\small\textbf{\skname{#1}}\,---\,#2}\par\vspace{2pt}}
+
+% Learning intentions panel: \begin{lipanel} \inquiryli{…} \understandli{…} \sclist{…} \end{lipanel}
+\newtcolorbox{lipanel}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, title={Learning intentions},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\inquiryli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Inquiry:}\ #1\par\vspace{2pt}}
+\newcommand{\understandli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Understanding:}\ #1\par\vspace{2pt}}
+\newcommand{\sctitle}{\par\noindent{\headingfont\bfseries\color{NavyBlue}Success criteria}\par}
+
+% Technique spotlight: \begin{technique}{title}{PC4} … \end{technique}
+\newtcolorbox{technique}[2]{
+  enhanced, breakable, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=Blue!55,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, colbacktitle=LightBlue,
+  title={Technique: #1\hfill\sk{#2}},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm}
+
+% Experiment divider: \experimentdiv{title}{summary}{lesson number}
+% Steps the section counter, so tasks, worked examples and figures are N.M.
+\newcommand{\experimentdiv}[3]{%
+  \clearpage
+  \refstepcounter{section}%
+  \pdfbookmark[1]{Experiment \thesection{} — #1}{exp.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.6cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm]
+    \begin{center}
+      {\headingfont\bfseries\color{white!60!NavyBlue}\scriptsize EXPERIMENT}\\[-2pt]
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{46}{46}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}\\[3pt]
+    {\headingfont\color{Sky}\footnotesize Lesson #3}
+  \end{tcolorbox}%
+}
+
+% Part bar inside an experiment. \exppart{title}{colour} starts a new page
+% (new parts always start on a new page); \exppart*{…}{…} follows straight on.
+\NewDocumentCommand{\exppart}{s m m}{%
+  \par\IfBooleanTF{#1}{\needspace{10\baselineskip}\vspace{8pt}}{\clearpage}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Skill check at the end of each experiment: students tick one column per row.
+%   \begin{skillcheck} \scrow{PC4}{I can …} … \end{skillcheck}
+\newcommand{\tickbox}{\tikz[baseline=-0.6ex]\draw[DarkGrey, line width=0.7pt, rounded corners=1pt] (0,-0.17) rectangle (0.34,0.17);}
+\newenvironment{skillcheck}{%
+  \par\noindent Read each statement. Tick the column that best describes you \emph{today}.\par
+  \begin{ctab}\renewcommand{\arraystretch}{1.25}%
+  \begin{tabular}{|W{3.9cm}|W{7.0cm}|Z{1.45cm}|Z{1.45cm}|Z{1.45cm}|}
+  \hline\thead{Skill} & \thead{Success criterion} & \thead{Not yet} & \thead{Nearly} & \thead{Got it} \\ \hline}
+  {\end{tabular}\end{ctab}}
+\newcommand{\scrow}[2]{\rule{0pt}{1.1cm}\skc{#1}\enspace{\small\skname{#1}} & #2 & \tickbox & \tickbox & \tickbox \\ \hline}
+
+% Write-in label under a drawing: \nameline{label}
+\newcommand{\nameline}[1]{\par\noindent{\small #1}\ \leaders\hbox{\rule[-2pt]{1pt}{0.4pt}}\hfill\null\par}
+
+% ── Equipment drawn as scientific diagrams (2D, side-on, outline only) ──────
+% Each \eq... macro draws at the origin inside a tikzpicture. \eqpic[scale]{\eqBeaker}
+% puts one on its own. The same shapes are used everywhere, so the booklet
+% models exactly the drawings students are asked to make.
+\tikzset{
+  eq/.style={line width=0.9pt, draw=Ink, line cap=round, line join=round},
+  eqlab/.style={draw=Ink, line width=0.4pt},
+  eqtext/.style={font=\footnotesize, text=Ink, inner sep=1.5pt},
+}
+\newcommand{\eqpic}[2][1]{\begin{tikzpicture}[scale=#1, baseline=(current bounding box.center)]#2\end{tikzpicture}}
+\newcommand{\eqBeaker}{\draw[eq] (-0.22,2.62) -- (0,2.45) -- (0,0) -- (1.8,0) -- (1.8,2.5);}
+\newcommand{\eqFlask}{\draw[eq] (0.62,2.9) -- (0.65,2.8) -- (0.65,1.9) -- (0,0) -- (1.9,0) -- (1.25,1.9) -- (1.25,2.8) -- (1.28,2.9);}
+\newcommand{\eqTestTube}{\draw[eq] (-0.06,3.0) -- (0,2.9) -- (0,0.3) arc[start angle=180,end angle=360,radius=0.3] -- (0.6,2.9) -- (0.66,3.0);}
+\newcommand{\eqCylinder}{%
+  \draw[eq] (-0.15,3.6) -- (0,3.5) -- (0,0.15) (0.6,0.15) -- (0.6,3.5);
+  \draw[eq] (-0.35,0) rectangle (0.95,0.15);
+  \foreach \y in {0.6,1.1,...,3.2} \draw[Ink, line width=0.5pt] (0.6,\y) -- (0.4,\y);}
+\newcommand{\eqFunnel}{\draw[eq] (0,2.2) -- (0.75,1.0) -- (0.75,0) (1.85,2.2) -- (1.1,1.0) -- (1.1,0);}
+\newcommand{\eqBasin}{\draw[eq] (0,0.9) .. controls (0.15,0.02) and (2.25,0.02) .. (2.4,0.9);}
+\newcommand{\eqTripod}{%
+  \draw[eq] (-0.15,2.0) rectangle (2.55,2.12);
+  \draw[eq] (0.25,2.0) -- (0,0) (2.15,2.0) -- (2.4,0) (1.2,2.0) -- (1.2,0.15);}
+\newcommand{\eqBunsen}{%
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \fill[Ink] (0.72,0.42) rectangle (0.88,0.62);
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);}
+\newcommand{\eqThermometer}{%
+  \draw[eq] (0.25,0.25) circle (0.2);
+  \draw[eq] (0.15,0.43) -- (0.15,3.9) arc[start angle=180,end angle=0,radius=0.1] -- (0.35,0.43);
+  \draw[Ink, line width=1.3pt] (0.25,0.45) -- (0.25,1.9);}
+\newcommand{\eqStand}{%
+  \draw[eq] (0,0) rectangle (2.3,0.2);
+  \draw[eq] (0.35,0.2) -- (0.35,4.0) (0.5,0.2) -- (0.5,4.0);
+  \draw[eq] (0.25,2.75) rectangle (0.75,3.2);
+  \draw[eq] (0.75,2.92) -- (1.6,2.92) (0.75,3.03) -- (1.6,3.03);
+  \draw[eq] (1.6,2.7) -- (1.6,3.25) (1.6,2.7) -- (1.95,2.7) (1.6,3.25) -- (1.95,3.25);}
+\newcommand{\eqWatchGlass}{\draw[eq] (0,0.35) .. controls (0.5,-0.05) and (1.7,-0.05) .. (2.2,0.35);}
+\newcommand{\eqTongs}{%
+  \draw[eq] (0,0.1) -- (2.0,0.45) .. controls (2.3,0.5) and (2.45,0.35) .. (2.6,0.15)
+            (0,0.0) -- (2.0,-0.35) .. controls (2.3,-0.4) and (2.45,-0.25) .. (2.6,-0.05);}
+
+% A label line from a point on a drawing to text at the side: \eqlab{(x,y)}{(tx,ty)}{text}
+\newcommand{\eqlab}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=west] {#3};}
+\newcommand{\eqlabl}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=east] {#3};}
+
+% ── Reading scales ──────────────────────────────────────────────────────────
+% \readcyl{lowest}{highest}{labelled step}{small divisions per label}{reading}
+% A close-up of a measuring cylinder's scale, the water drawn to the reading:
+% the bottom of the meniscus sits exactly on the reading.
+\pgfkeys{/pgf/number format/.cd, fixed, precision=1}
+\newcommand{\readcyl}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rcH{5.0}
+  \pgfmathsetmacro\rcY{(#5-#1)*\rcH/(#2-#1)}
+  \pgfmathtruncatemacro\rcN{round((#2-#1)/#3*#4)}
+  \fill[black!10] (0,-0.3) -- (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16) -- (1.6,-0.3) -- cycle;
+  \draw[Ink, line width=0.9pt] (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16);
+  \foreach \k in {0,...,\rcN}{
+    \pgfmathsetmacro\yy{\k*\rcH/\rcN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0,\yy) -- (0.6,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt, fill=white, fill opacity=0.8, text opacity=1] at (0.66,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0,\yy) -- (0.32,\yy);
+    \fi}
+  \draw[eq] (0,-0.3) -- (0,\rcH+0.35) (1.6,-0.3) -- (1.6,\rcH+0.35);
+  \node[font=\scriptsize, anchor=north] at (0.8,-0.35) {scale in mL};
+\end{tikzpicture}}
+% \readtherm{lowest}{highest}{labelled step}{small divisions per label}{reading}
+\newcommand{\readtherm}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rtH{5.0}
+  \pgfmathsetmacro\rtY{(#5-#1)*\rtH/(#2-#1)}
+  \pgfmathtruncatemacro\rtN{round((#2-#1)/#3*#4)}
+  \draw[eq, fill=white] (0,-0.45) circle (0.3);
+  \fill[black!75] (0,-0.45) circle (0.22);
+  \fill[black!75] (-0.07,-0.3) rectangle (0.07,\rtY);
+  \draw[eq] (-0.16,-0.2) -- (-0.16,\rtH+0.3) arc[start angle=180,end angle=0,radius=0.16] -- (0.16,-0.2);
+  \foreach \k in {0,...,\rtN}{
+    \pgfmathsetmacro\yy{\k*\rtH/\rtN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0.25,\yy) -- (0.75,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt] at (0.8,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0.25,\yy) -- (0.52,\yy);
+    \fi}
+  \node[font=\scriptsize, anchor=north] at (0.3,-0.8) {scale in \textdegree C};
+\end{tikzpicture}}
+% \balancefig{reading}: an electronic balance showing a reading
+\newcommand{\balancefig}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \draw[eq, rounded corners=3pt] (0,0) rectangle (4.2,1.35);
+  \draw[eq] (1.9,1.35) -- (1.9,1.55) (2.3,1.35) -- (2.3,1.55);
+  \draw[eq, rounded corners=1pt] (0.5,1.55) rectangle (3.7,1.72);
+  \draw[eq, fill=LightGrey] (0.35,0.35) rectangle (2.75,1.02);
+  \node[font=\headingfont\bfseries\large, anchor=east] at (2.65,0.68) {#1};
+  \draw[eq] (3.3,0.68) circle (0.2);
+  \node[font=\tiny\bfseries] at (3.3,0.3) {TARE};
+\end{tikzpicture}}
+% Bunsen burner with a flame: \bunsenflame{safety|heating}
+\newcommand{\bunsenflame}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \def\fl{#1}\def\safe{safety}%
+  \ifx\fl\safe
+    \fill[black!14] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+  \else
+    \fill[white] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \fill[black!30] (0.8,2.3) .. controls (0.65,2.55) and (0.7,2.85) .. (0.8,3.0) .. controls (0.9,2.85) and (0.95,2.55) .. (0.8,2.3);
+  \fi
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \ifx\fl\safe\draw[Ink, line width=0.5pt, densely dotted] (0.72,0.42) rectangle (0.88,0.62);\else\fill[Ink] (0.72,0.42) rectangle (0.88,0.62);\fi
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);
+\end{tikzpicture}}

@@ -1,0 +1,1645 @@
+% ============================================================
+%  Earth in Our Solar System — Experiment Booklet (one section per experiment)
+%  Year 7 (Year 8 extension)  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: xelatex three times, then python3 fill.py Space_Experiment_Booklet_Yr7
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+\newcommand{\unitname}{Earth in Our Solar System}\newcommand{\unitcaps}{EARTH IN OUR SOLAR SYSTEM}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Earth in Our Solar System — Experiment Booklet},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
+% hyperref 7.01 with implicit=false leaves \Hy@PageAnchorSlide undefined, which
+% throws at \end{document} and stops fill.py (it builds with -halt-on-error).
+\makeatletter\providecommand\Hy@PageAnchorSlide{}\makeatother
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}\unitname{} \textbar{} Experiment Booklet}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \linedbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.4cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  % the title is a bold lead-in on the first line rather than a title bar,
+  % which keeps Lesson 11's reading on the lesson's first page
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \linedbox{height}: an answer box ruled in dotted thirds. Lines are \thirdrow/3 apart and run dotted, dotted,
+% solid (the baseline), repeating, and end on one dotted line. The number of
+% rows is worked out from the box's final height, so the ruling still fills the
+% box after fill.py has grown it; the rows are centred in the box.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\newcommand{\linedbox}[1]{%
+  \abnext
+  % interior height = box height less the 1pt frame top and bottom
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  % whole rows that fit with at least 3 mm spare top and bottom (at least one)
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1},
+    underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}]
+  \end{tcolorbox}\ablog%
+}
+% Every written-response box is ruled the same way (Part A comprehension, We do,
+% Part C tasks and Part D extensions, including side-by-side pairs). Space for
+% mathematical working uses \workbox{height} instead and stays plain, as do
+% \drawbox and the write-in tables.
+\let\workbox\answerbox   % plain box: mathematical working (calculations) stays unruled
+\let\answerbox\linedbox
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT BOOKLET LAYER (Nov 2026)
+%  From 2027 every Year 7 unit collects its experiments into one A4 experiment
+%  booklet that puts the experimental techniques and skills first. Every skill
+%  comes from the faculty Science Skills continuum (Years 7--8 column) and is
+%  named the same way everywhere: a code (QP1, PC4, PA2 …) on a chip coloured by
+%  its sub-strand. Copy this block into the next unit's experiment booklet.
+%
+%  Each experiment runs in the same order:
+%    \experimentdiv{title}{summary}{lesson}\label{sec:N}
+%    key vocabulary · learning intentions · \begin{skillsfocus}
+%    \exppart*{Technique spotlight}{Blue}   (technique, worked example, We do)
+%    \exppart{Plan and safety}{Teal}        (aim, prediction, variables, risks)
+%    \exppart{Method}{Teal}
+%    \exppart{Results}{Amber}
+%    \exppart{Analysis and evaluation}{Coral}
+%    \exppart{Skill check}{NavyBlue}
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning}
+\usepackage{pifont}
+
+\newenvironment{keepext}{\par\begin{tcolorbox}[blankest, breakable=false]}{\end{tcolorbox}\par}
+% graph-paper box: \graphgrid{height}
+\newcommand{\graphgrid}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt, height=#1,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);
+      \draw[step=1cm, MidGrey!70, thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+  \end{tcolorbox}}
+
+% ── Skills (faculty Science Skills continuum, Years 7–8) ─────────────────────
+% \defskill{code}{name}{colour}{VC code}{what it means}
+\makeatletter
+\newcommand{\defskill}[5]{%
+  \expandafter\gdef\csname sk@n@#1\endcsname{#2}%
+  \expandafter\gdef\csname sk@c@#1\endcsname{#3}%
+  \expandafter\gdef\csname sk@v@#1\endcsname{#4}%
+  \expandafter\gdef\csname sk@d@#1\endcsname{#5}}
+\newcommand{\skname}[1]{\csname sk@n@#1\endcsname}
+\newcommand{\skcode}[1]{\csname sk@v@#1\endcsname}
+\newcommand{\skdesc}[1]{\csname sk@d@#1\endcsname}
+% \sk{PC4}: the chip — code and name on the sub-strand colour
+\newcommand{\sk}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=4pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1\,\textperiodcentered\,\skname{#1}};}
+% \skr{PC4}: the chip flush right at the end of a paragraph; drops to its own line if it does not fit
+\newcommand{\skr}[1]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\sk{#1}}
+% \skc{PC4}: the code alone, for tight table cells
+\newcommand{\skc}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=3pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1};}
+\makeatother
+
+% Questioning and predicting — VC2S8I01
+\defskill{QP1}{Testable hypothesis}{Teal}{VC2S8I01}{A prediction an experiment can test, naming both variables and the direction of change: \emph{If the [IV] is \dots, the [DV] will \dots}; a reason is optional}
+\defskill{QP2}{Formulate an aim}{Teal}{VC2S8I01}{One sentence naming both variables: \emph{To investigate the effect of changing [IV] on [DV]}}
+% Planning and conducting — VC2S8I02, VC2S8I03
+\defskill{PC1}{Plan and follow a method}{Blue}{VC2S8I02}{Follow, and later write, numbered steps in order: named equipment, quantities with units, no personal pronouns and a labelled diagram, so that someone else could repeat it (repeatable)}
+\defskill{PC2}{Identify variables}{Blue}{VC2S8I02}{Name the independent variable (what you change), the dependent variable (what you measure) and at least two controlled variables (what you keep the same)}
+\defskill{PC3}{Risks and safety}{Blue}{VC2S8I02}{Name each risk, how to prevent it and how to respond if it happens; follow the lab rules}
+\defskill{PC4}{Precision}{Blue}{VC2S8I02}{Choose equipment with a fine enough scale, read it to its smallest division, and repeat measurements to see how closely they agree}
+\defskill{PC5}{Ethics}{Blue}{VC2S8I02}{Treat people, living things, the environment and other people's data with respect}
+\defskill{PC6}{Collect data and measure}{Blue}{VC2S8I02}{Take each measurement at the right time, with its unit, and record it straight away}
+\defskill{PC7}{Use and select equipment}{Blue}{VC2S8I03}{Name each piece of equipment, use it correctly and choose the right piece for the job}
+\defskill{PC8}{Use digital tools}{Blue}{VC2S8I03}{Use stopwatches, data loggers, sensors and spreadsheets to collect and record data}
+% Processing, modelling and analysing — VC2S8I04, VC2S8I05
+\defskill{PA1}{Tables}{GoldDark}{VC2S8I04}{Title, Headings, Units in the headings only, Decimals kept the same (THUD), with the independent variable in the first column}
+\defskill{PA2}{Graphing}{GoldDark}{VC2S8I04}{The right type of graph, a title, axes labelled with units, the independent variable on the x-axis, an even scale and accurate points, then join the points or draw a line of best fit}
+\defskill{PA3}{Mathematical relationships}{GoldDark}{VC2S8I04}{Process data with calculations: differences, averages, rates and formulas}
+\defskill{PA4}{Creating models}{GoldDark}{VC2S8I04}{Build a physical, drawn or mathematical model that represents something real}
+\defskill{PA5}{Patterns and trends}{GoldDark}{VC2S8I05}{Describe how the dependent variable changes as the independent variable changes, quoting data}
+\defskill{PA6}{Correlation and causality}{GoldDark}{VC2S8I05}{Say whether two variables change together, and whether there is evidence that one causes the other}
+\defskill{PA7}{Identify anomalies}{GoldDark}{VC2S8I05}{Spot a result that does not fit the pattern and suggest why it happened}
+\defskill{PA8}{Interpreting models}{GoldDark}{VC2S8I05}{Use a model to explain an observation, and say what the model shows well and what it leaves out}
+% Evaluating — VC2S8I06, VC2S8I07
+\defskill{EV1}{Results against hypothesis}{OrangeDark}{VC2S8I06}{State the general trend and whether it supports the hypothesis (supported, never proven), with data to back the trend}
+\defskill{EV2}{Compare with known concepts}{OrangeDark}{VC2S8I06}{Compare your results with accepted values and scientific ideas}
+\defskill{EV3}{Error sources}{OrangeDark}{VC2S8I06}{Name what could have made results less accurate or less precise, and suggest how to improve the method}
+\defskill{EV4}{Quality of secondary sources}{OrangeDark}{VC2S8I07}{Judge whether information from a website, book or video can be trusted}
+\defskill{EV5}{Questions for further investigation}{OrangeDark}{VC2S8I07}{Pose a new question that follows from your results}
+% Communicating — VC2S8I08
+\defskill{CO1}{Scientific writing}{PurpleDark}{VC2S8I08}{Write in the third person, legibly, with correct spelling and grammar, short and to the point, using scientific terms}
+\defskill{CO2}{Presentation formats}{PurpleDark}{VC2S8I08}{Choose the right format to show findings: a table, graph, scientific diagram, poster, report or talk}
+
+% Skills focus panel at the top of each experiment:
+%   \begin{skillsfocus} \focus{PC4}{what you do with it here} … \end{skillsfocus}
+\newtcolorbox{skillsfocus}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=NavyBlue!55,
+  fonttitle=\headingfont\bfseries, coltitle=white, colbacktitle=NavyBlue,
+  title={Skills focus --- the science skills this experiment builds},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\focus}[2]{\par\noindent\makebox[1.25cm][l]{\skc{#1}}\parbox[t]{\dimexpr\linewidth-1.25cm\relax}{\small\textbf{\skname{#1}}\,---\,#2}\par\vspace{2pt}}
+
+% Learning intentions panel: \begin{lipanel} \inquiryli{…} \understandli{…} \sclist{…} \end{lipanel}
+\newtcolorbox{lipanel}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, title={Learning intentions},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\inquiryli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Inquiry:}\ #1\par\vspace{2pt}}
+\newcommand{\understandli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Understanding:}\ #1\par\vspace{2pt}}
+\newcommand{\sctitle}{\par\noindent{\headingfont\bfseries\color{NavyBlue}Success criteria}\par}
+
+% Technique spotlight: \begin{technique}{title}{PC4} … \end{technique}
+\newtcolorbox{technique}[2]{
+  enhanced, breakable, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=Blue!55,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, colbacktitle=LightBlue,
+  title={Technique: #1\hfill\sk{#2}},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm}
+
+% Experiment divider: \experimentdiv{title}{summary}{lesson number}
+% Steps the section counter, so tasks, worked examples and figures are N.M.
+\newcommand{\experimentdiv}[3]{%
+  \clearpage
+  \refstepcounter{section}%
+  \pdfbookmark[1]{Experiment \thesection{} — #1}{exp.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.6cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm]
+    \begin{center}
+      {\headingfont\bfseries\color{white!60!NavyBlue}\scriptsize EXPERIMENT}\\[-2pt]
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{46}{46}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}\\[3pt]
+    {\headingfont\color{Sky}\footnotesize Lesson #3}
+  \end{tcolorbox}%
+}
+
+% Part bar inside an experiment. \exppart{title}{colour} starts a new page
+% (new parts always start on a new page); \exppart*{…}{…} follows straight on.
+\NewDocumentCommand{\exppart}{s m m}{%
+  \par\IfBooleanTF{#1}{\needspace{10\baselineskip}\vspace{8pt}}{\clearpage}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Skill check at the end of each experiment: students tick one column per row.
+%   \begin{skillcheck} \scrow{PC4}{I can …} … \end{skillcheck}
+\newcommand{\tickbox}{\tikz[baseline=-0.6ex]\draw[DarkGrey, line width=0.7pt, rounded corners=1pt] (0,-0.17) rectangle (0.34,0.17);}
+\newenvironment{skillcheck}{%
+  \par\noindent Read each statement. Tick the column that best describes you \emph{today}.\par
+  \begin{ctab}\renewcommand{\arraystretch}{1.25}%
+  \begin{tabular}{|W{3.9cm}|W{7.0cm}|Z{1.45cm}|Z{1.45cm}|Z{1.45cm}|}
+  \hline\thead{Skill} & \thead{Success criterion} & \thead{Not yet} & \thead{Nearly} & \thead{Got it} \\ \hline}
+  {\end{tabular}\end{ctab}}
+\newcommand{\scrow}[2]{\rule{0pt}{1.1cm}\skc{#1}\enspace{\small\skname{#1}} & #2 & \tickbox & \tickbox & \tickbox \\ \hline}
+
+% Write-in label under a drawing: \nameline{label}
+\newcommand{\nameline}[1]{\par\noindent{\small #1}\ \leaders\hbox{\rule[-2pt]{1pt}{0.4pt}}\hfill\null\par}
+
+% ── Equipment drawn as scientific diagrams (2D, side-on, outline only) ──────
+% Each \eq... macro draws at the origin inside a tikzpicture. \eqpic[scale]{\eqBeaker}
+% puts one on its own. The same shapes are used everywhere, so the booklet
+% models exactly the drawings students are asked to make.
+\tikzset{
+  eq/.style={line width=0.9pt, draw=Ink, line cap=round, line join=round},
+  eqlab/.style={draw=Ink, line width=0.4pt},
+  eqtext/.style={font=\footnotesize, text=Ink, inner sep=1.5pt},
+}
+\newcommand{\eqpic}[2][1]{\begin{tikzpicture}[scale=#1, baseline=(current bounding box.center)]#2\end{tikzpicture}}
+\newcommand{\eqBeaker}{\draw[eq] (-0.22,2.62) -- (0,2.45) -- (0,0) -- (1.8,0) -- (1.8,2.5);}
+\newcommand{\eqFlask}{\draw[eq] (0.62,2.9) -- (0.65,2.8) -- (0.65,1.9) -- (0,0) -- (1.9,0) -- (1.25,1.9) -- (1.25,2.8) -- (1.28,2.9);}
+\newcommand{\eqTestTube}{\draw[eq] (-0.06,3.0) -- (0,2.9) -- (0,0.3) arc[start angle=180,end angle=360,radius=0.3] -- (0.6,2.9) -- (0.66,3.0);}
+\newcommand{\eqCylinder}{%
+  \draw[eq] (-0.15,3.6) -- (0,3.5) -- (0,0.15) (0.6,0.15) -- (0.6,3.5);
+  \draw[eq] (-0.35,0) rectangle (0.95,0.15);
+  \foreach \y in {0.6,1.1,...,3.2} \draw[Ink, line width=0.5pt] (0.6,\y) -- (0.4,\y);}
+\newcommand{\eqFunnel}{\draw[eq] (0,2.2) -- (0.75,1.0) -- (0.75,0) (1.85,2.2) -- (1.1,1.0) -- (1.1,0);}
+\newcommand{\eqBasin}{\draw[eq] (0,0.9) .. controls (0.15,0.02) and (2.25,0.02) .. (2.4,0.9);}
+\newcommand{\eqTripod}{%
+  \draw[eq] (-0.15,2.0) rectangle (2.55,2.12);
+  \draw[eq] (0.25,2.0) -- (0,0) (2.15,2.0) -- (2.4,0) (1.2,2.0) -- (1.2,0.15);}
+\newcommand{\eqBunsen}{%
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \fill[Ink] (0.72,0.42) rectangle (0.88,0.62);
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);}
+\newcommand{\eqThermometer}{%
+  \draw[eq] (0.25,0.25) circle (0.2);
+  \draw[eq] (0.15,0.43) -- (0.15,3.9) arc[start angle=180,end angle=0,radius=0.1] -- (0.35,0.43);
+  \draw[Ink, line width=1.3pt] (0.25,0.45) -- (0.25,1.9);}
+\newcommand{\eqStand}{%
+  \draw[eq] (0,0) rectangle (2.3,0.2);
+  \draw[eq] (0.35,0.2) -- (0.35,4.0) (0.5,0.2) -- (0.5,4.0);
+  \draw[eq] (0.25,2.75) rectangle (0.75,3.2);
+  \draw[eq] (0.75,2.92) -- (1.6,2.92) (0.75,3.03) -- (1.6,3.03);
+  \draw[eq] (1.6,2.7) -- (1.6,3.25) (1.6,2.7) -- (1.95,2.7) (1.6,3.25) -- (1.95,3.25);}
+\newcommand{\eqWatchGlass}{\draw[eq] (0,0.35) .. controls (0.5,-0.05) and (1.7,-0.05) .. (2.2,0.35);}
+\newcommand{\eqTongs}{%
+  \draw[eq] (0,0.1) -- (2.0,0.45) .. controls (2.3,0.5) and (2.45,0.35) .. (2.6,0.15)
+            (0,0.0) -- (2.0,-0.35) .. controls (2.3,-0.4) and (2.45,-0.25) .. (2.6,-0.05);}
+
+% A label line from a point on a drawing to text at the side: \eqlab{(x,y)}{(tx,ty)}{text}
+\newcommand{\eqlab}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=west] {#3};}
+\newcommand{\eqlabl}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=east] {#3};}
+
+% ── Reading scales ──────────────────────────────────────────────────────────
+% \readcyl{lowest}{highest}{labelled step}{small divisions per label}{reading}
+% A close-up of a measuring cylinder's scale, the water drawn to the reading:
+% the bottom of the meniscus sits exactly on the reading.
+\pgfkeys{/pgf/number format/.cd, fixed, precision=1}
+\newcommand{\readcyl}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rcH{5.0}
+  \pgfmathsetmacro\rcY{(#5-#1)*\rcH/(#2-#1)}
+  \pgfmathtruncatemacro\rcN{round((#2-#1)/#3*#4)}
+  \fill[black!10] (0,-0.3) -- (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16) -- (1.6,-0.3) -- cycle;
+  \draw[Ink, line width=0.9pt] (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16);
+  \foreach \k in {0,...,\rcN}{
+    \pgfmathsetmacro\yy{\k*\rcH/\rcN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0,\yy) -- (0.6,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt, fill=white, fill opacity=0.8, text opacity=1] at (0.66,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0,\yy) -- (0.32,\yy);
+    \fi}
+  \draw[eq] (0,-0.3) -- (0,\rcH+0.35) (1.6,-0.3) -- (1.6,\rcH+0.35);
+  \node[font=\scriptsize, anchor=north] at (0.8,-0.35) {scale in mL};
+\end{tikzpicture}}
+% \readtherm{lowest}{highest}{labelled step}{small divisions per label}{reading}
+\newcommand{\readtherm}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rtH{5.0}
+  \pgfmathsetmacro\rtY{(#5-#1)*\rtH/(#2-#1)}
+  \pgfmathtruncatemacro\rtN{round((#2-#1)/#3*#4)}
+  \draw[eq, fill=white] (0,-0.45) circle (0.3);
+  \fill[black!75] (0,-0.45) circle (0.22);
+  \fill[black!75] (-0.07,-0.3) rectangle (0.07,\rtY);
+  \draw[eq] (-0.16,-0.2) -- (-0.16,\rtH+0.3) arc[start angle=180,end angle=0,radius=0.16] -- (0.16,-0.2);
+  \foreach \k in {0,...,\rtN}{
+    \pgfmathsetmacro\yy{\k*\rtH/\rtN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0.25,\yy) -- (0.75,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt] at (0.8,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0.25,\yy) -- (0.52,\yy);
+    \fi}
+  \node[font=\scriptsize, anchor=north] at (0.3,-0.8) {scale in \textdegree C};
+\end{tikzpicture}}
+% \balancefig{reading}: an electronic balance showing a reading
+\newcommand{\balancefig}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \draw[eq, rounded corners=3pt] (0,0) rectangle (4.2,1.35);
+  \draw[eq] (1.9,1.35) -- (1.9,1.55) (2.3,1.35) -- (2.3,1.55);
+  \draw[eq, rounded corners=1pt] (0.5,1.55) rectangle (3.7,1.72);
+  \draw[eq, fill=LightGrey] (0.35,0.35) rectangle (2.75,1.02);
+  \node[font=\headingfont\bfseries\large, anchor=east] at (2.65,0.68) {#1};
+  \draw[eq] (3.3,0.68) circle (0.2);
+  \node[font=\tiny\bfseries] at (3.3,0.3) {TARE};
+\end{tikzpicture}}
+% Bunsen burner with a flame: \bunsenflame{safety|heating}
+\newcommand{\bunsenflame}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \def\fl{#1}\def\safe{safety}%
+  \ifx\fl\safe
+    \fill[black!14] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+  \else
+    \fill[white] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \fill[black!30] (0.8,2.3) .. controls (0.65,2.55) and (0.7,2.85) .. (0.8,3.0) .. controls (0.9,2.85) and (0.95,2.55) .. (0.8,2.3);
+  \fi
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \ifx\fl\safe\draw[Ink, line width=0.5pt, densely dotted] (0.72,0.42) rectangle (0.88,0.62);\else\fill[Ink] (0.72,0.42) rectangle (0.88,0.62);\fi
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);
+\end{tikzpicture}}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EARTH IN OUR SOLAR SYSTEM — COVER
+%  The unit's cover art (covers/earth-solar-system.jpg), full bleed. The A5 lesson
+%  booklet sets \wrcoverfile one folder deeper.
+% ══════════════════════════════════════════════════════════════════════════════
+\providecommand{\wrcoverfile}{../../covers/earth-solar-system.jpg}
+\newcommand{\wrcover}{%
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at (current page.north) {\includegraphics[width=\paperwidth]{\wrcoverfile}};
+\end{tikzpicture}}
+% ══════════════════════════════════════════════════════════════════════════════
+%  2027 WORKBOOK STYLE (Year 7 workbook redesign, Nov 2026) — A4 version
+%  The look of the A5 trial (space/booklet/a5-test) on an A4 page:
+%    · colour cover from the unit's cover art, black-and-white inside
+%    · headings in Outfit (the site's heading face), body in Lato
+%    · each experiment opens with a band: number, title, ink symbol, heavy rule
+%    · boxes told apart by frame and icon, never by colour:
+%        I do ●  solid · We do ●● dashed · You do ●●● heavy
+%        Key idea / technique ◆ thin · Above level ▲ double · Country ◎ dotted
+%    · skill tags are ink tabs carrying the code (QP1, PC4 …) plus the name
+%  Everything above this block still names the old colours; they are mapped to
+%  ink here, so the body never needs to know which look it is printed in.
+% ══════════════════════════════════════════════════════════════════════════════
+
+\usetikzlibrary{patterns}
+% ── Fonts ───────────────────────────────────────────────────────────────────
+% Bold is Outfit SemiBold, the weight the site uses; Outfit has no italic,
+% so a slanted one stands in.
+\renewfontfamily\headingfont{Outfit}[
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
+
+% ── Black and white inside ──────────────────────────────────────────────────
+\definecolor{Ink}{HTML}{111111}
+\colorlet{NavyBlue}{Ink}\colorlet{MidBlue}{Ink}\colorlet{TealGreen}{Ink}
+\colorlet{GoldDark}{Ink}\colorlet{PurpleDark}{Ink}\colorlet{OrangeDark}{Ink}
+\colorlet{TableHead}{Ink}
+\colorlet{Blue}{Ink}\colorlet{Teal}{Ink}\colorlet{Amber}{Ink}\colorlet{Coral}{Ink}
+\colorlet{Violet}{Ink}\colorlet{Sky}{Ink}
+\colorlet{LightBlue}{white}\colorlet{LightGreen}{white}\colorlet{GoldLight}{white}
+\colorlet{PurpleLight}{white}\colorlet{OrangeLight}{white}\colorlet{RowAlt}{white}
+\colorlet{LightGrey}{white}\colorlet{Paper}{white}
+\colorlet{DarkGrey}{black!72}\colorlet{MidGrey}{black!45}\colorlet{Line}{black!45}
+\arrayrulecolor{black!60}
+
+% ── Page style ──────────────────────────────────────────────────────────────
+\fancypagestyle{fancy}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{Ink}\leaders\hrule height \headrulewidth\hfill}}%
+  \fancyhead[L]{\headingfont\footnotesize \unitname\ \textbullet\ Experiment Booklet}%
+  \fancyhead[R]{\headingfont\footnotesize\leftmark}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{opener}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\pagestyle{fancy}
+\markboth{}{}
+
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{}{0em}{}
+
+% ── Box system: told apart by frame and icon, never by colour ───────────────
+\newcommand{\icodots}[1]{\tikz[baseline=-0.6ex]{\foreach \k in {1,...,#1}{\fill[white] (\k*1.9mm,0) circle (0.7mm);}}}
+\newcommand{\icokey}{\tikz[baseline=-0.6ex]{\fill[white] (0,0.9mm)--(0.9mm,0)--(0,-0.9mm)--(-0.9mm,0)--cycle;}}
+\newcommand{\icoup}{\tikz[baseline=-0.6ex]{\fill[white] (-1mm,-0.8mm)--(1mm,-0.8mm)--(0,1mm)--cycle;}}
+\newcommand{\icocountry}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.5pt] (0,0) circle (1mm); \fill[white] (0,0) circle (0.45mm);}}
+\newcommand{\icoskill}{\tikz[baseline=-0.6ex]{\fill[white] (-0.85mm,-0.85mm) rectangle (0.85mm,0.85mm);}}
+\newcommand{\tagicon}[1]{\tikz[baseline=-0.6ex]\node[fill=Ink, rounded corners=0.8mm, inner xsep=1.2mm, inner ysep=1mm]{#1};}
+\tcbset{wbbase/.style={enhanced, colback=white, arc=1.2mm,
+    left=3.5mm, right=3.5mm, top=4.2mm, bottom=2.6mm, before skip=11pt, after skip=8pt,
+    attach boxed title to top left={xshift=3mm, yshift=-2.4mm},
+    boxed title style={colback=Ink, colframe=Ink, arc=0.8mm, boxrule=0pt,
+                       left=1.6mm, right=1.8mm, top=0.6mm, bottom=0.6mm},
+    fonttitle=\headingfont\bfseries\footnotesize, coltitle=white}}
+
+% I do: the worked example (solid frame, one dot)
+\renewtcolorbox{workedexbox}[1]{wbbase, breakable, colframe=Ink, boxrule=1pt,
+  title={\icodots{1}\ I do \textbullet\ #1}}
+\renewenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+% We do: straight after its worked example (dashed frame, two dots)
+\renewtcolorbox{wedobox}[1]{wbbase, breakable=false, frame hidden,
+  borderline={1.1pt}{0pt}{Ink, dash pattern=on 4pt off 2.6pt},
+  title={\icodots{2}\ #1}}
+\renewenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+% You do: a set of practice tasks on your own (heavy frame, three dots)
+\newtcolorbox{youdobox}[1][Check your understanding]{wbbase, breakable=false,
+  colframe=Ink, boxrule=2.4pt, top=5mm,
+  title={\icodots{3}\ You do \textbullet\ #1}}
+% Key idea, technique, safety, word banks (thin frame, diamond)
+\renewtcolorbox{infobox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ #1}}
+\renewtcolorbox{scaffold}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ #1}}
+\renewtcolorbox{technique}[2]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ Technique \textbullet\ #1\enspace\textbar\enspace #2 \skname{#2}}}
+% Above level (double frame, triangle)
+\renewtcolorbox{yr8box}{wbbase, breakable, frame hidden,
+  borderline={0.6pt}{0pt}{Ink}, borderline={0.6pt}{1.6pt}{Ink},
+  title={\icoup\ Going further \textbullet\ Above level}}
+% Country (dotted frame, ring)
+\newtcolorbox{countrybox}[1]{wbbase, breakable, frame hidden,
+  borderline={1.4pt}{0pt}{Ink, line cap=round, dash pattern=on 0pt off 2.4pt},
+  title={\icocountry\ #1}}
+% Learning intentions and skills focus (thin frame; square for skills)
+\renewtcolorbox{lipanel}{wbbase, breakable=false, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ Learning intentions}}
+\renewtcolorbox{skillsfocus}{wbbase, breakable=false, colframe=Ink, boxrule=1pt,
+  title={\icoskill\ Skills focus \textbullet\ the science skills this experiment builds},
+  before upper={\begin{multicols}{2}\raggedcolumns}, after upper={\end{multicols}}}
+
+% ── Skill tags: an ink tab with the code, then the name ─────────────────────
+\makeatletter
+\renewcommand{\skc}[1]{%
+  \tikz[baseline=(c.base)]\node[rounded corners=0.8mm, fill=Ink, text=white, inner xsep=1.5mm, inner ysep=0.7mm,
+    font=\headingfont\bfseries\scriptsize] (c) {#1};}
+\renewcommand{\sk}[1]{\mbox{\skc{#1}\,{\headingfont\bfseries\footnotesize\skname{#1}}}}
+\makeatother
+\renewcommand{\focus}[2]{\par\noindent\makebox[1.1cm][l]{\skc{#1}}\parbox[t]{\dimexpr\linewidth-1.1cm\relax}{\footnotesize\RaggedRight\textbf{\skname{#1}}\,---\,#2}\par\vspace{3pt}}
+
+% ── Experiment opener band ──────────────────────────────────────────────────
+% \experimentdiv{title}{summary}{lesson}: number, title and the experiment's ink
+% symbol (\expsymbol{N}), then a heavy rule. Steps the section counter, so
+% tasks, worked examples and figures are N.M.
+\newcommand{\expword}{Experiment}\newcommand{\expcaps}{EXPERIMENT}\newcommand{\symid}{\thesection}
+\renewcommand{\experimentdiv}[3]{%
+  \clearpage\thispagestyle{opener}%
+  \refstepcounter{section}\markboth{\expword\ \thesection\ \textbullet\ #1}{}%
+  \pdfbookmark[1]{\expword\ \thesection{} — #1}{exp.\thesection}%
+  \noindent\begin{minipage}[b]{\dimexpr\linewidth-46mm\relax}
+    {\headingfont\bfseries\footnotesize\addfontfeatures{LetterSpace=14}\unitcaps\ \textbullet\ \expcaps}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{40}{40}\selectfont\thesection}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{19}{22}\selectfont\RaggedRight #1\par}\vspace{1mm}
+    {\small\itshape #2}\par\vspace{1mm}
+    {\headingfont\footnotesize Lesson #3}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{44mm}\centering\resizebox{!}{27mm}{\expsymbol{\symid}}\end{minipage}\par
+  \vspace{2mm}\noindent\rule{\linewidth}{1.6pt}\par\vspace{1mm}}
+\renewcommand{\lessoncodes}[1]{{\small\itshape VC 2.0: #1}\par\vspace{2pt}}
+
+% Part heading inside an experiment: every part starts a new page; the
+% starred form follows straight on.
+\RenewDocumentCommand{\exppart}{s m m}{%
+  \par\IfBooleanTF{#1}{\needspace{10\baselineskip}\vspace{8pt}}{\clearpage}%
+  {\headingfont\bfseries\LARGE #2}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}}
+
+% Key vocabulary: a heading like the trial's, then the write-in table
+\renewcommand{\vocabhead}{%
+  \par\vspace{4pt}{\headingfont\bfseries\Large Key vocabulary}\par\vspace{1pt}%
+  \noindent{\small Copy the meaning of each word from the slide. The first one has been done for you.}\par}
+
+% Table headings: bold Outfit on white, the grid in ink
+\renewcommand{\thead}[1]{\headingfont\bfseries #1}
+\renewcommand{\tickbox}{\tikz[baseline=-0.6ex]\draw[Ink, line width=0.7pt, rounded corners=1pt] (0,-0.17) rectangle (0.34,0.17);}
+
+% Glossary rows: \glossrow{word}{label}
+\newcommand{\glossrow}[2]{\rule{0pt}{5mm}\textbf{#1} & \pageref{#2} \\ \hline}
+
+% ── Ink symbols for the experiment openers ───────────────────────────────────
+% One diagrammatic idea per experiment, drawn in ink from the same 2D
+% equipment shapes the booklet teaches.
+\tikzset{sym/.style={line width=1.5pt, draw=Ink, line cap=round, line join=round}}
+\newcommand{\expsymbol}[1]{%
+  \begin{tikzpicture}[x=1cm,y=1cm]
+  \ifcase#1
+  \or
+    % 1 Angle of sunlight: a torch beam striking the ground at a slant
+    \draw[sym] (0,0) -- (4.2,0);
+    \begin{scope}[shift={(0.6,2.6)}, rotate=-40]\draw[sym, fill=white] (-0.3,-0.6) rectangle (0.3,0.5); \draw[sym, fill=black!25] (-0.4,0.5) rectangle (0.4,0.8);\end{scope}
+    \draw[Ink, line width=1.4pt, dashed] (1.1,1.95) -- (1.8,0) (1.75,2.5) -- (3.5,0);
+    \fill[black!25] (1.8,-0.08) rectangle (3.5,0.08);
+    \draw[Ink, line width=1.2pt] (3.9,0) arc[start angle=180, end angle=137, radius=0.9];
+  \or
+    % 2 Crater: a falling ball above a bowl-shaped crater with ejecta
+    \draw[sym, fill=white] (2.0,2.9) circle (0.38);
+    \draw[Ink, line width=1.2pt] (1.8,2.35) -- (1.8,1.9) (2.2,2.35) -- (2.2,1.9);
+    \draw[sym] (0,0.4) -- (0.9,0.4) .. controls (1.05,0.6) .. (1.2,0.5) .. controls (1.5,-0.3) and (2.5,-0.3) .. (2.8,0.5) .. controls (2.95,0.6) .. (3.1,0.4) -- (4.0,0.4);
+    \foreach \x in {0.2,0.45,0.7,3.3,3.55,3.8}{\fill[Ink] (\x,0.48) circle (0.06);}
+  \fi
+  \end{tikzpicture}}
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ---- Cover: the unit's cover art, full bleed, in colour ------------------
+% The art is 2:3 and A4 is taller-than-wide by less, so it fills the width and
+% loses a little off the bottom; the baked-in title at the top stays whole.
+\pdfbookmark[1]{Cover}{cover}
+\thispagestyle{empty}
+\wrcover
+\begin{tikzpicture}[remember picture, overlay]
+  
+  % Name box, top right, clear of the title.
+  \node[anchor=north east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.5mm,
+        inner xsep=2.6mm, inner ysep=2.2mm, text width=40mm, font=\headingfont\small]
+    at ([xshift=-6mm, yshift=-6mm]current page.north east)
+    {\textbf{Name}\par\vspace{5mm}\hrule\vspace{2.6mm}\textbf{Class}\par\vspace{5mm}\hrule};
+  % What this book is: the cover art says Workbook, so name the booklet here.
+  \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.5mm,
+        inner xsep=3.2mm, inner ysep=2.4mm, font=\headingfont\bfseries\large, align=right]
+    at ([xshift=-6mm, yshift=8mm]current page.south east)
+    {Experiment Booklet\\[-1pt]{\normalfont\headingfont\small Experiments 1--2}};
+\end{tikzpicture}
+\mbox{}
+\clearpage
+
+% ---- Inside cover ---------------------------------------------------------
+\thispagestyle{plain}
+{\headingfont\bfseries\fontsize{26}{30}\selectfont Earth in Our Solar System}\par\vspace{1mm}
+{\headingfont\Large Experiment Booklet \textbullet\ Year 7}\par\vspace{1mm}
+{\small\itshape VC 2.0: VC2S8U12 \textbullet\ VC2S8I01--I08 \textbullet\ VC2S8H02}\par\vspace{6mm}
+\renewcommand{\arraystretch}{2.2}
+\begin{tabular}{@{}l p{130mm}@{}}
+\textbf{Name} & \hrulefill \\ \textbf{Class} & \hrulefill \\ \textbf{Teacher} & \hrulefill \\ \textbf{Lab group} & \hrulefill \\
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+
+\begin{countrybox}{Acknowledgement of Country}
+This booklet was created on the unceded Country of the Wurundjeri Woi-wurrung people of the Kulin Nation. We acknowledge Elders past, present and emerging. Aboriginal and Torres Strait Islander peoples have observed, tested and passed on knowledge of Country for tens of thousands of years: science in the way this booklet teaches it, by careful observation, measurement and sharing what was found.
+\end{countrybox}
+
+\begin{infobox}{How this booklet works}
+This booklet holds every experiment in the unit. Bring it to every practical lesson. Each experiment opens with its key vocabulary, learning intentions and skills focus, then runs \emph{Technique} $\rightarrow$ \emph{Plan and safety} $\rightarrow$ \emph{Method} $\rightarrow$ \emph{Results} $\rightarrow$ \emph{Analysis and evaluation} $\rightarrow$ \emph{Skill check}. Each kind of box has its own frame and mark:\par\smallskip
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{32mm}l@{}}
+\textbf{Technique} \tagicon{\icokey} & How to do it properly (thin frame) \\
+\textbf{I do} \tagicon{\icodots{1}} & Your teacher works an example through --- you follow (solid frame) \\
+\textbf{We do} \tagicon{\icodots{2}} & You try one together, with help (dashed frame) \\
+\textbf{You do} \tagicon{\icodots{3}} & On your own: check your understanding (heavy frame) \\
+\textbf{Going further} \tagicon{\icoup} & Above level: Year 8 extension (double frame) \\
+\textbf{Skills focus} \tagicon{\icoskill} & The science skills the experiment builds \\
+\end{tabular}
+
+\smallskip
+Every skill comes from the faculty \textbf{Science Skills} list (the toolkit on page \pageref{sec:toolkit}). A skill always carries the same code, for example \sk{PC4} or \sk{PA1}, so you can follow it from this unit into every other unit this year.
+\end{infobox}
+
+\clearpage
+{\headingfont\bfseries\LARGE Contents}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}
+\begin{ctab}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|L{2.8cm}|L{10.2cm}|C{1.6cm}|}
+  \hline\thead{Section} & \thead{Title} & \thead{Page} \\ \hline
+  Skills & \hyperlink{toolkit}{The Science Skills toolkit} & \hyperlink{toolkit}{\pageref{sec:toolkit}} \\ \hline
+  Skills & \hyperlink{tracker}{My skills tracker} & \hyperlink{tracker}{\pageref{sec:tracker}} \\ \hline
+  Experiment 1 & \hyperlink{exp.1}{The Angle of Sunlight (Lesson 2)} & \hyperlink{exp.1}{\pageref{sec:1}} \\ \hline
+  Experiment 2 & \hyperlink{exp.2}{Impact Craters (Lesson 5)} & \hyperlink{exp.2}{\pageref{sec:2}} \\ \hline
+  Glossary & \hyperlink{glossary}{Key vocabulary, with the page each word first appears on} & \hyperlink{glossary}{\pageref{sec:glossary}} \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  THE SCIENCE SKILLS TOOLKIT — faculty continuum, Years 7–8 column
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\hypertarget{toolkit}{}\pdfbookmark[1]{The Science Skills toolkit}{toolkitbm}
+\markboth{The Science Skills toolkit}{}{\headingfont\bfseries\LARGE The Science Skills toolkit}\label{sec:toolkit}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+These are the skills scientists use in every investigation. They come from the Science Inquiry strand of the Victorian Curriculum, grouped the way our faculty teaches them. Each experiment in this booklet tells you which skills it builds.
+
+\newcommand{\tkhead}[2]{\multicolumn{3}{|l|}{\cellcolor{black!10}\rule{0pt}{4.6mm}\headingfont\bfseries #2} \\ \hline}
+\newcommand{\tkrow}[1]{\skc{#1}\enspace{\small\bfseries\skname{#1}} & \skdesc{#1} & {\small\skcode{#1}} \\ \hline}
+\renewcommand{\arraystretch}{1.35}
+\begin{ctab}
+\begin{longtable}{|W{5.0cm}|W{9.0cm}|Z{1.7cm}|}
+  \hline\thead{Skill} & \thead{What it means} & \thead{Code} \\ \hline
+  \endhead
+  \tkhead{Teal}{Questioning and predicting}
+  \tkrow{QP1}
+  \tkrow{QP2}
+  \tkhead{Blue}{Planning and conducting}
+  \tkrow{PC1}
+  \tkrow{PC2}
+  \tkrow{PC3}
+  \tkrow{PC4}
+  \tkrow{PC5}
+  \tkrow{PC6}
+  \tkrow{PC7}
+  \tkrow{PC8}
+  \tkhead{GoldDark}{Processing, modelling and analysing}
+  \tkrow{PA1}
+  \tkrow{PA2}
+  \tkrow{PA3}
+  \tkrow{PA4}
+  \tkrow{PA5}
+  \tkrow{PA6}
+  \tkrow{PA7}
+  \tkrow{PA8}
+  \tkhead{OrangeDark}{Evaluating}
+  \tkrow{EV1}
+  \tkrow{EV2}
+  \tkrow{EV3}
+  \tkrow{EV4}
+  \tkrow{EV5}
+  \tkhead{PurpleDark}{Communicating}
+  \tkrow{CO1}
+  \tkrow{CO2}
+\end{longtable}
+\end{ctab}
+\renewcommand{\arraystretch}{1}
+
+\begin{infobox}{Writing like a scientist \textbar\ CO1 \skname{CO1}}
+Scientists write in the \textbf{third person}: say what was done, not who did it. Write \emph{``The water was heated for 10 minutes''}, not \emph{``I heated the water for 10 minutes''}. Keep sentences short, spell scientific words correctly, and always give a unit with a measurement.
+\end{infobox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SKILLS TRACKER
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\hypertarget{tracker}{}\pdfbookmark[1]{My skills tracker}{trackerbm}
+\markboth{My skills tracker}{}{\headingfont\bfseries\LARGE My skills tracker}\label{sec:tracker}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+A dot \textbullet{} shows the experiments that build each skill. After each experiment, write how confident you are with each of its skills in its column: \textbf{1}~not yet, \textbf{2}~nearly, \textbf{3}~got it.
+
+\newcommand{\dotc}{{\Large\textbullet}}
+\newcommand{\trow}[3]{\rule[-0.36cm]{0pt}{0.92cm}\skc{#1}\enspace{\small\skname{#1}} & #2 & #3 & \\ \hline}
+\begin{ctab}
+\begin{tabular}{|W{6.0cm}|*{2}{Z{2.2cm}|}Z{2.2cm}|}
+  \hline\thead{Skill} & \thead{Exp 1} & \thead{Exp 2} & \thead{End of unit} \\ \hline
+  \trow{QP1}{\dotc}{\dotc}
+  \trow{PC2}{\dotc}{\dotc}
+  \trow{PC4}{\dotc}{\dotc}
+  \trow{PA1}{\dotc}{}
+  \trow{PA2}{\dotc}{\dotc}
+  \trow{PA3}{}{\dotc}
+  \trow{PA5}{\dotc}{}
+  \trow{PA7}{}{\dotc}
+  \trow{EV2}{\dotc}{}
+  \trow{EV3}{}{\dotc}
+\end{tabular}
+\end{ctab}
+{\small\color{DarkGrey} The other skills are built in the experiment booklets for other units.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 1 — THE ANGLE OF SUNLIGHT                  (Lesson 2, T4 Week 6)
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{The Angle of Sunlight}{Measuring a light patch \textbullet{} Repeat trials \textbullet{} A line of best fit \textbullet{} Why we have seasons}{2}\label{sec:1}
+\lessoncodes{VC2S8U12 \textbullet{} VC2S8I01, I02, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Axial tilt}\label{voc:axial-tilt}} & \scaf{Earth's axis leans 23.5\textdegree{} from upright, so each hemisphere leans towards the Sun for half the year.} \\ \hline
+  & \textbf{Angle of elevation}\label{voc:angle-of-elevation} & \\ \hline
+  & \textbf{Intensity}\label{voc:intensity} & \\ \hline
+  & \textbf{Solstice}\label{voc:solstice} & \\ \hline
+  & \textbf{Line of best fit}\label{voc:line-of-best-fit} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Measure a light patch precisely at several angles, repeat each and draw a line graph with a line of best fit.}
+\understandli{Explain why sunlight heats the ground more strongly in summer, when the Sun is higher in the sky.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can count the squares in a light patch the same way every time.
+  \item I can draw a line of best fit and describe the trend.
+  \item I can use my results to explain why Melbourne is warmer in summer.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a testable hypothesis.}
+\focus{PC2}{Change only the angle.}
+\focus{PC4}{Count the patch precisely, three times.}
+\focus{PA1}{Record results in a THUD table.}
+\focus{PA2}{Draw a line of best fit.}
+\focus{PA5}{Describe the trend with numbers.}
+\focus{EV2}{Link the results to the seasons.}
+\end{skillsfocus}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Measuring the light patch}{PC4}
+\begin{minipage}[c]{0.6\linewidth}
+Trace the edge of the bright patch on the grid paper in pencil. Count every square that is \textbf{more than half} inside the line; ignore the rest. Each square is 1\,cm$^2$, so the count is the area in cm$^2$. Use the same rule for every patch, and have a second person count it too.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.36\linewidth}\centering
+\begin{tikzpicture}[scale=0.42]
+  \draw[black!30, step=1] (0,0) grid (7,5);
+  \draw[Ink, line width=1.4pt] (3.5,2.5) ellipse (2.6 and 1.6);
+  \foreach \x/\y in {1.5/1.5,2.5/1.5,3.5/1.5,4.5/1.5,5.5/1.5,1.5/2.5,2.5/2.5,3.5/2.5,4.5/2.5,5.5/2.5,1.5/3.5,2.5/3.5,3.5/3.5,4.5/3.5,5.5/3.5}{\node[font=\tiny] at (\x,\y) {$\bullet$};}
+\end{tikzpicture}
+\end{minipage}
+\end{technique}
+
+\begin{workedex}{Counting and averaging}
+A patch was counted three times at 45\textdegree: 34, 36 and 35 squares.\qquad Average $= (34 + 36 + 35) \div 3 = 35$\,cm$^2$.
+\end{workedex}
+
+\begin{wedo}{Counting a patch}
+Count the marked squares in the patch in the technique box. What is its area?
+\answerbox{2cm}
+\end{wedo}
+
+\begin{technique}{Line of best fit}{PA2}
+Measurements always have small errors, so the points will not sit perfectly on a line. Draw \textbf{one smooth curve} through the middle of the points, with about as many above as below. Do not join the dots. The curve shows the trend and lets you read values between your measurements.
+\end{technique}
+
+% ─── PLAN AND SAFETY / METHOD ────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the angle of the light on the area of the light patch.
+
+\task Write a hypothesis. \skr{QP1}
+\answerbox{2.5cm}
+
+\needspace{12\baselineskip}
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{Angle between the torch beam and the paper (\textdegree)} \\ \hline
+  & Dependent & \\ \hline
+  & Controlled & \\ \hline
+  & Controlled & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \draw[Ink, line width=1.2pt] (0,0) -- (7,0);
+  \fill[black!20] (2.3,-0.1) rectangle (4.9,0.0);
+  \begin{scope}[shift={(1.2,3.0)}, rotate=-51.3]
+    \draw[eq, fill=white] (-1.3,-0.22) rectangle (0,0.22);
+    \draw[eq, fill=black!15] (0,-0.34) rectangle (0.25,0.34);
+    \coordinate (h1) at (0.25,0.3); \coordinate (h2) at (0.25,-0.3); \coordinate (tb) at (-1.3,0);
+  \end{scope}
+  \draw[Ink, dashed] (h1) -- (4.9,0) (h2) -- (2.3,0);
+  \draw[Ink, densely dotted] (1.2,3.0) -- (3.6,0);
+  \draw[Ink, line width=1pt] (2.8,0) arc[start angle=180, end angle=128.7, radius=0.8];
+  \node[font=\small, anchor=east] at (2.75,0.45) {angle};
+  \eqlabl{(tb)}{(-0.6,2.6)}{torch, 30\,cm from the paper}
+  \eqlab{(4.6,-0.05)}{(5.6,-0.8)}{light patch on 1\,cm grid paper}
+\end{tikzpicture}
+\expfigcap{Keep the torch the same distance from the paper at every angle.}
+\end{center}
+
+\subsubsection*{Equipment}
+Torch (LED, with a narrow beam) \textbullet{} retort stand and clamp \textbullet{} 1\,cm grid paper \textbullet{} protractor \textbullet{} metre ruler \textbullet{} pencil \textbullet{} a darkened room
+
+\needspace{10\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{Tripping in the darkened room} & \scaf{Bags under benches; walk, do not run} & \scaf{Tell the teacher; turn the lights on} \\ \hline
+  & The retort stand tips over & & \\ \hline
+  & Looking straight into the torch & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Tape the grid paper flat on the bench. Clamp the torch so the middle of its beam hits the centre of the paper at 90\textdegree, with the torch 30\,cm from the paper.
+  \item Darken the room. Trace the edge of the light patch in pencil.
+  \item Count the squares (the more-than-half rule) and record the area. A partner counts it again.
+  \item Repeat with the beam at 75\textdegree, 60\textdegree, 45\textdegree, 30\textdegree{} and 15\textdegree{} to the paper, measuring the angle with the protractor and keeping the torch 30\,cm away.
+  \item Do the whole set three times on fresh paper, then calculate the averages.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 1.1: Area of the light patch at each angle \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SW{3.0cm}|C{2.7cm}|C{2.7cm}|C{2.7cm}|C{3.0cm}|}
+  \hline\hd & \thead{Angle of beam (\textdegree)} & \thead{Trial 1 (cm$^2$)} & \thead{Trial 2 (cm$^2$)} & \thead{Trial 3 (cm$^2$)} & \thead{Average (cm$^2$)} \\ \hline
+  & \scaf{Example: 50} & \scaf{31} & \scaf{33} & \scaf{32} & \scaf{32} \\ \hline
+  & 90 & & & & \\ \hline
+  & 75 & & & & \\ \hline
+  & 60 & & & & \\ \hline
+  & 45 & & & & \\ \hline
+  & 30 & & & & \\ \hline
+  & 15 & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{22\baselineskip}
+\task Draw a line graph of the average area against the angle. Put the angle on the horizontal axis, give the graph a title, and draw a smooth line of best fit. \skr{PA2}
+\graphgrid{10cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Describe the trend in your results. Use numbers from Table 1.1. \skr{PA5}
+\answerbox{4cm}
+
+\needspace{12\baselineskip}
+\task The torch gives out the same amount of light at every angle. Explain what happens to the light on each square of paper when the patch gets bigger. Use the word \emph{intensity}.
+\answerbox{4.5cm}
+
+\needspace{14\baselineskip}
+\task At midday in Melbourne the Sun is about 75\textdegree{} above the horizon in December and about 28\textdegree{} in June. Use your graph to explain why the ground heats up more in December. \skr{EV2}
+\answerbox{5cm}
+
+\needspace{10\baselineskip}
+\task A student says, ``It's summer because Earth is closer to the Sun.'' Use your results and the idea of axial tilt to explain why this is wrong.
+\answerbox{4.5cm}
+
+\needspace{12\baselineskip}
+\task Give two sources of error and how each could be reduced. \skr{EV3}
+\begin{ctab}
+\begin{tabular}{|SW{7.2cm}|W{7.8cm}|}
+  \hline\hd & \thead{Source of error} & \thead{How to reduce it} \\ \hline
+  & \scaf{The edge of the patch is blurry} & \scaf{Use a torch with a sharper beam; agree on the edge before tracing} \\ \hline
+  & & \\ \hline
+  & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{10\baselineskip}
+\task Write a conclusion: the trend, the numbers that back it, and whether your hypothesis was supported. \skr{EV1}
+\answerbox{4.5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask Relative brightness $=$ area at 90\textdegree{} $\div$ area at the angle. Calculate it for 30\textdegree{} from your averages. Then calculate $\sin 30^\circ$ on a calculator and compare. What does this suggest about the shape of your graph?
+\workbox{5cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{I can write a hypothesis that names both variables.}
+\scrow{PC2}{I changed only the angle and kept the distance the same.}
+\scrow{PC4}{I counted each patch with the same rule, three times.}
+\scrow{PA1}{My table has a title, headings, units and matching decimals.}
+\scrow{PA2}{I drew a smooth line of best fit, not dot-to-dot.}
+\scrow{PA5}{I can describe the trend, quoting numbers.}
+\scrow{EV2}{I can use my results to explain the seasons.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 2? Explain what you will do differently.
+\answerbox{5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 2 — IMPACT CRATERS                         (Lesson 5, T4 Week 7)
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Impact Craters}{Dropping a model meteorite \textbullet{} Averages and anomalies \textbullet{} Reading the surface of the Moon}{5}\label{sec:2}
+\lessoncodes{VC2S8U12, VC2S8H02 \textbullet{} VC2S8I01, I02, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Impact crater}\label{voc:impact-crater}} & \scaf{A bowl-shaped hollow made when a meteorite or asteroid hits a planet or moon.} \\ \hline
+  & \textbf{Meteorite}\label{voc:meteorite} & \\ \hline
+  & \textbf{Ejecta}\label{voc:ejecta} & \\ \hline
+  & \textbf{Diameter}\label{voc:diameter} & \\ \hline
+  & \textbf{Anomaly}\label{voc:anomaly} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Measure crater diameters precisely, average repeat drops, spot anomalies and draw a line of best fit.}
+\understandli{Explain how the speed of an impact affects the size of a crater, and why the Moon has so many more craters than Earth.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can measure a crater's diameter to the nearest millimetre.
+  \item I can find an anomaly and leave it out of my average.
+  \item I can explain my results using the speed of the falling marble.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a testable hypothesis.}
+\focus{PC2}{Change only the drop height.}
+\focus{PC4}{Measure each crater to the nearest mm.}
+\focus{PA2}{Draw a line of best fit.}
+\focus{PA3}{Calculate averages.}
+\focus{PA7}{Find and explain anomalies.}
+\focus{EV3}{Suggest how to reduce errors.}
+\end{skillsfocus}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Measuring a crater}{PC4}
+\begin{minipage}[c]{0.6\linewidth}
+Lift the marble out gently with tweezers. Lay a ruler across the crater, without touching the flour, and measure from rim to rim across the widest part. The \textbf{rim} is the raised edge, not the spray of cocoa (the \textbf{ejecta}). Read to the nearest millimetre. Look straight down at the ruler, not from the side.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.36\linewidth}\centering
+\begin{tikzpicture}[scale=0.75]
+  \fill[black!8] (-2,-0.5) rectangle (2,0);
+  \draw[Ink, line width=1pt] (-2,0) -- (-0.9,0) .. controls (-0.75,0.15) .. (-0.6,0.05) .. controls (-0.3,-0.45) and (0.3,-0.45) .. (0.6,0.05) .. controls (0.75,0.15) .. (0.9,0) -- (2,0);
+  \foreach \x in {-1.7,-1.4,-1.2,1.15,1.4,1.75}{\fill[Ink] (\x,0.04) circle (0.04);}
+  \draw[Ink, {Stealth[length=3pt]}-{Stealth[length=3pt]}] (-0.72,0.45) -- (0.72,0.45);
+  \node[font=\scriptsize] at (0,0.75) {diameter};
+  \node[font=\scriptsize, anchor=north] at (1.5,-0.55) {ejecta};
+\end{tikzpicture}
+\end{minipage}
+\end{technique}
+
+\begin{technique}{Anomalies}{PA7}
+An \textbf{anomaly} is a result that does not fit the pattern of the others, such as 38, 41 and \textbf{57}\,mm from the same height. Circle it, suggest why it happened (the marble bounced, or hit a crater from an earlier drop), and leave it out of the average. Never just rub it out: a scientist records everything.
+\end{technique}
+
+\begin{workedex}{Averaging with an anomaly}
+Drops from 50\,cm: 38, 41 and 57\,mm. 57 is an anomaly. \quad Average $= (38 + 41) \div 2 = 39.5$\,mm.
+\end{workedex}
+
+\begin{wedo}{Averaging with an anomaly}
+Drops from 75\,cm: 46, 31 and 48\,mm. Find the anomaly, suggest a cause and calculate the average.
+\workbox{3cm}
+\end{wedo}
+
+% ─── PLAN AND SAFETY / METHOD ────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the drop height of a marble on the diameter of the crater it makes.
+
+\task Write a hypothesis. Add a reason if you can. \skr{QP1}
+\answerbox{3cm}
+
+\needspace{12\baselineskip}
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{Drop height (cm)} \\ \hline
+  & Dependent & \\ \hline
+  & Controlled & \\ \hline
+  & Controlled & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Equipment}
+Deep tray of plain flour (at least 3\,cm deep) with a thin dusting of cocoa on top \textbullet{} one large marble \textbullet{} metre ruler \textbullet{} 30\,cm ruler \textbullet{} tweezers \textbullet{} sieve to smooth the flour \textbullet{} newspaper under the tray
+
+\needspace{10\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{Flour dust gets in eyes} & \scaf{Drop gently; safety glasses; keep faces back from the tray} & \scaf{Rinse the eye with water; tell the teacher} \\ \hline
+  & A marble on the floor is slipped on & & \\ \hline
+  & Someone has a wheat or cocoa allergy & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Smooth the flour flat and sprinkle a thin layer of cocoa over it through the sieve.
+  \item Hold the metre ruler upright beside the tray. Hold the marble so its bottom is 25\,cm above the flour, and let go without pushing.
+  \item Measure the crater's diameter (rim to rim) to the nearest mm. Record it in Table 2.1.
+  \item Drop twice more from 25\,cm, each time on an untouched part of the tray.
+  \item Repeat steps 2 to 4 from 50, 75 and 100\,cm. Smooth the tray and add cocoa whenever it runs out of untouched space.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 2.1: Crater diameter at each drop height \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SW{3.0cm}|C{2.7cm}|C{2.7cm}|C{2.7cm}|C{3.0cm}|}
+  \hline\hd & \thead{Drop height (cm)} & \thead{Drop 1 (mm)} & \thead{Drop 2 (mm)} & \thead{Drop 3 (mm)} & \thead{Average (mm)} \\ \hline
+  & \scaf{Example: 10} & \scaf{29} & \scaf{31} & \scaf{30} & \scaf{30.0} \\ \hline
+  & 25 & & & & \\ \hline
+  & 50 & & & & \\ \hline
+  & 75 & & & & \\ \hline
+  & 100 & & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\task Circle any anomaly in Table 2.1, and show your working for one average. \skr{PA3}
+\workbox{3cm}
+
+\needspace{22\baselineskip}
+\task Draw a line graph of the average diameter against drop height, with a title and labelled axes. Draw a smooth line of best fit. \skr{PA2}
+\graphgrid{10cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Describe the trend. Use numbers from Table 2.1. \skr{PA5}
+\answerbox{4cm}
+
+\needspace{10\baselineskip}
+\task Explain why a higher drop made a bigger crater. Use the idea of speed (and energy, if you can).
+\answerbox{4cm}
+
+\needspace{10\baselineskip}
+\task Describe any anomaly you found and suggest what caused it. If you found none, say what could have caused one. \skr{PA7}
+\answerbox{4cm}
+
+\needspace{12\baselineskip}
+\task Give two sources of error and how each could be reduced. \skr{EV3}
+\begin{ctab}
+\begin{tabular}{|SW{7.2cm}|W{7.8cm}|}
+  \hline\hd & \thead{Source of error} & \thead{How to reduce it} \\ \hline
+  & \scaf{The marble was pushed, not dropped} & \scaf{Hold it on a spoon and tip it off} \\ \hline
+  & & \\ \hline
+  & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task The Moon is covered in craters but Earth has very few. Give two reasons. Think about the air, the weather and plate movement.
+\answerbox{4.5cm}
+
+\needspace{10\baselineskip}
+\task Write a conclusion: the trend, the numbers that back it, and whether your hypothesis was supported. \skr{EV1}
+\answerbox{4.5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask Tnorala (Gosses Bluff) in the Northern Territory is the remains of a crater about 22\,km across, made around 140 million years ago. The Western Arrernte account of Tnorala tells of a baby's wooden carrier that fell from the sky and struck the Earth. Explain how this account and the scientific explanation agree, and plan an experiment with your tray to test whether a heavier meteorite makes a wider crater.
+\answerbox{6cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{I can write a hypothesis that names both variables.}
+\scrow{PC2}{I changed only the drop height.}
+\scrow{PC4}{I measured each crater rim to rim, to the nearest mm.}
+\scrow{PA2}{I drew a smooth line of best fit.}
+\scrow{PA3}{I calculated averages, leaving out anomalies.}
+\scrow{PA7}{I can spot an anomaly and suggest its cause.}
+\scrow{EV3}{I can suggest ways to reduce errors.}
+\end{skillcheck}
+
+\task Look back over both experiments and the whole year. Which science skill have you improved most in Year 7? Give an example.
+\answerbox{5cm}
+
+\clearpage
+\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
+\markboth{Glossary}{}{\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+Every key vocabulary word in this booklet, and the page where you wrote what it means.\par
+\begin{ctab}\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|L{6cm}|C{2cm}|}
+\hline\thead{Word} & \thead{Page} \\ \hline
+\glossrow{Angle of elevation}{voc:angle-of-elevation}
+\glossrow{Anomaly}{voc:anomaly}
+\glossrow{Axial tilt}{voc:axial-tilt}
+\glossrow{Diameter}{voc:diameter}
+\glossrow{Ejecta}{voc:ejecta}
+\glossrow{Impact crater}{voc:impact-crater}
+\glossrow{Intensity}{voc:intensity}
+\glossrow{Line of best fit}{voc:line-of-best-fit}
+\glossrow{Meteorite}{voc:meteorite}
+\glossrow{Solstice}{voc:solstice}
+\end{tabular}
+\end{ctab}
+
+\end{document}

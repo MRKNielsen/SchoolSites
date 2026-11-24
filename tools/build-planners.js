@@ -45,7 +45,18 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const Y7 = path.join(ROOT, 'year7-science');
 const SITE = 'https://mrknielsen.github.io/SchoolSites/year7-science/';
-const QUALITY_CRITERIA = '{{PH:faculty quality criteria link}}';
+/* Faculty-agreed quality criteria for the science skills (Science Faculty
+   OneNote on SharePoint, staff sign-in), kept in tools/science-quality-criteria.json.
+   A practical names the criteria it builds in  prac.qc: ["tables", "errors"];
+   with none it links to the full skills list. An unknown key stops the build. */
+const QC = JSON.parse(fs.readFileSync(path.join(__dirname, 'science-quality-criteria.json'), 'utf8'));
+function qualityCriteria(p) {
+  const keys = p.qc && p.qc.length ? p.qc : ['all'];
+  for (const k of keys) {
+    if (!QC[k] || k === '_about') throw new Error(`unknown quality criterion "${k}" in "${p.name}" (use ${Object.keys(QC).filter(x => x !== '_about').join(', ')})`);
+  }
+  return 'faculty quality criteria: ' + keys.map(k => `[${QC[k].label}](${QC[k].href})`).join(' · ');
+}
 
 /* ---------- inline markup → runs ---------- */
 const TOKEN = /(\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|\\\(.+?\\\)|\{\{PH:[^}]+\}\})/g;
@@ -117,7 +128,7 @@ function rowHtml(u, l) {
         <ul class="pl-list">
           <li><strong>Activity sheet:</strong> ${inlineHtml(p.sheet)}</li>
           <li><strong>RiskAssess:</strong> ${inlineHtml(p.risk)}</li>
-          <li><strong>Science skill:</strong> ${inlineHtml(p.skill)} — ${inlineHtml(QUALITY_CRITERIA)}</li>
+          <li><strong>Science skill:</strong> ${inlineHtml(p.skill)} — ${inlineHtml(qualityCriteria(p))}</li>
         </ul>
       </div>`);
   }
@@ -336,7 +347,7 @@ async function writeDocx(u, outDir) {
       c3.push(P(`**Practical:** ${p.name}`));
       c3.push(B(`**Activity sheet:** ${p.sheet}`));
       c3.push(B(`**RiskAssess:** ${p.risk}`));
-      c3.push(B(`**Science skill:** ${p.skill} — ${QUALITY_CRITERIA}`));
+      c3.push(B(`**Science skill:** ${p.skill} — ${qualityCriteria(p)}`));
     }
     c3.push(...(l.guided || []).map(t => B(t)));
     const c4 = (l.review || []).map(t => P(t));

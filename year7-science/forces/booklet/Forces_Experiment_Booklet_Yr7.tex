@@ -1,0 +1,2598 @@
+% ============================================================
+%  Forces and Motion — Experiment Booklet (one section per experiment)
+%  Year 7 (Year 8 extension)  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: xelatex three times, then python3 fill.py Forces_Experiment_Booklet_Yr7
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+\newcommand{\unitname}{Forces and Motion}\newcommand{\unitcaps}{FORCES AND MOTION}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Forces and Motion — Experiment Booklet},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
+% hyperref 7.01 with implicit=false leaves \Hy@PageAnchorSlide undefined, which
+% throws at \end{document} and stops fill.py (it builds with -halt-on-error).
+\makeatletter\providecommand\Hy@PageAnchorSlide{}\makeatother
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}\unitname{} \textbar{} Experiment Booklet}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \linedbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.4cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  % the title is a bold lead-in on the first line rather than a title bar,
+  % which keeps Lesson 11's reading on the lesson's first page
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \linedbox{height}: an answer box ruled in dotted thirds. Lines are \thirdrow/3 apart and run dotted, dotted,
+% solid (the baseline), repeating, and end on one dotted line. The number of
+% rows is worked out from the box's final height, so the ruling still fills the
+% box after fill.py has grown it; the rows are centred in the box.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\newcommand{\linedbox}[1]{%
+  \abnext
+  % interior height = box height less the 1pt frame top and bottom
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  % whole rows that fit with at least 3 mm spare top and bottom (at least one)
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1},
+    underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}]
+  \end{tcolorbox}\ablog%
+}
+% Every written-response box is ruled the same way (Part A comprehension, We do,
+% Part C tasks and Part D extensions, including side-by-side pairs). Space for
+% mathematical working uses \workbox{height} instead and stays plain, as do
+% \drawbox and the write-in tables.
+\let\workbox\answerbox   % plain box: mathematical working (calculations) stays unruled
+\let\answerbox\linedbox
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT BOOKLET LAYER (Nov 2026)
+%  From 2027 every Year 7 unit collects its experiments into one A4 experiment
+%  booklet that puts the experimental techniques and skills first. Every skill
+%  comes from the faculty Science Skills continuum (Years 7--8 column) and is
+%  named the same way everywhere: a code (QP1, PC4, PA2 …) on a chip coloured by
+%  its sub-strand. Copy this block into the next unit's experiment booklet.
+%
+%  Each experiment runs in the same order:
+%    \experimentdiv{title}{summary}{lesson}\label{sec:N}
+%    key vocabulary · learning intentions · \begin{skillsfocus}
+%    \exppart*{Technique spotlight}{Blue}   (technique, worked example, We do)
+%    \exppart{Plan and safety}{Teal}        (aim, prediction, variables, risks)
+%    \exppart{Method}{Teal}
+%    \exppart{Results}{Amber}
+%    \exppart{Analysis and evaluation}{Coral}
+%    \exppart{Skill check}{NavyBlue}
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning}
+\usepackage{pifont}
+
+\newenvironment{keepext}{\par\begin{tcolorbox}[blankest, breakable=false]}{\end{tcolorbox}\par}
+% graph-paper box: \graphgrid{height}
+\newcommand{\graphgrid}[1]{%
+  \begin{tcolorbox}[enhanced, breakable=false, colback=white, colframe=MidGrey, boxrule=0.5pt, height=#1,
+    underlay={\begin{tcbclipinterior}\draw[step=5mm, Line, very thin] (interior.south west) grid (interior.north east);
+      \draw[step=1cm, MidGrey!70, thin] (interior.south west) grid (interior.north east);\end{tcbclipinterior}}]
+  \end{tcolorbox}}
+
+% ── Skills (faculty Science Skills continuum, Years 7–8) ─────────────────────
+% \defskill{code}{name}{colour}{VC code}{what it means}
+\makeatletter
+\newcommand{\defskill}[5]{%
+  \expandafter\gdef\csname sk@n@#1\endcsname{#2}%
+  \expandafter\gdef\csname sk@c@#1\endcsname{#3}%
+  \expandafter\gdef\csname sk@v@#1\endcsname{#4}%
+  \expandafter\gdef\csname sk@d@#1\endcsname{#5}}
+\newcommand{\skname}[1]{\csname sk@n@#1\endcsname}
+\newcommand{\skcode}[1]{\csname sk@v@#1\endcsname}
+\newcommand{\skdesc}[1]{\csname sk@d@#1\endcsname}
+% \sk{PC4}: the chip — code and name on the sub-strand colour
+\newcommand{\sk}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=4pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1\,\textperiodcentered\,\skname{#1}};}
+% \skr{PC4}: the chip flush right at the end of a paragraph; drops to its own line if it does not fit
+\newcommand{\skr}[1]{\unskip\nobreak\hfill\penalty50\hskip1em\null\nobreak\hfill\sk{#1}}
+% \skc{PC4}: the code alone, for tight table cells
+\newcommand{\skc}[1]{%
+  \edef\sk@col{\csname sk@c@#1\endcsname}%
+  \tikz[baseline=(c.base)]\node[rounded corners=2.5pt, fill=\sk@col!16, draw=\sk@col, line width=0.6pt,
+    text=\sk@col!55!black, inner xsep=3pt, inner ysep=2pt, font=\headingfont\bfseries\scriptsize]
+    (c) {#1};}
+\makeatother
+
+% Questioning and predicting — VC2S8I01
+\defskill{QP1}{Testable hypothesis}{Teal}{VC2S8I01}{A prediction an experiment can test, naming both variables and the direction of change: \emph{If the [IV] is \dots, the [DV] will \dots}; a reason is optional}
+\defskill{QP2}{Formulate an aim}{Teal}{VC2S8I01}{One sentence naming both variables: \emph{To investigate the effect of changing [IV] on [DV]}}
+% Planning and conducting — VC2S8I02, VC2S8I03
+\defskill{PC1}{Plan and follow a method}{Blue}{VC2S8I02}{Follow, and later write, numbered steps in order: named equipment, quantities with units, no personal pronouns and a labelled diagram, so that someone else could repeat it (repeatable)}
+\defskill{PC2}{Identify variables}{Blue}{VC2S8I02}{Name the independent variable (what you change), the dependent variable (what you measure) and at least two controlled variables (what you keep the same)}
+\defskill{PC3}{Risks and safety}{Blue}{VC2S8I02}{Name each risk, how to prevent it and how to respond if it happens; follow the lab rules}
+\defskill{PC4}{Precision}{Blue}{VC2S8I02}{Choose equipment with a fine enough scale, read it to its smallest division, and repeat measurements to see how closely they agree}
+\defskill{PC5}{Ethics}{Blue}{VC2S8I02}{Treat people, living things, the environment and other people's data with respect}
+\defskill{PC6}{Collect data and measure}{Blue}{VC2S8I02}{Take each measurement at the right time, with its unit, and record it straight away}
+\defskill{PC7}{Use and select equipment}{Blue}{VC2S8I03}{Name each piece of equipment, use it correctly and choose the right piece for the job}
+\defskill{PC8}{Use digital tools}{Blue}{VC2S8I03}{Use stopwatches, data loggers, sensors and spreadsheets to collect and record data}
+% Processing, modelling and analysing — VC2S8I04, VC2S8I05
+\defskill{PA1}{Tables}{GoldDark}{VC2S8I04}{Title, Headings, Units in the headings only, Decimals kept the same (THUD), with the independent variable in the first column}
+\defskill{PA2}{Graphing}{GoldDark}{VC2S8I04}{The right type of graph, a title, axes labelled with units, the independent variable on the x-axis, an even scale and accurate points, then join the points or draw a line of best fit}
+\defskill{PA3}{Mathematical relationships}{GoldDark}{VC2S8I04}{Process data with calculations: differences, averages, rates and formulas}
+\defskill{PA4}{Creating models}{GoldDark}{VC2S8I04}{Build a physical, drawn or mathematical model that represents something real}
+\defskill{PA5}{Patterns and trends}{GoldDark}{VC2S8I05}{Describe how the dependent variable changes as the independent variable changes, quoting data}
+\defskill{PA6}{Correlation and causality}{GoldDark}{VC2S8I05}{Say whether two variables change together, and whether there is evidence that one causes the other}
+\defskill{PA7}{Identify anomalies}{GoldDark}{VC2S8I05}{Spot a result that does not fit the pattern and suggest why it happened}
+\defskill{PA8}{Interpreting models}{GoldDark}{VC2S8I05}{Use a model to explain an observation, and say what the model shows well and what it leaves out}
+% Evaluating — VC2S8I06, VC2S8I07
+\defskill{EV1}{Results against hypothesis}{OrangeDark}{VC2S8I06}{State the general trend and whether it supports the hypothesis (supported, never proven), with data to back the trend}
+\defskill{EV2}{Compare with known concepts}{OrangeDark}{VC2S8I06}{Compare your results with accepted values and scientific ideas}
+\defskill{EV3}{Error sources}{OrangeDark}{VC2S8I06}{Name what could have made results less accurate or less precise, and suggest how to improve the method}
+\defskill{EV4}{Quality of secondary sources}{OrangeDark}{VC2S8I07}{Judge whether information from a website, book or video can be trusted}
+\defskill{EV5}{Questions for further investigation}{OrangeDark}{VC2S8I07}{Pose a new question that follows from your results}
+% Communicating — VC2S8I08
+\defskill{CO1}{Scientific writing}{PurpleDark}{VC2S8I08}{Write in the third person, legibly, with correct spelling and grammar, short and to the point, using scientific terms}
+\defskill{CO2}{Presentation formats}{PurpleDark}{VC2S8I08}{Choose the right format to show findings: a table, graph, scientific diagram, poster, report or talk}
+
+% Skills focus panel at the top of each experiment:
+%   \begin{skillsfocus} \focus{PC4}{what you do with it here} … \end{skillsfocus}
+\newtcolorbox{skillsfocus}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=NavyBlue!55,
+  fonttitle=\headingfont\bfseries, coltitle=white, colbacktitle=NavyBlue,
+  title={Skills focus --- the science skills this experiment builds},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\focus}[2]{\par\noindent\makebox[1.25cm][l]{\skc{#1}}\parbox[t]{\dimexpr\linewidth-1.25cm\relax}{\small\textbf{\skname{#1}}\,---\,#2}\par\vspace{2pt}}
+
+% Learning intentions panel: \begin{lipanel} \inquiryli{…} \understandli{…} \sclist{…} \end{lipanel}
+\newtcolorbox{lipanel}{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, title={Learning intentions},
+  left=4mm, right=3.5mm, top=2mm, bottom=2mm}
+\newcommand{\inquiryli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Inquiry:}\ #1\par\vspace{2pt}}
+\newcommand{\understandli}[1]{\par\noindent{\headingfont\bfseries\color{NavyBlue}Science Understanding:}\ #1\par\vspace{2pt}}
+\newcommand{\sctitle}{\par\noindent{\headingfont\bfseries\color{NavyBlue}Success criteria}\par}
+
+% Technique spotlight: \begin{technique}{title}{PC4} … \end{technique}
+\newtcolorbox{technique}[2]{
+  enhanced, breakable, arc=2.5mm, boxrule=0.6pt,
+  colback=white, colframe=Blue!55,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue, colbacktitle=LightBlue,
+  title={Technique: #1\hfill\sk{#2}},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm}
+
+% Experiment divider: \experimentdiv{title}{summary}{lesson number}
+% Steps the section counter, so tasks, worked examples and figures are N.M.
+\newcommand{\experimentdiv}[3]{%
+  \clearpage
+  \refstepcounter{section}%
+  \pdfbookmark[1]{Experiment \thesection{} — #1}{exp.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.6cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm]
+    \begin{center}
+      {\headingfont\bfseries\color{white!60!NavyBlue}\scriptsize EXPERIMENT}\\[-2pt]
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{46}{46}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}\\[3pt]
+    {\headingfont\color{Sky}\footnotesize Lesson #3}
+  \end{tcolorbox}%
+}
+
+% Part bar inside an experiment. \exppart{title}{colour} starts a new page
+% (new parts always start on a new page); \exppart*{…}{…} follows straight on.
+\NewDocumentCommand{\exppart}{s m m}{%
+  \par\IfBooleanTF{#1}{\needspace{10\baselineskip}\vspace{8pt}}{\clearpage}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Skill check at the end of each experiment: students tick one column per row.
+%   \begin{skillcheck} \scrow{PC4}{I can …} … \end{skillcheck}
+\newcommand{\tickbox}{\tikz[baseline=-0.6ex]\draw[DarkGrey, line width=0.7pt, rounded corners=1pt] (0,-0.17) rectangle (0.34,0.17);}
+\newenvironment{skillcheck}{%
+  \par\noindent Read each statement. Tick the column that best describes you \emph{today}.\par
+  \begin{ctab}\renewcommand{\arraystretch}{1.25}%
+  \begin{tabular}{|W{3.7cm}|W{6.7cm}|Z{1.45cm}|Z{1.45cm}|Z{1.45cm}|}
+  \hline\thead{Skill} & \thead{Success criterion} & \thead{Not yet} & \thead{Nearly} & \thead{Got it} \\ \hline}
+  {\end{tabular}\end{ctab}}
+\newcommand{\scrow}[2]{\rule{0pt}{1.1cm}\skc{#1}\enspace{\small\skname{#1}} & #2 & \tickbox & \tickbox & \tickbox \\ \hline}
+
+% Write-in label under a drawing: \nameline{label}
+\newcommand{\nameline}[1]{\par\noindent{\small #1}\ \leaders\hbox{\rule[-2pt]{1pt}{0.4pt}}\hfill\null\par}
+
+% ── Equipment drawn as scientific diagrams (2D, side-on, outline only) ──────
+% Each \eq... macro draws at the origin inside a tikzpicture. \eqpic[scale]{\eqBeaker}
+% puts one on its own. The same shapes are used everywhere, so the booklet
+% models exactly the drawings students are asked to make.
+\tikzset{
+  eq/.style={line width=0.9pt, draw=Ink, line cap=round, line join=round},
+  eqlab/.style={draw=Ink, line width=0.4pt},
+  eqtext/.style={font=\footnotesize, text=Ink, inner sep=1.5pt},
+}
+\newcommand{\eqpic}[2][1]{\begin{tikzpicture}[scale=#1, baseline=(current bounding box.center)]#2\end{tikzpicture}}
+\newcommand{\eqBeaker}{\draw[eq] (-0.22,2.62) -- (0,2.45) -- (0,0) -- (1.8,0) -- (1.8,2.5);}
+\newcommand{\eqFlask}{\draw[eq] (0.62,2.9) -- (0.65,2.8) -- (0.65,1.9) -- (0,0) -- (1.9,0) -- (1.25,1.9) -- (1.25,2.8) -- (1.28,2.9);}
+\newcommand{\eqTestTube}{\draw[eq] (-0.06,3.0) -- (0,2.9) -- (0,0.3) arc[start angle=180,end angle=360,radius=0.3] -- (0.6,2.9) -- (0.66,3.0);}
+\newcommand{\eqCylinder}{%
+  \draw[eq] (-0.15,3.6) -- (0,3.5) -- (0,0.15) (0.6,0.15) -- (0.6,3.5);
+  \draw[eq] (-0.35,0) rectangle (0.95,0.15);
+  \foreach \y in {0.6,1.1,...,3.2} \draw[Ink, line width=0.5pt] (0.6,\y) -- (0.4,\y);}
+\newcommand{\eqFunnel}{\draw[eq] (0,2.2) -- (0.75,1.0) -- (0.75,0) (1.85,2.2) -- (1.1,1.0) -- (1.1,0);}
+\newcommand{\eqBasin}{\draw[eq] (0,0.9) .. controls (0.15,0.02) and (2.25,0.02) .. (2.4,0.9);}
+\newcommand{\eqTripod}{%
+  \draw[eq] (-0.15,2.0) rectangle (2.55,2.12);
+  \draw[eq] (0.25,2.0) -- (0,0) (2.15,2.0) -- (2.4,0) (1.2,2.0) -- (1.2,0.15);}
+\newcommand{\eqBunsen}{%
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \fill[Ink] (0.72,0.42) rectangle (0.88,0.62);
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);}
+\newcommand{\eqThermometer}{%
+  \draw[eq] (0.25,0.25) circle (0.2);
+  \draw[eq] (0.15,0.43) -- (0.15,3.9) arc[start angle=180,end angle=0,radius=0.1] -- (0.35,0.43);
+  \draw[Ink, line width=1.3pt] (0.25,0.45) -- (0.25,1.9);}
+\newcommand{\eqStand}{%
+  \draw[eq] (0,0) rectangle (2.3,0.2);
+  \draw[eq] (0.35,0.2) -- (0.35,4.0) (0.5,0.2) -- (0.5,4.0);
+  \draw[eq] (0.25,2.75) rectangle (0.75,3.2);
+  \draw[eq] (0.75,2.92) -- (1.6,2.92) (0.75,3.03) -- (1.6,3.03);
+  \draw[eq] (1.6,2.7) -- (1.6,3.25) (1.6,2.7) -- (1.95,2.7) (1.6,3.25) -- (1.95,3.25);}
+\newcommand{\eqWatchGlass}{\draw[eq] (0,0.35) .. controls (0.5,-0.05) and (1.7,-0.05) .. (2.2,0.35);}
+\newcommand{\eqTongs}{%
+  \draw[eq] (0,0.1) -- (2.0,0.45) .. controls (2.3,0.5) and (2.45,0.35) .. (2.6,0.15)
+            (0,0.0) -- (2.0,-0.35) .. controls (2.3,-0.4) and (2.45,-0.25) .. (2.6,-0.05);}
+
+% A label line from a point on a drawing to text at the side: \eqlab{(x,y)}{(tx,ty)}{text}
+\newcommand{\eqlab}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=west] {#3};}
+\newcommand{\eqlabl}[3]{\draw[eqlab] #1 -- #2 node[eqtext, anchor=east] {#3};}
+
+% ── Reading scales ──────────────────────────────────────────────────────────
+% \readcyl{lowest}{highest}{labelled step}{small divisions per label}{reading}
+% A close-up of a measuring cylinder's scale, the water drawn to the reading:
+% the bottom of the meniscus sits exactly on the reading.
+\pgfkeys{/pgf/number format/.cd, fixed, precision=1}
+\newcommand{\readcyl}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rcH{5.0}
+  \pgfmathsetmacro\rcY{(#5-#1)*\rcH/(#2-#1)}
+  \pgfmathtruncatemacro\rcN{round((#2-#1)/#3*#4)}
+  \fill[black!10] (0,-0.3) -- (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16) -- (1.6,-0.3) -- cycle;
+  \draw[Ink, line width=0.9pt] (0,\rcY+0.16) .. controls (0.45,\rcY-0.05) and (1.15,\rcY-0.05) .. (1.6,\rcY+0.16);
+  \foreach \k in {0,...,\rcN}{
+    \pgfmathsetmacro\yy{\k*\rcH/\rcN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0,\yy) -- (0.6,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt, fill=white, fill opacity=0.8, text opacity=1] at (0.66,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0,\yy) -- (0.32,\yy);
+    \fi}
+  \draw[eq] (0,-0.3) -- (0,\rcH+0.35) (1.6,-0.3) -- (1.6,\rcH+0.35);
+  \node[font=\scriptsize, anchor=north] at (0.8,-0.35) {scale in mL};
+\end{tikzpicture}}
+% \readtherm{lowest}{highest}{labelled step}{small divisions per label}{reading}
+\newcommand{\readtherm}[5]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \pgfmathsetmacro\rtH{5.0}
+  \pgfmathsetmacro\rtY{(#5-#1)*\rtH/(#2-#1)}
+  \pgfmathtruncatemacro\rtN{round((#2-#1)/#3*#4)}
+  \draw[eq, fill=white] (0,-0.45) circle (0.3);
+  \fill[black!75] (0,-0.45) circle (0.22);
+  \fill[black!75] (-0.07,-0.3) rectangle (0.07,\rtY);
+  \draw[eq] (-0.16,-0.2) -- (-0.16,\rtH+0.3) arc[start angle=180,end angle=0,radius=0.16] -- (0.16,-0.2);
+  \foreach \k in {0,...,\rtN}{
+    \pgfmathsetmacro\yy{\k*\rtH/\rtN}
+    \pgfmathtruncatemacro\ismaj{mod(\k,#4)==0 ? 1 : 0}
+    \ifnum\ismaj=1
+      \draw[Ink, line width=0.75pt] (0.25,\yy) -- (0.75,\yy);
+      \pgfmathsetmacro\lv{#1+\k/#4*#3}
+      \node[anchor=west, font=\scriptsize\bfseries, inner sep=1pt] at (0.8,\yy) {\pgfmathprintnumber{\lv}};
+    \else
+      \draw[Ink, line width=0.4pt] (0.25,\yy) -- (0.52,\yy);
+    \fi}
+  \node[font=\scriptsize, anchor=north] at (0.3,-0.8) {scale in \textdegree C};
+\end{tikzpicture}}
+% \balancefig{reading}: an electronic balance showing a reading
+\newcommand{\balancefig}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \draw[eq, rounded corners=3pt] (0,0) rectangle (4.2,1.35);
+  \draw[eq] (1.9,1.35) -- (1.9,1.55) (2.3,1.35) -- (2.3,1.55);
+  \draw[eq, rounded corners=1pt] (0.5,1.55) rectangle (3.7,1.72);
+  \draw[eq, fill=LightGrey] (0.35,0.35) rectangle (2.75,1.02);
+  \node[font=\headingfont\bfseries\large, anchor=east] at (2.65,0.68) {#1};
+  \draw[eq] (3.3,0.68) circle (0.2);
+  \node[font=\tiny\bfseries] at (3.3,0.3) {TARE};
+\end{tikzpicture}}
+% Bunsen burner with a flame: \bunsenflame{safety|heating}
+\newcommand{\bunsenflame}[1]{%
+\begin{tikzpicture}[baseline=(current bounding box.south)]
+  \def\fl{#1}\def\safe{safety}%
+  \ifx\fl\safe
+    \fill[black!14] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.05,3.0) and (0.45,4.3) .. (0.85,5.0) .. controls (1.05,4.4) and (1.55,3.1) .. (0.8,2.3);
+  \else
+    \fill[white] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \draw[Ink, line width=0.6pt] (0.8,2.3) .. controls (0.45,2.8) and (0.6,3.5) .. (0.8,3.9) .. controls (1.0,3.5) and (1.15,2.8) .. (0.8,2.3);
+    \fill[black!30] (0.8,2.3) .. controls (0.65,2.55) and (0.7,2.85) .. (0.8,3.0) .. controls (0.9,2.85) and (0.95,2.55) .. (0.8,2.3);
+  \fi
+  \draw[eq] (0,0) rectangle (1.6,0.22);
+  \draw[eq] (0.58,0.85) -- (0.58,2.3) (1.02,0.85) -- (1.02,2.3);
+  \draw[eq] (0.5,0.22) rectangle (1.1,0.85);
+  \ifx\fl\safe\draw[Ink, line width=0.5pt, densely dotted] (0.72,0.42) rectangle (0.88,0.62);\else\fill[Ink] (0.72,0.42) rectangle (0.88,0.62);\fi
+  \draw[eq] (-0.65,0.06) rectangle (0,0.16);
+\end{tikzpicture}}
+% ══════════════════════════════════════════════════════════════════════════════
+%  BIODIVERSITY AND ECOSYSTEMS — COVER
+%  The unit's cover art (covers/forces.jpg), full bleed. The A5 lesson
+%  booklet sets \wrcoverfile one folder deeper.
+% ══════════════════════════════════════════════════════════════════════════════
+\providecommand{\wrcoverfile}{../../covers/forces.jpg}
+\newcommand{\wrcover}{%
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at (current page.north) {\includegraphics[width=\paperwidth]{\wrcoverfile}};
+\end{tikzpicture}}
+% ══════════════════════════════════════════════════════════════════════════════
+%  2027 WORKBOOK STYLE (Year 7 workbook redesign, Nov 2026) — A4 version
+%  The look of the A5 trial (space/booklet/a5-test) on an A4 page:
+%    · colour cover from the unit's cover art, black-and-white inside
+%    · headings in Outfit (the site's heading face), body in Lato
+%    · each experiment opens with a band: number, title, ink symbol, heavy rule
+%    · boxes told apart by frame and icon, never by colour:
+%        I do ●  solid · We do ●● dashed · You do ●●● heavy
+%        Key idea / technique ◆ thin · Above level ▲ double · Country ◎ dotted
+%    · skill tags are ink tabs carrying the code (QP1, PC4 …) plus the name
+%  Everything above this block still names the old colours; they are mapped to
+%  ink here, so the body never needs to know which look it is printed in.
+% ══════════════════════════════════════════════════════════════════════════════
+
+\usetikzlibrary{patterns}
+% ── Fonts ───────────────────────────────────────────────────────────────────
+% Bold is Outfit SemiBold, the weight the site uses; Outfit has no italic,
+% so a slanted one stands in.
+\renewfontfamily\headingfont{Outfit}[
+  Path=./fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
+
+% ── Black and white inside ──────────────────────────────────────────────────
+\definecolor{Ink}{HTML}{111111}
+\colorlet{NavyBlue}{Ink}\colorlet{MidBlue}{Ink}\colorlet{TealGreen}{Ink}
+\colorlet{GoldDark}{Ink}\colorlet{PurpleDark}{Ink}\colorlet{OrangeDark}{Ink}
+\colorlet{TableHead}{Ink}
+\colorlet{Blue}{Ink}\colorlet{Teal}{Ink}\colorlet{Amber}{Ink}\colorlet{Coral}{Ink}
+\colorlet{Violet}{Ink}\colorlet{Sky}{Ink}
+\colorlet{LightBlue}{white}\colorlet{LightGreen}{white}\colorlet{GoldLight}{white}
+\colorlet{PurpleLight}{white}\colorlet{OrangeLight}{white}\colorlet{RowAlt}{white}
+\colorlet{LightGrey}{white}\colorlet{Paper}{white}
+\colorlet{DarkGrey}{black!72}\colorlet{MidGrey}{black!45}\colorlet{Line}{black!45}
+\arrayrulecolor{black!60}
+
+% ── Page style ──────────────────────────────────────────────────────────────
+\fancypagestyle{fancy}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{Ink}\leaders\hrule height \headrulewidth\hfill}}%
+  \fancyhead[L]{\headingfont\footnotesize \unitname\ \textbullet\ Experiment Booklet}%
+  \fancyhead[R]{\headingfont\footnotesize\leftmark}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{opener}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\headingfont\footnotesize\thepage}}
+\pagestyle{fancy}
+\markboth{}{}
+
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{}{0em}{}
+
+% ── Box system: told apart by frame and icon, never by colour ───────────────
+\newcommand{\icodots}[1]{\tikz[baseline=-0.6ex]{\foreach \k in {1,...,#1}{\fill[white] (\k*1.9mm,0) circle (0.7mm);}}}
+\newcommand{\icokey}{\tikz[baseline=-0.6ex]{\fill[white] (0,0.9mm)--(0.9mm,0)--(0,-0.9mm)--(-0.9mm,0)--cycle;}}
+\newcommand{\icoup}{\tikz[baseline=-0.6ex]{\fill[white] (-1mm,-0.8mm)--(1mm,-0.8mm)--(0,1mm)--cycle;}}
+\newcommand{\icocountry}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.5pt] (0,0) circle (1mm); \fill[white] (0,0) circle (0.45mm);}}
+\newcommand{\icoskill}{\tikz[baseline=-0.6ex]{\fill[white] (-0.85mm,-0.85mm) rectangle (0.85mm,0.85mm);}}
+\newcommand{\tagicon}[1]{\tikz[baseline=-0.6ex]\node[fill=Ink, rounded corners=0.8mm, inner xsep=1.2mm, inner ysep=1mm]{#1};}
+\tcbset{wbbase/.style={enhanced, colback=white, arc=1.2mm,
+    left=3.5mm, right=3.5mm, top=4.2mm, bottom=2.6mm, before skip=11pt, after skip=8pt,
+    attach boxed title to top left={xshift=3mm, yshift=-2.4mm},
+    boxed title style={colback=Ink, colframe=Ink, arc=0.8mm, boxrule=0pt,
+                       left=1.6mm, right=1.8mm, top=0.6mm, bottom=0.6mm},
+    fonttitle=\headingfont\bfseries\footnotesize, coltitle=white}}
+
+% I do: the worked example (solid frame, one dot)
+\renewtcolorbox{workedexbox}[1]{wbbase, breakable, colframe=Ink, boxrule=1pt,
+  title={\icodots{1}\ I do \textbullet\ #1}}
+\renewenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+% We do: straight after its worked example (dashed frame, two dots)
+\renewtcolorbox{wedobox}[1]{wbbase, breakable=false, frame hidden,
+  borderline={1.1pt}{0pt}{Ink, dash pattern=on 4pt off 2.6pt},
+  title={\icodots{2}\ #1}}
+\renewenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+% You do: a set of practice tasks on your own (heavy frame, three dots)
+\newtcolorbox{youdobox}[1][Check your understanding]{wbbase, breakable=false,
+  colframe=Ink, boxrule=2.4pt, top=5mm,
+  title={\icodots{3}\ You do \textbullet\ #1}}
+% Key idea, technique, safety, word banks (thin frame, diamond)
+\renewtcolorbox{infobox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ #1}}
+\renewtcolorbox{scaffold}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ #1}}
+\renewtcolorbox{technique}[2]{wbbase, breakable, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ Technique \textbullet\ #1\enspace\textbar\enspace #2 \skname{#2}}}
+% Above level (double frame, triangle)
+\renewtcolorbox{yr8box}{wbbase, breakable, frame hidden,
+  borderline={0.6pt}{0pt}{Ink}, borderline={0.6pt}{1.6pt}{Ink},
+  title={\icoup\ Going further \textbullet\ Above level}}
+% Country (dotted frame, ring)
+\newtcolorbox{countrybox}[1]{wbbase, breakable, frame hidden,
+  borderline={1.4pt}{0pt}{Ink, line cap=round, dash pattern=on 0pt off 2.4pt},
+  title={\icocountry\ #1}}
+% Learning intentions and skills focus (thin frame; square for skills)
+\renewtcolorbox{lipanel}{wbbase, breakable=false, colframe=Ink, boxrule=0.5pt,
+  title={\icokey\ Learning intentions}}
+\renewtcolorbox{skillsfocus}{wbbase, breakable=false, colframe=Ink, boxrule=1pt,
+  title={\icoskill\ Skills focus \textbullet\ the science skills this experiment builds},
+  before upper={\begin{multicols}{2}\raggedcolumns}, after upper={\end{multicols}}}
+
+% ── Skill tags: an ink tab with the code, then the name ─────────────────────
+\makeatletter
+\renewcommand{\skc}[1]{%
+  \tikz[baseline=(c.base)]\node[rounded corners=0.8mm, fill=Ink, text=white, inner xsep=1.5mm, inner ysep=0.7mm,
+    font=\headingfont\bfseries\scriptsize] (c) {#1};}
+\renewcommand{\sk}[1]{\mbox{\skc{#1}\,{\headingfont\bfseries\footnotesize\skname{#1}}}}
+\makeatother
+\renewcommand{\focus}[2]{\par\noindent\makebox[1.1cm][l]{\skc{#1}}\parbox[t]{\dimexpr\linewidth-1.1cm\relax}{\footnotesize\RaggedRight\textbf{\skname{#1}}\,---\,#2}\par\vspace{3pt}}
+
+% ── Experiment opener band ──────────────────────────────────────────────────
+% \experimentdiv{title}{summary}{lesson}: number, title and the experiment's ink
+% symbol (\expsymbol{N}), then a heavy rule. Steps the section counter, so
+% tasks, worked examples and figures are N.M.
+\newcommand{\expword}{Experiment}\newcommand{\expcaps}{EXPERIMENT}\newcommand{\symid}{\thesection}
+\renewcommand{\experimentdiv}[3]{%
+  \clearpage\thispagestyle{opener}%
+  \refstepcounter{section}\markboth{\expword\ \thesection\ \textbullet\ #1}{}%
+  \pdfbookmark[1]{\expword\ \thesection{} — #1}{exp.\thesection}%
+  \noindent\begin{minipage}[b]{\dimexpr\linewidth-46mm\relax}
+    {\headingfont\bfseries\footnotesize\addfontfeatures{LetterSpace=14}\unitcaps\ \textbullet\ \expcaps}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{40}{40}\selectfont\thesection}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{19}{22}\selectfont\RaggedRight #1\par}\vspace{1mm}
+    {\small\itshape #2}\par\vspace{1mm}
+    {\headingfont\footnotesize Lesson #3}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{44mm}\centering\resizebox{!}{27mm}{\expsymbol{\symid}}\end{minipage}\par
+  \vspace{2mm}\noindent\rule{\linewidth}{1.6pt}\par\vspace{1mm}}
+\renewcommand{\lessoncodes}[1]{{\small\itshape VC 2.0: #1}\par\vspace{2pt}}
+
+% Part heading inside an experiment: every part starts a new page; the
+% starred form follows straight on.
+\RenewDocumentCommand{\exppart}{s m m}{%
+  \par\IfBooleanTF{#1}{\needspace{10\baselineskip}\vspace{8pt}}{\clearpage}%
+  {\headingfont\bfseries\LARGE #2}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}}
+
+% Key vocabulary: a heading like the trial's, then the write-in table
+\renewcommand{\vocabhead}{%
+  \par\vspace{4pt}{\headingfont\bfseries\Large Key vocabulary}\par\vspace{1pt}%
+  \noindent{\small Copy the meaning of each word from the slide. The first one has been done for you.}\par}
+
+% Table headings: bold Outfit on white, the grid in ink
+\renewcommand{\thead}[1]{\headingfont\bfseries #1}
+\renewcommand{\tickbox}{\tikz[baseline=-0.6ex]\draw[Ink, line width=0.7pt, rounded corners=1pt] (0,-0.17) rectangle (0.34,0.17);}
+
+% Glossary rows: \glossrow{word}{label}
+\newcommand{\glossrow}[2]{\rule{0pt}{5mm}\textbf{#1} & \pageref{#2} \\ \hline}
+
+% ── Ink symbols for the experiment openers ───────────────────────────────────
+% One diagrammatic idea per experiment, drawn in ink from the same 2D
+% equipment shapes the booklet teaches.
+\tikzset{sym/.style={line width=1.5pt, draw=Ink, line cap=round, line join=round}}
+% The openers use the unit's own lesson symbols (art/lN-ink.pdf, from
+% tools/forces_symbols.py): Experiments 1-5 = Lessons 3, 6, 8, 10, 13.
+\newcommand{\expsymbol}[1]{\edef\exparg{\ifcase#1\or3\or6\or8\or10\or13\fi}\includegraphics[height=27mm]{art/l\exparg-ink.pdf}}
+% ══════════════════════════════════════════════════════════════════════════════
+%  FORCES — keyed answer slots and the experiment diagrams
+%  Every answer slot keeps the key it has in the A4 Forces Lesson Booklet
+%  (\abox{6.t2}{h} = Task 6.2's box), so the red teacher copy can later be
+%  built from the same teacher-answers/L03 ... L13.tex. Here the keys only
+%  name the slot: \abox is a ruled writing box, \wbox a plain working box.
+%  The diagrams are copied from the A4 master's preamble (lines 1013-1302).
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+\tikzset{
+  force arrow/.style={-{Stealth[length=7pt,width=5pt]}, line width=2pt},
+  dim arrow/.style={<->, >=Stealth, thin, color=DarkGrey},
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+  ground hatch/.style={pattern=north east lines, pattern color=DarkGrey!50},
+}
+\newcommand{\abox}[2]{\answerbox{#2}}
+\newcommand{\wbox}[2]{\workbox{#2}}
+\newcommand{\cell}[1]{}
+\newcommand{\rcqk}[3]{\rcq{#2}{#3}}
+\newcommand{\drawk}[3]{\drawbox{#2}{#3}}
+\newcommand{\diagBounceSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, y=1cm]
+  % floor and wall
+  \fill[ground hatch] (-0.6,-0.3) rectangle (8.8,0);
+  \draw[thick, DarkGrey] (-0.6,0) -- (8.8,0);
+  \fill[ground hatch] (-0.6,0) rectangle (-0.3,4.5);
+  \draw[thick, DarkGrey] (-0.3,0) -- (-0.3,4.5);
+  % metre rulers taped to the wall: 1 unit = 40 cm
+  \fill[GoldLight] (-0.3,0) rectangle (0.25,4.2);
+  \draw[GoldDark] (-0.3,0) rectangle (0.25,4.2);
+  \foreach \y in {0,0.25,...,4.0} \draw[GoldDark] (0.25,\y) -- (0.12,\y);
+  \foreach \y/\l in {0/0,1/40,2/80,3/120,4/160} {
+    \draw[GoldDark, thick] (0.25,\y) -- (0.0,\y);
+    \node[font=\scriptsize, text=GoldDark, anchor=east] at (-0.32,\y) {\l};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, rotate=90] at (-1.45,2.1) {height (cm)};
+  % ball before release (bottom of ball at 120 cm)
+  \shade[ball color=Amber!80] (1.5,3.25) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,3.0) -- (1.5,3.0);
+  % path of the ball
+  \draw[dashed, DarkGrey!70, -{Stealth}] (1.5,2.95) -- (2.4,0.55);
+  \shade[ball color=Amber!80] (2.55,0.25) circle (0.25);
+  \draw[dashed, DarkGrey!70, -{Stealth}] (2.7,0.55) -- (3.45,1.6);
+  \shade[ball color=Amber!80] (3.6,1.9) circle (0.25);
+  \draw[dotted, DarkGrey] (0.25,1.65) -- (3.6,1.65);
+  % heights
+  \draw[dim arrow] (7.0,0) -- (7.0,3.0) node[midway, right, font=\small, text=NavyBlue] {drop height $h_1$};
+  \draw[dim arrow] (4.4,0) -- (4.4,1.65) node[midway, right, font=\small, text=TealGreen] {bounce height $h_2$};
+  \draw[DarkGrey!60] (1.75,3.0) -- (7.2,3.0);
+  \draw[DarkGrey!60] (3.85,1.65) -- (4.6,1.65);
+  % reading tip
+  \node[font=\scriptsize\itshape, text=DarkGrey, align=left, anchor=west] at (1.9,4.05)
+       {Read the \textbf{bottom} of the ball, at eye level\\(or film it in slow motion and pause at the top).};
+\end{tikzpicture}
+\end{center}}
+
+% ── Parts of a lever: fulcrum, effort, load and the two arms ─────────────────
+\newcommand{\diagExpFourSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.2cm, y=1cm]
+  % bench
+  \fill[ground hatch] (-0.3,0.15) rectangle (12.3,0.5);
+  \draw[thick, DarkGrey] (-0.3,0.5) -- (12.3,0.5);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (-0.25,0.3) {bench};
+  % fulcrum: triangular prism under the 50 cm mark
+  \fill[red!65!black] (6.0,1.5) -- (5.6,0.5) -- (6.4,0.5) -- cycle;
+  \node[font=\small\bfseries, text=red!65!black, anchor=west] at (6.5,0.95) {fulcrum at 50\,cm};
+  % metre stick, with a scale every 10 cm
+  \draw[fill=GoldLight, draw=GoldDark] (0,1.5) rectangle (12,1.9);
+  \foreach \c in {0,10,...,100} {
+    \draw[GoldDark] ({0.12*\c},1.9) -- ({0.12*\c},1.76);
+  }
+  \foreach \c in {5,15,...,95} { \draw[GoldDark!70] ({0.12*\c},1.9) -- ({0.12*\c},1.82); }
+  \foreach \c in {10,20,30,40,60,70,80,90} {
+    \node[font=\scriptsize, text=GoldDark] at ({0.12*\c},1.63) {\c};
+  }
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=north west] at (0.1,1.45) {metre stick};
+  % load: 100 g standing on the 30 cm mark
+  \draw[fill=TealGreen!25, draw=TealGreen, rounded corners=1pt] (3.25,1.9) rectangle (3.95,2.75);
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,2.325) {100\,g};
+  \node[font=\small\bfseries, text=TealGreen] at (3.6,3.05) {Load};
+  % effort: one 50 g slotted mass on the 90 cm mark
+  \draw[fill=MidBlue!25, draw=MidBlue, rounded corners=1pt] (10.5,1.9) rectangle (11.1,2.32);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (10.8,2.11) {50\,g};
+  \node[font=\small\bfseries, text=MidBlue] at (10.8,2.62) {Effort};
+  % arms, measured from the fulcrum to the centre of each mass
+  \draw[densely dashed, DarkGrey!60] (3.6,3.3) -- (3.6,3.95);
+  \draw[densely dashed, DarkGrey!60] (6.0,1.9) -- (6.0,3.95);
+  \draw[densely dashed, DarkGrey!60] (10.8,2.87) -- (10.8,3.95);
+  \draw[dim arrow] (3.6,3.8) -- (6.0,3.8) node[midway, above, font=\small, text=TealGreen] {load arm = 20\,cm};
+  \draw[dim arrow] (6.0,3.8) -- (10.8,3.8) node[midway, above, font=\small, text=MidBlue] {effort arm = 40\,cm};
+\end{tikzpicture}
+\end{center}}
+
+% ── Same angle, different arcs: why the long end of an arm moves faster ──────
+\newcommand{\diagMotionSensorSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=0.74cm]
+  % floor
+  \fill[ground hatch] (-0.4,-0.3) rectangle (10.2,0);
+  \draw[thick, DarkGrey] (-0.4,0) -- (10.2,0);
+  % bench, its right-hand edge at x = 4
+  \fill[LightGrey, draw=DarkGrey] (-0.2,3.25) rectangle (4.0,3.45);
+  \fill[DarkGrey!70] (0.0,0) rectangle (0.15,3.25);
+  \fill[DarkGrey!70] (3.7,0) rectangle (3.85,3.25);
+  \node[font=\scriptsize\itshape, text=DarkGrey] at (2.0,3.05) {bench};
+  % data logger on the bench
+  \draw[fill=white, draw=DarkGrey, rounded corners=1pt] (0.3,3.45) rectangle (1.9,4.45);
+  \draw[MidBlue, thick] (0.45,3.62) -- (0.75,3.62) -- (1.45,4.25) -- (1.52,3.62) -- (1.75,3.62);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=south] at (1.1,4.45) {data logger};
+  % stand: base, upright rod, right-angle clamp and an arm reaching over the edge
+  \fill[DarkGrey] (2.4,3.45) rectangle (3.6,3.62);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,3.62) -- (3.0,6.95);
+  \draw[line width=2.2pt, DarkGrey!80] (3.0,6.6) -- (5.7,6.6);
+  \fill[DarkGrey] (2.86,6.46) rectangle (3.14,6.74);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=east] at (2.85,6.1) {stand};
+  % motion sensor, pointing straight down
+  \draw[fill=NavyBlue, draw=NavyBlue, rounded corners=2pt] (5.15,6.0) rectangle (6.25,6.75);
+  \fill[MidGrey] (5.3,5.96) rectangle (6.1,6.06);
+  \node[font=\small\bfseries, text=NavyBlue, anchor=west] at (6.45,7.3) {motion sensor};
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=north west, align=left] at (6.45,7.0)
+       {sends pulses of sound down\\and times their echoes};
+  % cable to the logger
+  \draw[DarkGrey!70, thick] (5.15,6.4) .. controls (4.2,6.2) and (2.4,5.2) .. (1.9,4.1);
+  % sound pulses
+  \foreach \r in {0.25,0.45,0.65} {
+    \draw[MidBlue!70, thick] ($(5.7,5.96)+(-130:\r)$) arc[start angle=-130, end angle=-50, radius=\r];
+  }
+  % the weight, held with its bottom 40 cm below the sensor
+  \draw[fill=MidGrey!70, draw=DarkGrey] (5.35,4.4) rectangle (6.05,4.95);
+  \draw[fill=MidGrey!40, draw=DarkGrey] (5.7,4.95) ellipse (0.35 and 0.09);
+  \node[font=\scriptsize\bfseries, text=DarkGrey, anchor=west] at (6.15,4.68) {weight};
+  \draw[dim arrow] (4.95,5.96) -- (4.95,4.4) node[midway, left, font=\small, text=DarkGrey] {40\,cm};
+  \draw[densely dashed, DarkGrey!50] (4.85,4.4) -- (5.3,4.4);
+  \draw[densely dashed, DarkGrey!50] (4.85,5.96) -- (5.15,5.96);
+  % its fall
+  \draw[densely dashed, TealGreen, -{Stealth[length=6pt]}] (5.7,4.3) -- (5.7,0.55);
+  \node[font=\scriptsize\itshape, text=TealGreen, anchor=west] at (5.8,2.4) {falls};
+  % cushion
+  \draw[fill=GoldLight, draw=GoldDark, rounded corners=3pt] (4.8,0) rectangle (6.6,0.32);
+  \node[font=\scriptsize\itshape, text=GoldDark, anchor=west] at (6.7,0.2) {cushion (no-bounce pad)};
+\end{tikzpicture}
+\end{center}}
+
+% ── A velocity–time graph for one drop under the motion sensor ───────────────
+% \diagVelocityTime{numbers} labels the axes with values (Lesson 12);
+% \diagVelocityTime{parts} labels what each part of the line means (Lesson 13).
+\newcommand{\diagVelocityTime}[1]{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=11cm, y=0.8cm]
+  % grid and axes: time 0–0.7 s, velocity 0–5 m/s
+  \foreach \t in {0.1,0.2,...,0.71} \draw[Line] (\t,0) -- (\t,5);
+  \foreach \v in {1,...,5} \draw[Line] (0,\v) -- (0.7,\v);
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0.73,0) node[right, font=\small, text=DarkGrey] {time (s)};
+  \draw[thick, DarkGrey, -{Stealth[length=6pt]}] (0,0) -- (0,5.4) node[above, font=\small, text=DarkGrey] {velocity (m/s)};
+  \foreach \t/\l in {0/0,0.1/0.1,0.2/0.2,0.3/0.3,0.4/0.4,0.5/0.5,0.6/0.6,0.7/0.7} \node[font=\scriptsize, text=DarkGrey, below] at (\t,0) {\l};
+  \foreach \v in {0,...,5} \node[font=\scriptsize, text=DarkGrey, left] at (0,\v) {\v};
+  % the line: held still, falling, landing
+  \draw[line width=1.6pt, MidBlue] (0,0) -- (0.10,0) -- (0.55,4.4) -- (0.565,0.05) -- (0.7,0.05);
+  \fill[TealGreen] (0.10,0) circle (2pt);
+  \fill[OrangeDark] (0.55,4.4) circle (2pt);
+  \def\vtmode{#1}\def\vtnumbers{numbers}%
+  \ifx\vtmode\vtnumbers
+    \draw[densely dashed, DarkGrey!60] (0,4.4) -- (0.55,4.4);
+    \draw[densely dashed, DarkGrey!60] (0.55,0) -- (0.55,4.4);
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=south east, align=right] at (0.10,0.15) {let go\\0\,m/s};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {just before\\it lands: 4.4\,m/s};
+  \else
+    \node[font=\scriptsize, text=DarkGrey, align=center, anchor=south] at (0.05,0.2) {held\\still};
+    \node[font=\scriptsize\bfseries, text=TealGreen, anchor=north west, align=left] at (0.11,-0.45) {starting velocity\\(the moment it is let go)};
+    \node[font=\scriptsize\bfseries, text=OrangeDark, anchor=west, align=left] at (0.565,4.4) {final velocity\\(just before it lands)};
+    \node[font=\scriptsize, text=MidBlue, anchor=north west, align=left, fill=white, inner sep=1.5pt] at (0.03,4.75) {falling: a straight line, because\\the speed goes up steadily};
+    \draw[MidBlue, -{Stealth[length=4pt]}] (0.16,3.9) -- (0.29,2.05);
+    \node[font=\scriptsize, text=DarkGrey, anchor=west, align=left] at (0.58,0.9) {lands on\\the cushion};
+    \draw[dim arrow] (0.10,-1.35) -- (0.55,-1.35) node[midway, below, font=\scriptsize, text=DarkGrey] {time of fall};
+    \draw[densely dashed, DarkGrey!50] (0.10,-0.5) -- (0.10,-1.45);
+    \draw[densely dashed, DarkGrey!50] (0.55,-0.5) -- (0.55,-1.45);
+  \fi
+\end{tikzpicture}
+\end{center}}
+
+% ── Experiment 2: pulling a loaded wooden block along the bench with a spring balance ──
+\newcommand{\diagExpTwoSetup}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1.18cm, y=1.18cm]
+  % bench
+  \fill[ground hatch] (0,-0.35) rectangle (13,0);
+  \draw[thick, DarkGrey] (0,0) -- (13,0);
+  \node[font=\scriptsize\itshape, text=DarkGrey, anchor=west] at (0.05,-0.18) {bench top};
+  % wooden block with a hook on its left face
+  \draw[fill=GoldLight, draw=GoldDark, thick] (7.2,0) rectangle (10.2,1.3);
+  \foreach \y in {0.35,0.7,1.0} { \draw[GoldDark!45] (7.35,\y) .. controls (8.2,\y+0.08) and (9.2,\y-0.08) .. (10.05,\y); }
+  \draw[DarkGrey, thick] (7.2,0.65) -- (6.95,0.65);
+  \draw[DarkGrey, thick] (6.85,0.65) circle (0.1);
+  % two 200 g slotted masses on top
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.3) rectangle (9.5,1.62);
+  \draw[fill=MidBlue!22, draw=MidBlue, thick, rounded corners=1pt] (7.9,1.62) rectangle (9.5,1.94);
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.46) {200\,g};
+  \node[font=\scriptsize\bfseries, text=MidBlue] at (8.7,1.78) {200\,g};
+  % spring balance, hooked to the block
+  \draw[fill=white, draw=DarkGrey, thick, rounded corners=3pt] (2.6,0.42) rectangle (6.1,0.88);
+  \foreach \x in {3.0,3.25,...,5.5} { \draw[DarkGrey] (\x,0.42) -- (\x,0.56); }
+  \draw[red!65!black, very thick] (4.6,0.42) -- (4.6,0.88);
+  \draw[DarkGrey, thick] (6.1,0.65) -- (6.75,0.65);
+  \draw[DarkGrey, thick] (2.45,0.65) circle (0.15);
+  % pull and friction
+  \draw[force arrow, red!65!black] (2.25,0.65) -- (0.6,0.65);
+  \draw[force arrow, TealGreen] (10.2,0.12) -- (12.0,0.12);
+  % labels
+  \node[font=\small\bfseries, text=red!65!black, anchor=south] at (1.4,0.8) {pull steadily};
+  \node[font=\small\bfseries, text=TealGreen, anchor=south] at (11.4,0.25) {friction};
+  \node[font=\small\bfseries, text=DarkGrey, anchor=south west] at (2.55,0.92) {spring balance (or force sensor)};
+  \node[font=\small\bfseries, text=MidBlue, anchor=south] at (8.7,2.0) {200\,g masses};
+  \node[font=\small\bfseries, text=GoldDark, anchor=north] at (8.7,-0.45) {wooden block with a hook};
+\end{tikzpicture}
+\end{center}}
+
+
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ---- Cover: the unit's cover art, full bleed, in colour ------------------
+% The art is 2:3 and A4 is taller-than-wide by less, so it fills the width and
+% loses a little off the bottom; the baked-in title at the top stays whole.
+\pdfbookmark[1]{Cover}{cover}
+\thispagestyle{empty}
+\wrcover
+\begin{tikzpicture}[remember picture, overlay]
+  
+  % Name box, top right, clear of the title.
+  \node[anchor=north east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.5mm,
+        inner xsep=2.6mm, inner ysep=2.2mm, text width=40mm, font=\headingfont\small]
+    at ([xshift=-6mm, yshift=-6mm]current page.north east)
+    {\textbf{Name}\par\vspace{5mm}\hrule\vspace{2.6mm}\textbf{Class}\par\vspace{5mm}\hrule};
+  % What this book is: the cover art says Workbook, so name the booklet here.
+  \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.5mm,
+        inner xsep=3.2mm, inner ysep=2.4mm, font=\headingfont\bfseries\large, align=right]
+    at ([xshift=-6mm, yshift=8mm]current page.south east)
+    {Experiment Booklet\\[-1pt]{\normalfont\headingfont\small Experiments 1--5}};
+\end{tikzpicture}
+\mbox{}
+\clearpage
+
+% ---- Inside cover ---------------------------------------------------------
+\thispagestyle{plain}
+{\headingfont\bfseries\fontsize{26}{30}\selectfont Forces and Motion}\par\vspace{1mm}
+{\headingfont\Large Experiment Booklet \textbullet\ Year 7}\par\vspace{1mm}
+{\small\itshape VC 2.0: VC2S8U13 \textbullet\ VC2S8U14 \textbullet\ VC2S8U15 \textbullet\ VC2S8I01--I08}\par\vspace{6mm}
+\renewcommand{\arraystretch}{2.2}
+\begin{tabular}{@{}l p{130mm}@{}}
+\textbf{Name} & \hrulefill \\ \textbf{Class} & \hrulefill \\ \textbf{Teacher} & \hrulefill \\ \textbf{Lab group} & \hrulefill \\
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+
+\begin{countrybox}{Acknowledgement of Country}
+This booklet was created on the unceded Country of the Wurundjeri Woi-wurrung people of the Kulin Nation. We acknowledge Elders past, present and emerging. Aboriginal and Torres Strait Islander peoples have observed, tested and passed on knowledge of Country for tens of thousands of years: science in the way this booklet teaches it, by careful observation, measurement and sharing what was found.
+\end{countrybox}
+
+\begin{infobox}{How this booklet works}
+This booklet holds every experiment in the unit. Bring it to every practical lesson. Each experiment opens with its key vocabulary, learning intentions and skills focus, then runs \emph{Technique} $\rightarrow$ \emph{Plan and safety} $\rightarrow$ \emph{Method} $\rightarrow$ \emph{Results} $\rightarrow$ \emph{Analysis and evaluation} $\rightarrow$ \emph{Skill check}. Each kind of box has its own frame and mark:\par\smallskip
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{32mm}l@{}}
+\textbf{Technique} \tagicon{\icokey} & How to do it properly (thin frame) \\
+\textbf{I do} \tagicon{\icodots{1}} & Your teacher works an example through --- you follow (solid frame) \\
+\textbf{We do} \tagicon{\icodots{2}} & You try one together, with help (dashed frame) \\
+\textbf{You do} \tagicon{\icodots{3}} & On your own: check your understanding (heavy frame) \\
+\textbf{Going further} \tagicon{\icoup} & Above level: Year 8 extension (double frame) \\
+\textbf{Skills focus} \tagicon{\icoskill} & The science skills the experiment builds \\
+\end{tabular}
+
+\smallskip
+Every skill comes from the faculty \textbf{Science Skills} list (the toolkit on page \pageref{sec:toolkit}). A skill always carries the same code, for example \sk{PC4} or \sk{PA1}, so you can follow it from this unit into every other unit this year.
+\end{infobox}
+
+\clearpage
+{\headingfont\bfseries\LARGE Contents}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}
+\begin{ctab}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|L{2.8cm}|L{10.2cm}|C{1.6cm}|}
+  \hline\thead{Section} & \thead{Title} & \thead{Page} \\ \hline
+  Skills & \hyperlink{toolkit}{The Science Skills toolkit} & \hyperlink{toolkit}{\pageref{sec:toolkit}} \\ \hline
+  Skills & \hyperlink{tracker}{My skills tracker} & \hyperlink{tracker}{\pageref{sec:tracker}} \\ \hline
+  Experiment 1 & \hyperlink{exp.1}{Everyday Forces (Lesson 3)} & \hyperlink{exp.1}{\pageref{sec:1}} \\ \hline
+  Experiment 2 & \hyperlink{exp.2}{Friction and Mass (Lesson 6)} & \hyperlink{exp.2}{\pageref{sec:2}} \\ \hline
+  Experiment 3 & \hyperlink{exp.3}{Bounce Efficiency (Lesson 8)} & \hyperlink{exp.3}{\pageref{sec:3}} \\ \hline
+  Experiment 4 & \hyperlink{exp.4}{Mechanical Advantage (Lesson 10)} & \hyperlink{exp.4}{\pageref{sec:4}} \\ \hline
+  Experiment 5 & \hyperlink{exp.5}{Measuring $g$ (Lesson 13)} & \hyperlink{exp.5}{\pageref{sec:5}} \\ \hline
+  Glossary & \hyperlink{glossary}{Key vocabulary, with the page each word first appears on} & \hyperlink{glossary}{\pageref{sec:glossary}} \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  THE SCIENCE SKILLS TOOLKIT — faculty continuum, Years 7–8 column
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\hypertarget{toolkit}{}\pdfbookmark[1]{The Science Skills toolkit}{toolkitbm}
+\markboth{The Science Skills toolkit}{}{\headingfont\bfseries\LARGE The Science Skills toolkit}\label{sec:toolkit}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+These are the skills scientists use in every investigation. They come from the Science Inquiry strand of the Victorian Curriculum, grouped the way our faculty teaches them. Each experiment in this booklet tells you which skills it builds.
+
+\newcommand{\tkhead}[2]{\multicolumn{3}{|l|}{\cellcolor{black!10}\rule{0pt}{4.6mm}\headingfont\bfseries #2} \\ \hline}
+\newcommand{\tkrow}[1]{\skc{#1}\enspace{\small\bfseries\skname{#1}} & \skdesc{#1} & {\small\skcode{#1}} \\ \hline}
+\renewcommand{\arraystretch}{1.35}
+\begin{ctab}
+\begin{longtable}{|W{5.0cm}|W{9.0cm}|Z{1.7cm}|}
+  \hline\thead{Skill} & \thead{What it means} & \thead{Code} \\ \hline
+  \endhead
+  \tkhead{Teal}{Questioning and predicting}
+  \tkrow{QP1}
+  \tkrow{QP2}
+  \tkhead{Blue}{Planning and conducting}
+  \tkrow{PC1}
+  \tkrow{PC2}
+  \tkrow{PC3}
+  \tkrow{PC4}
+  \tkrow{PC5}
+  \tkrow{PC6}
+  \tkrow{PC7}
+  \tkrow{PC8}
+  \tkhead{GoldDark}{Processing, modelling and analysing}
+  \tkrow{PA1}
+  \tkrow{PA2}
+  \tkrow{PA3}
+  \tkrow{PA4}
+  \tkrow{PA5}
+  \tkrow{PA6}
+  \tkrow{PA7}
+  \tkrow{PA8}
+  \tkhead{OrangeDark}{Evaluating}
+  \tkrow{EV1}
+  \tkrow{EV2}
+  \tkrow{EV3}
+  \tkrow{EV4}
+  \tkrow{EV5}
+  \tkhead{PurpleDark}{Communicating}
+  \tkrow{CO1}
+  \tkrow{CO2}
+\end{longtable}
+\end{ctab}
+\renewcommand{\arraystretch}{1}
+
+\begin{infobox}{Writing like a scientist \textbar\ CO1 \skname{CO1}}
+Scientists write in the \textbf{third person}: say what was done, not who did it. Write \emph{``The water was heated for 10 minutes''}, not \emph{``I heated the water for 10 minutes''}. Keep sentences short, spell scientific words correctly, and always give a unit with a measurement.
+\end{infobox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  SKILLS TRACKER
+% ══════════════════════════════════════════════════════════════════════════════
+\clearpage
+\hypertarget{tracker}{}\pdfbookmark[1]{My skills tracker}{trackerbm}
+\markboth{My skills tracker}{}{\headingfont\bfseries\LARGE My skills tracker}\label{sec:tracker}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+A dot \textbullet{} shows the experiments that build each skill. After each experiment, write how confident you are with each of its skills in its column: \textbf{1}~not yet, \textbf{2}~nearly, \textbf{3}~got it.
+
+\newcommand{\dotc}{{\Large\textbullet}}
+\newcommand{\trow}[6]{\rule[-0.36cm]{0pt}{0.92cm}\skc{#1}\enspace{\small\skname{#1}} & #2 & #3 & #4 & #5 & #6 & \\ \hline}
+\begin{ctab}
+\begin{tabular}{|W{5.0cm}|*{5}{Z{1.3cm}|}Z{1.8cm}|}
+  \hline\thead{Skill} & \thead{Exp 1} & \thead{Exp 2} & \thead{Exp 3} & \thead{Exp 4} & \thead{Exp 5} & \thead{End of unit} \\ \hline
+  \trow{QP1}{}{\dotc}{\dotc}{\dotc}{\dotc}
+  \trow{PC2}{}{\dotc}{}{\dotc}{}
+  \trow{PC3}{\dotc}{}{}{}{}
+  \trow{PC4}{}{\dotc}{\dotc}{}{}
+  \trow{PC6}{\dotc}{}{}{\dotc}{}
+  \trow{PC8}{}{}{}{}{\dotc}
+  \trow{PA1}{}{\dotc}{\dotc}{\dotc}{\dotc}
+  \trow{PA2}{}{\dotc}{\dotc}{\dotc}{}
+  \trow{PA3}{}{\dotc}{\dotc}{\dotc}{\dotc}
+  \trow{PA5}{\dotc}{}{}{}{}
+  \trow{PA7}{}{}{\dotc}{}{\dotc}
+  \trow{EV2}{\dotc}{}{}{\dotc}{\dotc}
+  \trow{EV3}{}{\dotc}{\dotc}{}{\dotc}
+  \trow{CO2}{\dotc}{}{}{}{}
+\end{tabular}
+\end{ctab}
+{\small\color{DarkGrey} The other skills are built in the experiment booklets for other units.}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 1 — EVERYDAY FORCES                     (Lesson 3, T3 Week 1)
+%  From Lesson 3 of the A4 Forces Lesson Booklet; answer keys 3.* kept.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Everyday Forces}{Five workstations \textbullet{} Pushing, gravitational, electrostatic, magnetic and buoyancy forces \textbullet{} Observations and inferences}{3}\label{sec:1}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I02, I03, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Inference}\label{voc:inference}} & \scaf{An explanation of what you observed, using what you already know.} \\ \hline
+  & \textbf{Electrostatic force}\label{voc:electrostatic-force} & \cell{3.v2} \\ \hline
+  & \textbf{Magnetic force}\label{voc:magnetic-force} & \cell{3.v3} \\ \hline
+  & \textbf{Buoyancy force}\label{voc:buoyancy-force} & \cell{3.v4} \\ \hline
+  & \textbf{Generalisation}\label{voc:generalisation} & \cell{3.v5} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Observe carefully and safely, and tell an observation from an inference.}
+\understandli{Recognise five everyday forces and describe the direction each one acts in.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can follow the safety rules at each workstation.
+  \item I can write an inference that names the force and its direction.
+  \item I can write a generalisation from several observations.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{PC3}{Follow each workstation's safety rule.}
+\focus{PC6}{Observe and record what happens each time.}
+\focus{CO2}{Draw what you saw, with labels and force arrows.}
+\focus{PA5}{Spot the pattern and write it as a generalisation.}
+\focus{EV2}{Explain what you saw using the forces you know.}
+\end{skillsfocus}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Observation or inference?}{PC6}
+An \textbf{observation} is what you see, hear or measure: \emph{``The coin hit the floor before the paper.''} An \textbf{inference} explains it using what you already know: \emph{``Air resistance pushed up on the flat paper more than on the coin, so the paper fell more slowly.''} Record your observation first, then write the inference.
+\end{technique}
+
+\begin{technique}{Writing a generalisation}{PA5}
+A \textbf{generalisation} is a rule that fits \emph{all} your observations, not just one. Start with ``All \dots'' or ``Whenever \dots''. \emph{``Whenever two north poles are brought together, they push apart.''}
+\end{technique}
+
+\begin{workedex}{Observation, then inference}
+\textbf{Observation:} a balloon rubbed on a jumper sticks to the wall.
+
+\smallskip
+\textbf{Inference:} rubbing gave the balloon an electrostatic charge. The charge attracts the wall, so an electrostatic force pulls the balloon \emph{towards} the wall and holds it there against gravity.
+\end{workedex}
+
+\begin{wedo}{Observation, then inference}
+A fridge magnet holds a sheet of paper on the fridge door. Write one observation and one inference.
+\abox{3.wd1}{4cm}
+\end{wedo}
+
+% ─── PLAN AND SAFETY ─────────────────────────────────────────────────────────
+\exppart{Plan and safety}{Teal}
+
+\textbf{Aim:} To observe five everyday forces --- pushing, gravitational, electrostatic, magnetic and buoyancy forces --- and describe the direction each one acts in.
+
+\smallskip
+There are five workstations, A to E. Your group works at one at a time and moves on when your teacher says so, so you may not visit them in order. Answer a workstation's questions before you leave it.
+
+\needspace{14\baselineskip}
+\task Complete the risk assessment before you start. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{Germs spread from a shared straw (A)} & \scaf{Use only your own straw; bin it as soon as you finish} & \scaf{Wash your hands; tell the teacher if you used someone else's straw} \\ \hline
+  & A ball on the floor makes someone slip (A, E) & & \\ \hline
+  & Water spills from the tub (C, E) & & \\ \hline
+  & A magnet damages a phone or laptop (D) & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{infobox}{Safety at every workstation}
+Never throw a ball --- a golf ball can hurt someone. Tell your teacher if you are allergic to latex (rubber). Use scissors and the rod only for the task. Paper and Styrofoam burn easily: keep them away from flames.
+\end{infobox}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results: the five workstations}{Amber}
+
+\subsubsection*{Workstation A --- Pushing forces}
+\textbf{Materials:} table tennis ball \textbullet{} drinking straws\par
+\wssafety{Use only your own straw, and never blow towards anyone's face. Pick up the ball straight away if it falls on the floor.}
+\wsstep{1}Use the table tennis ball and a straw to answer these questions.
+\pt{a}What happens if you blow on the ball while it is moving towards you?
+\abox{3.A1a}{2.2cm}
+\pt{b}What happens if you blow on it while it is moving away from you?
+\abox{3.A1b}{2.2cm}
+\pt{c}What happens if you blow on it while it is moving across in front of you?
+\abox{3.A1c}{2.2cm}
+\wsstep{2}Play a game of blowball in groups of four, two in each team. Use a straw each, and set up two goals.
+\begin{ctab}
+\begin{tabular}{|SW{6.0cm}|Z{4.2cm}|Z{4.2cm}|}
+  \hline\hd & \thead{} & \thead{Team 1} & \thead{Team 2} \\ \hline
+  & \textbf{Number of goals scored} & \cell{3.A2-r1c2} & \cell{3.A2-r1c3} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\clearpage
+\subsubsection*{Workstation B --- Gravitational forces}
+\textbf{Materials:} 20 cent coin (or a metal washer) \textbullet{} scissors and paper\par
+\wssafety{Use the scissors only to cut the paper, and carry them with the points down.}
+\wsstep{1}Cut out a piece of paper the size of the coin.
+\wsstep{2}Hold the paper in one hand and the coin in the other, at the same height. Drop them both at the same time.
+\pt{a}Write an inference to explain what happened. Say what forces were acting on the coin and the paper, and in which direction.
+\abox{3.B2a}{3.4cm}
+\wsstep{3}Roll the paper into a ball and drop it and the coin again.
+\pt{b}Write an inference to explain what happened.
+\abox{3.B3b}{3.0cm}
+
+\clearpage
+\subsubsection*{Workstation C --- Electrostatic forces}
+\textbf{Materials:} piece of paper \textbullet{} plastic (Perspex) rod and a woollen cloth \textbullet{} running water from a tap\par
+\wssafety{Use the rod only for the task. Wipe up any water you spill straight away.}
+\wsstep{1}Tear a piece of paper into small bits. Rub the plastic rod briskly on the woollen cloth.
+\pt{a}What happens when you bring the rod near the pieces of paper?
+\abox{3.C1a}{2.4cm}
+\pt{b}The force here is due to an electrostatic charge on the rod. Does the rod need to touch the paper, or can the electrostatic force act over a distance?
+\abox{3.C1b}{2.4cm}
+\pt{c}Rub the rod on the cloth again, then hold it near a weak stream of running water. What happens?
+\abox{3.C1c}{2.4cm}
+
+\clearpage
+\subsubsection*{Workstation D --- Magnetic forces}
+\textbf{Materials:} 2 bar magnets with their poles marked\par
+\wssafety{Keep the magnets away from laptops, phones and other electronic devices.}
+\wsstep{1}Hold one magnet in each hand. Slowly bring the end of one close to the end of the other. Write down what happens, then draw the magnets with an arrow for each force.
+\abox{3.D1}{1.8cm}
+\drawk{3.D1-draw}{4cm}{}
+\wsstep{2}Repeat, but use the other end of one of the magnets. Write down what happens.
+\abox{3.D2}{2.0cm}
+\wsstep{3}Write a generalisation describing the forces between the two magnets. \skr{PA5}
+\abox{3.D3}{2.2cm}
+
+\clearpage
+\subsubsection*{Workstation E --- Buoyancy forces}
+\textbf{Materials:} bucket or tub of water \textbullet{} balls of different types, e.g.\ golf, table tennis, tennis, rubber, Styrofoam\par
+\wssafety{Never throw a ball. Don't carry the tub when it is full, and wipe up spills straight away.}
+\wsstep{1}Put a table tennis ball into the water. Push it to the bottom and let it go.
+\wsstep{2}Do the same with the other balls. What forces act on a ball in water? In which direction do they act?
+\abox{3.E2}{3.0cm}
+\pt{a}Write a generalisation about what happens to different balls in water. \skr{PA5}
+\abox{3.E2a}{3.0cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Complete the summary of the five forces. \skr{EV2}
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|W{2.6cm}|W{3.2cm}|W{5.2cm}|}
+  \hline\hd & \thead{Force} & \thead{Contact or non-contact?} & \thead{Direction it acted} & \thead{Where you saw it} \\ \hline
+  & \scaf{Pushing (blowing)} & \scaf{Contact (the air touches the ball)} & \scaf{Away from the straw} & \scaf{Workstation A: the ball moved away when blown} \\ \hline
+  & Gravitational & & & \\ \hline
+  & Electrostatic & & & \\ \hline
+  & Magnetic & & & \\ \hline
+  & Buoyancy & & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task At Workstation B, the flat paper and the screwed-up paper have the same mass. Use your observations to explain why they fell differently.
+\abox{3.t2}{5cm}
+
+\needspace{12\baselineskip}
+\task Which workstation was hardest to observe accurately? Suggest one change that would make the observations more reliable.
+\abox{3.t3}{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask A golf ball sinks and a table tennis ball floats, although both are round. Use the idea of the forces acting on each ball to suggest why. Draw a force diagram for each ball in the water.
+\drawk{3.x1}{6cm}{}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{PC3}{I followed each workstation's safety rule.}
+\scrow{PC6}{I recorded what I saw before explaining it.}
+\scrow{CO2}{My magnet drawing has labels and force arrows.}
+\scrow{PA5}{I wrote a generalisation that fits all my observations.}
+\scrow{EV2}{I explained each observation with a force I know.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 2? Explain what you will do differently.
+\abox{3.sc}{5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 2 — FRICTION AND MASS                    (Lesson 6, T3 Week 2)
+%  From Lesson 6 of the A4 Forces Lesson Booklet; answer keys 6.* kept.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Friction and Mass}{A fair test \textbullet{} Repeat trials and means \textbullet{} A line graph with a line of best fit}{6}\label{sec:2}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I01, I02, I03, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Fair test}\label{voc:fair-test}} & \scaf{An experiment where only one variable is changed and everything else is kept the same.} \\ \hline
+  & \textbf{Independent variable}\label{voc:independent-variable} & \cell{6.v2} \\ \hline
+  & \textbf{Dependent variable}\label{voc:dependent-variable} & \cell{6.v3} \\ \hline
+  & \textbf{Controlled variable}\label{voc:controlled-variable} & \cell{6.v4} \\ \hline
+  & \textbf{Trial}\label{voc:trial} & \cell{6.v5} \\ \hline
+  & \textbf{Mean}\label{voc:mean} & \cell{6.v6} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Plan a fair test, repeat each measurement and graph the means.}
+\understandli{Find out how pressing two surfaces together harder changes friction.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can name the variables and two controlled variables.
+  \item I can calculate a mean from three trials.
+  \item I can draw a line graph with a line of best fit and describe the trend with numbers.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a hypothesis in the faculty frame.}
+\focus{PC2}{Name the variables, with two controlled.}
+\focus{PC4}{Read the spring balance at a steady speed, three times.}
+\focus{PA1}{Record and average the trials in a THUD table.}
+\focus{PA2}{Plot the means and draw a line of best fit.}
+\focus{PA3}{Calculate each mean.}
+\focus{EV3}{Name an error and how to reduce it.}
+\end{skillsfocus}
+
+% ─── READING ─────────────────────────────────────────────────────────────────
+\exppart{Before the lab}{Teal}
+
+\begin{readingbox}{Reading --- Grip}
+Friction is the force that makes walking possible. With every step, your shoe pushes backwards against the ground, and friction pushes you forwards. On ice, where friction is tiny, your foot slips backwards and you go nowhere.
+
+Friction comes from the roughness of surfaces. Even surfaces that look smooth are covered in tiny bumps when you look at them under a microscope. When two surfaces press together, the bumps catch on each other and resist sliding. Press the surfaces together harder and the bumps push further into each other, so the friction is bigger.
+
+Sometimes engineers want as much friction as possible --- in the rubber of a car tyre, the soles of running shoes or the grip tape on a skateboard. Other times they want as little as possible: oil in an engine and wax on skis reduce friction, so parts slide easily and less energy is wasted as heat.
+
+In this experiment you will measure friction with a spring balance, then add masses to a wooden block so it presses harder on the bench. When you pull the block along at a \emph{steady} speed, your pull and the friction are balanced --- so the reading on the spring balance is equal to the friction force.
+\end{readingbox}
+
+\rcreset
+\rcqk{6.c1}{Explain how friction helps you to walk, and why walking on ice is so hard.}{2.4cm}
+\rcqk{6.c2}{Why does pressing two surfaces together harder make the friction bigger? Use the word \emph{bumps} in your answer.}{2.4cm}
+\rcqk{6.c3}{Give one example where engineers want more friction, and one where they want less.}{2.2cm}
+\rcqk{6.c4}{Why must the block move at a \emph{steady} speed when you read the spring balance?}{2.4cm}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Making it a fair test}{PC2}
+Change \textbf{one} thing (the \textbf{independent} variable), measure \textbf{one} thing (the \textbf{dependent} variable), and keep everything else the same (the \textbf{controlled} variables). Name at least two controlled variables.
+\end{technique}
+
+\begin{workedex}{Identifying variables}
+A student rolls a toy car down a ramp at different heights and measures how far it travels across the floor.
+
+\smallskip
+\textbf{Independent:} the height of the ramp. \quad \textbf{Dependent:} the distance the car travels.\\
+\textbf{Controlled:} the same car; the same floor surface; releasing the car without pushing it.
+\end{workedex}
+
+\begin{wedo}{Identifying variables}
+A student times how long a spoonful of sugar takes to dissolve in water at 20\,\textdegree C, 40\,\textdegree C and 60\,\textdegree C.
+\pt{a}Name the independent variable.
+\abox{6.wd1a}{1.4cm}
+\pt{b}Name the dependent variable.
+\abox{6.wd1b}{1.4cm}
+\pt{c}Name two controlled variables.
+\abox{6.wd1c}{1.8cm}
+\end{wedo}
+
+\begin{workedex}{Calculating a mean}
+With no mass added, three trials gave 0.8\,N, 1.0\,N and 0.9\,N.
+
+\smallskip
+Add the trials, then divide by how many there are: \quad $(0.8 + 1.0 + 0.9) \div 3 = 2.7 \div 3 = \mathbf{0.9\ \text{N}}$
+\end{workedex}
+
+\begin{wedo}{Calculating a mean}
+With 400\,g on the block, a group measured 1.9\,N, 2.1\,N and 2.3\,N. Calculate the mean friction force.
+\wbox{6.wd2}{2.4cm}
+\end{wedo}
+
+\begin{technique}{Join the points, or a line of best fit?}{PA2}
+Every measurement has a little scatter, so measured results do not sit exactly on a line. Draw one smooth \textbf{line of best fit} through the middle of the points, with about as many points above it as below. Do \emph{not} join the points dot to dot: that line follows the scatter, not the trend.
+\end{technique}
+
+% ─── PLAN, SAFETY AND METHOD ─────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the mass on a block on the friction force.
+
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{The mass added to the block (0 to 1000\,g)} \\ \hline
+  & Dependent & \cell{6.t1-r2} \\ \hline
+  & Controlled & \cell{6.t1-r3} \\ \hline
+  & Controlled & \cell{6.t1-r4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{8\baselineskip}
+\task Write your hypothesis. \skr{QP1}
+
+\scaf{If the mass on the block is increased, the friction force will \dots\ because \dots}
+\abox{6.pred}{2.5cm}
+
+\subsubsection*{Equipment}
+Wooden block with a hook \textbullet{} spring balance (spring scale) or force sensor \textbullet{} five 200\,g masses
+
+\begin{center}
+\diagExpTwoSetup
+\expfigcap{Pull the spring balance level with the bench, and read it while the block slides at a steady speed.}
+\end{center}
+
+\needspace{12\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{An overstretched spring balance snaps back} & \scaf{Pull gently and keep the balance in line with the block} & \scaf{Stop; check no one is hurt; tell the teacher} \\ \hline
+  & Masses slide off the block and fall & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Place the wooden block on the bench top and attach the spring balance to its hook.
+  \item Pull the block slowly, so it keeps moving at a steady speed. Read the force on the spring balance --- this is equal to the friction. Record it in Table 2.1.
+  \item Repeat step 2 twice more, so you have three trials.
+  \item Add a 200\,g mass on top of the block. Measure the friction three times and record the results.
+  \item Repeat with 400, 600, 800 and 1000\,g on the block.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 2.1: Friction force on the block for each added mass \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SW{3.6cm}|Z{2.4cm}|Z{2.4cm}|Z{2.4cm}|Z{2.8cm}|}
+  \hline\hd & \thead{Mass added (g)} & \thead{Friction, trial 1 (N)} & \thead{Friction, trial 2 (N)} & \thead{Friction, trial 3 (N)} & \thead{Mean (N)} \\ \hline
+  & \scaf{e.g.\ 0 (block only)} & \scaf{0.8} & \scaf{1.0} & \scaf{0.9} & \scaf{0.9} \\ \hline
+  & 0 (block only) & \cell{6.res-r2c2} & \cell{6.res-r2c3} & \cell{6.res-r2c4} & \cell{6.res-r2c5} \\ \hline
+  & 200 & \cell{6.res-r3c2} & \cell{6.res-r3c3} & \cell{6.res-r3c4} & \cell{6.res-r3c5} \\ \hline
+  & 400 & \cell{6.res-r4c2} & \cell{6.res-r4c3} & \cell{6.res-r4c4} & \cell{6.res-r4c5} \\ \hline
+  & 600 & \cell{6.res-r5c2} & \cell{6.res-r5c3} & \cell{6.res-r5c4} & \cell{6.res-r5c5} \\ \hline
+  & 800 & \cell{6.res-r6c2} & \cell{6.res-r6c3} & \cell{6.res-r6c4} & \cell{6.res-r6c5} \\ \hline
+  & 1000 & \cell{6.res-r7c2} & \cell{6.res-r7c3} & \cell{6.res-r7c4} & \cell{6.res-r7c5} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{mass added (g)} on the horizontal axis and \textbf{mean friction force (N)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title. \skr{PA2}
+\graphgrid{9cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Describe the trend in your results. Use the means for 0\,g and 1000\,g in your answer. \skr{PA5}
+\abox{6.t2}{3.5cm}
+
+\needspace{8\baselineskip}
+\task Another group measured 2.1\,N, 2.3\,N and 2.2\,N with 600\,g on the block. Calculate the mean. \skr{PA3}
+\wbox{6.t4}{2.6cm}
+
+\needspace{8\baselineskip}
+\task A group measured 1.6\,N, 1.7\,N and 2.6\,N with 400\,g on the block. Which value looks wrong? Find the mean of the other two.
+\wbox{6.t5}{2.6cm}
+
+\needspace{10\baselineskip}
+\task Use the idea of \emph{bumps} pressing together to explain your results. Then describe a situation in everyday life where you have noticed this link between friction and mass.
+\abox{6.t6}{4cm}
+
+\needspace{14\baselineskip}
+\task \skr{EV3}
+\pt{a}Why did you take three trials for each mass?
+\abox{6.t3a}{2.2cm}
+\pt{b}Identify one error that could have affected your results.
+\abox{6.t3b}{2.2cm}
+\pt{c}Propose one improvement to the method that would reduce it.
+\abox{6.t3c}{2.2cm}
+
+\needspace{12\baselineskip}
+\task Write a conclusion: state the trend, back it with numbers from your table, and say whether your hypothesis was supported.
+
+\scaf{As the mass added increased from 0\,g to 1000\,g, the mean friction force increased from \dots\,N to \dots\,N. This supports / does not support the hypothesis.}
+\abox{6.concl}{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask Look at your graph. With no masses added, the friction was not zero. Explain why, and say what your line of best fit would do if you could make the block lighter and lighter.
+\abox{6.x8}{4cm}
+\end{keepext}
+\begin{keepext}
+\exttask Predict how your results would change if the block slid on sandpaper instead of the bench. Would the line on your graph be steeper or less steep? Explain.
+\abox{6.x9}{4cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{My hypothesis names the mass and the friction force.}
+\scrow{PC2}{I named the variables, with two controlled.}
+\scrow{PC4}{I read the balance at a steady speed, three times for each mass.}
+\scrow{PA1}{My table has a title, headings, units in the headings and matching decimals.}
+\scrow{PA2}{I drew a line of best fit, not dot to dot.}
+\scrow{PA3}{I calculated each mean correctly.}
+\scrow{EV3}{I named an error and a way to reduce it.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 3? Explain what you will do differently.
+\abox{6.sc}{5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 3 — BOUNCE EFFICIENCY                    (Lesson 8, T3 Week 3)
+%  From Lesson 8 of the A4 Forces Lesson Booklet; answer keys 8.* kept.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Bounce Efficiency}{Drop height and bounce height \textbullet{} Repeat trials and anomalies \textbullet{} Calculating efficiency}{8}\label{sec:3}
+\lessoncodes{VC2S8U15 \textbullet{} VC2S8I01, I02, I03, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Elastic potential energy}\label{voc:elastic-potential-energy}} & \scaf{The energy stored in an object when it is squashed or stretched.} \\ \hline
+  & \textbf{Thermal energy}\label{voc:thermal-energy} & \cell{8.v2} \\ \hline
+  & \textbf{Drop height}\label{voc:drop-height} & \cell{8.v3} \\ \hline
+  & \textbf{Bounce height}\label{voc:bounce-height} & \cell{8.v4} \\ \hline
+  & \textbf{Wasted energy}\label{voc:wasted-energy} & \cell{8.v5} \\ \hline
+  & \textbf{Anomaly}\label{voc:anomaly} & \cell{8.v6} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Measure heights precisely, spot anomalies and calculate with your results.}
+\understandli{Use energy transformations to explain why a ball never bounces back to its drop height.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can read the bounce height to the bottom of the ball, at eye level.
+  \item I can leave an anomaly out of a mean and say why.
+  \item I can calculate the efficiency of a bounce.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a hypothesis in the faculty frame.}
+\focus{PC4}{Read each bounce at eye level, three times.}
+\focus{PA1}{Record trials, means and efficiencies in a THUD table.}
+\focus{PA2}{Plot the means and draw a line of best fit.}
+\focus{PA3}{Calculate means and efficiencies.}
+\focus{PA7}{Spot an anomaly and leave it out of the mean.}
+\focus{EV3}{Name an error and how to reduce it.}
+\end{skillsfocus}
+
+% ─── READING ─────────────────────────────────────────────────────────────────
+\exppart{Before the lab}{Teal}
+
+\begin{readingbox}{Reading --- The Rules of the Bounce}
+Every ball used in serious sport has to pass a bounce test. A tennis ball, for example, is dropped from a height of 254 centimetres onto concrete. To be approved for play, it must bounce back up to between 135 and 147 centimetres --- a little more than half the height it fell from.
+
+Why doesn't a ball bounce all the way back up? As it falls, its gravitational potential energy becomes kinetic energy. When it hits the ground the ball squashes, and for a split second its energy is stored as elastic potential energy, like a squashed spring. The ball then springs back into shape and pushes itself back up. But some of the energy is wasted: the rubber warms up a little (thermal energy) and you hear the bounce (sound energy).
+
+Squash players know this well. A cold squash ball hardly bounces at all, so players hit it hard for a few minutes before a match. As the ball warms up, the air inside it pushes harder on the rubber, and the rubber itself becomes springier, so the ball bounces higher.
+
+In this experiment you will run your own bounce test, and use the heights to work out how efficient each bounce is.
+\end{readingbox}
+
+\rcreset
+\rcqk{8.c1}{From what height is a tennis ball dropped in the bounce test, and how high must it bounce to be approved?}{2.2cm}
+\rcqk{8.c2}{Explain, using the words \emph{elastic potential energy}, what happens to the ball's energy when it hits the ground.}{2.4cm}
+\rcqk{8.c3}{Why can a ball never bounce back up to the height it was dropped from? Name the two forms of wasted energy.}{2.4cm}
+\rcqk{8.c4}{Why do squash players hit the ball hard for a few minutes before a match?}{2.2cm}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Reading a height at eye level}{PC4}
+The top of a bounce lasts only a moment. Crouch so your eyes are level with where the ball will stop --- looking from above or below makes the reading wrong (parallax). Read to the \emph{bottom} of the ball every time, or film the bounce in slow motion and pause it at the highest point. One person drops, one person reads.
+\end{technique}
+
+\begin{technique}{Spotting an anomaly}{PA7}
+An \textbf{anomaly} is a result that does not fit the pattern of the others: 52, 55 and \textbf{41}\,cm. Circle it, suggest what went wrong (the ball was pushed, or read from above), and leave it out of the mean --- or repeat that trial.
+\end{technique}
+
+\begin{infobox}{Bounce efficiency}
+\[ \text{Efficiency} = \frac{\text{bounce height}}{\text{drop height}} \times 100\% \]
+At the drop height and at the top of the bounce the ball is still, so all its energy is gravitational potential energy, which depends on height. Comparing the two heights compares the energy.
+\end{infobox}
+
+\begin{workedex}{Calculating bounce efficiency}
+A ball is dropped from 100\,cm and bounces back up to 62\,cm.
+
+\smallskip
+\textbf{Efficiency:}\quad $62 \div 100 \times 100\% = \mathbf{62\%}$ \qquad \textbf{Wasted:}\quad $100\% - 62\% = \mathbf{38\%}$, as thermal energy and sound.
+\end{workedex}
+
+\begin{wedo}{Calculating bounce efficiency}
+A tennis ball is dropped from 80\,cm and bounces back up to 44\,cm.
+\pt{a}Find the efficiency of the bounce.
+\wbox{8.wd1a}{2cm}
+\pt{b}What percentage of the energy is wasted, and where does it go?
+\wbox{8.wd1b}{2cm}
+\end{wedo}
+
+% ─── PLAN, SAFETY AND METHOD ─────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the drop height of a ball on its bounce height.
+
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{The drop height: 40, 80, 120 and 160\,cm} \\ \hline
+  & Dependent & \cell{8.t1-r2} \\ \hline
+  & Controlled & \cell{8.t1-r3} \\ \hline
+  & Controlled & \cell{8.t1-r4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{8\baselineskip}
+\task Write your hypothesis. Will the efficiency change as the drop height increases? \skr{QP1}
+
+\scaf{If the drop height is increased, the bounce height will \dots}
+\abox{8.pred}{2.5cm}
+
+\subsubsection*{Equipment}
+Tennis ball (or another rubber ball) \textbullet{} two metre rulers or a tape measure, fixed upright to a wall \textbullet{} sticky tape \textbullet{} hard, flat floor \textbullet{} phone with slow-motion video (optional)
+
+\begin{center}
+\diagBounceSetup
+\expfigcap{Measure the drop height and the bounce height to the bottom of the ball, against rulers fixed to a wall.}
+\end{center}
+
+\needspace{12\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{Falling while reaching for a high drop} & \scaf{Keep every drop height within reach from the floor; never stand on chairs or desks} & \scaf{Tell the teacher straight away; first aid if needed} \\ \hline
+  & Tripping over bags while chasing the ball & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Fix the metre rulers upright against the wall, with 0\,cm touching the floor.
+  \item Hold the ball beside the rulers so that the \textbf{bottom} of the ball is level with the 40\,cm mark.
+  \item Let go --- do not push or throw the ball.
+  \item Read the height of the bottom of the ball at the top of its first bounce, at eye level. Record it in Table 3.1.
+  \item Repeat steps 2--4 so that you have three trials.
+  \item Repeat for drop heights of 80\,cm, 120\,cm and 160\,cm.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 3.1: Bounce height and efficiency for each drop height \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SZ{2.3cm}|Z{2.3cm}|Z{2.3cm}|Z{2.3cm}|Z{2.6cm}|Z{2.4cm}|}
+  \hline\hd & \thead{Drop height (cm)} & \thead{Bounce, trial 1 (cm)} & \thead{Bounce, trial 2 (cm)} & \thead{Bounce, trial 3 (cm)} & \thead{Mean bounce (cm)} & \thead{Efficiency (\%)} \\ \hline
+  & \scaf{e.g.\ 40} & \scaf{23} & \scaf{21} & \scaf{22} & \scaf{22} & \scaf{55} \\ \hline
+  & 40  & \cell{8.res-r2c2} & \cell{8.res-r2c3} & \cell{8.res-r2c4} & \cell{8.res-r2c5} & \cell{8.res-r2c6} \\ \hline
+  & 80  & \cell{8.res-r3c2} & \cell{8.res-r3c3} & \cell{8.res-r3c4} & \cell{8.res-r3c5} & \cell{8.res-r3c6} \\ \hline
+  & 120 & \cell{8.res-r4c2} & \cell{8.res-r4c3} & \cell{8.res-r4c4} & \cell{8.res-r4c5} & \cell{8.res-r4c6} \\ \hline
+  & 160 & \cell{8.res-r5c2} & \cell{8.res-r5c3} & \cell{8.res-r5c4} & \cell{8.res-r5c5} & \cell{8.res-r5c6} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{drop height (cm)} on the horizontal axis and \textbf{mean bounce height (cm)} on the vertical axis. Plot each point, draw a line of best fit, and give your graph a title. \skr{PA2}
+\graphgrid{9cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task What happened to the bounce height as the drop height increased? Use two means from your table. \skr{PA5}
+\abox{8.t2}{3cm}
+
+\needspace{10\baselineskip}
+\task Look at your efficiency column. Did the efficiency stay about the same, rise or fall as the drop height increased? Use numbers from your results.
+\abox{8.t3}{3cm}
+
+\needspace{8\baselineskip}
+\task A ball dropped from 150\,cm bounces to 90\,cm. Calculate the efficiency of the bounce. \skr{PA3}
+\wbox{8.t4}{2.6cm}
+
+\needspace{8\baselineskip}
+\task Another group's bounce heights for an 80\,cm drop were 52, 55 and 41\,cm. Which value is the anomaly? Find the mean of the other two. \skr{PA7}
+\wbox{8.t5}{2.6cm}
+
+\needspace{10\baselineskip}
+\task Explain why the ball never bounces back up to its drop height. Use the words \emph{gravitational potential}, \emph{kinetic}, \emph{elastic potential} and \emph{thermal}.
+\abox{8.t6}{4cm}
+
+\needspace{10\baselineskip}
+\task Identify one error in your method, and suggest how to reduce it. \skr{EV3}
+\abox{8.t8}{3.5cm}
+
+\needspace{12\baselineskip}
+\task Write a conclusion: state the trend, back it with numbers from your table, and say whether your hypothesis was supported.
+
+\scaf{As the drop height increased from 40\,cm to 160\,cm, the mean bounce height increased from \dots\,cm to \dots\,cm, while the efficiency stayed near \dots\,\%. This supports / does not support the hypothesis.}
+\abox{8.concl}{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask Is your line of best fit straight, and does it pass through (or close to) the origin? Calculate its gradient, and explain how the gradient is connected to the efficiency of the ball.
+\wbox{8.x8}{4cm}
+\end{keepext}
+\begin{keepext}
+\exttask Design a fair test to find out whether the \emph{temperature} of a ball changes its bounce efficiency.
+\pt{a}Name the independent and dependent variables.
+\abox{8.x11a}{2cm}
+\pt{b}Name two variables you would keep the same.
+\abox{8.x11b}{2cm}
+\pt{c}Describe a safe way to make the ball warmer and colder.
+\abox{8.x11c}{2.2cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{My hypothesis names the drop height and the bounce height.}
+\scrow{PC4}{I read each bounce at eye level, to the bottom of the ball.}
+\scrow{PA1}{My table has a title, headings, units in the headings and matching decimals.}
+\scrow{PA2}{I drew a line of best fit, not dot to dot.}
+\scrow{PA3}{I calculated the means and efficiencies correctly.}
+\scrow{PA7}{I spotted an anomaly and left it out of the mean.}
+\scrow{EV3}{I named an error and a way to reduce it.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 4? Explain what you will do differently.
+\abox{8.sc}{5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 4 — MECHANICAL ADVANTAGE               (Lesson 10, T3 Week 4)
+%  From Lesson 10 of the A4 Forces Lesson Booklet; answer keys 10.* kept.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Mechanical Advantage}{Balancing a lever \textbullet{} Effort arm and load arm \textbullet{} Two ways to find the MA}{10}\label{sec:4}
+\lessoncodes{VC2S8U13 \textbullet{} VC2S8I01, I02, I03, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Steelyard}\label{voc:steelyard}} & \scaf{An old weighing machine: a lever with a sliding weight that balances the load.} \\ \hline
+  & \textbf{Pivot}\label{voc:pivot} & \cell{10.v2} \\ \hline
+  & \textbf{Effort arm}\label{voc:effort-arm} & \cell{10.v3} \\ \hline
+  & \textbf{Load arm}\label{voc:load-arm} & \cell{10.v4} \\ \hline
+  & \textbf{Balanced lever}\label{voc:balanced-lever} & \cell{10.v5} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Measure distances carefully and check one calculation against another.}
+\understandli{Use the law of the lever to find a lever's mechanical advantage.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can measure each arm from the fulcrum to the centre of the mass.
+  \item I can find the MA from the arms and from the forces.
+  \item I can draw a smooth curve of best fit when the trend is not a straight line.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a hypothesis in the faculty frame.}
+\focus{PC2}{Name the variables, with two controlled.}
+\focus{PC6}{Measure each arm to the centre of the mass, three times.}
+\focus{PA1}{Record trials, means and MAs in a THUD table.}
+\focus{PA2}{Plot the means and draw a curve of best fit.}
+\focus{PA3}{Calculate the MA two ways.}
+\focus{EV2}{Compare your results with the law of the lever.}
+\end{skillsfocus}
+
+% ─── READING ─────────────────────────────────────────────────────────────────
+\exppart{Before the lab}{Teal}
+
+\begin{readingbox}{Reading --- The Steelyard: Weighing with a Lever}
+Long before electronic scales, market sellers weighed goods with a \emph{steelyard}. A steelyard is a lever: a long bar hanging from a hook near one end, which acts as the pivot. The goods hang from the short side, close to the pivot. A small, heavy weight slides along the long side, which is marked with a scale. The seller slides the weight until the bar hangs level, then reads the weight of the goods off the scale.
+
+How can a small weight balance a heavy load? The answer is distance. A lever balances when effort $\times$ effort arm equals load $\times$ load arm. Far from the pivot, a small weight turns the bar as strongly as a large weight close to it. A sliding weight ten times further from the pivot than the goods can balance goods ten times heavier than itself.
+
+Steelyards are very old: bronze ones have been found at Pompeii, the Roman town buried by Vesuvius in AD~79. About three hundred years earlier, the Greek mathematician Archimedes had worked out the law of the lever that makes them work.
+
+In this experiment you will do what a steelyard does: balance a heavy load near the pivot with a lighter mass further away, measure both arms, and work out your lever's mechanical advantage.
+\end{readingbox}
+
+\rcreset
+\rcqk{10.c1}{Describe how a market seller uses a steelyard to find the weight of some goods.}{2.4cm}
+\rcqk{10.c2}{Explain how a small sliding weight can balance a much heavier load. Use the words \emph{pivot} and \emph{distance}.}{2.4cm}
+\rcqk{10.c3}{The sliding weight sits ten times further from the pivot than the goods. How heavy can the goods be, compared with the sliding weight?}{2.2cm}
+\rcqk{10.c4}{In this experiment, what will you balance, and what will you measure?}{2.2cm}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Measuring an arm}{PC6}
+Measure each arm from the fulcrum to the \emph{centre} of the mass, not its edge. If the stick balances a little to one side of 50\,cm on its own, use that point as the fulcrum and measure every arm from there.
+\end{technique}
+
+\begin{infobox}{Mechanical advantage, two ways}
+\textbf{From the arms:} \quad $\text{MA} = \text{effort arm} \div \text{load arm}$\\[2pt]
+\textbf{From the forces:} \quad $\text{MA} = \text{load} \div \text{effort}$\\[4pt]
+Weight is proportional to mass, so you can compare the forces using the masses in grams. When the lever is balanced, the two answers should agree.
+\end{infobox}
+
+\begin{workedex}{Mechanical advantage of a balanced lever}
+A 100\,g load stands 20\,cm from the fulcrum. A 50\,g effort balances it 40\,cm from the fulcrum.
+
+\smallskip
+\textbf{From the arms:}\quad $40 \div 20 = \mathbf{2}$ \qquad \textbf{From the forces:}\quad $100 \div 50 = \mathbf{2}$
+
+\smallskip
+They agree. This is the law of the lever: $100 \times 20 = 50 \times 40 = 2000$ on both sides.
+\end{workedex}
+
+\begin{wedo}{Mechanical advantage of a balanced lever}
+A 150\,g load stands 10\,cm from the fulcrum. A 50\,g effort balances it 30\,cm from the fulcrum.
+\pt{a}Find the MA from the arms.
+\wbox{10.wd1a}{1.8cm}
+\pt{b}Find the MA from the forces.
+\wbox{10.wd1b}{1.8cm}
+\pt{c}Show that the law of the lever works for this lever.
+\wbox{10.wd1c}{1.8cm}
+\end{wedo}
+
+\begin{technique}{When the trend is a curve}{PA2}
+Not every trend is a straight line. If your points bend, draw one smooth \textbf{curve of best fit} through the middle of them --- still never dot to dot, and never a ruler line through a curve.
+\end{technique}
+
+% ─── PLAN, SAFETY AND METHOD ─────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the effort mass on the effort arm needed to balance a lever.
+
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{The effort mass: 50, 100, 150 and 200\,g} \\ \hline
+  & Dependent & \cell{10.t1-r2} \\ \hline
+  & Controlled & \cell{10.t1-r3} \\ \hline
+  & Controlled & \cell{10.t1-r4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{8\baselineskip}
+\task Write your hypothesis. \skr{QP1}
+
+\scaf{If the effort mass is increased, the effort arm needed to balance the lever will \dots\ because \dots}
+\abox{10.pred}{2.5cm}
+
+\subsubsection*{Equipment}
+Metre stick \textbullet{} triangular prism or thick pencil (fulcrum) \textbullet{} one 100\,g mass (load) \textbullet{} four 50\,g slotted masses (effort) \textbullet{} sticky tack
+
+\begin{center}
+\diagExpFourSetup
+\expfigcap{Measure each arm from the fulcrum to the centre of the mass. Here a 50\,g effort balances the 100\,g load at an effort arm of 40\,cm.}
+\end{center}
+
+\needspace{12\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{The stick tips and drops the masses on a foot} & \scaf{Hold the stick while adding or moving a mass; keep feet clear of the bench edge} & \scaf{Tell the teacher; cold pack for a bruise} \\ \hline
+  & Masses roll off the bench & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Rest the metre stick on the fulcrum at the 50\,cm mark and check that it balances level.
+  \item Stand the 100\,g load on the 30\,cm mark, so the load arm is 20\,cm. Fix it with a little sticky tack. It stays there for the whole experiment.
+  \item Stand one 50\,g mass on the other side of the fulcrum. Slide it until the stick balances level. Record the effort arm in Table 4.1.
+  \item Take the effort mass off and repeat step 3 twice more, so you have three trials.
+  \item Repeat steps 3--4 with an effort of 100\,g, 150\,g and 200\,g (stack the 50\,g masses).
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 4.1: Effort arm and MA for each effort mass (load 100\,g, load arm 20\,cm) \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SZ{1.9cm}|Z{1.5cm}|Z{1.5cm}|Z{1.5cm}|Z{2.2cm}|Z{2.5cm}|Z{2.5cm}|}
+  \hline\hd & \thead{Effort mass (g)} & \thead{Effort arm, trial 1 (cm)} & \thead{Effort arm, trial 2 (cm)} & \thead{Effort arm, trial 3 (cm)} & \thead{Mean effort arm (cm)} & \thead{MA = effort arm $\div$ load arm} & \thead{MA = load $\div$ effort} \\ \hline
+  & \scaf{e.g.\ 50} & \scaf{39} & \scaf{41} & \scaf{40} & \scaf{40} & \scaf{$40 \div 20 = 2$} & \scaf{$100 \div 50 = 2$} \\ \hline
+  & 50  & \cell{10.res-r2c2} & \cell{10.res-r2c3} & \cell{10.res-r2c4} & \cell{10.res-r2c5} & \cell{10.res-r2c6} & \cell{10.res-r2c7} \\ \hline
+  & 100 & \cell{10.res-r3c2} & \cell{10.res-r3c3} & \cell{10.res-r3c4} & \cell{10.res-r3c5} & \cell{10.res-r3c6} & \cell{10.res-r3c7} \\ \hline
+  & 150 & \cell{10.res-r4c2} & \cell{10.res-r4c3} & \cell{10.res-r4c4} & \cell{10.res-r4c5} & \cell{10.res-r4c6} & \cell{10.res-r4c7} \\ \hline
+  & 200 & \cell{10.res-r5c2} & \cell{10.res-r5c3} & \cell{10.res-r5c4} & \cell{10.res-r5c5} & \cell{10.res-r5c6} & \cell{10.res-r5c7} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{20\baselineskip}
+\task Draw a line graph of your results. Put \textbf{effort mass (g)} on the horizontal axis and \textbf{mean effort arm (cm)} on the vertical axis. Plot each point, then draw a smooth curve of best fit. Give your graph a title. \skr{PA2}
+\graphgrid{9cm}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task What happened to the effort arm as the effort mass increased? What happened to the MA? Use numbers from your table. \skr{PA5}
+\abox{10.t2}{3.5cm}
+
+\needspace{10\baselineskip}
+\task Compare your two MA columns. Do they agree? Suggest one reason why they might not agree exactly. \skr{EV2}
+\abox{10.t3}{3.5cm}
+
+\needspace{8\baselineskip}
+\task Another group balanced the 100\,g load (load arm 20\,cm) with an 80\,g effort. Use the law of the lever to predict their effort arm. \skr{PA3}
+\wbox{10.t4}{2.6cm}
+
+\needspace{8\baselineskip}
+\task A group's effort arms for 100\,g were 19, 21 and 27\,cm. Which value looks wrong? Find the mean of the other two.
+\wbox{10.t5}{2.6cm}
+
+\needspace{10\baselineskip}
+\task Use the law of the lever to explain \emph{why} a heavier effort mass balanced the load closer to the fulcrum.
+\abox{10.t6}{4cm}
+
+\needspace{12\baselineskip}
+\task Write a conclusion: state the trend, back it with numbers from your table, and say whether your hypothesis was supported.
+
+\scaf{As the effort mass increased from 50\,g to 200\,g, the mean effort arm decreased from \dots\,cm to \dots\,cm. This supports / does not support the hypothesis.}
+\abox{10.concl}{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask For each row of your results, calculate effort mass $\times$ mean effort arm. What do you notice? Use the law of the lever to explain why this number should be the same every time, and what it should equal.
+\wbox{10.x8}{4.5cm}
+\end{keepext}
+\begin{keepext}
+\exttask A trebuchet is a lever too, but it is built with an MA \emph{less} than 1. Describe how its effort and load are placed differently from this experiment, and explain why it is built that way.
+\abox{10.x9}{4.5cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{My hypothesis names the effort mass and the effort arm.}
+\scrow{PC2}{I named the variables, with two controlled.}
+\scrow{PC6}{I measured each arm to the centre of the mass.}
+\scrow{PA1}{My table has a title, headings, units in the headings and matching decimals.}
+\scrow{PA2}{I drew a smooth curve of best fit.}
+\scrow{PA3}{I found the MA two ways.}
+\scrow{EV2}{I compared my results with the law of the lever.}
+\end{skillcheck}
+
+\task Which skill will you focus on in Experiment 5? Explain what you will do differently.
+\abox{10.sc}{5cm}
+% ══════════════════════════════════════════════════════════════════════════════
+%  EXPERIMENT 5 — MEASURING g                         (Lesson 13, T3 Week 5)
+%  From Lesson 13 of the A4 Forces Lesson Booklet; answer keys 13.* kept.
+% ══════════════════════════════════════════════════════════════════════════════
+\experimentdiv{Measuring \texorpdfstring{$g$}{g}}{A motion sensor \textbullet{} Velocity--time graphs \textbullet{} Anomalies and percentage error}{13}\label{sec:5}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8I01, I02, I03, I04, I05, I06}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{4.2cm}|W{11.6cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Motion sensor}\label{voc:motion-sensor}} & \scaf{A device that sends out pulses of sound and times their echoes, to measure how far away an object is many times a second.} \\ \hline
+  & \textbf{Velocity}\label{voc:velocity} & \cell{13.v2} \\ \hline
+  & \textbf{Acceleration}\label{voc:acceleration} & \cell{13.v6} \\ \hline
+  & \textbf{Accepted value}\label{voc:accepted-value} & \cell{13.v3} \\ \hline
+  & \textbf{Percentage error}\label{voc:percentage-error} & \cell{13.v4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\begin{lipanel}
+\inquiryli{Collect data with a digital sensor and judge how accurate it is.}
+\understandli{Test whether the mass of a falling object changes its acceleration.}
+\sctitle
+\begin{itemize}[leftmargin=1.4em, itemsep=0pt, topsep=1pt]
+  \item I can read starting velocity, final velocity and time of fall off a graph.
+  \item I can calculate an acceleration and a percentage error.
+  \item I can say whether my results support Galileo's idea, using numbers.
+\end{itemize}
+\end{lipanel}
+
+\begin{skillsfocus}
+\focus{QP1}{Write a hypothesis in the faculty frame.}
+\focus{PC8}{Set up and read the motion sensor and its software.}
+\focus{PA1}{Record every trial in a THUD table.}
+\focus{PA3}{Calculate accelerations, means and percentage errors.}
+\focus{PA7}{Spot an anomaly and leave it out of the mean.}
+\focus{EV2}{Compare your value with the accepted value of $g$.}
+\focus{EV3}{Name two errors and how to reduce them.}
+\end{skillsfocus}
+
+% ─── READING ─────────────────────────────────────────────────────────────────
+\exppart{Before the lab}{Teal}
+
+\begin{readingbox}{Reading --- The Hammer and the Feather}
+A ball dropped from head height hits the floor in about half a second --- too quick to time with a stopwatch. For almost two thousand years, people trusted the Greek thinker Aristotle, who taught that heavy objects fall faster than light ones.
+
+Galileo disagreed. A famous story says he dropped two balls of different mass from the Leaning Tower of Pisa, and they landed together. Without air in the way, heavy and light objects speed up at exactly the same rate. In 1971 the astronaut David Scott tested this on the Moon, where there is no air: he dropped a hammer and a feather, and they hit the ground at the same moment.
+
+A motion sensor can measure a fall for you. Like a bat hunting in the dark, it sends out short pulses of sound, too high for us to hear, and times how long each echo takes to come back. It does this 50 times a second, so it knows how fast a falling object is moving at every moment.
+
+In this experiment you will drop three weights of different mass under a motion sensor, find each one's acceleration from its graph, and test Galileo's idea. You will also compare your results with the accepted value of $g$, 9.8\,m/s$^2$.
+\end{readingbox}
+
+\rcreset
+\rcqk{13.c1}{Why is a ball dropped from head height hard to time with a stopwatch?}{2.2cm}
+\rcqk{13.c2}{What did Aristotle teach about falling objects, and what did Galileo say instead?}{2.4cm}
+\rcqk{13.c3}{What happened when David Scott dropped a hammer and a feather on the Moon? Why would the same test not work on Earth?}{2.4cm}
+\rcqk{13.c4}{Explain how a motion sensor works out how far away an object is.}{2.2cm}
+
+% ─── TECHNIQUE ────────────────────────────────────────────────────────────────
+\exppart{Technique spotlight}{Blue}
+
+\begin{technique}{Acceleration from a velocity--time graph}{PC8}
+While the object falls, its speed goes up steadily, so the line on the graph is straight. Read three things off it: the \textbf{starting velocity} (the moment it is let go), the \textbf{final velocity} (just before it lands) and the \textbf{time of fall} between them. Then ask the software for the \emph{slope} of the straight part as a check.
+\end{technique}
+
+\begin{center}
+\diagVelocityTime{parts}
+\expfigcap{What one drop looks like on the velocity--time graph.}
+\end{center}
+
+\begin{workedex}{Acceleration from a graph}
+A falling 100\,g weight: starting velocity 0.2\,m/s, final velocity 4.1\,m/s, time of fall 0.40\,s; the software's slope is 9.7\,m/s$^2$.
+
+\smallskip
+\textbf{Change in speed:}\quad $4.1 - 0.2 = 3.9$\,m/s \qquad \textbf{Acceleration:}\quad $3.9 \div 0.40 = \mathbf{9.75\ \text{m/s}^2}$\\
+\textbf{Check:}\quad the slope, 9.7\,m/s$^2$, is very close, so the graph was read well.
+\end{workedex}
+
+\begin{wedo}{Acceleration from a graph}
+Another drop shows a starting velocity of 0.1\,m/s, a final velocity of 4.5\,m/s and a time of fall of 0.45\,s.
+\pt{a}Find the change in speed.
+\wbox{13.wd1a}{1.8cm}
+\pt{b}Find the acceleration, to one decimal place.
+\wbox{13.wd1b}{1.8cm}
+\end{wedo}
+
+\begin{infobox}{Percentage error}
+\[ \text{percentage error} = \frac{\text{your value} - \text{accepted value}}{\text{accepted value}} \times 100\% \]
+Ignore any minus sign. For $g$, the accepted value is 9.8\,m/s$^2$. A smaller percentage error means a more accurate result.
+\end{infobox}
+
+\begin{workedex}{Percentage error}
+A group's mean value of $g$ is 9.2\,m/s$^2$.
+
+\smallskip
+\textbf{Difference:}\quad $9.8 - 9.2 = 0.6$ \qquad \textbf{Percentage error:}\quad $0.6 \div 9.8 \times 100\% \approx \mathbf{6\%}$
+\end{workedex}
+
+\begin{wedo}{Percentage error}
+Another group's mean value of $g$ is 10.3\,m/s$^2$.
+\pt{a}Find the difference from the accepted value of 9.8\,m/s$^2$.
+\wbox{13.wd2a}{1.6cm}
+\pt{b}Find the percentage error.
+\wbox{13.wd2b}{1.8cm}
+\end{wedo}
+
+% ─── PLAN, SAFETY AND METHOD ─────────────────────────────────────────────────
+\exppart{Plan, safety and method}{Teal}
+
+\textbf{Aim:} To investigate the effect of changing the mass of a falling object on its acceleration.
+
+\task Complete the variables table. \skr{PC2}
+\begin{ctab}
+\begin{tabular}{|SW{4.4cm}|W{10.2cm}|}
+  \hline\hd & \thead{Variable} & \thead{In this experiment} \\ \hline
+  & \scaf{Independent} & \scaf{The mass of the weight: 50, 100 and 200\,g} \\ \hline
+  & Dependent & \cell{13.t1-r2} \\ \hline
+  & Controlled & \cell{13.t1-r3} \\ \hline
+  & Controlled & \cell{13.t1-r4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{8\baselineskip}
+\task Write your hypothesis. \skr{QP1}
+
+\scaf{If the mass of the falling weight is increased, its acceleration will \dots\ because \dots}
+\abox{13.pred}{2.5cm}
+
+\subsubsection*{Equipment}
+Motion sensor and data logger (or a computer with the logging software) \textbullet{} stand, rod and right-angle clamp \textbullet{} 50\,g, 100\,g and 200\,g weights \textbullet{} cushion or no-bounce pad \textbullet{} metre rule
+
+\begin{center}
+\diagMotionSensorSetup
+\expfigcap{The sensor points straight down at a cushion, so the weight does not bounce back up towards it.}
+\end{center}
+
+\needspace{12\baselineskip}
+\task Complete the risk assessment. \skr{PC3}
+\begin{ctab}
+\begin{tabular}{|SW{4.0cm}|W{5.2cm}|W{5.4cm}|}
+  \hline\hd & \thead{Risk (what could go wrong)} & \thead{Prevention} & \thead{Responding (if it happens)} \\ \hline
+  & \scaf{The stand tips over} & \scaf{Stand the base well onto the bench} & \scaf{Step back; tell the teacher; check for injuries} \\ \hline
+  & A falling weight hits a foot or hand & & \\ \hline
+  & Someone climbs to reach the sensor & & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{18\baselineskip}
+\subsubsection*{Method}
+\begin{enumerate}[itemsep=2pt]
+  \item Clamp the motion sensor to the stand at the edge of the bench, as high as it will go, pointing straight down. Put the cushion on the floor directly underneath it.
+  \item Connect the sensor to the data logger. Set the sensor to long range, set the logger to 50 readings per second, and show a graph of velocity against time.
+  \item Hold the 50\,g weight flat, directly under the sensor, with its bottom 40\,cm below the sensor. Keep your hand out of the way of the sound pulses.
+  \item Start recording, then let go --- do not push it. Stop recording once it has landed.
+  \item From the graph, read the starting velocity, the final velocity and the time of fall, and ask the software for the slope. Record all four in Table 5.1.
+  \item Repeat steps 3--5 until you have three trials, then do the same for the 100\,g and 200\,g weights.
+\end{enumerate}
+
+% ─── RESULTS ─────────────────────────────────────────────────────────────────
+\exppart{Results}{Amber}
+
+\subsubsection*{Table 5.1: Velocity, time of fall and acceleration for each trial \skr{PA1}}
+\begin{ctab}
+\begin{tabular}{|SZ{2.3cm}|Z{2.0cm}|Z{2.0cm}|Z{1.9cm}|Z{3.6cm}|Z{2.3cm}|}
+  \hline\hd & \thead{Weight, trial} & \thead{Starting velocity (m/s)} & \thead{Final velocity (m/s)} & \thead{Time of fall (s)} & \thead{Acceleration (m/s$^2$)} & \thead{Slope from the software (m/s$^2$)} \\ \hline
+  & \scaf{e.g.\ 50\,g, 1} & \scaf{0.1} & \scaf{4.3} & \scaf{0.45} & \scaf{$(4.3 - 0.1) \div 0.45 = 9.3$} & \scaf{9.4} \\ \hline
+  & 50\,g, 1 & \cell{13.res-r2c2} & \cell{13.res-r2c3} & \cell{13.res-r2c4} & \cell{13.res-r2c5} & \cell{13.res-r2c6} \\ \hline
+  & 50\,g, 2 & \cell{13.res-r3c2} & \cell{13.res-r3c3} & \cell{13.res-r3c4} & \cell{13.res-r3c5} & \cell{13.res-r3c6} \\ \hline
+  & 50\,g, 3 & \cell{13.res-r4c2} & \cell{13.res-r4c3} & \cell{13.res-r4c4} & \cell{13.res-r4c5} & \cell{13.res-r4c6} \\ \hline
+  & 100\,g, 1 & \cell{13.res-r5c2} & \cell{13.res-r5c3} & \cell{13.res-r5c4} & \cell{13.res-r5c5} & \cell{13.res-r5c6} \\ \hline
+  & 100\,g, 2 & \cell{13.res-r6c2} & \cell{13.res-r6c3} & \cell{13.res-r6c4} & \cell{13.res-r6c5} & \cell{13.res-r6c6} \\ \hline
+  & 100\,g, 3 & \cell{13.res-r7c2} & \cell{13.res-r7c3} & \cell{13.res-r7c4} & \cell{13.res-r7c5} & \cell{13.res-r7c6} \\ \hline
+  & 200\,g, 1 & \cell{13.res-r8c2} & \cell{13.res-r8c3} & \cell{13.res-r8c4} & \cell{13.res-r8c5} & \cell{13.res-r8c6} \\ \hline
+  & 200\,g, 2 & \cell{13.res-r9c2} & \cell{13.res-r9c3} & \cell{13.res-r9c4} & \cell{13.res-r9c5} & \cell{13.res-r9c6} \\ \hline
+  & 200\,g, 3 & \cell{13.res-r10c2} & \cell{13.res-r10c3} & \cell{13.res-r10c4} & \cell{13.res-r10c5} & \cell{13.res-r10c6} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\subsubsection*{Table 5.2: Mean acceleration and percentage error for each weight}
+\begin{ctab}
+\begin{tabular}{|SZ{2.4cm}|Z{2.2cm}|Z{5.6cm}|Z{4.4cm}|}
+  \hline\hd & \thead{Weight} & \thead{Mass (kg)} & \thead{Mean acceleration (m/s$^2$), leaving out any anomalies} & \thead{Percentage error (\%)} \\ \hline
+  & \scaf{e.g.\ 50\,g} & \scaf{0.05} & \scaf{$(9.3 + 9.5 + 9.4) \div 3 = 9.4$} & \scaf{$(9.8 - 9.4) \div 9.8 \times 100 \approx 4$} \\ \hline
+  & 50\,g & \cell{13.mean-r2c2} & \cell{13.mean-r2c3} & \cell{13.mean-r2c4} \\ \hline
+  & 100\,g & \cell{13.mean-r3c2} & \cell{13.mean-r3c3} & \cell{13.mean-r3c4} \\ \hline
+  & 200\,g & \cell{13.mean-r4c2} & \cell{13.mean-r4c3} & \cell{13.mean-r4c4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── ANALYSIS ────────────────────────────────────────────────────────────────
+\exppart{Analysis and evaluation}{Coral}
+
+\task Does the mass of a falling object change its acceleration? Use your mean accelerations. \skr{PA5}
+\abox{13.t2a}{3.5cm}
+
+\needspace{12\baselineskip}
+\task \skr{PA7}
+\pt{a}Did any trial look like an anomaly? Say which, and suggest what might have gone wrong.
+\abox{13.t4a}{2.4cm}
+\pt{b}Why is it better to use the mean of three trials than a single trial?
+\abox{13.t4b}{2.4cm}
+
+\needspace{8\baselineskip}
+\task A falling weight speeds up from 0.3\,m/s to 3.9\,m/s in 0.37\,s. Find its acceleration. \skr{PA3}
+\wbox{13.t5}{2.6cm}
+
+\needspace{8\baselineskip}
+\task A group's mean acceleration was 9.5\,m/s$^2$. Calculate their percentage error. \skr{EV2}
+\wbox{13.t6}{2.6cm}
+
+\needspace{10\baselineskip}
+\task An apple and a bowling ball are dropped from the same height at the same moment. Which lands first? Use your results to explain.
+\abox{13.t7}{3.5cm}
+
+\needspace{14\baselineskip}
+\task Identify two sources of error. For each, suggest a change to the method that would reduce it. \skr{EV3}
+\pt{a}First source of error and how to reduce it:
+\abox{13.t8a}{2.4cm}
+\pt{b}Second source of error and how to reduce it:
+\abox{13.t8b}{2.4cm}
+
+\needspace{12\baselineskip}
+\task Write a conclusion: state what you found, back it with numbers from Table 5.2, and say whether your hypothesis was supported.
+
+\scaf{The mean accelerations of the 50\,g, 100\,g and 200\,g weights were \dots, \dots\ and \dots\,m/s$^2$, within \dots\,\% of 9.8\,m/s$^2$. This supports / does not support the hypothesis.}
+\abox{13.concl}{5cm}
+
+\begin{yr8box}
+\begin{keepext}
+\exttask The motion sensor takes 50 readings every second. How much time passes between readings, and about how many readings does it take during a 0.45\,s fall? Explain why a sensor that took only 5 readings a second would give a much less precise value of $g$.
+\wbox{13.x9}{4.5cm}
+\end{keepext}
+\begin{keepext}
+\exttask Air resistance pushes up on a falling object. The 50\,g weight often has a slightly smaller acceleration than the 200\,g weight. Use the idea of net force to explain why.
+\abox{13.x10}{4.5cm}
+\end{keepext}
+\end{yr8box}
+
+% ─── SKILL CHECK ─────────────────────────────────────────────────────────────
+\exppart{Skill check}{NavyBlue}
+
+\begin{skillcheck}
+\scrow{QP1}{My hypothesis names the mass and the acceleration.}
+\scrow{PC8}{I set up the sensor and read its graph and slope.}
+\scrow{PA1}{My tables have titles, headings, units in the headings and matching decimals.}
+\scrow{PA3}{I calculated accelerations, means and percentage errors.}
+\scrow{PA7}{I spotted any anomaly and left it out of the mean.}
+\scrow{EV2}{I compared my value of $g$ with 9.8\,m/s$^2$.}
+\scrow{EV3}{I named two errors and ways to reduce them.}
+\end{skillcheck}
+
+\task Look back over all five experiments. Which skill have you improved most this unit? Give an example.
+\abox{13.sc}{5cm}
+
+\clearpage
+\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
+\markboth{Glossary}{}{\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+Every key vocabulary word in this booklet, and the page where you wrote what it means.\par
+\begin{ctab}\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|L{6cm}|C{2cm}|}
+\hline\thead{Word} & \thead{Page} \\ \hline
+\glossrow{Acceleration}{voc:acceleration}
+\glossrow{Accepted value}{voc:accepted-value}
+\glossrow{Anomaly}{voc:anomaly}
+\glossrow{Balanced lever}{voc:balanced-lever}
+\glossrow{Bounce height}{voc:bounce-height}
+\glossrow{Buoyancy force}{voc:buoyancy-force}
+\glossrow{Controlled variable}{voc:controlled-variable}
+\glossrow{Dependent variable}{voc:dependent-variable}
+\glossrow{Drop height}{voc:drop-height}
+\glossrow{Effort arm}{voc:effort-arm}
+\glossrow{Elastic potential energy}{voc:elastic-potential-energy}
+\glossrow{Electrostatic force}{voc:electrostatic-force}
+\glossrow{Fair test}{voc:fair-test}
+\glossrow{Generalisation}{voc:generalisation}
+\glossrow{Independent variable}{voc:independent-variable}
+\glossrow{Inference}{voc:inference}
+\glossrow{Load arm}{voc:load-arm}
+\glossrow{Magnetic force}{voc:magnetic-force}
+\glossrow{Mean}{voc:mean}
+\glossrow{Motion sensor}{voc:motion-sensor}
+\glossrow{Percentage error}{voc:percentage-error}
+\glossrow{Pivot}{voc:pivot}
+\glossrow{Steelyard}{voc:steelyard}
+\glossrow{Thermal energy}{voc:thermal-energy}
+\glossrow{Trial}{voc:trial}
+\glossrow{Velocity}{voc:velocity}
+\glossrow{Wasted energy}{voc:wasted-energy}
+\end{tabular}
+\end{ctab}
+
+\end{document}

@@ -87,19 +87,56 @@ booklet's lesson set matches the plan's theory lessons one for one.
 | Particle Model | `particle-model/booklet/Particle_Model_Experiment_Booklet_Yr7` — Mini-lab A (L1), Exps 1–3 (L3, L6, L9), 48 pp | `particle-model/booklet/a5/` — Book 1 L1, 2, 4; Book 2 L5, 7, 8 (56 pp each) |
 | Water Cycle + Resources | `water-resources/booklet/` — Exp 1 Water Cycle in a Bag (L2), Exp 2 Household Energy Audit (L6), 28 pp | `water-resources/booklet/a5/` — L1, 3, 4, 5, 48 pp |
 | Separation | `separation/booklet/` — Exps 1–9 in teaching order, "Separation techniques at a glance", 78 pp | `separation/booklet/a5/` — Book 1 L1, 2, 4, 5, 7 (72 pp); Book 2 L8, 10, 12, 16 (56 pp) |
+| Ecosystems | `bio-ecosystems/booklet/Ecosystems_Experiment_Booklet_Yr7` — Exps 1–5: Is Yeast Alive? (L1), Key the Schoolyard (L4), Quadrat Survey (L5), Beaks and Food (L8), Rabbit and Fox Model (L9), 49 pp | `bio-ecosystems/booklet/a5/` — Book 1 L1–4 (52 pp), Book 2 L5–8 (48 pp), Book 3 L9–11 (36 pp); written fresh in the 2027 lesson shape (`eco-lessons-1/2/3.tex`) from the A4 unit booklet's content |
+| Space | `space/booklet/Space_Experiment_Booklet_Yr7` — Exp 1 Angle of Sunlight (L2), Exp 2 Impact Craters (L5), 27 pp | `space/booklet/a5/` — core book L1–7 (76 pp), above-level book L8–10 (40 pp), generated from the A4 master by the Section 1 trial's rules |
+| Forces | `forces/booklet/Forces_Experiment_Booklet_Yr7` — Exp 1 Everyday Forces (L3), Exp 2 Friction and Mass (L6), Exp 3 Bounce Efficiency (L8), Exp 4 Mechanical Advantage (L10), Exp 5 Measuring g (L13), 63 pp; every answer slot keeps its A4 key (`forces-diagrams.tex`) | `forces/booklet/a5/` — Book 1 L1, 2, 4 (72 pp), Book 2 L5, 7, 9 (76 pp), Book 3 L11, 12, 14 (60 pp), generated whole from the A4 master with every answer key kept |
 
 - The Particle Model and Separation A5 books are **generated** from the A4
   Particle Model master by `a5/make_a5.py` (the master is never edited):
   merged lessons keep the first lesson's reading, both theory sections, 3
   practice tasks from each and 2 extensions. Old Lessons 6 (Limits of the
   Model) and 12 (Gas Pressure) are left out as optional.
+- Ecosystems, Forces and Space A5 books (24 Nov): `a5/make_a5.py` in each
+  unit. Ecosystems' lessons are written in `eco-lessons-*.tex` (its A4 booklet
+  predates the Parts A–D shape) and built on the Particle Model preamble.
+  Forces slices its own master (keys intact, `\abbase` per book, so a red
+  teacher A5 can be made the A4 way). Space grows the Section 1 trial to all
+  ten sections as Kodie's two books (core / above level); `a5-test/` is left
+  as it was.
+- Forces Experiment Booklet (24 Nov): the five experiments of the A4
+  Forces Lesson Booklet in the 2027 experiment shape (reading, technique,
+  faculty aim and hypothesis frames, variables and risk tables, results,
+  analysis with a numbers-backed conclusion, skill check). Slots keep their
+  A4 keys (`\abox{6.t2}{h}` …; `forces-diagrams.tex` maps them to plain
+  boxes for now), so a red teacher copy can reuse `teacher-answers/L03…L13`;
+  new slots (`N.concl`, `N.sc`, `N.t1-rK`, `3.wd1`, `8.v6`, `13.v6`) need
+  answers added. The A4 lesson booklet still carries the experiments too.
+  The unit plan's five practicals now link to the new pages.
 - Builds: experiment booklet `python3 assemble.py`, xelatex ×3, then
   `python3 fill.py <job>`; A5 `python3 make_a5.py`, then
   `python3 fill_a5.py <job>` per book. The committed `.abx` files came from
   the cloud TeX; re-run the fill locally before printing.
+- Ecosystems and Space had no labs in the plan; Kodie added these on 24 Nov.
+  Each shares its theory lesson (Scope & Sequence cells read "… + Lab: …"),
+  and both unit plans now carry the practicals with booklet page links.
+- **Faculty quality criteria** (24 Nov), from the Science Faculty OneNote
+  "Science Inquiry skills". The unit plans link each practical's science
+  skill to its OneNote page: links in `tools/science-quality-criteria.json`,
+  chosen per practical by `prac.qc`, rendered by `tools/build-planners.js`
+  (staff sign-in, so planners only, never student booklets). The booklets
+  follow the Years 7–8 criteria: hypothesis *If the [IV] is …, the [DV]
+  will …* (reason optional); aim *To investigate the effect of changing
+  [IV] on [DV]*; at least two controlled variables; risk tables
+  Risk / Prevention / Responding; THUD tables; the faculty method
+  checklist. Two deliberate departures (Kodie's call): graphs teach both
+  joining the points and a line of best fit, moving students to a line of
+  best fit quickly, and conclusions quote numbers to back the trend.
 - Scope & Sequence changed with this (23 Nov): T1 W9 L1 is the energy
   audit; Sep Tech W3–W7 reordered so every lab follows its theory lesson
-  and Filtration (W6) comes before the EPI.
+  and Filtration (W6) comes before the EPI. The Separation unit plan
+  (`tools/planner-data/separation-techniques.json`) follows the new order,
+  numbered 1–18 with the CATs unnumbered, and links each row to its page in
+  the A5 lesson books or the experiment booklet (24 Nov).
 
 Still to do *(Kodie, 2026-11-24)*:
 
