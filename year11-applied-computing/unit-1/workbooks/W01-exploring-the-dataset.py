@@ -5,13 +5,41 @@ app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
-def _():
+async def _():
     import marimo as mo
     import sys, os
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "checks"))
-    from contract import data_path
-    nb_dir = os.path.dirname(os.path.abspath(__file__))
-    return data_path, mo, nb_dir, os, sys
+
+    # This notebook runs two ways: downloaded and opened in marimo, or in the
+    # browser with no filesystem beside it. In the browser the dataset still
+    # lives on the site, so fetch the files this workbook needs into the
+    # virtual filesystem first; everything below then reads them normally.
+    NEEDS = ("climate.db", "climate-raw.db",
+             "observation.csv", "station.csv", "region.csv")
+
+    if sys.platform == "emscripten":
+        from pyodide.http import pyfetch
+        base = str(mo.notebook_location()).rstrip("/") + "/../data/"
+        os.makedirs("/data", exist_ok=True)
+        for _name in NEEDS:
+            _r = await pyfetch(base + _name)
+            if _r.status != 200:
+                raise RuntimeError(f"Could not load {_name} from the site ({_r.status}).")
+            with open("/data/" + _name, "wb") as _f:
+                _f.write(await _r.bytes())
+        nb_dir = "/data"
+    else:
+        nb_dir = os.path.dirname(os.path.abspath(__file__))
+        sys.path.insert(0, nb_dir)
+
+    # Imported through the package, not as a bare `import contract`: the
+    # browser build traces imports to decide what to ship, and a module it
+    # only reaches through checks/__init__.py's sys.path shim is left out.
+    from checks import contract
+    if sys.platform == "emscripten":
+        contract.set_data_dir(nb_dir)
+
+    data_path = contract.data_path
+    return NEEDS, contract, data_path, mo, nb_dir, os, sys
 
 
 @app.cell(hide_code=True)
@@ -28,8 +56,10 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _():
-    import w01_exploring as bank
+def _(contract):
+    # Takes `contract` so this cell can only run after the bootstrap above:
+    # the bank resolves its fixture paths at import time.
+    from checks import w01_exploring as bank
     CHECKS = bank.build()
     return CHECKS, bank
 

@@ -9,7 +9,7 @@ Open this whenever you are picking up, finishing or adding work. Claim
 items before starting (Tier 2+), tick and date them on landing, and add
 anything you discover.
 
-Last full audit: 16 Aug 2026. Last addition: 24 Nov 2026 (Applied Computing — holiday homework opening section).
+Last full audit: 16 Aug 2026. Last addition: 25 Nov 2026 (Applied Computing — W01 browser build, proof).
 
 Effort key: **S** = under one session · **M** = one to three sessions ·
 **L** = several sessions, worth splitting.
@@ -1193,6 +1193,61 @@ Course design decisions recorded: Python as the OOP language (so the
 marimo workbooks and the assessed language are the same), SQL against a
 relational database for Unit 1 AOS 1. Unit 1 = Semester 1, Unit 2 =
 Semester 2.
+
+### Landed — W01 runs in a browser (25 Nov 2026) — PROOF, not yet shipped
+
+The Applied Computing workbooks can be WASM exports like
+`year12-algorithmics/unit-4/workbooks`, with students typing into cells. W01
+is converted and built; the built pages are **deliberately not committed yet**
+(see the decision at the end).
+
+What had to change, none of which Algorithmics needed — those notebooks are
+self-contained, these import a package and read a dataset:
+
+- **`checks/` is now a package.** `checks/__init__.py` puts its own directory
+  on `sys.path`, so the GENERATED banks keep working unchanged with their
+  top-level `from contract import ...`. Rewriting them to relative imports
+  would have been undone by the next `build_banks.py` run.
+- **`contract.set_data_dir()`** added. Banks resolve fixture paths at import
+  time, so the data root has to be settable before the bank is imported.
+- **W01 opens with a bootstrap cell.** In the browser it fetches the five
+  files it needs from `unit-1/data/` into Pyodide's virtual filesystem and
+  points `contract` at them; locally the whole branch is skipped. Everything
+  downstream — `open()`, `sqlite3.connect()` — is untouched. The bank cell
+  takes `contract` as an argument purely to force it to run after this one.
+- **`from checks import contract`, never `import contract`.** The export
+  traces imports to decide what to wheel; reached only through the sys.path
+  shim, `contract.py` was silently left out of the wheel. Caught by reading
+  the wheel's manifest, not at runtime.
+
+`tools/build-workbooks-web.py` does the export. It exists because the raw
+export is self-contained: **each notebook would ship its own 26 MB copy of
+the marimo runtime.** It moves the runtime to one `assets/marimo/` and
+rewrites each page to point at it, so eight workbooks cost 26 MB once instead
+of eight times. It also drops marimo's `<link rel="manifest">` — the only
+breakage `check-links.js --all` reports today, now fixed at the source rather
+than hand-edited. Never hand-edit the generated pages; change the script.
+
+- Verified the rewrite is **neutral**: served from a repo-shaped tree, the
+  page pulls **235 local assets, all 200**, and fails at exactly the same
+  point as an untouched export.
+- Verified the local workflow **still works** after the restructure: W01
+  executes headless against the real dataset, and all four checks accept the
+  correct answer and reject a wrong one.
+- **Not verified here:** anything past Pyodide starting. This container
+  cannot reach the CDN, so the data fetch, the wheel install and `sqlite3` in
+  the browser are untested. That is what Kodie's test is for.
+- The export needs **two external hosts**: `cdn.jsdelivr.net` and
+  `wasm.marimo.app` (the Pyodide lockfile). Both must be reachable from the
+  school network. The Algorithmics workbooks already live on the site and use
+  the same two hosts, so opening one of those at school answers this without
+  committing anything.
+- **Mode matters.** The Algorithmics export was built `--mode run` — its code
+  is read-only. These are built `--mode edit`, since the whole design is
+  typing an answer and watching the feedback panel update.
+- **Decision: the 27 MB was not committed.** Git keeps it forever even if the
+  approach is abandoned, and repo weight is already an open item below. The
+  source changes are in; the built pages wait on the firewall answer.
 
 ### Landed — Holiday homework opening section (24 Nov 2026)
 

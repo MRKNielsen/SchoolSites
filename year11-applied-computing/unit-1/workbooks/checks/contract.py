@@ -29,7 +29,25 @@ _CANDIDATES = (
 )
 
 
+_OVERRIDE = None
+
+
+def set_data_dir(path: str) -> None:
+    """Point the checks at a dataset root that is not on disk beside us.
+
+    The browser build has no unit-1/data next to it — this file arrives as an
+    installed wheel and the dataset stays on the site. The notebook fetches the
+    files it needs into the virtual filesystem and calls this once, before any
+    bank is imported (banks resolve their fixtures at import time). Running
+    locally never touches it.
+    """
+    global _OVERRIDE
+    _OVERRIDE = os.path.abspath(path)
+
+
 def data_dir() -> str:
+    if _OVERRIDE is not None:
+        return _OVERRIDE
     for cand in _CANDIDATES:
         if os.path.exists(os.path.join(cand, "climate.db")):
             return os.path.abspath(cand)
