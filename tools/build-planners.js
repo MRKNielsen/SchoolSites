@@ -275,7 +275,7 @@ async function writeDocx(u, outDir) {
   const toRuns = (str, base = {}) => runs(str).map(r => {
     const o = { text: r.math ? texPlain(r.text) : r.text, font: FONT, size: base.size || 18,
       bold: r.bold || base.bold, italics: r.italic || base.italics, color: base.color };
-    if (r.ph) return new TextRun({ ...o, text: `[${r.text}]`, bold: true, highlight: 'yellow' });
+    if (r.ph) return new TextRun({ ...o, text: `[${r.text}]`, bold: true, shading: { type: ShadingType.CLEAR, fill: 'FFF200', color: 'auto' } });
     if (r.href) return new ExternalHyperlink({ link: abs(r.href), children: [new TextRun({ ...o, style: 'Hyperlink', color: '0563C1', underline: {} })] });
     return new TextRun(o);
   });
@@ -321,7 +321,7 @@ async function writeDocx(u, outDir) {
     ...u.print.map(p => B(printItem(p))),
     P('*Each lesson row links its own booklet pages so one section can be printed at a time.*', { after: 100 }),
     ...u.notes.map(n => B(n)),
-    new Paragraph({ children: [new TextRun({ text: u.length, font: FONT, size: 22, bold: true, highlight: 'yellow' })], spacing: { before: 160, after: 120 } }),
+    new Paragraph({ children: [new TextRun({ text: u.length, font: FONT, size: 22, bold: true, shading: { type: ShadingType.CLEAR, fill: 'FFF200', color: 'auto' } })], spacing: { before: 160, after: 120 } }),
   ];
 
   const cw = [900, 3900, 2900, 4900, 2798];
@@ -373,7 +373,19 @@ async function writeDocx(u, outDir) {
   });
   const name = u.unit.replace(/&/g, 'and').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '');
   const file = path.join(outDir, u.file || `${name}_Unit_Plan_Yr7.docx`);
-  fs.writeFileSync(file, await Packer.toBuffer(doc));
+  // Shading, not highlight: some docx versions also write <w:highlightCs>, which
+  // fails schema validation. Folder entries are dropped from the zip because Word
+  // has refused files that carry them when opened through OneDrive/SharePoint.
+  let buf = await Packer.toBuffer(doc);
+  try {
+    const JSZip = require(require.resolve('jszip', { paths: [path.dirname(require.resolve('docx'))] }));
+    // Copy the file entries into a fresh zip: JSZip's remove() on a folder entry
+    // deletes everything under it, so the folders are simply never added.
+    const z = await JSZip.loadAsync(buf), out = new JSZip();
+    for (const [k, f] of Object.entries(z.files)) if (!f.dir) out.file(k, await f.async('nodebuffer'), { createFolders: false });
+    buf = await out.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
+  } catch (e) { /* jszip not resolvable: keep the file as docx wrote it */ }
+  fs.writeFileSync(file, buf);
   return file;
 }
 
