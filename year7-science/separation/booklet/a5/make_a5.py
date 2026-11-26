@@ -33,6 +33,7 @@ What this does to the master:
 Fails if a word of a kept lesson is lost.
 """
 from a5_fullwidth import full_width
+from a5_levels import split_levels, build_advanced
 import re, sys, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -50,6 +51,14 @@ MOVED = {3: 'Experiment 1 --- Solubility', 6: 'Experiment 2 --- Surface Area and
          9: 'Experiment 3 --- Fast and Slow Evaporation', 11: 'Experiment 4 --- Rates of Evaporation',
          13: 'Experiment 5 --- Solubility and Temperature', 14: 'Experiment 6 --- Growing Copper Sulfate Crystals (stretch)',
          15: 'Experiment 7 --- Filtration', 17: 'Experiment 8 --- Distillation', 18: 'Experiment 9 --- The Great Green Mix Up'}
+ADV = 'Advanced Separation'
+OUT_ADV = os.path.join(HERE, 'Advanced_Separation_Yr7_A5.tex')
+BOOKS_LINE = 'Two lesson books. The experiments are in the \\textbf{Experiment Booklet}.'
+# Advanced topics: (title, at-level lessons it deepens); one book
+TOPICS = {1: ('Atoms, Elements and Compounds', '1, 4'), 2: ('Mixtures by Numbers', '2, 5'),
+          3: ('Separating by Size, Density and Magnetism', '7'), 4: ('Crystals and Solubility Curves', '8, 10, 12'),
+          5: ('Distillation and Chromatography at Work', '16')}
+ADV_BOOKS = {1: [1, 2, 3, 4, 5]}
 TEXT_W = 11.8          # cm: A5 148 mm less inner 17 + outer 13
 COL_PAD = 0.42         # cm of \tabcolsep padding per column
 
@@ -177,17 +186,27 @@ def build(book, keep):
   assert '%%' not in front and 'particle-model.jpg' not in front
 
   out = pre + style + '\\begin{document}\n' + front + ''.join(body) + '\n'.join(gloss) + '\n\\end{document}\n'
+  out, parts = split_levels(out, BOOKS_LINE, ADV)
   open(OUT % book, 'w', encoding='utf-8').write(full_width(out))
 
   # ---- no word lost: every word of every kept lesson is still in the output ----
   def words_of(t):
       t = re.sub(r'%.*', '', t)
       return re.findall(r'[A-Za-z]{4,}', t)
-  missing = set(w for n in keep for w in words_of(blocks[n])) - set(words_of(out))
+  missing = set(w for n in keep for w in words_of(blocks[n][:blocks[n].index('\\lessonpart{D}')])) - set(words_of(out))
   if missing:
       sys.exit('lost words: %s' % sorted(missing)[:20])
   print('wrote', os.path.basename(OUT % book), '-', len(keep), 'lessons,', len(words), 'glossary words')
+  return parts
 
 
+parts = {}
 for book, keep in BOOKS.items():
-    build(book, keep)
+    parts.update(build(book, keep))
+
+build_advanced(here=HERE, pre=pre.replace('{SEPARATION}', '{ADVANCED SEPARATION}'), style=style,
+               front_tpl=open(os.path.join(HERE, 'a5-front.tex'), encoding='utf-8').read(),
+               adv_src='adv-separation.tex', topics=TOPICS, books=ADV_BOOKS, out_pattern=OUT_ADV, parts=parts,
+               unit='Separation Technologies and Techniques', adv=ADV, cover='covers/separation.jpg',
+               vc='VC2S8U06 \\textbullet\\ VC2S8U07 \\textbullet\\ VC2S10U07 \\textbullet\\ VC2S10H02--H03',
+               fit=lambda t: fit_pictures(tabspec(t)), full_width=full_width)

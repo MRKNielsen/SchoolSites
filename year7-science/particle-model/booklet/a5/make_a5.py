@@ -35,6 +35,7 @@ What this does to it:
 Fails if a word of a kept part is lost or an environment is cut in half.
 """
 from a5_fullwidth import full_width
+from a5_levels import split_levels, build_advanced, d_tasks, balanced as _bal, words_of as _wo
 import re, sys, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -48,6 +49,15 @@ BOOKS = {1: [1, 2, 4], 2: [5, 7, 8]}
 MOVED = {3: 'Experiment 1 --- Matter Has Mass and Takes Up Space',
          6: 'Experiment 2 --- A Cooling Curve',
          9: 'Experiment 3 --- Density by Displacement'}
+ADV = 'Advanced Particle Model'
+OUT_ADV = os.path.join(HERE, 'Advanced_Particle_Model_Yr7_A5_Book%d.tex')
+BOOKS_LINE = 'Two lesson books. The experiments are in the \\textbf{Experiment Booklet}.'
+# Advanced topics: (title, at-level lessons it deepens). Topics 2 and 5 are the
+# master's Lessons 6 and 12, which the at-level books leave out.
+TOPICS = {1: ('Strange States of Matter', '1'), 2: ('Models and Their Limits', '2, 4'),
+          3: ('Particles, Energy and Temperature', '4'), 4: ('Energy and Changes of State', '5'),
+          5: ('Gas Pressure', '7'), 6: ('Density, Floating and Buoyancy', '8')}
+ADV_BOOKS = {1: [1, 2, 3], 2: [4, 5, 6]}
 PRACTICE_PER_SOURCE = 3
 EXT_KEEP = 2
 TEXT_W = 11.8          # cm: A5 148 mm less inner 17 + outer 13
@@ -166,7 +176,7 @@ def plan_lesson(num, title, srcs):
     out = head + p1['A'] + p1['B'] + b2 + i1 + t1 + t2 + d1
     # cross-references between the two master lessons now point inside one lesson
     out = out.replace('This lesson is about melting and freezing; Lesson 8 covers the rest.', 'Melting and freezing come first; the rest follow.')
-    return balanced(out, num), [p1['A'], p1['B'], b2, t1, t2, d1]
+    return balanced(out, num), [p1['A'], p1['B'], b2, t1, t2]
 
 
 def build(book, keep):
@@ -178,7 +188,7 @@ def build(book, keep):
       if num not in keep:
           continue
       b, pieces = plan_lesson(num, title, srcs)
-      kept += pieces
+      kept += pieces if len(srcs) > 1 else [pieces[0][:pieces[0].index('\\lessonpart{D}')]]
       b = fit_pictures(tabspec(b))
       body.append('\\setcounter{section}{%d}\\renewcommand{\\lessonart}{%d}\n' % (num - 1, srcs[0]) + b)
 
@@ -228,6 +238,7 @@ def build(book, keep):
            .replace('%%CONTENTS%%', '\n'.join(rows)).replace('%%BOOK%%', str(book)).replace('%%RANGE%%', rng))
 
   out = pre + style + '\\begin{document}\n' + front + ''.join(body) + '\n'.join(gloss) + '\n\\end{document}\n'
+  out, _ = split_levels(out, BOOKS_LINE, ADV)
   open(OUT % book, 'w', encoding='utf-8').write(full_width(out))
 
   # ---- no word lost: every word of every kept lesson is still in the output ----
@@ -242,3 +253,36 @@ def build(book, keep):
 
 for book, keep in BOOKS.items():
     build(book, keep)
+
+
+# ---- Advanced Particle Model ---------------------------------------------------
+def master_d(n):
+    b = blocks[n]
+    return d_tasks(b[b.index('\\lessonpart{D}'):])
+
+
+def whole_lesson(n, more):
+    """A master lesson left out of the at-level books, as an Advanced topic:
+    from its vocabulary on, its Part D a Challenge, with the Part D of at-level
+    lesson `more` added to its practice."""
+    b = blocks[n]
+    b = b[b.index('\\vocabhead'):]
+    i = b.index('\\lessonpart{D}')
+    core, d = b[:i], b[i:]
+    d = '\\lessonpart{D}{Challenge}{Violet}\n' + d_tasks(d)
+    b = (core + '\\needspace{14\\baselineskip}\\par\\medskip{\\headingfont\\bfseries\\large More practice}\\par\\smallskip\n'
+         + '%%%%PARTD:%d%%%%\n' % more + d)
+    return fit_pictures(tabspec(_bal(b, n)))
+
+
+adv_parts = {1: master_d(1), 2: master_d(2), 4: master_d(4) + master_d(5), 5: master_d(7) + master_d(8),
+             7: master_d(10) + master_d(11), 8: master_d(13) + master_d(14)}
+lessons = {'%%LESSON:6%%': whole_lesson(6, 2), '%%LESSON:12%%': whole_lesson(12, 7)}
+outs = build_advanced(here=HERE, pre=pre, style=style, front_tpl=open(os.path.join(HERE, 'a5-front.tex'), encoding='utf-8').read(),
+                      adv_src='adv-particle-model.tex', topics=TOPICS, books=ADV_BOOKS, out_pattern=OUT_ADV, parts=adv_parts,
+                      unit='The Particle Model', adv=ADV, cover='covers/particle-model.jpg',
+                      vc='VC2S8U05 \\textbullet\\ VC2S10U14 \\textbullet\\ VC2S10U15',
+                      fit=lambda t: fit_pictures(tabspec(t)), full_width=full_width, extra=lessons)
+lost = set(w for t in lessons.values() for w in _wo(t)) - set(_wo(''.join(outs)))
+if lost:
+    sys.exit('advanced lost words: %s' % sorted(lost)[:20])

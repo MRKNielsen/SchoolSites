@@ -13,6 +13,7 @@ the 2027 A5 workbook style (a5-style.tex) is the same file the Particle Model
 A5 books use.
 """
 from a5_fullwidth import full_width
+from a5_levels import split_levels, build_advanced
 import re, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 MASTER = os.path.join(HERE, '..', '..', '..', 'particle-model', 'booklet', 'Particle_Model_Lesson_Booklet_Yr7.tex')
@@ -76,6 +77,22 @@ front = (front.replace('%%CONTENTS%%', '\n'.join(rows))
          .replace('Three lesson books; experiments are in the \\textbf{Experiment Booklet}.',
                   'Lessons 2 and 6 are practicals: they are in the \\textbf{Experiment Booklet}.'))
 assert '%%' not in front
+ADV = 'Advanced Water and Resources'
 out = pre + style + '\\begin{document}\n' + front + body + '\n'.join(gloss) + '\n\\end{document}\n'
+out, dparts = split_levels(out, 'Lessons 2 and 6 are practicals: they are in the \\textbf{Experiment Booklet}.', ADV)
 open(OUT, 'w', encoding='utf-8').write(full_width(out))
 print('wrote', os.path.basename(OUT), '-', len(words), 'glossary words')
+
+# ---- Advanced Water and Resources (faculty decision, Nov 2026; see a5_levels.py) ----
+def cover_fix(f):
+    f = f.replace('\\node[anchor=north] at (current page.north) {\\includegraphics[width=\\paperwidth]{../../../covers/particle-model.jpg}};', '')
+    f = f.replace('\\thispagestyle{empty}\n', '\\thispagestyle{empty}\n\\wrcover\n', 1)
+    return f.replace('VC2S8U05 \\textbullet\\ VC2S8I01--I08 \\textbullet\\ VC2S8H01', 'VC2S8U09 \\textbullet\\ VC2S10U11 \\textbullet\\ VC2S10U15 \\textbullet\\ VC2S10U16')
+build_advanced(here=HERE, pre=pre, style=style, front_tpl=open(os.path.join(HERE, 'a5-front.tex'), encoding='utf-8').read(),
+               adv_src='adv-water-resources.tex',
+               topics={1: ('Energy, the Water Cycle and Climate', '1'), 2: ('Resources Across Their Life Cycle', '3'),
+                       3: ('Water Footprints', '4'), 4: ('Energy Efficiency and the Grid', '5')},
+               books={1: [1, 2, 3, 4]}, out_pattern=os.path.join(HERE, 'Advanced_Water_Resources_Yr7_A5.tex'), parts=dparts,
+               unit='Water Cycle and Resources', adv=ADV, cover='\\wrcover', vc='',
+               fit=lambda t: t.replace('\\begin{tikzpicture}', '\\begin{fitbox}\\begin{tikzpicture}').replace('\\end{tikzpicture}', '\\end{tikzpicture}\\end{fitbox}'),
+               full_width=full_width, front_fix=cover_fix)

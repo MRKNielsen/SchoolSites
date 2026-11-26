@@ -292,7 +292,11 @@ SHORT = {1: 'Earth, Moon and Sun', 2: 'Day, Night and Seasons', 3: 'Moon Phases 
          5: 'Our Solar System', 6: 'Space Technology', 7: 'First Nations Astronomy', 8: 'The Search for Life',
          9: 'Gravity and Orbits', 10: 'Stars, Galaxies and Starlight'}
 LABS = {2: 'Experiment 1 --- The Angle of Sunlight', 5: 'Experiment 2 --- Impact Craters'}
-BOOKS = {1: ([1, 2, 3, 4, 5, 6, 7], 'Lessons 1--7 \\textbullet\\ Core'), 2: ([8, 9, 10], 'Lessons 8--10 \\textbullet\\ Above level')}
+# Faculty decision, 25 Nov 2026: one at-level book (Lessons 1-7, the Year 8
+# boxes taken out) and Advanced Space (Lessons 8-10 and those boxes, deepened).
+BOOKS = {1: ([1, 2, 3, 4, 5, 6, 7], 'Lessons 1--7'), 2: ([8, 9, 10], 'Lessons 8--10')}
+OUT_AT = os.path.join(HERE, "Space_Lesson_Booklet_Yr7_A5.tex")
+OUT_ADV = os.path.join(HERE, "Advanced_Space_Yr7_A5.tex")
 OUTB = os.path.join(HERE, "Space_Lesson_Booklet_Yr7_A5_Book%d.tex")
 
 
@@ -403,12 +407,21 @@ def transform_n(n, title, header, body):
     return vc.group(1), vc.group(2), body
 
 
-def build(book, keep, rng, secs, allwords):
+def build(book, keep, rng, secs, allwords, above=None):
     parts = []
     words, seen = [], set()
     for n in keep:
         title, header, raw = secs[n]
         area, desc, body = transform_n(n, title, header, raw)
+        if above is not None:
+            # at-level book: the Year 8 boxes go to Advanced Space
+            above.extend(re.findall(r"\\begin\{abovebox\}(.*?)\\end\{abovebox\}", body, flags=re.S))
+            body = re.sub(r"(\\clearpage\n)?\\begin\{abovebox\}.*?\\end\{abovebox\}\n?", "", body, flags=re.S)
+            raw = re.sub(r"\\begin\{yr8box\}.*?\\end\{yr8box\}", "", raw, flags=re.S)
+            # and the master's "Above level --- extension sections" divider after Lesson 7
+            div = r"\\vspace\*\{3cm\}\s*\\begin\{center\}\s*\{\\headingfont\\Huge\\bfseries\\color\{Violet\}Above level\}.*?extension sections\}\}"
+            body = re.sub(div, "", body, flags=re.S)
+            raw = re.sub(div, "", raw, flags=re.S)
         lw = []
 
         def lab(m):
@@ -529,17 +542,133 @@ def check_words(raw_all, doc):
         sys.exit("text lost: %s" % lost)
 
 
+def at_level_front(doc):
+    """One at-level book: no above-level rows, Lessons 8-10 point to Advanced Space."""
+    for old, new in [("{Lesson Booklet 1\\\\[-1pt]{\\normalfont\\headingfont\\scriptsize Lessons 1--7}}", "{Lesson Booklet\\\\[-1pt]{\\normalfont\\headingfont\\scriptsize Lessons 1--7}}"),
+                     ("{\\headingfont Lesson Booklet 1 \\textbullet\\ Lessons 1--7 \\textbullet\\ Year 7}", "{\\headingfont Lesson Booklet \\textbullet\\ Lessons 1--7 \\textbullet\\ Year 7}"),
+                     ("\\textbf{Above level} & Year 8 extension (double frame) \\\\\n", ""),
+                     ("Two lesson books: the core book and the above-level book. The two labs are in the \\textbf{Experiment Booklet}.",
+                      "One lesson book. The two labs are in the \\textbf{Experiment Booklet}. Finished your lesson work and want to go further? Ask your teacher about \\textbf{Advanced Space}.")]:
+        assert old in doc, old
+        doc = doc.replace(old, new)
+    doc, k = re.subn(r"  (8|9|10) & \\textit\{([^}]*)\} \\textit\{\(above level\)\} & Book 2", r"  \1 & \\textit{\2} & Advanced Space", doc)
+    assert k == 3, k
+    body = re.sub(r"(?<!\\)%.*", "", doc[doc.index("\\begin{document}"):])
+    for bad in ("abovebox", "Year 8", "above level", "Above level"):
+        assert bad not in body, bad
+    return doc
+
+
+ADV_TOPICS = {1: ("The Moon Up Close", "1, 3, 4"), 2: ("Earth's Shield and Crowded Orbits", "1, 6"),
+              3: ("The Search for Life", "5, 6"), 4: ("Gravity and Orbits", "1, 3, 5"),
+              5: ("Stars, Galaxies and Starlight", "5, 7")}
+
+
+def advanced(doc2, above):
+    """Advanced Space: Topics 1-2 written in adv-space.tex around the Year 8 boxes
+    of Lessons 1-7; Topics 3-5 are Lessons 8-10, renumbered."""
+    pre, rest = doc2.split("\\begin{document}", 1)
+    pre = pre.replace("\\newtcolorbox{abovebox}[1][Above level \\textbullet\\ Year 8 extension]", "\\newtcolorbox{abovebox}[1][Reading]")
+    pre = pre.replace("SPACE \\textbullet\\ LESSON}", "ADVANCED SPACE \\textbullet\\ TOPIC}")
+    pre = pre.replace("\\fancyhead[LE]{\\headingfont\\footnotesize Space}", "\\fancyhead[LE]{\\headingfont\\footnotesize Advanced Space}")
+    i = rest.index("\\setcounter{section}{7}"); j = rest.index("\\clearpage\\markboth{Glossary}")
+    front, body = rest[:i], rest[i:j]
+    # Lessons 8-10 become Topics 3-5
+    for n in (8, 9, 10):
+        t = n - 5
+        body = body.replace("\\setcounter{section}{%d}\n\\lessonopener{%d}" % (n - 1, n), "\\setcounter{section}{%d}\n\\lessonopener{%d}" % (t - 1, t))
+        body = body.replace("}{%d \\textbullet\\ %s}\\label{sec:%d}\\pdfbookmark[1]{Lesson %d}{lesson.%d}\\hypertarget{lesson.%d.1}{}" % (n, SHORT[n], n, n, n, n),
+                            "}{%d \\textbullet\\ %s}\\label{sec:%d}\\pdfbookmark[1]{Topic %d}{lesson.%d}\\hypertarget{lesson.%d.1}{}" % (t, SHORT[n], t, t, t, t))
+    assert body.count("\\lessonopener{3}") == 1 and body.count("\\lessonopener{5}") == 1
+    body = re.sub(r"\\extension\{This section sits.*?extension\.\}\n*", "", body, flags=re.S)
+    assert "\\extension" not in body
+    def retitle(m):
+        return "\\begin{abovebox}[Reading \\textbullet\\ %s]" % m.group(1).strip()
+    body = re.sub(r"\\begin\{abovebox\}\s*\\textbf\{Year 8 Extension: ([^}]*)\}", retitle, body)
+    # the Year 8 boxes from Lessons 1-7, as readings
+    assert len(above) == 6, len(above)
+    def reading(t):
+        t = re.sub(r"\\label\{(voc|y8):[^}]*\}", "", t)
+        m = re.search(r"\\textbf\{Year 8 Extension: ([^}]*)\}", t)
+        t = t.replace(m.group(0), "", 1).replace("\\textbf{Extension challenge.}", "\\textbf{Challenge.}")
+        return "\\begin{abovebox}[Reading \\textbullet\\ %s]\n%s\n\\end{abovebox}\n" % (m.group(1).strip(), t.strip())
+    src = open(os.path.join(HERE, "adv-space.tex"), encoding="utf-8").read()
+    src = re.sub(r"%%ABOVE:(\d)%%", lambda m: reading(above[int(m.group(1)) - 1]), src)
+    k = src.index("%%LESSON:8%%"); e = src.index("%%LESSON:10%%") + len("%%LESSON:10%%")
+    topics12, tail = src[:k], src[e:]
+    topics12 = tabspec(fit(topics12))
+    adv = topics12 + body + tail
+    assert not re.search(r"%%[A-Z]+:\d+%%", adv)
+    # glossary: every \vocab word, labelled at its first use
+    words, seen = [], set()
+    def lab(m):
+        w = m.group(1); key = slug(w)
+        if key in seen:
+            return m.group(0)
+        seen.add(key); words.append(w)
+        return m.group(0) + "\\label{voc:%s}" % key
+    adv = re.sub(r"\\label\{voc:[^}]*\}", "", adv)
+    adv = re.sub(r"\\vocab\{([^}]*)\}", lab, adv)
+    gloss_rows = "\n".join(r"  %s & \pageref{voc:%s} & \\ \hline" % (w[0].upper() + w[1:], slug(w)) for w in sorted(words, key=lambda w: w.lower()))
+    glossary = rest[j:]
+    glossary = glossary[:glossary.index("\\endhead") + len("\\endhead")] + "\n" + gloss_rows + "\n\\end{longtable}\n\\padtofour\n\\end{document}\n"
+    # front
+    front = front.replace("{Lesson Booklet 2\\\\[-1pt]{\\normalfont\\headingfont\\scriptsize Lessons 8--10}}", "{Advanced Space\\\\[-1pt]{\\normalfont\\headingfont\\scriptsize Topics 1--5}}")
+    front = front.replace("\\markboth{Space}{Space}\n{\\headingfont\\bfseries\\Large Space}", "\\markboth{Advanced Space}{Advanced Space}\n{\\headingfont\\bfseries\\Large Advanced Space}")
+    front = front.replace("{\\headingfont Lesson Booklet 2 \\textbullet\\ Lessons 8--10 \\textbullet\\ Year 7}", "{\\headingfont Topics 1--5 \\textbullet\\ Above the Year 7 level}")
+    a = front.index("\\begin{keybox}{How this booklet works}"); b = front.index("\\end{keybox}", a) + len("\\end{keybox}")
+    front = front[:a] + r"""\begin{keybox}{How this booklet works}
+\textbf{Advanced Space} goes deeper into the ideas of the lesson book: more powerful models, the mathematics behind them, and harder problems that bring several ideas together. Each topic builds on the lessons named in the contents. Each kind of box has its own frame and mark:\par\smallskip
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{24mm}l@{}}
+\textbf{I do} {\scriptsize\textbullet} & Worked through for you --- follow it \\
+\textbf{We do} {\scriptsize\textbullet\textbullet} & You try it with help \\
+\textbf{You do} {\scriptsize\textbullet\textbullet\textbullet} & On your own: check your understanding \\
+\textbf{Key idea} & The idea to remember \\
+\textbf{Reading} & A deeper reading (double frame) \\
+\textbf{Country} & First Nations perspectives (dotted frame) \\
+\end{tabular}
+\end{keybox}""" + front[b:]
+    a = front.index("\\begin{tabular}{|>{\\Centering}p{11mm}"); b = front.index("\\end{tabular}", a) + len("\\end{tabular}")
+    rows = "\n".join(r"  %d & \hyperlink{lesson.%d.1}{%s} & %s & \hyperlink{lesson.%d.1}{p.\ \pageref{sec:%d}} \\ \hline" % (t, t, ti, dl, t, t) for t, (ti, dl) in ADV_TOPICS.items())
+    front = front[:a] + r"""\begin{tabular}{|>{\Centering}p{11mm}|>{\RaggedRight}p{52mm}|>{\Centering}p{15mm}|>{\Centering}p{13mm}|}
+  \hline\thead{Topic} & \thead{Title} & \thead{Deepens lesson} & \thead{Page} \\ \hline
+""" + rows + r"""
+  --- & \hyperlink{glossary}{Glossary} & & \hyperlink{glossary}{\pageref{sec:glossary}} \\ \hline
+\end{tabular}""" + front[b:]
+    out = pre + "\\begin{document}" + front + adv + glossary
+    nc = re.sub(r"(?<!\\)%.*", "", out[out.index("\\begin{document}"):])
+    for bad in ("Year 8", "above level", "Above level", "ptional", "\\extension"):
+        assert bad not in nc, (bad, nc[nc.index(bad) - 200:nc.index(bad) + 80])
+    return out
+
+
 def main():
     master = open(MASTER, encoding="utf-8").read()
     secs = sections(master)
     assert sorted(secs) == list(range(1, 11)), sorted(secs)
-    for book, (keep, rng) in BOOKS.items():
-        raw = []
-        doc = build(book, keep, rng, secs, raw)
-        check_words(raw, doc)
-        with open(OUTB % book, "w", encoding="utf-8", newline="\n") as f:
-            f.write(doc)
-        print("wrote", os.path.basename(OUTB % book))
+    raw, above = [], []
+    doc = at_level_front(build(1, BOOKS[1][0], BOOKS[1][1], secs, raw, above))
+    check_words(raw, doc)
+    with open(OUT_AT, "w", encoding="utf-8", newline="\n") as f:
+        f.write(doc)
+    print("wrote", os.path.basename(OUT_AT))
+    raw2 = []
+    doc2 = build(2, BOOKS[2][0], BOOKS[2][1], secs, raw2)
+    check_words(raw2, doc2)
+    adv = advanced(doc2, above)
+    # no word of Lessons 8-10 or of a moved Year 8 box is lost
+    def norm_src(t):
+        t = re.sub(r"\\extension\{This section sits.*?extension\.\}", "", t, flags=re.S)
+        t = re.sub(r"This section sits \\textbf\{above\} the Year 7 level\..*?extension\.", "", t, flags=re.S)
+        t = re.sub(r"\\label\{[^}]*\}", "", t)
+        return t.replace("Year 8 Extension:", "").replace("Extension challenge.", "Challenge.")
+    def norm_adv(t):
+        return re.sub(r"\\begin\{abovebox\}\[Reading \\textbullet\\ ([^\]]*)\]", r"\1 ", t)
+    check_words([norm_src(t) for t in raw2 + above], norm_adv(adv))
+    with open(OUT_ADV, "w", encoding="utf-8", newline="\n") as f:
+        f.write(adv)
+    print("wrote", os.path.basename(OUT_ADV))
 
 
 if __name__ == "__main__":

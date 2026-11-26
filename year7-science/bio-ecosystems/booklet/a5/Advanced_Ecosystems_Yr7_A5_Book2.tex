@@ -1,0 +1,1278 @@
+% ============================================================
+%  The Particle Model — Lesson Booklet (one section per lesson: A Reading · B Theory · C Practice · D Above level)
+%  Year 7 (Year 8 extension)  |  Victorian Curriculum F–10 Version 2.0
+%  Compile with: xelatex three times, then python3 fill.py Particle_Model_Lesson_Booklet_Yr7
+% ============================================================
+\documentclass[11pt,a5paper,twoside]{article}
+\newcommand{\wrcoverfile}{../../../covers/ecosystems.jpg}\newcommand{\unitname}{Advanced Ecosystems}\newcommand{\unitcaps}{ADVANCED ECOSYSTEMS}
+
+% ── Fonts (compile with LuaLaTeX) ────────────────────────────────────────────
+\usepackage{fontspec}
+% Bundled fonts (in ./fonts/) so the document compiles anywhere with XeLaTeX/LuaLaTeX
+\setmainfont{Lato}[                   % body — humanist sans (stands in for deck's Inter)
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Lato-Regular, ItalicFont=Lato-Italic,
+  BoldFont=Lato-Bold, BoldItalicFont=Lato-BoldItalic ]
+\newfontfamily\headingfont{Poppins}[  % display/headings — matches the slide decks
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Poppins-Regular, ItalicFont=Poppins-Italic,
+  BoldFont=Poppins-Bold, BoldItalicFont=Poppins-BoldItalic ]
+\setlength{\headheight}{22pt}
+
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage[a5paper, inner=17mm, outer=13mm, top=19mm, bottom=17mm, headheight=14pt, headsep=4mm, footskip=8mm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, calc, positioning, decorations.pathreplacing}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, raster}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{needspace}
+% TikZ diagram macros are embedded below (just before \begin{document}) for easy editing.
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{pifont}
+\usepackage{lastpage}
+\usepackage{calc}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{ragged2e}
+% PDF bookmarks: one per lesson (made in \sectiondiv) plus the cover and
+% contents, and links from the contents table to each lesson.
+% implicit=false: hyperref adds no anchors of its own (an anchor on each
+% list item nudged lists down 1.5 mm, which would undo the page fill).
+% hidelinks keeps the links invisible, so the printed pages are unchanged.
+\usepackage[implicit=false, hidelinks,
+  pdftitle={Advanced Ecosystems},
+  pdfsubject={Years 7–8 Science, Victorian Curriculum F–10 v2.0}]{hyperref}
+\usepackage{bookmark} % writes the outline itself, which implicit=false switches off in hyperref
+% hyperref 7.01 with implicit=false leaves \Hy@PageAnchorSlide undefined, which
+% throws at \end{document} and stops fill.py (it builds with -halt-on-error).
+\makeatletter\providecommand\Hy@PageAnchorSlide{}\makeatother
+
+% ── Colour Palette ───────────────────────────────────────────────────────────
+% Remapped to the slide-deck palette (names kept so body + diagrams cascade)
+\definecolor{NavyBlue}   {HTML}{16305C}
+\definecolor{MidBlue}    {HTML}{2E6FE0}
+\definecolor{LightBlue}  {HTML}{E8F1FF}
+\definecolor{TealGreen}  {HTML}{0F6E63}
+\definecolor{LightGreen} {HTML}{E0F7F3}
+\definecolor{GoldDark}   {HTML}{C77F12}
+\definecolor{GoldLight}  {HTML}{FFF3DC}
+\definecolor{PurpleDark} {HTML}{5B3FC0}
+\definecolor{PurpleLight}{HTML}{EFE9FF}
+\definecolor{OrangeDark} {HTML}{C9483D}
+\definecolor{OrangeLight}{HTML}{FFE9E6}
+\definecolor{MidGrey}    {HTML}{AEBED4}
+\definecolor{LightGrey}  {HTML}{F2F5FA}
+\definecolor{DarkGrey}   {HTML}{3A4759}
+\definecolor{TableHead}  {HTML}{16305C}
+\definecolor{RowAlt}     {HTML}{EEF4FF}
+% Bright accent tints (deck) for bars, rules and chips
+\definecolor{Blue}   {HTML}{2E6FE0}
+\definecolor{Teal}   {HTML}{18A999}
+\definecolor{Amber}  {HTML}{F5A623}
+\definecolor{Coral}  {HTML}{FF6B5E}
+\definecolor{Violet} {HTML}{7C5CE0}
+\definecolor{Sky}    {HTML}{4DA3FF}
+\definecolor{Ink}    {HTML}{16223A}
+\definecolor{Line}   {HTML}{DDE5F0}
+\definecolor{Paper}  {HTML}{FBFCFE}
+
+% ── Page Style ───────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{NavyBlue}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\headingfont\small\color{NavyBlue}The Particle Model}
+\fancyhead[R]{\headingfont\small\color{DarkGrey}Year 7 \textbar{} Victorian Curriculum F--10 v2.0}
+\fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\headingfont\small\color{DarkGrey}\thepage\ \textbar{} \pageref{LastPage}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ── Section Formatting ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\headingfont\color{NavyBlue}\Large\bfseries}
+  {}{0em}{}
+  [{\color{Teal}\rule[0.6ex]{2.2em}{3pt}}{\color{Line}\rule[0.6ex]{\dimexpr\linewidth-2.2em\relax}{1pt}}]
+\titlespacing{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\headingfont\color{MidBlue}\large\bfseries}
+  {\thesubsection}{0.6em}{}
+\titlespacing{\subsection}{0pt}{12pt}{4pt}
+
+\titleformat{\subsubsection}
+  {\headingfont\color{NavyBlue}\normalsize\bfseries}
+  {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% Deck-style eyebrow / kicker (optional use)
+\newcommand{\kicker}[2][Teal]{%
+  {\headingfont\bfseries\footnotesize\color{#1}%
+   \textcolor{#1}{\rule[0.18ex]{1.6em}{2.2pt}}\hspace{0.5em}\MakeUppercase{#2}\par}%
+  \vspace{2pt}}
+
+% ── Custom tcolorbox Environments ────────────────────────────────────────────
+
+% Section divider banner
+\newtcolorbox{sectionbanner}[2]{
+  enhanced, breakable=false,
+  colback=NavyBlue, colframe=NavyBlue,
+  fontupper=\color{white}\bfseries\large,
+  left=4mm, right=4mm, top=3mm, bottom=3mm,
+  title={\color{white}\Huge\bfseries #1},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NavyBlue, colframe=NavyBlue},
+  after upper={\par\smallskip\normalfont\normalsize\color{white!80!NavyBlue}\textit{#2}}
+}
+
+% Key info box (blue)
+\newtcolorbox{infobox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Scaffold box (yellow)
+\newtcolorbox{scaffold}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=GoldLight, colframe=Amber!40,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Worked example box
+\newtcolorbox{workedexbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Amber!50,
+  fonttitle=\headingfont\bfseries, coltitle=GoldDark,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+% Worked examples: \begin{workedex}{title} -> "Worked Example N.M --- title",
+% auto-numbered per section and labelled we:N.M. Never type the number.
+\newcounter{wenum}[section]
+\renewcommand{\thewenum}{\thesection.\arabic{wenum}}
+\newenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked Example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+
+% We do: straight after each worked example, a near-identical question the
+% class works through together, with its own writing space. Numbered to
+% match the worked example above it and labelled wd:N.M.
+%   \begin{wedo}{title} question ... \answerbox{h} \end{wedo}
+\newtcolorbox{wedobox}[1]{
+  enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=TealGreen!55,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen!75!black,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+\newenvironment{wedo}[1]
+  {\par\needspace{9\baselineskip}\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+
+% Year 7 box (blue)
+\newtcolorbox{yr7box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=LightBlue, colframe=Blue!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Year 8 extension box (violet)
+\newtcolorbox{yr8box}{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=PurpleLight, colframe=Violet!40,
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% Answer lines box
+\newcommand{\answerbox}[1]{%
+  \begin{tcolorbox}[
+    enhanced, breakable, arc=2mm,
+    colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    boxrule=1pt,
+    height=#1
+  ]
+  \end{tcolorbox}%
+}
+
+% Experiment header
+\newtcolorbox{expheader}[3]{
+  breakable=false, arc=2.5mm,
+  colback=RowAlt, colframe=Amber!50, boxrule=0.5pt,
+  fonttitle=\headingfont\bfseries\large, coltitle=NavyBlue,
+  title={Experiment #1: #2},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  after upper={\par\smallskip
+    {\headingfont\bfseries\color{GoldDark}Aim:}\ \textit{#3}},
+}
+
+% Reading comprehension passage box (green)
+\newtcolorbox{readingbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=white, colframe=Teal!50,
+  fonttitle=\headingfont\bfseries, coltitle=TealGreen,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+  fontupper=\normalsize
+}
+
+% Skill-builder box (for beginner scaffolding)
+\newtcolorbox{skillbox}[1]{
+  breakable, arc=2.5mm, boxrule=0.5pt,
+  colback=RowAlt, colframe=Blue!40,
+  fonttitle=\headingfont\bfseries, coltitle=MidBlue,
+  title={#1},
+  left=4mm, right=3.5mm, top=2.5mm, bottom=2.5mm
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+
+% Question: \question{marks}{text}  (marks can be empty)
+% Numbered automatically as Q<section>.<n>, reset every section.
+% Do NOT write numbers by hand.
+\newcounter{qnum}[section]
+\renewcommand{\theqnum}{\thesection.\arabic{qnum}}
+\newcommand{\question}[2]{%
+  \refstepcounter{qnum}%
+  \needspace{3\baselineskip}%
+  \medskip
+  \noindent\label{q:\theqnum}\textbf{Q\theqnum}\ifx&#1&\else\ \textcolor{DarkGrey}{(#1 mark\ifnum#1=1\else s\fi)}\fi\quad #2%
+  \medskip
+}
+
+% Inline marks note
+\newcommand{\markscount}[1]{\hfill\textcolor{DarkGrey}{\textit{(#1 mark\ifnum#1=1\else s\fi)}}}
+
+% ── Practice set counter and question macros ─────────────────────────────────
+\newcounter{pqnum}
+\newcommand{\practiceset}[1]{%
+  \needspace{6\baselineskip}
+  \setcounter{pqnum}{0}%
+  \vspace{6pt}
+  {\headingfont\bfseries\large\color{GoldDark} Practice Set --- #1}\\[-2pt]
+  {\color{Amber}\rule{\linewidth}{1pt}}\\[2pt]
+}
+% \pq{question text}{working box height}
+\newcommand{\pq}[2]{%
+  \stepcounter{pqnum}%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent\textbf{\thepqnum.}\quad #1\par
+  \vspace{2pt}
+  \answerbox{#2}
+}
+% Two short questions side by side, each with its own box
+\newcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}
+  \vspace{5pt}
+  \noindent
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\linewidth}
+    \stepcounter{pqnum}\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+    \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+      top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}
+  \end{minipage}
+}
+
+% ── Comprehension question macro (compact, lined) ────────────────────────────
+\newcounter{rcnum}
+\newcommand{\rcreset}{\setcounter{rcnum}{0}}
+\newcommand{\rcq}[2]{%
+  \stepcounter{rcnum}%
+  \needspace{3\baselineskip}
+  \vspace{4pt}
+  \noindent\textbf{C\thercnum.}\quad #1\par
+  \vspace{2pt}
+  \linedbox{#2}
+}
+
+% Section divider (big numbered banner): \sectiondiv{title}{summary}
+%
+% This IS the section: it steps the real section counter, so subsections,
+% tasks, questions and figures inside it are numbered N.M automatically.
+% Put \label{sec:N} straight after it. Never hand-type a section number.
+\newcommand{\sectiondiv}[2]{%
+  \needspace{5\baselineskip}%
+  \refstepcounter{section}%
+  % PDF bookmark for the lesson; its anchor, lesson.N.1, is what the contents table links to
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}%
+  \begin{tcolorbox}[
+    enhanced, breakable=false, arc=3.5mm,
+    colback=NavyBlue, colframe=NavyBlue, boxrule=0pt,
+    sidebyside, sidebyside align=center,
+    lefthand width=2.4cm,
+    left=2mm, right=4mm, top=4mm, bottom=4mm
+  ]
+    \begin{center}
+      {\headingfont\bfseries\color{white!35!NavyBlue}\fontsize{50}{50}\selectfont \thesection}
+    \end{center}
+    \tcblower
+    {\headingfont\bfseries\color{white}\LARGE #1}\\[3pt]
+    {\itshape\color{white!75!NavyBlue}\small #2}
+  \end{tcolorbox}%
+}
+
+% Tasks: \task, \task[a] (part a of a NEW task), \taskpart{b} (next part
+% of the same task), \exttask (Year 8 "Extension" — same counter).
+% Numbered Task <section>.<n>, reset every section. Do NOT type numbers.
+% Every task, question and figure also gets an automatic label
+% (task:1.7b, q:2.4, fig:1.2, fig:E2.1) so page refs come from the .aux.
+\newcounter{tasknum}[section]
+\renewcommand{\thetasknum}{\thesection.\arabic{tasknum}}
+\NewDocumentCommand{\task}{o}{\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}}
+\newcommand{\taskpart}[1]{\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}}
+\newcommand{\exttask}{\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}}
+
+% Figure captions: \figcap[fig:label]{caption} -> "Figure N.M --- caption"
+% \expfigcap{caption} -> "Figure EN.M" (experiment pages). Both auto-numbered.
+\newcounter{fignum}[section]
+\renewcommand{\thefignum}{\thesection.\arabic{fignum}}
+\newcounter{expfignum}[section]
+\renewcommand{\theexpfignum}{E\thesection.\arabic{expfignum}}
+\newcommand{\figcap}[2][]{%
+  \begin{center}
+    \refstepcounter{fignum}\label{fig:\thefignum}\if\relax\detokenize{#1}\relax\else\label{#1}\fi
+    \small\itshape\color{DarkGrey} Figure \thefignum\ --- #2
+  \end{center}%
+}
+\newcommand{\expfigcap}[1]{%
+  \begin{center}
+    \refstepcounter{expfignum}\label{fig:\theexpfignum}%
+    \small\itshape\color{DarkGrey} Figure \theexpfignum\ --- #1
+  \end{center}%
+}
+
+% Diagram include
+\newcommand{\diagramfig}[3]{%  {filename}{width fraction}{caption}
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{#1}\\[4pt]
+    \small\itshape\color{DarkGrey} #3
+  \end{center}%
+}
+
+% Table column types
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+% Table header colour
+\newcommand{\thead}[1]{\cellcolor{TableHead}\color{white}\bfseries #1}
+\newcommand{\talt}{\rowcolor{RowAlt}}
+\newcommand{\tmid}{\rowcolor{MidGrey}}
+
+% Inline year tags
+\newcommand{\tagyr}[1]{%
+  \tikz[baseline=-0.5ex]\node[
+    rounded corners=2pt,
+    fill=#1!20, draw=#1, text=#1,
+    inner xsep=4pt, inner ysep=1pt,
+    font=\scriptsize\bfseries
+  ]{Yr #1 only};}
+
+% Draw answer lines
+\newcommand{\anslines}[1]{%
+  \vspace{2pt}%
+  \foreach \n in {1,...,#1}{%
+    \par\noindent\rule{\linewidth}{0.3pt}\vspace{3pt}%
+  }%
+}
+
+% ── Document ─────────────────────────────────────────────────────────────────
+% ── Optional-lesson note, shown under the lesson banner ──────────────────────
+\newcommand{\optionalnote}[1]{%
+  % the title is a bold lead-in on the first line rather than a title bar,
+  % which keeps Lesson 11's reading on the lesson's first page
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2.5mm, boxrule=0.5pt,
+    colback=PurpleLight, colframe=Violet!50,
+    left=4mm, right=3.5mm, top=2mm, bottom=2mm]
+  {\headingfont\bfseries\color{PurpleDark}Optional lesson \textbullet{} Year 8 extension.}\enspace #1
+  \end{tcolorbox}\vspace{2pt}}
+
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON STRUCTURE (lesson booklet, Oct 2026)
+%  Every lesson runs in the same four parts, in this order:
+%    \lessonpart{A}{Reading and comprehension}{Teal}   \label{read:N}
+%    \lessonpart{B}{Theory and examples}{Blue}         \label{theory:N}
+%    \lessonpart{C}{Practice}{Amber}                    \label{prac:N}
+%    \lessonpart{D}{Above level}{Violet}                \label{ext:N}
+%  Above-level / higher-order questions live ONLY in Part D, at the end.
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{10pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=#3!14, borderline west={4pt}{0pt}{#3},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{#3!60!black}\large Part #1 \textbullet{} #2}
+  \end{tcolorbox}\vspace{2pt}}
+
+% Key vocabulary at the start of each lesson: students copy each definition
+% from the vocabulary slide in the lesson's starter. First row = red scaffold.
+\newcommand{\vocabhead}{%
+  \par\vspace{6pt}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, boxrule=0pt,
+    colback=NavyBlue!10, borderline west={4pt}{0pt}{NavyBlue},
+    left=4mm, right=3mm, top=1.6mm, bottom=1.6mm]
+  {\headingfont\bfseries\color{NavyBlue}\large Key vocabulary}
+  \end{tcolorbox}\vspace{2pt}%
+  \noindent Copy the definition of each word from the slide. The first one has been done for you.\par}
+
+% Curriculum codes under a lesson banner
+\newcommand{\lessoncodes}[1]{%
+  {\small\headingfont\color{DarkGrey}Victorian Curriculum 2.0:\ \textbf{#1}}\par\vspace{4pt}}
+
+% Two short tasks side by side, each with its own working box
+% \taskpair{text}{box height}{text}{box height}
+% The two boxes line up: the shorter question is padded by the difference in
+% text height (measured in a scratch box, task counter restored, no label).
+\newsavebox\tpbox
+\newlength\tpA \newlength\tpB
+\newcount\tpsaved
+\newcommand\tpmeasure[2]{%
+  \tpsaved=\value{tasknum}%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt
+    \renewcommand\label[1]{}\task #1\par}}%
+  \setlength{#2}{\dimexpr\ht\tpbox+\dp\tpbox\relax}%
+  \setcounter{tasknum}{\tpsaved}}
+\newcommand{\taskpair}[4]{%
+  \par\needspace{9\baselineskip}\vspace{4pt}%
+  \tpmeasure{#1}{\tpA}\tpmeasure{#3}{\tpB}%
+  \noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #1\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\vspace{2pt}\answerbox{#2}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \task #3\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\vspace{2pt}\answerbox{#4}
+  \end{minipage}\par\gdef\abgrp{0}\vspace{4pt}}
+% Two parts of one question side by side, with their answer boxes level:
+% \ptpair{a}{part (a) text}{box height}{b}{part (b) text}{box height}.
+% The shorter part's text gets space below it to match the longer one.
+\newcommand\ptmeasure[3]{%
+  \sbox\tpbox{\vbox{\hsize=0.485\linewidth \linewidth=\hsize \parskip=0pt \pt{#1}#2\par}}%
+  \setlength{#3}{\dimexpr\ht\tpbox+\dp\tpbox\relax}}
+\newcommand{\ptpair}[6]{%
+  \ptmeasure{#1}{#2}{\tpA}\ptmeasure{#4}{#5}{\tpB}%
+  \par\noindent
+  \edef\abgrp{\number\numexpr\value{abox}+1\relax}%
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#1}#2\par\ifdim\tpB>\tpA\vspace{\dimexpr\tpB-\tpA\relax}\fi\answerbox{#3}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\linewidth}
+    \pt{#4}#5\par\ifdim\tpA>\tpB\vspace{\dimexpr\tpA-\tpB\relax}\fi\answerbox{#6}
+  \end{minipage}\par\gdef\abgrp{0}}
+
+% Answer boxes never split across a page (a half box on its own page is useless)
+% ── Page filling ────────────────────────────────────────────────────────────
+% Every writing box gets an id. Its page is logged to \jobname.abp; fill.py
+% measures the empty space left at the foot of each page and shares it out
+% among that page's boxes via \jobname.abx (\abset{id}{extra}). Side-by-side
+% boxes share a group so they grow together.
+\newcounter{abox}
+\newwrite\abpos \immediate\openout\abpos=\jobname.abp
+\newcommand{\abset}[2]{\expandafter\gdef\csname abx@#1\endcsname{#2}}
+\InputIfFileExists{\jobname.abx}{}{}
+\def\abgrp{0}
+\newcommand{\abnext}{\stepcounter{abox}%
+  \edef\abcur{\ifcsname abx@\theabox\endcsname\csname abx@\theabox\endcsname\else 0pt\fi}}
+\newcommand{\ablog}{\edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage}}\abtmp}
+\newcommand{\abh}[1]{\dimexpr#1+\abcur\relax}
+\renewcommand{\answerbox}[1]{%
+  \abnext
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1}]
+  \end{tcolorbox}\ablog%
+}
+% \linedbox{height}: an answer box ruled in dotted thirds. Lines are \thirdrow/3 apart and run dotted, dotted,
+% solid (the baseline), repeating, and end on one dotted line. The number of
+% rows is worked out from the box's final height, so the ruling still fills the
+% box after fill.py has grown it; the rows are centred in the box.
+\newlength\thirdrow \setlength\thirdrow{9mm}
+\tikzset{thirdsolid/.style={draw=DarkGrey!70, line width=0.5pt},
+         thirddot/.style={draw=DarkGrey!70, line width=0.6pt, dash pattern=on 0.9pt off 1.6pt}}
+\newlength\lbH \newlength\lbO \newcount\lbN
+\newcommand{\linedbox}[1]{%
+  \abnext
+  % interior height = box height less the 1pt frame top and bottom
+  \setlength\lbH{\dimexpr\abh{#1}-2pt\relax}%
+  % whole rows that fit with at least 3 mm spare top and bottom (at least one)
+  \lbN=\numexpr(\dimexpr\lbH-6mm-\thirdrow/2\relax)/\thirdrow\relax
+  \ifnum\lbN<1 \lbN=1 \fi
+  \setlength\lbO{\dimexpr(\lbH-\lbN\thirdrow)/2\relax}%
+  \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+    left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt, height=\abh{#1},
+    underlay={\begin{tcbclipinterior}
+      \foreach \i in {1,...,\the\lbN}{
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow]interior.north east);
+        \draw[thirddot] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-\thirdrow/3]interior.north east);
+        \draw[thirdsolid] ([xshift=3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-(\i-1)*\thirdrow-2*\thirdrow/3]interior.north east);}
+      \draw[thirddot] ([xshift=3mm,yshift=-\lbO-\lbN\thirdrow]interior.north west) -- ([xshift=-3mm,yshift=-\lbO-\lbN\thirdrow]interior.north east);
+    \end{tcbclipinterior}}]
+  \end{tcolorbox}\ablog%
+}
+% Every written-response box is ruled the same way (Part A comprehension, We do,
+% Part C tasks and Part D extensions, including side-by-side pairs). Space for
+% mathematical working uses \workbox{height} instead and stays plain, as do
+% \drawbox and the write-in tables.
+\let\workbox\answerbox   % plain box: mathematical working (calculations) stays unruled
+\let\answerbox\linedbox
+% \drawbox{height}{contents}: white box for a diagram or drawing
+\newcommand{\drawbox}[2]{%
+  \abnext
+  \begin{tcolorbox}[colback=white, colframe=MidGrey, boxrule=0.5pt, height=\abh{#1}]#2\end{tcolorbox}\ablog}
+% Notes box at the end of Part B: fills whatever is left of the page (if worth it)
+\newcommand{\notesfill}{\par
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax>3.2cm
+    \vspace*{\fill}%
+    \begin{tcolorbox}[enhanced, breakable=false, arc=2mm, colback=Paper, colframe=Line,
+      left=2mm, right=2mm, top=1mm, bottom=1mm, boxrule=1pt,
+      height=\dimexpr\pagegoal-\pagetotal-1.0cm\relax]
+      {\small\headingfont\color{DarkGrey}Notes}
+    \end{tcolorbox}%
+  \fi}
+
+
+
+% Centred table: wrap every content table in \begin{ctab} ... \end{ctab}
+% (figures already centre themselves inside their \diag... macros)
+% ctab also registers write-in tables (S column) for page filling: the extra
+% height is per row, logged with the row count.
+\newenvironment{ctab}{\par\smallskip\begingroup\centering
+  \abnext\let\tbcur\abcur\global\wtrows0 }{\par
+  \ifnum\wtrows>0 \edef\abtmp{\noexpand\write\abpos{\theabox\space\abgrp\space\noexpand\thepage\space\the\wtrows}}\abtmp\fi
+  \endgroup\smallskip}
+
+% ── Booklet formatting rules (Oct 2026) ─────────────────────────────────────
+% 1. No marks are shown anywhere in the booklet.
+\renewcommand{\markscount}[1]{}
+% 2. A task's heading sits on its own line; its text starts on the next
+%    line, left aligned. Parts (a), (b)… each start a new line: use \pt{a}.
+\RenewDocumentCommand{\task}{o}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum\IfValueT{#1}{#1}}\textbf{Task \thetasknum\IfValueT{#1}{#1}}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\taskpart}[1]{\par\noindent\label{task:\thetasknum#1}\textbf{Task \thetasknum#1}\par\nobreak\noindent\ignorespaces}
+\renewcommand{\exttask}{\par\noindent\refstepcounter{tasknum}\label{task:\thetasknum}\textbf{Extension \thetasknum}\par\nobreak\noindent\ignorespaces}
+\newcommand{\pt}[1]{\par\noindent\textbf{(#1)}\ \ignorespaces}
+% Workstation pages (Experiment 1): numbered method steps with a hanging
+% indent, and a one-line safety reminder under the materials list.
+\newcommand{\wsstep}[1]{\par\noindent\hangindent=1.6em\hangafter=1\makebox[1.6em][l]{\textbf{#1}}\ignorespaces}
+\newcommand{\wssafety}[1]{\par\smallskip{\small\textcolor{ScaffoldRed}{\headingfont\bfseries Safety:}\ #1}\par}
+% 3. Tables have vertical rules between columns and down both sides
+%    (write | between and around the columns, e.g. {|L{3cm}|C{2cm}|}).
+%    Keep the normal padding at the outer edges (no @{} there): colortbl paints
+%    header colour one \tabcolsep past each edge, so trimming the padding makes
+%    the header overhang the grid.
+\arrayrulecolor{MidGrey}
+\setlength{\arrayrulewidth}{0.6pt}
+% 4. Write-in tables: W/Z are left/centred columns that centre text
+%    vertically; put the S column first (see below).
+\newcolumntype{W}[1]{>{\RaggedRight\arraybackslash}m{#1}}
+\newcolumntype{Z}[1]{>{\Centering\arraybackslash}m{#1}}
+\def\tbcur{0pt}
+\newcount\wtrows
+\newcommand{\wh}{\global\advance\wtrows1 \rule[\dimexpr-0.75cm-\tbcur/2\relax]{0pt}{\dimexpr1.5cm+\tbcur\relax}}
+% S = zero-width first column that makes every row of a write-in table
+% at least 1.5 cm tall with its text vertically centred. Start each data
+% row with "&"; start the header row with "\hd &" so it stays slim.
+\newif\ifnowh
+\newcolumntype{S}{@{}>{}c<{\ifnowh\else\wh\fi\global\nowhfalse}@{\hspace{\tabcolsep}}}
+\newcommand{\hd}{\global\nowhtrue}
+% 5. The first row of a multi-row write-in table is a worked scaffold in red.
+\definecolor{ScaffoldRed}{HTML}{C0392B}
+\newcommand{\scaf}[1]{\textcolor{ScaffoldRed}{\itshape #1}}
+% 6. Tables are a light grid (rules between rows and columns) on white —
+%    row shading is off, because colortbl paints shading over column rules.
+\renewcommand{\talt}{}
+\renewcommand{\tmid}{}
+% ══════════════════════════════════════════════════════════════════════════════
+%  DIAGRAM DEFINITIONS — The Particle Model
+%  Self-contained TikZ macros, no external image files. Each \diag... macro is
+%  called from the body by name.
+% ══════════════════════════════════════════════════════════════════════════════
+\usetikzlibrary{arrows.meta,calc,positioning,patterns,backgrounds}
+\tikzset{
+  thin arrow/.style={-{Stealth[length=6pt,width=4pt]}, line width=1.4pt},
+}
+
+% ── Lesson 1: the same three jars holding a solid, a liquid and a gas ───────────
+% The solid keeps its own shape, the liquid takes the jar's shape with a flat top,
+% the gas fills the whole jar. No particles yet: those arrive in Lesson 4.
+\newcommand{\jar}[1]{% jar outline with its base at (#1,0)
+  \draw[line width=1.2pt, Ink] (#1-1.25,2.9) -- (#1-1.25,0.15) arc (180:270:0.15)
+    -- (#1+1.1,0) arc (270:360:0.15) -- (#1+1.25,2.9);}
+\newcommand{\diagStates}{%
+\begin{center}
+\begin{tikzpicture}[font=\small, x=1cm, y=1cm]
+  % solid: a block sitting in the corner
+  \fill[GoldLight] (-0.95,0.02) rectangle (0.15,1.25);
+  \draw[GoldDark, line width=1.1pt] (-0.95,0.02) rectangle (0.15,1.25);
+  \jar{0}
+  \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Solid};
+  \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {keeps its own shape\\and volume};
+  % liquid: takes the jar's shape, flat top
+  \begin{scope}[xshift=4.2cm]
+    \fill[Sky!35] (-1.25,0.15) arc (180:270:0.15) -- (1.1,0) arc (270:360:0.15) -- (1.25,1.1) -- (-1.25,1.1) -- cycle;
+    \draw[MidBlue, line width=1.1pt] (-1.25,1.1) -- (1.25,1.1);
+    \jar{0}
+    \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Liquid};
+    \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {takes the jar's shape,\\keeps its volume};
+  \end{scope}
+  % gas: fills the whole (sealed) jar
+  \begin{scope}[xshift=8.4cm]
+    \fill[Violet!16] (-1.25,0.15) arc (180:270:0.15) -- (1.1,0) arc (270:360:0.15) -- (1.25,2.9) -- (-1.25,2.9) -- cycle;
+    \draw[line width=2.2pt, DarkGrey] (-1.4,2.9) -- (1.4,2.9);
+    \jar{0}
+    \node[font=\scriptsize, text=DarkGrey, anchor=south] at (0,2.95) {lid};
+    \node[font=\bfseries, text=NavyBlue] at (0,-0.45) {Gas};
+    \node[align=center, font=\footnotesize, text=DarkGrey] at (0,-1.05) {spreads out to fill\\the whole jar};
+  \end{scope}
+\end{tikzpicture}
+\end{center}}
+
+% ── Lesson 1, Worked Example 1.2 and We do 1.2: the same syringe, before and after
+\newcommand{\diagSyringe}[3]{% {start mL}{end mL}{contents: gas|liquid}
+\begin{center}\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize, x=0.11cm, y=1cm]
+  \foreach \row/\vol/\lab in {0/#1/before, -1.15/#2/after}{
+    \begin{scope}[yshift=\row cm]
+      \ifx#3g\fill[Violet!16] (0,0) rectangle (\vol,0.7);\else\fill[Sky!35] (0,0) rectangle (\vol,0.7);\fi
+      \draw[line width=1pt, Ink] (0,0) rectangle (60,0.7);
+      \draw[line width=1pt, Ink] (0,0.25) -- (-4,0.25) (0,0.45) -- (-4,0.45);
+      \fill[Ink] (-5.5,0.15) rectangle (-4,0.55);
+      \foreach \t in {0,10,...,60}{\draw[Ink] (\t,0.7) -- (\t,0.85); \node[anchor=south, font=\tiny] at (\t,0.82) {\t};}
+      \fill[DarkGrey] (\vol,0.04) rectangle (\vol+1.6,0.66);
+      \draw[line width=2pt, DarkGrey] (\vol+1.6,0.35) -- (\vol+26,0.35);
+      \draw[line width=2pt, DarkGrey] (\vol+26,0.05) -- (\vol+26,0.65);
+      \node[anchor=east, font=\scriptsize\bfseries, text=DarkGrey] at (-7,0.35) {\lab};
+    \end{scope}}
+  \node[font=\tiny, text=DarkGrey, anchor=west] at (61,0.35) {mL};
+  \node[font=\tiny, text=DarkGrey, anchor=north] at (-4.75,-1.2) {sealed tip};
+\end{tikzpicture}}
+\end{center}}
+
+% needspace.sty reserves room by planting a penalty -100 with 9 lines of
+% temporary stretch. On a page that can't be filled tightly that fake break
+% always wins, so a We do that fitted was pushed over and left half a page
+% empty. This version breaks only when the room really isn't there, and
+% ragged bottom lets every other page run on until something won't fit;
+% fill.py then grows the writing boxes into what is left at the foot.
+\renewcommand{\needspace}[1]{\par\ifdim\dimexpr\pagegoal-\pagetotal\relax<\dimexpr#1\relax\newpage\fi}
+\raggedbottom
+% Part D sits in a breakable yr8box, where \needspace can't see the page (the box
+% is built off the page first). Wrap each extension in keepext so it is one
+% unsplittable block: the yr8box then breaks between extensions, never inside one.
+\newenvironment{keepext}{\par\begin{tcolorbox}[blankest, breakable=false]}{\end{tcolorbox}\par}
+\usetikzlibrary{patterns}
+\providecommand{\lessonart}{\thesection}
+
+\providecommand{\unitname}{Advanced Ecosystems}\providecommand{\unitcaps}{ADVANCED ECOSYSTEMS}
+% ══════════════════════════════════════════════════════════════════════════════
+%  2027 WORKBOOK STYLE — A5 TOPIC BOOKLET (added by make_a5.py)
+%  Same look as the Space A5 trial and the A4 experiment booklets: colour
+%  cover, black-and-white inside, Outfit headings, a lesson opener band with
+%  the lesson's ink symbol, boxes told apart by frame and icon:
+%    I do ● solid · We do ●● dashed · You do ●●● heavy · key idea / reading ◆
+%    thin · Above level ▲ double · Country ◎ dotted
+%  The body still names the master's colours; they are mapped to ink here.
+% ══════════════════════════════════════════════════════════════════════════════
+\usepackage{pdflscape}
+\usetikzlibrary{patterns}
+
+% A picture wider than the A5 text block is scaled down to fit it.
+\newsavebox\fitb
+\newenvironment{fitbox}{\begin{lrbox}{\fitb}}{\end{lrbox}%
+  \ifdim\wd\fitb>\linewidth\resizebox{\linewidth}{!}{\usebox\fitb}\else\usebox\fitb\fi}
+
+% ── Fonts: Outfit for headings ──────────────────────────────────────────────
+\renewfontfamily\headingfont{Outfit}[
+  Path=../fonts/, Extension=.ttf, Ligatures=TeX,
+  UprightFont=Outfit-Regular, BoldFont=Outfit-SemiBold,
+  ItalicFont=Outfit-Regular, ItalicFeatures={FakeSlant=0.18},
+  BoldItalicFont=Outfit-SemiBold, BoldItalicFeatures={FakeSlant=0.18} ]
+
+% ── Black and white inside ──────────────────────────────────────────────────
+\definecolor{Ink}{HTML}{111111}
+\colorlet{NavyBlue}{Ink}\colorlet{MidBlue}{Ink}\colorlet{TealGreen}{Ink}
+\colorlet{GoldDark}{Ink}\colorlet{PurpleDark}{Ink}\colorlet{OrangeDark}{Ink}
+\colorlet{TableHead}{Ink}
+\colorlet{Blue}{Ink}\colorlet{Teal}{Ink}\colorlet{Amber}{Ink}\colorlet{Coral}{Ink}
+\colorlet{Violet}{Ink}\colorlet{Sky}{Ink}
+\colorlet{LightBlue}{white}\colorlet{LightGreen}{white}\colorlet{GoldLight}{white}
+\colorlet{PurpleLight}{white}\colorlet{OrangeLight}{white}\colorlet{RowAlt}{white}
+\colorlet{LightGrey}{white}\colorlet{Paper}{white}
+\colorlet{DarkGrey}{black!72}\colorlet{MidGrey}{black!45}\colorlet{Line}{black!45}
+\arrayrulecolor{black!60}
+% Particle kinds stay distinguishable without colour: white, light grey,
+% dotted and dark.
+\tikzset{
+  pA/.style={circle, fill=white, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pB/.style={circle, fill=black!35, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pC/.style={circle, preaction={fill=white}, pattern=dots, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt},
+  pD/.style={circle, fill=black!75, draw=Ink, line width=0.6pt, minimum size=3.2mm, inner sep=0pt}}
+
+% ── Page style: mirrored, running head on the outside ───────────────────────
+\fancypagestyle{fancy}{\fancyhf{}%
+  \renewcommand{\headrulewidth}{0.4pt}%
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{Ink}\leaders\hrule height \headrulewidth\hfill}}%
+  \fancyhead[LE]{\headingfont\footnotesize \unitname}%
+  \fancyhead[RO]{\headingfont\footnotesize\leftmark}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\fancypagestyle{opener}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[LE,RO]{\headingfont\footnotesize\thepage}}
+\pagestyle{fancy}\markboth{}{}
+\raggedbottom
+\setlength{\emergencystretch}{2em}
+
+\titleformat{\subsection}{\headingfont\large\bfseries}{\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}{\headingfont\normalsize\bfseries}{}{0em}{}
+
+% ── Lesson opener band (replaces the navy section banner) ────────────────────
+\renewcommand{\sectiondiv}[2]{%
+  \clearpage\thispagestyle{opener}%
+  \refstepcounter{section}\markboth{\thesection\ \textbullet\ #1}{\thesection\ \textbullet\ #1}%
+  \pdfbookmark[1]{Lesson \thesection{} — #1}{lesson.\thesection}\hypertarget{lesson.\thesection.1}{}%
+  \noindent\begin{minipage}[b]{\dimexpr\linewidth-36mm\relax}
+    {\headingfont\bfseries\scriptsize\addfontfeatures{LetterSpace=14}\unitcaps\ \textbullet\ TOPIC}\par\vspace{1mm}
+    {\headingfont\bfseries\fontsize{40}{40}\selectfont\thesection}\par\vspace{1.5mm}
+    {\headingfont\bfseries\fontsize{15}{18}\selectfont\RaggedRight #1\par}\vspace{1mm}
+    {\footnotesize\itshape\RaggedRight #2\par}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{34mm}\includegraphics[width=34mm]{../art/l\lessonart-ink.pdf}\end{minipage}\par
+  \vspace{2.5mm}\noindent\rule{\linewidth}{1.6pt}\par\vspace{1mm}}
+\renewcommand{\lessoncodes}[1]{{\small\itshape VC 2.0: #1}\par\vspace{2pt}}
+
+% Lesson parts: a heading and a rule; B, C and D start a new page.
+\renewcommand{\lessonpart}[3]{%
+  \par\if#1A\needspace{10\baselineskip}\vspace{8pt}\else
+    \if#1C\notesfill\fi\clearpage\fi
+  {\headingfont\bfseries\Large Part #1 \textbullet\ #2}\par\vspace{0.5mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{1mm}}
+\renewcommand{\vocabhead}{%
+  \par\vspace{4pt}{\headingfont\bfseries\Large Key vocabulary}\par\vspace{1pt}%
+  \noindent{\small Copy the meaning of each word from the slide. The first one has been done for you.}\par}
+\renewcommand{\thead}[1]{\headingfont\bfseries #1}
+
+% ── Box system ──────────────────────────────────────────────────────────────
+\newcommand{\icodots}[1]{\tikz[baseline=-0.6ex]{\foreach \k in {1,...,#1}{\fill[white] (\k*1.9mm,0) circle (0.7mm);}}}
+\newcommand{\icokey}{\tikz[baseline=-0.6ex]{\fill[white] (0,0.9mm)--(0.9mm,0)--(0,-0.9mm)--(-0.9mm,0)--cycle;}}
+\newcommand{\icoup}{\tikz[baseline=-0.6ex]{\fill[white] (-1mm,-0.8mm)--(1mm,-0.8mm)--(0,1mm)--cycle;}}
+\newcommand{\icocountry}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.5pt] (0,0) circle (1mm); \fill[white] (0,0) circle (0.45mm);}}
+\newcommand{\icoread}{\tikz[baseline=-0.6ex]{\draw[white,line width=0.6pt] (-1.1mm,-0.8mm) rectangle (1.1mm,0.8mm); \draw[white,line width=0.5pt] (0,-0.8mm) -- (0,0.8mm);}}
+\newcommand{\tagicon}[1]{\tikz[baseline=-0.6ex]\node[fill=Ink, rounded corners=0.8mm, inner xsep=1.2mm, inner ysep=1mm]{#1};}
+\tcbset{wbbase/.style={enhanced, colback=white, arc=1.2mm,
+    left=3mm, right=3mm, top=4.2mm, bottom=2.4mm, before skip=10pt, after skip=7pt,
+    attach boxed title to top left={xshift=3mm, yshift=-2.4mm},
+    boxed title style={colback=Ink, colframe=Ink, arc=0.8mm, boxrule=0pt,
+                       left=1.6mm, right=1.8mm, top=0.6mm, bottom=0.6mm},
+    fonttitle=\headingfont\bfseries\footnotesize, coltitle=white}}
+\renewtcolorbox{workedexbox}[1]{wbbase, breakable, colframe=Ink, boxrule=1pt,
+  title={\icodots{1}\ I do \textbullet\ #1}}
+\renewenvironment{workedex}[1]
+  {\refstepcounter{wenum}\label{we:\thewenum}\begin{workedexbox}{Worked example \thewenum\ --- #1}}
+  {\end{workedexbox}}
+\renewtcolorbox{wedobox}[1]{wbbase, breakable=false, frame hidden,
+  borderline={1.1pt}{0pt}{Ink, dash pattern=on 4pt off 2.6pt},
+  title={\icodots{2}\ #1}}
+\renewenvironment{wedo}[1]
+  {\par\begin{wedobox}{We do \thewenum\ --- #1}\label{wd:\thewenum}\ignorespaces}
+  {\end{wedobox}}
+\renewtcolorbox{yr7box}{wbbase, breakable, colframe=Ink, boxrule=2.4pt, top=5mm,
+  title={\icodots{3}\ You do \textbullet\ Check your understanding}}
+\renewtcolorbox{yr8box}{wbbase, breakable, frame hidden,
+  borderline={0.6pt}{0pt}{Ink}, borderline={0.6pt}{1.6pt}{Ink},
+  title={\icoup\ Above level \textbullet\ Year 8 extension}}
+\renewtcolorbox{infobox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{scaffold}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{skillbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icokey\ #1}}
+\renewtcolorbox{readingbox}[1]{wbbase, breakable, colframe=Ink, boxrule=0.5pt, title={\icoread\ #1}}
+\renewtcolorbox{expheader}[3]{wbbase, breakable=false, colframe=Ink, boxrule=1pt,
+  title={\icokey\ Experiment #1: #2},
+  after upper={\par\smallskip{\headingfont\bfseries Aim:}\ \textit{#3}}}
+\newtcolorbox{countrybox}[1]{wbbase, breakable, frame hidden,
+  borderline={1.4pt}{0pt}{Ink, line cap=round, dash pattern=on 0pt off 2.4pt},
+  title={\icocountry\ #1}}
+
+% ── Padding to a multiple of 4 (copier booklet mode) ────────────────────────
+\newcommand{\notespage}{\clearpage\markboth{Notes}{Notes}%
+  {\headingfont\bfseries\Large Notes}\par\vspace{3mm}%
+  \noindent\begin{tikzpicture}\foreach \y in {0,...,17}{\draw[black!35, line width=0.4pt] (0,-\y*9mm) -- (\linewidth,-\y*9mm);}\end{tikzpicture}}
+\newcount\padleft
+\newcommand{\padtofour}{\clearpage
+  \pgfmathtruncatemacro\pagesused{\the\value{page}-1}%
+  \pgfmathtruncatemacro\padn{mod(4-mod(\pagesused,4),4)}%
+  \padleft=\padn\relax
+  \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
+  \clearpage}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  BIODIVERSITY AND ECOSYSTEMS — COVER
+%  The unit's cover art (covers/ecosystems.jpg), full bleed. The A5 lesson
+%  booklet sets \wrcoverfile one folder deeper.
+% ══════════════════════════════════════════════════════════════════════════════
+\providecommand{\wrcoverfile}{../../covers/ecosystems.jpg}
+\newcommand{\wrcover}{%
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at (current page.north) {\includegraphics[width=\paperwidth]{\wrcoverfile}};
+\end{tikzpicture}}
+% ── A5: every question full page width (stacked, never side by side) ───────
+\renewcommand{\taskpair}[4]{%
+  \par\needspace{6\baselineskip}\vspace{2pt}%
+  \task #1\par\vspace{2pt}\answerbox{#2}%
+  \par\needspace{6\baselineskip}%
+  \task #3\par\vspace{2pt}\answerbox{#4}\par\vspace{2pt}}
+\renewcommand{\ptpair}[6]{%
+  \pt{#1}#2\par\answerbox{#3}%
+  \pt{#4}#5\par\answerbox{#6}}
+\renewcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}\vspace{5pt}%
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}}
+
+\begin{document}
+\pdfbookmark[1]{Cover}{cover}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ---- Cover: the unit's cover art, full bleed, in colour ------------------
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north] at (current page.north) {\includegraphics[width=\paperwidth]{../../../covers/ecosystems.jpg}};
+  \node[anchor=north east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
+        inner xsep=2mm, inner ysep=1.8mm, text width=30mm, font=\headingfont\footnotesize]
+    at ([xshift=-4mm, yshift=-4mm]current page.north east)
+    {\textbf{Name}\par\vspace{4mm}\hrule\vspace{2mm}\textbf{Class}\par\vspace{4mm}\hrule};
+  \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
+        inner xsep=2.6mm, inner ysep=2mm, font=\headingfont\bfseries, align=right]
+    at ([xshift=-4mm, yshift=6mm]current page.south east)
+    {Advanced Ecosystems 2\\[-1pt]{\normalfont\headingfont\scriptsize Topics 5--7}};
+\end{tikzpicture}
+\mbox{}
+\clearpage
+
+% ---- Inside cover ---------------------------------------------------------
+\thispagestyle{plain}
+{\headingfont\bfseries\fontsize{22}{26}\selectfont Advanced Ecosystems}\par\vspace{1mm}
+{\headingfont\large Book 2 \textbullet\ Topics 5--7 \textbullet\ Above the Year 7 level}\par\vspace{1mm}
+{\small\itshape VC 2.0: VC2S8U01--U04 \textbullet\ VC2S10U04 \textbullet\ VC2S10U05 \textbullet\ VC2S10U10}\par\vspace{4mm}
+\textbf{Teacher}\ \hrulefill\par
+
+\begin{countrybox}{Acknowledgement of Country}
+This booklet was created on the unceded Country of the Wurundjeri Woi-wurrung people of the Kulin Nation. We acknowledge Elders past, present and emerging.
+\end{countrybox}
+
+\begin{infobox}{How this booklet works}
+\textbf{Advanced Ecosystems} goes deeper into the ideas of the lesson books: more powerful models, the reasoning behind them, and harder problems that bring several ideas together. Each topic builds on the lessons named under its title. Each opens with its key vocabulary, then:\par\smallskip
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{24mm}p{70mm}@{}}
+\textbf{Part A} & a reading with comprehension questions \\
+\textbf{Part B} & the deeper idea, worked through \\
+\textbf{Part C} & practice on your own \\
+\textbf{Part D} & a challenge that pulls the ideas together \\
+\end{tabular}
+
+\smallskip
+\begin{tabular}{@{}p{24mm}p{70mm}@{}}
+\textbf{I do} \tagicon{\icodots{1}} & a worked example (solid frame) \\
+\textbf{We do} \tagicon{\icodots{2}} & you try one with help (dashed frame) \\
+\textbf{Reading} \tagicon{\icoread} & a passage to read (thin frame) \\
+\end{tabular}
+\end{infobox}
+
+\clearpage
+\markboth{Contents}{Contents}
+{\headingfont\bfseries\LARGE Contents}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par\vspace{2mm}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|C{1.1cm}|L{5.2cm}|C{1.7cm}|C{1.4cm}|}
+  \hline\thead{Topic} & \thead{Title} & \thead{Deepens lesson} & \thead{Page} \\ \hline
+  1 & \textit{Cells: the Units of Life} & 1 & Book 1 \\ \hline
+  2 & \textit{The Tree of Life: Domains and DNA} & 2, 3 & Book 1 \\ \hline
+  3 & \textit{What Is a Species? Keys and DNA Barcodes} & 4 & Book 1 \\ \hline
+  4 & \textit{Measuring Biodiversity} & 5 & Book 1 \\ \hline
+  5 & \hyperlink{lesson.5.1}{Energy Flow and the Carbon Cycle} & 6, 7 & \hyperlink{lesson.5.1}{p.\ \pageref{sec:5}} \\ \hline
+  6 & \hyperlink{lesson.6.1}{Natural Selection and Evolution} & 8 & \hyperlink{lesson.6.1}{p.\ \pageref{sec:6}} \\ \hline
+  7 & \hyperlink{lesson.7.1}{Populations, Invaders and Extinction} & 9, 10, 11 & \hyperlink{lesson.7.1}{p.\ \pageref{sec:7}} \\ \hline
+  --- & \hyperlink{glossary}{Glossary} & & \hyperlink{glossary}{\pageref{sec:glossary}} \\ \hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+\clearpage
+\setcounter{section}{4}\renewcommand{\lessonart}{6}
+\sectiondiv{Energy Flow and the Carbon Cycle}{Where the energy goes \textbullet{} Pyramids of energy \textbullet{} Photosynthesis and respiration \textbullet{} Tipping points}\label{sec:5}
+\lessoncodes{Deepens Lessons 6 and 7 \textbullet{} VC2S8U04 \textbullet{} VC2S10U10}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Trophic level}\label{voc:trophic-level}} & \scaf{A feeding level in a food chain: producers, primary consumers, secondary consumers, and so on.} \\ \hline
+  & \textbf{Pyramid of energy}\label{voc:pyramid-of-energy} & \\ \hline
+  & \textbf{Photosynthesis}\label{voc:photosynthesis} & \\ \hline
+  & \textbf{Respiration}\label{voc:respiration} & \\ \hline
+  & \textbf{Carbon cycle}\label{voc:carbon-cycle} & \\ \hline
+  & \textbf{Tipping point}\label{voc:tipping-point} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:5}
+
+\begin{readingbox}{Reading --- Where Does the Energy Go?}
+A wedge-tailed eagle eats rabbits; the rabbits eat grass. Yet in any grassland there is far more grass than rabbits, and far more rabbits than eagles. The reason is energy. Each feeding level, or \textbf{trophic level}, passes on only about one-tenth of the energy it takes in. Most of the rest is used to stay alive and released as heat during \textbf{respiration}; some is in parts that are never eaten, such as roots and bones, and some passes out as waste. Drawn as stacked bars, the energy at each level makes a \textbf{pyramid of energy}.
+
+Energy flows through an ecosystem in one direction and is lost as heat. Matter is different: it is recycled. Carbon is taken from the air as carbon dioxide during \textbf{photosynthesis}, built into the plant, passed along food chains, and returned to the air by respiration, decomposition and fire. This loop is the \textbf{carbon cycle}.
+
+Ecosystems can absorb a lot of damage and recover. But past a \textbf{tipping point}, an ecosystem flips into a different, poorer state and stays there. Mountain ash trees take about twenty years to produce seed. If two fires burn a forest within twenty years, the young trees die before they can seed, and the forest can turn permanently into scrub.
+\end{readingbox}
+
+\rcreset
+\rcq{Give three reasons most of the energy at one trophic level does not reach the next.}{3cm}
+\rcq{Why are there fewer eagles than rabbits in a grassland?}{2.5cm}
+\rcq{How is the way carbon moves through an ecosystem different from the way energy moves?}{3cm}
+\rcq{Explain why two fires close together can destroy a mountain ash forest for good.}{2.5cm}
+
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
+
+\subsection{Pyramids of Energy}\label{sub:a5.1}
+
+\begin{center}
+\begin{fitbox}\begin{tikzpicture}[font=\small]
+  \draw[Ink, line width=0.8pt, fill=black!8] (-3,0) rectangle (3,0.7);
+  \draw[Ink, line width=0.8pt, fill=black!8] (-1.6,0.7) rectangle (1.6,1.4);
+  \draw[Ink, line width=0.8pt, fill=black!8] (-0.8,1.4) rectangle (0.8,2.1);
+  \draw[Ink, line width=0.8pt, fill=black!8] (-0.35,2.1) rectangle (0.35,2.8);
+  \node at (0,0.35) {producers 20\,000\,kJ};
+  \node at (0,1.05) {2000\,kJ};
+  \node at (0,1.75) {200};
+  \node at (0,2.45) {20};
+  \node[right, font=\scriptsize] at (3.2,0.35) {grass};
+  \node[right, font=\scriptsize] at (3.2,1.05) {rabbit (primary)};
+  \node[right, font=\scriptsize] at (3.2,1.75) {fox (secondary)};
+  \node[right, font=\scriptsize] at (3.2,2.45) {eagle (tertiary)};
+\end{tikzpicture}\end{fitbox}
+\figcap{About 10\% of the energy passes up each level. (Bars not to scale.)}
+\end{center}
+
+\begin{workedex}{Why food chains are short}
+Using the pyramid, what share of the grass's energy reaches the eagle?
+
+\smallskip
+$20 \div 20\,000 = 0.001$, so only \textbf{0.1\%}. A fifth level would get about 2\,kJ, far too little to support a population. That is why food chains rarely have more than four or five links.
+\end{workedex}
+
+\begin{wedo}{Why food chains are short}
+The producers in a wetland hold 50\,000\,kJ. Calculate the energy reaching each of the next three levels, and the percentage of the producers' energy that reaches the third consumer.
+\workbox{5cm}
+\end{wedo}
+
+\subsection{Carbon In and Out}\label{sub:a5.2}
+
+\begin{skillbox}{Two word equations}
+\textbf{Photosynthesis} (in chloroplasts, needs light):\quad carbon dioxide $+$ water $\rightarrow$ glucose $+$ oxygen\\
+\textbf{Respiration} (in every living cell):\quad glucose $+$ oxygen $\rightarrow$ carbon dioxide $+$ water $+$ energy
+\end{skillbox}
+
+\begin{workedex}{Tracing a carbon atom}
+A carbon atom in the air ends up in a kangaroo and then back in the air. Describe its path.
+
+\smallskip
+Grass takes in the carbon dioxide and, by photosynthesis, builds the carbon into glucose and then into its leaves. A kangaroo eats the grass and builds the carbon into its own body. When the kangaroo's cells use the glucose in respiration, or when the kangaroo dies and decomposers respire, the carbon is released into the air again as carbon dioxide.
+\end{workedex}
+
+\begin{wedo}{Tracing a carbon atom}
+Describe the path of a carbon atom from the air into a eucalyptus leaf, and back into the air when the leaf is burnt in a bushfire. Name the processes.
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{C}{Practice}{Amber}\label{prac:5}
+
+\begin{keepext}
+\task Only about 10\% of the energy at one level of a food chain passes to the next. A grassland's producers hold 10\,000 units of energy. Show your working.
+\pt{a} Calculate the energy reaching the primary consumers.
+\workbox{3cm}
+\pt{b} Calculate the energy reaching the tertiary consumers.
+\workbox{3.5cm}
+\end{keepext}
+\begin{keepext}
+\task Compare the two word equations. What do you notice? Explain what this means for the balance of oxygen and carbon dioxide in the air, and predict what clearing a large grassland would do to it.
+\answerbox{5cm}
+\end{keepext}
+
+
+\begin{keepext}
+\task The world's ecosystem services have been valued at about US\$125 trillion a year. Give two advantages and one limitation of putting a dollar value on nature.
+\answerbox{5cm}
+\end{keepext}
+\begin{keepext}
+\task A \emph{tipping point} is when an ecosystem is damaged so much that it switches to a new, poorer state and cannot easily recover. Describe a Victorian ecosystem at risk of a tipping point, and one action that could prevent it.
+\answerbox{5cm}
+\end{keepext}
+
+
+\lessonpart{D}{Challenge}{Violet}\label{ext:5}
+
+\task A mountain ash forest stores a great deal of carbon in its trees. Explain, using the carbon cycle and the idea of a tipping point, how logging followed by a bushfire within twenty years could change the forest, and what that would do to the amount of carbon dioxide in the air.
+\answerbox{8cm}
+
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 6 — NATURAL SELECTION AND EVOLUTION                 (deepens Lesson 8)
+% ══════════════════════════════════════════════════════════════════════════════
+\setcounter{section}{5}\renewcommand{\lessonart}{8}
+\sectiondiv{Natural Selection and Evolution}{Variation and selection \textbullet{} Evolution we can watch \textbullet{} Similar bodies, different reasons}\label{sec:6}
+\lessoncodes{Deepens Lesson 8 \textbullet{} VC2S8U04 \textbullet{} VC2S10U05}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Variation}\label{voc:variation}} & \scaf{The differences between individuals of the same species.} \\ \hline
+  & \textbf{Natural selection}\label{voc:natural-selection} & \\ \hline
+  & \textbf{Evolution}\label{voc:evolution} & \\ \hline
+  & \textbf{Mutation}\label{voc:mutation} & \\ \hline
+  & \textbf{Homologous structures}\label{voc:homologous-structures} & \\ \hline
+  & \textbf{Convergent evolution}\label{voc:convergent-evolution} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:6}
+
+\begin{readingbox}{Reading --- Toads on the Move}
+Cane toads were released in Queensland in 1935 and have been spreading west ever since. In the 2000s, scientists measured toads along the invasion front in the Northern Territory and found something surprising: the toads at the very front had longer legs than toads in older populations, and they were moving faster every year. The species was changing before the scientists' eyes.
+
+The explanation is \textbf{natural selection}. Toads vary: some are born with slightly longer legs than others. This \textbf{variation} comes from small, random changes in DNA called \textbf{mutations}, and from the way parents' genes are mixed. Long-legged toads travel further, so they reach new land first, where there is plenty of food and no competition, and breed there. Their young inherit long legs. At the front, long-leggedness is selected, generation after generation.
+
+Change in a species over many generations like this is \textbf{evolution}. Charles Darwin and Alfred Russel Wallace proposed it in 1858. It explains why living things are suited to their environments, and why related species share the same body plan.
+\end{readingbox}
+
+\rcreset
+\rcq{What did scientists notice about toads at the invasion front?}{2.5cm}
+\rcq{Where does variation between individuals come from?}{2.5cm}
+\rcq{Explain why long-legged toads leave more young at the front.}{3cm}
+\rcq{Did any single toad's legs grow longer during its life? Explain.}{2.5cm}
+
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:6}
+
+\subsection{Natural Selection, Step by Step}\label{sub:a6.1}
+
+\begin{skillbox}{The four steps}
+\textbf{Variation:} individuals differ. \quad \textbf{Inheritance:} some differences are passed to the young. \quad \textbf{Selection:} individuals with helpful features survive and breed more. \quad \textbf{Time:} over many generations, the helpful feature becomes common.
+\end{skillbox}
+
+\begin{workedex}{Rabbits and myxoma}
+When myxoma virus was released in 1950, it killed over 99\% of infected rabbits. Within a few decades most wild rabbits survived it. Why?
+
+\smallskip
+\textbf{Variation:} a few rabbits had genes that made them resist the virus. \textbf{Selection:} they survived while others died. \textbf{Inheritance:} their young inherited the resistance. \textbf{Time:} over many generations, resistant rabbits became most of the population.
+\end{workedex}
+
+\begin{wedo}{Antibiotic resistance}
+A patient stops taking antibiotics as soon as they feel better, and a few bacteria survive. Use the four steps to explain how this can lead to an infection the antibiotic no longer cures.
+\answerbox{5cm}
+\end{wedo}
+
+\subsection{Similar Bodies, Different Reasons}\label{sub:a6.2}
+
+\begin{workedex}{Homologous structures}
+A human arm, a bat wing, a whale flipper and a kangaroo's front leg look different and do different jobs, but they have the same set of bones in the same order.
+
+\smallskip
+They are \textbf{homologous structures}: the same body plan, inherited from a shared ancestor and changed by natural selection for different uses. They are evidence that these mammals are related.
+\end{workedex}
+
+\begin{wedo}{Same job, different ancestors}
+A bird's wing and a bee's wing both let the animal fly, but are built from completely different parts. Explain why these wings are \emph{not} evidence that birds and bees are closely related.
+\answerbox{4.5cm}
+\end{wedo}
+
+\lessonpart{C}{Practice}{Amber}\label{prac:6}
+
+\begin{keepext}
+\task Rock ringtail possums vary in colour: some are dark and blend in with dark granite, others are pale. A new predator, an eagle, arrives. Use the four steps of natural selection (variation, inheritance, selection, more young for the survivors) to explain how the population might change over 50 generations.
+\answerbox{6cm}
+\end{keepext}
+\begin{keepext}
+\task The Australian marsupial mole looks very like the European mole, but they are not closely related. Explain this using the term \emph{convergent evolution}.
+\answerbox{5cm}
+\end{keepext}
+
+
+\lessonpart{D}{Challenge}{Violet}\label{ext:6}
+
+\task A student writes: ``Giraffes stretched their necks to reach high leaves, so their babies were born with longer necks.''
+\pt{a} Explain what is wrong with this explanation.
+\answerbox{4cm}
+\pt{b} Rewrite it correctly, using all four steps of natural selection.
+\answerbox{5.5cm}
+
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  TOPIC 7 — POPULATIONS, INVADERS AND EXTINCTION   (deepens Lessons 9, 10, 11)
+% ══════════════════════════════════════════════════════════════════════════════
+\setcounter{section}{6}\renewcommand{\lessonart}{9}
+\sectiondiv{Populations, Invaders and Extinction}{Population growth \textbullet{} Carrying capacity \textbullet{} Why small populations are fragile \textbullet{} Genetic rescue}\label{sec:7}
+\lessoncodes{Deepens Lessons 9, 10 and 11 \textbullet{} VC2S8U04 \textbullet{} VC2S10H03}
+
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{3.4cm}|W{7.0cm}|}
+  \hline\hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Population}\label{voc:population}} & \scaf{All the individuals of one species living in an area.} \\ \hline
+  & \textbf{Exponential growth}\label{voc:exponential-growth} & \\ \hline
+  & \textbf{Carrying capacity}\label{voc:carrying-capacity} & \\ \hline
+  & \textbf{Limiting factor}\label{voc:limiting-factor} & \\ \hline
+  & \textbf{Inbreeding}\label{voc:inbreeding} & \\ \hline
+  & \textbf{Genetic rescue}\label{voc:genetic-rescue} & \\ \hline
+\end{tabular}
+\end{ctab}
+
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:7}
+
+\begin{readingbox}{Reading --- Twenty-Four Rabbits}
+In 1859 about two dozen rabbits were released on a property near Geelong. With plenty of grass and few predators, each pair could raise dozens of young a year. Within seventy years there were hundreds of millions of rabbits across Australia. When nothing holds a population back, it keeps doubling: this is \textbf{exponential growth}.
+
+No population can grow forever. Sooner or later food, water, shelter, predators or disease hold it back. These are \textbf{limiting factors}. The largest population an area can support for a long time is its \textbf{carrying capacity}. A population usually grows quickly, then levels off near the carrying capacity.
+
+Small populations face the opposite danger. When only a few animals are left, relatives breed with each other. This \textbf{inbreeding} reduces genetic diversity and makes harmful features more common, so fewer young survive and the population shrinks further. In the 2010s, the mountain pygmy possums at Mt Buller were inbred and declining. Scientists brought in a few males from Mt Hotham. Their young were larger and survived better, and the population grew. This is \textbf{genetic rescue}.
+\end{readingbox}
+
+\rcreset
+\rcq{Why did the rabbit population grow so fast after 1859?}{2.5cm}
+\rcq{Name four limiting factors.}{2cm}
+\rcq{What is the carrying capacity of an area?}{2cm}
+\rcq{Explain how inbreeding can make a small population smaller still.}{3cm}
+\rcq{How did bringing in males from Mt Hotham help the Mt Buller possums?}{2.5cm}
+
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:7}
+
+\subsection{Two Kinds of Growth}\label{sub:a7.1}
+
+\begin{center}
+\begin{fitbox}\begin{tikzpicture}[font=\small, x=0.55cm, y=0.5cm]
+  \draw[->, line width=0.7pt] (0,0) -- (10.5,0) node[below left, font=\scriptsize] {time};
+  \draw[->, line width=0.7pt] (0,0) -- (0,7) node[above right, font=\scriptsize] {population};
+  \draw[line width=1.1pt, domain=0:6.6, samples=60] plot (\x, {0.2*exp(0.52*\x)});
+  \node[font=\scriptsize] at (6.2,6.6) {exponential};
+  \draw[dashed, line width=0.6pt] (0,4.5) -- (10,4.5) node[right, font=\scriptsize] {carrying capacity};
+  \draw[line width=1.1pt, densely dotted, domain=0:10, samples=80] plot (\x, {4.5/(1+21.5*exp(-0.9*\x))});
+  \node[font=\scriptsize] at (8.6,3.8) {levels off};
+\end{tikzpicture}\end{fitbox}
+\figcap{With no limits a population grows faster and faster (solid). Limiting factors make it level off at the carrying capacity (dotted).}
+\end{center}
+
+\begin{workedex}{Doubling}
+24 rabbits double every year. How many after 10 years, with no limits?
+
+\smallskip
+$24 \times 2^{10} = 24 \times 1024 = \mathbf{24\,576}$ rabbits. After 20 years it would be over 25 million.
+\end{workedex}
+
+\begin{wedo}{Doubling}
+A population of 100 cane toads doubles every two years. How many toads after 10 years? Why will the real number eventually stop growing?
+\workbox{5cm}
+\end{wedo}
+
+\subsection{Saving Small Populations}\label{sub:a7.2}
+
+\begin{workedex}{Why one big reserve is not enough}
+All the remaining animals of a threatened species live in one reserve. Why is this risky, even if the reserve is protected?
+
+\smallskip
+One bushfire, flood or disease outbreak could kill them all at once. The animals cannot mix with others, so inbreeding rises. Recovery plans therefore set up several separate populations, and move animals between them to keep genetic diversity up.
+\end{workedex}
+
+\begin{wedo}{Planning genetic rescue}
+Eastern barred bandicoots now live in a few fenced reserves and on islands. Explain why managers move bandicoots from one population to another every few years, and one risk of doing so.
+\answerbox{5cm}
+\end{wedo}
+
+\lessonpart{C}{Practice}{Amber}\label{prac:7}
+
+\begin{keepext}
+\task Evaluate the myxoma virus as a biological control for rabbits: describe how it worked, the evidence that it worked, and one risk of using biological control. (Cane toads are one example of a biological control that went wrong.)
+\answerbox{6cm}
+\end{keepext}
+\begin{keepext}
+\task Animals on islands are especially at risk from introduced predators. Explain why, and give a Victorian example.
+\answerbox{5cm}
+\end{keepext}
+
+
+\begin{keepext}
+\task A population of eastern barred bandicoots has been cut off in a 15\,ha reserve for 20 years. Explain two risks that small, isolated populations face. Use the terms \emph{genetic diversity} and \emph{inbreeding}.
+\answerbox{6cm}
+\end{keepext}
+\begin{keepext}
+\task Explain why losing biodiversity can make it harder for the world to deal with other problems, such as climate change or supplies of fresh water.
+\answerbox{5cm}
+\end{keepext}
+
+
+\begin{keepext}
+\task The EPBC Act is Australia's main law for protecting threatened species. A 2020 review found it ``not fit for purpose'', because biodiversity keeps falling. Explain what the law is meant to do, what evidence suggests it is failing, and one improvement you would make.
+\answerbox{6cm}
+\end{keepext}
+\begin{keepext}
+\task Some scientists propose bringing Tasmanian devils back to mainland Victoria to control foxes and cats. Give one ecological benefit, one concern farmers or communities might raise, and say who you think should decide, and why.
+\answerbox{6cm}
+\end{keepext}
+
+
+\lessonpart{D}{Challenge}{Violet}\label{ext:7}
+
+\task An imaginary lizard, the ridge skink, survives in two patches of grassland: 250 skinks in one, 50 in the other, 5\,km apart, with farmland between. Foxes, cats and an uncontrolled weed are spreading. Write a recovery plan with three actions. For each, say which threat it deals with and how you would measure whether it is working.
+\answerbox{9cm}
+
+\clearpage
+
+\clearpage\markboth{Glossary}{Glossary}\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
+{\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
+{\small Every key word in this booklet and the page it is introduced on.}\par\smallskip
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|>{\RaggedRight}p{34mm}|p{9mm}|p{\dimexpr\linewidth-43mm-6\tabcolsep-4\arrayrulewidth-1pt\relax}|}
+\hline \rule{0pt}{4mm}\headingfont\bfseries Word & \headingfont\bfseries Page & \headingfont\bfseries In my own words \\ \hline \endhead
+  Carbon cycle & \pageref{voc:carbon-cycle} & \\ \hline
+  Carrying capacity & \pageref{voc:carrying-capacity} & \\ \hline
+  Convergent evolution & \pageref{voc:convergent-evolution} & \\ \hline
+  Evolution & \pageref{voc:evolution} & \\ \hline
+  Exponential growth & \pageref{voc:exponential-growth} & \\ \hline
+  Genetic rescue & \pageref{voc:genetic-rescue} & \\ \hline
+  Homologous structures & \pageref{voc:homologous-structures} & \\ \hline
+  Inbreeding & \pageref{voc:inbreeding} & \\ \hline
+  Limiting factor & \pageref{voc:limiting-factor} & \\ \hline
+  Mutation & \pageref{voc:mutation} & \\ \hline
+  Natural selection & \pageref{voc:natural-selection} & \\ \hline
+  Photosynthesis & \pageref{voc:photosynthesis} & \\ \hline
+  Population & \pageref{voc:population} & \\ \hline
+  Pyramid of energy & \pageref{voc:pyramid-of-energy} & \\ \hline
+  Respiration & \pageref{voc:respiration} & \\ \hline
+  Tipping point & \pageref{voc:tipping-point} & \\ \hline
+  Trophic level & \pageref{voc:trophic-level} & \\ \hline
+  Variation & \pageref{voc:variation} & \\ \hline
+\end{longtable}
+\padtofour
+\end{document}

@@ -17,6 +17,7 @@ the Particle Model and Separation books use. The cover art is placed by
 ../exp-cover.tex (covers/ecosystems.jpg).
 """
 from a5_fullwidth import full_width
+from a5_levels import split_levels, build_advanced
 import re, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 MASTER = os.path.join(HERE, '..', '..', '..', 'particle-model', 'booklet', 'Particle_Model_Lesson_Booklet_Yr7.tex')
@@ -26,6 +27,15 @@ TITLES = {1: 'Living or Non-living?', 2: 'Classification: Linnaean Levels', 3: '
           7: 'Ecosystem Services', 8: 'Adaptations', 9: 'Introduced Species', 10: 'Human Impacts on Ecosystems',
           11: 'Conservation and Action'}
 LABS = {1: 'Is Yeast Alive?', 4: 'Key the Schoolyard', 5: 'Quadrat Survey', 8: 'Beaks and Food', 9: 'The Rabbit and Fox Model'}
+ADV = 'Advanced Ecosystems'
+OUT_ADV = os.path.join(HERE, 'Advanced_Ecosystems_Yr7_A5_Book%d.tex')
+BOOKS_LINE = 'Three lesson books. The five labs share a lesson and are in the \\textbf{Experiment Booklet}.'
+# Advanced topics: (title, at-level lessons it deepens); two books
+TOPICS = {1: ('Cells: the Units of Life', '1'), 2: ('The Tree of Life: Domains and DNA', '2, 3'),
+          3: ('What Is a Species? Keys and DNA Barcodes', '4'), 4: ('Measuring Biodiversity', '5'),
+          5: ('Energy Flow and the Carbon Cycle', '6, 7'), 6: ('Natural Selection and Evolution', '8'),
+          7: ('Populations, Invaders and Extinction', '9, 10, 11')}
+ADV_BOOKS = {1: [1, 2, 3, 4], 2: [5, 6, 7]}
 BOOKS = {1: ([1, 2, 3, 4], 'eco-lessons-1.tex', 'Lessons 1--4 \\textbullet\\ Classifying life'),
          2: ([5, 6, 7, 8], 'eco-lessons-2.tex', 'Lessons 5--8 \\textbullet\\ How ecosystems work'),
          3: ([9, 10, 11], 'eco-lessons-3.tex', 'Lessons 9--11 \\textbullet\\ Threats and conservation')}
@@ -93,10 +103,19 @@ def build(book, lessons, src, rng):
                    lambda m: 'Three lesson books. The five labs share a lesson and are in the \\textbf{Experiment Booklet}.', front)
     assert '%%' not in front and 'particle-model.jpg' not in front, front
     out = pre + style + '\\begin{document}\n' + front + body + '\n'.join(gloss) + '\n\\end{document}\n'
+    out, parts = split_levels(out, BOOKS_LINE, ADV)
     open(OUT % book, 'w', encoding='utf-8').write(full_width(out))
     print('wrote', os.path.basename(OUT % book), '-', len(lessons), 'lessons,', len(words), 'glossary words')
+    return parts
 
 
+parts = {}
 for book, (lessons, src, rng) in BOOKS.items():
-    if os.path.exists(os.path.join(HERE, src)):
-        build(book, lessons, src, rng)
+    parts.update(build(book, lessons, src, rng))
+
+build_advanced(here=HERE, pre=pre, style=style, front_tpl=open(os.path.join(HERE, 'a5-front.tex'), encoding='utf-8').read(),
+               adv_src='adv-ecosystems.tex', topics=TOPICS, books=ADV_BOOKS, out_pattern=OUT_ADV, parts=parts,
+               unit='Biodiversity and Ecosystems', adv=ADV, cover='covers/ecosystems.jpg',
+               vc='VC2S8U01--U04 \\textbullet\\ VC2S10U04 \\textbullet\\ VC2S10U05 \\textbullet\\ VC2S10U10',
+               fit=lambda t: t.replace('\\begin{tikzpicture}', '\\begin{fitbox}\\begin{tikzpicture}').replace('\\end{tikzpicture}', '\\end{tikzpicture}\\end{fitbox}'),
+               full_width=full_width)
