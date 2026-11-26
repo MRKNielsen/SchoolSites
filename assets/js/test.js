@@ -34,6 +34,9 @@
        shuffleQuestions: false,
        shuffleOptions:   false,
        checkSalt: "",                         // optional: any word; must match on tools/test-check.html
+       clearOnLeave: false,                   // true: leaving the page (another tab, app or window)
+                                              //   wipes every answer. Either way, the number of times
+                                              //   the student left is reported in the email.
        questions: [
          { q: "…", opts: ["A","B","C","D"], ans: 1, marks: 1 },        // multiple choice, ans 0-based
          { type: "short",  q: "…", accept: ["gravity"], marks: 1 },     // typed, any accepted answer
@@ -46,7 +49,8 @@
    all work); the email gets the plain-text version.
 
    The email ends with a tab-separated SPREADSHEET ROW — test, name,
-   email, submitted, minutes, auto score, out of, one cell per question
+   email, submitted, minutes, auto score, out of, times left the page,
+   one cell per question
    in the ORIGINAL question order (so shuffling doesn't scramble
    columns; written questions are left blank) and a check code.
    Paste it straight into Excel, or paste whole emails into
@@ -136,6 +140,7 @@
   const writtenTotal = qs.filter(q => typeOf(q) === "written").reduce((s, q) => s + marksOf(q), 0);
 
   let student = null, startedAt = null, inProgress = false;
+  let leaves = 0, away = false, ownDialog = false;
 
   window.addEventListener("beforeunload", e => {
     if (inProgress) { e.preventDefault(); e.returnValue = ""; }
@@ -155,6 +160,10 @@
   details.noValidate = true;
   details.innerHTML =
     '<p class="test-note">Your results are emailed to your teacher when you finish. ' +
+    (T.clearOnLeave
+      ? "<strong>Stay on this page until you submit</strong> &mdash; switching to another tab, app or window " +
+        "<strong>clears all your answers</strong>. "
+      : "Your teacher is told if you leave this page during the test. ") +
     'Nothing is saved on this website &mdash; if you close or refresh this tab, your answers are lost.</p>' +
     '<label class="test-field"><span>Your full name</span>' +
       '<input name="name" autocomplete="name" required></label>' +
@@ -202,6 +211,10 @@
   paper.hidden = true;
   paper.noValidate = true;
   paper.appendChild(el("p", "test-who"));
+  const leaveBanner = el("p", "test-leave");
+  leaveBanner.setAttribute("role", "alert");
+  leaveBanner.hidden = true;
+  paper.appendChild(leaveBanner);
 
   qs.forEach((q, i) => {
     const card = el("fieldset", "q-card test-q");
@@ -246,6 +259,33 @@
   app.appendChild(paper);
   typeset(paper);
 
+  /* ---------- leaving the page ----------
+     blur catches another app/window taking focus; visibilitychange
+     catches tab switches and minimising. One departure counts once,
+     until the page has focus again. Our own confirm() dialog is ignored. */
+  function clearAnswers() {
+    paper.querySelectorAll("input[type=radio]").forEach(r => { r.checked = false; });
+    paper.querySelectorAll("input.test-input, textarea.test-input").forEach(t => { t.value = ""; });
+  }
+  function left() {
+    if (!inProgress || away || ownDialog) return;
+    away = true;
+    leaves++;
+    if (T.clearOnLeave) {
+      clearAnswers();
+      leaveBanner.textContent = "You left the test page, so your answers were cleared. " +
+        "Your teacher will see that this happened (" + leaves + (leaves === 1 ? " time" : " times") + ").";
+    } else {
+      leaveBanner.textContent = "You left the test page. Your teacher will see that this happened (" +
+        leaves + (leaves === 1 ? " time" : " times") + ").";
+    }
+    leaveBanner.hidden = false;
+  }
+  function back() { if (document.visibilityState === "visible" && document.hasFocus()) away = false; }
+  window.addEventListener("blur", left);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) left(); else back(); });
+  window.addEventListener("focus", back);
+
   /* ---------- marking ---------- */
   function responseOf(q, i) {
     const f = paper.elements["q" + i];
@@ -284,8 +324,11 @@
   paper.addEventListener("submit", e => {
     e.preventDefault();
     const blanks = qs.map((q, i) => responseOf(q, i) == null ? i + 1 : 0).filter(Boolean);
-    if (blanks.length && !confirm("You haven’t answered question" + (blanks.length > 1 ? "s " : " ") +
-        blanks.join(", ") + ". Submit anyway?")) return;
+    ownDialog = true;
+    const goAhead = !blanks.length || confirm("You haven’t answered question" + (blanks.length > 1 ? "s " : " ") +
+        blanks.join(", ") + ". Submit anyway?");
+    setTimeout(() => { ownDialog = false; away = false; }, 400);   /* blur from the dialog can arrive late */
+    if (!goAhead) return;
 
     const finishedAt = new Date();
     const mins = Math.max(1, Math.round((finishedAt - startedAt) / 60000));
@@ -330,6 +373,8 @@
       (T.subject ? T.subject + " — " : "") + (T.title || "Test") + "\n" +
       "Student: " + student.name + " <" + student.email + ">\n" +
       "Started: " + fmtTime(startedAt) + "\n" +
+      "Left the test page: " + leaves + (leaves === 1 ? " time" : " times") +
+        (T.clearOnLeave && leaves ? " (answers were cleared each time)" : "") + "\n" +
       "Submitted: " + fmtTime(finishedAt) + " (" + mins + " min)\n" +
       scoreLine + "\n\n" + lines.join("\n\n") + "\n\n" +
       "Spreadsheet row (paste into Excel, or into tools/test-check.html to verify):\n" +
@@ -340,13 +385,13 @@
   });
 
   /* Tab-separated so a paste into Excel lands one value per cell:
-     Test | Name | Email | Submitted | Minutes | Auto score | Out of | Q1..Qn | Code */
+     Test | Name | Email | Submitted | Minutes | Auto score | Out of | Left page | Q1..Qn | Code */
   function rowFor(got, mins, when, cells) {
     const p = n => String(n).padStart(2, "0");
     const stamp = when.getFullYear() + "-" + p(when.getMonth() + 1) + "-" + p(when.getDate()) +
                   " " + p(when.getHours()) + ":" + p(when.getMinutes());
     const clean = v => String(v).replace(/[\t\r\n]+/g, " ").trim();
-    const fields = [T.title || "Test", student.name, student.email, stamp, mins, got, autoTotal]
+    const fields = [T.title || "Test", student.name, student.email, stamp, mins, got, autoTotal, leaves]
       .concat(cells).map(clean);
     return fields.concat(checkCode(fields, T.checkSalt)).join("\t");
   }

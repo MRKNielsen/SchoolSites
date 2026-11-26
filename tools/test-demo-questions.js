@@ -13,6 +13,7 @@ window.TEST = {
   reveal: "marks",     // "score" | "marks" | "answers"
   shuffleQuestions: false,
   shuffleOptions: true,
+  clearOnLeave: true,  // leaving the page wipes answers (the count is emailed either way)
   questions: [
     { q: "A force is best described as…",
       opts: ["a push or a pull", "a type of energy", "the speed of an object", "the mass of an object"],

@@ -57,7 +57,7 @@ Nothing you paste leaves this page or is saved.</p>
 (function () {
   "use strict";
   const $ = id => document.getElementById(id);
-  const FIXED = ["Test", "Name", "Email", "Submitted", "Minutes", "Auto score", "Out of"];
+  const FIXED = ["Test", "Name", "Email", "Submitted", "Minutes", "Auto score", "Out of", "Left page"];
 
   function esc(s) {
     return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -114,7 +114,7 @@ Nothing you paste leaves this page or is saved.</p>
       list.forEach(r => {
         const dup = counts[r.cols[2].toLowerCase()] > 1;
         html += '<tr' + (dup ? ' class="dup" title="This email appears more than once — possible retake"' : "") + ">" +
-          r.cols.slice(1).map((c, i) => '<td' + (i >= 3 ? ' class="num"' : "") + ">" + esc(c) + "</td>").join("") +
+          r.cols.slice(1).map((c, i) => '<td' + (i >= 3 ? ' class="num' + (i === 6 && c !== "0" ? " bad" : "") + '"' : "") + ">" + esc(c) + "</td>").join("") +
           "<td><code>" + esc(r.code) + "</code></td>" +
           (r.valid ? '<td class="ok">✓ matches</td>' : '<td class="bad">✗ edited</td>') + "</tr>";
       });
