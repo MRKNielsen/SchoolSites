@@ -33,6 +33,7 @@
                                               //   "answers" — the above + the correct answers
        shuffleQuestions: false,
        shuffleOptions:   false,
+       checkSalt: "",                         // optional: any word; must match on tools/test-check.html
        questions: [
          { q: "…", opts: ["A","B","C","D"], ans: 1, marks: 1 },        // multiple choice, ans 0-based
          { type: "short",  q: "…", accept: ["gravity"], marks: 1 },     // typed, any accepted answer
@@ -44,6 +45,13 @@
    Question and option text is HTML (so <em>, <sub>, MathJax \( \)
    all work); the email gets the plain-text version.
 
+   The email ends with a tab-separated SPREADSHEET ROW — test, name,
+   email, submitted, minutes, auto score, out of, one cell per question
+   in the ORIGINAL question order (so shuffling doesn't scramble
+   columns; written questions are left blank) and a check code.
+   Paste it straight into Excel, or paste whole emails into
+   tools/test-check.html to verify codes and copy a clean table.
+
    The student is cc'd, so the email only includes correct answers
    when reveal is "answers".
 
@@ -52,6 +60,22 @@
    ============================================================ */
 (function () {
   "use strict";
+
+  /* ---------- check code (shared with tools/test-check.html) ----------
+     FNV-1a over the spreadsheet-row fields + an optional per-test salt.
+     It catches a student editing the emailed results; it can't stop a
+     student who reads this file and recomputes it. */
+  function checkCode(fields, salt) {
+    const str = String(salt || "") + "\u241E" + fields.map(f => String(f).trim()).join("\u241F");
+    let h1 = 0x811c9dc5, h2 = 0x01000193 ^ str.length;
+    for (let i = 0; i < str.length; i++) {
+      const c = str.charCodeAt(i);
+      h1 = Math.imul(h1 ^ c, 16777619) >>> 0;
+      h2 = Math.imul(h2 ^ c, 2246822519) >>> 0;
+    }
+    return (h1.toString(36).padStart(7, "0").slice(-5) + h2.toString(36).padStart(7, "0").slice(-5)).toUpperCase();
+  }
+  window.testCheckCode = checkCode;
 
   const T = window.TEST;
   const app = document.getElementById("test-app");
@@ -267,12 +291,14 @@
     const mins = Math.max(1, Math.round((finishedAt - startedAt) / 60000));
     let got = 0;
     const lines = [];
+    const cells = new Array(T.questions.length).fill("");   /* original question order */
     qs.forEach((q, i) => {
       const resp = responseOf(q, i);
       const m = mark(q, resp);
       const out = marksOf(q);
       const kind = typeOf(q);
       if (m != null) got += m;
+      cells[q.orig] = m == null ? "" : m;                  /* written: blank for the teacher */
 
       /* lock the paper and show per-question feedback if allowed */
       q.card.disabled = true;
@@ -305,11 +331,25 @@
       "Student: " + student.name + " <" + student.email + ">\n" +
       "Started: " + fmtTime(startedAt) + "\n" +
       "Submitted: " + fmtTime(finishedAt) + " (" + mins + " min)\n" +
-      scoreLine + "\n\n" + lines.join("\n\n") + "\n";
+      scoreLine + "\n\n" + lines.join("\n\n") + "\n\n" +
+      "Spreadsheet row (paste into Excel, or into tools/test-check.html to verify):\n" +
+      rowFor(got, mins, finishedAt, cells) + "\n";
     const subject = (T.title || "Test") + " — " + student.name + " — " + got + "/" + autoTotal;
 
     showResults(got, body, subject);
   });
+
+  /* Tab-separated so a paste into Excel lands one value per cell:
+     Test | Name | Email | Submitted | Minutes | Auto score | Out of | Q1..Qn | Code */
+  function rowFor(got, mins, when, cells) {
+    const p = n => String(n).padStart(2, "0");
+    const stamp = when.getFullYear() + "-" + p(when.getMonth() + 1) + "-" + p(when.getDate()) +
+                  " " + p(when.getHours()) + ":" + p(when.getMinutes());
+    const clean = v => String(v).replace(/[\t\r\n]+/g, " ").trim();
+    const fields = [T.title || "Test", student.name, student.email, stamp, mins, got, autoTotal]
+      .concat(cells).map(clean);
+    return fields.concat(checkCode(fields, T.checkSalt)).join("\t");
+  }
 
   /* ---------- 4. results + email ---------- */
   function mailtoFor(body, subject) {
