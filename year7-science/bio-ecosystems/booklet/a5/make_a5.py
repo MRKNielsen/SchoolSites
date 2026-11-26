@@ -16,6 +16,7 @@ booklet shares one set of macros, and a5-style.tex is the same 2027 A5 style
 the Particle Model and Separation books use. The cover art is placed by
 ../exp-cover.tex (covers/ecosystems.jpg).
 """
+from a5_fullwidth import full_width
 import re, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 MASTER = os.path.join(HERE, '..', '..', '..', 'particle-model', 'booklet', 'Particle_Model_Lesson_Booklet_Yr7.tex')
@@ -92,7 +93,7 @@ def build(book, lessons, src, rng):
                    lambda m: 'Three lesson books. The five labs share a lesson and are in the \\textbf{Experiment Booklet}.', front)
     assert '%%' not in front and 'particle-model.jpg' not in front, front
     out = pre + style + '\\begin{document}\n' + front + body + '\n'.join(gloss) + '\n\\end{document}\n'
-    open(OUT % book, 'w', encoding='utf-8').write(out)
+    open(OUT % book, 'w', encoding='utf-8').write(full_width(out))
     print('wrote', os.path.basename(OUT % book), '-', len(lessons), 'lessons,', len(words), 'glossary words')
 
 

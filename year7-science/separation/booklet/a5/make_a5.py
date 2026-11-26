@@ -32,6 +32,7 @@ What this does to the master:
     table wider than the text block has its column widths scaled to fit.
 Fails if a word of a kept lesson is lost.
 """
+from a5_fullwidth import full_width
 import re, sys, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -176,7 +177,7 @@ def build(book, keep):
   assert '%%' not in front and 'particle-model.jpg' not in front
 
   out = pre + style + '\\begin{document}\n' + front + ''.join(body) + '\n'.join(gloss) + '\n\\end{document}\n'
-  open(OUT % book, 'w', encoding='utf-8').write(out)
+  open(OUT % book, 'w', encoding='utf-8').write(full_width(out))
 
   # ---- no word lost: every word of every kept lesson is still in the output ----
   def words_of(t):

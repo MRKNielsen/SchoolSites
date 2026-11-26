@@ -1714,6 +1714,24 @@
   \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
   \clearpage}
 
+% ── A5: every question full page width (stacked, never side by side) ───────
+\renewcommand{\taskpair}[4]{%
+  \par\needspace{6\baselineskip}\vspace{2pt}%
+  \task #1\par\vspace{2pt}#2%
+  \par\needspace{6\baselineskip}%
+  \task #3\par\vspace{2pt}#4\par\vspace{2pt}}
+\renewcommand{\ptpair}[6]{%
+  \pt{#1}#2\par#3%
+  \pt{#4}#5\par#6}
+\renewcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}\vspace{5pt}%
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}}
+
 \begin{document}
 \pdfbookmark[1]{Cover}{cover}
 \setlength{\parindent}{0pt}
@@ -1730,7 +1748,7 @@
   \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
         inner xsep=2.6mm, inner ysep=2mm, font=\headingfont\bfseries, align=right]
     at ([xshift=-4mm, yshift=6mm]current page.south east)
-    {Lesson Booklet 1\\[-1pt]{\normalfont\headingfont\scriptsize Lessons 1--4}};
+    {Lesson Booklet 1\\[-1pt]{\normalfont\headingfont\scriptsize Lessons 1, 2, 4, 5}};
 \end{tikzpicture}
 \mbox{}
 \clearpage
@@ -1738,7 +1756,7 @@
 % ---- Inside cover ---------------------------------------------------------
 \thispagestyle{plain}
 {\headingfont\bfseries\fontsize{22}{26}\selectfont Forces and Motion}\par\vspace{1mm}
-{\headingfont\large Lesson Booklet 1 \textbullet\ Lessons 1--4 \textbullet\ Year 7}\par\vspace{1mm}
+{\headingfont\large Lesson Booklet 1 \textbullet\ Lessons 1, 2, 4, 5 \textbullet\ Year 7}\par\vspace{1mm}
 {\small\itshape VC 2.0: VC2S8U13 \textbullet\ VC2S8U14 \textbullet\ VC2S8U15 \textbullet\ VC2S8I01--I08}\par\vspace{4mm}
 \textbf{Teacher}\ \hrulefill\par
 
@@ -1753,7 +1771,6 @@ One section for each lesson. Each opens with its key vocabulary, then:\par\small
 \textbf{Part A} & a reading with comprehension questions \\
 \textbf{Part B} & the ideas, worked through \\
 \textbf{Part C} & practice on your own \\
-\textbf{Part D} & above level: Year 8 extension \\
 \end{tabular}
 
 \smallskip
@@ -1761,11 +1778,10 @@ One section for each lesson. Each opens with its key vocabulary, then:\par\small
 \textbf{I do} \tagicon{\icodots{1}} & your teacher works an example (solid frame) \\
 \textbf{We do} \tagicon{\icodots{2}} & you try one together (dashed frame) \\
 \textbf{Reading} \tagicon{\icoread} & a passage to read (thin frame) \\
-\textbf{Above level} \tagicon{\icoup} & extension (double frame) \\
 \end{tabular}
 
 \smallskip
-Three lesson books. The five experiments are in the \textbf{Experiment Booklet}; the trebuchet investigation has its own booklet.
+Two lesson books. The five experiments are in the \textbf{Experiment Booklet}, and the trebuchet investigation has its own booklet. Finished your lesson work and want to go further? Ask your teacher about \textbf{Advanced Forces}.
 \end{infobox}
 
 \clearpage
@@ -1778,16 +1794,16 @@ Three lesson books. The five experiments are in the \textbf{Experiment Booklet};
   2 & \hyperlink{lesson.2.1}{Force Diagrams and Net Force} & \hyperlink{lesson.2.1}{p.\ \pageref{sec:2}} \\ \hline
   3 & \textit{Experiment 1 --- Everyday Forces} & {\footnotesize Experiment Booklet} \\ \hline
   4 & \hyperlink{lesson.4.1}{Newton's First and Third Laws} & \hyperlink{lesson.4.1}{p.\ \pageref{sec:4}} \\ \hline
-  5 & Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma} & Book 2 \\ \hline
+  5 & \hyperlink{lesson.5.1}{Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma}} & \hyperlink{lesson.5.1}{p.\ \pageref{sec:5}} \\ \hline
   6 & \textit{Experiment 2 --- Friction and Mass} & {\footnotesize Experiment Booklet} \\ \hline
   7 & Energy and Transformation & Book 2 \\ \hline
   8 & \textit{Experiment 3 --- Bounce Efficiency} & {\footnotesize Experiment Booklet} \\ \hline
   9 & Simple Machines and Levers & Book 2 \\ \hline
   10 & \textit{Experiment 4 --- Lever Mechanical Advantage} & {\footnotesize Experiment Booklet} \\ \hline
-  11 & Levers Extension (Optional) & Book 3 \\ \hline
-  12 & Projectile Motion & Book 3 \\ \hline
+  11 & \textit{Turning Effects and the Trebuchet} & {\footnotesize Advanced Forces} \\ \hline
+  12 & Projectile Motion & Book 2 \\ \hline
   13 & \textit{Experiment 5 --- Measuring $g$} & {\footnotesize Experiment Booklet} \\ \hline
-  14 & Optimising Range (Optional) & Book 3 \\ \hline
+  14 & \textit{Optimising Range} & {\footnotesize Advanced Forces} \\ \hline
   15 & \textit{Trebuchet investigation: planning} & {\footnotesize Trebuchet booklet} \\ \hline
   16 & \textit{Trebuchet investigation: launches} & {\footnotesize Trebuchet booklet} \\ \hline
   17 & \textit{Trebuchet investigation: analysis and conclusion} & {\footnotesize Trebuchet booklet} \\ \hline
@@ -1900,9 +1916,9 @@ A spring scale is marked from 0 to 10\,N, with \textbf{20} small divisions betwe
 
 \begin{wedo}{Reading a spring scale}
 A spring scale is marked from 0 to 5\,N, with \textbf{20} small divisions between 0 and 5. The pointer sits on the \textbf{9th} small division. What is the reading?
-\par\smallskip\noindent
-\begin{minipage}[c]{0.3\linewidth}\diagSpringScaleWeDo\end{minipage}\hfill
-\begin{minipage}[c]{0.66\linewidth}\wbox{1.wd1}{4.6cm}\end{minipage}
+\par\smallskip
+\begin{center}\diagSpringScaleWeDo\end{center}
+\wbox{1.wd1}{4.6cm}
 \end{wedo}
 
 \subsection{Mass and Weight Are Not the Same Thing}\label{sub:1.4}
@@ -2083,56 +2099,6 @@ Work through every task. Show your working for calculations, and always include 
 \abox{1.t12}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:1}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to combine ideas, use a formula, or judge someone else's reasoning.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask An astronaut has a mass of 75\,kg.
-\pt{a}Find her weight on Earth.
-\wbox{1.x13a}{2.0cm}
-\pt{b}Find her weight on the Moon.
-\wbox{1.x13b}{2.0cm}
-\pt{c}Explain why she can jump much higher on the Moon, even though her mass has not changed.
-\abox{1.x13c}{2.0cm}
-
-
-\needspace{10\baselineskip}
-\exttask A suitcase has a weight of 196\,N on Earth.
-\pt{a}Find its mass.
-\wbox{1.x14a}{2.0cm}
-\pt{b}Find its weight on the Moon.
-\wbox{1.x14b}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A bathroom scale really measures \emph{force}, but it is labelled in kilograms. A 60\,kg student reads 60\,kg on it on Earth. Predict what the same scale would read on the Moon, and explain why the scale is not really measuring mass.
-\abox{1.x15}{3.0cm}
-
-\needspace{10\baselineskip}
-\exttask On Mars, $g = 3.7$\,N/kg. A 10\,kg backpack is carried on Earth ($g = 9.8$\,N/kg), on the Moon ($g = 1.6$\,N/kg) and on Mars.
-\pt{a}Calculate the backpack's weight in each place.
-\wbox{1.x16a}{2.0cm}
-\pt{b}Rank the three places from easiest to hardest to carry the backpack, and explain your ranking.
-\abox{1.x16b}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A rock hangs from a spring scale on Earth, and the scale reads 4.9\,N. Use $g = 9.8$\,N/kg on Earth and $g = 1.6$\,N/kg on the Moon.
-\pt{a}Find the mass of the rock.
-\wbox{1.x17a}{2.0cm}
-\pt{b}Find what the same spring scale would read if the rock were hung from it on the Moon.
-\wbox{1.x17b}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A \emph{balance} compares an object with known masses. A \emph{spring scale} measures the pull of gravity on the object. Explain why a balance gives the same result on the Moon as on Earth, but a spring scale does not.
-\abox{1.x18}{3.2cm}
-
-\needspace{10\baselineskip}
-\exttask Magnets can push or pull without touching. Describe a quick test you could do with a magnet, a paperclip and a sheet of paper to show that magnetic force acts \emph{through} the paper. Say what you would do and what you would expect to see.
-\abox{1.x19}{3.4cm}
-
-\end{yr8box}
 \newpage
 \setcounter{section}{1}\renewcommand{\lessonart}{2}
 % ══════════════════════════════════════════════════════════════════════════════
@@ -2381,76 +2347,13 @@ Why is the book not speeding up or slowing down? Use the words \textit{net force
 \vspace*{2.4cm}
 \begin{center}\tikz{\draw[line width=2pt, DarkGrey] (0,0) -- (6,0);}\\[2pt]\textit{\small\color{MidGrey}rope}\end{center}
 }
-
-\lessonpart{D}{Above level}{Violet}\label{ext:2}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to combine ideas, use a formula, or judge someone else's reasoning.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask Sam says: \emph{``A hockey puck sliding across ice at a steady speed must have an unbalanced force pushing it forwards.''} Is Sam right? Use a free body diagram and the idea of net force to explain.
-\abox{2.x17}{3.4cm}
-
-\needspace{14\baselineskip}
-\exttask A skydiver jumps from a plane. Draw a free body diagram for each moment below. Then explain why air resistance grows, and why the skydiver eventually stops speeding up.
-\pt{i}just after jumping
-\pt{ii}while still speeding up
-\pt{iii}at terminal velocity
-
-\vspace{3pt}
-\edef\abgrp{\number\numexpr\value{abox}+1\relax}%
-\noindent\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18i}{4.2cm}{\textbf{(i)} just after jumping}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18ii}{4.2cm}{\textbf{(ii)} speeding up}\end{minipage}\hfill
-\begin{minipage}[t]{0.31\linewidth}\drawk{2.x18iii}{4.2cm}{\textbf{(iii)} terminal velocity}\end{minipage}\par\gdef\abgrp{0}
-\abox{2.x18-why}{2.6cm}
-
-\needspace{10\baselineskip}
-\exttask A car has a driving force of 4500\,N and a total resistive force of 1200\,N.
-\pt{a}Calculate the net force.
-\wbox{2.x19a}{2.0cm}
-\pt{b}State which way the car accelerates.
-\abox{2.x19b}{2.0cm}
-\pt{c}Suggest one way the driver could make the forces balanced.
-\abox{2.x19c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A 1200\,kg car has a driving force of 4800\,N. Air resistance and friction total 1500\,N.
-\pt{a}Find the net force.
-\wbox{2.x20a}{2.0cm}
-\pt{b}Use $F = ma$ (acceleration = net force $\div$ mass) to find the acceleration.
-\wbox{2.x20b}{2.0cm}
-\pt{c}The driving force rises to 6000\,N --- find the new acceleration.
-\wbox{2.x20c}{2.0cm}
-\needspace{16\baselineskip}
-\exttask A car drives along a flat road at a steady 60\,km/h. Draw a free body diagram for the car showing four forces: weight, the normal force, the driving force and the total resistive force. Show which pairs of forces are balanced.
-
-\vspace{3pt}
-\drawk{2.x21}{4.6cm}{
-\textit{\color{MidGrey}Draw your force diagram here.}
-}
-
-\needspace{10\baselineskip}
-\exttask A 2\,kg ball is falling. Air resistance pushes up on it with 5\,N. Use $W = mg$ with $g = 9.8$\,N/kg.
-\pt{a}Find the weight of the ball.
-\wbox{2.x22a}{2.0cm}
-\pt{b}Find the size and direction of the net force.
-\wbox{2.x22b}{2.0cm}
-\pt{c}Is the ball speeding up, slowing down or moving at a steady speed? Explain.
-\abox{2.x22c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A loaded truck and a small car are both travelling at the same speed. Explain, using the idea of net force, why the truck needs a much bigger braking force to stop in the same distance.
-\abox{2.x23}{3.0cm}
-
-\end{yr8box}
 \newpage
 \setcounter{section}{3}\renewcommand{\lessonart}{4}
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 4 — NEWTON'S FIRST AND THIRD LAWS                       (Week 2 · P1)
 % ══════════════════════════════════════════════════════════════════════════════
 \sectiondiv{Newton's First and Third Laws}{Inertia \textbullet{} Why moving things keep moving \textbullet{} Action and reaction \textbullet{} Force pairs}\label{sec:4}
-\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
+\lessoncodes{VC2S8U14}
 
 \vocabhead
 \begin{ctab}
@@ -2717,60 +2620,284 @@ Work through every task. Use the words \emph{inertia}, \emph{unbalanced force}, 
 \abox{4.t14b}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:4}
+\newpage
+\setcounter{section}{4}\renewcommand{\lessonart}{5}
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 5 — NEWTON'S SECOND LAW                                 (Week 2 · P2)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma}}{Acceleration \textbullet{} Force, mass and acceleration \textbullet{} Rearranging $F = ma$ \textbullet{} Using the net force}\label{sec:5}
+\lessoncodes{VC2S8U14}
 
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to combine ideas, use both laws together, or judge someone else's reasoning.
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{2.91cm}|W{8.05cm}|}
+  \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Acceleration}\label{voc:acceleration}} & \scaf{How quickly an object's speed changes, measured in metres per second squared ($\text{m/s}^2$).} \\ \hline
+  & \textbf{Deceleration}\label{voc:deceleration} & \cell{5.v2} \\ \hline
+  & \textbf{Newton's Second Law}\label{voc:newton-s-second-law} & \cell{5.v3} \\ \hline
+  & \textbf{Directly proportional}\label{voc:directly-proportional} & \cell{5.v4} \\ \hline
+  & \textbf{Rearrange}\label{voc:rearrange} & \cell{5.v5} \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:5}
+
+\begin{readingbox}{Reading --- Pushing a Broken-Down Car}
+A car has broken down on a quiet, flat street, and it needs to be pushed to the side of the road. One person leans against the back and pushes as hard as they can. Slowly --- very slowly --- the car starts to roll. Two friends run over to help, and with three people pushing, the car speeds up much more quickly. A bigger force gives a bigger acceleration.
+
+Further down the street, a removalist's van packed full of furniture has also broken down. The same three people push it just as hard as they pushed the car. This time it barely creeps forwards. The force is the same, but the van has far more mass, and more mass means a smaller acceleration.
+
+Once the car is rolling, something changes: the pushers can ease off. They only need to push hard enough to match the friction acting on the car, and it keeps rolling at a steady speed. Pushing harder only matters if they want it to go faster.
+
+Isaac Newton tied all of this together in his Second Law: how quickly an object speeds up depends on the net force acting on it, and on its mass. That is why racing cars and racing bikes are built to be as light as possible. With the same engine, or the same legs, a lighter vehicle speeds up faster.
+\end{readingbox}
+
+\rcreset
+\rcqk{5.c1}{What happened to the car's acceleration when two friends joined in? Explain why.}{1.6cm}
+\rcqk{5.c2}{The same push was used on the loaded van. Describe what happened, and explain it using the word \emph{mass}.}{1.8cm}
+\rcqk{5.c3}{Once the car rolls at a steady speed, which force are the pushers balancing? How do you know the forces are balanced?}{1.8cm}
+\rcqk{5.c4}{Why are racing cars and racing bikes built to be as light as possible?}{1.6cm}
+\rcqk{5.c5}{According to the passage, what \emph{two} things decide how quickly an object speeds up?}{1.4cm}
+\rcqk{5.c6}{Which sentence in the first paragraph sums up what happened when more people pushed the car?}{1.4cm}
+\rcqk{5.c7}{Describe one other everyday example where the same push gives a smaller acceleration because the object has more mass.}{1.6cm}
+\rcqk{5.c8}{Suppose the three pushers kept pushing just as hard after the car was already rolling. Using the passage, predict what would happen to the car, and explain why using the words \emph{net force}.}{2.0cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
+
+\subsection{What is Acceleration?}\label{sub:5.1}
+
+\textbf{Acceleration} is how quickly an object's speed changes. It is measured in \textbf{metres per second squared (m/s$^2$)}, which means ``metres per second, every second''.
+
+\begin{infobox}{Reading an acceleration}
+An acceleration of \textbf{3\,m/s$^2$} means the speed goes up by \textbf{3\,m/s every second}. Starting from rest:
 
 \medskip
-\needspace{10\baselineskip}
-\exttask Jess says: \emph{``The weight of a book on a table and the normal force from the table are a Third Law pair, because they are equal and opposite.''} Is Jess right? Explain, and name the true reaction force to each of the two forces.
-\abox{4.x15}{2.8cm}
+\begin{tabular}{|l|c|c|c|c|}
+  \hline
+  \textbf{Time (s)}    & 0 & 1 & 2 & 3 \\ \hline
+  \textbf{Speed (m/s)} & 0 & 3 & 6 & 9 \\ \hline
+\end{tabular}
+
+\medskip
+Slowing down is also an acceleration. It is sometimes called a \textbf{deceleration}.
+\end{infobox}
+
+\subsection{Force, Mass and Acceleration}\label{sub:5.2}
+
+Newton's Second Law links three things: the \textbf{net force} on an object, its \textbf{mass}, and its \textbf{acceleration}.
+
+\diagFma
+\figcap[fig:fma]{Newton's Second Law: force, mass and acceleration}
+
+\vspace{2pt}
+\begin{ctab}
+\begin{tabular}{|L{3.79cm}|L{2.25cm}|L{4.50cm}|}
+  \thead{If you\ldots} & \thead{the acceleration\ldots} & \thead{Example} \\ \hline
+  \talt increase the force (same mass) & increases & Three people push the car instead of one \\ \hline
+        increase the mass (same force) & decreases & The same push on a loaded van \\ \hline
+  \talt double the force (same mass)   & doubles   & Two people push a trolley, each as hard as one did before \\ \hline
+        double the mass (same force)   & halves    & The same push on two identical trolleys joined together \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{11\baselineskip}
+\begin{infobox}{Second Law}
+The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass.
+\[
+  \boxed{F = m \times a}
+  \qquad\qquad
+  \boxed{a = \frac{F}{m}}
+  \qquad\qquad
+  \boxed{m = \frac{F}{a}}
+\]
+Force in newtons (N) \quad Mass in kilograms (kg) \quad Acceleration in m/s$^2$
+\end{infobox}
+\newpage
+\subsection{Using $F = ma$}\label{sub:5.3}
+
+You only need to remember one formula. The \textbf{formula triangle} shows how to rearrange it.
+
+\diagFmaTriangle
+\figcap{The formula triangle. Cover the quantity you want; what is left shows how to find it.}
+
+\begin{skillbox}{Four steps for every $F = ma$ question}
+\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
+  \item Write down what you \textbf{know}, with units.
+  \item Choose the \textbf{version} of the formula you need (use the triangle).
+  \item \textbf{Substitute} the numbers.
+  \item \textbf{Calculate}, and always write the \textbf{unit}.
+\end{enumerate}
+\end{skillbox}
+
+\begin{workedex}{Finding acceleration}
+A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
+
+\medskip
+\textbf{Know:}\quad $F = 20$\,N, \quad $m = 5$\,kg
+
+\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $a = F \div m$
+
+\textbf{Substitute:}\quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
+\end{workedex}
+
+\begin{wedo}{Finding acceleration}
+A 3\,kg toy car is pushed with a net force of 15\,N. What is its acceleration?
+\wbox{5.wd1}{2.8cm}
+\end{wedo}
+
+\begin{workedex}{Finding force}
+A 1200\,kg car accelerates at 2\,m/s$^2$. What net force is acting on it?
+
+\medskip
+\textbf{Know:}\quad $m = 1200$\,kg, \quad $a = 2$\,m/s$^2$
+
+\textbf{Formula:}\quad $F = m \times a$
+
+\textbf{Substitute:}\quad $F = 1200 \times 2 = \mathbf{2400\ \text{N}}$
+\end{workedex}
+
+\begin{wedo}{Finding force}
+A 0.5\,kg ball accelerates at 12\,m/s$^2$ when it is thrown. What net force acts on it?
+\wbox{5.wd2}{2.8cm}
+\end{wedo}
+
+\begin{workedex}{Finding mass}
+A net force of 60\,N gives a box an acceleration of 4\,m/s$^2$. What is the mass of the box?
+
+\medskip
+\textbf{Know:}\quad $F = 60$\,N, \quad $a = 4$\,m/s$^2$
+
+\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $m = F \div a$
+
+\textbf{Substitute:}\quad $m = 60 \div 4 = \mathbf{15\ \text{kg}}$
+\end{workedex}
+
+\begin{wedo}{Finding mass}
+A net force of 80\,N gives a wheelbarrow an acceleration of 5\,m/s$^2$. What is the mass of the wheelbarrow?
+\wbox{5.wd3}{2.8cm}
+\end{wedo}
+
+\subsection{Always Use the Net Force}\label{sub:5.4}
+
+The $F$ in $F = ma$ is the \textbf{net force} --- the force left over after you add up all the forces (Lesson~2). If the forces are balanced, the net force is zero, so the acceleration is zero: the object stays still, or keeps moving at a steady speed. That is exactly what the First Law says.
+
+\begin{workedex}{Net force first}
+A 10\,kg trolley is pushed forwards with 50\,N. Friction pushes back with 10\,N. Find its acceleration.
+
+\medskip
+\textbf{Step 1 --- net force:}\quad opposite directions, so subtract: \quad $50 - 10 = 40$\,N forwards
+
+\textbf{Step 2 --- acceleration:}\quad $a = F \div m = 40 \div 10 = \mathbf{4\ \text{m/s}^2}$ \textbf{forwards}
+\end{workedex}
+
+\begin{wedo}{Net force first}
+A 25\,kg go-kart is pushed forwards with 120\,N. Friction pushes back with 45\,N.
+\pt{a}Find the net force.
+\wbox{5.wd4a}{1.8cm}
+\pt{b}Find the acceleration of the go-kart.
+\wbox{5.wd4b}{1.8cm}
+\end{wedo}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:5}
+
+Work through every task. Show your working for calculations, and always include the unit.
 
 \needspace{12\baselineskip}
-\exttask For each pair of forces, decide whether it is a Third Law pair. Write \textbf{YES} or \textbf{NO}, and explain how you decided.
-\pt{i}The Earth pulls a book down; the book pulls the Earth up.
-\abox{4.x16i}{2.0cm}
-\pt{ii}A rope pulls a sledge forwards; friction from the snow pulls the sledge backwards.
-\abox{4.x16ii}{2.0cm}
-\pt{iii}A swimmer pushes the water backwards; the water pushes the swimmer forwards.
-\abox{4.x16iii}{2.0cm}
+\task For each change, describe what happens to the acceleration. Write \textbf{increases}, \textbf{decreases}, \textbf{doubles} or \textbf{halves}.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{3.51cm}|Z{1.55cm}|W{3.51cm}|Z{1.55cm}|}
+  \hd & \thead{Change} & \thead{\scriptsize Acceleration} & \thead{Change} & \thead{\scriptsize Acceleration} \\ \hline
+  & The force is doubled; the mass stays the same & \scaf{doubles} & The mass is doubled; the force stays the same & \scaf{halves} \\ \hline
+  & More people help push the same car & \cell{5.t1-r2c2} & A heavier rider pedals the same bike just as hard & \cell{5.t1-r2c4} \\ \hline
+  & A truck is loaded with bricks; its engine force stays the same & \cell{5.t1-r3c2} & A rocket burns fuel and gets lighter; its thrust stays the same & \cell{5.t1-r3c4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task Use $F = ma$ to complete the table. The first row is done for you.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{3.09cm}|Z{2.25cm}|Z{2.25cm}|Z{2.53cm}|}
+  \hd & \thead{Situation} & \thead{Force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
+  & Trolley pushed      & 20     & 5    & \scaf{$a = 20 \div 5 = 4$} \\ \hline
+  & Soccer ball kicked  & 45     & 0.45 & \cell{5.t2-r2c4} \\ \hline
+  & Car braking         & \cell{5.t2-r3c2} & 1200 & 3.5 \\ \hline
+  & Rocket launch       & 6\,000 & \cell{5.t2-r4c3} & 30 \\ \hline
+\end{tabular}
+\end{ctab}
+
+\taskpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{\wbox{5.t3}{2.4cm}}
+         {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{\wbox{5.t4}{2.4cm}}
+
+\taskpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{\wbox{5.t5}{2.4cm}}
+         {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the net force needed.}{\wbox{5.t6}{2.4cm}}
+
+\taskpair{A 70\,kg sprinter accelerates at 4\,m/s$^2$ out of the blocks. Find the net force on her.}{\wbox{5.t7}{2.4cm}}
+         {A 0.15\,kg cricket ball is hit with a net force of 30\,N. Find its acceleration.}{\wbox{5.t8}{2.4cm}}
+
+\needspace{14\baselineskip}
+\task A 2.5\,kg trolley is pushed with different net forces.
+\pt{a}Complete the table.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SZ{2.89cm}|Z{2.89cm}|Z{4.76cm}|}
+  \hd & \thead{Net force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
+  & 5  & 2.5 & \scaf{$a = 5 \div 2.5 = 2$} \\ \hline
+  & 10 & 2.5 & \cell{5.t9a-r2c3} \\ \hline
+  & 15 & 2.5 & \cell{5.t9a-r3c3} \\ \hline
+  & 20 & 2.5 & \cell{5.t9a-r4c3} \\ \hline
+\end{tabular}
+\end{ctab}
+\pt{b}What happens to the acceleration each time the force goes up by 5\,N? Describe the pattern.
+\abox{5.t9b}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask A horse pulls a cart. By the Third Law, the cart pulls back on the horse with an equal force. Liam says: \emph{``So the forces cancel out, and the horse can never get the cart moving.''} Explain Liam's mistake. \textit{(Hint: draw a free body diagram for the horse alone. What pushes the horse forwards?)}
-\abox{4.x17}{3.0cm}
+\task A shopping trolley of mass 15\,kg is pushed with a force of 45\,N. Friction opposes the motion with 15\,N.
+\pt{a}Find the net force.
+\wbox{5.t10a}{2.0cm}
+\pt{b}Find the acceleration of the trolley.
+\wbox{5.t10b}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask An astronaut on a spacewalk is floating 10\,m from the Space Station, not moving. Her safety line has come loose, but she is holding a heavy toolbox.
-\pt{a}Explain how she can use the Third Law to start moving back towards the station.
-\abox{4.x18a}{2.0cm}
-\pt{b}Once she is moving, does she need to keep doing anything to keep moving? Use the First Law.
-\abox{4.x18b}{2.0cm}
+\task A 60\,kg cyclist and her 12\,kg bicycle accelerate at 1.5\,m/s$^2$.
+\pt{a}Find the total mass.
+\wbox{5.t11a}{2.0cm}
+\pt{b}Find the net force.
+\wbox{5.t11b}{2.0cm}
+\pt{c}Air resistance is 30\,N. Find the force she must produce by pedalling.
+\wbox{5.t11c}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask An apple falls from a tree. The Earth pulls the apple down with a force of 1\,N.
-\pt{a}What is the reaction force? Give its size and direction, and say what it acts on.
-\abox{4.x19a}{2.0cm}
-\pt{b}The two forces are the same size. So why do we see the apple move towards the Earth, and not the Earth move towards the apple? Use the idea of inertia.
-\abox{4.x19b}{2.0cm}
+\task Two identical trolleys are pushed with the same force. Trolley A is empty, with a mass of 2\,kg. Trolley B carries an extra 6\,kg, so its total mass is 8\,kg.
+\pt{a}Which trolley accelerates more?
+\abox{5.t12a}{2.0cm}
+\pt{b}Explain your answer using $F = ma$.
+\abox{5.t12b}{2.0cm}
+\pt{c}The force is 16\,N. Calculate both accelerations.
+\wbox{5.t12c}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask Two skaters stand still on ice and push each other apart. Skater A has twice the mass of skater B.
-\pt{a}Compare the sizes of the forces on the two skaters.
-\abox{4.x20a}{2.0cm}
-\pt{b}Which skater moves away faster? Explain, using the idea of inertia.
-\abox{4.x20b}{2.0cm}
+\task A net force of 3600\,N gives a car an acceleration of 2\,m/s$^2$.
+\pt{a}Find the mass of the car.
+\wbox{5.t13a}{2.0cm}
+\pt{b}The car is then loaded with 200\,kg of luggage. Find its new acceleration with the same net force.
+\wbox{5.t13b}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask A waiter carries a full cup of water on a tray.
-\pt{a}The waiter suddenly moves the tray forwards. Which way does the water spill? Explain.
-\abox{4.x21a}{2.0cm}
-\pt{b}Later, walking at a steady speed, the waiter suddenly stops. Which way does the water spill now? Explain.
-\abox{4.x21b}{2.0cm}
-\pt{c}Use the First Law to explain why moving the tray smoothly stops the water spilling.
-\abox{4.x21c}{2.0cm}
-\end{yr8box}
+\task A 900\,kg car travels along a flat road at a steady 60\,km/h. Its engine provides a driving force of 2000\,N.
+\pt{a}What is the car's acceleration? Explain how you know.
+\abox{5.t14a}{2.0cm}
+\pt{b}What is the total size of the resistive forces (friction and air resistance) acting on the car?
+\abox{5.t14b}{2.0cm}
 
+% ─── PART D ───────────────────────────────────────────────────────────────────
 \newpage
 \clearpage\markboth{Glossary}{Glossary}\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
 {\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
@@ -2778,9 +2905,12 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
 \renewcommand{\arraystretch}{1.3}
 \begin{longtable}{|>{\RaggedRight}p{34mm}|p{9mm}|p{\dimexpr\linewidth-43mm-6\tabcolsep-4\arrayrulewidth-1pt\relax}|}
 \hline \rule{0pt}{4mm}\headingfont\bfseries Word & \headingfont\bfseries Page & \headingfont\bfseries In my own words \\ \hline \endhead
+  Acceleration & \pageref{voc:acceleration} & \\ \hline
   Action--reaction pair & \pageref{voc:action-reaction-pair} & \\ \hline
   Air resistance & \pageref{voc:air-resistance} & \\ \hline
   Atmosphere & \pageref{voc:atmosphere} & \\ \hline
+  Deceleration & \pageref{voc:deceleration} & \\ \hline
+  Directly proportional & \pageref{voc:directly-proportional} & \\ \hline
   Force & \pageref{voc:force} & \\ \hline
   Free body diagram & \pageref{voc:free-body-diagram} & \\ \hline
   Friction & \pageref{voc:friction} & \\ \hline
@@ -2789,9 +2919,11 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, us
   Net force & \pageref{voc:net-force} & \\ \hline
   Newton (N) & \pageref{voc:newton-n} & \\ \hline
   Newton's First Law & \pageref{voc:newton-s-first-law} & \\ \hline
+  Newton's Second Law & \pageref{voc:newton-s-second-law} & \\ \hline
   Newton's Third Law & \pageref{voc:newton-s-third-law} & \\ \hline
   Non-contact force & \pageref{voc:non-contact-force} & \\ \hline
   Normal force & \pageref{voc:normal-force} & \\ \hline
+  Rearrange & \pageref{voc:rearrange} & \\ \hline
   Spring scale & \pageref{voc:spring-scale} & \\ \hline
   Unbalanced forces & \pageref{voc:unbalanced-forces} & \\ \hline
   Weight & \pageref{voc:weight} & \\ \hline

@@ -36,10 +36,10 @@ def read_abp():
 
 
 def free_space():
-    subprocess.run(['pdftoppm', '-r', str(DPI), '-gray', BASE + '.pdf', '_fill'], check=True)
+    subprocess.run(['pdftoppm', '-r', str(DPI), '-gray', BASE + '.pdf', BASE + '_fill'], check=True)
     out = {}
     for fn in sorted(os.listdir('.')):
-        m = re.match(r'_fill-(\d+)\.pgm$', fn)
+        m = re.match(re.escape(BASE) + r'_fill-(\d+)\.pgm$', fn)
         if not m:
             continue
         im = Image.open(fn); w, h = im.size; px = im.load()
@@ -62,19 +62,25 @@ def write_abx(extra):
 
 
 def main():
+    """Grow boxes page by page. When a round pushes a box onto another page,
+    every page before the first one that overflowed keeps its growth, that page
+    is damped, and the rounds go on - so one stubborn page can't hold back the
+    rest of the book."""
     if os.path.exists(BASE + '.abx'):
         os.remove(BASE + '.abx')
     build()
     ref = read_abp(); npages = len(free_space())
-    extra = defaultdict(float)
-    good = {}
+    good = defaultdict(float)
+    verified = {}
     damp = defaultdict(lambda: 0.92)
-    for rnd in range(6):
+    done = set()
+    for rnd in range(14):
         free = free_space()
+        extra = defaultdict(float, good)
         grew = False
         for p in sorted(free):
             ids = [i for i, b in ref.items() if b['page'] == p]
-            if not ids or free[p] - KEEP_MM < 3.0:
+            if p in done or not ids or free[p] - KEEP_MM < 3.0:
                 continue
             units = {}
             for i in ids:
@@ -89,18 +95,29 @@ def main():
             break
         write_abx(extra); build()
         now = read_abp(); n = len(free_space())
-        moved = {ref[i]['page'] for i in ref if now.get(i, {}).get('page') != ref[i]['page']}
-        if n != npages or moved:
-            for p in (moved or set(free)):
-                damp[p] *= 0.5
-            extra = defaultdict(float, good)
-            write_abx(extra); build()
+        moved = sorted({ref[i]['page'] for i in ref if now.get(i, {}).get('page') != ref[i]['page']})
+        if moved or n != npages:
+            p0 = moved[0] if moved else min(free)
+            # A box leaving page p0 was pushed by page p0 or the page before it.
+            # Pages before those keep their growth; the two are damped.
+            good = defaultdict(float, {i: v for i, v in extra.items() if ref[i]['page'] < p0 - 1})
+            for q in (p0 - 1, p0):
+                damp[q] *= 0.5
+                if damp[q] < 0.05:
+                    done.add(q)
+            write_abx(good); build()
+            status = 'overflow at p%d, kept p<%d' % (p0, p0 - 1)
         else:
-            good = dict(extra)
-        print('round', rnd + 1, 'free after:', {p: round(v) for p, v in free_space().items()})
+            good = extra
+            verified = dict(extra)
+            status = 'ok'
+        print('round', rnd + 1, status, 'free after:', {p: round(v) for p, v in free_space().items()})
+    write_abx(good); build()
     final = read_abp()
+    if any(final.get(i, {}).get('page') != ref[i]['page'] for i in ref):
+        print('last round moved a box - falling back to the last verified fill')
+        write_abx(verified); build(); final = read_abp()
     assert all(final[i]['page'] == ref[i]['page'] for i in ref), 'a box moved page'
     print('pages', len(free_space()), '- boxes on the same pages as before')
-
 
 main()

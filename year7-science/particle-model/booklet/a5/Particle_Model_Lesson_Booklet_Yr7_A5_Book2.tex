@@ -1057,6 +1057,24 @@
   \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
   \clearpage}
 
+% ── A5: every question full page width (stacked, never side by side) ───────
+\renewcommand{\taskpair}[4]{%
+  \par\needspace{6\baselineskip}\vspace{2pt}%
+  \task #1\par\vspace{2pt}\answerbox{#2}%
+  \par\needspace{6\baselineskip}%
+  \task #3\par\vspace{2pt}\answerbox{#4}\par\vspace{2pt}}
+\renewcommand{\ptpair}[6]{%
+  \pt{#1}#2\par\answerbox{#3}%
+  \pt{#4}#5\par\answerbox{#6}}
+\renewcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}\vspace{5pt}%
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}}
+
 \begin{document}
 \pdfbookmark[1]{Cover}{cover}
 \setlength{\parindent}{0pt}

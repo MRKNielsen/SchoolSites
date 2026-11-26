@@ -1714,6 +1714,24 @@
   \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
   \clearpage}
 
+% ── A5: every question full page width (stacked, never side by side) ───────
+\renewcommand{\taskpair}[4]{%
+  \par\needspace{6\baselineskip}\vspace{2pt}%
+  \task #1\par\vspace{2pt}#2%
+  \par\needspace{6\baselineskip}%
+  \task #3\par\vspace{2pt}#4\par\vspace{2pt}}
+\renewcommand{\ptpair}[6]{%
+  \pt{#1}#2\par#3%
+  \pt{#4}#5\par#6}
+\renewcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}\vspace{5pt}%
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}}
+
 \begin{document}
 \pdfbookmark[1]{Cover}{cover}
 \setlength{\parindent}{0pt}
@@ -1730,7 +1748,7 @@
   \node[anchor=south east, fill=white, draw=Ink, line width=0.6pt, rounded corners=1.2mm,
         inner xsep=2.6mm, inner ysep=2mm, font=\headingfont\bfseries, align=right]
     at ([xshift=-4mm, yshift=6mm]current page.south east)
-    {Lesson Booklet 2\\[-1pt]{\normalfont\headingfont\scriptsize Lessons 5--9}};
+    {Lesson Booklet 2\\[-1pt]{\normalfont\headingfont\scriptsize Lessons 7, 9, 12}};
 \end{tikzpicture}
 \mbox{}
 \clearpage
@@ -1738,7 +1756,7 @@
 % ---- Inside cover ---------------------------------------------------------
 \thispagestyle{plain}
 {\headingfont\bfseries\fontsize{22}{26}\selectfont Forces and Motion}\par\vspace{1mm}
-{\headingfont\large Lesson Booklet 2 \textbullet\ Lessons 5--9 \textbullet\ Year 7}\par\vspace{1mm}
+{\headingfont\large Lesson Booklet 2 \textbullet\ Lessons 7, 9, 12 \textbullet\ Year 7}\par\vspace{1mm}
 {\small\itshape VC 2.0: VC2S8U13 \textbullet\ VC2S8U14 \textbullet\ VC2S8U15 \textbullet\ VC2S8I01--I08}\par\vspace{4mm}
 \textbf{Teacher}\ \hrulefill\par
 
@@ -1753,7 +1771,6 @@ One section for each lesson. Each opens with its key vocabulary, then:\par\small
 \textbf{Part A} & a reading with comprehension questions \\
 \textbf{Part B} & the ideas, worked through \\
 \textbf{Part C} & practice on your own \\
-\textbf{Part D} & above level: Year 8 extension \\
 \end{tabular}
 
 \smallskip
@@ -1761,11 +1778,10 @@ One section for each lesson. Each opens with its key vocabulary, then:\par\small
 \textbf{I do} \tagicon{\icodots{1}} & your teacher works an example (solid frame) \\
 \textbf{We do} \tagicon{\icodots{2}} & you try one together (dashed frame) \\
 \textbf{Reading} \tagicon{\icoread} & a passage to read (thin frame) \\
-\textbf{Above level} \tagicon{\icoup} & extension (double frame) \\
 \end{tabular}
 
 \smallskip
-Three lesson books. The five experiments are in the \textbf{Experiment Booklet}; the trebuchet investigation has its own booklet.
+Two lesson books. The five experiments are in the \textbf{Experiment Booklet}, and the trebuchet investigation has its own booklet. Finished your lesson work and want to go further? Ask your teacher about \textbf{Advanced Forces}.
 \end{infobox}
 
 \clearpage
@@ -1778,16 +1794,16 @@ Three lesson books. The five experiments are in the \textbf{Experiment Booklet};
   2 & Force Diagrams and Net Force & Book 1 \\ \hline
   3 & \textit{Experiment 1 --- Everyday Forces} & {\footnotesize Experiment Booklet} \\ \hline
   4 & Newton's First and Third Laws & Book 1 \\ \hline
-  5 & \hyperlink{lesson.5.1}{Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma}} & \hyperlink{lesson.5.1}{p.\ \pageref{sec:5}} \\ \hline
+  5 & Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma} & Book 1 \\ \hline
   6 & \textit{Experiment 2 --- Friction and Mass} & {\footnotesize Experiment Booklet} \\ \hline
   7 & \hyperlink{lesson.7.1}{Energy and Transformation} & \hyperlink{lesson.7.1}{p.\ \pageref{sec:7}} \\ \hline
   8 & \textit{Experiment 3 --- Bounce Efficiency} & {\footnotesize Experiment Booklet} \\ \hline
   9 & \hyperlink{lesson.9.1}{Simple Machines and Levers} & \hyperlink{lesson.9.1}{p.\ \pageref{sec:9}} \\ \hline
   10 & \textit{Experiment 4 --- Lever Mechanical Advantage} & {\footnotesize Experiment Booklet} \\ \hline
-  11 & Levers Extension (Optional) & Book 3 \\ \hline
-  12 & Projectile Motion & Book 3 \\ \hline
+  11 & \textit{Turning Effects and the Trebuchet} & {\footnotesize Advanced Forces} \\ \hline
+  12 & \hyperlink{lesson.12.1}{Projectile Motion} & \hyperlink{lesson.12.1}{p.\ \pageref{sec:12}} \\ \hline
   13 & \textit{Experiment 5 --- Measuring $g$} & {\footnotesize Experiment Booklet} \\ \hline
-  14 & Optimising Range (Optional) & Book 3 \\ \hline
+  14 & \textit{Optimising Range} & {\footnotesize Advanced Forces} \\ \hline
   15 & \textit{Trebuchet investigation: planning} & {\footnotesize Trebuchet booklet} \\ \hline
   16 & \textit{Trebuchet investigation: launches} & {\footnotesize Trebuchet booklet} \\ \hline
   17 & \textit{Trebuchet investigation: analysis and conclusion} & {\footnotesize Trebuchet booklet} \\ \hline
@@ -1795,357 +1811,12 @@ Three lesson books. The five experiments are in the \textbf{Experiment Booklet};
 \end{tabular}
 \renewcommand{\arraystretch}{1}
 \clearpage
-\setcounter{section}{4}\renewcommand{\lessonart}{5}
-% ══════════════════════════════════════════════════════════════════════════════
-%  LESSON 5 — NEWTON'S SECOND LAW                                 (Week 2 · P2)
-% ══════════════════════════════════════════════════════════════════════════════
-\sectiondiv{Newton's Second Law: \texorpdfstring{$F = ma$}{F = ma}}{Acceleration \textbullet{} Force, mass and acceleration \textbullet{} Rearranging $F = ma$ \textbullet{} Using the net force}\label{sec:5}
-\lessoncodes{VC2S8U14 \textbullet{} VC2S10U17 (above level)}
-
-\vocabhead
-\begin{ctab}
-\begin{tabular}{|SW{2.91cm}|W{8.05cm}|}
-  \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
-  & \scaf{\textbf{Acceleration}\label{voc:acceleration}} & \scaf{How quickly an object's speed changes, measured in metres per second squared ($\text{m/s}^2$).} \\ \hline
-  & \textbf{Deceleration}\label{voc:deceleration} & \cell{5.v2} \\ \hline
-  & \textbf{Newton's Second Law}\label{voc:newton-s-second-law} & \cell{5.v3} \\ \hline
-  & \textbf{Directly proportional}\label{voc:directly-proportional} & \cell{5.v4} \\ \hline
-  & \textbf{Rearrange}\label{voc:rearrange} & \cell{5.v5} \\ \hline
-\end{tabular}
-\end{ctab}
-
-% ─── PART A ───────────────────────────────────────────────────────────────────
-\lessonpart{A}{Reading and comprehension}{Teal}\label{read:5}
-
-\begin{readingbox}{Reading --- Pushing a Broken-Down Car}
-A car has broken down on a quiet, flat street, and it needs to be pushed to the side of the road. One person leans against the back and pushes as hard as they can. Slowly --- very slowly --- the car starts to roll. Two friends run over to help, and with three people pushing, the car speeds up much more quickly. A bigger force gives a bigger acceleration.
-
-Further down the street, a removalist's van packed full of furniture has also broken down. The same three people push it just as hard as they pushed the car. This time it barely creeps forwards. The force is the same, but the van has far more mass, and more mass means a smaller acceleration.
-
-Once the car is rolling, something changes: the pushers can ease off. They only need to push hard enough to match the friction acting on the car, and it keeps rolling at a steady speed. Pushing harder only matters if they want it to go faster.
-
-Isaac Newton tied all of this together in his Second Law: how quickly an object speeds up depends on the net force acting on it, and on its mass. That is why racing cars and racing bikes are built to be as light as possible. With the same engine, or the same legs, a lighter vehicle speeds up faster.
-\end{readingbox}
-
-\rcreset
-\rcqk{5.c1}{What happened to the car's acceleration when two friends joined in? Explain why.}{1.6cm}
-\rcqk{5.c2}{The same push was used on the loaded van. Describe what happened, and explain it using the word \emph{mass}.}{1.8cm}
-\rcqk{5.c3}{Once the car rolls at a steady speed, which force are the pushers balancing? How do you know the forces are balanced?}{1.8cm}
-\rcqk{5.c4}{Why are racing cars and racing bikes built to be as light as possible?}{1.6cm}
-\rcqk{5.c5}{According to the passage, what \emph{two} things decide how quickly an object speeds up?}{1.4cm}
-\rcqk{5.c6}{Which sentence in the first paragraph sums up what happened when more people pushed the car?}{1.4cm}
-\rcqk{5.c7}{Describe one other everyday example where the same push gives a smaller acceleration because the object has more mass.}{1.6cm}
-\rcqk{5.c8}{Suppose the three pushers kept pushing just as hard after the car was already rolling. Using the passage, predict what would happen to the car, and explain why using the words \emph{net force}.}{2.0cm}
-
-% ─── PART B ───────────────────────────────────────────────────────────────────
-\lessonpart{B}{Theory and examples}{Blue}\label{theory:5}
-
-\subsection{What is Acceleration?}\label{sub:5.1}
-
-\textbf{Acceleration} is how quickly an object's speed changes. It is measured in \textbf{metres per second squared (m/s$^2$)}, which means ``metres per second, every second''.
-
-\begin{infobox}{Reading an acceleration}
-An acceleration of \textbf{3\,m/s$^2$} means the speed goes up by \textbf{3\,m/s every second}. Starting from rest:
-
-\medskip
-\begin{tabular}{|l|c|c|c|c|}
-  \hline
-  \textbf{Time (s)}    & 0 & 1 & 2 & 3 \\ \hline
-  \textbf{Speed (m/s)} & 0 & 3 & 6 & 9 \\ \hline
-\end{tabular}
-
-\medskip
-Slowing down is also an acceleration. It is sometimes called a \textbf{deceleration}.
-\end{infobox}
-
-\subsection{Force, Mass and Acceleration}\label{sub:5.2}
-
-Newton's Second Law links three things: the \textbf{net force} on an object, its \textbf{mass}, and its \textbf{acceleration}.
-
-\diagFma
-\figcap[fig:fma]{Newton's Second Law: force, mass and acceleration}
-
-\vspace{2pt}
-\begin{ctab}
-\begin{tabular}{|L{3.79cm}|L{2.25cm}|L{4.50cm}|}
-  \thead{If you\ldots} & \thead{the acceleration\ldots} & \thead{Example} \\ \hline
-  \talt increase the force (same mass) & increases & Three people push the car instead of one \\ \hline
-        increase the mass (same force) & decreases & The same push on a loaded van \\ \hline
-  \talt double the force (same mass)   & doubles   & Two people push a trolley, each as hard as one did before \\ \hline
-        double the mass (same force)   & halves    & The same push on two identical trolleys joined together \\ \hline
-\end{tabular}
-\end{ctab}
-
-\needspace{11\baselineskip}
-\begin{infobox}{Second Law}
-The acceleration of an object is directly proportional to the net force acting on it, and inversely proportional to its mass.
-\[
-  \boxed{F = m \times a}
-  \qquad\qquad
-  \boxed{a = \frac{F}{m}}
-  \qquad\qquad
-  \boxed{m = \frac{F}{a}}
-\]
-Force in newtons (N) \quad Mass in kilograms (kg) \quad Acceleration in m/s$^2$
-\end{infobox}
-\newpage
-\subsection{Using $F = ma$}\label{sub:5.3}
-
-You only need to remember one formula. The \textbf{formula triangle} shows how to rearrange it.
-
-\diagFmaTriangle
-\figcap{The formula triangle. Cover the quantity you want; what is left shows how to find it.}
-
-\begin{skillbox}{Four steps for every $F = ma$ question}
-\begin{enumerate}[itemsep=1pt, leftmargin=1.4em, topsep=1pt]
-  \item Write down what you \textbf{know}, with units.
-  \item Choose the \textbf{version} of the formula you need (use the triangle).
-  \item \textbf{Substitute} the numbers.
-  \item \textbf{Calculate}, and always write the \textbf{unit}.
-\end{enumerate}
-\end{skillbox}
-
-\begin{workedex}{Finding acceleration}
-A 5\,kg trolley is pushed with a net force of 20\,N. What is its acceleration?
-
-\medskip
-\textbf{Know:}\quad $F = 20$\,N, \quad $m = 5$\,kg
-
-\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $a = F \div m$
-
-\textbf{Substitute:}\quad $a = 20 \div 5 = \mathbf{4\ \text{m/s}^2}$
-\end{workedex}
-
-\begin{wedo}{Finding acceleration}
-A 3\,kg toy car is pushed with a net force of 15\,N. What is its acceleration?
-\wbox{5.wd1}{2.8cm}
-\end{wedo}
-
-\begin{workedex}{Finding force}
-A 1200\,kg car accelerates at 2\,m/s$^2$. What net force is acting on it?
-
-\medskip
-\textbf{Know:}\quad $m = 1200$\,kg, \quad $a = 2$\,m/s$^2$
-
-\textbf{Formula:}\quad $F = m \times a$
-
-\textbf{Substitute:}\quad $F = 1200 \times 2 = \mathbf{2400\ \text{N}}$
-\end{workedex}
-
-\begin{wedo}{Finding force}
-A 0.5\,kg ball accelerates at 12\,m/s$^2$ when it is thrown. What net force acts on it?
-\wbox{5.wd2}{2.8cm}
-\end{wedo}
-
-\begin{workedex}{Finding mass}
-A net force of 60\,N gives a box an acceleration of 4\,m/s$^2$. What is the mass of the box?
-
-\medskip
-\textbf{Know:}\quad $F = 60$\,N, \quad $a = 4$\,m/s$^2$
-
-\textbf{Formula:}\quad $F = m \times a$ \quad $\Rightarrow$ \quad $m = F \div a$
-
-\textbf{Substitute:}\quad $m = 60 \div 4 = \mathbf{15\ \text{kg}}$
-\end{workedex}
-
-\begin{wedo}{Finding mass}
-A net force of 80\,N gives a wheelbarrow an acceleration of 5\,m/s$^2$. What is the mass of the wheelbarrow?
-\wbox{5.wd3}{2.8cm}
-\end{wedo}
-
-\subsection{Always Use the Net Force}\label{sub:5.4}
-
-The $F$ in $F = ma$ is the \textbf{net force} --- the force left over after you add up all the forces (Lesson~2). If the forces are balanced, the net force is zero, so the acceleration is zero: the object stays still, or keeps moving at a steady speed. That is exactly what the First Law says.
-
-\begin{workedex}{Net force first}
-A 10\,kg trolley is pushed forwards with 50\,N. Friction pushes back with 10\,N. Find its acceleration.
-
-\medskip
-\textbf{Step 1 --- net force:}\quad opposite directions, so subtract: \quad $50 - 10 = 40$\,N forwards
-
-\textbf{Step 2 --- acceleration:}\quad $a = F \div m = 40 \div 10 = \mathbf{4\ \text{m/s}^2}$ \textbf{forwards}
-\end{workedex}
-
-\begin{wedo}{Net force first}
-A 25\,kg go-kart is pushed forwards with 120\,N. Friction pushes back with 45\,N.
-\pt{a}Find the net force.
-\wbox{5.wd4a}{1.8cm}
-\pt{b}Find the acceleration of the go-kart.
-\wbox{5.wd4b}{1.8cm}
-\end{wedo}
-
-% ─── PART C ───────────────────────────────────────────────────────────────────
-\lessonpart{C}{Practice}{Amber}\label{prac:5}
-
-Work through every task. Show your working for calculations, and always include the unit.
-
-\needspace{12\baselineskip}
-\task For each change, describe what happens to the acceleration. Write \textbf{increases}, \textbf{decreases}, \textbf{doubles} or \textbf{halves}.
-
-\vspace{4pt}
-\begin{ctab}
-\begin{tabular}{|SW{3.51cm}|Z{1.55cm}|W{3.51cm}|Z{1.55cm}|}
-  \hd & \thead{Change} & \thead{\scriptsize Acceleration} & \thead{Change} & \thead{\scriptsize Acceleration} \\ \hline
-  & The force is doubled; the mass stays the same & \scaf{doubles} & The mass is doubled; the force stays the same & \scaf{halves} \\ \hline
-  & More people help push the same car & \cell{5.t1-r2c2} & A heavier rider pedals the same bike just as hard & \cell{5.t1-r2c4} \\ \hline
-  & A truck is loaded with bricks; its engine force stays the same & \cell{5.t1-r3c2} & A rocket burns fuel and gets lighter; its thrust stays the same & \cell{5.t1-r3c4} \\ \hline
-\end{tabular}
-\end{ctab}
-
-\needspace{12\baselineskip}
-\task Use $F = ma$ to complete the table. The first row is done for you.
-
-\vspace{4pt}
-\begin{ctab}
-\begin{tabular}{|SW{3.09cm}|Z{2.25cm}|Z{2.25cm}|Z{2.53cm}|}
-  \hd & \thead{Situation} & \thead{Force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
-  & Trolley pushed      & 20     & 5    & \scaf{$a = 20 \div 5 = 4$} \\ \hline
-  & Soccer ball kicked  & 45     & 0.45 & \cell{5.t2-r2c4} \\ \hline
-  & Car braking         & \cell{5.t2-r3c2} & 1200 & 3.5 \\ \hline
-  & Rocket launch       & 6\,000 & \cell{5.t2-r4c3} & 30 \\ \hline
-\end{tabular}
-\end{ctab}
-
-\taskpair{A net force of 24\,N acts on a 6\,kg mass. Find the acceleration.}{\wbox{5.t3}{2.4cm}}
-         {A 0.5\,kg ball accelerates at 12\,m/s$^2$. Find the net force.}{\wbox{5.t4}{2.4cm}}
-
-\taskpair{A force of 90\,N gives an object an acceleration of 3\,m/s$^2$. Find its mass.}{\wbox{5.t5}{2.4cm}}
-         {A 1500\,kg car accelerates at 2.5\,m/s$^2$. Find the net force needed.}{\wbox{5.t6}{2.4cm}}
-
-\taskpair{A 70\,kg sprinter accelerates at 4\,m/s$^2$ out of the blocks. Find the net force on her.}{\wbox{5.t7}{2.4cm}}
-         {A 0.15\,kg cricket ball is hit with a net force of 30\,N. Find its acceleration.}{\wbox{5.t8}{2.4cm}}
-
-\needspace{14\baselineskip}
-\task A 2.5\,kg trolley is pushed with different net forces.
-\pt{a}Complete the table.
-
-\vspace{4pt}
-\begin{ctab}
-\begin{tabular}{|SZ{2.89cm}|Z{2.89cm}|Z{4.76cm}|}
-  \hd & \thead{Net force (N)} & \thead{Mass (kg)} & \thead{Acceleration (m/s$^2$)} \\ \hline
-  & 5  & 2.5 & \scaf{$a = 5 \div 2.5 = 2$} \\ \hline
-  & 10 & 2.5 & \cell{5.t9a-r2c3} \\ \hline
-  & 15 & 2.5 & \cell{5.t9a-r3c3} \\ \hline
-  & 20 & 2.5 & \cell{5.t9a-r4c3} \\ \hline
-\end{tabular}
-\end{ctab}
-\pt{b}What happens to the acceleration each time the force goes up by 5\,N? Describe the pattern.
-\abox{5.t9b}{2.0cm}
-
-\needspace{10\baselineskip}
-\task A shopping trolley of mass 15\,kg is pushed with a force of 45\,N. Friction opposes the motion with 15\,N.
-\pt{a}Find the net force.
-\wbox{5.t10a}{2.0cm}
-\pt{b}Find the acceleration of the trolley.
-\wbox{5.t10b}{2.0cm}
-
-\needspace{10\baselineskip}
-\task A 60\,kg cyclist and her 12\,kg bicycle accelerate at 1.5\,m/s$^2$.
-\pt{a}Find the total mass.
-\wbox{5.t11a}{2.0cm}
-\pt{b}Find the net force.
-\wbox{5.t11b}{2.0cm}
-\pt{c}Air resistance is 30\,N. Find the force she must produce by pedalling.
-\wbox{5.t11c}{2.0cm}
-
-\needspace{10\baselineskip}
-\task Two identical trolleys are pushed with the same force. Trolley A is empty, with a mass of 2\,kg. Trolley B carries an extra 6\,kg, so its total mass is 8\,kg.
-\pt{a}Which trolley accelerates more?
-\abox{5.t12a}{2.0cm}
-\pt{b}Explain your answer using $F = ma$.
-\abox{5.t12b}{2.0cm}
-\pt{c}The force is 16\,N. Calculate both accelerations.
-\wbox{5.t12c}{2.0cm}
-
-\needspace{10\baselineskip}
-\task A net force of 3600\,N gives a car an acceleration of 2\,m/s$^2$.
-\pt{a}Find the mass of the car.
-\wbox{5.t13a}{2.0cm}
-\pt{b}The car is then loaded with 200\,kg of luggage. Find its new acceleration with the same net force.
-\wbox{5.t13b}{2.0cm}
-
-\needspace{10\baselineskip}
-\task A 900\,kg car travels along a flat road at a steady 60\,km/h. Its engine provides a driving force of 2000\,N.
-\pt{a}What is the car's acceleration? Explain how you know.
-\abox{5.t14a}{2.0cm}
-\pt{b}What is the total size of the resistive forces (friction and air resistance) acting on the car?
-\abox{5.t14b}{2.0cm}
-
-% ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:5}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to combine ideas, use more than one formula, or judge someone else's reasoning.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask Ahmed pushes a 20\,kg crate with a force of 60\,N, but it does not move. He says: \emph{``$F = ma$ means it should accelerate at 3\,m/s$^2$, so the formula must be wrong.''} Explain Ahmed's mistake, and find the size of the friction force on the crate.
-\wbox{5.x15}{3.0cm}
-
-\needspace{10\baselineskip}
-\exttask Mia pushes a 50\,kg crate across the floor. Friction on the crate is 40\,N. She says: \emph{``If I push twice as hard, the crate will speed up twice as fast.''}
-\pt{a}Find the acceleration when she pushes with 100\,N.
-\wbox{5.x16a}{2.0cm}
-\pt{b}Find the acceleration when she pushes with 200\,N.
-\wbox{5.x16b}{2.0cm}
-\pt{c}Is Mia right? Explain, using the idea of net force.
-\abox{5.x16c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A rocket's engines push exhaust gas downwards with a force of 500\,000\,N, and the gas pushes the rocket upwards with the same force. The rocket has a mass of 20\,000\,kg. Use $g = 9.8$\,N/kg.
-\pt{a}Find the rocket's weight.
-\wbox{5.x17a}{2.0cm}
-\pt{b}Find the net force on the rocket at lift-off.
-\wbox{5.x17b}{2.0cm}
-\pt{c}Find its acceleration.
-\wbox{5.x17c}{2.0cm}
-\pt{d}Which of Newton's laws explains (i) the upward push of the gas, and (ii) the size of the acceleration?
-\abox{5.x17d}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A lift and its passengers have a total mass of 800\,kg. The cable pulls the lift upwards with a force of 8640\,N. Use $g = 9.8$\,N/kg.
-\pt{a}Find the weight of the lift and its passengers.
-\wbox{5.x18a}{2.0cm}
-\pt{b}Find the size and direction of the net force.
-\wbox{5.x18b}{2.0cm}
-\pt{c}Find the acceleration of the lift.
-\wbox{5.x18c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A cyclist speeds up from 2\,m/s to 8\,m/s in 4\,s. The cyclist and bicycle have a total mass of 80\,kg.
-\pt{a}Calculate the acceleration, using $a = \Delta v \div t$ (change in speed $\div$ time).
-\wbox{5.x19a}{2.0cm}
-\pt{b}Calculate the net force on the cyclist and bicycle.
-\wbox{5.x19b}{2.0cm}
-\pt{c}Air resistance and friction total 40\,N. Find the force the cyclist must supply by pedalling.
-\wbox{5.x19c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A 0.045\,kg golf ball is struck and leaves the tee at 60\,m/s. The club is in contact with the ball for 0.0005\,s.
-\pt{a}Calculate the acceleration of the ball, using $a = \Delta v \div t$ (change in speed $\div$ time).
-\wbox{5.x20a}{2.0cm}
-\pt{b}Calculate the force applied by the club.
-\wbox{5.x20b}{2.0cm}
-\pt{c}Calculate the ball's weight, and comment on how the force from the club compares with it.
-\wbox{5.x20c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask In the trebuchet investigation at the end of this unit, a sling swings a 0.05\,kg projectile. While it is being swung, the net force on the projectile is 2\,N.
-\pt{a}Find the projectile's acceleration.
-\wbox{5.x21a}{2.0cm}
-\pt{b}The sling pulls on the projectile. Describe the reaction force.
-\abox{5.x21b}{2.0cm}
-\pt{c}Once the projectile leaves the sling, nothing pushes it forwards. Explain why it keeps moving forwards, and name the force that brings it back to the ground.
-\abox{5.x21c}{2.0cm}
-\end{yr8box}
-
-\newpage
 \setcounter{section}{6}\renewcommand{\lessonart}{7}
 % ══════════════════════════════════════════════════════════════════════════════
 %  LESSON 7 — ENERGY AND TRANSFORMATION                           (Week 3 · P1)
 % ══════════════════════════════════════════════════════════════════════════════
 \sectiondiv{Energy and Transformation}{Forms of energy \textbullet{} Energy chains \textbullet{} Conservation and efficiency \textbullet{} GPE and KE}\label{sec:7}
-\lessoncodes{VC2S8U15 \textbullet{} VC2S10U15 (above level)}
+\lessoncodes{VC2S8U15}
 
 \vocabhead
 \begin{ctab}
@@ -2401,66 +2072,6 @@ Work through every task. Use $g = 9.8$\,N/kg. Show your working for calculations
 \abox{7.t13c}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:7}
-
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to use the Law of Conservation of Energy, combine formulas, or judge someone else's reasoning.
-
-\medskip
-\needspace{10\baselineskip}
-\exttask The 2\,kg ball in Worked Example~\ref{we:7.3} starts with 98\,J of GPE, but actually hits the ground with 92\,J of KE.
-\pt{a}Calculate the efficiency of the GPE $\rightarrow$ KE transformation.
-\wbox{7.x14a}{2.0cm}
-\pt{b}Explain where the ``missing'' energy went. Has it been destroyed?
-\abox{7.x14b}{2.0cm}
-
-\needspace{18\baselineskip}
-\exttask A trebuchet counterweight provides 500\,J of GPE. Only 380\,J is transferred to the ball as KE. Draw a Sankey diagram for this energy transfer, using a scale of \textbf{1\,cm = 50\,J}. Label each arrow with its energy.
-
-\vspace{3pt}
-\drawk{7.x15}{5.0cm}{
-\textit{\color{MidGrey}Draw your Sankey diagram here: energy in on the left, useful energy straight on, wasted energy turning down.}
-}
-
-\needspace{10\baselineskip}
-\exttask A 0.5\,kg ball is dropped from a height of 3\,m. Assume no energy is wasted.
-\pt{a}Find its KE just before it lands.
-\wbox{7.x16a}{2.0cm}
-\pt{b}Use $\text{KE} = \tfrac{1}{2}mv^2$ to find the speed at which it lands. \textit{(Hint: find $v^2$ first, then take the square root.)}
-\wbox{7.x16b}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A trebuchet's 10\,kg counterweight falls 1.0\,m. The trebuchet is 20\% efficient.
-\pt{a}Calculate the GPE given up by the counterweight.
-\wbox{7.x17a}{2.0cm}
-\pt{b}Calculate the KE given to the projectile.
-\wbox{7.x17b}{2.0cm}
-\pt{c}The projectile has a mass of 0.1\,kg. Calculate its launch speed.
-\wbox{7.x17c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask Jordan says: \emph{``If a car goes twice as fast, it has twice as much kinetic energy.''}
-\pt{a}Calculate the KE of a 1000\,kg car at 10\,m/s and at 20\,m/s.
-\wbox{7.x18a}{2.0cm}
-\pt{b}Is Jordan right? Explain what happens to the KE when the speed doubles.
-\abox{7.x18b}{2.0cm}
-\pt{c}Suggest why this matters for how far a car needs to stop.
-\abox{7.x18c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A 500\,kg roller coaster train is pulled to the top of a first hill 40\,m high.
-\pt{a}Calculate its GPE at the top.
-\wbox{7.x19a}{2.0cm}
-\pt{b}By the bottom of the first drop, 25\% of this energy has been wasted. Calculate its KE at the bottom.
-\wbox{7.x19b}{2.0cm}
-\pt{c}Use your answers to explain why the next hill cannot be 40\,m high.
-\abox{7.x19c}{2.0cm}
-
-\needspace{10\baselineskip}
-\exttask A pole vaulter sprints down the runway, plants the pole, bends it, and is flung up over the bar. Describe the energy chain from the run-up to the top of the jump. Say where elastic potential energy appears, and where energy is wasted.
-\abox{7.x20}{3.0cm}
-\end{yr8box}
-
 \newpage
 \setcounter{section}{8}\renewcommand{\lessonart}{9}
 % ══════════════════════════════════════════════════════════════════════════════
@@ -2710,64 +2321,225 @@ Work through every task. Show your working for calculations, and always include 
 \abox{9.t13c}{2.0cm}
 
 % ─── PART D ───────────────────────────────────────────────────────────────────
-\lessonpart{D}{Above level}{Violet}\label{ext:9}
+\newpage
+\setcounter{section}{11}\renewcommand{\lessonart}{12}
+% ══════════════════════════════════════════════════════════════════════════════
+%  LESSON 12 — PROJECTILE MOTION                                     (Week 4 · P3)
+% ══════════════════════════════════════════════════════════════════════════════
+\sectiondiv{Projectile Motion}{Projectiles \textbullet{} Two independent motions \textbullet{} Time of flight \textbullet{} Measuring $g$}\label{sec:12}
+\lessoncodes{VC2S8U14 \textbullet{} VC2S8H01}
 
-\begin{yr8box}
-These questions go beyond the Year 7 standard. They ask you to combine ideas, design a lever, or judge someone else's reasoning.
+\vocabhead
+\begin{ctab}
+\begin{tabular}{|SW{2.91cm}|W{8.05cm}|}
+  \hd & \thead{Word} & \thead{Definition (copy from the slide)} \\ \hline
+  & \scaf{\textbf{Projectile}\label{voc:projectile}} & \scaf{An object that is thrown or launched and then moves under gravity alone.} \\ \hline
+  & \textbf{Trajectory}\label{voc:trajectory} & \cell{12.v2} \\ \hline
+  & \textbf{Horizontal}\label{voc:horizontal} & \cell{12.v3} \\ \hline
+  & \textbf{Vertical}\label{voc:vertical} & \cell{12.v4} \\ \hline
+  & \textbf{Independent motions}\label{voc:independent-motions} & \cell{12.v5} \\ \hline
+  & \textbf{Time of flight}\label{voc:time-of-flight} & \cell{12.v6} \\ \hline
+\end{tabular}
+\end{ctab}
+
+% ─── PART A ───────────────────────────────────────────────────────────────────
+\lessonpart{A}{Reading and comprehension}{Teal}\label{read:12}
+
+\begin{readingbox}{Reading --- Galileo and the Two Motions}
+\small % one size down so the whole reading fits on the lesson's first page
+How does a cannonball fly? In 1537 the Italian mathematician Niccolò Tartaglia published one of the first books to use mathematics to study gunnery. He described a cannonball leaving the barrel in a straight line, then curving around in an arc, and finally dropping straight down to the ground. Gunnery books repeated his ideas for many years.
+
+About a hundred years later, Galileo Galilei worked out what really happens, and he published it in 1638. He realised that a projectile is doing \emph{two things at once}, and that the two motions do not affect each other. Sideways, once the ball is launched nothing pushes or pulls it (if we ignore the air), so it keeps moving sideways at a steady speed. Downwards, gravity pulls it, so it speeds up as it falls --- exactly as if it had simply been dropped. Put a steady sideways motion together with a speeding-up downwards motion and you get a smooth curve called a \emph{parabola}, with no straight sections at all.
+
+The result that surprises people most is this. Launch one ball sideways and drop an identical ball from the same height at the same moment: they hit the ground at the same time. The launched ball lands far away, but its sideways speed makes no difference to how quickly gravity pulls it down.
+
+That is why a launched ball and a dropped ball speed up downwards at exactly the same rate --- a rate you will measure in Experiment~5. Galileo's idea replaced a model that had been trusted for a century --- a good example of science changing when someone finds better evidence and better reasoning.
+\end{readingbox}
+
+\rcreset
+\rcqk{12.c1}{Describe the path Tartaglia thought a cannonball followed.}{1.5cm}
+\rcqk{12.c2}{Galileo said a projectile does ``two things at once''. Describe each motion.}{1.8cm}
+\rcqk{12.c3}{According to the passage, why does a projectile's sideways speed stay the same?}{1.5cm}
+\rcqk{12.c4}{What is the name of the curved path that Galileo described?}{1.2cm}
+\rcqk{12.c5}{Explain why a ball launched sideways and a ball dropped from the same height land at the same time.}{1.9cm}
+\rcqk{12.c6}{Which phrase in the second paragraph tells you that the sideways motion and the downwards motion are independent?}{1.4cm}
+\rcqk{12.c7}{How does the passage show that scientific ideas can change? Give the old idea and the new one.}{1.8cm}
+
+% ─── PART B ───────────────────────────────────────────────────────────────────
+\lessonpart{B}{Theory and examples}{Blue}\label{theory:12}
+
+\subsection{What is a Projectile?}\label{sub:12.1}
+
+A \textbf{projectile} is an object that has been launched and is then moving with only gravity acting on it. A thrown ball, water from a drinking fountain and a stone flung by a trebuchet are all projectiles. (We ignore air resistance, which is small for heavy, slow objects.) The curved path of a projectile is called its \textbf{trajectory}.
+
+\diagProjectile
+\figcap[fig:projectile]{A ball launched sideways from height $h$ lands a horizontal distance $R$ away. Once launched, the only force on it is its weight, $W$.}
+
+\subsection{Two Independent Motions}\label{sub:12.2}
+
+\vspace{2pt}
+\begin{ctab}
+\begin{tabular}{|L{2.20cm}|L{3.95cm}|L{4.39cm}|}
+  \thead{} & \thead{Sideways (horizontal)} & \thead{Downwards (vertical)} \\ \hline
+  Force acting & none (ignoring air) & gravity (the ball's weight) \\ \hline
+  Speed        & stays the same       & increases by 9.8\,m/s every second \\ \hline
+  Distance     & the same in every second & more in every second \\ \hline
+\end{tabular}
+\end{ctab}
+
+\diagTwoMotions
+\figcap[fig:two-motions]{Positions every 0.1\,s. At every moment the launched ball is at the same height as the dropped ball, so they land together. Sideways, the launched ball moves the same distance in each 0.1\,s.}
+
+\subsection{Time of Flight}\label{sub:12.3}
+
+The time a projectile spends in the air depends only on the height it falls from, not on its sideways speed.
+
+\begin{infobox}{Key equations --- launched sideways}
+\[
+  h = \tfrac{1}{2}g t^2
+  \quad\Rightarrow\quad
+  t = \sqrt{\frac{2h}{g}}
+  \qquad\qquad
+  R = v \times t
+  \qquad\qquad
+  g = \frac{2h}{t^2}
+\]
+$h$ = drop height (m) \quad $t$ = time of flight (s) \quad $g = 9.8$\,m/s$^2$\\
+$v$ = sideways launch speed (m/s) \quad $R$ = range (m)
+\end{infobox}
+
+\begin{workedex}{Time of flight}
+A ball rolls off a table 1.25\,m high. How long does it take to land?
 
 \medskip
-\needspace{10\baselineskip}
-\exttask A trebuchet has a short arm of 0.6\,m and a long arm of 3.0\,m.
-\pt{a}Calculate the mechanical advantage.
-\wbox{9.x14a}{2.0cm}
-\pt{b}The counterweight pushes with 600\,N. Calculate the force at the projectile end.
-\wbox{9.x14b}{2.0cm}
-\pt{c}Explain why a trebuchet is designed with an MA less than 1, rather than greater than 1.
-\abox{9.x14c}{2.0cm}
+\textbf{Step 1:}\quad $2h = 2 \times 1.25 = 2.5$
+
+\textbf{Step 2:}\quad $2.5 \div 9.8 = 0.255$
+
+\textbf{Step 3:}\quad $t = \sqrt{0.255} \approx \mathbf{0.51\ \text{s}}$
+\end{workedex}
+
+\begin{wedo}{Time of flight}
+A ball rolls off a table 0.60\,m high. Use $t = \sqrt{2h \div 9.8}$ to find how long it takes to land.
+\wbox{12.wd1}{2.8cm}
+\end{wedo}
+
+\subsection{How Far Does It Go?}\label{sub:12.4}
+
+While the ball falls, it keeps moving sideways at its launch speed. So the distance it travels sideways is its launch speed multiplied by its time in the air.
+
+\begin{workedex}{Range}
+The ball in Worked Example~\ref{we:12.1} leaves the table at 3.0\,m/s. How far from the table does it land?
+
+\medskip
+$R = v \times t = 3.0 \times 0.51 \approx \mathbf{1.5\ \text{m}}$
+\end{workedex}
+
+\begin{wedo}{Range}
+A ball rolls off a table 0.60\,m high at 2.5\,m/s, and is in the air for 0.35\,s. How far from the table does it land?
+\wbox{12.wd2}{2.4cm}
+\end{wedo}
+
+\subsection{Measuring $g$}\label{sub:12.5}
+
+The table in Section~\ref{sub:12.2} says that a falling object's speed goes up by 9.8\,m/s every second. That number is $g$. You could find it from a drop height and a fall time, using $g = 2h \div t^2$ from the key equations box. Experiment~5 measures it more directly, by watching a falling object speed up. A \textbf{motion sensor} above the object measures how fast it is moving 50 times every second, and draws a \textbf{velocity--time graph}. (Velocity is speed in one direction --- here, downwards.) While the object falls, the line on the graph is straight and slopes up, because its speed goes up by the same amount every second.
+
+\diagVelocityTime{numbers}
+\figcap[fig:velocity-time]{A velocity--time graph for a ball dropped under a motion sensor. The ball is held still, let go at 0.10\,s, and lands at 0.55\,s.}
+
+\begin{infobox}{Acceleration from a velocity--time graph}
+\textbf{Time of fall} $=$ time it lands $-$ time it is let go\\[2pt]
+\textbf{Change in speed} $=$ final velocity $-$ starting velocity\\[2pt]
+\textbf{Acceleration} $=$ change in speed $\div$ time of fall \qquad (for a falling object, this is $g$)
+\end{infobox}
+
+\begin{workedex}{Finding $g$ from a velocity--time graph}
+Use the graph in Figure~\ref{fig:velocity-time} to find the ball's acceleration.
+
+\medskip
+\textbf{Read the graph:}\quad starting velocity $= 0$\,m/s, \quad final velocity $= 4.4$\,m/s
+
+\textbf{Time of fall:}\quad $0.55 - 0.10 = 0.45$\,s
+
+\textbf{Change in speed:}\quad $4.4 - 0 = 4.4$\,m/s
+
+\textbf{Acceleration:}\quad $4.4 \div 0.45 \approx \mathbf{9.8\ \text{m/s}^2}$ \quad --- the accepted value of $g$.
+\end{workedex}
+
+\begin{wedo}{Finding $g$ from a velocity--time graph}
+A motion sensor's graph for a falling tennis ball shows a starting velocity of 0.2\,m/s and a final velocity of 3.1\,m/s. The fall took 0.30\,s.
+\ptpair{a}{Find the change in speed.}{\wbox{12.wd3a}{1.8cm}}{b}{Find the acceleration.}{\wbox{12.wd3b}{1.8cm}}
+\end{wedo}
+
+% ─── PART C ───────────────────────────────────────────────────────────────────
+\lessonpart{C}{Practice}{Amber}\label{prac:12}
+
+Work through every task. Use $g = 9.8$\,m/s$^2$ and ignore air resistance. Show your working, and always include the unit.
+
+\needspace{12\baselineskip}
+\task Is each object a projectile? Write \textbf{YES} or \textbf{NO} in the box.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{3.69cm}|Z{1.37cm}|W{3.69cm}|Z{1.37cm}|}
+  \hd & \thead{Object} & \thead{\scriptsize Projectile?} & \thead{Object} & \thead{\scriptsize Projectile?} \\ \hline
+  & A basketball after it leaves the player's hands & \scaf{YES} & A rocket with its engine on & \scaf{NO} \\ \hline
+  & A stone flying from a trebuchet & \cell{12.t1-r2c2} & A car driving along a road & \cell{12.t1-r2c4} \\ \hline
+  & Water arcing from a drinking fountain & \cell{12.t1-r3c2} & A ball rolling off the edge of a table & \cell{12.t1-r3c4} \\ \hline
+\end{tabular}
+\end{ctab}
+
+\needspace{12\baselineskip}
+\task Complete the table for a ball that has been launched sideways.
+
+\vspace{4pt}
+\begin{ctab}
+\begin{tabular}{|SW{3.13cm}|W{3.70cm}|W{3.70cm}|}
+  \hd & \thead{} & \thead{Sideways motion} & \thead{Downwards motion} \\ \hline
+  & What force acts? & \scaf{none (ignoring air)} & \cell{12.t2-r1c3} \\ \hline
+  & What happens to the speed? & \cell{12.t2-r2c2} & \cell{12.t2-r2c3} \\ \hline
+\end{tabular}
+\end{ctab}
 
 \needspace{10\baselineskip}
-\exttask Two trebuchets have the same counterweight, dropping the same distance. Trebuchet A has arms of 0.5\,m and 2.0\,m; Trebuchet B has arms of 0.5\,m and 3.5\,m.
-\pt{a}Calculate the ratio long arm $\div$ short arm for each.
-\wbox{9.x15a}{2.0cm}
-\pt{b}Explain which will launch the projectile faster, referring to the distance the arm tip travels.
-\abox{9.x15b}{2.0cm}
-\pt{c}Suggest one practical limit on making the long arm even longer.
-\abox{9.x15c}{2.0cm}
+\task One ball is dropped, and an identical ball is launched sideways from the same height at the same moment. The dropped ball lands after 0.6\,s. When does the launched ball land? Explain.
+\abox{12.t3}{2.4cm}
+
+\taskpair{A ball rolls off a table 0.80\,m high. Find its time of flight.}{\wbox{12.t4}{2.4cm}}
+         {A ball rolls off a ledge 2.0\,m high. Find its time of flight.}{\wbox{12.t5}{2.4cm}}
+
+\taskpair{A ball is launched sideways at 4.0\,m/s and is in the air for 0.50\,s. How far does it travel sideways?}{\wbox{12.t6}{2.4cm}}
+         {A ball launched sideways lands 2.4\,m away after 0.60\,s. Find its launch speed.}{\wbox{12.t7}{2.4cm}}
+
+\taskpair{A ball falls 2.0\,m in 0.64\,s. Calculate $g$.}{\wbox{12.t8}{2.4cm}}
+         {A motion sensor shows a falling ball speed up from 1.0\,m/s to 4.0\,m/s in 0.31\,s. Find its acceleration.}{\wbox{12.t9}{2.4cm}}
 
 \needspace{10\baselineskip}
-\exttask Your forearm is a Class 3 lever with the elbow as the fulcrum. Your biceps muscle pulls 4\,cm from the elbow, and you hold a 20\,N dumbbell 32\,cm from the elbow.
-\pt{a}Calculate the mechanical advantage.
-\wbox{9.x16a}{2.0cm}
-\pt{b}Use the law of the lever to find the force the biceps must provide.
-\wbox{9.x16b}{2.0cm}
-\pt{c}Suggest why the body uses a lever with an MA less than 1 here.
-\abox{9.x16c}{2.0cm}
+\task A marble rolls off a desk 0.45\,m high at 2.0\,m/s.
+\pt{a}Find its time of flight.
+\wbox{12.t10a}{2.0cm}
+\pt{b}Find how far from the desk it lands.
+\wbox{12.t10b}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask On one side of a seesaw, a 300\,N child sits 1.5\,m from the pivot and a 200\,N child sits 1.0\,m from the pivot. Where must a 500\,N adult sit on the other side to balance it? Show your working.
-\wbox{9.x17}{3.0cm}
+\task A group measures $g = 9.2$\,m/s$^2$. Calculate their percentage error, using
+\[ \% \text{ error} = \frac{|\text{measured } g - 9.8|}{9.8} \times 100\% \]
+\wbox{12.t11}{2.6cm}
 
 \needspace{10\baselineskip}
-\exttask You need to lift a 1200\,N log with a 2.5\,m bar, but you can push with at most 300\,N.
-\pt{a}What mechanical advantage do you need?
-\abox{9.x18a}{2.0cm}
-\pt{b}Where should you place the fulcrum along the bar? Show your working.
-\wbox{9.x18b}{2.0cm}
+\task Two marbles roll off the same desk at the same moment, one at 1\,m/s and one at 3\,m/s.
+\pt{a}Which one lands first?
+\abox{12.t12a}{2.0cm}
+\pt{b}Which one lands further from the desk?
+\abox{12.t12b}{2.0cm}
+\pt{c}Explain both answers using the idea of two independent motions.
+\abox{12.t12c}{2.0cm}
 
 \needspace{10\baselineskip}
-\exttask A 600\,N box must be loaded onto a truck 1\,m high. Lifting it straight up uses $600 \times 1 = 600$\,J of energy. Pushing it up a 3\,m ramp takes a steady push of 250\,N. The energy used is $\text{force} \times \text{distance moved}$.
-\pt{a}Calculate the energy used pushing the box up the ramp.
-\wbox{9.x19a}{2.0cm}
-\pt{b}Calculate the efficiency of the ramp.
-\wbox{9.x19b}{2.0cm}
-\pt{c}Where did the extra energy go?
-\abox{9.x19c}{2.0cm}
+\task Priya says: \emph{``The faster I roll a ball off the table, the longer it stays in the air.''} Is Priya right? Explain.
+\abox{12.t13}{2.6cm}
 
-\needspace{10\baselineskip}
-\exttask Ali says: \emph{``A lever with an MA of 4 gives you four times as much energy as you put in.''} Is Ali right? Explain, using the idea of trading distance for force.
-\abox{9.x20}{2.8cm}
-\end{yr8box}
-
+% ─── PART D ───────────────────────────────────────────────────────────────────
 \newpage
 \clearpage\markboth{Glossary}{Glossary}\hypertarget{glossary}{}\pdfbookmark[1]{Glossary}{glossarybm}
 {\headingfont\bfseries\LARGE Glossary}\label{sec:glossary}\par\vspace{1mm}\noindent\rule{\linewidth}{0.6pt}\par
@@ -2775,23 +2547,24 @@ These questions go beyond the Year 7 standard. They ask you to combine ideas, de
 \renewcommand{\arraystretch}{1.3}
 \begin{longtable}{|>{\RaggedRight}p{34mm}|p{9mm}|p{\dimexpr\linewidth-43mm-6\tabcolsep-4\arrayrulewidth-1pt\relax}|}
 \hline \rule{0pt}{4mm}\headingfont\bfseries Word & \headingfont\bfseries Page & \headingfont\bfseries In my own words \\ \hline \endhead
-  Acceleration & \pageref{voc:acceleration} & \\ \hline
   Conservation of energy & \pageref{voc:conservation-of-energy} & \\ \hline
-  Deceleration & \pageref{voc:deceleration} & \\ \hline
-  Directly proportional & \pageref{voc:directly-proportional} & \\ \hline
   Efficiency & \pageref{voc:efficiency} & \\ \hline
   Effort & \pageref{voc:effort} & \\ \hline
   Energy & \pageref{voc:energy} & \\ \hline
   Energy transformation & \pageref{voc:energy-transformation} & \\ \hline
   Fulcrum & \pageref{voc:fulcrum} & \\ \hline
   Gravitational potential energy & \pageref{voc:gravitational-potential-energy} & \\ \hline
+  Horizontal & \pageref{voc:horizontal} & \\ \hline
+  Independent motions & \pageref{voc:independent-motions} & \\ \hline
   Kinetic energy & \pageref{voc:kinetic-energy} & \\ \hline
   Lever & \pageref{voc:lever} & \\ \hline
   Load & \pageref{voc:load} & \\ \hline
   Mechanical advantage & \pageref{voc:mechanical-advantage} & \\ \hline
-  Newton's Second Law & \pageref{voc:newton-s-second-law} & \\ \hline
-  Rearrange & \pageref{voc:rearrange} & \\ \hline
+  Projectile & \pageref{voc:projectile} & \\ \hline
   Simple machine & \pageref{voc:simple-machine} & \\ \hline
+  Time of flight & \pageref{voc:time-of-flight} & \\ \hline
+  Trajectory & \pageref{voc:trajectory} & \\ \hline
+  Vertical & \pageref{voc:vertical} & \\ \hline
 \end{longtable}
 \padtofour
 \end{document}

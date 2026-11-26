@@ -11,6 +11,7 @@ the Particle Model lesson booklet, so both units share one set of macros, and
 the 2027 A5 workbook style (a5-style.tex) is the same file the Particle Model
 A5 books use.
 """
+from a5_fullwidth import full_width
 import re, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 MASTER = os.path.join(HERE, '..', '..', '..', 'particle-model', 'booklet', 'Particle_Model_Lesson_Booklet_Yr7.tex')
@@ -75,5 +76,5 @@ front = (front.replace('%%CONTENTS%%', '\n'.join(rows))
                   'Lessons 2, 3 and 6 are practicals: they are in the \\textbf{Experiment Booklet}.'))
 assert '%%' not in front
 out = pre + style + '\\begin{document}\n' + front + body + '\n'.join(gloss) + '\n\\end{document}\n'
-open(OUT, 'w', encoding='utf-8').write(out)
+open(OUT, 'w', encoding='utf-8').write(full_width(out))
 print('wrote', os.path.basename(OUT), '-', len(words), 'glossary words')

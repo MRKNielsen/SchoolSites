@@ -1058,6 +1058,24 @@
   \loop\ifnum\padleft>0 \notespage\advance\padleft by -1 \repeat
   \clearpage}
 
+% ── A5: every question full page width (stacked, never side by side) ───────
+\renewcommand{\taskpair}[4]{%
+  \par\needspace{6\baselineskip}\vspace{2pt}%
+  \task #1\par\vspace{2pt}\answerbox{#2}%
+  \par\needspace{6\baselineskip}%
+  \task #3\par\vspace{2pt}\answerbox{#4}\par\vspace{2pt}}
+\renewcommand{\ptpair}[6]{%
+  \pt{#1}#2\par\answerbox{#3}%
+  \pt{#4}#5\par\answerbox{#6}}
+\renewcommand{\pqpair}[4]{%
+  \needspace{4\baselineskip}\vspace{5pt}%
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #1\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#2]\end{tcolorbox}
+  \stepcounter{pqnum}\noindent\textbf{\thepqnum.}\quad #3\par\vspace{2pt}
+  \begin{tcolorbox}[enhanced,arc=2mm,colback=Paper,colframe=Line,left=2mm,right=2mm,
+    top=1mm,bottom=1mm,boxrule=1pt,height=#4]\end{tcolorbox}}
+
 \begin{document}
 \pdfbookmark[1]{Cover}{cover}
 \setlength{\parindent}{0pt}
@@ -1225,9 +1243,9 @@ Every particle in B is \textbf{the same}: one blue atom joined to one red atom. 
 
 \begin{wedo}{Reading a particle diagram}
 Explain why diagram C is not a pure substance.
-\par\smallskip\noindent
-\begin{minipage}[c]{0.3\linewidth}\centering\pboxfig{\pkinds{A,AB,A,B,AB,A,B,AB}}{C}\end{minipage}\hfill
-\begin{minipage}[c]{0.66\linewidth}\answerbox{3.0cm}\end{minipage}
+\par\smallskip
+\begin{center}\pboxfig{\pkinds{A,AB,A,B,AB,A,B,AB}}{C}\end{center}
+\answerbox{3.0cm}
 \end{wedo}
 
 \subsection{Testing Purity}\label{sub:16.3}
@@ -1427,9 +1445,9 @@ Both diagrams above contain blue and red atoms. Explain why the left one is a mi
 
 \begin{wedo}{Mixture or compound?}
 Is this diagram a mixture or a pure substance? Explain.
-\par\smallskip\noindent
-\begin{minipage}[c]{0.3\linewidth}\centering\pboxfig{\pkinds{AB,AB,BB,AB,BB,AB,BB,AB}}{}\end{minipage}\hfill
-\begin{minipage}[c]{0.66\linewidth}\answerbox{3.0cm}\end{minipage}
+\par\smallskip
+\begin{center}\pboxfig{\pkinds{AB,AB,BB,AB,BB,AB,BB,AB}}{}\end{center}
+\answerbox{3.0cm}
 \end{wedo}
 
 \subsection{Mixtures Keep Their Properties}\label{sub:17.3}
@@ -1610,14 +1628,12 @@ Classify this diagram. Justify your answer.
 
 \begin{wedo}{Using the flowchart}
 Classify this diagram, and justify your answer.
-\par\smallskip\noindent
-\begin{minipage}[c]{0.3\linewidth}\centering\pboxfig{\stateIn{solid}{pC}}{}\end{minipage}\hfill
-\begin{minipage}[c]{0.66\linewidth}
+\par\smallskip
+\begin{center}\pboxfig{\stateIn{solid}{pC}}{}\end{center}
 \pt{a}Pure or mixture? Why?
 \answerbox{1.6cm}
 \pt{b}Which state? Why?
 \answerbox{1.6cm}
-\end{minipage}
 \end{wedo}
 
 \subsection{Liquids and Solids That Are Mixtures}\label{sub:18.2}

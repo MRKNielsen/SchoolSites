@@ -1,0 +1,93 @@
+/* ============================================================
+   test.css — EMAILED TEST PAGE (opt-in)
+   Layers on top of quiz.css's standalone quiz page. Load both:
+     <link rel="stylesheet" href="../../assets/css/quiz.css">
+     <link rel="stylesheet" href="../../assets/css/test.css">
+     <body class="quizapp-page testapp-page theme-…">
+   Pair with assets/js/test.js. Everything is scoped to
+   .testapp-page so it can't leak into decks.
+   ============================================================ */
+.testapp-page #test-app { max-width: 780px; }
+.testapp-page [hidden] { display: none !important; }
+.testapp-page .test-eyebrow {
+  margin: 0 0 .4vh; font-family: var(--font-display); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em; font-size: .82rem; color: rgba(255,255,255,.7);
+}
+
+/* Details card — same glass panel as the quiz setup */
+.testapp-page .test-details {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px; padding: 3vh 3vw; max-width: 560px;
+}
+.testapp-page .test-note { margin: 0 0 2.5vh; color: rgba(255,255,255,.85); font-size: .98rem; }
+.testapp-page .test-field { display: block; margin-bottom: 2vh; }
+.testapp-page .test-field span {
+  display: block; margin-bottom: .6vh; font-family: var(--font-display); font-weight: 700;
+  color: rgba(255,255,255,.9);
+}
+.testapp-page .test-field input,
+.testapp-page .test-field select {
+  width: 100%; padding: .6em .8em; border-radius: var(--radius-sm); border: 2px solid transparent;
+  font: inherit; font-size: 1.05rem; background: #fff; color: var(--c-slate-900);
+}
+.testapp-page .test-field input:focus,
+.testapp-page .test-field select:focus { outline: none; border-color: var(--accent-warm); }
+.testapp-page .test-error { min-height: 1.3em; margin: 0 0 1vh; font-weight: 700; color: var(--accent-warm-soft); }
+
+/* The paper — every question on one page */
+.testapp-page .test-paper { display: flex; flex-direction: column; gap: 2.4vh; }
+.testapp-page .test-who { margin: 0; color: rgba(255,255,255,.75); font-family: var(--font-display); }
+.testapp-page fieldset.test-q { border: 0; margin: 0; min-width: 0; }
+.testapp-page fieldset.test-q legend { float: left; width: auto; }
+.testapp-page fieldset.test-q legend + * { clear: left; }
+
+.testapp-page .test-opts { display: grid; gap: 10px; }
+.testapp-page .test-opt {
+  display: flex; align-items: flex-start; gap: .7em; cursor: pointer; line-height: 1.4;
+  background: #fff; border: 2px solid var(--c-line-cool); border-radius: 10px; padding: 10px 14px;
+  font-size: clamp(.95rem, 1.5vw, 1.1rem); transition: background .15s, border-color .15s;
+}
+.testapp-page .test-opt:hover { border-color: var(--accent); }
+.testapp-page .test-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.testapp-page .test-opt-letter {
+  flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800; font-size: .9em;
+  background: color-mix(in srgb, var(--accent) 12%, #fff); color: var(--accent-dark);
+}
+.testapp-page .test-opt:has(input:checked) {
+  border-color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, #fff);
+}
+.testapp-page .test-opt:has(input:checked) .test-opt-letter { background: var(--accent); color: #fff; }
+.testapp-page .test-opt:has(input:focus-visible) { outline: 3px solid var(--accent-warm); outline-offset: 2px; }
+
+.testapp-page .test-input {
+  width: 100%; padding: .6em .8em; font: inherit; font-size: 1.05rem; line-height: 1.45;
+  border: 2px solid var(--c-line-cool); border-radius: 10px; background: #fff; color: var(--c-slate-900);
+}
+.testapp-page .test-input:focus { outline: none; border-color: var(--accent); }
+.testapp-page textarea.test-input { resize: vertical; }
+.testapp-page .test-inline { display: flex; align-items: center; gap: .6em; max-width: 340px; }
+.testapp-page .test-unit { font-weight: 600; color: var(--c-slate-500); white-space: nowrap; }
+
+/* Post-submit marks */
+.testapp-page .test-mark { margin: 1.4vh 0 0; font-weight: 700; min-height: 0; }
+.testapp-page .test-mark:empty { display: none; }
+.testapp-page .test-mark.right { color: var(--pos); }
+.testapp-page .test-mark.wrong { color: var(--neg); }
+.testapp-page .test-mark.pending { color: var(--c-slate-500); font-weight: 600; font-style: italic; }
+.testapp-page fieldset:disabled .test-opt { cursor: default; }
+.testapp-page fieldset:disabled .test-opt:hover { border-color: var(--c-line-cool); }
+
+.testapp-page .test-submit { padding-bottom: 6vh; }
+
+/* Results */
+.testapp-page .test-results { text-align: center; margin-bottom: 5vh; }
+.testapp-page .test-results .result-sub strong { color: #fff; }
+.testapp-page .test-btn {
+  display: inline-block; text-decoration: none; border-radius: 100px; padding: .65em 1.8em;
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(.92rem, 1.5vw, 1.1rem);
+}
+.testapp-page .test-fallback { margin: 3vh auto 0; max-width: 620px; text-align: left; }
+.testapp-page .test-fallback summary { cursor: pointer; color: rgba(255,255,255,.85); font-weight: 600; }
+.testapp-page .test-fallback p { color: rgba(255,255,255,.8); }
+.testapp-page .test-fallback textarea { font-family: var(--font-mono); font-size: .85rem; }

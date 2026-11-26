@@ -89,13 +89,29 @@ booklet's lesson set matches the plan's theory lessons one for one.
 | Separation | `separation/booklet/` — Exps 1–9 in teaching order, "Separation techniques at a glance", 78 pp | `separation/booklet/a5/` — Book 1 L1, 2, 4, 5, 7 (72 pp); Book 2 L8, 10, 12, 16 (56 pp) |
 | Ecosystems | `bio-ecosystems/booklet/Ecosystems_Experiment_Booklet_Yr7` — Exps 1–5: Is Yeast Alive? (L1), Key the Schoolyard (L4), Quadrat Survey (L5), Beaks and Food (L8), Rabbit and Fox Model (L9), 49 pp | `bio-ecosystems/booklet/a5/` — Book 1 L1–4 (52 pp), Book 2 L5–8 (48 pp), Book 3 L9–11 (36 pp); written fresh in the 2027 lesson shape (`eco-lessons-1/2/3.tex`) from the A4 unit booklet's content |
 | Space | `space/booklet/Space_Experiment_Booklet_Yr7` — Exp 1 Angle of Sunlight (L2), Exp 2 Impact Craters (L5), 27 pp | `space/booklet/a5/` — core book L1–7 (76 pp), above-level book L8–10 (40 pp), generated from the A4 master by the Section 1 trial's rules |
-| Forces | `forces/booklet/Forces_Experiment_Booklet_Yr7` — Exp 1 Everyday Forces (L3), Exp 2 Friction and Mass (L6), Exp 3 Bounce Efficiency (L8), Exp 4 Mechanical Advantage (L10), Exp 5 Measuring g (L13), 63 pp; every answer slot keeps its A4 key (`forces-diagrams.tex`) | `forces/booklet/a5/` — Book 1 L1, 2, 4 (72 pp), Book 2 L5, 7, 9 (76 pp), Book 3 L11, 12, 14 (60 pp), generated whole from the A4 master with every answer key kept |
+| Forces | `forces/booklet/Forces_Experiment_Booklet_Yr7` — Exp 1 Everyday Forces (L3), Exp 2 Friction and Mass (L6), Exp 3 Bounce Efficiency (L8), Exp 4 Mechanical Advantage (L10), Exp 5 Measuring g (L13), 63 pp; every answer slot keeps its A4 key (`forces-diagrams.tex`) | `forces/booklet/a5/` — at level: Book 1 L1, 2, 4, 5 (76 pp), Book 2 L7, 9, 12 (52 pp); **Advanced Forces** Book 1 Topics 1–4 (56 pp), Book 2 Topics 5–7 (56 pp). Pilot of the at-level / Advanced split (25 Nov) |
 
 - The Particle Model and Separation A5 books are **generated** from the A4
   Particle Model master by `a5/make_a5.py` (the master is never edited):
   merged lessons keep the first lesson's reading, both theory sections, 3
   practice tasks from each and 2 extensions. Old Lessons 6 (Limits of the
   Model) and 12 (Gas Pressure) are left out as optional.
+- **A5 questions are full page width (26 Nov 2026, Kodie).** Side by side was too narrow to write in at A5. Each unit's `booklet/a5/a5_fullwidth.py` (called by `make_a5.py`) redefines `\taskpair`, `\ptpair` and `\pqpair` to stack, puts a We do figure above its box rather than beside it, and stacks the Advanced Forces skydiver drawing row; it fails the build if anything is left side by side. `fill_a5.py` now keeps the growth on pages before the first overflow rather than reverting the whole round, so the long books fill. All 13 books rebuilt (Forces at level Book 1 is now 80 pp); Space had no side-by-side questions.
+- **At level and Advanced (faculty decision, 25 Nov 2026).** Lesson books
+  split by curriculum level: every student completes the at-level books;
+  students who excel move on to an **Advanced <Unit>** book (e.g. "Advanced
+  Forces") — deeper elaborations, never labelled optional. Experiment
+  booklets are not split (they keep their Going further boxes). Advanced
+  books are organised by their own topics, not lesson by lesson, and start
+  from the old above-level material. **Forces is the pilot**:
+  `forces/booklet/a5/make_a5.py` now strips every Part D and the
+  "(above level)" codes from the at-level books and moves old optional
+  Lessons 11 and 14 into Advanced Forces. `adv-forces.tex` holds Topics 1–5
+  (new readings, I do / We do and a Challenge each, with the old Part D
+  questions of Lessons 1, 2, 4, 5, 7 as practice) and pulls in Lessons 11
+  and 14 whole as Topics 6–7 (plus the Part D questions of Lessons 9, 12).
+  Two Advanced books because one would be 108 pp. Old Book 3 moved to
+  `a5/_to_delete/`. The other six units wait for Kodie's check of the pilot.
 - Ecosystems, Forces and Space A5 books (24 Nov): `a5/make_a5.py` in each
   unit. Ecosystems' lessons are written in `eco-lessons-*.tex` (its A4 booklet
   predates the Parts A–D shape) and built on the Particle Model preamble.
